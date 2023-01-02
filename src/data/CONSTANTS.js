@@ -7,10 +7,15 @@
  */
 
 // ---------------------------------------------
-// ------------------ ASSETS -------------------
+// ------------------ CURRENCIES -------------------
 // ---------------------------------------------
 export const CURRENCY = "9375231913536683768";
 export const CURRENCYOFFER = "14399941215024895112";
+export const EXCHANGERATE = 295;
+
+// ---------------------------------------------
+// ------------------ ASSETS -------------------
+// ---------------------------------------------
 export const TARASCACARDASSET = "13187825386854631652"; 
 export const GEMASSET = "10230963490193589789";
 export const REFERRALASSET = "15893499867718551186"; // mainnet
@@ -31,32 +36,47 @@ export const GEMASSETACCOUNT = "ARDOR-XG7G-V7BV-GT4P-FUGW6";
 export const BURNACCOUNT = "ARDOR-Q9KZ-74XD-WERK-CV6GB";
 export const REFERRALCONTRACTACCOUNT = "ARDOR-YAAE-KL8S-28Y4-BNQW3";
 
+// ---------------------------------------------
+// -------------- GAME PARAMETERS --------------
+// ---------------------------------------------
+export const PACKPRICE = 295;
+export const PACKPRICEGIFTZ = 1;
+export const MAXPACKS = 999;
+export const NQTDIVIDER = 100000000;
 
-export const EXCHANGERATE = 295;
-export const NODEURL = "https://node1.mythicalbeings.io:27876/nxt";
-export const APILIMIT = 125;
+// ---------------------------------------------
+// ---------------- IMAGE PATHS-- --------------
+// ---------------------------------------------
 export const IMGURL = "https://media.mythicalbeings.io/";
 export const IMG_HI_PATH = "md/"
 export const IMG_MD_PATH = "sm/"
 export const IMG_THUMB_PATH = "thumbs/"
-export const NQTDIVIDER = 100000000;
-export const FREQUENCY = 5040;  
-export const JACKPOTHALF = true;
-export const BLOCKTIME = 60;
-export const PACKPRICE = 295;
-export const PACKPRICEGIFTZ = 1;
-export const MAXPACKS = 999;
-export const QUANT_COMMON = 10000;
-export const QUANT_RARE = 5000;
-export const QUANT_VERYRARE = 2500;
-export const QUANT_SPECIAL = 250;
-export const QUANT_UNBURNED = 100000000000000000;
+
+// ---------------------------------------------
+// -------------- REFERRAL SYSTEM --------------
+// ---------------------------------------------
 export const VIEW_ONLY_DISABLES = [];  // if user.viewonly && VIEW_ONLY_DISABLES.find(e=>e==gameaction) sozusagen..
 export const VIEW_ONLY_REASON = "This function is disabled until start of Season 01!";
 export const WHITELIST = [];
 export const SEASON1TIMESTAMP = 105800000;
 export const CURRENTSEASON = "season01";
+
+// ---------------------------------------------
+// ------------------- JACKPOT -----------------
+// ---------------------------------------------
+export const FREQUENCY = 5040;  
+export const JACKPOTHALF = true;
+export const BLOCKTIME = 60;
 export const LOWIGNIS = 65;
+
+// ---------------------------------------------
+// --------------- ASSET QUANTITY --------------
+// ---------------------------------------------
+export const QUANT_COMMON = 10000;
+export const QUANT_RARE = 5000;
+export const QUANT_VERYRARE = 2500;
+export const QUANT_SPECIAL = 250;
+export const QUANT_UNBURNED = 100000000000000000;
 
 // ---------------------------------------------
 // ----------------- BURNING -------------------
@@ -81,3 +101,5 @@ export const MORPHINGEPIC = 750
 // ---------------------------------------------
 export const GAMEAPIURL = "https://api.mythicalbeings.io/";
 export const BRIDGEAPIURL = "https://api.mythicalbeings.io/";
+export const NODEURL = "https://node1.mythicalbeings.io:27876/nxt";
+export const APILIMIT = 125;
