@@ -1,16 +1,17 @@
 import React from 'react';
-import {
-  ChakraProvider,
-  theme,
-} from '@chakra-ui/react';
-
+import { ChakraProvider } from '@chakra-ui/react';
 import { Routes, Route } from 'react-router-dom';
 
+import { theme } from './themes/theme';
 import routes from './routes/routes';
+
+import Header from './components/Navigation/Header/Header';
+import Footer from './components/Navigation/Footer/Footer';
 
 function App() {
   return (
-    <ChakraProvider theme={theme}>
+    <ChakraProvider theme={ theme }>
+      <Header/>
       <Routes>
         {
           routes.map((route, index) => (
@@ -22,6 +23,7 @@ function App() {
           ))
         }
       </Routes>
+      <Footer/>
     </ChakraProvider>
   );
 }
