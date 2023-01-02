@@ -22,6 +22,13 @@ import { ColorModeSwitcher } from '../ColorModeSwitch/ColorModeSwitcher';
 import { NAV_ITEMS } from '../../data/NAV_ITEMS';
 import Logo from '../Logo/Logo';
 
+/**
+ * This component is used to render the navigation bar
+ * @param {boolean} isHeader - This parameter is used to render the navigation bar or the footer
+ * @returns {JSX.Element} Navigation component
+ * @dev With "isHeader" parameter we can calculate logos and if need ColorSwitcher
+ * @author Jesús Sánchez Fernández
+ */
 const Navigation = ({ isHeader = true }) => {
     const { isOpen, onToggle } = useDisclosure();
     const needTarascaLogo = isHeader ? false : true;
@@ -69,7 +76,13 @@ const Navigation = ({ isHeader = true }) => {
 }
 
 export default Navigation;
-  
+
+/**
+ * This component is used to render the navigation bar
+ * @param {boolean} needTarascaLogo - This parameter is used to render the logo of the game or the logo of the team
+ * @returns {JSX.Element} Desktop navigation component
+ * @dev With "needTarascaLogo" parameter we can calculate logos
+ */
 const DesktopNav = ({ needTarascaLogo }) => {
     const linkColor = useColorModeValue('gray.600', 'gray.200');
     const linkHoverColor = useColorModeValue('gray.800', 'white');
@@ -115,6 +128,10 @@ const DesktopNav = ({ needTarascaLogo }) => {
     );
 };
   
+/**
+ * This component is used to render the navigation bar for Mobile
+ * @returns {JSX.Element} Mobile navigation component
+ */
 const MobileNav = () => {
     return (
         <Stack
@@ -127,7 +144,14 @@ const MobileNav = () => {
         </Stack>
     );
 };
-  
+
+/**
+ * This component is used to render the navigation bar for Mobile (for items)
+ * @param {string} label - This parameter is used to render the label of the item
+ * @param {string} children - This parameter is used to render the children of the item
+ * @param {string} href - This parameter is used to render the href of the item
+ * @returns {JSX.Element} Mobile navigation item component
+ */
 const MobileNavItem = ({ label, children, href }) => {
     const { isOpen, onToggle } = useDisclosure();
 

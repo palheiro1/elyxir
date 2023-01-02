@@ -1,5 +1,13 @@
 import { Button, Box, Heading, Image, Stack, Center, Input } from "@chakra-ui/react"
 
+/**
+ * This component is used to render the login page
+ * @name Login
+ * @description Login page
+ * @author Jesús Sánchez Fernández
+ * @version 0.1
+ * @returns {JSX.Element} Login component
+ */
 const Login = () => {
     return(
         <Box px={8}>
