@@ -24,7 +24,7 @@ import Logo from '../Logo/Logo';
 
 /**
  * This component is used to render the navigation bar
- * @param {boolean} isHeader - This parameter is used to render the navigation bar or the footer
+ * @param {boolean} isHeader - By default its true - This parameter is used to render the navigation bar or the footer
  * @returns {JSX.Element} Navigation component
  * @dev With "isHeader" parameter we can calculate logos and if need ColorSwitcher
  * @author Jesús Sánchez Fernández
