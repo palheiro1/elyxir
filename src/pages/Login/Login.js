@@ -21,7 +21,7 @@ const Login = () => {
                         <Stack spacing={3} pt={4}>
                             <Input placeholder='Login' size='lg' />
                             <Input placeholder='PIN' size='lg' />
-                            <Button size="lg" fontWeight="bold" bgColor="blue">LOGIN NOW</Button>
+                            <Button size="lg" fontWeight="bold" bgColor="blue" color="white">LOGIN NOW</Button>
                         </Stack>
                     </Box>
 

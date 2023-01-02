@@ -4,7 +4,7 @@ export const NAV_ITEMS = [
         href: '#',
     },
     {
-        label: 'How to Play',
+        label: 'How to play',
         href: '#',
     },
     {
