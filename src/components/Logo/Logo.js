@@ -12,7 +12,7 @@ const Logo = ({isLogoGame = true}) => {
     const logoImg = isLogoGame ? "images/logo_transparent.png" : "images/logo_tarasca.png"
 
     return (
-        <Image src={logoImg} alt="Logo" filter={filtro} h="80%" key="logo" />
+        <Image src={logoImg} alt="Logo" filter={filtro} maxH="100px" key="logo" />
     )
 }
 
