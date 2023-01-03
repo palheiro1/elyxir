@@ -81,6 +81,7 @@ export const QUANT_UNBURNED = 100000000000000000;
 // ---------------------------------------------
 // --------- LOCAL STORAGE AND CRYPT -----------
 // ---------------------------------------------
+export const CIPHER_ALGORITHM = "aes-256-cbc";
 export const IV_LENGTH = 16;
 
 // ---------------------------------------------

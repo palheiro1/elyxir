@@ -1,5 +1,6 @@
-import Crypto from 'crypto';
-import { IV_LENGTH } from '../data/CONSTANTS';
+import Crypto from 'crypto-browserify';
+import { Buffer } from 'buffer';
+import { CIPHER_ALGORITHM, IV_LENGTH } from '../data/CONSTANTS';
 
 /**
  * @param {string} name - user name
@@ -29,13 +30,24 @@ export function initUser(name, accountRs, usePin, passPhrase="", pin=""){
  */
 export const encrypt = (passPhrase, userPin) => {
 
-    const iv = crypto.randomBytes(IV_LENGTH);
-    const cipher = Crypto.createCipheriv('aes-256-cbc', Buffer.from(userPin.toString()), iv);
-
-    let encrypted = cipher.update(passPhrase);
-    encrypted = Buffer.concat([encrypted, cipher.final()]);
-
-    return iv.toString('hex') + ":" + encrypted.toString('hex');
+    // Encrypt the pass phrase with the user pin using AES-256-CBC
+    try {
+        const iv = Crypto.randomBytes(IV_LENGTH);
+        // userPin to AES-256-CBC key
+        const key = Crypto.createHash('sha256').update(String(userPin.toString())).digest('base64').substr(0, 32);  
+        // Create cipher      
+        const cipher = Crypto.createCipheriv(CIPHER_ALGORITHM, key, iv);
+        // Encrypt pass phrase
+        let encrypted = cipher.update(passPhrase);        
+        console.log("🚀 ~ file: storage.js:42 ~ encrypt ~ encrypted", encrypted)
+        // Add the final block
+        encrypted = Buffer.concat([encrypted, cipher.final()]);
+        // Return the encrypted pass phrase
+        return iv.toString('hex') + ':' + encrypted.toString('hex');
+    } catch (exception) {
+        console.log("🚀 ~ file: storage.js:41 ~ encrypt ~ exception", exception)
+        throw new Error(exception.message);
+    }
 }
 
 /**
@@ -49,7 +61,7 @@ export const decrypt = (token, userPin) => {
         const textParts = token.split(':');
         const iv = Buffer.from(textParts.shift(), 'hex');
         const encryptedText = Buffer.from(textParts.join(':'), 'hex');
-        const decipher = Crypto.createDecipheriv('aes-256-cbc', Buffer.from(userPin.toString()), iv);
+        const decipher = Crypto.createDecipheriv(CIPHER_ALGORITHM, Buffer.from(userPin.toString()), iv);
         let decrypted = decipher.update(encryptedText);
         decrypted = Buffer.concat([decrypted, decipher.final()]);
         return decrypted.toString();
