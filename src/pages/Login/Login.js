@@ -1,4 +1,6 @@
-import { Button, Box, Heading, Image, Stack, Center, Input, HStack, PinInput, PinInputField } from "@chakra-ui/react"
+import { Box, Heading, Image, Stack, Center } from "@chakra-ui/react"
+import LoginButtons from "../../components/LoginPage/LoginButtons/LoginButtons"
+import UserLogin from "../../components/LoginPage/UserLogin/UserLogin"
 
 /**
  * This component is used to render the login page
@@ -14,29 +16,13 @@ const Login = () => {
             <Center>
                 <Stack direction={"row"} spacing={4} pt={8} align="center">
                     <Box w="60%">
-                        <Stack direction={"row"} spacing={4} py={4}>
-                            <Button>
-                                New user
-                            </Button>
-                            <Button>
-                                Restore user
-                            </Button>
-                        </Stack>
+                        <LoginButtons/>
+
                         <Heading>
                             Welcome to the Tarasca<br/> Trading Card Game
                         </Heading>
                         
-                        <Stack spacing={3} pt={4}>
-                            <Input placeholder='Login' size='lg' w="77%"/>
-                            <HStack spacing={12}>
-                                <PinInput size="lg" placeholder='🔒'>
-                                    <PinInputField size="lg" />
-                                    <PinInputField />
-                                    <PinInputField />
-                                    <PinInputField />
-                                </PinInput>
-                            </HStack>
-                        </Stack>
+                        <UserLogin/>
                     </Box>
 
                     <Image src="images/criatures/login.png" w="40%"/>
