@@ -21,6 +21,7 @@ import {
 import { ColorModeSwitcher } from '../ColorModeSwitch/ColorModeSwitcher';
 import { NAV_ITEMS } from '../../data/NAV_ITEMS';
 import Logo from '../Logo/Logo';
+import { Fragment } from 'react';
 
 /**
  * This component is used to render the navigation bar
@@ -89,25 +90,25 @@ const DesktopNav = ({ needTarascaLogo }) => {
     const laMitad = Math.round((NAV_ITEMS.length)/2);
 
     return (
-        <Stack direction={'row'} spacing={16} align="center">
+        <Stack direction={'row'} spacing={24} align="center">
             {NAV_ITEMS.map((navItem, index) => (
-                <>
-                { laMitad === index && <Logo key="logo" isLogoGame = {!needTarascaLogo} /> }
-                <Box key={navItem.label}>
-                    <Link
-                        p={2}
-                        href={navItem.href ?? '#'}
-                        fontSize={'sm'}
-                        fontWeight={"bold"}
-                        color={linkColor}
-                        _hover={{
-                        textDecoration: 'none',
-                        color: linkHoverColor,
-                        }}>
-                        {navItem.label}
-                    </Link>
-                </Box>
-                </>
+                <Fragment key={index}>
+                    { laMitad === index && <Logo key="logo" isLogoGame = {!needTarascaLogo} /> }
+                    <Box key={navItem.label}>
+                        <Link
+                            p={2}
+                            href={navItem.href ?? '#'}
+                            fontSize={'sm'}
+                            fontWeight={"bold"}
+                            color={linkColor}
+                            _hover={{
+                            textDecoration: 'none',
+                            color: linkHoverColor,
+                            }}>
+                            {navItem.label}
+                        </Link>
+                    </Box>
+                </Fragment>
             ))}
             <Button
             display={{ base: 'none', md: 'inline-flex' }}
