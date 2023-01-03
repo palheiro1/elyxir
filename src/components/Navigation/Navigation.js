@@ -90,41 +90,44 @@ const DesktopNav = ({ needTarascaLogo }) => {
     const laMitad = Math.round((NAV_ITEMS.length)/2);
 
     return (
-        <Stack direction={'row'} spacing={24} align="center">
-            {NAV_ITEMS.map((navItem, index) => (
-                <Fragment key={index}>
-                    { laMitad === index && <Logo key="logo" isLogoGame = {!needTarascaLogo} /> }
-                    <Box key={navItem.label}>
-                        <Link
-                            p={2}
-                            href={navItem.href ?? '#'}
-                            fontSize={'sm'}
-                            fontWeight={"bold"}
-                            color={linkColor}
-                            _hover={{
-                            textDecoration: 'none',
-                            color: linkHoverColor,
-                            }}>
-                            {navItem.label}
-                        </Link>
-                    </Box>
-                </Fragment>
-            ))}
-            <Button
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'sm'}
-            fontWeight={"bold"}
-            border = {'2px'}
-            borderColor={'orange.400'}
-            href={'#'}
-            px={8}
-            variant="outline"
-            key="login"
-            _hover={{
-                bg: 'orange.400',
-            }}>
-                Login
-            </Button>
+        <Stack direction={'column'}>
+            <Stack direction={'row'} spacing={24} align="center">
+                {NAV_ITEMS.map((navItem, index) => (
+                    <Fragment key={index}>
+                        { laMitad === index && <Logo key="logo" isLogoGame = {!needTarascaLogo} /> }
+                        <Box key={navItem.label}>
+                            <Link
+                                p={2}
+                                href={navItem.href ?? '#'}
+                                fontSize={'sm'}
+                                fontWeight={"bold"}
+                                color={linkColor}
+                                _hover={{
+                                textDecoration: 'none',
+                                color: linkHoverColor,
+                                }}>
+                                {navItem.label}
+                            </Link>
+                        </Box>
+                    </Fragment>
+                ))}
+                <Button
+                display={{ base: 'none', md: 'inline-flex' }}
+                fontSize={'sm'}
+                fontWeight={"bold"}
+                border = {'2px'}
+                borderColor={'orange.400'}
+                href={'#'}
+                px={8}
+                variant="outline"
+                key="login"
+                _hover={{
+                    bg: 'orange.400',
+                }}>
+                    Login
+                </Button>
+            </Stack>
+            <Text align="center" fontSize="small">All rights reserved. 2021</Text>
         </Stack>
     );
 };
