@@ -24,7 +24,7 @@ const LoginButtons = ({ showNewUser, showLogIn, showRestore }) => {
 
 
     return(
-        <Stack direction={"row"} spacing={4} py={4}>
+        <Stack direction={"row"} spacing={4} mb={4}>
 
             {showNewUser && (
                 <Button onClick={handleNewUser}>
