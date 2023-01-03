@@ -16,7 +16,7 @@ const Login = () => {
             <Center>
                 <Stack direction={"row"} spacing={4} pt={8} align="center">
                     <Box w="60%">
-                        <LoginButtons/>
+                        <LoginButtons showNewUser={true} showRestore={true} />
 
                         <Heading>
                             Welcome to the Tarasca<br/> Trading Card Game
