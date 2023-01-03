@@ -4,6 +4,10 @@ import { mode } from '@chakra-ui/theme-tools';
 // ----------------------------------------------------------------
 // -----------------  Configuración de Chakra UI  -----------------
 // ----------------------------------------------------------------
+// Floating label styles
+const activeLabelStyles = {
+  transform: "scale(0.85) translateY(-24px)"
+};
 
 const config = {
   initialColorMode: 'dark',
@@ -11,7 +15,7 @@ const config = {
 }
 
 const styles = {
-  global: props => ({
+  global: (props) => ({
     body: {
       color: mode('gray.800', 'whiteAlpha.900')(props),
       bg: mode('white', 'black')(props),
@@ -22,6 +26,7 @@ const styles = {
       minHeight: "100vh",
     },
   }),
+  
 }
 
 const components = {
@@ -31,7 +36,39 @@ const components = {
         bg: mode('white', 'dark')(props),
       },
     }),
-  },
+  }
 };
 
-export const theme = extendTheme({ config, components,  styles });
+
+
+const floatingLabelStyles = {
+  components: {
+    Form: {
+      variants: {
+        floating: {
+          container: {
+            "input:not(:placeholder-shown) + label, .chakra-select__wrapper + label, textarea:not(:placeholder-shown) ~ label": {
+              ...activeLabelStyles
+            },
+            label: {
+              top: -5,
+              left: 0,
+              zIndex: 2,
+              position: "absolute",
+              backgroundColor: mode("black", "white"),
+              fontSize: "sm",
+              fontWeight: "bold",
+              pointerEvents: "none",
+              mx: 3,
+              px: 1,
+              my: 2,
+              transformOrigin: "left top"
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
+export const theme = extendTheme({ config, components, styles, ...floatingLabelStyles });
