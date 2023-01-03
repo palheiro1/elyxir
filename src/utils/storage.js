@@ -1,5 +1,5 @@
 import Crypto from 'crypto';
-import { IV_LENGTH } from '../data/Constants';
+import { IV_LENGTH } from '../data/CONSTANTS';
 
 /**
  * @param {string} name - user name
