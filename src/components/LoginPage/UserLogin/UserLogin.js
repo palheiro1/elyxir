@@ -1,6 +1,6 @@
 import { HStack, PinInput, PinInputField, Select, Stack } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-import { decrypt, encrypt, getAllUsers, getUser } from "../../../utils/storage";
+import { decrypt, getAllUsers, getUser } from "../../../utils/storage";
 
 /**
  * This component is used to render the user login form
@@ -20,33 +20,31 @@ const UserLogin = () => {
     const [ user, setUser ] = useState(); // username
     const handleSelectUser = (value) => setUser(value);
 
-    const [ userPin, setUserPin ] = useState(); // user pin
     const handleCompletePin = (value) => {
-        setUserPin(value);
+        isInvalidPin && setIsInvalidPin(false); // reset invalid pin flag
         handleLogin(value);
     }
+        
+    const [ isInvalidPin, setIsInvalidPin ] = useState(false); // invalid pin flag
 
     useEffect(() => {
         const recoverUsers = () => {
             const users = getAllUsers();
             setAccounts(users);
-            if(users.length > 0) 
-                setUser(users[0]);
+            if(users.length > 0) setUser(users[0]);
         }
         
         recoverUsers();
     }, [])
 
-    const test = encrypt("connection kid sentence almost game greet grant planet perfect glove math came", "1234");
-    console.log("🚀 ~ file: UserLogin.js:43 ~ handleLogin ~ test", test)
-
     const handleLogin = (pin) => {
         const recoverUser = getUser(user);
-        
         const { token } = recoverUser;
-        console.log("🚀 ~ file: UserLogin.js:43 ~ handleLogin ~ token", token)
-        const decryptedPin = decrypt(token, pin);
-        console.log("🚀 ~ file: UserLogin.js:42 ~ handleLogin ~ decryptedPin", decryptedPin)
+
+        const data = decrypt(token, pin);
+        if(!data) 
+            setIsInvalidPin(true);
+        
     }
 
     return(
@@ -58,8 +56,13 @@ const UserLogin = () => {
             </Select>
 
             <HStack spacing={12}>
-                <PinInput size="lg" placeholder='🔒' mask onComplete={handleCompletePin} value={userPin}>
-                    <PinInputField />
+                <PinInput size="lg"
+                placeholder='🔒'
+                onComplete={handleCompletePin}
+                isInvalid={isInvalidPin}
+                mask
+                >
+                    <PinInputField/>
                     <PinInputField />
                     <PinInputField />
                     <PinInputField />

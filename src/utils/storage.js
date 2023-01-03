@@ -58,17 +58,27 @@ export const encrypt = (passPhrase, userPin) => {
  */
 export const decrypt = (token, userPin) => {
     try {
+        // Split the token into the iv and the encrypted text
         const textParts = token.split(':');
+        // Extract the iv
         const iv = Buffer.from(textParts.shift(), 'hex');
+        // Extract the encrypted text
         const encryptedText = Buffer.from(textParts.join(':'), 'hex');
-        const decipher = Crypto.createDecipheriv(CIPHER_ALGORITHM, Buffer.from(userPin.toString()), iv);
+        // userPin to AES-256-CBC key
+        const key = Crypto.createHash('sha256').update(String(userPin.toString())).digest('base64').substr(0, 32);  
+        // Create decipher
+        const decipher = Crypto.createDecipheriv(CIPHER_ALGORITHM, Buffer.from(key), iv);
+        // Decrypt the text
         let decrypted = decipher.update(encryptedText);
+        // Add the final block
         decrypted = Buffer.concat([decrypted, decipher.final()]);
+        // Return the decrypted pass phrase
         return decrypted.toString();
     }
     catch(exception) {
         console.log("🚀 ~ file: storage.js:52 ~ decrypt ~ exception", exception)
-        throw new Error(exception.message);
+        return false;
+        //throw new Error(exception.message);
     }
 }
 
