@@ -9,8 +9,6 @@ import { decrypt, getAllUsers, getUser } from "../../../utils/storage";
  * @author Jesús Sánchez Fernández
  * @version 0.1
  * @returns {JSX.Element} UserLogin component
- * @todo Add logic to check if the user exists
- * @todo Add logic to check if the password is correct
  * @todo Add logic to check if the user is already logged in
  */
 const UserLogin = () => {
@@ -62,7 +60,7 @@ const UserLogin = () => {
                 isInvalid={isInvalidPin}
                 mask
                 >
-                    <PinInputField/>
+                    <PinInputField />
                     <PinInputField />
                     <PinInputField />
                     <PinInputField />
