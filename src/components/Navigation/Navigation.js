@@ -36,7 +36,7 @@ const Navigation = ({ isHeader = true }) => {
     const needChangeColor = isHeader ? true : false;
 
     return (
-        <Box mb={8}>
+        <Box>
             <Flex
             color={useColorModeValue('gray.600', 'white')}
             minH={'60px'}
@@ -127,7 +127,7 @@ const DesktopNav = ({ needTarascaLogo }) => {
                     Login
                 </Button>
             </Stack>
-            <Text align="center" fontSize="small">All rights reserved. 2021</Text>
+            {needTarascaLogo && <Text align="center" fontSize="small">All rights reserved. 2021</Text> }
         </Stack>
     );
 };
