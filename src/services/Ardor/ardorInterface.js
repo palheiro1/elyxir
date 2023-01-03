@@ -29,6 +29,11 @@ export function getImageURL(nodeurl, fullHash) {
     return nodeurl+'?' + params.toString();
 }
 
+export function getAccountFromPhrase(value){
+    return {
+        account: secretPhraseToAccountId(value,false)
+    };
+}
 
 function getTransactionBytes(nodeurl, query) {
     console.log(nodeurl,query);
