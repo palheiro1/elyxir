@@ -13,16 +13,20 @@
     "ardorjs": "^0.2.0",
     "axios": "^1.2.2",
     "crypto": "^1.0.1",
+    "crypto-browserify": "^3.12.0",
     "framer-motion": "^6.5.1",
+    "patch-package": "^6.5.0",
     "qs": "^6.11.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^3.11.0",
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
+    "stream": "^0.0.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "postinstall": "patch-package",
     "start": "node scripts/version.js && react-scripts start",
     "build": "node scripts/version.js && react-scripts build",
     "test": "react-scripts test",
@@ -44,6 +48,7 @@
     ]
   },
   "browser": {
-    "crypto": false
-}
+    "crypto": false,
+    "steam": false
+  }
 }
