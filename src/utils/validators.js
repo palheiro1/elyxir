@@ -1,4 +1,4 @@
-import { secretPhraseToAccountId } from 'ardorjs';
+import ardorjs from 'ardorjs';
 
 /**
  * @param {string} value - user name
@@ -27,11 +27,11 @@ export function validateUsername(value, userList) {
  * @description - checks if the pass phrase belongs to the account
  */
 export function validatePassPhrase(value, account){
-    let invalid=false;
-    let error=""; 
-    const accountFromPhrase = secretPhraseToAccountId(value, false);
+    let invalid = false;
+    let error = ""; 
+    const accountFromPhrase = ardorjs.secretPhraseToAccountId(value, false);
 
-    if (accountFromPhrase !== account){
+    if (accountFromPhrase !== account) {
         invalid = true;
         error = "This pass phrase belongs to account " + accountFromPhrase;
     }
