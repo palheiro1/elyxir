@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { theme } from './themes/theme';
 
@@ -24,7 +24,9 @@ function App() {
       <Header isLogged = {infoAccount.token !== null && infoAccount.accountRs !== null} />
       <Routes>
 
-        <Route path="/" element={ <Login setInfoAccount = {setInfoAccount} /> } />
+        <Route path="/" element={ <Navigate replace to="/login" />} />
+
+        <Route path="/login" element={ <Login setInfoAccount = {setInfoAccount} /> } />
 
         <Route path="/register" element={ <Register/> } />
 
