@@ -11,7 +11,7 @@ import { decrypt, getAllUsers, getUser } from "../../../utils/storage";
  * @returns {JSX.Element} UserLogin component
  * @todo Add logic to check if the user is already logged in
  */
-const UserLogin = () => {
+const UserLogin = ({ setInfoAccount }) => {
 
     const [ accounts, setAccounts ] = useState([]); // list of accounts
 
@@ -40,9 +40,12 @@ const UserLogin = () => {
         const { token } = recoverUser;
 
         const data = decrypt(token, pin);
-        if(!data) 
+        if(!data) {
             setIsInvalidPin(true);
-        
+            return;
+        }
+
+        setInfoAccount(data);
     }
 
     return(

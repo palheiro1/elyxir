@@ -10,7 +10,7 @@ import UserLogin from "../../components/LoginPage/UserLogin/UserLogin"
  * @version 0.1
  * @returns {JSX.Element} Login component
  */
-const Login = () => {
+const Login = ({ setInfoAccount }) => {
     return(
         <Box px={8}>
             <Center>
@@ -22,7 +22,7 @@ const Login = () => {
                             Welcome to the Tarasca<br/> Trading Card Game
                         </Heading>
                         
-                        <UserLogin/>
+                        <UserLogin setInfoAccount = {setInfoAccount} />
                     </Box>
 
                     <Image src="images/criatures/login.png" w="40%"/>
