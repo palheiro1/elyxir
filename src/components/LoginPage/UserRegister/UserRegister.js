@@ -90,7 +90,7 @@ const UserRegister = () => {
                     <InputGroup size="lg">
                         <Input disabled placeholder=" " value={account}/>
                         <InputRightAddon bgColor="transparent">
-                            <Button variant="outline" borderColor="blue" onClick={() => {handleCopyToast("Account") && navigator.clipboard.writeText(account)}}>
+                            <Button variant="outline" borderColor="blue" onClick={() => { navigator.clipboard.writeText(account) && handleCopyToast("Account") }}>
                                 COPY
                             </Button>
                         </InputRightAddon>
@@ -102,7 +102,7 @@ const UserRegister = () => {
                     <InputGroup size="lg">
                         <Textarea disabled placeholder=" " value={passphrase} resize="none" minH="80px" />
                         <InputRightAddon bgColor="transparent" minH="80px">
-                            <Button variant="outline" borderColor="blue" onClick={() => {handleCopyToast("Passphrase") && navigator.clipboard.writeText(passphrase)}}>
+                            <Button variant="outline" borderColor="blue" onClick={() => { navigator.clipboard.writeText(passphrase) && handleCopyToast("Passphrase")}}>
                                 COPY
                             </Button>
                         </InputRightAddon>
