@@ -31,43 +31,34 @@ const styles = {
 
 const components = {
   Drawer: {
-    baseStyle: props => ({
+    baseStyle: (props) => ({
       dialog: {
         bg: mode('white', 'dark')(props),
       },
     }),
-  }
-};
-
-
-
-const floatingLabelStyles = {
-  components: {
-    Form: {
-      variants: {
-        floating: {
-          container: {
-            "input:not(:placeholder-shown) + label, .chakra-select__wrapper + label, textarea:not(:placeholder-shown) ~ label": {
-              ...activeLabelStyles
-            },
-            label: {
-              top: -5,
-              left: 0,
-              zIndex: 2,
-              position: "absolute",
-              fontSize: "sm",
-              fontWeight: "bold",
-              pointerEvents: "none",
-              mx: 3,
-              px: 1,
-              my: 2,
-              transformOrigin: "left top"
-            }
+  },
+  Form: {
+    variants: {
+      floating: (props) => ({
+        container: {
+          label: {
+            bg: props.colorMode === 'dark' ? 'black' : 'white',
+            top: -5,
+            left: 0,
+            zIndex: 2,
+            position: "absolute",
+            fontSize: "sm",
+            fontWeight: "bold",
+            pointerEvents: "none",
+            mx: 3,
+            px: 1,
+            my: 2,
+            transformOrigin: "left top"
           }
         }
-      }
+      })
     }
   }
 };
 
-export const theme = extendTheme({ config, components, styles, ...floatingLabelStyles });
+export const theme = extendTheme({ config, components, styles});
