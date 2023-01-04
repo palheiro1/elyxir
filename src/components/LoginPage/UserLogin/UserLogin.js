@@ -47,7 +47,7 @@ const UserLogin = () => {
 
     return(
         <Stack spacing={3} pt={4}>
-            <Select size="lg"  w="77%" bgColor="CaptionText" onChange={handleSelectUser}>
+            <Select size="lg"  w="77%" onChange={handleSelectUser}>
                 {accounts.map((account) => (
                     <option key={account} value={account}>{account}</option>
                 ))}
