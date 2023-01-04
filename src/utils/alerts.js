@@ -5,6 +5,9 @@
  * @description This function is used to display a success toast
  */
 export const okToast = (text, toast) => {
+    const id = text;
+    if(toast.isActive(id)) return;
+    
     toast({
         title: 'Success',
         description: text,
@@ -21,6 +24,9 @@ export const okToast = (text, toast) => {
  * @description This function is used to display an error toast
  */
 export const errorToast = (text, toast) => {
+    const id = text;
+    if(toast.isActive(id)) return;
+
     toast({
         title: 'Error',
         description: text,
@@ -37,6 +43,9 @@ export const errorToast = (text, toast) => {
  * @description This function is used to display a warning toast
  */
 export const warningToast = (text, toast) => {
+    const id = text;
+    if(toast.isActive(id)) return;
+
     toast({
         title: 'Warning',
         description: text,
@@ -53,6 +62,9 @@ export const warningToast = (text, toast) => {
  * @description This function is used to display an info toast
  */
 export const infoToast = (text, toast) => {
+    const id = text;
+    if(toast.isActive(id)) return;
+
     toast({
         title: 'Info',
         description: text,
@@ -69,7 +81,11 @@ export const infoToast = (text, toast) => {
  * @description This function is used to display a toast with a copy to clipboard button
  */
 export const copyToast = (text, toast) => {
+    const id = text;
+    if(toast.isActive(id)) return;
+
     toast({
+        id,
         title: 'Copied to clipboard!',
         description: text + ' copied to clipboard',
         status: 'success',
