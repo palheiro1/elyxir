@@ -11,7 +11,7 @@ import { CIPHER_ALGORITHM, IV_LENGTH } from '../data/CONSTANTS';
  * @returns {object} user object
  * @description initialises the user information for localStorage
  */
-export function initUser(name, accountRs, usePin, passPhrase="", pin=""){
+export const initUser = (name, accountRs, usePin, passPhrase="", pin="") => {
     return {
         name: name, 
         accountRs: accountRs,
@@ -39,7 +39,6 @@ export const encrypt = (passPhrase, userPin) => {
         const cipher = Crypto.createCipheriv(CIPHER_ALGORITHM, key, iv);
         // Encrypt pass phrase
         let encrypted = cipher.update(passPhrase);        
-        console.log("🚀 ~ file: storage.js:42 ~ encrypt ~ encrypted", encrypted)
         // Add the final block
         encrypted = Buffer.concat([encrypted, cipher.final()]);
         // Return the encrypted pass phrase
@@ -86,7 +85,7 @@ export const decrypt = (token, userPin) => {
  * @param {object} user - user object
  * @description registers or updates the user in localStorage
  */
-export function registerOrUpdateUser(user) {
+export const registerOrUpdateUser = (user) => {
     localStorage.setItem(user.name, JSON.stringify(user));
 }
 
@@ -94,7 +93,7 @@ export function registerOrUpdateUser(user) {
  * @param {string} name - user name
  * @description removes the user from localStorage
  */
-export function dropUser(name) {
+export const dropUser = (name) => {
     localStorage.removeItem(name);
 }
 
@@ -103,7 +102,7 @@ export function dropUser(name) {
  * @returns {object} user object
  * @description gets the user from localStorage
  */
-export function getUser(name) {
+export const getUser = (name) => {
     const item = localStorage.getItem(name);
     return item !== null ? JSON.parse(item) : null;
 }
@@ -112,7 +111,7 @@ export function getUser(name) {
  * @returns {string} app version
  * @description gets the app version from localStorage
  */
-export function getVersion() {
+export const getVersion = () => {
     const item = localStorage.getItem('APP_VERSION');
     return item !== null ? JSON.parse(item) : null;
 }
@@ -122,7 +121,7 @@ export function getVersion() {
  * @description registers the app version in localStorage
  * @description this is used to check if the app has been updated
  */
-export function getAllUsers() {
+export const getAllUsers = () => {
     const item = localStorage.getItem('users');
     return item !== null ? JSON.parse(item) : [];
 }
@@ -131,14 +130,11 @@ export function getAllUsers() {
  * @param {object} user - user object
  * @description registers the user in the list of all users
  */
-export function addToAllUsers(user) {
+export const addToAllUsers = (user) => {
     let users = getAllUsers();
-
-    if (users.length === 0)
-        users.push(user.name);
-    else
-        users = [user.name];
-
+    console.log("🚀 ~ file: storage.js:136 ~ addToAllUsers ~ users", users)
+    users.push(user.name);
+    console.log("🚀 ~ file: storage.js:138 ~ addToAllUsers ~ users", users)
     localStorage.setItem("users", JSON.stringify(users));
 }
 
@@ -146,7 +142,7 @@ export function addToAllUsers(user) {
  * @param {object} user - user object
  * @description removes the user from the list of all users
  */
-export function removeFromAllUsers(user) {
+export const removeFromAllUsers = (user) => {
     let users = getAllUsers();
     let newUsers = [];
 
@@ -169,7 +165,7 @@ export function removeFromAllUsers(user) {
  * @param {string} timestamp - timestamp
  * @description updates the timestamp of the user
  */
-export function updateTimestamp(name, timestamp){
+export const updateTimestamp = (name, timestamp) => {
     let user = getUser(name);
     user.timestamp = timestamp;
     registerOrUpdateUser(user);
@@ -180,7 +176,7 @@ export function updateTimestamp(name, timestamp){
  * @returns {string} timestamp
  * @description gets the timestamp of the user
  */
-export function getTimestamp(name){
+export const getTimestamp = (name) => {
     if (name){
         let user = getUser(name);
         if (user) return user.timestamp;
@@ -192,7 +188,7 @@ export function getTimestamp(name){
  * @returns {boolean} true if the backup has been done
  * @description gets the backupDone flag of the user
  */
-export function getBackupDone(name){
+export const getBackupDone = (name) => {
     let user = getUser(name);
     return user.backupDone;
 }
@@ -202,7 +198,7 @@ export function getBackupDone(name){
  * @description sets the backupDone flag of the user
  * @description this is used to check if the backup has been done
  */
-export function setBackupDone(name){
+export const setBackupDone = (name) => {
     let user = getUser(name);
     user.backupDone = true;
     registerOrUpdateUser(user);
