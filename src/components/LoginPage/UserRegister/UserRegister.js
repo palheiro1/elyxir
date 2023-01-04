@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormHelperText, FormLabel, Input, InputGroup, InputRightAddon, Stack, Text, Textarea, useToast } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, Input, InputGroup, InputRightAddon, PinInput, PinInputField, Stack, Text, Textarea, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { generatePassphrase } from "../../../services/Ardor/generatePassphrase";
 import { getAccountFromPhrase } from "../../../services/Ardor/ardorInterface";
@@ -90,8 +90,8 @@ const UserRegister = () => {
 
                 <FormControl variant="floating" id="passphrase" my={6}>
                     <InputGroup size="lg">
-                        <Textarea disabled placeholder=" " value={passphrase} resize="none" />
-                        <InputRightAddon bgColor="transparent">
+                        <Textarea disabled placeholder=" " value={passphrase} resize="none" minH="80px" />
+                        <InputRightAddon bgColor="transparent" minH="80px">
                             <Button variant="outline" borderColor="blue" onClick={() => {handleCopyToast("Passphrase") && navigator.clipboard.writeText(passphrase)}}>
                                 COPY
                             </Button>
@@ -108,8 +108,15 @@ const UserRegister = () => {
                     </FormControl>
 
                     <FormControl variant="floating" id="pin">
-                        <Input placeholder=" " value={pin} size="lg" onChange={handleChangePin}/>
-                        <FormLabel>PIN</FormLabel>
+                        <HStack spacing={4}>
+                            <PinInput size="lg" onComplete={handleChangePin} manageFocus={true}>
+                                <PinInputField placeholder="P" />
+                                <PinInputField placeholder="I" />
+                                <PinInputField placeholder="N" />
+                                <PinInputField placeholder="🔒" />
+                            </PinInput>
+                        </HStack>
+                        <FormLabel mx={16}>PIN</FormLabel>
                         <FormHelperText textAlign="center">Used to access easily.</FormHelperText>
                     </FormControl>
                 </Stack>
@@ -122,3 +129,11 @@ const UserRegister = () => {
 }
 
 export default UserRegister;
+
+/*
+<FormControl variant="floating" id="pin">
+    <Input placeholder=" " value={pin} size="lg" onChange={handleChangePin}/>
+    <FormLabel>PIN</FormLabel>
+    <FormHelperText textAlign="center">Used to access easily.</FormHelperText>
+</FormControl>
+*/
