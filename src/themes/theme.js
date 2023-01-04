@@ -4,10 +4,6 @@ import { mode } from '@chakra-ui/theme-tools';
 // ----------------------------------------------------------------
 // -----------------  Configuración de Chakra UI  -----------------
 // ----------------------------------------------------------------
-// Floating label styles
-const activeLabelStyles = {
-  transform: "scale(0.85) translateY(-24px)"
-};
 
 const config = {
   initialColorMode: 'dark',
