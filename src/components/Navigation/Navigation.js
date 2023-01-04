@@ -127,7 +127,7 @@ const DesktopNav = ({ needTarascaLogo }) => {
                     Login
                 </Button>
             </Stack>
-            {needTarascaLogo && <Text align="center" fontSize="small">All rights reserved. 2021</Text> }
+            {needTarascaLogo && <Text align="center" fontSize="small" textColor="gray.600" pb={2}>All rights reserved. 2021</Text> }
         </Stack>
     );
 };
