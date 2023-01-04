@@ -55,7 +55,6 @@ const floatingLabelStyles = {
               left: 0,
               zIndex: 2,
               position: "absolute",
-              backgroundColor: mode("black", "white"),
               fontSize: "sm",
               fontWeight: "bold",
               pointerEvents: "none",
