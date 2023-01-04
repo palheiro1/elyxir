@@ -1,0 +1,11 @@
+diff --git a/node_modules/ardorjs/lib/helpers.js b/node_modules/ardorjs/lib/helpers.js
+index e895c85..5e3c4d4 100644
+--- a/node_modules/ardorjs/lib/helpers.js
++++ b/node_modules/ardorjs/lib/helpers.js
+@@ -1,5 +1,6 @@
+ import cryptoJs from "crypto-js";
+ import hex from "crypto-js/enc-hex";
++import { Buffer } from "buffer";
+ import { BigInteger } from "jsbn";
+ 
+ var charToNibble = {};
