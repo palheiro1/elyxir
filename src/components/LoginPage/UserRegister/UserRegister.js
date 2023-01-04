@@ -2,7 +2,7 @@ import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, Input, Inp
 import { useState } from "react";
 import { generatePassphrase } from "../../../services/Ardor/generatePassphrase";
 import { getAccountFromPhrase } from "../../../services/Ardor/ardorInterface";
-import { initUser, registerOrUpdateUser } from "../../../utils/storage";
+import { addToAllUsers, getUser, initUser } from "../../../utils/storage";
 import { copyToast, errorToast, okToast } from "../../../utils/alerts";
 import { useNavigate } from "react-router-dom";
 /**
@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
  * @author Jesús Sánchez Fernández
  * @version 0.1
  * @todo Add logic to check if the user is already logged in
- * @todo Add logic to check if the user is already registered
  */
 const UserRegister = () => {
 
@@ -29,7 +28,7 @@ const UserRegister = () => {
     const handleChangeName = (e) => setName(e.target.value);
 
     const [ pin, setPin ] = useState("");
-    const handleChangePin = (e) => setPin(e.target.value);
+    const handleChangePin = (e) => setPin(e);
 
     const clearFormData = () => {
         setName("");
@@ -37,6 +36,8 @@ const UserRegister = () => {
         setAccount("");
         setPassphrase("");
     }
+
+    const handleCopyToast = (text) => copyToast(text, toast);
 
     const handleGenerateWallet = () => {
         const auxPassphrase = generatePassphrase();
@@ -47,23 +48,32 @@ const UserRegister = () => {
 
     const handleSaveWallet = () => {
 
+        // Check if all fields are filled
         if(!name || !account || !passphrase || !pin) {
             errorToast("Please generate wallet and fill name and PIN", toast);
             return;
         }
 
-        const user = initUser(name, account, true, passphrase, pin);
+        // Check if user already exists
+        if(getUser(name)) {
+            errorToast("User already exists", toast);
+            return;
+        }
 
-        registerOrUpdateUser(user).then(() => {
-            okToast("User saved successfully", toast);
-            clearFormData();
-            navigate("/login");
-        }).catch(() => {
-            errorToast("Error saving user", toast)
-        });
+        // Prepare user object
+        const user = initUser(name, account, true, passphrase, pin);
+        // Save user in local storage
+        saveUserAndRedirect(user);
     }
 
-    const handleCopyToast = (text) => copyToast(text, toast);
+    const saveUserAndRedirect = (user) => {
+        // Save user in local storage
+        localStorage.setItem(user.name, JSON.stringify(user));
+        addToAllUsers(user);
+        okToast("Wallet saved successfully", toast);
+        clearFormData();
+        navigate("/login");
+    }
 
     return(
         <Box>
