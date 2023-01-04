@@ -4,7 +4,7 @@ import { generatePassphrase } from "../../../services/Ardor/generatePassphrase";
 import { getAccountFromPhrase } from "../../../services/Ardor/ardorInterface";
 import { initUser, registerOrUpdateUser } from "../../../utils/storage";
 import { copyToast, errorToast, okToast } from "../../../utils/alerts";
-
+import { useNavigate } from "react-router-dom";
 /**
  * @description This component is used to render the user register form
  * @description Auto-generates a wallet and saves it in the local storage
@@ -12,11 +12,13 @@ import { copyToast, errorToast, okToast } from "../../../utils/alerts";
  * @name UserRegister
  * @author Jesús Sánchez Fernández
  * @version 0.1
-
+ * @todo Add logic to check if the user is already logged in
+ * @todo Add logic to check if the user is already registered
  */
 const UserRegister = () => {
 
     const toast = useToast();
+    const navigate = useNavigate();
 
     // Generated wallet
     const [ account, setAccount ] = useState("");
@@ -55,6 +57,7 @@ const UserRegister = () => {
         registerOrUpdateUser(user).then(() => {
             okToast("User saved successfully", toast);
             clearFormData();
+            navigate("/login");
         }).catch(() => {
             errorToast("Error saving user", toast)
         });
