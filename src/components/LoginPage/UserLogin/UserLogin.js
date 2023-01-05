@@ -1,6 +1,8 @@
-import { HStack, PinInput, PinInputField, Select, Stack } from "@chakra-ui/react"
+import { HStack, IconButton, PinInput, PinInputField, Select, Stack } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-import { decrypt, getAllUsers, getUser } from "../../../utils/storage";
+import { decrypt, getAllUsers, getUser, removeFromAllUsers } from "../../../utils/storage";
+
+import { ImCross } from "react-icons/im";
 
 /**
  * This component is used to render the user login form
@@ -16,7 +18,10 @@ const UserLogin = ({ setInfoAccount }) => {
     const [ accounts, setAccounts ] = useState([]); // list of accounts
 
     const [ user, setUser ] = useState(); // username
-    const handleSelectUser = (value) => setUser(value);
+    const handleSelectUser = (e) => {
+        setUser(e.target.value);
+    }
+        
 
     const handleCompletePin = (value) => {
         isInvalidPin && setIsInvalidPin(false); // reset invalid pin flag
@@ -24,16 +29,18 @@ const UserLogin = ({ setInfoAccount }) => {
     }
         
     const [ isInvalidPin, setIsInvalidPin ] = useState(false); // invalid pin flag
+    const [ needReload, setNeedReload ] = useState(true); // reload flag
 
     useEffect(() => {
         const recoverUsers = () => {
+            setNeedReload(false);
             const users = getAllUsers();
             setAccounts(users);
             if(users.length > 0) setUser(users[0]);
         }
         
-        recoverUsers();
-    }, [])
+        needReload && recoverUsers();
+    }, [needReload])
 
     const handleLogin = (pin) => {
         const recoverUser = getUser(user);
@@ -48,19 +55,29 @@ const UserLogin = ({ setInfoAccount }) => {
         setInfoAccount(data);
     }
 
+    const handleDeleteUser = () => {
+        localStorage.removeItem(user.name);
+        removeFromAllUsers(user);
+        setNeedReload(true);
+    }
+
     return(
         <Stack spacing={3} pt={4}>
-            <Select size="lg"  w="77%" onChange={handleSelectUser}>
-                {accounts.map((account) => (
-                    <option key={account} value={account}>{account}</option>
-                ))}
-            </Select>
+            <HStack>
+                <Select size="lg" w="59%" onChange={handleSelectUser} variant="filled">
+                    {accounts.map((account) => (
+                        <option key={account} value={account}>{account}</option>
+                    ))}
+                </Select>
+                <IconButton p={6} icon={<ImCross />} onClick={handleDeleteUser} />
+            </HStack>
 
-            <HStack spacing={12}>
+            <HStack spacing={6}>
                 <PinInput size="lg"
                 placeholder='🔒'
                 onComplete={handleCompletePin}
                 isInvalid={isInvalidPin}
+                variant="filled"
                 mask
                 >
                     <PinInputField />
