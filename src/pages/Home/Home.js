@@ -1,3 +1,6 @@
+import { Box } from "@chakra-ui/react"
+import LateralMenu from "../../components/LateralMenu/LateralMenu"
+
 /**
  * @name Home
  * @description Home page
@@ -6,11 +9,11 @@
  * @dev This page is used to render the home page
  * @returns {JSX.Element} Home component
  */
-const Home = () => {
+const Home = ({ infoAccount }) => {
     return (
-        <div>
-            <h1>Home</h1>
-        </div>
+        <Box bg="whiteAlpha.100" m={8} p={4} rounded="lg">
+            <LateralMenu/>
+        </Box>
     )
 }
 

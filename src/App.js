@@ -24,6 +24,7 @@ function App() {
       <Header isLogged = {infoAccount.token !== null && infoAccount.accountRs !== null} />
       <Routes>
 
+        {/* LOGING PAGE / CREATE WALLET / RESTORE WALLET */}
         <Route path="/" element={ <Navigate replace to="/login" />} />
 
         <Route path="/login" element={ <Login setInfoAccount = {setInfoAccount} /> } />
@@ -32,9 +33,8 @@ function App() {
 
         <Route path="/restore" element={ <Restore/> } />
 
-        <Route path="/home" element={ 
-          <Home infoAccount = {infoAccount} />
-        } />
+        {/* HOME PAGE */}
+        <Route path="/home" element={ <Home infoAccount = {infoAccount} /> } />
 
       </Routes>
       <Footer/>
