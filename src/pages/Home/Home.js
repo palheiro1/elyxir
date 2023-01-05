@@ -1,8 +1,6 @@
-import { Box } from "@chakra-ui/react"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import Jackpot from "../../components/HomePage/Jackpot/Jackpot"
-import SimpleSidebar from "../../components/SideBar/SideBar"
+import MainPanel from "../../components/HomePage/MainPanel/MainPanel"
 
 /**
  * @name Home
@@ -21,12 +19,10 @@ const Home = ({ infoAccount }) => {
             navigate("/login")
 
     }, [infoAccount, navigate])
-    return (
-        <Box bg="whiteAlpha.100" m={8} p={4} rounded="lg">
-            <SimpleSidebar children={<Jackpot/>} />
 
-            
-        </Box>
+
+    return (
+        <MainPanel/>
     )
 }
 
