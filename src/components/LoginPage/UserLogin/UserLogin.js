@@ -65,7 +65,7 @@ const UserLogin = ({ setInfoAccount }) => {
     return (
         <Stack spacing={3} pt={4}>
             <HStack>
-                <Select size="lg" w="59%" onChange={handleSelectUser} variant="filled">
+                <Select size="lg" w="66%" onChange={handleSelectUser} variant="filled">
                     {accounts.map((account) => (
                         <option key={account} value={account}>{account}</option>
                     ))}
@@ -75,7 +75,7 @@ const UserLogin = ({ setInfoAccount }) => {
 
             <ConfirmDialog ref={ref} isOpen={isOpen} onClose={onClose} setNeedReload={setNeedReload} />
 
-            <HStack spacing={6}>
+            <HStack spacing={7}>
                 <PinInput size="lg"
                     placeholder='🔒'
                     onComplete={handleCompletePin}

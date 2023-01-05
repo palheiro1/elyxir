@@ -25,7 +25,7 @@ const Login = ({ setInfoAccount }) => {
                         <UserLogin setInfoAccount = {setInfoAccount} />
                     </Box>
 
-                    <Image src="images/criatures/login.png" w="40%"/>
+                    <Image src="images/criatures/login.png" w="50%" p={4} />
                 </Stack>
             </Center>
         </Box>
