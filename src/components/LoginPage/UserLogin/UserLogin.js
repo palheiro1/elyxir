@@ -1,8 +1,10 @@
-import { HStack, IconButton, PinInput, PinInputField, Select, Stack } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
-import { decrypt, getAllUsers, getUser, removeFromAllUsers } from "../../../utils/storage";
-
+import { HStack, IconButton, PinInput, PinInputField, Select, Stack, useDisclosure } from "@chakra-ui/react"
+import { useEffect, useRef, useState } from "react"
+import { decrypt, getAllUsers, getUser } from "../../../utils/storage";
+import ConfirmDialog from "../../ConfirmDialog/ConfirmDialog";
 import { ImCross } from "react-icons/im";
+
+import { useNavigate } from "react-router-dom";
 
 /**
  * This component is used to render the user login form
@@ -15,30 +17,34 @@ import { ImCross } from "react-icons/im";
  */
 const UserLogin = ({ setInfoAccount }) => {
 
-    const [ accounts, setAccounts ] = useState([]); // list of accounts
+    const navigate = useNavigate();
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const ref = useRef()
 
-    const [ user, setUser ] = useState(); // username
+    const [accounts, setAccounts] = useState([]); // list of accounts
+
+    const [user, setUser] = useState(); // username
     const handleSelectUser = (e) => {
         setUser(e.target.value);
     }
-        
+
 
     const handleCompletePin = (value) => {
         isInvalidPin && setIsInvalidPin(false); // reset invalid pin flag
         handleLogin(value);
     }
-        
-    const [ isInvalidPin, setIsInvalidPin ] = useState(false); // invalid pin flag
-    const [ needReload, setNeedReload ] = useState(true); // reload flag
+
+    const [isInvalidPin, setIsInvalidPin] = useState(false); // invalid pin flag
+    const [needReload, setNeedReload] = useState(true); // reload flag
 
     useEffect(() => {
         const recoverUsers = () => {
             setNeedReload(false);
             const users = getAllUsers();
             setAccounts(users);
-            if(users.length > 0) setUser(users[0]);
+            if (users.length > 0) setUser(users[0]);
         }
-        
+
         needReload && recoverUsers();
     }, [needReload])
 
@@ -47,21 +53,16 @@ const UserLogin = ({ setInfoAccount }) => {
         const { token } = recoverUser;
 
         const data = decrypt(token, pin);
-        if(!data) {
+        if (!data) {
             setIsInvalidPin(true);
             return;
         }
 
         setInfoAccount(data);
+        navigate("/home");
     }
 
-    const handleDeleteUser = () => {
-        localStorage.removeItem(user.name);
-        removeFromAllUsers(user);
-        setNeedReload(true);
-    }
-
-    return(
+    return (
         <Stack spacing={3} pt={4}>
             <HStack>
                 <Select size="lg" w="59%" onChange={handleSelectUser} variant="filled">
@@ -69,16 +70,18 @@ const UserLogin = ({ setInfoAccount }) => {
                         <option key={account} value={account}>{account}</option>
                     ))}
                 </Select>
-                <IconButton p={6} icon={<ImCross />} onClick={handleDeleteUser} />
+                <IconButton p={6} icon={<ImCross />} onClick={onOpen} />
             </HStack>
+
+            <ConfirmDialog ref={ref} isOpen={isOpen} onClose={onClose} setNeedReload={setNeedReload} />
 
             <HStack spacing={6}>
                 <PinInput size="lg"
-                placeholder='🔒'
-                onComplete={handleCompletePin}
-                isInvalid={isInvalidPin}
-                variant="filled"
-                mask
+                    placeholder='🔒'
+                    onComplete={handleCompletePin}
+                    isInvalid={isInvalidPin}
+                    variant="filled"
+                    mask
                 >
                     <PinInputField />
                     <PinInputField />
