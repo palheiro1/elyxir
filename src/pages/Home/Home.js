@@ -1,7 +1,8 @@
 import { Box } from "@chakra-ui/react"
 import { useEffect } from "react"
-import LateralMenu from "../../components/LateralMenu/LateralMenu"
 import { useNavigate } from "react-router-dom"
+import Jackpot from "../../components/HomePage/Jackpot/Jackpot"
+import SimpleSidebar from "../../components/SideBar/SideBar"
 
 /**
  * @name Home
@@ -22,7 +23,9 @@ const Home = ({ infoAccount }) => {
     }, [infoAccount, navigate])
     return (
         <Box bg="whiteAlpha.100" m={8} p={4} rounded="lg">
-            <LateralMenu/>
+            <SimpleSidebar children={<Jackpot/>} />
+
+            
         </Box>
     )
 }
