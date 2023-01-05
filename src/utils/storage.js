@@ -132,9 +132,7 @@ export const getAllUsers = () => {
  */
 export const addToAllUsers = (user) => {
     let users = getAllUsers();
-    console.log("🚀 ~ file: storage.js:136 ~ addToAllUsers ~ users", users)
     users.push(user.name);
-    console.log("🚀 ~ file: storage.js:138 ~ addToAllUsers ~ users", users)
     localStorage.setItem("users", JSON.stringify(users));
 }
 
