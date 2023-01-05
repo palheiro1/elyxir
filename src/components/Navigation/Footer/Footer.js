@@ -6,8 +6,8 @@ import Navigation from '../Navigation';
  * @dev This component is used to render the footer navigation
  * @author Jesús Sánchez Fernández
  */
-const Footer = () => {
-    return(<Navigation isHeader={false} />);
+const Footer = ({ isLogged }) => {
+    return(<Navigation isHeader={false} isLogged={isLogged} />);
 }
 
 export default Footer;

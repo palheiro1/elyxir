@@ -10,6 +10,7 @@ import {
     Link,
     useColorModeValue,
     useDisclosure,
+    ButtonGroup,
 } from '@chakra-ui/react';
 
 import {
@@ -30,7 +31,7 @@ import { Fragment } from 'react';
  * @dev With "isHeader" parameter we can calculate logos and if need ColorSwitcher
  * @author Jesús Sánchez Fernández
  */
-const Navigation = ({ isHeader = true }) => {
+const Navigation = ({ isHeader = true, isLogged = false }) => {
     const { isOpen, onToggle } = useDisclosure();
     const needTarascaLogo = isHeader ? false : true;
     const needChangeColor = isHeader ? true : false;
@@ -41,7 +42,6 @@ const Navigation = ({ isHeader = true }) => {
             color={useColorModeValue('gray.600', 'white')}
             minH={'60px'}
             py={{ base: isHeader ? 2 : 0 }}
-            px={{ base: 4 }}
             pt={{ base: isHeader ? 0 : 8 }}
             borderBottom={isHeader ? 1 : 0}
             borderStyle={'solid'}
@@ -62,11 +62,11 @@ const Navigation = ({ isHeader = true }) => {
                 </Flex>
                 <Flex flex={{ base: 1 }} justify={'center'}>
                     <Flex display={{ base: 'none', md: 'flex' }}>
-                        <DesktopNav needTarascaLogo = {needTarascaLogo} />
+                        <DesktopNav needTarascaLogo = {needTarascaLogo} isLogged={isLogged} />
                     </Flex>
                 </Flex>
 
-                { needChangeColor && <ColorModeSwitcher justifySelf="flex-end" /> }
+                { needChangeColor && <ColorModeSwitcher ml={-10} justifySelf="flex-end" /> }
             </Flex>
 
             <Collapse in={isOpen} animateOpacity>
@@ -84,7 +84,7 @@ export default Navigation;
  * @returns {JSX.Element} Desktop navigation component
  * @dev With "needTarascaLogo" parameter we can calculate logos
  */
-const DesktopNav = ({ needTarascaLogo }) => {
+const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
     const linkColor = useColorModeValue('gray.600', 'gray.200');
     const linkHoverColor = useColorModeValue('gray.800', 'white');
     const laMitad = Math.round((NAV_ITEMS.length)/2);
@@ -111,21 +111,28 @@ const DesktopNav = ({ needTarascaLogo }) => {
                         </Box>
                     </Fragment>
                 ))}
-                <Button
-                display={{ base: 'none', md: 'inline-flex' }}
-                fontSize={'sm'}
-                fontWeight={"bold"}
-                border = {'2px'}
-                borderColor={'orange.400'}
-                href={'#'}
-                px={8}
-                variant="outline"
-                key="login"
-                _hover={{
-                    bg: 'orange.400',
-                }}>
-                    Login
-                </Button>
+                {!isLogged ? (
+                    <Button
+                    display={{ base: 'none', md: 'inline-flex' }}
+                    fontSize={'sm'}
+                    fontWeight={"bold"}
+                    border = {'2px'}
+                    borderColor={'orange.400'}
+                    href={'#'}
+                    px={8}
+                    variant="outline"
+                    key="login"
+                    _hover={{
+                        bg: 'orange.400',
+                    }}>
+                        Login
+                    </Button>
+                ) : (
+                    <ButtonGroup size='sm' isAttached variant='outline'>
+                        <Button display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'}>IGNIS: 21.8</Button>
+                        <Button display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'}>GIFTZ: 3</Button>
+                    </ButtonGroup>
+                )}
             </Stack>
             {needTarascaLogo && <Text align="center" fontSize="small" textColor="gray.600" pb={2}>All rights reserved. 2021</Text> }
         </Stack>
