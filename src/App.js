@@ -18,10 +18,11 @@ import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
 function App() {
 
   const [ infoAccount, setInfoAccount ] = useState(cleanInfoAccount);
+  const isLogged = infoAccount.token !== null && infoAccount.accountRs !== null;
 
   return (
     <ChakraProvider theme={ theme }> 
-      <Header isLogged = {infoAccount.token !== null && infoAccount.accountRs !== null} />
+      <Header isLogged = {isLogged} />
       <Routes>
 
         {/* LOGING PAGE / CREATE WALLET / RESTORE WALLET */}
@@ -37,7 +38,7 @@ function App() {
         <Route path="/home" element={ <Home infoAccount = {infoAccount} /> } />
 
       </Routes>
-      <Footer/>
+      <Footer isLogged = {isLogged} />
     </ChakraProvider>
   );
 }
