@@ -1,5 +1,7 @@
 import { Box } from "@chakra-ui/react"
+import { useEffect } from "react"
 import LateralMenu from "../../components/LateralMenu/LateralMenu"
+import { useNavigate } from "react-router-dom"
 
 /**
  * @name Home
@@ -10,6 +12,14 @@ import LateralMenu from "../../components/LateralMenu/LateralMenu"
  * @returns {JSX.Element} Home component
  */
 const Home = ({ infoAccount }) => {
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if(infoAccount.token === null && infoAccount.accountRs === null)
+            navigate("/login")
+
+    }, [infoAccount, navigate])
     return (
         <Box bg="whiteAlpha.100" m={8} p={4} rounded="lg">
             <LateralMenu/>
