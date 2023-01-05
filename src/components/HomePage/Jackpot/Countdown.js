@@ -3,7 +3,7 @@ import { GiCutDiamond } from "react-icons/gi"
 
 const Countdown = () => {
     return (
-        <Box>
+        <Box minH="160px"  minW="325px">
             <HStack>
                 <IconButton icon={<GiCutDiamond />} size="lg" m={4} mr={2} p={4} fontSize="2xl" bg="whiteAlpha.100" />
                 <VStack align="flex-start">

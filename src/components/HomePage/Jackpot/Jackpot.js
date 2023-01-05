@@ -1,4 +1,4 @@
-import { Box, HStack } from "@chakra-ui/react";
+import { Center, HStack } from "@chakra-ui/react";
 
 // Components
 import BlockInfo from "./BlockInfo";
@@ -7,16 +7,15 @@ import Countdown from "./Countdown";
 
 const Jackpot = () => {
     return (
-        <HStack align="flex-end" bg="#1A273D" rounded="lg" p={4}>
+        <Center>
+            <HStack bg="#1A273D" rounded="lg" p={4}>
 
-            <Countdown/>
-            
-            <BlockInfo/>
+                <Countdown />
 
-            <Box>
-                Box 1
-            </Box>
-        </HStack>
+                <BlockInfo />
+
+            </HStack>
+        </Center>
     )
 
 }

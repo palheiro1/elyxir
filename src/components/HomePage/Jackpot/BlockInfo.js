@@ -2,7 +2,7 @@ import { Box, Table, Td, Tr } from "@chakra-ui/react"
 
 const BlockInfo = () => {
     return (
-        <Box>
+        <Box minH="160px" minW="325px">
             <Table variant="simple" m={4}>
                 <Tr>
                     <Td py={1.5} borderBottom="0px">
