@@ -9,10 +9,7 @@ import Navigation from '../Navigation';
  */
 const Header = ({ isLogged }) => {
     return(
-        !isLogged ?
-            <Navigation/>
-            :
-            null
+        <Navigation isLogged={isLogged} />
     );
 }
 
