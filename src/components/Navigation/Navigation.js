@@ -23,6 +23,7 @@ import { ColorModeSwitcher } from '../ColorModeSwitch/ColorModeSwitcher';
 import { NAV_ITEMS } from '../../data/NAV_ITEMS';
 import Logo from '../Logo/Logo';
 import { Fragment } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 /**
  * This component is used to render the navigation bar
@@ -113,12 +114,13 @@ const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
                 ))}
                 {!isLogged ? (
                     <Button
+                    as={RouterLink}
                     display={{ base: 'none', md: 'inline-flex' }}
                     fontSize={'sm'}
                     fontWeight={"bold"}
                     border = {'2px'}
                     borderColor={'orange.400'}
-                    href={'#'}
+                    to="/login"
                     px={8}
                     variant="outline"
                     key="login"
