@@ -16,41 +16,46 @@ import { GiCardRandom, GiCutDiamond } from 'react-icons/gi';
 import { AiOutlineSetting, AiOutlineShoppingCart } from 'react-icons/ai';
 import { BiPackage } from 'react-icons/bi';
 
-const LateralMenu = ({ children }) => {
-    const isActive = true;
-    const bgColor = isActive && 'white';
-    const textColor = isActive ? 'black' : 'white';
-    const iconColor = isActive ? 'blue' : 'white';
+const LateralMenu = ({ option = 0, setOption, children }) => {
+
+    const isActive = (index) => {
+        return index === option;
+    }
+
+    const bgColor =  (index) => isActive(index) && 'whiteAlpha.800';
+    const textColor =  (index) => isActive(index) ? 'black' : 'white';
+    const iconColor =  (index) => isActive(index) ? 'blue' : 'white';
+
+    
 
     return (
         <Stack direction="row">
-            <Box mr={8}>
+            <Box mr={2}>
                 <Stack direction="column">
                     <Text
-                        fontSize="xl"
-                        ml={2}
-                        mr={4}
-                        mb={4}
+                        fontSize="2xl"
                         textAlign="center"
                         fontWeight="bold"
+                        mb={2}
                     >
                         My Wallet
                     </Text>
-
-                    <Box></Box>
                 </Stack>
-                <VStack align="flex-start">
+                <VStack align="flex-start" spacing={2}>
                     <Button
                         minW="150px"
                         minH="50px"
                         leftIcon={
                             <BsReverseLayoutTextWindowReverse
                                 size={17.5}
-                                color={iconColor}
+                                color={iconColor(0)}
                             />
                         }
-                        bgColor={bgColor}
-                        textColor={textColor}
+                        _hover={{ background: 'white.600' }}
+                        _active={{ background: 'white.600' }}
+                        bgColor={bgColor(0)}
+                        textColor={textColor(0)}
+                        onClick={() => setOption(0)}
                     >
                         Overview
                     </Button>
@@ -58,7 +63,17 @@ const LateralMenu = ({ children }) => {
                     <Button
                         minW="150px"
                         minH="50px"
-                        leftIcon={<GiCardRandom />}
+                        leftIcon={
+                            <GiCardRandom 
+                                size={17.5}
+                                color={iconColor(1)}
+                            />
+                        }
+                        _hover={{ background: 'white.600' }}
+                        _active={{ background: 'white.600' }}
+                        bgColor={bgColor(1)}
+                        textColor={textColor(1)}
+                        onClick={() => setOption(1)}
                     >
                         Inventory
                     </Button>
@@ -66,7 +81,12 @@ const LateralMenu = ({ children }) => {
                     <Button
                         minW="150px"
                         minH="50px"
-                        leftIcon={<BsClockHistory />}
+                        leftIcon={<BsClockHistory size={17.5} color={iconColor(2)}/>}
+                        _hover={{ background: 'white.600' }}
+                        _active={{ background: 'white.600' }}
+                        bgColor={bgColor(2)}
+                        textColor={textColor(2)}
+                        onClick={() => setOption(2)}
                     >
                         History
                     </Button>
@@ -74,7 +94,12 @@ const LateralMenu = ({ children }) => {
                     <Button
                         minW="150px"
                         minH="50px"
-                        leftIcon={<AiOutlineShoppingCart />}
+                        leftIcon={<AiOutlineShoppingCart size={17.5} color={iconColor(3)} />}
+                        _hover={{ background: 'white.600' }}
+                        _active={{ background: 'white.600' }}
+                        bgColor={bgColor(3)}
+                        textColor={textColor(3)}
+                        onClick={() => setOption(3)}
                     >
                         Market
                     </Button>
@@ -82,7 +107,12 @@ const LateralMenu = ({ children }) => {
                     <Button
                         minW="150px"
                         minH="50px"
-                        leftIcon={<GiCutDiamond />}
+                        leftIcon={<GiCutDiamond size={17.5} color={iconColor(4)} />}
+                        _hover={{ background: 'white.600' }}
+                        _active={{ background: 'white.600' }}
+                        bgColor={bgColor(4)}
+                        textColor={textColor(4)}
+                        onClick={() => setOption(4)}
                     >
                         Jackpot
                     </Button>
@@ -90,7 +120,12 @@ const LateralMenu = ({ children }) => {
                     <Button
                         minW="150px"
                         minH="50px"
-                        leftIcon={<AiOutlineSetting />}
+                        leftIcon={<AiOutlineSetting size={17.5} color={iconColor(5)} />}
+                        _hover={{ background: 'white.600' }}
+                        _active={{ background: 'white.600' }}
+                        bgColor={bgColor(5)}
+                        textColor={textColor(5)}
+                        onClick={() => setOption(5)}
                     >
                         Account
                     </Button>
@@ -99,7 +134,11 @@ const LateralMenu = ({ children }) => {
                         minW="150px"
                         minH="50px"
                         bgColor="orange.600"
-                        leftIcon={<BiPackage />}
+                        leftIcon={<BiPackage size={17.5} color={iconColor(6)} />}
+                        _hover={{ background: 'orange.700' }}
+                        _active={{ background: 'orange.700' }}
+                        textColor={"white"}
+                        onClick={() => setOption(6)}
                     >
                         Buy pack
                     </Button>

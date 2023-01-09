@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Overview from "../../components/HomePage/MainPanel/Overview"
 import LateralMenu from "../../components/LateralMenu/LateralMenu"
@@ -31,10 +31,41 @@ const Home = ({ infoAccount }) => {
     * 5 -> Account
     * 6 -> Buy pack
     */
+    const [ option, setOption ] = useState(0);
+    const [ renderComponent, setRenderComponent ] = useState(<Overview />)
+
+    useEffect(() => {
+        switch(option) {
+            case 0:
+                setRenderComponent(<Overview />)
+                break;
+            case 1:
+                setRenderComponent(<Overview />)
+                break;
+            case 2:
+                setRenderComponent(<Overview />)
+                break;
+            case 3:
+                setRenderComponent(<Overview />)
+                break;
+            case 4:
+                setRenderComponent(<Overview />)
+                break;
+            case 5:
+                setRenderComponent(<Overview />)
+                break;
+            case 6:
+                setRenderComponent(<Overview />)
+                break;
+            default:
+                setRenderComponent(<Overview />)
+                break;
+        }
+    }, [option])
 
     return (
         <Box bg="whiteAlpha.100" m={8} p={4} rounded="lg">
-            <LateralMenu children={<Overview />} />
+            <LateralMenu option={option} setOption={setOption} children={<Overview />} />
         </Box>
     )
 }
