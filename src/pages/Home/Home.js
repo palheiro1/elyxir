@@ -1,7 +1,8 @@
 import { Box } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import Overview from "../../components/HomePage/MainPanel/Overview"
+import Overview from "../../components/HomePage/Overview"
+import Inventory from "../../components/InventoryPage/Inventory"
 import LateralMenu from "../../components/LateralMenu/LateralMenu"
 
 /**
@@ -40,7 +41,7 @@ const Home = ({ infoAccount }) => {
                 setRenderComponent(<Overview />)
                 break;
             case 1:
-                setRenderComponent(<Overview />)
+                setRenderComponent(<Inventory />)
                 break;
             case 2:
                 setRenderComponent(<Overview />)
