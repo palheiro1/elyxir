@@ -11,7 +11,7 @@ const Jackpot = () => {
             
             <Text mb={4} fontSize="2xl" textAlign="center" fontWeight="bolder">Jackpot</Text>
             <Center>
-                <Stack bg="#1A273D" rounded="lg" p={4} direction="row" divider={<StackDivider borderColor='blue.800' />}>
+                <Stack bg="#1A273D" shadow="dark-lg" rounded="lg" p={4} direction="row" divider={<StackDivider borderColor='blue.800' />}>
                     <Countdown />
                     
                     <BlockInfo />

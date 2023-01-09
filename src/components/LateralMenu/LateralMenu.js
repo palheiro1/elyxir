@@ -30,7 +30,7 @@ const LateralMenu = ({ option = 0, setOption, children }) => {
 
     return (
         <Stack direction="row">
-            <Box mr={2}>
+            <Box>
                 <Stack direction="column">
                     <Text
                         fontSize="2xl"
@@ -148,7 +148,7 @@ const LateralMenu = ({ option = 0, setOption, children }) => {
                     <Switch size="md" colorScheme="blue" />
                 </Stack>
             </Box>
-            <Box width="100%">{children}</Box>
+            <Box width="100%" p={2}>{children}</Box>
         </Stack>
     );
 };

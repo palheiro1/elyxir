@@ -17,12 +17,12 @@ const LatestTransaction = () => {
     }
 
     return (
-        <Box mt={6}>
-            <Text mt={8} mb={4} fontSize="2xl">Latest game transactions</Text>
+        <Box mt={8}>
+            <Text mb={4} fontSize="2xl">Latest game transactions</Text>
 
-            <TableContainer border="1px" rounded="2xl">
+            <TableContainer border="1px" borderColor="gray" rounded="2xl" shadow="inner" boxShadow={"2xl"}>
                 <Table variant="simple">
-                    <Thead>
+                    <Thead border="1px">
                         <Tr>
                             <Th textAlign={"center"} textTransform="inherit" fontSize="sm" fontWeight="medium">Title</Th>
                             <Th textAlign={"center"} textTransform="inherit" fontSize="sm" fontWeight="medium">Amount</Th>
@@ -30,7 +30,7 @@ const LatestTransaction = () => {
                             <Th textAlign={"center"} textTransform="inherit" fontSize="sm" fontWeight="medium">Status</Th>
                         </Tr>
                     </Thead>
-                    <Tbody>
+                    <Tbody border="1px">
                         <Tr>
                             <Td>
                                 <TableCard image={"/images/cards/card.png"} title={"Droemerdene"} continent={"America"} rarity={"Common"} />
@@ -46,7 +46,7 @@ const LatestTransaction = () => {
                             <Td><InOutTransaction type={"in"}/></Td>
                         </Tr>
                         <Tr>
-                            <Td><TableCard image={"/images/cards/card.png"} title={"Rompo"} continent={"Oceania"} rarity={"Rare"} />3</Td>
+                            <Td><TableCard image={"/images/cards/card.png"} title={"Rompo"} continent={"Oceania"} rarity={"Rare"} /></Td>
                             <Td>7</Td>
                             <Td>Aug 23, 16:35</Td>
                             <Td><InOutTransaction type={"out"}/></Td>

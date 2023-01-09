@@ -7,11 +7,11 @@ const Overview = () => {
     return (
         <Box>
             <Jackpot/>
-            <Stack direction="row">
-                <Box m={4}>
+            <Stack direction={{base: "column", xl: "row"}} spacing={4}>
+                <Box>
                     <LatestTransaction/>
                 </Box>
-                <Box m={8}>
+                <Box>
                     <News/>
                 </Box>
             </Stack>
