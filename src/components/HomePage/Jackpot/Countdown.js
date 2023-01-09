@@ -3,15 +3,15 @@ import { GiCutDiamond } from "react-icons/gi"
 
 const Countdown = () => {
     return (
-        <Box minH="160px"  minW="325px">
-            <HStack>
-                <IconButton icon={<GiCutDiamond />} size="lg" m={4} mr={2} p={4} fontSize="2xl" bg="whiteAlpha.100" />
+        <Box>
+            <HStack mr={6} my={6}>
+                <IconButton icon={<GiCutDiamond />} size="xl" p={4} mr={2} fontSize="4xl" bg="whiteAlpha.100" />
                 <VStack align="flex-start">
-                    <Text fontSize="2xl" fontWeight="bold" mb={-3}>3581.23 IGNIS</Text>
-                    <Text fontSize="sm">(215.60 USD)</Text>
+                    <Text fontSize="3xl" fontWeight="bold" mb={-3}>3581.23 IGNIS</Text>
+                    <Text fontSize="md">(215.60 USD)</Text>
                 </VStack>
             </HStack>
-            <HStack spacing={2} ml={4}>
+            <HStack spacing={4}>
                 <Box p={2} bg="#121D31" rounded="lg" minW="60px">
                     <Text textAlign="center" fontSize="lg" fontWeight="bold">5</Text>
                     <Text textAlign="center" fontSize="xs">days</Text>
