@@ -1,9 +1,10 @@
-import { Center, Table, Td, Tr } from "@chakra-ui/react"
+import { Center, Table, Tbody, Td, Tr } from "@chakra-ui/react"
 
 const BlockInfo = () => {
     return (
         <Center>
             <Table variant="simple" my={6}>
+                <Tbody>
                 <Tr>
                     <Td py={2.5} borderBottom="0px">
                         Remaining blocks
@@ -39,6 +40,7 @@ const BlockInfo = () => {
                         1665150
                     </Td>
                 </Tr>
+                </Tbody>
             </Table>
         </Center>
     )

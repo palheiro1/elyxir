@@ -1,8 +1,7 @@
 import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button } from "@chakra-ui/react"
 import { dropUser, removeFromAllUsers } from "../../utils/storage"
 
-const ConfirmDialog = ({ ref, isOpen, onClose, setNeedReload, user }) => {
-    const cancelRef = ref
+const ConfirmDialog = ({ reference, isOpen, onClose, setNeedReload, user }) => {
 
     const handleDelete = () => {
         dropUser(user);
@@ -16,7 +15,7 @@ const ConfirmDialog = ({ ref, isOpen, onClose, setNeedReload, user }) => {
         <>
             <AlertDialog
                 motionPreset='slideInBottom'
-                leastDestructiveRef={cancelRef}
+                leastDestructiveRef={reference}
                 onClose={onClose}
                 isOpen={isOpen}
                 isCentered
@@ -30,7 +29,7 @@ const ConfirmDialog = ({ ref, isOpen, onClose, setNeedReload, user }) => {
                         Don't worry, you can restore it with your Ardor account and your seed phrase.
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button ref={cancelRef} onClick={onClose}>
+                        <Button ref={reference} onClick={onClose}>
                             No
                         </Button>
                         <Button colorScheme='red' ml={3} onClick={handleDelete}>

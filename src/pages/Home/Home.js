@@ -65,7 +65,7 @@ const Home = ({ infoAccount }) => {
 
     return (
         <Box bg="whiteAlpha.100" m={8} p={4} rounded="lg">
-            <LateralMenu option={option} setOption={setOption} children={<Overview />} />
+            <LateralMenu option={option} setOption={setOption} children={renderComponent} />
         </Box>
     )
 }

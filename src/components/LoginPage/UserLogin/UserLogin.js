@@ -19,7 +19,7 @@ const UserLogin = ({ setInfoAccount }) => {
 
     const navigate = useNavigate();
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const ref = useRef()
+    const reference = useRef()
 
     const [accounts, setAccounts] = useState([]); // list of accounts
 
@@ -73,7 +73,7 @@ const UserLogin = ({ setInfoAccount }) => {
                 <IconButton p={6} icon={<ImCross />} onClick={onOpen} />
             </HStack>
 
-            <ConfirmDialog ref={ref} isOpen={isOpen} onClose={onClose} setNeedReload={setNeedReload} />
+            <ConfirmDialog reference={reference} isOpen={isOpen} onClose={onClose} setNeedReload={setNeedReload} />
 
             <HStack spacing={7}>
                 <PinInput size="lg"
