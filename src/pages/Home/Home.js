@@ -1,6 +1,8 @@
+import { Box } from "@chakra-ui/react"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import MainPanel from "../../components/HomePage/MainPanel/MainPanel"
+import Overview from "../../components/HomePage/MainPanel/Overview"
+import LateralMenu from "../../components/LateralMenu/LateralMenu"
 
 /**
  * @name Home
@@ -20,9 +22,20 @@ const Home = ({ infoAccount }) => {
 
     }, [infoAccount, navigate])
 
+    /*
+    * 0 -> Overview
+    * 1 -> Inventory
+    * 2 -> History
+    * 3 -> Market
+    * 4 -> Jackpot
+    * 5 -> Account
+    * 6 -> Buy pack
+    */
 
     return (
-        <MainPanel/>
+        <Box bg="whiteAlpha.100" m={8} p={4} rounded="lg">
+            <LateralMenu children={<Overview />} />
+        </Box>
     )
 }
 
