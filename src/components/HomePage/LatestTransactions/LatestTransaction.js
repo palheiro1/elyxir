@@ -1,44 +1,61 @@
-import { Box, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import TableCard from "../../Cards/TableCard";
+
+import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons'
 
 const LatestTransaction = () => {
+
+    const InOutTransaction = ({ type }) => {
+        const color = type === "in" ? "green" : "blue.600"
+        const msg = type === "in" ? "Received" : "Sent"
+        return(
+            <Stack direction="row">
+                <Text color={color}> {msg} </Text>
+                {type === "in" ? <ArrowDownIcon fontSize="xl" fontWeight="bold" color={color} /> : <ArrowUpIcon fontSize="xl" color={color} />}
+            </Stack>
+        )
+    }
+
     return (
         <Box mt={6}>
-            <Text mb={4}>Latest game transactions</Text>
+            <Text mt={8} mb={4} fontSize="2xl">Latest game transactions</Text>
 
             <TableContainer border="1px" rounded="2xl">
                 <Table variant="simple">
                     <Thead>
                         <Tr>
-                            <Th>Title</Th>
-                            <Th>Amount</Th>
-                            <Th>Date and time</Th>
-                            <Th>Status</Th>
+                            <Th textAlign={"center"} textTransform="inherit" fontSize="sm" fontWeight="medium">Title</Th>
+                            <Th textAlign={"center"} textTransform="inherit" fontSize="sm" fontWeight="medium">Amount</Th>
+                            <Th textAlign={"center"} textTransform="inherit" fontSize="sm" fontWeight="medium">Date and time</Th>
+                            <Th textAlign={"center"} textTransform="inherit" fontSize="sm" fontWeight="medium">Status</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
                         <Tr>
-                            <Td>Game 1</Td>
-                            <Td>0.0001 ETH</Td>
-                            <Td>2021-10-10 10:10:10</Td>
-                            <Td>Won</Td>
+                            <Td>
+                                <TableCard image={"/images/cards/card.png"} title={"Droemerdene"} continent={"America"} rarity={"Common"} />
+                            </Td>
+                            <Td>5</Td>
+                            <Td>Jan 8, 11:35</Td>
+                            <Td><InOutTransaction type={"in"}/></Td>
                         </Tr>
                         <Tr>
-                            <Td>Game 2</Td>
-                            <Td>0.0001 ETH</Td>
-                            <Td>2021-10-10 10:10:10</Td>
-                            <Td>Lost</Td>
+                            <Td><TableCard image={"/images/cards/card.png"} title={"Kel Essuf"} continent={"America"} rarity={"Common"} /></Td>
+                            <Td>1</Td>
+                            <Td>Sep 24, 16:35</Td>
+                            <Td><InOutTransaction type={"in"}/></Td>
                         </Tr>
                         <Tr>
-                            <Td>Game 3</Td>
-                            <Td>0.0001 ETH</Td>
-                            <Td>2021-10-10 10:10:10</Td>
-                            <Td>Won</Td>
+                            <Td><TableCard image={"/images/cards/card.png"} title={"Rompo"} continent={"Oceania"} rarity={"Rare"} />3</Td>
+                            <Td>7</Td>
+                            <Td>Aug 23, 16:35</Td>
+                            <Td><InOutTransaction type={"out"}/></Td>
                         </Tr>
                         <Tr>
-                            <Td>Game 4</Td>
-                            <Td>0.0001 ETH</Td>
-                            <Td>2021-10-10 10:10:10</Td>
-                            <Td>Won</Td>
+                            <Td><TableCard image={"/images/cards/card.png"} title={"Kel Essuf"} continent={"America"} rarity={"Common"} /></Td>
+                            <Td>5</Td>
+                            <Td>Jan 8, 11:35</Td>
+                            <Td><InOutTransaction type={"in"}/></Td>
                         </Tr>
                     </Tbody>
                 </Table>
