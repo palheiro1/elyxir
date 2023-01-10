@@ -3,5 +3,10 @@
   "trailingComma": "es5",
   "singleQuote": true,
   "semi": true,
-  "tabWidth": 4
+  "tabWidth": 4,
+  "bracketSameLine": true,
+  "proseWrap": "always",
+  "printWidth": 100,
+  "bracketSpacing": true,
+  "singleAttributePerLine": false
 }
