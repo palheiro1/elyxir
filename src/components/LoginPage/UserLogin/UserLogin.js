@@ -52,13 +52,13 @@ const UserLogin = ({ setInfoAccount }) => {
         const recoverUser = getUser(user);
         const { token } = recoverUser;
 
-        const data = decrypt(token, pin);
-        if (!data) {
+        const passphrase = decrypt(token, pin);
+        if (!passphrase) {
             setIsInvalidPin(true);
             return;
         }
-
-        setInfoAccount(data);
+        
+        setInfoAccount({...recoverUser, passphrase: passphrase});
         navigate("/home");
     }
 

@@ -41,7 +41,7 @@ const Home = ({ infoAccount }) => {
                 setRenderComponent(<Overview />)
                 break;
             case 1:
-                setRenderComponent(<Inventory />)
+                setRenderComponent(<Inventory infoAccount={infoAccount} />)
                 break;
             case 2:
                 setRenderComponent(<Overview />)
@@ -62,7 +62,7 @@ const Home = ({ infoAccount }) => {
                 setRenderComponent(<Overview />)
                 break;
         }
-    }, [option])
+    }, [option, infoAccount])
 
     return (
         <Box bg="whiteAlpha.100" m={8} p={4} rounded="lg">

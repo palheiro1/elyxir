@@ -1,42 +1,70 @@
+import { useEffect, useState } from 'react';
 import { Box, Button, Grid, GridItem, Select, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import Card from '../Cards/Card';
 import DetailedCard from '../Cards/DetailedCard';
 
 import { FaRegPaperPlane } from 'react-icons/fa';
+import { fetchAllCards } from '../../utils/cardsUtils';
+import { COLLECTIONACCOUNT, TARASCACARDACCOUNT } from '../../data/CONSTANTS';
 
-const Inventory = () => {
+const Inventory = ({ infoAccount }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [ cards, setCards ] = useState([]);
+    const [ cardClicked, setCardClicked ] = useState();
+    //const [cardsFiltered, setCardsFiltered] = useState([]);
+    //const [rarity, setRarity] = useState("All");
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
-
-    const data = {
-        name: "Kel Essuf",
-        image: "/images/cards/card.png",
-        continent: "Europe",
-        rarity: "Common",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar mi ut ornare imperdiet. Vivamus imperdiet vel sem quis viverra. Aliquam convallis ultricies metus a aliquam. Phasellus accumsan nunc eget massa accumsan, sed pretium nisi tempor. Donec sed aliquam magna. Aliquam erat volutpat. Aliquam vestibulum malesuada eleifend. Mauris vestibulum urna id eros molestie, id luctus elit vulputate. Vivamus ultrices felis id felis auctor laoreet. "
+    const handleClick = ({ card }) => {
+        setCardClicked(card);
+        onOpen();
     }
 
-    const GridItemCard = ({ name, image, quantity, continent, rarity }) => {
-        return(
-            <GridItem onClick={onOpen}>
+    const GridItemCard = ({ card }) => {
+        if(!card) return;
+        return (
+            <GridItem onClick={() => handleClick({card: card})}>
                 <Card
-                    name="Kel Essuf"
-                    image="/images/cards/card.png"
-                    quantity={7}
-                    continent="Europe"
-                    rarity="Common"
+                    name={card.name}
+                    image={card.cardImgUrl}
+                    quantity={card.quantityQNT}
+                    continent={card.channel}
+                    rarity={card.rarity}
                 />
             </GridItem>
         );
-    }
+    };
+
+    useEffect(() => {
+        const getAllCards = async () => {
+            const response = await fetchAllCards(
+                infoAccount.accountRs,
+                COLLECTIONACCOUNT,
+                TARASCACARDACCOUNT
+            );
+            setCards(response);
+        };
+
+        infoAccount && getAllCards();
+    }, [infoAccount]);
 
     return (
         <Box>
             <Stack direction="row">
-                <Stack direction="row" border="1px" borderColor="gray.600" rounded="2xl" p={2} align="center" mx={4}>
-                    <FaRegPaperPlane size="2em" />
-                    <Text fontSize="sm" color="gray.400">Sort: </Text>
-                    <Select border="1px" borderColor="gray.800" size="xs" placeholder='Sort option'>Sort</Select>
+                <Stack
+                    direction="row"
+                    border="1px"
+                    borderColor="gray.600"
+                    rounded="2xl"
+                    px={2}
+                    align="center"
+                    mx={4}>
+                    <FaRegPaperPlane size="1.5em" />
+                    <Text fontSize="sm" color="gray.400">
+                        Sort:{' '}
+                    </Text>
+                    <Select border="0px" borderColor="gray.800" size="xs" placeholder="Sort option">
+                        Sort
+                    </Select>
                 </Stack>
                 <Stack position="fixed" right="68px" direction="row" spacing={4}>
                     <Button>All rarities</Button>
@@ -47,16 +75,12 @@ const Inventory = () => {
             </Stack>
 
             <Grid templateColumns="repeat(4, 1fr)">
-                <GridItemCard />
-                <GridItemCard />
-                <GridItemCard />
-                <GridItemCard />
-                <GridItemCard />
-                <GridItemCard />
-                <GridItemCard />
-                <GridItemCard />
+                {cards &&
+                    cards.map((card) => {
+                        return <GridItemCard card={card} />;
+                    })}
             </Grid>
-            <DetailedCard isOpen={isOpen} onClose={onClose} data={data} />
+            { isOpen && <DetailedCard isOpen={isOpen} onClose={onClose} data={cardClicked} /> }
         </Box>
     );
 };
