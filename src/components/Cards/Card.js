@@ -13,14 +13,14 @@ const Card = ({ name, image, quantity, continent, rarity }) => {
             borderColor="gray"
             shadow="dark-lg"
         >
-            <Stack direction="column">
+            <Stack direction="column" spacing={4} shadow={"inner"}>
                 <Image src={image} alt={name} />
-                <Stack direction="row">
+                <Stack direction="row" spacing={4}>
                     <Box>
-                        <Text fontSize="lg" fontWeight="bold">
+                        <Text fontSize="xl" fontWeight="bolder" >
                             {name}
                         </Text>
-                        <Text color="gray">
+                        <Text color="gray" fontSize="md">
                             {continent} / {rarity}{' '}
                         </Text>
                     </Box>
