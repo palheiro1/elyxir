@@ -5,7 +5,7 @@ const News = () => {
     const NewArticle = ({ date, title, text, url}) => {
         return(
             <a href={url}>
-                <Box bg="whiteAlpha.100" p={8} w="100%" rounded="3xl" shadow="dark-lg">
+                <Box bg="whiteAlpha.100" _hover={{ bg: "whiteAlpha.200" }} p={8} w="100%" rounded="3xl" shadow="dark-lg">
                     <Stack direction="column">
                         <Text color="white" fontSize="xs" textTransform="full-width">{date}</Text>
                         <Text color="white" fontSize="2xl">{title}</Text>
