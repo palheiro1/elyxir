@@ -12,7 +12,7 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                 <ModalOverlay />
                 <ModalContent p={6} backgroundColor="blackAlpha.900" border="1px" rounded="3xl" borderTop="2px" borderBottom="2px" shadow="dark-lg">
                     <Stack direction="row">
-                        <Image src={image} alt={name} minW="50%" />
+                        <Image src={image} alt={name} minW="50%" rounded="lg" />
 
                         <Stack direction="column">
                             <ModalHeader>
