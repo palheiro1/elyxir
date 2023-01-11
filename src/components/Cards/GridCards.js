@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Card from './Card';
 import DetailedCard from './DetailedCard';
 
-const GridCards = ({ cards }) => {
+const GridCards = ({ cards, isMarket = false }) => {
     
     // Card clicked
     const [cardClicked, setCardClicked] = useState();
@@ -18,7 +18,7 @@ const GridCards = ({ cards }) => {
                     cards.map(card => {
                         return (
                             <GridItem>
-                                <Card card={card} setCardClicked={setCardClicked} onOpen={onOpen} />
+                                <Card card={card} setCardClicked={setCardClicked} onOpen={onOpen} isMarket={isMarket} />
                             </GridItem>
                         );
                     })}
