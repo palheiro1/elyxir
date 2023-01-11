@@ -5,6 +5,9 @@ import History from "../../components/HistoryPage/History"
 import Overview from "../../components/HomePage/Overview"
 import Inventory from "../../components/InventoryPage/Inventory"
 import LateralMenu from "../../components/LateralMenu/LateralMenu"
+import Market from "../../components/MarketPage/Market"
+import { COLLECTIONACCOUNT, TARASCACARDACCOUNT } from "../../data/CONSTANTS"
+import { fetchAllCards } from "../../utils/cardsUtils"
 
 /**
  * @name Home
@@ -17,12 +20,32 @@ import LateralMenu from "../../components/LateralMenu/LateralMenu"
 const Home = ({ infoAccount }) => {
 
     const navigate = useNavigate()
+    // All cards
+    const [cards, setCards] = useState([]);
 
     useEffect(() => {
         if(infoAccount.token === null && infoAccount.accountRs === null)
             navigate("/login")
 
     }, [infoAccount, navigate])
+
+    /**
+     * @description Get all cards
+     * @param {Object} infoAccount - Account info
+     * @returns {Array} - All cards
+     */
+    useEffect(() => {
+        const getAllCards = async () => {
+            const response = await fetchAllCards(
+                infoAccount.accountRs,
+                COLLECTIONACCOUNT,
+                TARASCACARDACCOUNT
+            );
+            setCards(response);
+        };
+
+        infoAccount && getAllCards();
+    }, [infoAccount]);
 
     /*
     * 0 -> Overview
@@ -42,13 +65,13 @@ const Home = ({ infoAccount }) => {
                 setRenderComponent(<Overview />)
                 break;
             case 1:
-                setRenderComponent(<Inventory infoAccount={infoAccount} />)
+                setRenderComponent(<Inventory infoAccount={infoAccount} cards={cards} />)
                 break;
             case 2:
                 setRenderComponent(<History infoAccount={infoAccount} />)
                 break;
             case 3:
-                setRenderComponent(<Overview />)
+                setRenderComponent(<Market infoAccount={infoAccount} cards={cards} />)
                 break;
             case 4:
                 setRenderComponent(<Overview />)
@@ -63,7 +86,7 @@ const Home = ({ infoAccount }) => {
                 setRenderComponent(<Overview />)
                 break;
         }
-    }, [option, infoAccount])
+    }, [option, infoAccount, cards])
 
     const bgColor = useColorModeValue("blackAlpha.100", "whiteAlpha.100")
 

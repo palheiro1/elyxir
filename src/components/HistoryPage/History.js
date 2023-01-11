@@ -14,6 +14,15 @@ import { FaRegPaperPlane, FaFilter } from 'react-icons/fa';
 import TableCard from '../Cards/TableCard';
 import InOutTransaction from '../Tables/InOutTransaction';
 
+/**
+ * @name History
+ * @description History page
+ * @author Jesús Sánchez Fernández
+ * @version 0.1
+ * @dev This page is used to render the history page
+ * @returns {JSX.Element} History component
+ * 
+ */
 const History = ({ infoAccount }) => {
     const TableElement = () => {
         return (
@@ -77,8 +86,11 @@ const History = ({ infoAccount }) => {
                             borderColor="gray.800"
                             size="xs"
                             placeholder="All transactions">
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
+                            <option value="option1">Received</option>
+                            <option value="option2">Send</option>
+                            <option value="option2">Cards transactions</option>
+                            <option value="option2">Currency TX</option>
+                            <option value="option2">From the Market</option>
                         </Select>
                     </Stack>
                 </Stack>
