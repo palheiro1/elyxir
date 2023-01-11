@@ -87,11 +87,11 @@ const Inventory = ({ infoAccount }) => {
                     direction="row"
                     border="1px"
                     borderColor="gray.600"
-                    rounded="2xl"
+                    rounded="lg"
                     px={2}
                     align="center">
                     <Box pl={1} py={2}>
-                    <FaRegPaperPlane/>
+                        <FaRegPaperPlane />
                     </Box>
                     <Text fontSize="sm" color="gray.400">
                         Sort:{' '}
@@ -125,12 +125,14 @@ const Inventory = ({ infoAccount }) => {
                         Rare
                     </Button>
                     <Button
+                        size="sm"
                         bgColor={bgButtons}
                         isActive={rarity === 'Epic'}
                         onClick={() => setRarity('Epic')}>
                         Epic
                     </Button>
                     <Button
+                        size="sm"
                         bgColor={bgButtons}
                         isActive={rarity === 'Special'}
                         onClick={() => setRarity('Special')}>

@@ -43,7 +43,7 @@ const History = ({ infoAccount }) => {
                     direction="row"
                     border="1px"
                     borderColor="gray.600"
-                    rounded="2xl"
+                    rounded="lg"
                     px={2}
                     align="center">
                     <Box pl={1} py={2}>
@@ -63,7 +63,7 @@ const History = ({ infoAccount }) => {
                         direction="row"
                         border="1px"
                         borderColor="gray.600"
-                        rounded="2xl"
+                        rounded="lg"
                         px={2}
                         align="center">
                         <Box pl={1} py={2}>
