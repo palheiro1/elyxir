@@ -1,20 +1,9 @@
-import { Box, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import TableCard from "../../Cards/TableCard";
 
-import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons'
+import InOutTransaction from "../../Tables/InOutTransaction";
 
 const LatestTransaction = () => {
-
-    const InOutTransaction = ({ type }) => {
-        const color = type === "in" ? "green" : "blue.600"
-        const msg = type === "in" ? "Received" : "Sent"
-        return(
-            <Stack direction="row">
-                <Text color={color}> {msg} </Text>
-                {type === "in" ? <ArrowDownIcon fontSize="xl" fontWeight="bold" color={color} /> : <ArrowUpIcon fontSize="xl" color={color} />}
-            </Stack>
-        )
-    }
 
     return (
         <Box mt={8}>
