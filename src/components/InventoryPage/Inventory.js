@@ -1,12 +1,22 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, Grid, Select, Stack, Text, useDisclosure } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Grid,
+    GridItem,
+    Select,
+    Stack,
+    Text,
+    useColorModeValue,
+    useDisclosure,
+} from '@chakra-ui/react';
 
 import DetailedCard from '../Cards/DetailedCard';
 
 import { FaRegPaperPlane } from 'react-icons/fa';
 import { fetchAllCards } from '../../utils/cardsUtils';
 import { COLLECTIONACCOUNT, TARASCACARDACCOUNT } from '../../data/CONSTANTS';
-import GridItemCard from './GridItemCard';
+import Card from '../Cards/Card';
 
 /**
  * Inventory component
@@ -33,7 +43,6 @@ const Inventory = ({ infoAccount }) => {
     const [cardsFiltered, setCardsFiltered] = useState(cards);
     const [rarity, setRarity] = useState('All');
 
-
     /**
      * @description Get all cards
      * @param {Object} infoAccount - Account info
@@ -52,7 +61,6 @@ const Inventory = ({ infoAccount }) => {
         infoAccount && getAllCards();
     }, [infoAccount]);
 
-
     /**
      * @description Filter cards by rarity
      * @param {String} rarity - Rarity
@@ -69,6 +77,8 @@ const Inventory = ({ infoAccount }) => {
 
         filterCards(rarity);
     }, [cards, rarity]);
+
+    const bgButtons = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
         <Box>
@@ -90,12 +100,38 @@ const Inventory = ({ infoAccount }) => {
                         <option value="option2">Option 2</option>
                     </Select>
                 </Stack>
+
                 <Stack position="absolute" right="70px" direction="row" spacing={4}>
-                    <Button onClick={() => setRarity('All')}>All rarities</Button>
-                    <Button onClick={() => setRarity('Common')}>Common</Button>
-                    <Button onClick={() => setRarity('Rare')}>Rare</Button>
-                    <Button onClick={() => setRarity('Epic')}>Epic</Button>
-                    <Button onClick={() => setRarity('Special')}>Special</Button>
+                    <Button
+                        bgColor={bgButtons}
+                        isActive={rarity === 'All'}
+                        onClick={() => setRarity('All')}>
+                        All rarities
+                    </Button>
+                    <Button
+                        bgColor={bgButtons}
+                        isActive={rarity === 'Common'}
+                        onClick={() => setRarity('Common')}>
+                        Common
+                    </Button>
+                    <Button
+                        bgColor={bgButtons}
+                        isActive={rarity === 'Rare'}
+                        onClick={() => setRarity('Rare')}>
+                        Rare
+                    </Button>
+                    <Button
+                        bgColor={bgButtons}
+                        isActive={rarity === 'Epic'}
+                        onClick={() => setRarity('Epic')}>
+                        Epic
+                    </Button>
+                    <Button
+                        bgColor={bgButtons}
+                        isActive={rarity === 'Special'}
+                        onClick={() => setRarity('Special')}>
+                        Special
+                    </Button>
                 </Stack>
             </Stack>
 
@@ -103,11 +139,9 @@ const Inventory = ({ infoAccount }) => {
                 {cardsFiltered &&
                     cardsFiltered.map(card => {
                         return (
-                            <GridItemCard
-                                card={card}
-                                setCardClicked={setCardClicked}
-                                onOpen={onOpen}
-                            />
+                            <GridItem>
+                                <Card card={card} setCardClicked={setCardClicked} onOpen={onOpen} />
+                            </GridItem>
                         );
                     })}
             </Grid>
