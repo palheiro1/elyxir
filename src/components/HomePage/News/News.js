@@ -1,14 +1,17 @@
-import { Box, Stack, Text } from "@chakra-ui/react";
+import { Box, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 
 const News = () => {
 
     const NewArticle = ({ date, title, text, url}) => {
+        const bgColor = useColorModeValue("blackAlpha.100", "whiteAlpha.100")
+        const bgHoverColor = useColorModeValue("blackAlpha.300", "whiteAlpha.300")
+        const textColor = useColorModeValue("black", "white")
         return(
             <a href={url}>
-                <Box bg="whiteAlpha.100" _hover={{ bg: "whiteAlpha.200" }} p={8} w="100%" rounded="3xl" shadow="dark-lg">
+                <Box bg={bgColor} _hover={{ bg: bgHoverColor }} p={8} w="100%" rounded="3xl" shadow="xl">
                     <Stack direction="column">
-                        <Text color="white" fontSize="xs" textTransform="full-width">{date}</Text>
-                        <Text color="white" fontSize="2xl">{title}</Text>
+                        <Text color={textColor} fontSize="xs" textTransform="full-width">{date}</Text>
+                        <Text color={textColor} fontSize="2xl">{title}</Text>
                         <Text color="grey">{text}</Text>
                     </Stack>
                 </Box>

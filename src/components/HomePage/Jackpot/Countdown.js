@@ -48,16 +48,17 @@ const Countdown = ({ jackpotTimer }) => {
                     mr={2}
                     fontSize="4xl"
                     bg="whiteAlpha.100"
+                    color="white"
                 />
                 <VStack align="flex-start">
-                    <Text fontSize="3xl" fontWeight="bold" mb={-3}>
+                    <Text color="white" fontSize="3xl" fontWeight="bold" mb={-3}>
                         {jackpotBalance} IGNIS
                     </Text>
-                    <Text fontSize="md">({jackpotBalanceUSD} USD)</Text>
+                    <Text color="white" fontSize="md">({jackpotBalanceUSD} USD)</Text>
                 </VStack>
             </HStack>
             <Center>
-            <HStack spacing={4}>
+            <HStack spacing={4} color="white">
                 <Box p={2} bg="#121D31" rounded="lg" minW="90px">
                     <Text textAlign="center" fontSize="xl" fontWeight="bold">
                         {jackpotTimer.days}

@@ -3,7 +3,7 @@ import { Center, Table, Tbody, Td, Tr } from '@chakra-ui/react';
 const BlockInfo = ({ jackpotStatus, jackpotTimer }) => {
     return (
         <Center>
-            <Table variant="simple" my={6}>
+            <Table variant="simple" my={6} color="white">
                 <Tbody>
                     <Tr>
                         <Td py={2.5} borderBottom="0px">
