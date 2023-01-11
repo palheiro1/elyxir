@@ -1,39 +1,44 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, Grid, GridItem, Select, Stack, Text, useDisclosure } from '@chakra-ui/react';
-import Card from '../Cards/Card';
+import { Box, Button, Grid, Select, Stack, Text, useDisclosure } from '@chakra-ui/react';
+
 import DetailedCard from '../Cards/DetailedCard';
 
 import { FaRegPaperPlane } from 'react-icons/fa';
 import { fetchAllCards } from '../../utils/cardsUtils';
 import { COLLECTIONACCOUNT, TARASCACARDACCOUNT } from '../../data/CONSTANTS';
+import GridItemCard from './GridItemCard';
 
+/**
+ * Inventory component
+ * @name Inventory
+ * @description This component is the inventory page
+ * @author Jesús Sánchez Fernández
+ * @version 0.1
+ * @param {Object} infoAccount - Account info
+ * @returns {JSX.Element} - Inventory component
+ * @example
+ * <Inventory infoAccount={infoAccount} />
+ */
 const Inventory = ({ infoAccount }) => {
+    // Open DetailedCardView
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [ cards, setCards ] = useState([]);
-    const [ cardClicked, setCardClicked ] = useState();
-    //const [cardsFiltered, setCardsFiltered] = useState([]);
-    //const [rarity, setRarity] = useState("All");
 
-    const handleClick = ({ card }) => {
-        setCardClicked(card);
-        onOpen();
-    }
+    // All cards
+    const [cards, setCards] = useState([]);
 
-    const GridItemCard = ({ card }) => {
-        if(!card) return;
-        return (
-            <GridItem onClick={() => handleClick({card: card})}>
-                <Card
-                    name={card.name}
-                    image={card.cardImgUrl}
-                    quantity={card.quantityQNT}
-                    continent={card.channel}
-                    rarity={card.rarity}
-                />
-            </GridItem>
-        );
-    };
+    // Card clicked
+    const [cardClicked, setCardClicked] = useState();
 
+    // Filtered cards
+    const [cardsFiltered, setCardsFiltered] = useState(cards);
+    const [rarity, setRarity] = useState('All');
+
+
+    /**
+     * @description Get all cards
+     * @param {Object} infoAccount - Account info
+     * @returns {Array} - All cards
+     */
     useEffect(() => {
         const getAllCards = async () => {
             const response = await fetchAllCards(
@@ -47,9 +52,27 @@ const Inventory = ({ infoAccount }) => {
         infoAccount && getAllCards();
     }, [infoAccount]);
 
+
+    /**
+     * @description Filter cards by rarity
+     * @param {String} rarity - Rarity
+     * @returns {Array} - Filtered cards
+     */
+    useEffect(() => {
+        const filterCards = rarity => {
+            if (rarity === 'All') {
+                setCardsFiltered(cards);
+                return;
+            }
+            setCardsFiltered(cards.filter(card => card.rarity === rarity));
+        };
+
+        filterCards(rarity);
+    }, [cards, rarity]);
+
     return (
         <Box>
-            <Stack direction="row">
+            <Stack direction="row" pb={2}>
                 <Stack
                     direction="row"
                     border="1px"
@@ -63,24 +86,31 @@ const Inventory = ({ infoAccount }) => {
                         Sort:{' '}
                     </Text>
                     <Select border="0px" borderColor="gray.800" size="xs" placeholder="Sort option">
-                        Sort
+                        <option value="option1">Option 1</option>
+                        <option value="option2">Option 2</option>
                     </Select>
                 </Stack>
-                <Stack position="fixed" right="68px" direction="row" spacing={4}>
-                    <Button>All rarities</Button>
-                    <Button>Common</Button>
-                    <Button>Rare</Button>
-                    <Button>Very rare</Button>
+                <Stack position="absolute" right="70px" direction="row" spacing={4}>
+                    <Button onClick={() => setRarity('All')}>All rarities</Button>
+                    <Button onClick={() => setRarity('common')}>Common</Button>
+                    <Button onClick={() => setRarity('rare')}>Rare</Button>
+                    <Button onClick={() => setRarity('very rare')}>Very rare</Button>
                 </Stack>
             </Stack>
 
             <Grid templateColumns="repeat(4, 1fr)">
-                {cards &&
-                    cards.map((card) => {
-                        return <GridItemCard card={card} />;
+                {cardsFiltered &&
+                    cardsFiltered.map(card => {
+                        return (
+                            <GridItemCard
+                                card={card}
+                                setCardClicked={setCardClicked}
+                                onOpen={onOpen}
+                            />
+                        );
                     })}
             </Grid>
-            { isOpen && <DetailedCard isOpen={isOpen} onClose={onClose} data={cardClicked} /> }
+            {isOpen && <DetailedCard isOpen={isOpen} onClose={onClose} data={cardClicked} />}
         </Box>
     );
 };
