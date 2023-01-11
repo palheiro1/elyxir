@@ -92,9 +92,10 @@ const Inventory = ({ infoAccount }) => {
                 </Stack>
                 <Stack position="absolute" right="70px" direction="row" spacing={4}>
                     <Button onClick={() => setRarity('All')}>All rarities</Button>
-                    <Button onClick={() => setRarity('common')}>Common</Button>
-                    <Button onClick={() => setRarity('rare')}>Rare</Button>
-                    <Button onClick={() => setRarity('very rare')}>Very rare</Button>
+                    <Button onClick={() => setRarity('Common')}>Common</Button>
+                    <Button onClick={() => setRarity('Rare')}>Rare</Button>
+                    <Button onClick={() => setRarity('Epic')}>Epic</Button>
+                    <Button onClick={() => setRarity('Special')}>Special</Button>
                 </Stack>
             </Stack>
 

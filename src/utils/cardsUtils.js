@@ -100,12 +100,16 @@ export function cardInfoGenerator(asset, quantityQNT, unconfirmedQuantityQNT, fe
         let totalQuantityQNT = 0;
         if (cardDetails.rarity === 'special') {
             totalQuantityQNT = QUANT_SPECIAL;
+            cardDetails.rarity = 'Special';
         } else if (cardDetails.rarity === 'very rare') {
             totalQuantityQNT = QUANT_VERYRARE;
+            cardDetails.rarity = 'Epic';
         } else if (cardDetails.rarity === 'rare') {
             totalQuantityQNT = QUANT_RARE;
+            cardDetails.rarity = 'Rare';
         } else if (cardDetails.rarity === 'common') {
             totalQuantityQNT = QUANT_COMMON;
+            cardDetails.rarity = 'Common';
         }
 
         let cardname = cardDetails.name === 'Kăk-whăn’-û-ghăt Kǐg-û-lu’-nǐk' ? 'Kăk-whăn’ ...' : cardDetails.name;
