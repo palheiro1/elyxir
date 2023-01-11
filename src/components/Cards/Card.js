@@ -3,14 +3,21 @@ import { Box, Button, Center, Grid, GridItem, Image, Stack, Text, useColorModeVa
 import { BsArrowLeftRight, BsTools } from 'react-icons/bs';
 import { FaRegPaperPlane } from 'react-icons/fa';
 
-const Card = ({ name, image, quantity, continent, rarity }) => {
+const Card = ({ card, setCardClicked, onOpen }) => {
+
+    const handleClick = ({ card }) => {
+        setCardClicked(card);
+        onOpen();
+    }
+
+    const { name, cardImgUrl:image, channel:continent, quantityQNT:quantity, rarity } = card
 
     const bgColor = useColorModeValue("white", "transparent")
 
     return (
         <Box p={4} m={4} border="1px" rounded="3xl" borderColor="gray" shadow="dark-lg" bgColor={bgColor}>
             <Stack direction="column" spacing={4} shadow={'inner'}>
-                <Image src={image} alt={name} rounded="lg" />
+                <Image src={image} alt={name} rounded="lg" onClick={() => handleClick({ card: card })} />
                 <Grid templateColumns="repeat(3, 1fr)" alignContent="center">
                     <GridItem colSpan="2">
                         <Text fontSize="xl" fontWeight="bolder" minW="100%">
