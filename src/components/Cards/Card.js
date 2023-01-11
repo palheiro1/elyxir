@@ -15,9 +15,11 @@ const Card = ({ card, setCardClicked, onOpen }) => {
     const bgColor = useColorModeValue("white", "transparent")
 
     return (
-        <Box p={4} m={4} border="1px" rounded="3xl" borderColor="gray" shadow="dark-lg" bgColor={bgColor}>
-            <Stack direction="column" spacing={4} shadow={'inner'}>
-                <Image src={image} alt={name} rounded="lg" onClick={() => handleClick({ card: card })} />
+        <Box p={4} m={4} border="1px" rounded="3xl" borderColor="gray" shadow="xl" bgColor={bgColor}>
+            <Stack direction="column" spacing={4}>
+
+                <Image src={image} alt={name} rounded="lg" onClick={() => handleClick({ card: card })} shadow="md" />
+
                 <Grid templateColumns="repeat(3, 1fr)" alignContent="center">
                     <GridItem colSpan="2">
                         <Text fontSize="xl" fontWeight="bolder" minW="100%">
@@ -37,14 +39,14 @@ const Card = ({ card, setCardClicked, onOpen }) => {
                 </Grid>
                 <Center>
                     <Stack direction="row">
-                        <Button leftIcon={<BsArrowLeftRight />} _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
-                            Trade
-                        </Button>
                         <Button leftIcon={<FaRegPaperPlane />} _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
                             Send
                         </Button>
                         <Button leftIcon={<BsTools />} _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
                             Craft
+                        </Button>
+                        <Button leftIcon={<BsArrowLeftRight />} _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
+                            Morph
                         </Button>
                     </Stack>
                 </Center>

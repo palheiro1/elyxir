@@ -64,7 +64,7 @@ const Home = ({ infoAccount }) => {
         }
     }, [option, infoAccount])
 
-    const bgColor = useColorModeValue("blackAlpha.200", "whiteAlpha.100")
+    const bgColor = useColorModeValue("blackAlpha.100", "whiteAlpha.100")
 
     return (
         <Box bg={bgColor} m={4} p={8} rounded="lg">

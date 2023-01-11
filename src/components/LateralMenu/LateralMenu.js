@@ -24,7 +24,7 @@ const LateralMenu = ({ option = 0, setOption, children }) => {
     }
 
     const sBgActiveColor = useColorModeValue('blackAlpha.900', 'whiteAlpha.800');
-    const sBgColor = useColorModeValue("blackAlpha.600", "whiteAlpha.400")
+    const sBgColor = useColorModeValue("blackAlpha.600", "whiteAlpha.100")
 
     const sTextActiveColor = useColorModeValue('white', 'black');
     const sTextColor = useColorModeValue('white', 'white');
