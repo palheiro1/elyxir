@@ -1,6 +1,7 @@
 import { Box, useColorModeValue } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import History from "../../components/HistoryPage/History"
 import Overview from "../../components/HomePage/Overview"
 import Inventory from "../../components/InventoryPage/Inventory"
 import LateralMenu from "../../components/LateralMenu/LateralMenu"
@@ -44,7 +45,7 @@ const Home = ({ infoAccount }) => {
                 setRenderComponent(<Inventory infoAccount={infoAccount} />)
                 break;
             case 2:
-                setRenderComponent(<Overview />)
+                setRenderComponent(<History infoAccount={infoAccount} />)
                 break;
             case 3:
                 setRenderComponent(<Overview />)

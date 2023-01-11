@@ -89,9 +89,10 @@ const Inventory = ({ infoAccount }) => {
                     borderColor="gray.600"
                     rounded="2xl"
                     px={2}
-                    align="center"
-                    mx={4}>
-                    <FaRegPaperPlane size="1.5em" />
+                    align="center">
+                    <Box pl={1} py={2}>
+                    <FaRegPaperPlane/>
+                    </Box>
                     <Text fontSize="sm" color="gray.400">
                         Sort:{' '}
                     </Text>
@@ -101,20 +102,23 @@ const Inventory = ({ infoAccount }) => {
                     </Select>
                 </Stack>
 
-                <Stack position="absolute" right="70px" direction="row" spacing={4}>
+                <Stack position="absolute" right="70px" direction="row" spacing={2}>
                     <Button
+                        size="sm"
                         bgColor={bgButtons}
                         isActive={rarity === 'All'}
                         onClick={() => setRarity('All')}>
                         All rarities
                     </Button>
                     <Button
+                        size="sm"
                         bgColor={bgButtons}
                         isActive={rarity === 'Common'}
                         onClick={() => setRarity('Common')}>
                         Common
                     </Button>
                     <Button
+                        size="sm"
                         bgColor={bgButtons}
                         isActive={rarity === 'Rare'}
                         onClick={() => setRarity('Rare')}>
