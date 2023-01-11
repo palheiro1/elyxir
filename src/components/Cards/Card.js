@@ -5,7 +5,7 @@ import { FaRegPaperPlane } from 'react-icons/fa';
 
 const Card = ({ name, image, quantity, continent, rarity }) => {
     return (
-        <Box p={8} m={4} border="1px" rounded="3xl" borderColor="gray" shadow="dark-lg">
+        <Box p={4} m={4} border="1px" rounded="3xl" borderColor="gray" shadow="dark-lg">
             <Stack direction="column" spacing={4} shadow={'inner'}>
                 <Image src={image} alt={name} />
                 <Grid templateColumns="repeat(3, 1fr)" alignContent="center">
