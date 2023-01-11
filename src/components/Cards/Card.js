@@ -1,13 +1,16 @@
-import { Box, Button, Center, Grid, GridItem, Image, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Grid, GridItem, Image, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 
 import { BsArrowLeftRight, BsTools } from 'react-icons/bs';
 import { FaRegPaperPlane } from 'react-icons/fa';
 
 const Card = ({ name, image, quantity, continent, rarity }) => {
+
+    const bgColor = useColorModeValue("white", "transparent")
+
     return (
-        <Box p={4} m={4} border="1px" rounded="3xl" borderColor="gray" shadow="dark-lg">
+        <Box p={4} m={4} border="1px" rounded="3xl" borderColor="gray" shadow="dark-lg" bgColor={bgColor}>
             <Stack direction="column" spacing={4} shadow={'inner'}>
-                <Image src={image} alt={name} />
+                <Image src={image} alt={name} rounded="lg" />
                 <Grid templateColumns="repeat(3, 1fr)" alignContent="center">
                     <GridItem colSpan="2">
                         <Text fontSize="xl" fontWeight="bolder" minW="100%">

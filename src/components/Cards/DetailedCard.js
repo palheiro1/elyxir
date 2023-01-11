@@ -1,8 +1,10 @@
-import { Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Stack, Text } from "@chakra-ui/react";
+import { Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 
 const DetailedCard = ({ isOpen, onClose, data }) => {
 
     const { name, cardImgUrl:image, channel:continent, rarity, description } = data;
+
+    const textColor = useColorModeValue("gray.200", "gray.200")
 
     return (
         <>
@@ -14,12 +16,12 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
 
                         <Stack direction="column">
                             <ModalHeader>
-                                <Text fontSize="3xl" fontWeight="bolder">{name}</Text>
+                                <Text color="white" fontSize="3xl" fontWeight="bolder">{name}</Text>
                                 <Text fontSize="md" color="gray">{continent} / {rarity}</Text>
                             </ModalHeader>
                             <ModalCloseButton />
 
-                            <ModalBody>
+                            <ModalBody color={textColor}>
                                 {description}
                             </ModalBody>
                         </Stack>
