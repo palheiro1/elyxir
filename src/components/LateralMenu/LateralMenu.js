@@ -4,6 +4,7 @@ import {
     Stack,
     Switch,
     Text,
+    useColorModeValue,
     VStack,
 } from '@chakra-ui/react';
 
@@ -22,9 +23,17 @@ const LateralMenu = ({ option = 0, setOption, children }) => {
         return index === option;
     }
 
-    const bgColor =  (index) => isActive(index) && 'whiteAlpha.800';
-    const textColor =  (index) => isActive(index) ? 'black' : 'white';
-    const iconColor =  (index) => isActive(index) ? 'blue' : 'white';
+    const sBgActiveColor = useColorModeValue('blackAlpha.900', 'whiteAlpha.800');
+    const sBgColor = useColorModeValue("blackAlpha.600", "whiteAlpha.400")
+
+    const sTextActiveColor = useColorModeValue('white', 'black');
+    const sTextColor = useColorModeValue('white', 'white');
+
+    const sIconColor = useColorModeValue('white', 'blue')
+
+    const bgColor =  (index) => isActive(index) ? sBgActiveColor : sBgColor;
+    const textColor =  (index) => isActive(index) ? sTextActiveColor : sTextColor;
+    const iconColor =  (index) => isActive(index) ? sIconColor : 'white';
 
     
 

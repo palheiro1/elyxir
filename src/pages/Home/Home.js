@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react"
+import { Box, useColorModeValue } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Overview from "../../components/HomePage/Overview"
@@ -64,8 +64,10 @@ const Home = ({ infoAccount }) => {
         }
     }, [option, infoAccount])
 
+    const bgColor = useColorModeValue("blackAlpha.200", "whiteAlpha.100")
+
     return (
-        <Box bg="whiteAlpha.100" m={8} p={4} rounded="lg">
+        <Box bg={bgColor} m={4} p={8} rounded="lg">
             <LateralMenu option={option} setOption={setOption} children={renderComponent} />
         </Box>
     )
