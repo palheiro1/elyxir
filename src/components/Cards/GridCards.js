@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Card from './Card';
 import DetailedCard from './DetailedCard';
 
-const GridCards = ({ cards, isMarket = false }) => {
+const GridCards = ({ cards, isMarket = false, onlyBuy = false }) => {
     
     // Card clicked
     const [cardClicked, setCardClicked] = useState();
@@ -13,12 +13,12 @@ const GridCards = ({ cards, isMarket = false }) => {
 
     return (
         <>
-            <Grid templateColumns="repeat(4, 1fr)">
+            <Grid templateColumns={["repeat(1, 1fr)", "repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 3fr)", "repeat(4, 1fr)"]} gap={4} my={4}>
                 {cards &&
                     cards.map(card => {
                         return (
                             <GridItem>
-                                <Card card={card} setCardClicked={setCardClicked} onOpen={onOpen} isMarket={isMarket} />
+                                <Card card={card} setCardClicked={setCardClicked} onOpen={onOpen} isMarket={isMarket} onlyBuy = {onlyBuy} />
                             </GridItem>
                         );
                     })}

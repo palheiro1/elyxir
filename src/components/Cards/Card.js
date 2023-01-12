@@ -14,7 +14,7 @@ import {
 import { BsArrowLeftRight, BsTools } from 'react-icons/bs';
 import { FaRegPaperPlane } from 'react-icons/fa';
 
-const Card = ({ card, setCardClicked, onOpen, isMarket = false }) => {
+const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true }) => {
     const handleClick = ({ card }) => {
         setCardClicked(card);
         onOpen();
@@ -27,9 +27,9 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false }) => {
     return (
         <Box
             p={4}
-            m={4}
+            
             border="1px"
-            rounded="3xl"
+            rounded="lg"
             borderColor="gray"
             shadow="xl"
             bgColor={bgColor}>
@@ -42,8 +42,8 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false }) => {
                     shadow="md"
                 />
 
-                <Grid templateColumns="repeat(3, 1fr)" alignContent="center">
-                    <GridItem colSpan="2">
+                <Grid templateColumns="repeat(4, 1fr)" alignContent="center">
+                    <GridItem colSpan="3">
                         <Text fontSize="xl" fontWeight="bolder" minW="100%">
                             {name}
                         </Text>
@@ -54,12 +54,21 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false }) => {
                     <GridItem alignContent="center" minH="100%">
                         <Center minHeight="100%">
                             <Text textAlign="end" minH="100%">
-                                Quantity: {quantity}
+                                <small>Quantity:</small> {quantity}
                             </Text>
                         </Center>
                     </GridItem>
                 </Grid>
-                {!isMarket && (
+                {onlyBuy ? (
+                    <Box w="100%">
+                        <Button
+                            size="lg"
+                            w="100%"
+                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
+                            Buy
+                        </Button>
+                    </Box>
+                ) : !isMarket ? (
                     <Center>
                         <Stack direction="row">
                             <Button
@@ -79,8 +88,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false }) => {
                             </Button>
                         </Stack>
                     </Center>
-                )}
-                {isMarket && (
+                ) : (
                     <Center>
                         <Stack direction="column" w="100%">
                             <Box w="100%">
@@ -92,7 +100,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false }) => {
                                     Trade
                                 </Button>
                             </Box>
-                            <Box borderTop="1px" borderTopColor="gray.600"pt={4}>
+                            <Box borderTop="1px" borderTopColor="gray.600" pt={4}>
                                 <SimpleGrid columns={3} spacing={4}>
                                     <Box>
                                         <Text fontSize="sm" color="gray" textAlign="center">
