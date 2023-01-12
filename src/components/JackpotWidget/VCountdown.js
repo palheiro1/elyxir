@@ -2,34 +2,24 @@ import { Box, Center, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { GiCutDiamond } from 'react-icons/gi';
 
-import { JACKPOTACCOUNT, JACKPOTHALF, NODEURL, NQTDIVIDER } from '../../data/CONSTANTS';
-
-import { getIgnisBalance } from '../../services/Ardor/ardorInterface';
+import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/utils';
 
 const VCountdown = ({ jackpotTimer }) => {
     const [jackpotBalance, setJackpotBalance] = useState(0);
     const [jackpotBalanceUSD, setJackpotBalanceUSD] = useState(0);
 
     useEffect(() => {
-        const getJackpotBalance = async () => {
+        const fetchJackpotBalance = async () => {
             // Recover Jackpot balance - IGNIS
-            const response = await getIgnisBalance(NODEURL, JACKPOTACCOUNT);
-            const balance = response.balanceNQT / NQTDIVIDER;
-            const jackpotBalance = (JACKPOTHALF ? balance / 2 : balance).toFixed(2);
+            const jackpotBalance = await getJackpotBalance();
             setJackpotBalance(jackpotBalance);
 
             // Recover Jackpot balance - USD
-            const responseUSD = await fetch(
-                'https://api.coingecko.com/api/v3/simple/price?ids=ignis&vs_currencies=usd'
-            );
-            const data = await responseUSD.json();
-            const jackpotBalanceUSD = (
-                (JACKPOTHALF ? balance / 2 : balance) * data.ignis.usd
-            ).toFixed(2);
+            const jackpotBalanceUSD = await getJackpotBalanceUSD(jackpotBalance);
             setJackpotBalanceUSD(jackpotBalanceUSD);
         };
 
-        getJackpotBalance();
+        fetchJackpotBalance();
     }, []);
 
     return (
