@@ -1,33 +1,37 @@
-import { Center, Table, Tbody, Td, Tr } from '@chakra-ui/react';
+import { Center, Table, Tbody, Td, Tr, useColorModeValue } from '@chakra-ui/react';
 
-const BlockInfo = ({ jackpotStatus, jackpotTimer }) => {
+const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle }) => {
+
+    const pyStyle = cStyle !== 2 ? 2.5 : 1;
+    const textColor = useColorModeValue("black", "white");
+
     return (
-        <Center>
-            <Table variant="simple" my={6} color="white">
+        <Center rounded="lg">
+            <Table variant="simple" my={cStyle !== 2 && 6} color={textColor} size={cStyle === 2 && "sm"} >
                 <Tbody>
                     <Tr>
-                        <Td py={2.5} borderBottom="0px">
+                        <Td py={pyStyle} borderBottom="0px">
                             Remaining blocks
                         </Td>
-                        <Td py={2.5} borderBottom="0px" color="gray">
+                        <Td py={pyStyle} borderBottom="0px" color="gray">
                             {jackpotTimer.remainingBlocks}
                         </Td>
                     </Tr>
 
                     <Tr>
-                        <Td py={2.5} borderBottom="0px">
+                        <Td py={pyStyle} borderBottom="0px">
                             Jackpot block
                         </Td>
-                        <Td py={2.5} borderBottom="0px" color="gray">
+                        <Td py={pyStyle} borderBottom="0px" color="gray">
                             {jackpotStatus.status.numberOfBlocks + jackpotTimer.remainingBlocks}
                         </Td>
                     </Tr>
 
                     <Tr>
-                        <Td py={2.5} borderBottom="0px">
+                        <Td py={pyStyle} borderBottom="0px">
                             Current block
                         </Td>
-                        <Td py={2.5} borderBottom="0px" color="gray">
+                        <Td py={pyStyle} borderBottom="0px" color="gray">
                             {jackpotStatus.status.numberOfBlocks}
                         </Td>
                     </Tr>
