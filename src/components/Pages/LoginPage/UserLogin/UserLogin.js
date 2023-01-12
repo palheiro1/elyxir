@@ -1,7 +1,7 @@
 import { HStack, IconButton, PinInput, PinInputField, Select, Stack, useDisclosure } from "@chakra-ui/react"
 import { useEffect, useRef, useState } from "react"
-import { decrypt, getAllUsers, getUser } from "../../../utils/storage";
-import ConfirmDialog from "../../ConfirmDialog/ConfirmDialog";
+import { decrypt, getAllUsers, getUser } from "../../../../utils/storage";
+import ConfirmDialog from "../../../ConfirmDialog/ConfirmDialog";
 import { ImCross } from "react-icons/im";
 
 import { useNavigate } from "react-router-dom";

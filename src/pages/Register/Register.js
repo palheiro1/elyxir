@@ -1,6 +1,6 @@
 import { Box, Center, Heading, Image, Stack } from "@chakra-ui/react"
-import LoginButtons from "../../components/LoginPage/LoginButtons/LoginButtons"
-import UserRegister from "../../components/LoginPage/UserRegister/UserRegister"
+import LoginButtons from "../../components/Pages/LoginPage/LoginButtons/LoginButtons"
+import UserRegister from "../../components/Pages/LoginPage/UserRegister/UserRegister"
 
 const Register = () => {
     return(

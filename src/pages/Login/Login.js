@@ -1,6 +1,6 @@
 import { Box, Heading, Image, Stack, Center } from "@chakra-ui/react"
-import LoginButtons from "../../components/LoginPage/LoginButtons/LoginButtons"
-import UserLogin from "../../components/LoginPage/UserLogin/UserLogin"
+import LoginButtons from "../../components/Pages/LoginPage/LoginButtons/LoginButtons"
+import UserLogin from "../../components/Pages/LoginPage/UserLogin/UserLogin"
 
 /**
  * This component is used to render the login page

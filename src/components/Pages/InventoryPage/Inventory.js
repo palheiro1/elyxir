@@ -3,8 +3,8 @@ import {
     Box,
 } from '@chakra-ui/react';
 
-import GridCards from '../Cards/GridCards';
-import SortAndFilterMenu from '../SortAndFilters/SortAndFilterMenu';
+import GridCards from '../../Cards/GridCards';
+import SortAndFilterMenu from '../../SortAndFilters/SortAndFilterMenu';
 
 /**
  * Inventory component

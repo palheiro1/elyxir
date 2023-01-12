@@ -4,8 +4,8 @@ import {
 } from '@chakra-ui/react';
 
 import { useState } from 'react';
-import GridCards from '../Cards/GridCards';
-import SortAndFilterMenu from '../SortAndFilters/SortAndFilterMenu';
+import GridCards from '../../Cards/GridCards';
+import SortAndFilterMenu from '../../SortAndFilters/SortAndFilterMenu';
 import AskAndBidGrid from './AskAndBidGrid';
 import TradesAndOrderTable from './TradesAndOrderTable';
 

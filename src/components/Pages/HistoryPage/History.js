@@ -11,8 +11,8 @@ import {
     Tr,
 } from '@chakra-ui/react';
 import { FaRegPaperPlane, FaFilter } from 'react-icons/fa';
-import TableCard from '../Cards/TableCard';
-import InOutTransaction from '../Tables/InOutTransaction';
+import TableCard from '../../Cards/TableCard';
+import InOutTransaction from '../../Tables/InOutTransaction';
 
 /**
  * @name History

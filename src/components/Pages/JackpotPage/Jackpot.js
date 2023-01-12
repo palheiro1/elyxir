@@ -1,8 +1,8 @@
 import { Box } from "@chakra-ui/react";
 import { useState } from "react";
-import RemainingCards from "../Cards/RemainingCards";
-import JackpotWidget from "../JackpotWidget/JackpotWidget";
-import SortAndFilterMenu from "../SortAndFilters/SortAndFilterMenu";
+import RemainingCards from "../../Cards/RemainingCards";
+import JackpotWidget from "../../JackpotWidget/JackpotWidget";
+import SortAndFilterMenu from "../../SortAndFilters/SortAndFilterMenu";
 
 const Jackpot = ({ cards }) => {
 

@@ -1,6 +1,6 @@
 import { Box, Center, Heading, Image, Stack } from "@chakra-ui/react"
-import LoginButtons from "../../components/LoginPage/LoginButtons/LoginButtons"
-import UserRestore from "../../components/LoginPage/UserRestore/UserRestore"
+import LoginButtons from "../../components/Pages/LoginPage/LoginButtons/LoginButtons"
+import UserRestore from "../../components/Pages/LoginPage/UserRestore/UserRestore"
 
 const Restore = () => {
     return(

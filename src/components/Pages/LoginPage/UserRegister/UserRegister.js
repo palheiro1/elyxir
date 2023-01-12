@@ -1,9 +1,9 @@
 import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, Input, InputGroup, InputRightAddon, PinInput, PinInputField, Stack, Text, Textarea, useToast } from "@chakra-ui/react";
 import { useState } from "react";
-import { generatePassphrase } from "../../../services/Ardor/generatePassphrase";
-import { getAccountFromPhrase } from "../../../services/Ardor/ardorInterface";
-import { addToAllUsers, getUser, initUser } from "../../../utils/storage";
-import { copyToast, errorToast, okToast } from "../../../utils/alerts";
+import { generatePassphrase } from "../../../../services/Ardor/generatePassphrase";
+import { getAccountFromPhrase } from "../../../../services/Ardor/ardorInterface";
+import { addToAllUsers, getUser, initUser } from "../../../../utils/storage";
+import { copyToast, errorToast, okToast } from "../../../../utils/alerts";
 import { useNavigate } from "react-router-dom";
 /**
  * @description This component is used to render the user register form

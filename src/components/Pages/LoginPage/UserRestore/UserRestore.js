@@ -1,8 +1,8 @@
 import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, Input, PinInput, PinInputField, Stack, Text, Textarea, useToast } from "@chakra-ui/react";
 import { useState } from "react";
-import { errorToast, okToast } from "../../../utils/alerts";
-import { addToAllUsers, initUser } from "../../../utils/storage";
-import { validatePassPhrase } from "../../../utils/validators";
+import { errorToast, okToast } from "../../../../utils/alerts";
+import { addToAllUsers, initUser } from "../../../../utils/storage";
+import { validatePassPhrase } from "../../../../utils/validators";
 import { useNavigate } from "react-router-dom";
 
 const UserRestore = () => {

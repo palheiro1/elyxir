@@ -1,12 +1,15 @@
 import { Box, useColorModeValue } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import History from "../../components/HistoryPage/History"
-import Overview from "../../components/HomePage/Overview"
-import Inventory from "../../components/InventoryPage/Inventory"
-import Jackpot from "../../components/JackpotPage/Jackpot"
+
 import LateralMenu from "../../components/LateralMenu/LateralMenu"
-import Market from "../../components/MarketPage/Market"
+
+import History from "../../components/Pages/HistoryPage/History"
+import Overview from "../../components/Pages/HomePage/Overview"
+import Inventory from "../../components/Pages/InventoryPage/Inventory"
+import Jackpot from "../../components/Pages/JackpotPage/Jackpot"
+import Market from "../../components/Pages/MarketPage/Market"
+
 import { COLLECTIONACCOUNT, TARASCACARDACCOUNT } from "../../data/CONSTANTS"
 import { fetchAllCards } from "../../utils/cardsUtils"
 
