@@ -12,7 +12,7 @@ const Jackpot = ({ cards }) => {
         <Box>
             <SortAndFilterMenu cards={cards} setCardsFiltered={setCardsFiltered}/>
             <JackpotWidget cStyle={2} />
-            <RemainingCards remainingCards={cards} />
+            <RemainingCards remainingCards={cardsFiltered} />
         </Box>
     )
 }
