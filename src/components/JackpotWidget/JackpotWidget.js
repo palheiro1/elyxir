@@ -104,7 +104,7 @@ const JackpotWidget = ({ cStyle = 1 }) => {
                 </Box>
             )}
             {cStyle === 2 && (
-                <Center>
+                <Center mt={4}>
                     <Grid
                         templateColumns="repeat(3, 1fr)"
                         border="1px"
