@@ -2,14 +2,14 @@ import { Box, Center, HStack, IconButton, Text, useColorModeValue, VStack } from
 import { useEffect, useState } from 'react';
 import { GiCutDiamond } from 'react-icons/gi';
 
-import { getJackpotBalanceUSD } from '../../services/Jackpot/utils';
+import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/utils';
 
 const HCountdown = ({ jackpotTimer }) => {
     const [jackpotBalance, setJackpotBalance] = useState(0);
     const [jackpotBalanceUSD, setJackpotBalanceUSD] = useState(0);
 
     useEffect(() => {
-        const getJackpotBalance = async () => {
+        const fetchJackpotBalance = async () => {
             // Recover Jackpot balance - IGNIS
             const jackpotBalance = await getJackpotBalance();
             setJackpotBalance(jackpotBalance);
@@ -19,7 +19,7 @@ const HCountdown = ({ jackpotTimer }) => {
             setJackpotBalanceUSD(jackpotBalanceUSD);
         };
 
-        getJackpotBalance();
+        fetchJackpotBalance();
     }, []);
 
     const textColor = useColorModeValue('black', 'white');
