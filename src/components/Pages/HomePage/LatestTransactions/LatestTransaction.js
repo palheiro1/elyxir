@@ -1,7 +1,7 @@
 import { Box, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
-import TableCard from "../../Cards/TableCard";
+import TableCard from "../../../Cards/TableCard";
 
-import InOutTransaction from "../../Tables/InOutTransaction";
+import InOutTransaction from "../../../Tables/InOutTransaction";
 
 const LatestTransaction = () => {
 

@@ -1,5 +1,5 @@
 import { Box, Stack } from "@chakra-ui/react";
-import Jackpot from "../JackpotWidget/JackpotWidget";
+import Jackpot from "../../JackpotWidget/JackpotWidget";
 import LatestTransaction from "./LatestTransactions/LatestTransaction";
 import News from "./News/News";
 
