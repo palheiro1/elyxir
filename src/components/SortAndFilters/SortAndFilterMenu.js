@@ -2,7 +2,7 @@ import { Box, Button, Select, Stack, Text, useColorModeValue } from "@chakra-ui/
 import { useEffect, useState } from "react";
 import { FaRegPaperPlane } from "react-icons/fa";
 
-const SortAndFilterMenu = ({ cards, setCardsFiltered }) => {
+const SortAndFilterMenu = ({ cards = [], setCardsFiltered }) => {
 
     const bgButtons = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
     const [rarity, setRarity] = useState('All');
