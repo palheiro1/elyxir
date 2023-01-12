@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import History from "../../components/HistoryPage/History"
 import Overview from "../../components/HomePage/Overview"
 import Inventory from "../../components/InventoryPage/Inventory"
+import Jackpot from "../../components/JackpotPage/Jackpot"
 import LateralMenu from "../../components/LateralMenu/LateralMenu"
 import Market from "../../components/MarketPage/Market"
 import { COLLECTIONACCOUNT, TARASCACARDACCOUNT } from "../../data/CONSTANTS"
@@ -74,7 +75,7 @@ const Home = ({ infoAccount }) => {
                 setRenderComponent(<Market infoAccount={infoAccount} cards={cards} />)
                 break;
             case 4:
-                setRenderComponent(<Overview />)
+                setRenderComponent(<Jackpot />)
                 break;
             case 5:
                 setRenderComponent(<Overview />)
