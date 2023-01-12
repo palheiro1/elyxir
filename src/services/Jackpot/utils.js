@@ -1,5 +1,6 @@
 import { JACKPOTACCOUNT, JACKPOTHALF, NQTDIVIDER } from "../../data/CONSTANTS";
 import { getIgnisBalance } from "../Ardor/ardorInterface";
+import { getIgnisPrice } from "../coingecko/utils";
 
 export const getJackpotBalance = async () => {
     // Recover Jackpot balance - IGNIS
@@ -9,11 +10,8 @@ export const getJackpotBalance = async () => {
 }
 
 export const getJackpotBalanceUSD = async (jackpotBalance) => {
-    const responseUSD = await fetch(
-        'https://api.coingecko.com/api/v3/simple/price?ids=ignis&vs_currencies=usd'
-    );
-    const data = await responseUSD.json();
+    const ignisPrice = await getIgnisPrice();
     return (
-        (JACKPOTHALF ? jackpotBalance / 2 : jackpotBalance) * data.ignis.usd
+        (JACKPOTHALF ? jackpotBalance / 2 : jackpotBalance) * ignisPrice
     ).toFixed(2);
 }
