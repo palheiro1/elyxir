@@ -25,14 +25,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true }
     const bgColor = useColorModeValue('white', 'transparent');
 
     return (
-        <Box
-            p={4}
-            
-            border="1px"
-            rounded="lg"
-            borderColor="gray"
-            shadow="xl"
-            bgColor={bgColor}>
+        <Box p={2} border="1px" rounded="lg" borderColor="gray" shadow="xl" bgColor={bgColor}>
             <Stack direction="column" spacing={4}>
                 <Image
                     src={image}
@@ -61,33 +54,28 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true }
                 </Grid>
                 {onlyBuy ? (
                     <Box w="100%">
-                        <Button
-                            size="lg"
-                            w="100%"
-                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
+                        <Button size="lg" w="100%" _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
                             Buy
                         </Button>
                     </Box>
                 ) : !isMarket ? (
-                    <Center>
-                        <Stack direction="row">
-                            <Button
-                                leftIcon={<FaRegPaperPlane />}
-                                _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
-                                Send
-                            </Button>
-                            <Button
-                                leftIcon={<BsTools />}
-                                _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
-                                Craft
-                            </Button>
-                            <Button
-                                leftIcon={<BsArrowLeftRight />}
-                                _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
-                                Morph
-                            </Button>
-                        </Stack>
-                    </Center>
+                    <SimpleGrid columns={3} gap={1}>
+                        <Button
+                            leftIcon={<FaRegPaperPlane />}
+                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
+                            Send
+                        </Button>
+                        <Button
+                            leftIcon={<BsTools />}
+                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
+                            Craft
+                        </Button>
+                        <Button
+                            leftIcon={<BsArrowLeftRight />}
+                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
+                            Morph
+                        </Button>
+                    </SimpleGrid>
                 ) : (
                     <Center>
                         <Stack direction="column" w="100%">
