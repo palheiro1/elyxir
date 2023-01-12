@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import LateralMenu from "../../components/LateralMenu/LateralMenu"
+import Account from "../../components/Pages/AccountPage/Account"
 
 import History from "../../components/Pages/HistoryPage/History"
 import Overview from "../../components/Pages/HomePage/Overview"
@@ -81,7 +82,7 @@ const Home = ({ infoAccount }) => {
                 setRenderComponent(<Jackpot cards={cards} />)
                 break;
             case 5:
-                setRenderComponent(<Overview />)
+                setRenderComponent(<Account />)
                 break;
             case 6:
                 setRenderComponent(<Overview />)
