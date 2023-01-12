@@ -3,7 +3,7 @@ import axios from 'axios';
 import qs from 'qs';
 import ardorjs from 'ardorjs';
 
-import { NQTDIVIDER } from '../../data/CONSTANTS';
+import { NODEURL, NQTDIVIDER } from '../../data/CONSTANTS';
 //import { APILIMIT, JACKPOTACCOUNT } from '../../data/CONSTANTS';
 
 
@@ -45,8 +45,8 @@ function getTransactionBytes(nodeurl, query) {
 
 
 //Account balance
-export function getIgnisBalance(nodeurl, account) {
-    return axios.get(nodeurl, {
+export function getIgnisBalance(account) {
+    return axios.get(NODEURL, {
         params: {
             requestType: "getBalance",
             chain: "IGNIS",
