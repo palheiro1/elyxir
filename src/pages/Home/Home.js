@@ -82,7 +82,7 @@ const Home = ({ infoAccount }) => {
                 setRenderComponent(<Jackpot cards={cards} />)
                 break;
             case 5:
-                setRenderComponent(<Account />)
+                setRenderComponent(<Account infoAccount={infoAccount} />)
                 break;
             case 6:
                 setRenderComponent(<Overview />)

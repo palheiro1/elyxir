@@ -12,7 +12,8 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 
-const Account = () => {
+const Account = ({ infoAccount }) => {
+    console.log("🚀 ~ file: Account.js:16 ~ Account ~ infoAccount", infoAccount)
 
     const bgColor = useColorModeValue("blackAlpha.100", "whiteAlpha.100")
 
@@ -23,13 +24,13 @@ const Account = () => {
                     <Heading fontSize="lg" pb={2}>
                         Your Ardor account
                     </Heading>
-                    <Text>ARDOR-J45A-8UPL-XYHR-DAUD8</Text>
+                    <Text>{infoAccount.accountRs}</Text>
                 </Box>
                 <Box p={6} bgColor={bgColor} rounded="lg" mb={2}>
                     <Heading fontSize="lg" pb={2}>
                         User
                     </Heading>
-                    <Text>ARDOR+ASDSA</Text>
+                    <Text>{infoAccount.name}</Text>
                 </Box>
                 <Grid templateColumns="repeat(2, 1fr)" p={6} bgColor={bgColor} rounded="lg">
                     <GridItem>
