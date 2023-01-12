@@ -2,17 +2,23 @@ import { Box, useColorModeValue } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
+// Menu
 import LateralMenu from "../../components/LateralMenu/LateralMenu"
-import Account from "../../components/Pages/AccountPage/Account"
 
+// Pages
 import History from "../../components/Pages/HistoryPage/History"
 import Overview from "../../components/Pages/HomePage/Overview"
 import Inventory from "../../components/Pages/InventoryPage/Inventory"
 import Jackpot from "../../components/Pages/JackpotPage/Jackpot"
 import Market from "../../components/Pages/MarketPage/Market"
+import Account from "../../components/Pages/AccountPage/Account"
 
+// Data
 import { COLLECTIONACCOUNT, TARASCACARDACCOUNT } from "../../data/CONSTANTS"
+
+// Services
 import { fetchAllCards } from "../../utils/cardsUtils"
+import { getGIFTZBalance, getIGNISBalance } from "../../services/Ardor/walletUtils"
 
 /**
  * @name Home
@@ -22,12 +28,18 @@ import { fetchAllCards } from "../../utils/cardsUtils"
  * @dev This page is used to render the home page
  * @returns {JSX.Element} Home component
  */
-const Home = ({ infoAccount }) => {
+const Home = ({ infoAccount, setInfoAccount }) => {
 
+    // Navigate
     const navigate = useNavigate()
+
     // All cards
     const [cards, setCards] = useState([]);
 
+    // Need reload data
+    const [ needReload, setNeedReload ] = useState(true)
+
+    // Check if user is logged
     useEffect(() => {
         if(infoAccount.token === null && infoAccount.accountRs === null)
             navigate("/login")
@@ -49,8 +61,23 @@ const Home = ({ infoAccount }) => {
             setCards(response);
         };
 
-        infoAccount && getAllCards();
-    }, [infoAccount]);
+        const fetchBalances = async () => {
+            const ignis = await getIGNISBalance(infoAccount.accountRs)
+            const giftz = await getGIFTZBalance(infoAccount.accountRs)
+            setInfoAccount({
+                ...infoAccount,
+                IGNISBalance: ignis,
+                GIFTZBalance: giftz.unitsQNT
+            })
+        }
+
+        const loadAll = () => {
+            Promise.all([getAllCards(), fetchBalances()])
+            .then(() => setNeedReload(false))
+        }
+
+        infoAccount.accountRs && needReload && loadAll();
+    }, [infoAccount, setInfoAccount, needReload]);
 
     /*
     * 0 -> Overview
