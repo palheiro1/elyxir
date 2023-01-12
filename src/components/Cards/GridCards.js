@@ -4,7 +4,6 @@ import Card from './Card';
 import DetailedCard from './DetailedCard';
 
 const GridCards = ({ cards, isMarket = false, onlyBuy = false }) => {
-    
     // Card clicked
     const [cardClicked, setCardClicked] = useState();
 
@@ -13,12 +12,27 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false }) => {
 
     return (
         <>
-            <Grid templateColumns={["repeat(1, 1fr)", "repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 3fr)", "repeat(5, 1fr)"]} gap={4} my={4}>
+            <Grid
+                templateColumns={[
+                    'repeat(1, 1fr)',
+                    'repeat(1, 1fr)',
+                    'repeat(2, 1fr)',
+                    'repeat(3, 3fr)',
+                    'repeat(5, 1fr)',
+                ]}
+                gap={4}
+                my={4}>
                 {cards &&
-                    cards.map(card => {
+                    cards.map((card, index) => {
                         return (
-                            <GridItem>
-                                <Card card={card} setCardClicked={setCardClicked} onOpen={onOpen} isMarket={isMarket} onlyBuy = {onlyBuy} />
+                            <GridItem key={index}>
+                                <Card
+                                    card={card}
+                                    setCardClicked={setCardClicked}
+                                    onOpen={onOpen}
+                                    isMarket={isMarket}
+                                    onlyBuy={onlyBuy}
+                                />
                             </GridItem>
                         );
                     })}
