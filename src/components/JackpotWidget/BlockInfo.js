@@ -1,13 +1,13 @@
 import { Center, Table, Tbody, Td, Tr, useColorModeValue } from '@chakra-ui/react';
 
-const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle }) => {
+const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
 
-    const pyStyle = cStyle !== 2 ? 2.5 : 1;
+    const pyStyle = cStyle === 1 ? 2.5 : 1;
     const textColor = useColorModeValue("black", "white");
 
     return (
         <Center rounded="lg">
-            <Table variant="simple" my={cStyle !== 2 && 6} color={textColor} size={cStyle === 2 && "sm"} >
+            <Table variant="simple" my={cStyle === 1 && 6} color={textColor} size={cStyle === 1 ? "lg" : "sm"}>
                 <Tbody>
                     <Tr>
                         <Td py={pyStyle} borderBottom="0px">
