@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Box, Center, Stack, StackDivider, Text } from '@chakra-ui/react';
+import { Box, Center, Grid, GridItem, Stack, StackDivider, Text, useColorModeValue } from '@chakra-ui/react';
 
 // Components
 import BlockInfo from './BlockInfo';
-import Countdown from './Countdown';
+import VCountdown from './VCountdown';
 
 import { BLOCKTIME, FREQUENCY, NODEURL } from '../../data/CONSTANTS';
 
 import { getBlockchainStatus } from '../../services/Ardor/ardorInterface';
+import HCountdown from './HCountdown';
 
 /**
  * @name JackpotWidget
  * @description This component is the jackpot widget
  * @author Jesús Sánchez Fernández
  * @version 0.1
- * @param {Number} style - Style of the component
+ * @param {Number} cStyle - Style of the component
  */
-const JackpotWidget = ({ style = 1 }) => {
+const JackpotWidget = ({ cStyle = 1 }) => {
     const [jackpotStatus, setJackpotStatus] = useState({
         prev_height: 0,
         status: false,
@@ -78,9 +79,11 @@ const JackpotWidget = ({ style = 1 }) => {
         jackpotStatus.status && getJackpotTimer();
     }, [jackpotStatus]);
 
+    const bgColor = useColorModeValue("blackAlpha.200", "whiteAlpha.200")
+
     return (
         <>
-            {style === 1 && (
+            {cStyle === 1 && (
                 <Box alignContent="center">
                     <Text mb={4} fontSize="2xl" textAlign="center" fontWeight="bolder">
                         Jackpot
@@ -93,32 +96,37 @@ const JackpotWidget = ({ style = 1 }) => {
                             p={4}
                             direction="row"
                             divider={<StackDivider borderColor="blue.800" />}>
-                            <Countdown jackpotTimer={jackpotTimer} />
+                            <VCountdown jackpotTimer={jackpotTimer} />
 
                             <BlockInfo jackpotStatus={jackpotStatus} jackpotTimer={jackpotTimer} />
                         </Stack>
                     </Center>
                 </Box>
             )}
-            {style === 2 && (
-                <Box alignContent="center">
-                    <Text mb={4} fontSize="2xl" textAlign="center" fontWeight="bolder">
-                        Jackpot
-                    </Text>
-                    <Center>
-                        <Stack
-                            bg="#1A273D"
-                            shadow="dark-lg"
-                            rounded="lg"
-                            p={4}
-                            direction="row"
-                            divider={<StackDivider borderColor="blue.800" />}>
-                            <Countdown jackpotTimer={jackpotTimer} />
+            {cStyle === 2 && (
+                <Center>
+                    <Grid
+                        templateColumns="repeat(3, 1fr)"
+                        border="1px"
+                        borderColor="whiteAlpha.300"
+                        rounded="lg"
+                        bg="blackAlpha"
+                        shadow="dark-lg"
+                        direction="row">
 
-                            <BlockInfo jackpotStatus={jackpotStatus} jackpotTimer={jackpotTimer} />
-                        </Stack>
-                    </Center>
-                </Box>
+                        <GridItem colSpan={2} p={4} borderLeftRadius="lg">
+                            <HCountdown jackpotTimer={jackpotTimer} />
+                        </GridItem>
+
+                        <GridItem bgColor={bgColor} p={4} borderRightRadius="lg">
+                            <BlockInfo
+                                jackpotStatus={jackpotStatus}
+                                jackpotTimer={jackpotTimer}
+                                cStyle={cStyle}
+                            />
+                        </GridItem>
+                    </Grid>
+                </Center>
             )}
         </>
     );

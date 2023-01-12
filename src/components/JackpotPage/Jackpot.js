@@ -2,7 +2,7 @@ import JackpotWidget from "../JackpotWidget/JackpotWidget";
 
 const Jackpot = () => {
     return(
-        <JackpotWidget style={2} />
+        <JackpotWidget cStyle={2} />
     )
 }
 
