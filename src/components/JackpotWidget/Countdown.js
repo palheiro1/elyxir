@@ -7,9 +7,9 @@ import {
     JACKPOTHALF,
     NODEURL,
     NQTDIVIDER,
-} from '../../../data/CONSTANTS';
+} from '../../data/CONSTANTS';
 
-import { getIgnisBalance } from '../../../services/Ardor/ardorInterface';
+import { getIgnisBalance } from '../../services/Ardor/ardorInterface';
 
 const Countdown = ({ jackpotTimer }) => {
 
