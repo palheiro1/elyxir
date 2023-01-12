@@ -210,8 +210,8 @@ export function getAccountAssets(nodeurl, account, asset = "") {
     });
 }
 
-export function getAccountCurrencies(nodeurl, account, currency) {
-    return axios.get(nodeurl, {
+export const getAccountCurrencies = async (account, currency) => {
+    return axios.get(NODEURL, {
         params: {
             requestType: "getAccountCurrencies",
             account: account,
