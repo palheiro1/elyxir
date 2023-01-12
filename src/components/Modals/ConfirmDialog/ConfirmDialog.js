@@ -1,5 +1,5 @@
 import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button } from "@chakra-ui/react"
-import { dropUser, removeFromAllUsers } from "../../utils/storage"
+import { dropUser, removeFromAllUsers } from "../../../utils/storage"
 
 const ConfirmDialog = ({ reference, isOpen, onClose, setNeedReload, user }) => {
 

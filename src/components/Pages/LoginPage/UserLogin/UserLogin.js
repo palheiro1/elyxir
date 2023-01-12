@@ -1,10 +1,11 @@
 import { HStack, IconButton, PinInput, PinInputField, Select, Stack, useDisclosure } from "@chakra-ui/react"
 import { useEffect, useRef, useState } from "react"
-import { decrypt, getAllUsers, getUser } from "../../../../utils/storage";
-import ConfirmDialog from "../../../ConfirmDialog/ConfirmDialog";
+import { getAllUsers } from "../../../../utils/storage";
+import ConfirmDialog from "../../../Modals/ConfirmDialog/ConfirmDialog";
 import { ImCross } from "react-icons/im";
 
 import { useNavigate } from "react-router-dom";
+import { checkPin } from "../../../../services/Ardor/walletUtils";
 
 /**
  * This component is used to render the user login form
@@ -49,16 +50,12 @@ const UserLogin = ({ setInfoAccount }) => {
     }, [needReload])
 
     const handleLogin = (pin) => {
-        const recoverUser = getUser(user);
-        const { token } = recoverUser;
-
-        const passphrase = decrypt(token, pin);
-        if (!passphrase) {
+        const account = checkPin(user, pin);
+        if (!account) {
             setIsInvalidPin(true);
             return;
         }
-        
-        setInfoAccount({...recoverUser, passphrase: passphrase});
+        setInfoAccount(account);
         navigate("/home");
     }
 
