@@ -98,6 +98,18 @@ export const MORPHINGRARE = 250
 export const MORPHINGEPIC = 750
 
 // ---------------------------------------------
+// --------------- TRANSACTIONS ----------------
+// ---------------------------------------------
+export const DEFAULT_CONTACTS = [
+    { accountRs: COLLECTIONACCOUNT, name: 'Mythical Beings' },
+    { accountRs: BRIDGEACCOUNT, name: 'Mythical Beings ERC1155 Bridge' },
+    { accountRs: BUYPACKACCOUNT, name: 'Mythical Beings' },
+    { accountRs: TARASCACARDACCOUNT, name: 'Mythical Beings' },
+    { accountRs: GEMASSETACCOUNT, name: 'Mythical Beings' },
+    { accountRs: JACKPOTACCOUNT, name: 'Mythical Beings' },
+];
+
+// ---------------------------------------------
 // ----------------- APIS URL ------------------
 // ---------------------------------------------
 export const GAMEAPIURL = "https://api.mythicalbeings.io/";
