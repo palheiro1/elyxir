@@ -75,7 +75,7 @@ const Home = ({ infoAccount }) => {
                 setRenderComponent(<Market infoAccount={infoAccount} cards={cards} />)
                 break;
             case 4:
-                setRenderComponent(<Jackpot />)
+                setRenderComponent(<Jackpot cards={cards} />)
                 break;
             case 5:
                 setRenderComponent(<Overview />)
