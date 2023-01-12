@@ -25,10 +25,10 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true }
     const bgColor = useColorModeValue('white', 'transparent');
 
     return (
-        <Box p={2} border="1px" rounded="lg" borderColor="gray" shadow="xl" bgColor={bgColor}>
+        <Box p={3} border="1px" rounded="lg" borderColor="gray" shadow="xl" bgColor={bgColor}>
             <Stack direction="column" spacing={4}>
                 <Image
-                    _hover={{ cursor: 'pointer', transform: 'scale(1.01)' }}
+                    _hover={{ cursor: 'pointer', transform: 'scale(1.025)', transition: 'all 0.3s ease-in-out', shadow: 'xl' }}
                     src={image}
                     alt={name}
                     rounded="lg"
