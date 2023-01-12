@@ -28,6 +28,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true }
         <Box p={2} border="1px" rounded="lg" borderColor="gray" shadow="xl" bgColor={bgColor}>
             <Stack direction="column" spacing={4}>
                 <Image
+                    _hover={{ cursor: 'pointer', transform: 'scale(1.01)' }}
                     src={image}
                     alt={name}
                     rounded="lg"
