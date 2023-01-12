@@ -22,7 +22,7 @@ function App() {
 
   return (
     <ChakraProvider theme={ theme }> 
-      <Header isLogged = {isLogged} />
+      <Header isLogged = {isLogged} IGNISBalance={infoAccount.IGNISBalance} GIFTZBalance={infoAccount.GIFTZBalance}  />
       <Routes>
 
         {/* LOGING PAGE / CREATE WALLET / RESTORE WALLET */}
@@ -35,7 +35,7 @@ function App() {
         <Route path="/restore" element={ <Restore/> } />
 
         {/* HOME PAGE */}
-        <Route path="/home" element={ <Home infoAccount = {infoAccount} /> } />
+        <Route path="/home" element={ <Home infoAccount = {infoAccount} setInfoAccount = {setInfoAccount} /> } />
 
       </Routes>
       <Footer isLogged = {isLogged} />

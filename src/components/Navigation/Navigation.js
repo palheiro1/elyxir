@@ -28,11 +28,12 @@ import { Link as RouterLink } from 'react-router-dom';
 /**
  * This component is used to render the navigation bar
  * @param {boolean} isHeader - By default its true - This parameter is used to render the navigation bar or the footer
+ * @param {boolean} isLogged - Indicates if the user is logged in or not
  * @returns {JSX.Element} Navigation component
  * @dev With "isHeader" parameter we can calculate logos and if need ColorSwitcher
  * @author Jesús Sánchez Fernández
  */
-const Navigation = ({ isHeader = true, isLogged = false }) => {
+const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBalance }) => {
     const { isOpen, onToggle } = useDisclosure();
     const needTarascaLogo = isHeader ? false : true;
     const needChangeColor = isHeader ? true : false;
@@ -63,7 +64,7 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
                 </Flex>
                 <Flex flex={{ base: 1 }} justify={'center'}>
                     <Flex display={{ base: 'none', md: 'flex' }}>
-                        <DesktopNav needTarascaLogo = {needTarascaLogo} isLogged={isLogged} />
+                        <DesktopNav needTarascaLogo = {needTarascaLogo} isLogged={isLogged} IGNISBalance={IGNISBalance} GIFTZBalance={GIFTZBalance} />
                     </Flex>
                 </Flex>
 
@@ -85,7 +86,7 @@ export default Navigation;
  * @returns {JSX.Element} Desktop navigation component
  * @dev With "needTarascaLogo" parameter we can calculate logos
  */
-const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
+const DesktopNav = ({ needTarascaLogo, isLogged = false, IGNISBalance, GIFTZBalance }) => {
     const linkColor = useColorModeValue('gray.600', 'gray.200');
     const linkHoverColor = useColorModeValue('gray.800', 'white');
     const laMitad = Math.round((NAV_ITEMS.length)/2);
@@ -131,8 +132,8 @@ const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
                     </Button>
                 ) : (
                     <ButtonGroup size='sm' isAttached variant='outline'>
-                        <Button display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'}>IGNIS: 21.8</Button>
-                        <Button display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'}>GIFTZ: 3</Button>
+                        <Button display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'}>IGNIS: {IGNISBalance}</Button>
+                        <Button display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'}>GIFTZ: {GIFTZBalance}</Button>
                     </ButtonGroup>
                 )}
             </Stack>
