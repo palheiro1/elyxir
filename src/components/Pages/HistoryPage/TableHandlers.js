@@ -184,6 +184,7 @@ export const handleIncomingGIFTZ = (amount, date) => {
     return {
         component,
         type: 'in',
+        isCurrency: true,
     };
 };
 
@@ -265,6 +266,7 @@ export const handleGEM = (type, amount, date, account) => {
     return {
         component,
         type,
+        isCurrency: true,
     };
 };
 
@@ -370,6 +372,7 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
     return {
         component,
         type,
+        isCurrency: true,
     };
 };
 
@@ -405,5 +408,6 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
     return {
         component,
         type,
+        isCurrency: true,
     };
 };

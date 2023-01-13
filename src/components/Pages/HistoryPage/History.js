@@ -152,6 +152,8 @@ const History = ({ infoAccount, cards }) => {
                     setFilteredTransactions(transactions.filter(tx => tx.type === 'ask' || tx.type === 'bid'));
                 } else if (filter === 'cards') {
                     setFilteredTransactions(transactions.filter(tx => tx.isCard === true));
+                } else if (filter === 'currency') {
+                    setFilteredTransactions(transactions.filter(tx => tx.isCurrency === true));
                 } else {
                     setFilteredTransactions(transactions.filter(tx => tx.type === filter));
                 }
@@ -191,6 +193,7 @@ const History = ({ infoAccount, cards }) => {
                             <option value="in">Received</option>
                             <option value="out">Send</option>
                             <option value="cards">Cards</option>
+                            <option value="currency">Currency</option>
                             <option value="placed">From the Market</option>
                         </Select>
                     </Stack>
