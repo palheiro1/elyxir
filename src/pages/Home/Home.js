@@ -91,9 +91,9 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             });
         };
 
-        const fetchAllTxs = () => {
-            const txs = getBlockchainTransactions(2, infoAccount.accountRs, true);
-            const unconfirmed = getUnconfirmedTransactions(2, infoAccount.accountRs);
+        const fetchAllTxs = async () => {
+            const txs = await getBlockchainTransactions(2, infoAccount.accountRs, true);
+            const unconfirmed = await getUnconfirmedTransactions(2, infoAccount.accountRs);
             console.log("🚀 ~ file: Home.js:98 ~ fetchAllTxs ~ unconfirmed", unconfirmed)
             setInfoAccount({
                 ...infoAccount,

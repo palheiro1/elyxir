@@ -249,18 +249,19 @@ export const getAccountCurrencies = async (account, currency) => {
         });
 };
 
-const sendIgnis = async (
+const sendIgnis = async ({
     amountNQT,
     recipient,
     passPhrase,
     message,
     messagePrunable = true,
     deadline = 30,
-    priority = 'NORMAL'
-) => {
-    let recipientNew = false;
+    priority = 'NORMAL',
+}) => {
     const account = await getAccount(recipient);
-    if (account.data.errorCode === 5 || account.data.errorCode === 4) recipientNew = true;
+    console.log('🚀 ~ file: ardorInterface.js:263 ~ account', account);
+    const recipientNew = account.data.errorCode === 5;
+    console.log('🚀 ~ file: ardorInterface.js:265 ~ recipientNew', recipientNew);
 
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
     const query = Object.assign({
@@ -281,10 +282,12 @@ const sendIgnis = async (
     const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
 
     const res = await axios.post(url_sendmoney, qs.stringify(query), config);
+    console.log("🚀 ~ file: ardorInterface.js:285 ~ res", res)
     const fee = recipientNew ? 14 * NQTDIVIDER : res.data.minimumFeeFQT * res.data.bundlerRateNQTPerFXT * 0.00000001;
     query.feeNQT = Math.ceil(fee);
     query.broadcast = false;
     const res2 = await axios.post(url_sendmoney, qs.stringify(query, config));
+    console.log("🚀 ~ file: ardorInterface.js:290 ~ res2", res2)
     const signed = ardorjs.signTransactionBytes(res2.data.unsignedTransactionBytes, passPhrase);
     let txdata;
     if (message !== '') {
@@ -296,7 +299,7 @@ const sendIgnis = async (
     } else {
         txdata = { transactionBytes: signed };
     }
-    return axios.post(url_broadcast, qs.stringify(txdata), config);
+    return await axios.post(url_broadcast, qs.stringify(txdata), config);
 };
 
 export const cancelAskOrder = async (order, passPhrase) => {
@@ -517,16 +520,15 @@ const transferAsset = async ({
     deadline = 30,
     priority = 'NORMAL',
 }) => {
-    console.log("🚀 ~ file: ardorInterface.js:520 ~ recipient", recipient)
+    console.log('🚀 ~ file: ardorInterface.js:520 ~ recipient', recipient);
     console.log('transferAsset(): ' + asset);
     let recipientNew = false;
-    
 
     await getAccount(recipient).then(response => {
         recipientNew = response.data.errorCode === 5;
     });
-    
-    console.log("🚀 ~ file: ardorInterface.js:522 ~ recipientNew", recipientNew)
+
+    console.log('🚀 ~ file: ardorInterface.js:522 ~ recipientNew', recipientNew);
 
     console.log('get publicKey');
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
@@ -582,7 +584,6 @@ const transferAsset = async ({
 };
 
 export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
-
     const message = JSON.stringify({
         contract: 'TarascaDaoOmno',
         operation: [
@@ -620,7 +621,7 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
             console.log(error);
         });
 
-    console.log("TransferAsset -> ", transferedAsset)
+    console.log('TransferAsset -> ', transferedAsset);
 
     // ----------------------------------
 
@@ -645,8 +646,63 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
             console.log(error);
         });
 
-    console.log("TransferGEM -> ", transferedGEM)
-    return(transferedAsset.status === 'success' && transferedGEM.status === 'success')
+    console.log('TransferGEM -> ', transferedGEM);
+    return transferedAsset.status === 'success' && transferedGEM.status === 'success';
+};
+
+export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
+    const message = JSON.stringify({ contract: 'TarascaDAOCardCraft' });
+
+    //const noCrafts = Math.floor(noCards / CRAFTING_RATIO);
+    /*
+    const transferedAsset = await transferAsset({
+        asset: asset,
+        quantityQNT: noCards,
+        recipient: BUYPACKACCOUNT,
+        passPhrase,
+        message,
+        messagePrunable: true,
+        deadline: 1440,
+        priority: 'HIGH',
+    })
+        .then(response => {
+            return {
+                response: response,
+                responseTime: response.data.requestProcessingTime,
+                bought: true,
+                status: 'success',
+            };
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+    console.log('TransferAsset -> ', transferedAsset);*/
+
+    const transferedIgnis = await sendIgnis({
+        amountNQT: cost * NQTDIVIDER,
+        recipient: BUYPACKACCOUNT,
+        passPhrase,
+        message,
+        messagePrunable: true,
+        deadline: 1440,
+        priority: 'HIGH',
+    })
+        .then(response => {
+            return {
+                response: response,
+                responseTime: response.data.requestProcessingTime,
+                bought: true,
+                status: 'success',
+            };
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+    console.log('TransferGEM -> ', transferedIgnis);
+
+    return transferedIgnis.status === 'success';
 };
 
 const transferGEM = async ({

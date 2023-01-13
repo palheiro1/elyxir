@@ -87,6 +87,7 @@ export const IV_LENGTH = 16;
 // ---------------------------------------------
 // ----------------- CRAFTING ------------------
 // ---------------------------------------------
+export const CRAFTING_RATIO = 5;
 export const CRAFTINGCOMMON = 150;
 export const CRAFTINGRARE = 450;
 

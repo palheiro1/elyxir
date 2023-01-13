@@ -23,17 +23,22 @@ import {
     Text,
     Tooltip,
     useNumberInput,
+    useToast,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { CRAFTINGCOMMON, CRAFTINGRARE } from '../../../data/CONSTANTS';
+import { sendToCraft } from '../../../services/Ardor/ardorInterface';
 import { checkPin } from '../../../services/Ardor/walletUtils';
+import { errorToast, okToast } from '../../../utils/alerts';
 
 const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
+
+    const toast = useToast();
     const maxCards = Number(card.quantityQNT);
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: 5,
-        defaultValue: 0,
+        defaultValue: 5,
         min: 5,
         max: maxCards,
     });
@@ -42,6 +47,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
     const dec = getDecrementButtonProps();
     const input = getInputProps();
     const [craftingCost, setCraftingCost] = useState(0);
+    const [passPhrase, setPassPhrase] = useState('');
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -49,6 +55,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
         const account = checkPin(username, pin);
         if (account) {
             setIsValidPin(true);
+            setPassPhrase(account.passphrase);
         }
     };
 
@@ -59,12 +66,28 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
 
     useEffect(() => {
         const { rarity } = card;
+        const noCrafts = Math.floor(input.value / 5);
         if (rarity === 'Common') {
-            setCraftingCost(input.value * CRAFTINGCOMMON);
+            setCraftingCost(noCrafts * CRAFTINGCOMMON);
         } else if (rarity === 'Rare') {
-            setCraftingCost(input.value * CRAFTINGRARE);
+            setCraftingCost(noCrafts * CRAFTINGRARE);
         }
     }, [input, card]);
+
+    const handleCrafting = async () => {
+        const ok = await sendToCraft({
+            asset: card.asset,
+            noCards: input.value,
+            passPhrase: passPhrase,
+            cost: craftingCost,
+        });
+        if (ok) {
+            okToast('Crafting request sent', toast)
+            onClose();
+        } else {
+            errorToast('Error sending crafting request', toast)
+        }
+    }
 
     return (
         <>
@@ -160,7 +183,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
                         </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button isDisabled={!isValidPin} bgColor="blue.700" w="100%" py={6}>
+                        <Button isDisabled={!isValidPin} bgColor="blue.700" w="100%" py={6} onClick={handleCrafting} >
                             Submit
                         </Button>
                     </AlertDialogFooter>
