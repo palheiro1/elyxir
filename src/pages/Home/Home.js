@@ -118,7 +118,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 setRenderComponent(<Inventory infoAccount={infoAccount} cards={cardsFiltered} />);
                 break;
             case 2:
-                setRenderComponent(<History infoAccount={infoAccount} cards={cards} />);
+                setRenderComponent(<History infoAccount={infoAccount} collectionCardsStatic={cards} />);
                 break;
             case 3:
                 setRenderComponent(<Market infoAccount={infoAccount} cards={cardsFiltered} />);

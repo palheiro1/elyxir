@@ -22,8 +22,7 @@ import {
  * @returns {JSX.Element} History component
  *
  */
-const History = ({ infoAccount, cards }) => {
-    const collectionCardsStatic = cards;
+const History = ({ infoAccount, collectionCardsStatic }) => {
     /**
      * Tipos
      * 1. IncomingGEM
