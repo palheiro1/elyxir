@@ -10,7 +10,7 @@ const RemainingCards = ({ totalCards, remainingCards, cards }) => {
             <Box>
                 <Text fontSize="xl">You have {have} out of {totalCards} cards.</Text>
                 <Text fontSize="xs">
-                    Complete the collection to claim the jackpot. {remainingCards.length} cards missing.
+                    Complete the collection to claim the jackpot. {remainingCards} cards missing.
                 </Text>
             </Box>
             <GridCards cards={cards} onlyBuy={true} />
