@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Card from './Card';
 import DetailedCard from './DetailedCard';
 
-const GridCards = ({ cards, isMarket = false, onlyBuy = false }) => {
+const GridCards = ({ cards, isMarket = false, onlyBuy = false, username }) => {
     // Card clicked
     const [cardClicked, setCardClicked] = useState();
 
@@ -27,6 +27,7 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false }) => {
                         return (
                             <GridItem key={index}>
                                 <Card
+                                    username={username}
                                     card={card}
                                     setCardClicked={setCardClicked}
                                     onOpen={onOpen}

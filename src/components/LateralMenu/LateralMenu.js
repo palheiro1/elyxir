@@ -1,52 +1,33 @@
-import {
-    Box,
-    Button,
-    Stack,
-    Switch,
-    Text,
-    useColorModeValue,
-    VStack,
-} from '@chakra-ui/react';
+import { Box, Button, Stack, Switch, Text, useColorModeValue, VStack } from '@chakra-ui/react';
 
-import {
-    BsReverseLayoutTextWindowReverse,
-    BsClockHistory,
-} from 'react-icons/bs';
+import { BsReverseLayoutTextWindowReverse, BsClockHistory } from 'react-icons/bs';
 
 import { GiCardRandom, GiCutDiamond } from 'react-icons/gi';
 import { AiOutlineSetting, AiOutlineShoppingCart } from 'react-icons/ai';
 import { BiPackage } from 'react-icons/bi';
 
-const LateralMenu = ({ option = 0, setOption, children }) => {
-
-    const isActive = (index) => {
+const LateralMenu = ({ option = 0, setOption, children, showAllCards, handleShowAllCards }) => {
+    const isActive = index => {
         return index === option;
-    }
+    };
 
     const sBgActiveColor = useColorModeValue('blackAlpha.900', 'whiteAlpha.800');
-    const sBgColor = useColorModeValue("blackAlpha.600", "whiteAlpha.100")
+    const sBgColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.100');
 
     const sTextActiveColor = useColorModeValue('white', 'black');
     const sTextColor = useColorModeValue('white', 'white');
 
-    const sIconColor = useColorModeValue('white', 'blue')
+    const sIconColor = useColorModeValue('white', 'blue');
 
-    const bgColor =  (index) => isActive(index) ? sBgActiveColor : sBgColor;
-    const textColor =  (index) => isActive(index) ? sTextActiveColor : sTextColor;
-    const iconColor =  (index) => isActive(index) ? sIconColor : 'white';
-
-    
+    const bgColor = index => (isActive(index) ? sBgActiveColor : sBgColor);
+    const textColor = index => (isActive(index) ? sTextActiveColor : sTextColor);
+    const iconColor = index => (isActive(index) ? sIconColor : 'white');
 
     return (
         <Stack direction="row">
             <Box>
                 <Stack direction="column">
-                    <Text
-                        fontSize="2xl"
-                        textAlign="center"
-                        fontWeight="bold"
-                        mb={2}
-                    >
+                    <Text fontSize="2xl" textAlign="center" fontWeight="bold" mb={2}>
                         My Wallet
                     </Text>
                 </Stack>
@@ -54,49 +35,36 @@ const LateralMenu = ({ option = 0, setOption, children }) => {
                     <Button
                         minW="150px"
                         minH="50px"
-                        leftIcon={
-                            <BsReverseLayoutTextWindowReverse
-                                size={17.5}
-                                color={iconColor(0)}
-                            />
-                        }
+                        leftIcon={<BsReverseLayoutTextWindowReverse size={17.5} color={iconColor(0)} />}
                         _hover={{ background: 'white.600' }}
                         _active={{ background: 'white.600' }}
                         bgColor={bgColor(0)}
                         textColor={textColor(0)}
-                        onClick={() => setOption(0)}
-                    >
+                        onClick={() => setOption(0)}>
                         Overview
                     </Button>
 
                     <Button
                         minW="150px"
                         minH="50px"
-                        leftIcon={
-                            <GiCardRandom 
-                                size={17.5}
-                                color={iconColor(1)}
-                            />
-                        }
+                        leftIcon={<GiCardRandom size={17.5} color={iconColor(1)} />}
                         _hover={{ background: 'white.600' }}
                         _active={{ background: 'white.600' }}
                         bgColor={bgColor(1)}
                         textColor={textColor(1)}
-                        onClick={() => setOption(1)}
-                    >
+                        onClick={() => setOption(1)}>
                         Inventory
                     </Button>
 
                     <Button
                         minW="150px"
                         minH="50px"
-                        leftIcon={<BsClockHistory size={17.5} color={iconColor(2)}/>}
+                        leftIcon={<BsClockHistory size={17.5} color={iconColor(2)} />}
                         _hover={{ background: 'white.600' }}
                         _active={{ background: 'white.600' }}
                         bgColor={bgColor(2)}
                         textColor={textColor(2)}
-                        onClick={() => setOption(2)}
-                    >
+                        onClick={() => setOption(2)}>
                         History
                     </Button>
 
@@ -108,8 +76,7 @@ const LateralMenu = ({ option = 0, setOption, children }) => {
                         _active={{ background: 'white.600' }}
                         bgColor={bgColor(3)}
                         textColor={textColor(3)}
-                        onClick={() => setOption(3)}
-                    >
+                        onClick={() => setOption(3)}>
                         Market
                     </Button>
 
@@ -121,8 +88,7 @@ const LateralMenu = ({ option = 0, setOption, children }) => {
                         _active={{ background: 'white.600' }}
                         bgColor={bgColor(4)}
                         textColor={textColor(4)}
-                        onClick={() => setOption(4)}
-                    >
+                        onClick={() => setOption(4)}>
                         Jackpot
                     </Button>
 
@@ -134,8 +100,7 @@ const LateralMenu = ({ option = 0, setOption, children }) => {
                         _active={{ background: 'white.600' }}
                         bgColor={bgColor(5)}
                         textColor={textColor(5)}
-                        onClick={() => setOption(5)}
-                    >
+                        onClick={() => setOption(5)}>
                         Account
                     </Button>
 
@@ -146,18 +111,19 @@ const LateralMenu = ({ option = 0, setOption, children }) => {
                         leftIcon={<BiPackage size={17.5} color={iconColor(6)} />}
                         _hover={{ background: 'orange.700' }}
                         _active={{ background: 'orange.700' }}
-                        textColor={"white"}
-                        onClick={() => setOption(6)}
-                    >
+                        textColor={'white'}
+                        onClick={() => setOption(6)}>
                         Buy pack
                     </Button>
                 </VStack>
-                <Stack p={2} align="center" pt={8} >
+                <Stack p={2} align="center" pt={8}>
                     <Text fontWeight="bold">Show all cards</Text>
-                    <Switch size="md" colorScheme="blue" />
+                    <Switch isChecked={showAllCards} onChange={handleShowAllCards} size="lg" colorScheme="blue" />
                 </Stack>
             </Box>
-            <Box width="100%" p={2}>{children}</Box>
+            <Box width="100%" p={2}>
+                {children}
+            </Box>
         </Stack>
     );
 };
