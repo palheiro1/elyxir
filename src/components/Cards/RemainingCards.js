@@ -1,9 +1,9 @@
 import { Box, Text } from '@chakra-ui/react';
 import GridCards from './GridCards';
 
-const RemainingCards = ({ totalCards, remainingCards }) => {
+const RemainingCards = ({ totalCards, remainingCards, cards }) => {
 
-    const have = totalCards - remainingCards.length;
+    const have = totalCards - remainingCards;
 
     return (
         <Box mt={4}>
@@ -13,7 +13,7 @@ const RemainingCards = ({ totalCards, remainingCards }) => {
                     Complete the collection to claim the jackpot. {remainingCards.length} cards missing.
                 </Text>
             </Box>
-            <GridCards cards={remainingCards} onlyBuy={true} />
+            <GridCards cards={cards} onlyBuy={true} />
         </Box>
     );
 };

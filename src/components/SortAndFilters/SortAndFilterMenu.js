@@ -1,39 +1,31 @@
-import { Box, Button, Select, Stack, Text, useColorModeValue } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { FaRegPaperPlane } from "react-icons/fa";
+import { Box, Button, Select, Stack, Text, useColorModeValue } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { FaRegPaperPlane } from 'react-icons/fa';
 
-const SortAndFilterMenu = ({ cards = [], setCardsFiltered }) => {
-
+const SortAndFilterMenu = ({ cards = [], setCardsFiltered, needSpecials = true }) => {
     const bgButtons = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
     const [rarity, setRarity] = useState('All');
 
-        /**
+    /**
      * @description Filter cards by rarity
      * @param {String} rarity - Rarity
      * @returns {Array} - Filtered cards
      */
-        useEffect(() => {
-            const filterCards = rarity => {
-                if (rarity === 'All') {
-                    setCardsFiltered(cards);
-                    return;
-                }
-                setCardsFiltered(cards.filter(card => card.rarity === rarity));
-            };
-    
-            filterCards(rarity);
-        }, [cards, rarity, setCardsFiltered]);
-    
+    useEffect(() => {
+        const filterCards = rarity => {
+            if (rarity === 'All') {
+                setCardsFiltered(cards);
+                return;
+            }
+            setCardsFiltered(cards.filter(card => card.rarity === rarity));
+        };
+
+        filterCards(rarity);
+    }, [cards, rarity, setCardsFiltered]);
 
     return (
         <Stack direction="row" pb={2}>
-            <Stack
-                direction="row"
-                border="1px"
-                borderColor="gray.600"
-                rounded="lg"
-                px={2}
-                align="center">
+            <Stack direction="row" border="1px" borderColor="gray.600" rounded="lg" px={2} align="center">
                 <Box pl={1} py={2}>
                     <FaRegPaperPlane />
                 </Box>
@@ -47,11 +39,7 @@ const SortAndFilterMenu = ({ cards = [], setCardsFiltered }) => {
             </Stack>
 
             <Stack position="absolute" right="70px" direction="row" spacing={2}>
-                <Button
-                    size="sm"
-                    bgColor={bgButtons}
-                    isActive={rarity === 'All'}
-                    onClick={() => setRarity('All')}>
+                <Button size="sm" bgColor={bgButtons} isActive={rarity === 'All'} onClick={() => setRarity('All')}>
                     All rarities
                 </Button>
                 <Button
@@ -61,27 +49,21 @@ const SortAndFilterMenu = ({ cards = [], setCardsFiltered }) => {
                     onClick={() => setRarity('Common')}>
                     Common
                 </Button>
-                <Button
-                    size="sm"
-                    bgColor={bgButtons}
-                    isActive={rarity === 'Rare'}
-                    onClick={() => setRarity('Rare')}>
+                <Button size="sm" bgColor={bgButtons} isActive={rarity === 'Rare'} onClick={() => setRarity('Rare')}>
                     Rare
                 </Button>
-                <Button
-                    size="sm"
-                    bgColor={bgButtons}
-                    isActive={rarity === 'Epic'}
-                    onClick={() => setRarity('Epic')}>
+                <Button size="sm" bgColor={bgButtons} isActive={rarity === 'Epic'} onClick={() => setRarity('Epic')}>
                     Epic
                 </Button>
-                <Button
-                    size="sm"
-                    bgColor={bgButtons}
-                    isActive={rarity === 'Special'}
-                    onClick={() => setRarity('Special')}>
-                    Special
-                </Button>
+                {needSpecials && (
+                    <Button
+                        size="sm"
+                        bgColor={bgButtons}
+                        isActive={rarity === 'Special'}
+                        onClick={() => setRarity('Special')}>
+                        Special
+                    </Button>
+                )}
             </Stack>
         </Stack>
     );

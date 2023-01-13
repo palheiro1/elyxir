@@ -10,6 +10,7 @@ import {
     Text,
     useColorModeValue,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 
 import { BsArrowLeftRight, BsTools } from 'react-icons/bs';
 import { FaRegPaperPlane } from 'react-icons/fa';
@@ -24,16 +25,31 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true }
 
     const bgColor = useColorModeValue('white', 'transparent');
 
+    const [hover, setHover] = useState(false);
+    const initialStyle = {
+        cursor: 'none',
+        transform: 'scale(1)',
+        transition: 'all 0.3s ease-in-out',
+        shadow: 'none',
+    };
+    const hoverStyle = {
+        cursor: 'pointer',
+        transform: 'scale(1.025)',
+        transition: 'all 0.3s ease-in-out',
+        shadow: 'xl',
+    };
+
     return (
         <Box p={3} border="1px" rounded="lg" borderColor="gray" shadow="xl" bgColor={bgColor}>
             <Stack direction="column" spacing={4}>
                 <Image
-                    _hover={{ cursor: 'pointer', transform: 'scale(1.025)', transition: 'all 0.3s ease-in-out', shadow: 'xl' }}
                     src={image}
                     alt={name}
                     rounded="lg"
                     onClick={() => handleClick({ card: card })}
-                    shadow="md"
+                    style={hover ? hoverStyle : initialStyle}
+                    onMouseEnter={() => setHover(true)}
+                    onMouseLeave={() => setHover(false)}
                 />
 
                 <Grid templateColumns="repeat(4, 1fr)" alignContent="center">
@@ -61,19 +77,13 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true }
                     </Box>
                 ) : !isMarket ? (
                     <SimpleGrid columns={3} gap={1}>
-                        <Button
-                            leftIcon={<FaRegPaperPlane />}
-                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
+                        <Button leftIcon={<FaRegPaperPlane />} _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
                             Send
                         </Button>
-                        <Button
-                            leftIcon={<BsTools />}
-                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
+                        <Button leftIcon={<BsTools />} _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
                             Craft
                         </Button>
-                        <Button
-                            leftIcon={<BsArrowLeftRight />}
-                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
+                        <Button leftIcon={<BsArrowLeftRight />} _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
                             Morph
                         </Button>
                     </SimpleGrid>
