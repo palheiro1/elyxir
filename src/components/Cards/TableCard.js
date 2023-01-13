@@ -1,10 +1,10 @@
-import { Box, Image, Stack, Text } from "@chakra-ui/react";
+import { Box, Center, Image, Stack, Text } from "@chakra-ui/react";
 
 const TableCard = ({ image, title, continent, rarity }) => {
     return (
-        <Box>
+        <Center>
             <Stack direction={'row'}>
-                <Image minW="75px" src={image} alt={title} mr={6} />
+                <Image maxW="75px" src={image} alt={title} mr={6} />
 
                 <Stack direction={'row'} align="center">
                     <Box>
@@ -17,7 +17,7 @@ const TableCard = ({ image, title, continent, rarity }) => {
                     </Box>
                 </Stack>
             </Stack>
-        </Box>
+        </Center>
     )
 }
 
