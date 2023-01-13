@@ -19,6 +19,7 @@ import { COLLECTIONACCOUNT, TARASCACARDACCOUNT } from "../../data/CONSTANTS"
 // Services
 import { fetchAllCards } from "../../utils/cardsUtils"
 import { getGIFTZBalance, getIGNISBalance } from "../../services/Ardor/walletUtils"
+import { getBlockchainTransactions, getUnconfirmedTransactions } from "../../services/Ardor/ardorInterface"
 
 /**
  * @name Home
@@ -71,8 +72,18 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             })
         }
 
+        const fetchAllTxs = async () => {
+            const txs = await getBlockchainTransactions(2, infoAccount.accountRs, true)
+            const unconfirmed = await getUnconfirmedTransactions(2, infoAccount.accountRs)
+            setInfoAccount({
+                ...infoAccount,
+                transactions: txs.transactions,
+                unconfirmedTxs: unconfirmed.transactions
+            })
+        }
+
         const loadAll = () => {
-            Promise.all([getAllCards(), fetchBalances()])
+            Promise.all([getAllCards(), fetchBalances(), fetchAllTxs()])
             .then(() => setNeedReload(false))
         }
 
@@ -100,7 +111,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 setRenderComponent(<Inventory infoAccount={infoAccount} cards={cards} />)
                 break;
             case 2:
-                setRenderComponent(<History infoAccount={infoAccount} />)
+                setRenderComponent(<History infoAccount={infoAccount} cards={cards} />)
                 break;
             case 3:
                 setRenderComponent(<Market infoAccount={infoAccount} cards={cards} />)
