@@ -7,17 +7,16 @@ import ardorjs from 'ardorjs';
  * @description - checks if the user name is already taken
  */
 export function validateUsername(value, userList) {
-
-    const user_existing = userList.find((el)=> el === value);
+    const user_existing = userList.find(el => el === value);
     const length = value.length;
 
-    if (user_existing){
-        return {invalid:true, error:"User name is already taken"};
+    if (user_existing) {
+        return { invalid: true, error: 'User name is already taken' };
     } else if (length === 0) {
-        return {invalid:true, error:"User name can't be empty"};
+        return { invalid: true, error: "User name can't be empty" };
     }
 
-    return {invalid:false, error:""};
+    return { invalid: false, error: '' };
 }
 
 /**
@@ -26,17 +25,17 @@ export function validateUsername(value, userList) {
  * @returns {object} - object with invalid and error properties
  * @description - checks if the pass phrase belongs to the account
  */
-export function validatePassPhrase(value, account){
+export function validatePassPhrase(value, account) {
     let invalid = false;
-    let error = ""; 
+    let error = '';
     const accountFromPhrase = ardorjs.secretPhraseToAccountId(value, false);
 
     if (accountFromPhrase !== account) {
         invalid = true;
-        error = "This pass phrase belongs to account " + accountFromPhrase;
+        error = 'This pass phrase belongs to account ' + accountFromPhrase;
     }
 
-    return {invalid: invalid, error: error};
+    return { invalid: invalid, error: error };
 }
 
 /**
@@ -44,26 +43,36 @@ export function validatePassPhrase(value, account){
  * @returns {object} - object with invalid and error properties
  * @description - checks if the ethreum address is valid
  */
-export function validateEthAddress(value){
-    let invalid=false;
-    let error="";
+export function validateEthAddress(value) {
+    let invalid = false;
+    let error = '';
 
-    if (value!==''){
-
-        if (value.length<40) {
+    if (value !== '') {
+        if (value.length < 40) {
             invalid = true;
             error = 'address looks too short.';
-        } else if (!(value.charAt(0) === "0" && value.charAt(1) === "x")) {
+        } else if (!(value.charAt(0) === '0' && value.charAt(1) === 'x')) {
             invalid = true;
             error = 'address must begin with 0x';
         }
-
     } else {
         // case if field is empty
         invalid = false;
         error = '';
     }
-    return {invalid: invalid, error: error};
+    return { invalid: invalid, error: error };
+}
+
+export function validateAddress(value, status) {
+    let invalid = status.invalid;
+    let error = status.error;
+    invalid = value.match('^ARDOR-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{5}') ? false : true;
+    error = invalid ? "this doesn't look like a valid ARDOR address." : '';
+    return { invalid: invalid, error: error };
+}
+
+export const isArdorAccount = (account) => {
+    return (account.match('^ARDOR-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{5}'));
 }
 
 /**
@@ -87,20 +96,24 @@ function eqSet(userSet, collectionSet) {
  * @returns {object} - object with complete, userAssets, missingAssets and totalNum properties
  * @description - check if every asset of the collection exists at least once in the users' assets
  */
-export function validateWinner(userAssets, collectionAssets){
+export function validateWinner(userAssets, collectionAssets) {
     const userValidAssets = [];
     userAssets.forEach(asset => {
-        if (asset.quantityQNT > 0){
+        if (asset.quantityQNT > 0) {
             userValidAssets.push(asset.asset);
         }
     });
 
     const userSet = new Set(userValidAssets);
 
-    const collectionSet = new Set(collectionAssets.map(asset=>{return asset.asset}));
+    const collectionSet = new Set(
+        collectionAssets.map(asset => {
+            return asset.asset;
+        })
+    );
     const intersection = new Set([...userSet].filter(x => collectionSet.has(x)));
 
-    const sets_equal = eqSet(intersection,collectionSet);
+    const sets_equal = eqSet(intersection, collectionSet);
 
     // difference between intersection (all user's cards) and collection
     let difference = new Set([...collectionSet].filter(x => !intersection.has(x)));
@@ -110,7 +123,7 @@ export function validateWinner(userAssets, collectionAssets){
         complete: sets_equal,
         userAssets: [...intersection],
         missingAssets: [...difference],
-        totalNum: collectionAssets.length
+        totalNum: collectionAssets.length,
     };
 }
 
@@ -123,9 +136,9 @@ export function validateWinner(userAssets, collectionAssets){
 export function validatePin(value, status) {
     let invalid = status.invalid;
     let error = status.error;
-    
-    invalid = value.length < 4 ? true : false;
-    error = invalid ? "too short" : '';
 
-    return({invalid: invalid, error: error});
+    invalid = value.length < 4 ? true : false;
+    error = invalid ? 'too short' : '';
+
+    return { invalid: invalid, error: error };
 }
