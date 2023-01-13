@@ -1,10 +1,16 @@
-import { Box, Select, Stack, Table, TableContainer, Tbody, Td, Text, Thead, Tr } from '@chakra-ui/react';
+import { Box, Button, Select, Stack, Table, TableContainer, Tbody, Td, Text, Thead, Tr } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaRegPaperPlane, FaFilter } from 'react-icons/fa';
 import { getBlockchainStatus } from '../../../services/Ardor/ardorInterface';
 import { getTxTimestamp } from '../../../utils/txUtils';
 import {
-    handleIncomingGIFTZ, handleType0AndSubtype0, handleType1AndSubtype0, handleType2AndSubtype1, handleType2AndSubtype2And3, handleType2AndSubtype4And5, handleType5AndSubtype3,
+    handleIncomingGIFTZ,
+    handleType0AndSubtype0,
+    handleType1AndSubtype0,
+    handleType2AndSubtype1,
+    handleType2AndSubtype2And3,
+    handleType2AndSubtype4And5,
+    handleType5AndSubtype3,
 } from './TableHandlers';
 
 /**
@@ -47,7 +53,12 @@ const History = ({ infoAccount, cards }) => {
     const [transactions, setTransactions] = useState([]);
     const [blockchainStatus, setBlockchainStatus] = useState({});
     const [needReload, setNeedReload] = useState(true);
+    const [visibleTransactions, setVisibleTransactions] = useState(10);
     //const [filter, setFilter] = useState('all');
+
+    const loadMoreTransactions = () => {
+        setVisibleTransactions(prevVisibleTransactions => prevVisibleTransactions + 10);
+    };
 
     useEffect(() => {
         const fetchBlockchainStatus = async () => {
@@ -64,14 +75,13 @@ const History = ({ infoAccount, cards }) => {
         fetchBlockchainStatus();
     }, []);
 
-
     // -------------------------------------------------
     useEffect(() => {
         const processTransactions = () => {
             console.log('Processing transactions...');
             let transactions = [];
 
-            const dirtyTransactions = infoAccount.transactions.slice(0, 10);
+            const dirtyTransactions = infoAccount.transactions.slice(0, 50);
 
             dirtyTransactions.forEach(tx => {
                 const timestamp = getTxTimestamp(tx, blockchainStatus.epoch_beginning);
@@ -81,25 +91,32 @@ const History = ({ infoAccount, cards }) => {
 
                 switch (type) {
                     case 0:
-                        if(subtype === 0) // Money transfer
+                        if (subtype === 0)
+                            // Money transfer
                             handler = handleType0AndSubtype0(tx, timestamp, infoAccount);
                         break;
                     case 1:
-                        if(subtype === 0) // Message
+                        if (subtype === 0)
+                            // Message
                             handler = handleType1AndSubtype0(tx, timestamp, infoAccount);
                         break;
                     case 2:
-                        if(subtype === 1) // GEM & Card transfer
+                        if (subtype === 1)
+                            // GEM & Card transfer
                             handler = handleType2AndSubtype1(tx, timestamp, infoAccount, collectionCardsStatic);
-                        if(subtype === 2 || subtype === 3) // GEM & Card exchange
+                        if (subtype === 2 || subtype === 3)
+                            // GEM & Card exchange
                             handler = handleType2AndSubtype2And3(tx, timestamp, infoAccount, collectionCardsStatic);
-                        if(subtype === 4 || subtype === 5) // Cancelled order
+                        if (subtype === 4 || subtype === 5)
+                            // Cancelled order
                             handler = handleType2AndSubtype4And5(tx, timestamp, infoAccount);
                         break;
                     case 5:
-                        if(subtype === 3) // Currency transfer
+                        if (subtype === 3)
+                            // Currency transfer
                             handler = handleType5AndSubtype3(tx, timestamp, infoAccount);
-                        if(subtype === 5 && tx.senderRS === infoAccount.accountRs) // Incoming GIFTZ (NOT WORKING)
+                        if (subtype === 5 && tx.senderRS === infoAccount.accountRs)
+                            // Incoming GIFTZ (NOT WORKING)
                             handler = handleIncomingGIFTZ(tx, timestamp, infoAccount);
                         break;
                     default:
@@ -169,11 +186,13 @@ const History = ({ infoAccount, cards }) => {
                     </Thead>
                     <Tbody>
                         {!needReload &&
-                            transactions.map(transaction => {
+                            transactions.slice(0, visibleTransactions).map(transaction => {
                                 return transaction;
                             })}
                     </Tbody>
                 </Table>
+                
+                <Button size="lg" w="100%" p={6} onClick={loadMoreTransactions}>Load More</Button>
             </TableContainer>
         </Box>
     );
