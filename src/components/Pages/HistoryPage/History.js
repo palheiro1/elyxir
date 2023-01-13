@@ -114,13 +114,17 @@ const History = ({ infoAccount, cards }) => {
                         let sender = parseSender(tx);
 
                         if (inOut && sender) {
-                            const quantity = Number(tx.attachment.quantityQNT / NQTDIVIDER).toFixed(2);
-
+                            const gemAmount = Number(tx.attachment.quantityQNT / NQTDIVIDER)
+                            let fixedAmount = 0;
+                            if(gemAmount > 0) {
+                                fixedAmount = gemAmount - Math.floor(gemAmount) === 0 ? Number(tx.attachment.quantityQNT / NQTDIVIDER).toFixed(0) : Number(tx.attachment.quantityQNT / NQTDIVIDER).toFixed(2);
+                            }
+                            console.log("🚀 ~ file: History.js:119 ~ processTransactions ~ fixedAmount", fixedAmount)
                             let handler = null;
                             if (asset === 'GEM') {
-                                handler = handleGEM(inOut, quantity, timestamp, sender);
+                                handler = handleGEM(inOut, fixedAmount, timestamp, sender);
                             } else {
-                                handler = handleCardTransfer(inOut, quantity, timestamp, sender, asset);
+                                handler = handleCardTransfer(inOut, tx.attachment.quantityQNT, timestamp, sender, asset);
                             }
 
                             transactions.push(handler);
@@ -133,10 +137,16 @@ const History = ({ infoAccount, cards }) => {
                     const card = collectionCardsStatic.find(card => card.asset === tx.attachment.asset);
                     const orderType = tx.subtype === 2 ? 'ask' : 'bid';
                     const isGem = !card;
+                    const amount = tx.attachment.quantityQNT;
+                    let fixedAmount = 0;
+                    if(amount > 0) {
+                        console.log("🚀 ~ file: History.js:143 ~ processTransactions ~ amount", amount)
+                        fixedAmount = amount - Math.floor(amount) === 0 ? Number(amount / NQTDIVIDER).toFixed(0) : Number(amount / NQTDIVIDER).toFixed(2);
+                    }
                     if (card || tx.attachment.asset === GEMASSET) {
                         const handler = handleAssetExchange(
                             orderType,
-                            tx.attachment.quantityQNT,
+                            fixedAmount,
                             timestamp,
                             parseSender(tx),
                             isGem
@@ -186,19 +196,23 @@ const History = ({ infoAccount, cards }) => {
                             }
                         }
                     }
-                    console.log('Debug -> ', tx.attachment);
-                    let sender;
+                    let account;
                     try {
-                        sender = parseSender(tx);
+                        if(inOut === 'out') {
+                            account = parseRecipient(tx);
+                        } else {
+                            account = parseSender(tx);
+                        }
                     } catch (e) {
                         console.log(e);
                     }
-                    if (!sender) return;
+                    if (!account) return;
+                    console.log("------------>", tx);
                     const handler = handleMoneyTransfer(
                         inOut,
-                        tx.attachment.quantityQNT,
+                        tx.amountNQT/NQTDIVIDER,
                         timestamp,
-                        sender,
+                        account,
                         jackpot,
                         reason
                     );
@@ -347,8 +361,6 @@ const History = ({ infoAccount, cards }) => {
         const icon = isGem ? <FaGem scale={5} /> : <FaFilter />;
         const msg = isGem ? 'GEM' : 'Asset';
         const fixedType = type === 'ask' ? 'Ask' : 'Bid';
-
-        const fixedAmount = Number(amount / 100000000).toFixed(2);
         return (
             <Tr>
                 <Td>
@@ -366,7 +378,7 @@ const History = ({ infoAccount, cards }) => {
                         </Center>
                     </SimpleGrid>
                 </Td>
-                <Td>{fixedAmount}</Td>
+                <Td>{amount}</Td>
                 <Td>{date}</Td>
                 <Td>{account === infoAccount.accountRs ? 'You' : account}</Td>
                 <Td>
