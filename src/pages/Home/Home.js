@@ -40,6 +40,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     // Need reload data
     const [needReload, setNeedReload] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     /*
      * 0 -> Overview
@@ -61,13 +62,11 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     }, [infoAccount, navigate]);
 
     useEffect(() => {
-
-        if(showAllCards) {
-            setCardsFiltered(cards)
+        if (showAllCards) {
+            setCardsFiltered(cards);
         } else {
             setCardsFiltered(cards.filter(card => Number(card.quantityQNT) > 0));
         }
-        
     }, [showAllCards, cards]);
 
     /**
@@ -76,50 +75,41 @@ const Home = ({ infoAccount, setInfoAccount }) => {
      * @returns {Array} - All cards
      */
     useEffect(() => {
-        const getAllCards = async () => {
-            const response = await fetchAllCards(infoAccount.accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT);
-            setCards(response);
-        };
+        const loadAll = async () => {
+            console.log('Loading all data...');
+            setIsLoading(true);
+            setNeedReload(false);
+            const [cards, ignis, giftz, txs, unconfirmed] = await Promise.all([
+                fetchAllCards(infoAccount.accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT),
+                getIGNISBalance(infoAccount.accountRs),
+                getGIFTZBalance(infoAccount.accountRs),
+                getBlockchainTransactions(2, infoAccount.accountRs, true),
+                getUnconfirmedTransactions(2, infoAccount.accountRs),
+            ]);
 
-        const fetchBalances = async () => {
-            const ignis = await getIGNISBalance(infoAccount.accountRs);
-            const giftz = await getGIFTZBalance(infoAccount.accountRs);
+            setCards(cards);
             setInfoAccount({
                 ...infoAccount,
                 IGNISBalance: ignis,
                 GIFTZBalance: giftz.unitsQNT,
-            });
-        };
-
-        const fetchAllTxs = async () => {
-            const txs = await getBlockchainTransactions(2, infoAccount.accountRs, true);
-            const unconfirmed = await getUnconfirmedTransactions(2, infoAccount.accountRs);
-            console.log("🚀 ~ file: Home.js:98 ~ fetchAllTxs ~ unconfirmed", unconfirmed)
-            setInfoAccount({
-                ...infoAccount,
                 transactions: txs.transactions,
                 unconfirmedTxs: unconfirmed.transactions,
             });
+            setIsLoading(false);
         };
 
-        const loadAll = () => {
-            setNeedReload(false)
-            console.log("Loading all...")
-            Promise.all([getAllCards(), fetchBalances(), fetchAllTxs()]);
-        };
+        if (infoAccount.accountRs && needReload && !isLoading) {
+            loadAll();
+        }
 
-        infoAccount.accountRs && needReload && loadAll();
-    }, [infoAccount, setInfoAccount, needReload]);
-
-    useEffect(() => {
-        setInterval(() => {
-            setNeedReload(true);
+        const intervalId = setInterval(() => {
+            if (!isLoading) {
+                setNeedReload(true);
+            }
         }, 30000);
 
-        return () => {
-            clearInterval();
-        };
-    }, []);
+        return () => clearInterval(intervalId);
+    }, [infoAccount, needReload, isLoading, setInfoAccount]);
 
     useEffect(() => {
         switch (option) {
