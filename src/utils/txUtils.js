@@ -58,6 +58,8 @@ export function parseSender(tx, contacts = DEFAULT_CONTACTS) {
                 case 'TarascaDaoOmno':
                     nameSuffix = ' Morph';
                     break;
+                default:
+                    break;
             }
         }
         return found.name + nameSuffix;
@@ -95,43 +97,15 @@ export function parseRecipient(tx, contacts = DEFAULT_CONTACTS) {
                 case 'TarascaDaoOmno':
                     nameSuffix = ' Morph';
                     break;
+                default:
+                    break;
             }
         }
         return found.name + nameSuffix;
     }
 }
 
-export function getTxTimestamp({ tx, eb }) {
-    var txstamp = new Date(eb.getTime());
-    txstamp.setSeconds(+txstamp.getSeconds() + tx.timestamp);
-    let status = 'unconfirmed';
-    if (tx.confirmations === 1) {
-        status = 'just confirmed';
-    } else if (tx.confirmations > 1) {
-        status = 'confirmed';
-    }
-    const Month = txstamp.getMonth() + 1;
-    const datestring =
-        txstamp.getFullYear().toString() +
-        '-' +
-        Month.toString().padStart(2, '0') +
-        '-' +
-        txstamp.getDate().toString().padStart(2, '0');
-    const timestring =
-        txstamp.getHours().toString().padStart(2, '0') +
-        ':' +
-        txstamp.getMinutes().toString().padStart(2, '0') +
-        ':' +
-        txstamp.getSeconds().toString().padStart(2, '0');
-
-    return {
-        datestring: datestring,
-        timestring: timestring,
-        status: status,
-    };
-}
-
-export function getTxTimestamp({ tx, eb }) {
+export function getTxTimestamp(tx, eb) {
     const txstamp = new Date(eb.getTime() + tx.timestamp * 1000);
     const status =
         tx.confirmations === 1
@@ -142,9 +116,5 @@ export function getTxTimestamp({ tx, eb }) {
     const datestring = formatDate(txstamp, 'yyyy-MM-dd');
     const timestring = formatTime(txstamp, 'HH:mm:ss');
 
-    return {
-        datestring,
-        timestring,
-        status,
-    };
+    return `${datestring} ${timestring} (${status})`;
 }
