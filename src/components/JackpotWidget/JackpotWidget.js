@@ -5,7 +5,7 @@ import { Box, Center, Grid, GridItem, Stack, StackDivider, Text, useColorModeVal
 import BlockInfo from './BlockInfo';
 import VCountdown from './VCountdown';
 
-import { BLOCKTIME, FREQUENCY, NODEURL } from '../../data/CONSTANTS';
+import { BLOCKTIME, FREQUENCY } from '../../data/CONSTANTS';
 
 import { getBlockchainStatus } from '../../services/Ardor/ardorInterface';
 import HCountdown from './HCountdown';
@@ -33,7 +33,7 @@ const JackpotWidget = ({ cStyle = 1 }) => {
 
     useEffect(() => {
         const getJackpotStatus = async () => {
-            const response = await getBlockchainStatus(NODEURL);
+            const response = await getBlockchainStatus();
 
             if (jackpotStatus.prev_height !== response.data.numberOfBlocks) {
                 setJackpotStatus({
