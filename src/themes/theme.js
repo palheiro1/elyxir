@@ -52,8 +52,27 @@ const components = {
             transformOrigin: "left top"
           }
         }
+      }),
+      floatingGray: (props) => ({
+        container: {
+          label: {
+            bg: props.colorMode === 'dark' ? '#1D1D1D' : '#1D1D1D',
+            color: 'white',
+            top: -5,
+            left: 0,
+            zIndex: 2,
+            position: "absolute",
+            fontSize: "sm",
+            fontWeight: "bold",
+            pointerEvents: "none",
+            mx: 3,
+            px: 1,
+            my: 2,
+            transformOrigin: "left top"
+          }
+        }
       })
-    }
+    },
   }
 };
 
