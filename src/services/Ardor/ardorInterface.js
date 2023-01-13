@@ -3,7 +3,7 @@ import axios from 'axios';
 import qs from 'qs';
 import ardorjs from 'ardorjs';
 
-import { NODEURL, NQTDIVIDER } from '../../data/CONSTANTS';
+import { GEMASSET, NODEURL, NQTDIVIDER, BUYPACKACCOUNT } from '../../data/CONSTANTS';
 //import { APILIMIT, JACKPOTACCOUNT } from '../../data/CONSTANTS';
 
 const config = {
@@ -181,7 +181,7 @@ export const getAssetsByIssuer = async issuerAccount => {
 };
 
 export const getAccount = async account => {
-    return axios
+    return await axios
         .get(NODEURL, {
             params: {
                 requestType: 'getAccount',
@@ -259,7 +259,7 @@ const sendIgnis = async (
     priority = 'NORMAL'
 ) => {
     let recipientNew = false;
-    const account = await getAccount(NODEURL, recipient);
+    const account = await getAccount(recipient);
     if (account.data.errorCode === 5 || account.data.errorCode === 4) recipientNew = true;
 
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
@@ -380,7 +380,7 @@ function transferCurrency(nodeurl, currency, unitsQNT, recipient, passPhrase, me
     console.log('transferCurrency()');
     let recipientNew = false;
 
-    getAccount(nodeurl, recipient).then(response => {
+    getAccount(recipient).then(response => {
         if (response.data.errorCode === 5 || response.data.errorCode === 4) recipientNew = true;
     });
 
@@ -507,8 +507,7 @@ function getCurrency(nodeurl, currency) {
         });
 }
 
-function transferAsset(
-    nodeurl,
+const transferAsset = async ({
     asset,
     quantityQNT,
     recipient,
@@ -516,14 +515,18 @@ function transferAsset(
     message = '',
     messagePrunable = true,
     deadline = 30,
-    priority = 'NORMAL'
-) {
+    priority = 'NORMAL',
+}) => {
+    console.log("🚀 ~ file: ardorInterface.js:520 ~ recipient", recipient)
     console.log('transferAsset(): ' + asset);
     let recipientNew = false;
+    
 
-    getAccount(nodeurl, recipient).then(response => {
-        recipientNew = response.data.errorCode === 5 || response.data.errorCode === 4;
+    await getAccount(recipient).then(response => {
+        recipientNew = response.data.errorCode === 5;
     });
+    
+    console.log("🚀 ~ file: ardorInterface.js:522 ~ recipientNew", recipientNew)
 
     console.log('get publicKey');
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
@@ -542,12 +545,13 @@ function transferAsset(
         messageIsPrunable: messagePrunable,
         transactionPriority: priority,
     };
+    console.log('🚀 ~ file: ardorInterface.js:544 ~ query', query);
 
     console.log('get minimumFee');
-    const url_tx = nodeurl + '?requestType=transferAsset';
-    const url_broadcast = nodeurl + '?requestType=broadcastTransaction';
+    const url_tx = NODEURL + '?requestType=transferAsset';
+    const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
 
-    return axios.post(url_tx, qs.stringify(query), config).then(function (response) {
+    return await axios.post(url_tx, qs.stringify(query), config).then(async response => {
         let fee = recipientNew
             ? 14 * NQTDIVIDER
             : response.data.minimumFeeFQT * response.data.bundlerRateNQTPerFXT * 0.00000001;
@@ -558,42 +562,105 @@ function transferAsset(
         query.broadcast = false;
 
         console.log('get transactionBytes');
-        return axios.post(url_tx, qs.stringify(query), config).then(function (response) {
-            const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
-            let txdata;
-
-            if (message !== '') {
-                let txattachment = JSON.stringify(response.data.transactionJSON.attachment);
-                txdata = {
-                    transactionBytes: signed,
-                    prunableAttachmentJSON: txattachment,
-                };
-            } else {
-                txdata = { transactionBytes: signed };
-            }
-
-            console.log('sending signed transaction');
-            return axios.post(url_broadcast, qs.stringify(txdata), config).then(response => {
-                return response;
-            });
-        });
+        const response_1 = await axios.post(url_tx, qs.stringify(query), config);
+        console.log('🚀 ~ file: ardorInterface.js:561 ~ returnawaitaxios.post ~ response_1', response_1);
+        const signed = ardorjs.signTransactionBytes(response_1.data.unsignedTransactionBytes, passPhrase);
+        let txdata;
+        if (message !== '') {
+            let txattachment = JSON.stringify(response_1.data.transactionJSON.attachment);
+            txdata = {
+                transactionBytes: signed,
+                prunableAttachmentJSON: txattachment,
+            };
+        } else {
+            txdata = { transactionBytes: signed };
+        }
+        console.log('sending signed transaction');
+        const response_2 = await axios.post(url_broadcast, qs.stringify(txdata), config);
+        return response_2;
     });
-}
+};
 
-function transferGEM(
-    nodeurl,
-    GEMASSET,
+export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
+
+    const message = JSON.stringify({
+        contract: 'TarascaDaoOmno',
+        operation: [
+            {
+                service: 'cardmorph',
+                request: 'morph',
+                parameter: {
+                    asset: asset,
+                    count: ''.concat('', noCards, ''),
+                    withdraw: true,
+                },
+            },
+        ],
+    });
+
+    const transferedAsset = await transferAsset({
+        asset: asset,
+        quantityQNT: noCards,
+        recipient: BUYPACKACCOUNT,
+        passPhrase,
+        message,
+        messagePrunable: true,
+        deadline: 1440,
+        priority: 'HIGH',
+    })
+        .then(response => {
+            return {
+                response: response,
+                responseTime: response.data.requestProcessingTime,
+                bought: true,
+                status: 'success',
+            };
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+    console.log("TransferAsset -> ", transferedAsset)
+
+    // ----------------------------------
+
+    const transferedGEM = await transferGEM({
+        quantityQNT: cost * NQTDIVIDER,
+        recipient: BUYPACKACCOUNT,
+        passPhrase,
+        message,
+        messagePrunable: true,
+        deadline: 1440,
+        priority: 'HIGH',
+    })
+        .then(response => {
+            return {
+                response: response,
+                responseTime: response.data.requestProcessingTime,
+                bought: true,
+                status: 'success',
+            };
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+    console.log("TransferGEM -> ", transferedGEM)
+    return(transferedAsset.status === 'success' && transferedGEM.status === 'success')
+};
+
+const transferGEM = async ({
     quantityQNT,
     recipient,
     passPhrase,
     message = '',
     messagePrunable = true,
     deadline = 30,
-    priority = 'NORMAL'
-) {
+    priority = 'NORMAL',
+}) => {
     console.log('transferAsset(): ' + GEMASSET);
     let recipientNew = false;
-    getAccount(nodeurl, recipient).then(response => {
+    await getAccount(recipient).then(response => {
         recipientNew = response.data.errorCode === 5 || response.data.errorCode === 4;
     });
 
@@ -616,9 +683,9 @@ function transferGEM(
     };
 
     console.log('get minimumFee');
-    const url_tx = nodeurl + '?requestType=transferAsset';
-    const url_broadcast = nodeurl + '?requestType=broadcastTransaction';
-    return axios.post(url_tx, qs.stringify(query), config).then(function (response) {
+    const url_tx = NODEURL + '?requestType=transferAsset';
+    const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
+    return await axios.post(url_tx, qs.stringify(query), config).then(async response => {
         let fee = recipientNew
             ? 14 * NQTDIVIDER
             : response.data.minimumFeeFQT * response.data.bundlerRateNQTPerFXT * 0.00000001;
@@ -629,7 +696,7 @@ function transferGEM(
         query.broadcast = false;
 
         console.log('get transactionBytes');
-        return axios.post(url_tx, qs.stringify(query), config).then(response => {
+        return await axios.post(url_tx, qs.stringify(query), config).then(async response => {
             const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
             var txdata;
 
@@ -641,12 +708,12 @@ function transferGEM(
             }
             console.log('sending signed transaction');
 
-            return axios.post(url_broadcast, qs.stringify(txdata), config).then(function (response) {
+            return await axios.post(url_broadcast, qs.stringify(txdata), config).then(function (response) {
                 return response;
             });
         });
     });
-}
+};
 
 const getBlockchainTransactions = async (chain, account, executedOnly = true, timestamp, lastIndex) => {
     try {

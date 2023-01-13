@@ -39,9 +39,9 @@ const UserRegister = () => {
 
     const handleCopyToast = (text) => copyToast(text, toast);
 
-    const handleGenerateWallet = () => {
+    const handleGenerateWallet = async () => {
         const auxPassphrase = generatePassphrase();
-        const auxAccount = getAccountFromPhrase(auxPassphrase);
+        const auxAccount = await getAccountFromPhrase(auxPassphrase);
         setAccount(auxAccount);
         setPassphrase(auxPassphrase);
     }

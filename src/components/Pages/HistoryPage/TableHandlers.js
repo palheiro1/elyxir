@@ -1,4 +1,4 @@
-import { Box, Center, SimpleGrid, Td, Text, Tr } from '@chakra-ui/react';
+import { Center, SimpleGrid, Td, Text, Tr } from '@chakra-ui/react';
 import { FaFilter, FaGem, FaCoins } from 'react-icons/fa';
 
 // Components
@@ -164,7 +164,6 @@ const getAsset = (tx, collectionCardsStatic) => {
 
 // NOT WORKING - FLOW IS NOT CORRECT
 export const handleIncomingGIFTZ = (amount, date) => {
-
     const component = () => {
         return (
             <Tr>
@@ -204,7 +203,7 @@ export const handleMessage = (type, msg, date) => {
     };
     return {
         component,
-        type
+        type,
     };
 };
 
@@ -301,7 +300,7 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
     // CONTROLAR PARA GEMAS O ASSETS
 
     const isGem = asset === 'GEM';
-    const fixedType = type === 'ask' ? 'Ask' : 'Bid';
+    const fixedType = type === 'ask' ? 'ASK' : 'BID';
 
     const component = () => {
         return (
@@ -309,11 +308,6 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
                 <Td>
                     <SimpleGrid columns={2}>
                         <Center>
-                            <Text fontSize="xl" fontWeight="bold">
-                                {fixedType}
-                            </Text>
-                        </Center>
-                        <Box>
                             {isGem ? (
                                 <FaGem />
                             ) : (
@@ -324,7 +318,12 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
                                     rarity={asset.rarity}
                                 />
                             )}
-                        </Box>
+                        </Center>
+                        <Center>
+                            <Text fontSize="xl" fontWeight="bold">
+                                {fixedType}
+                            </Text>
+                        </Center>
                     </SimpleGrid>
                 </Td>
                 <Td>{amount}</Td>

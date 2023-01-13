@@ -1,3 +1,15 @@
+diff --git a/node_modules/ardorjs/lib/account.js b/node_modules/ardorjs/lib/account.js
+index 68eb41e..7d021ea 100644
+--- a/node_modules/ardorjs/lib/account.js
++++ b/node_modules/ardorjs/lib/account.js
+@@ -6,6 +6,7 @@ import BigInteger from "jsbn";
+ import * as pako from "pako";
+ import cryptoJs from "crypto-js";
+ import hex from "crypto-js/enc-hex";
++import { Buffer } from "buffer";
+ 
+ function rsConvert(address) {
+   var addr = new NxtAddress();
 diff --git a/node_modules/ardorjs/lib/helpers.js b/node_modules/ardorjs/lib/helpers.js
 index e895c85..5e3c4d4 100644
 --- a/node_modules/ardorjs/lib/helpers.js

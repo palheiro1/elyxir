@@ -173,9 +173,8 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
                     <Text fontSize="sm" color="gray.400">
                         Sort:{' '}
                     </Text>
-                    <Select border="0px" borderColor="gray.800" size="xs" placeholder="Sort option">
-                        <option value="option1">Option 1</option>
-                        <option value="option2">Option 2</option>
+                    <Select border="0px" borderColor="gray.800" size="xs">
+                        <option value="option1">Unnavailable</option>
                     </Select>
                 </Stack>
 

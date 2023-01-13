@@ -68,7 +68,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             setCardsFiltered(cards.filter(card => Number(card.quantityQNT) > 0));
         }
         
-        console.log("🚀 ~ file: Home.js:66 ~ useEffect ~ showAllCards", showAllCards)
     }, [showAllCards, cards]);
 
     /**
@@ -92,9 +91,10 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             });
         };
 
-        const fetchAllTxs = async () => {
-            const txs = await getBlockchainTransactions(2, infoAccount.accountRs, true);
-            const unconfirmed = await getUnconfirmedTransactions(2, infoAccount.accountRs);
+        const fetchAllTxs = () => {
+            const txs = getBlockchainTransactions(2, infoAccount.accountRs, true);
+            const unconfirmed = getUnconfirmedTransactions(2, infoAccount.accountRs);
+            console.log("🚀 ~ file: Home.js:98 ~ fetchAllTxs ~ unconfirmed", unconfirmed)
             setInfoAccount({
                 ...infoAccount,
                 transactions: txs.transactions,
@@ -103,11 +103,23 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         };
 
         const loadAll = () => {
-            Promise.all([getAllCards(), fetchBalances(), fetchAllTxs()]).then(() => setNeedReload(false));
+            setNeedReload(false)
+            console.log("Loading all...")
+            Promise.all([getAllCards(), fetchBalances(), fetchAllTxs()]);
         };
 
         infoAccount.accountRs && needReload && loadAll();
     }, [infoAccount, setInfoAccount, needReload]);
+
+    useEffect(() => {
+        setInterval(() => {
+            setNeedReload(true);
+        }, 30000);
+
+        return () => {
+            clearInterval();
+        };
+    }, []);
 
     useEffect(() => {
         switch (option) {

@@ -23,12 +23,18 @@ import {
     Text,
     Tooltip,
     useNumberInput,
+    useToast,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { MORPHINGCOMMON, MORPHINGEPIC, MORPHINGRARE } from '../../../data/CONSTANTS';
+import { sendToMorph } from '../../../services/Ardor/ardorInterface';
 import { checkPin } from '../../../services/Ardor/walletUtils';
+import { errorToast, okToast } from '../../../utils/alerts';
 
 const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
+
+    const toast = useToast();
+
     const maxCards = Number(card.quantityQNT);
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
@@ -41,7 +47,8 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
     const input = getInputProps();
-    const [craftingCost, setCraftingCost] = useState(0);
+    const [morphingCost, setMorphingCost] = useState(0);
+    const [ passPhrase, setPassPhrase ] = useState('')
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -49,6 +56,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
         const account = checkPin(username, pin);
         if (account) {
             setIsValidPin(true);
+            setPassPhrase(account.passphrase);
         }
     };
 
@@ -60,13 +68,28 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
     useEffect(() => {
         const { rarity } = card;
         if (rarity === 'Common') {
-            setCraftingCost(input.value * MORPHINGCOMMON);
+            setMorphingCost(input.value * MORPHINGCOMMON);
         } else if (rarity === 'Rare') {
-            setCraftingCost(input.value * MORPHINGRARE);
+            setMorphingCost(input.value * MORPHINGRARE);
         } else if (rarity === 'ePIC') {
-            setCraftingCost(input.value * MORPHINGEPIC);
+            setMorphingCost(input.value * MORPHINGEPIC);
         }
     }, [input, card]);
+
+    const handleMorph = async () => {
+        const ok = await sendToMorph({
+            asset: card.asset,
+            noCards: input.value,
+            passPhrase: passPhrase,
+            cost: morphingCost,
+        })
+        if(ok){
+            okToast('Morphing successful', toast)
+            onClose();
+        } else {
+            errorToast('Morphing failed', toast)
+        }
+    }
 
     return (
         <>
@@ -107,7 +130,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
                         </Center>
                         <Box my={4}>
                             <Text textAlign="center" color="white">
-                                Carft cards (max: {maxCards})
+                                Morph cards (max: {maxCards})
                             </Text>
                             <Center my={2}>
                                 <HStack maxW="50%" spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
@@ -140,8 +163,8 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
                         </FormControl>
 
                         <FormControl variant="floatingGray" id="name" my={4}>
-                            <Input placeholder=" " value={craftingCost + ' IGNIS'} size="lg" disabled />
-                            <FormLabel>Crafting costs</FormLabel>
+                            <Input placeholder=" " value={morphingCost + ' GEM'} size="lg" disabled />
+                            <FormLabel>Morphing costs</FormLabel>
                         </FormControl>
 
                         <Center>
@@ -162,7 +185,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
                         </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button isDisabled={!isValidPin} bgColor="blue.700" w="100%" py={6}>
+                        <Button isDisabled={!isValidPin} bgColor="blue.700" w="100%" py={6} onClick={handleMorph}>
                             Submit
                         </Button>
                     </AlertDialogFooter>
