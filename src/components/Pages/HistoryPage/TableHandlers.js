@@ -12,6 +12,13 @@ import { GEMASSET, JACKPOTACCOUNT, NQTDIVIDER } from '../../../data/CONSTANTS';
 // -------------------------------------------- //
 // ------------------ HANDLERS ---------------- //
 // -------------------------------------------- //
+
+/**
+ * @description Handles money transfer transactions
+ * @param {string} tx - transaction object
+ * @param {number} timestamp - timestamp of transaction
+ * @param {object} infoAccount - account info
+ */
 export const handleType0AndSubtype0 = (tx, timestamp, infoAccount) => {
     let inOut = 'in';
     let jackpot = false;
@@ -43,6 +50,13 @@ export const handleType0AndSubtype0 = (tx, timestamp, infoAccount) => {
     return handleMoneyTransfer(inOut, tx.amountNQT / NQTDIVIDER, timestamp, account, jackpot, reason);
 };
 
+
+/**
+ * @description Handles message transactions
+ * @param {string} tx - transaction object
+ * @param {number} timestamp - timestamp of transaction
+ * @param {object} infoAccount - account info
+ */
 export const handleType1AndSubtype0 = (tx, timestamp, infoAccount) => {
     if (tx.recipientRS === infoAccount.accountRs && tx.senderRS === JACKPOTACCOUNT) {
         const msg = JSON.parse(tx.attachment.message.replace(/\bNaN\b/g, 'null'));
@@ -54,6 +68,13 @@ export const handleType1AndSubtype0 = (tx, timestamp, infoAccount) => {
     }
 };
 
+/**
+ * @description Handles GEM & Assets transfer transactions
+ * @param {string} tx - transaction object
+ * @param {number} timestamp - timestamp of transaction
+ * @param {object} infoAccount - account info
+ * @param {array} collectionCardsStatic - static collection of cards
+ */
 export const handleType2AndSubtype1 = (tx, timestamp, infoAccount, collectionCardsStatic) => {
     let asset = null;
     if (tx.attachment.asset === GEMASSET) {
@@ -80,6 +101,13 @@ export const handleType2AndSubtype1 = (tx, timestamp, infoAccount, collectionCar
     }
 };
 
+/**
+ * @description Handles GEM & Assets exchange transactions
+ * @param {string} tx - transaction object
+ * @param {number} timestamp - timestamp of transaction
+ * @param {object} infoAccount - account info
+ * @param {array} collectionCardsStatic - static collection of cards
+ */
 export const handleType2AndSubtype2And3 = (tx, timestamp, infoAccount, collectionCardsStatic) => {
     const card = collectionCardsStatic.find(card => card.asset === tx.attachment.asset);
     const orderType = tx.subtype === 2 ? 'ask' : 'bid';
@@ -93,6 +121,12 @@ export const handleType2AndSubtype2And3 = (tx, timestamp, infoAccount, collectio
     }
 };
 
+/**
+ * @description Handles cancelled order transactions
+ * @param {string} tx - transaction object
+ * @param {number} timestamp - timestamp of transaction
+ * @param {object} infoAccount - account info
+ */
 export const handleType2AndSubtype4And5 = (tx, timestamp, infoAccount) => {
     const orderType = tx.subtype === 4 ? 'ask' : 'bid';
     let sender = parseSender(tx);
@@ -101,6 +135,12 @@ export const handleType2AndSubtype4And5 = (tx, timestamp, infoAccount) => {
     return handler;
 };
 
+/**
+ * @description Handles currency transfer transactions
+ * @param {string} tx - transaction object
+ * @param {number} timestamp - timestamp of transaction
+ * @param {object} infoAccount - account info
+ */
 export const handleType5AndSubtype3 = (tx, timestamp, infoAccount) => {
     let handler = null;
     if (tx.senderRS === infoAccount.accountRs) {
