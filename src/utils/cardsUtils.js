@@ -13,7 +13,6 @@ import {
     SASQUATCHASSET,
 } from '../data/CONSTANTS';
 import { getAccountAssets, getAskOrders, getAssetsByIssuer, getBidOrders } from '../services/Ardor/ardorInterface';
-import axios from 'axios';
 
 // -------------------------------------------------
 //                  CARDS UTILS
@@ -41,20 +40,18 @@ function getThumbsImage(name) {
 //                  CARDS FETCH
 // -------------------------------------------------
 
-export const fetchAllCards = (accountRs, collectionRs, specialRs, fetchOrders = false) => {
-    
-    return axios.all([getAccountAssets(NODEURL, accountRs), getAssetsByIssuer(NODEURL, collectionRs), getAssetsByIssuer(NODEURL, specialRs)]).then(
-        axios.spread(function (account, collectionAssets, specialAssets) {
-            //blacklisting the REF asset, its from the same account as the special cards
-            let specialCards = specialAssets.filter(
-                asset => asset.asset !== REFERRALASSET && asset.asset !== SASQUATCHASSET && asset.asset !== MARUXAINAASSETWRONG
-            );
-
-            let fullCollection = collectionAssets.concat(specialCards).filter(asset => asset.asset !== CATOBLEPASASSETWRONG);
-            return cardsGenerator(account.accountAssets, fullCollection, fetchOrders);
-        })
-    );
+export const fetchAllCards = async (accountRs, collectionRs, specialRs, fetchOrders = false) => {
+    const [account, collectionAssets, specialAssets] = await Promise.all([
+        getAccountAssets(accountRs),
+        getAssetsByIssuer(collectionRs),
+        getAssetsByIssuer(specialRs)
+    ]);
+    const blacklistedAssets = [REFERRALASSET, SASQUATCHASSET, MARUXAINAASSETWRONG];
+    const specialCards = specialAssets.filter(asset => !blacklistedAssets.includes(asset.asset));
+    const fullCollection = collectionAssets.concat(specialCards).filter(asset => asset.asset !== CATOBLEPASASSETWRONG);
+    return cardsGenerator(account.accountAssets, fullCollection, fetchOrders);
 };
+
 
 // -------------------------------------------------
 //            CARDS UTILS FOR INVENTORY
