@@ -14,22 +14,17 @@ export function parseAccount(account, contacts = DEFAULT_CONTACTS) {
     return found === undefined ? account : found.name;
 }
 
-function parseJson(message) {
+export function parseJson(message) {
     try {
         return JSON.parse(message.replace(/\bNaN\b/g, 'null'));
     } catch (error) {
-        console.log('🚀 ~ file: txUtils.js:11 ~ parseJson ~ error', error);
-        return null;
+        return false;
     }
 }
 
 export function calculateFixedAmount(quantityQNT) {
-    const amount = Number(quantityQNT / NQTDIVIDER);
-    return amount > 0
-        ? amount - Math.floor(amount) === 0
-            ? Number(quantityQNT / NQTDIVIDER).toFixed(0)
-            : Number(quantityQNT / NQTDIVIDER).toFixed(2)
-        : 0;
+    const amount = quantityQNT >= NQTDIVIDER ? Number(quantityQNT / NQTDIVIDER) : Number(quantityQNT);
+    return Number.isInteger(amount) ? amount : amount.toFixed(2);
 }
 
 // ------------------------------------------------
@@ -58,7 +53,7 @@ export function parseSender(tx, contacts = DEFAULT_CONTACTS) {
         const { message } = tx.attachment;
         if (message) {
             const msg = parseJson(message);
-            if (!msg) return;
+            if (!msg) return account;
             switch (msg.submittedBy) {
                 case 'Jackpot':
                     if (msg.source === 'BLOCK') {
@@ -100,7 +95,7 @@ export function parseRecipient(tx, contacts = DEFAULT_CONTACTS) {
 
         if (message) {
             const msg = parseJson(message);
-            if (!msg) return;
+            if (!msg) return account;
 
             switch (msg.contract) {
                 case 'Jackpot':

@@ -93,6 +93,7 @@ export const CRAFTINGRARE = 450;
 // ---------------------------------------------
 // ----------------- MORPHING ------------------
 // ---------------------------------------------
+export const MORPHING_ACCOUNT = "ARDOR-J45A-8UPL-XYHR-DAUD8"
 export const MORPHINGCOMMON = 50
 export const MORPHINGRARE = 250
 export const MORPHINGEPIC = 750
@@ -101,6 +102,7 @@ export const MORPHINGEPIC = 750
 // --------------- TRANSACTIONS ----------------
 // ---------------------------------------------
 export const DEFAULT_CONTACTS = [
+    { accountRs: MORPHING_ACCOUNT, name: 'Mythical Beings Morph' },
     { accountRs: COLLECTIONACCOUNT, name: 'Mythical Beings' },
     { accountRs: BRIDGEACCOUNT, name: 'Mythical Beings ERC1155 Bridge' },
     { accountRs: BUYPACKACCOUNT, name: 'Mythical Beings' },

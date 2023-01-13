@@ -81,25 +81,25 @@ const History = ({ infoAccount, cards }) => {
 
                 switch (type) {
                     case 0:
-                        if(subtype === 0)
+                        if(subtype === 0) // Money transfer
                             handler = handleType0AndSubtype0(tx, timestamp, infoAccount);
                         break;
                     case 1:
-                        if(subtype === 0)
+                        if(subtype === 0) // Message
                             handler = handleType1AndSubtype0(tx, timestamp, infoAccount);
                         break;
                     case 2:
-                        if(subtype === 1)
+                        if(subtype === 1) // GEM & Card transfer
                             handler = handleType2AndSubtype1(tx, timestamp, infoAccount, collectionCardsStatic);
-                        if(subtype === 2 || subtype === 3)
+                        if(subtype === 2 || subtype === 3) // GEM & Card exchange
                             handler = handleType2AndSubtype2And3(tx, timestamp, infoAccount, collectionCardsStatic);
-                        if(subtype === 4 || subtype === 5)
+                        if(subtype === 4 || subtype === 5) // Cancelled order
                             handler = handleType2AndSubtype4And5(tx, timestamp, infoAccount);
                         break;
                     case 5:
-                        if(subtype === 3) 
+                        if(subtype === 3) // Currency transfer
                             handler = handleType5AndSubtype3(tx, timestamp, infoAccount);
-                        if(subtype === 5 && tx.senderRS === infoAccount.accountRs)
+                        if(subtype === 5 && tx.senderRS === infoAccount.accountRs) // Incoming GIFTZ (NOT WORKING)
                             handler = handleIncomingGIFTZ(tx, timestamp, infoAccount);
                         break;
                     default:

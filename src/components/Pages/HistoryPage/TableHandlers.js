@@ -6,12 +6,14 @@ import InOutTransaction from '../../Tables/InOutTransaction';
 import TableCard from '../../Cards/TableCard';
 
 // Utils
-import { calculateFixedAmount, getReason, parseRecipient, parseSender } from '../../../utils/txUtils';
+import { calculateFixedAmount, getReason, parseJson, parseRecipient, parseSender } from '../../../utils/txUtils';
 import { GEMASSET, JACKPOTACCOUNT, NQTDIVIDER } from '../../../data/CONSTANTS';
 
 // -------------------------------------------- //
 // ------------------ HANDLERS ---------------- //
 // -------------------------------------------- //
+
+//account = account === infoAccount.accountRs ? 'You' : account;
 
 /**
  * @description Handles money transfer transactions
@@ -20,36 +22,15 @@ import { GEMASSET, JACKPOTACCOUNT, NQTDIVIDER } from '../../../data/CONSTANTS';
  * @param {object} infoAccount - account info
  */
 export const handleType0AndSubtype0 = (tx, timestamp, infoAccount) => {
-    let inOut = 'in';
-    let jackpot = false;
-    let reason = null;
-    if (tx.senderRS === infoAccount.accountRs) {
-        inOut = 'out';
-    } else if (tx.recipientRS === infoAccount.accountRs && tx.senderRS === JACKPOTACCOUNT) {
-        jackpot = true;
-        if (tx.attachment.message) {
-            const msg = JSON.parse(tx.attachment.message.replace(/\bNaN\b/g, 'null'));
-            reason = getReason(msg);
-            if (msg.submittedBy !== 'Jackpot' || msg.source !== 'BLOCK') {
-                jackpot = false;
-            }
-        }
-    }
-    let account;
-    try {
-        if (inOut === 'out') {
-            account = parseRecipient(tx);
-        } else {
-            account = parseSender(tx);
-        }
-    } catch (e) {
-        console.log(e);
-    }
+    const inOut = getInOut(tx, infoAccount);
+    if (!inOut) return;
+
+    const account = inOut === 'out' ? parseRecipient(tx) : parseSender(tx);
     if (!account) return;
-    account = account === infoAccount.accountRs ? 'You' : account;
+
+    const { jackpot, reason } = getJackpotAndReason(tx);
     return handleMoneyTransfer(inOut, tx.amountNQT / NQTDIVIDER, timestamp, account, jackpot, reason);
 };
-
 
 /**
  * @description Handles message transactions
@@ -59,7 +40,7 @@ export const handleType0AndSubtype0 = (tx, timestamp, infoAccount) => {
  */
 export const handleType1AndSubtype0 = (tx, timestamp, infoAccount) => {
     if (tx.recipientRS === infoAccount.accountRs && tx.senderRS === JACKPOTACCOUNT) {
-        const msg = JSON.parse(tx.attachment.message.replace(/\bNaN\b/g, 'null'));
+        const msg = parseJson(tx.attachment.message);
         if (msg.reason === 'confirmParticipation') {
             return handleMessage('Participation', 'Our Jackpot contract confirmed your participation.', timestamp);
         } else {
@@ -76,29 +57,25 @@ export const handleType1AndSubtype0 = (tx, timestamp, infoAccount) => {
  * @param {array} collectionCardsStatic - static collection of cards
  */
 export const handleType2AndSubtype1 = (tx, timestamp, infoAccount, collectionCardsStatic) => {
-    let asset = null;
-    if (tx.attachment.asset === GEMASSET) {
-        asset = 'GEM';
+    const inOut = getInOut(tx, infoAccount);
+    if (!inOut) return;
+
+    const sender = parseSender(tx);
+    if (!sender) return;
+
+    const asset = getAsset(tx, collectionCardsStatic);
+    if (!asset) return;
+
+
+    const amount = calculateFixedAmount(tx.attachment.quantityQNT);
+    const fixedAmount = amount === 0 ? tx.unitsQNT : amount;
+    let handler = null;
+    if (asset === 'GEM') {
+        handler = handleGEM(inOut, fixedAmount, timestamp, sender);
     } else {
-        asset = collectionCardsStatic.find(card => card.asset === tx.attachment.asset);
+        handler = handleCardTransfer(inOut, fixedAmount, timestamp, sender, asset);
     }
-
-    if (asset) {
-        let inOut = tx.recipientRS === infoAccount.accountRs ? 'in' : 'out';
-        let sender = parseSender(tx);
-
-        if (inOut && sender) {
-            const fixedAmount = calculateFixedAmount(tx.attachment.quantityQNT);
-            let handler = null;
-            if (asset === 'GEM') {
-                handler = handleGEM(inOut, fixedAmount, timestamp, sender);
-            } else {
-                handler = handleCardTransfer(inOut, fixedAmount, timestamp, sender, asset);
-            }
-
-            return handler;
-        }
-    }
+    return handler;
 };
 
 /**
@@ -109,16 +86,17 @@ export const handleType2AndSubtype1 = (tx, timestamp, infoAccount, collectionCar
  * @param {array} collectionCardsStatic - static collection of cards
  */
 export const handleType2AndSubtype2And3 = (tx, timestamp, infoAccount, collectionCardsStatic) => {
-    const card = collectionCardsStatic.find(card => card.asset === tx.attachment.asset);
+    const asset = getAsset(tx, collectionCardsStatic);
+    if (!asset) return;
+
+    const isGem = asset === 'GEM';
     const orderType = tx.subtype === 2 ? 'ask' : 'bid';
-    const isGem = !card;
     let fixedAmount = calculateFixedAmount(tx.attachment.quantityQNT);
+
     let sender = parseSender(tx);
     sender = sender === infoAccount.accountRs ? 'You' : sender;
-    if (card || tx.attachment.asset === GEMASSET) {
-        const handler = handleAssetExchange(orderType, fixedAmount, timestamp, sender, isGem);
-        return handler;
-    }
+    
+    return handleAssetExchange(orderType, fixedAmount, timestamp, sender, isGem);
 };
 
 /**
@@ -131,8 +109,7 @@ export const handleType2AndSubtype4And5 = (tx, timestamp, infoAccount) => {
     const orderType = tx.subtype === 4 ? 'ask' : 'bid';
     let sender = parseSender(tx);
     sender = sender === infoAccount.accountRs ? 'You' : sender;
-    const handler = cancelledOrder(orderType, timestamp, sender);
-    return handler;
+    return cancelledOrder(orderType, timestamp, sender);
 };
 
 /**
@@ -156,6 +133,36 @@ export const handleType5AndSubtype3 = (tx, timestamp, infoAccount) => {
 // -------------------------------------------- //
 // ------- AUX FUNCTIONS FOR COMPONENTES ------ //
 // -------------------------------------------- //
+
+const getInOut = (tx, infoAccount) => {
+    if (tx.senderRS === infoAccount.accountRs) {
+        return 'out';
+    } else if (tx.recipientRS === infoAccount.accountRs) {
+        return 'in';
+    }
+    return null;
+};
+
+const getJackpotAndReason = tx => {
+    let jackpot = tx.senderRS === JACKPOTACCOUNT;
+    let reason = null;
+    if (tx.attachment.message) {
+        const msg = parseJson(tx.attachment.message);
+        reason = getReason(msg);
+        if (msg.submittedBy !== 'Jackpot' || msg.source !== 'BLOCK') {
+            jackpot = false;
+        }
+    }
+    return { jackpot, reason };
+};
+
+const getAsset = (tx, collectionCardsStatic) => {
+    if (tx.attachment.asset === GEMASSET) {
+        return 'GEM';
+    } else {
+        return collectionCardsStatic.find(card => card.asset === tx.attachment.asset);
+    }
+};
 
 // NOT WORKING - FLOW IS NOT CORRECT
 export const handleIncomingGIFTZ = (amount, date) => {
@@ -315,9 +322,6 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
 };
 
 export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reason = '') => {
-    console.log('🚀 ~ file: History.js:389 ~ handleMoneyTransfer ~ account', account);
-    console.log('🚀 ~ file: History.js:389 ~ handleMoneyTransfer ~ type', type);
-    console.log('🚀 ~ file: History.js:389 ~ handleMoneyTransfer ~ amount', amount);
     type = type.toLowerCase();
     // CONTROLAR SI ES JACKPOT!!
     return (
