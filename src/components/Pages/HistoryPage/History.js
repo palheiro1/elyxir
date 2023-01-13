@@ -51,13 +51,20 @@ const History = ({ infoAccount, cards }) => {
      */
 
     const [transactions, setTransactions] = useState([]);
+    const [filteredTransactions, setFilteredTransactions] = useState(transactions);
     const [blockchainStatus, setBlockchainStatus] = useState({});
     const [needReload, setNeedReload] = useState(true);
-    const [visibleTransactions, setVisibleTransactions] = useState(10);
-    //const [filter, setFilter] = useState('all');
+    const [filter, setFilter] = useState('all');
 
+    // -------------------------------------------------
+    const [visibleTransactions, setVisibleTransactions] = useState(10);
     const loadMoreTransactions = () => {
         setVisibleTransactions(prevVisibleTransactions => prevVisibleTransactions + 10);
+    };
+    // -------------------------------------------------
+
+    const handleFilter = e => {
+        setFilter(e.target.value);
     };
 
     useEffect(() => {
@@ -137,6 +144,24 @@ const History = ({ infoAccount, cards }) => {
             processTransactions();
     }, [infoAccount, transactions, blockchainStatus.epoch_beginning, needReload, collectionCardsStatic]);
 
+    useEffect(() => {
+        if (transactions.length > 0) {
+            console.log('Filtering transactions... ' + filter);
+            if (filter !== 'all') {
+                if (filter === 'placed') {
+                    setFilteredTransactions(transactions.filter(tx => tx.type === 'ask' || tx.type === 'bid'));
+                } else if (filter === 'cards') {
+                    setFilteredTransactions(transactions.filter(tx => tx.isCard === true));
+                } else {
+                    setFilteredTransactions(transactions.filter(tx => tx.type === filter));
+                }
+            } else {
+                setFilteredTransactions(transactions);
+            }
+            setVisibleTransactions(10);
+        }
+    }, [transactions, filter]);
+
     return (
         <Box>
             <Stack direction="row" pb={2}>
@@ -161,12 +186,12 @@ const History = ({ infoAccount, cards }) => {
                         <Text fontSize="sm" color="gray.400">
                             Show:{' '}
                         </Text>
-                        <Select border="0px" borderColor="gray.800" size="xs" placeholder="All transactions">
-                            <option value="option1">Received</option>
-                            <option value="option2">Send</option>
-                            <option value="option2">Cards transactions</option>
-                            <option value="option2">Currency TX</option>
-                            <option value="option2">From the Market</option>
+                        <Select border="0px" borderColor="gray.800" size="xs" onChange={handleFilter}>
+                            <option value="all">All transactions</option>
+                            <option value="in">Received</option>
+                            <option value="out">Send</option>
+                            <option value="cards">Cards</option>
+                            <option value="placed">From the Market</option>
                         </Select>
                     </Stack>
                 </Stack>
@@ -186,13 +211,17 @@ const History = ({ infoAccount, cards }) => {
                     </Thead>
                     <Tbody>
                         {!needReload &&
-                            transactions.slice(0, visibleTransactions).map(transaction => {
-                                return transaction;
+                            filteredTransactions.slice(0, visibleTransactions).map(transaction => {
+                                return <transaction.component />;
                             })}
                     </Tbody>
                 </Table>
-                
-                <Button size="lg" w="100%" p={6} onClick={loadMoreTransactions}>Load More</Button>
+
+                {filteredTransactions.length > visibleTransactions && (
+                    <Button size="lg" w="100%" p={6} onClick={loadMoreTransactions}>
+                        Load More
+                    </Button>
+                )}
             </TableContainer>
         </Box>
     );

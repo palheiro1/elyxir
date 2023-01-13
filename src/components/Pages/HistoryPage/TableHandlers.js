@@ -164,99 +164,134 @@ const getAsset = (tx, collectionCardsStatic) => {
 
 // NOT WORKING - FLOW IS NOT CORRECT
 export const handleIncomingGIFTZ = (amount, date) => {
-    console.log('🚀 ~ file: History.js:222 ~ handleIncomingGIFTZ ~ amount', amount);
 
-    return (
-        <Tr>
-            <Td>
-                <FaFilter /> INCOMING GIFTZ
-            </Td>
-            <Td>{amount}</Td>
-            <Td>{date}</Td>
-            <Td>You</Td>
-            <Td>
-                <InOutTransaction type={'in'} />
-            </Td>
-        </Tr>
-    );
+    const component = () => {
+        return (
+            <Tr>
+                <Td>
+                    <FaFilter /> INCOMING GIFTZ
+                </Td>
+                <Td>{amount}</Td>
+                <Td>{date}</Td>
+                <Td>You</Td>
+                <Td>
+                    <InOutTransaction type={'in'} />
+                </Td>
+            </Tr>
+        );
+    };
+
+    return {
+        component,
+        type: 'in',
+    };
 };
 
 export const handleMessage = (type, msg, date) => {
-    return (
-        <Tr>
-            <Td>{msg}</Td>
-            <Td>
-                <FaFilter /> Message
-            </Td>
-            <Td>{date}</Td>
-            <Td>You</Td>
-            <Td>{type}</Td>
-        </Tr>
-    );
+    const component = () => {
+        return (
+            <Tr>
+                <Td>{msg}</Td>
+                <Td>
+                    <FaFilter /> Message
+                </Td>
+                <Td>{date}</Td>
+                <Td>You</Td>
+                <Td>{type}</Td>
+            </Tr>
+        );
+    };
+    return {
+        component,
+        type
+    };
 };
 
 export const cancelledOrder = (type, date, account) => {
     type = type.toLowerCase();
     // Type - bid/ask
     // Calcular TIMESTAMP!!!
-    return (
-        <Tr>
-            <Td>
-                <FaFilter /> Cancelled Order
-            </Td>
-            <Td>-</Td>
-            <Td>{date}</Td>
-            <Td>{account}</Td>
-            <Td>
-                <InOutTransaction type={type} />
-            </Td>
-        </Tr>
-    );
+
+    const component = () => {
+        return (
+            <Tr>
+                <Td>
+                    <FaFilter /> Cancelled Order
+                </Td>
+                <Td>-</Td>
+                <Td>{date}</Td>
+                <Td>{account}</Td>
+                <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+            </Tr>
+        );
+    };
+
+    return {
+        component,
+        type,
+    };
 };
 
 export const handleGEM = (type, amount, date, account) => {
     // MANEAJR DATE CON TIMESTAMP!!!
     type = type.toLowerCase();
-    return (
-        <Tr>
-            <Td>
-                <SimpleGrid columns={2} spacing={2}>
-                    <Center>
-                        <FaGem />
-                    </Center>
-                    <Center>
-                        <Text fontSize="xl" fontWeight="bold">
-                            GEM
-                        </Text>
-                    </Center>
-                </SimpleGrid>
-            </Td>
-            <Td>{amount}</Td>
-            <Td>{date}</Td>
-            <Td>{account}</Td>
-            <Td>
-                <InOutTransaction type={type} />
-            </Td>
-        </Tr>
-    );
+
+    const component = () => {
+        return (
+            <Tr>
+                <Td>
+                    <SimpleGrid columns={2} spacing={2}>
+                        <Center>
+                            <FaGem />
+                        </Center>
+                        <Center>
+                            <Text fontSize="xl" fontWeight="bold">
+                                GEM
+                            </Text>
+                        </Center>
+                    </SimpleGrid>
+                </Td>
+                <Td>{amount}</Td>
+                <Td>{date}</Td>
+                <Td>{account}</Td>
+                <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+            </Tr>
+        );
+    };
+    return {
+        component,
+        type,
+    };
 };
 
 export const handleCardTransfer = (type, amount, date, account, card) => {
     type = type.toLowerCase();
     const { cardImgUrl: image, name: title, channel: continent, rarity } = card;
-    return (
-        <Tr>
-            <Td>
-                <TableCard image={image} title={title} continent={continent} rarity={rarity} />
-            </Td>
-            <Td>{amount}</Td>
-            <Td>{date}</Td>
-            <Td>{account}</Td>
-            <Td>
-                <InOutTransaction type={type} />
-            </Td>
-        </Tr>
-    );
+
+    const component = () => {
+        return (
+            <Tr>
+                <Td>
+                    <TableCard image={image} title={title} continent={continent} rarity={rarity} />
+                </Td>
+                <Td>{amount}</Td>
+                <Td>{date}</Td>
+                <Td>{account}</Td>
+                <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+            </Tr>
+        );
+    };
+    return {
+        component,
+        type,
+        isCard: true,
+    };
 };
 
 export const handleAssetExchange = (type, amount, date, account, asset) => {
@@ -265,88 +300,110 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
 
     const isGem = asset === 'GEM';
     const fixedType = type === 'ask' ? 'Ask' : 'Bid';
-    return (
-        <Tr>
-            <Td>
-                <SimpleGrid columns={2}>
-                    <Center>
-                        <Text fontSize="xl" fontWeight="bold">
-                            {fixedType}
-                        </Text>
-                    </Center>
-                    <Box>
-                        {isGem ? (
-                            <FaGem />
-                        ) : (
-                            <TableCard
-                                title={asset.name}
-                                image={asset.cardImgUrl}
-                                continent={asset.channel}
-                                rarity={asset.rarity}
-                            />
-                        )}
-                    </Box>
-                </SimpleGrid>
-            </Td>
-            <Td>{amount}</Td>
-            <Td>{date}</Td>
-            <Td>{account}</Td>
-            <Td>
-                <InOutTransaction type={'placed'} />
-            </Td>
-        </Tr>
-    );
+
+    const component = () => {
+        return (
+            <Tr>
+                <Td>
+                    <SimpleGrid columns={2}>
+                        <Center>
+                            <Text fontSize="xl" fontWeight="bold">
+                                {fixedType}
+                            </Text>
+                        </Center>
+                        <Box>
+                            {isGem ? (
+                                <FaGem />
+                            ) : (
+                                <TableCard
+                                    title={asset.name}
+                                    image={asset.cardImgUrl}
+                                    continent={asset.channel}
+                                    rarity={asset.rarity}
+                                />
+                            )}
+                        </Box>
+                    </SimpleGrid>
+                </Td>
+                <Td>{amount}</Td>
+                <Td>{date}</Td>
+                <Td>{account}</Td>
+                <Td>
+                    <InOutTransaction type={'placed'} />
+                </Td>
+            </Tr>
+        );
+    };
+
+    return {
+        component,
+        type,
+    };
 };
 
 export const handleCurrencyTransfer = (type, amount, date, account) => {
     type = type.toLowerCase();
-    return (
-        <Tr>
-            <Td>
-                <SimpleGrid columns={2}>
-                    <Center>
-                        <FaGem />
-                    </Center>
-                    <Center>
-                        <Text fontSize="xl" fontWeight="bold">
-                            GIFTZ
-                        </Text>
-                    </Center>
-                </SimpleGrid>
-            </Td>
-            <Td>{amount}</Td>
-            <Td>{date}</Td>
-            <Td>{account}</Td>
-            <Td>
-                <InOutTransaction type={type} />
-            </Td>
-        </Tr>
-    );
+    const component = () => {
+        return (
+            <Tr>
+                <Td>
+                    <SimpleGrid columns={2}>
+                        <Center>
+                            <FaGem />
+                        </Center>
+                        <Center>
+                            <Text fontSize="xl" fontWeight="bold">
+                                GIFTZ
+                            </Text>
+                        </Center>
+                    </SimpleGrid>
+                </Td>
+                <Td>{amount}</Td>
+                <Td>{date}</Td>
+                <Td>{account}</Td>
+                <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+            </Tr>
+        );
+    };
+    return {
+        component,
+        type,
+    };
 };
 
 export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reason = '') => {
     type = type.toLowerCase();
     // CONTROLAR SI ES JACKPOT!!
-    return (
-        <Tr>
-            <Td>
-                <SimpleGrid columns={2}>
-                    <Center>
-                        <FaCoins />
-                    </Center>
-                    <Center>
-                        <Text fontSize="xl" fontWeight="bold">
-                            IGNIS
-                        </Text>
-                    </Center>
-                </SimpleGrid>
-            </Td>
-            <Td>{amount}</Td>
-            <Td>{date}</Td>
-            <Td>{account}</Td>
-            <Td>
-                <InOutTransaction type={type} />
-            </Td>
-        </Tr>
-    );
+
+    const component = () => {
+        return (
+            <Tr>
+                <Td>
+                    <SimpleGrid columns={2}>
+                        <Center>
+                            <FaCoins />
+                        </Center>
+                        <Center>
+                            <Text fontSize="xl" fontWeight="bold">
+                                IGNIS
+                            </Text>
+                        </Center>
+                    </SimpleGrid>
+                </Td>
+                <Td>{amount}</Td>
+                <Td>{date}</Td>
+                <Td>{account}</Td>
+                <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+            </Tr>
+        );
+    };
+
+    return {
+        component,
+        type,
+    };
 };
