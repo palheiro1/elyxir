@@ -654,7 +654,7 @@ export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
     const message = JSON.stringify({ contract: 'TarascaDAOCardCraft' });
 
     //const noCrafts = Math.floor(noCards / CRAFTING_RATIO);
-    /*
+    
     const transferedAsset = await transferAsset({
         asset: asset,
         quantityQNT: noCards,
@@ -677,7 +677,7 @@ export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
             console.log(error);
         });
 
-    console.log('TransferAsset -> ', transferedAsset);*/
+    console.log('TransferAsset -> ', transferedAsset);
 
     const transferedIgnis = await sendIgnis({
         amountNQT: cost * NQTDIVIDER,
