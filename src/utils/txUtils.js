@@ -1,4 +1,4 @@
-import { BRIDGEACCOUNT, DEFAULT_CONTACTS } from '../data/CONSTANTS';
+import { BRIDGEACCOUNT, DEFAULT_CONTACTS, NQTDIVIDER } from '../data/CONSTANTS';
 import { formatDate, formatTime } from './dateAndTime';
 
 // ------------------------------------------------
@@ -23,9 +23,30 @@ function parseJson(message) {
     }
 }
 
+export function calculateFixedAmount(quantityQNT) {
+    const amount = Number(quantityQNT / NQTDIVIDER);
+    return amount > 0
+        ? amount - Math.floor(amount) === 0
+            ? Number(quantityQNT / NQTDIVIDER).toFixed(0)
+            : Number(quantityQNT / NQTDIVIDER).toFixed(2)
+        : 0;
+}
+
 // ------------------------------------------------
 // ----------------- TX UTILS ---------------------
 // ------------------------------------------------
+
+export const getReason = msg => {
+    let reason = '';
+    if (msg.reason === 'referral') {
+        reason = '- Referral Pay';
+    } else if (msg.reason === 'confirmParticipation') {
+        reason = 'participation confirmed - should not occur with type 0 subtype 0';
+    } else if (msg.reason === 'sendPrize') {
+        reason = '- Jackpot Prize';
+    }
+    return reason;
+};
 
 export function parseSender(tx, contacts = DEFAULT_CONTACTS) {
     const { senderRS: account } = tx;
@@ -107,12 +128,7 @@ export function parseRecipient(tx, contacts = DEFAULT_CONTACTS) {
 
 export function getTxTimestamp(tx, eb) {
     const txstamp = new Date(eb.getTime() + tx.timestamp * 1000);
-    const status =
-        tx.confirmations === 1
-            ? 'just confirmed'
-            : tx.confirmations > 1
-            ? 'confirmed'
-            : 'unconfirmed';
+    const status = tx.confirmations === 1 ? 'just confirmed' : tx.confirmations > 1 ? 'confirmed' : 'unconfirmed';
     const datestring = formatDate(txstamp, 'yyyy-MM-dd');
     const timestring = formatTime(txstamp, 'HH:mm:ss');
 
