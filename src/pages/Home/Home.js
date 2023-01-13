@@ -95,6 +95,8 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 transactions: txs.transactions,
                 unconfirmedTxs: unconfirmed.transactions,
             });
+            // Añadir toast para cuando haya transacciones pendientes
+            // Añadir toast cuando se detecte que ya no hay transacciones pendientes
             setIsLoading(false);
         };
 
