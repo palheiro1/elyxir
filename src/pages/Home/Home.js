@@ -14,14 +14,14 @@ import Market from '../../components/Pages/MarketPage/Market';
 import Account from '../../components/Pages/AccountPage/Account';
 
 // Data
-import { COLLECTIONACCOUNT, TARASCACARDACCOUNT } from '../../data/CONSTANTS';
+import { COLLECTIONACCOUNT, GEMASSETACCOUNT, REFRESH_DATA_TIME, TARASCACARDACCOUNT } from '../../data/CONSTANTS';
 
 // Services
-import { fetchAllCards } from '../../utils/cardsUtils';
-import { getGIFTZBalance, getIGNISBalance } from '../../services/Ardor/walletUtils';
+import { fetchAllCards, fetchGemCards } from '../../utils/cardsUtils';
+import { getAskAndBids, getCurrentAskAndBids, getGIFTZBalance, getIGNISBalance } from '../../utils/walletUtils';
 import {
-    getAskAndBids,
     getBlockchainTransactions,
+    getTrades,
     getUnconfirmedTransactions,
 } from '../../services/Ardor/ardorInterface';
 
@@ -36,6 +36,9 @@ import {
 const Home = ({ infoAccount, setInfoAccount }) => {
     // Navigate
     const navigate = useNavigate();
+
+    // GEM Cards
+    const [gemCards, setGemCards] = useState([]);
 
     // All cards
     const [cards, setCards] = useState([]);
@@ -86,25 +89,54 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             const { accountRs } = infoAccount;
             setIsLoading(true);
             setNeedReload(false);
-            const [cards, ignis, giftz, txs, unconfirmed] = await Promise.all([
+
+            // Fetch all info
+            const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades] = await Promise.all([
                 fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT),
+                fetchGemCards(accountRs, GEMASSETACCOUNT, true),
                 getIGNISBalance(accountRs),
                 getGIFTZBalance(accountRs),
                 getBlockchainTransactions(2, accountRs, true),
                 getUnconfirmedTransactions(2, accountRs),
+                getCurrentAskAndBids(accountRs),
+                getTrades(2,accountRs)
             ]);
 
-            setCards(cards);
-            setMarketFetched(false);
-            setInfoAccount({
+            // Get "quantityQNT" from "cards" and "loadCards" and compare them
+            const cardsQuantity = cards.map(card => card.quantityQNT);
+            const loadCardsQuantity = loadCards.map(card => card.quantityQNT);
+            if (JSON.stringify(cardsQuantity) !== JSON.stringify(loadCardsQuantity)) {
+                console.log('Cards changed');
+                setCards(loadCards);
+                setMarketFetched(false);
+            }
+
+            if(JSON.stringify(gemCards) !== JSON.stringify(gems[0]) && gems.length > 0) {
+                console.log('Gems changed');
+                setGemCards(gems[0]);
+            }
+
+            const _auxInfo = {
                 ...infoAccount,
                 IGNISBalance: ignis,
                 GIFTZBalance: giftz.unitsQNT,
                 transactions: txs.transactions,
                 unconfirmedTxs: unconfirmed.transactions,
-            });
+                currentAsks: currentAskOrBids.askOrders,
+                currentBids: currentAskOrBids.bidOrders,
+                trades: trades.trades
+            }
+            
+            console.log("🚀 ~ file: Home.js:129 ~ loadAll ~ trades.trades", trades.trades)
+
+            if(JSON.stringify(infoAccount) !== JSON.stringify(_auxInfo)) {
+                console.log('Account info changed');
+                setInfoAccount(_auxInfo);
+            }
+
             setIsLoading(false);
         };
+            
 
         if (infoAccount.accountRs && needReload && !isLoading) {
             loadAll();
@@ -114,10 +146,10 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             if (!isLoading) {
                 setNeedReload(true);
             }
-        }, 30000);
+        }, REFRESH_DATA_TIME);
 
         return () => clearInterval(intervalId);
-    }, [infoAccount, needReload, isLoading, setInfoAccount]);
+    }, [infoAccount, needReload, isLoading, setInfoAccount, cards, gemCards]);
 
     useEffect(() => {
         const fetchAskAndBids = async () => {
@@ -148,7 +180,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 setRenderComponent(<History infoAccount={infoAccount} collectionCardsStatic={cards} />);
                 break;
             case 3:
-                setRenderComponent(<Market infoAccount={infoAccount} cards={cardsFiltered} />);
+                setRenderComponent(<Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />);
                 break;
             case 4:
                 setRenderComponent(<Jackpot cards={cards} />);
@@ -163,7 +195,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 setRenderComponent(<Overview />);
                 break;
         }
-    }, [option, infoAccount, cards, cardsFiltered]);
+    }, [option, infoAccount, cards, cardsFiltered, gemCards]);
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
 
