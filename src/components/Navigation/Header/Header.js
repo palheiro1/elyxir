@@ -9,10 +9,15 @@ import Navigation from '../Navigation';
  * @dev This component is used to render the header navigation
  * @author Jesús Sánchez Fernández
  */
-const Header = ({ isLogged, IGNISBalance = 0, GIFTZBalance = 0 }) => {
-    return(
-        <Navigation isLogged={isLogged} IGNISBalance={IGNISBalance} GIFTZBalance={GIFTZBalance} />
+const Header = ({ isLogged, IGNISBalance = 0, GIFTZBalance = 0, GEMSBalance = 0 }) => {
+    return (
+        <Navigation
+            isLogged={isLogged}
+            IGNISBalance={IGNISBalance}
+            GIFTZBalance={GIFTZBalance}
+            GEMSBalance={GEMSBalance}
+        />
     );
-}
+};
 
 export default Header;

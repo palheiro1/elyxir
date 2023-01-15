@@ -14,7 +14,7 @@ import Market from '../../components/Pages/MarketPage/Market';
 import Account from '../../components/Pages/AccountPage/Account';
 
 // Data
-import { COLLECTIONACCOUNT, GEMASSETACCOUNT, REFRESH_DATA_TIME, TARASCACARDACCOUNT } from '../../data/CONSTANTS';
+import { COLLECTIONACCOUNT, GEMASSETACCOUNT, NQTDIVIDER, REFRESH_DATA_TIME, TARASCACARDACCOUNT } from '../../data/CONSTANTS';
 
 // Services
 import { fetchAllCards, fetchGemCards } from '../../utils/cardsUtils';
@@ -120,6 +120,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 ...infoAccount,
                 IGNISBalance: ignis,
                 GIFTZBalance: giftz.unitsQNT,
+                GEMSBalance: gems[0].quantityQNT / NQTDIVIDER,
                 transactions: txs.transactions,
                 unconfirmedTxs: unconfirmed.transactions,
                 currentAsks: currentAskOrBids.askOrders,
