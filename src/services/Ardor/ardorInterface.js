@@ -49,7 +49,7 @@ export const fetchAssetCount = async asset => {
 
 //Account balance
 export const getIgnisBalance = async account => {
-    return axios
+    return await axios
         .get(NODEURL, {
             params: {
                 requestType: 'getBalance',
@@ -66,7 +66,7 @@ export const getIgnisBalance = async account => {
 };
 
 export const getAccountCurrentAskOrders = async account => {
-    return axios
+    return await axios
         .get(NODEURL, {
             params: {
                 requestType: 'getAccountCurrentAskOrders',
@@ -84,7 +84,7 @@ export const getAccountCurrentAskOrders = async account => {
 };
 
 export const getAccountCurrentBidOrders = async account => {
-    return axios
+    return await axios
         .get(NODEURL, {
             params: {
                 requestType: 'getAccountCurrentBidOrders',
@@ -99,14 +99,6 @@ export const getAccountCurrentBidOrders = async account => {
             // handle error
             console.log(error);
         });
-};
-
-export const getAskAndBids = async asset => {
-    const askOrders = (await getAskOrders(asset)).askOrders;
-    const bidOrders = (await getBidOrders(asset)).bidOrders;
-    const assetCount = await fetchAssetCount(asset);
-
-    return { askOrders, bidOrders, assetCount };
 };
 
 export const getAskOrders = async asset => {
@@ -376,7 +368,7 @@ export const cancelBidOrder = async (order, passPhrase) => {
 };
 
 export const getTrades = async (chain, account, timestamp) => {
-    return axios
+    return await axios
         .get(NODEURL, {
             params: {
                 requestType: 'getTrades',
