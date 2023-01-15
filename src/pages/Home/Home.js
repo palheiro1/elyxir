@@ -126,8 +126,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 currentBids: currentAskOrBids.bidOrders,
                 trades: trades.trades
             }
-            
-            console.log("🚀 ~ file: Home.js:129 ~ loadAll ~ trades.trades", trades.trades)
 
             if(JSON.stringify(infoAccount) !== JSON.stringify(_auxInfo)) {
                 console.log('Account info changed');

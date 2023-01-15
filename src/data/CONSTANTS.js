@@ -9,8 +9,8 @@
 // ---------------------------------------------------------
 // ------------------ APP CONFIGURATION --------------------
 // ---------------------------------------------------------
-export const REFRESH_DATA_TIME =  30 * 1000; // 30 seconds
-export const REFRESH_MARKE_TIME =  5 * 1000; // 5 seconds
+export const REFRESH_DATA_TIME =  5 * 1000; // 5 seconds
+export const REFRESH_MARKE_TIME =  3 * 1000; // 3 seconds
 
 // -------------------------------------------------
 // ------------------ CURRENCIES -------------------
@@ -109,7 +109,6 @@ export const MORPHINGEPIC = 750
 // --------------- TRANSACTIONS ----------------
 // ---------------------------------------------
 export const DEFAULT_CONTACTS = [
-    { accountRs: MORPHING_ACCOUNT, name: 'Mythical Beings Morph' },
     { accountRs: COLLECTIONACCOUNT, name: 'Mythical Beings' },
     { accountRs: BRIDGEACCOUNT, name: 'Mythical Beings ERC1155 Bridge' },
     { accountRs: BUYPACKACCOUNT, name: 'Mythical Beings' },
