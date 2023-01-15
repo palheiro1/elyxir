@@ -1,5 +1,18 @@
-import { Box, Button, Center, Grid, GridItem, Heading, Text } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Center,
+    Grid,
+    GridItem,
+    Heading,
+    HStack,
+    IconButton,
+    Text,
+    useColorModeValue,
+    VStack,
+} from '@chakra-ui/react';
 import { useState } from 'react';
+import { GiCutDiamond } from 'react-icons/gi';
 import { NQTDIVIDER } from '../../../data/CONSTANTS';
 
 const GemWidget = ({ gemCards }) => {
@@ -25,15 +38,91 @@ const GemWidget = ({ gemCards }) => {
     };
     const hoverStyle = {
         cursor: 'pointer',
-        transform: 'scale(1.15)',
+        transform: 'scale(1.35)',
         transition: 'all 0.6s ease-in-out',
         shadow: 'lg',
     };
 
+    const textColor = useColorModeValue('black', 'white');
+    const bgColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
+
     // ------------------------------
 
     return (
-        <Center mb={2}>
+        <Center mt={4}>
+            <Grid
+                templateColumns="repeat(3, 1fr)"
+                border="1px"
+                borderColor="whiteAlpha.300"
+                rounded="lg"
+                bg="blackAlpha"
+                shadow="dark-lg"
+                direction="row">
+                <GridItem colSpan={2} p={4} borderLeftRadius="lg">
+                    <Center>
+                        <HStack>
+                            <IconButton
+                                icon={<GiCutDiamond />}
+                                size="xl"
+                                p={4}
+                                mr={2}
+                                fontSize="4xl"
+                                bg={bgColor}
+                                color={textColor}
+                            />
+                            <VStack align="flex-start">
+                                <Text color={textColor} fontSize="3xl" fontWeight="bold" mb={-3}>
+                                    {confirmedBalance} GEMs
+                                </Text>
+                                <Text color={textColor} fontSize="md">
+                                    ({unconfirmedBalance} unconfirmed)
+                                </Text>
+                            </VStack>
+                            <Center pl={4}>
+                                <HStack spacing={4} color={textColor}>
+                                    <Box p={2} bg={bgColor} rounded="lg" minW="90px">
+                                        <Text textAlign="center" fontSize="xl" fontWeight="bold">
+                                            {lowestGemAsk}
+                                        </Text>
+                                        <Text textAlign="center" fontSize="xs">
+                                            LOWEST ASK
+                                        </Text>
+                                    </Box>
+
+                                    <Box p={2} bg={bgColor} rounded="lg" minW="90px">
+                                        <Text textAlign="center" fontSize="xl" fontWeight="bold">
+                                            {highestGemBid}
+                                        </Text>
+                                        <Text textAlign="center" fontSize="xs">
+                                            HIGHEST BID
+                                        </Text>
+                                    </Box>
+                                </HStack>
+                            </Center>
+                        </HStack>
+                    </Center>
+                </GridItem>
+
+                <GridItem bgColor={bgColor} p={4} borderRightRadius="lg">
+                    <Center
+                        h="100%"
+                        fontWeight="bolder"
+                        textTransform="full-width"
+                        style={hover ? hoverStyle : initialStyle}
+                        onMouseEnter={() => setHover(true)}
+                        onMouseLeave={() => setHover(false)}>
+                        TRADE NOW
+                    </Center>
+                </GridItem>
+            </Grid>
+        </Center>
+    );
+};
+
+export default GemWidget;
+
+/*
+<Center mb={2}>
             <Grid
                 templateColumns="repeat(5, 1fr)"
                 bgColor="whiteAlpha.200"
@@ -87,7 +176,4 @@ const GemWidget = ({ gemCards }) => {
                 </Center>
             </Grid>
         </Center>
-    );
-};
-
-export default GemWidget;
+*/
