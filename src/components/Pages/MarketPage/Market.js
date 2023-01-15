@@ -1,15 +1,14 @@
-import {
-    Box,
-    Button
-} from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 
 import { useState } from 'react';
 import GridCards from '../../Cards/GridCards';
 import SortAndFilterMenu from '../../SortAndFilters/SortAndFilterMenu';
-import AskAndBidGrid from './AskAndBidGrid';
-import TradesAndOrderTable from './TradesAndOrderTable';
+import AskAndBidGrid from './TradesAndOrders/AskAndBids/AskAndBidGrid';
+import GemWidget from './GemWidget';
+import SectionSwitch from './SectionSwitch';
+import TradesAndOrderTable from './TradesAndOrders/TradesAndOrderTable';
 
-const Market = ({ infoAccount, cards }) => {
+const Market = ({ infoAccount, cards, gemCards }) => {
     // Option
     // 0 -> Market
     // 1 -> Trades and orders
@@ -20,44 +19,16 @@ const Market = ({ infoAccount, cards }) => {
 
     return (
         <Box>
-            <Box>
-                <SortAndFilterMenu cards={cards} setCardsFiltered={setCardsFiltered} />
-            </Box>
+            <GemWidget gemCards={gemCards} />
 
-            <Box w="100%">
-                <Button
-                    isActive={option === 0}
-                    w="50%"
-                    size="lg"
-                    rounded="node"
-                    fontWeight="medium"
-                    fontSize="md"
-                    onClick={() => setOption(0)}
-                    borderLeftRadius="lg">
-                    Market
-                </Button>
-
-                <Button
-                    isActive={option === 1}
-                    w="50%"
-                    size="lg"
-                    rounded="node"
-                    fontWeight="medium"
-                    fontSize="md"
-                    onClick={() => setOption(1)}
-                    borderRightRadius="lg">
-                    Trades and orders
-                </Button>
-            </Box>
-
-            {option === 0 && (
-                <GridCards cards={cardsFiltered} isMarket={true} />
-            )}
+            <SortAndFilterMenu cards={cards} setCardsFiltered={setCardsFiltered} />
+            <SectionSwitch option={option} setOption={setOption} />
+            {option === 0 && <GridCards cards={cardsFiltered} isMarket={true} />}
 
             {option === 1 && (
                 <Box>
-                    <TradesAndOrderTable />
-                    <AskAndBidGrid />
+                    <TradesAndOrderTable account={infoAccount.accountRs} trades={infoAccount.trades} />
+                    <AskAndBidGrid cards = {cards} askOrders={infoAccount.currentAsks} bidOrders={infoAccount.currentBids} />
                 </Box>
             )}
         </Box>
