@@ -1,7 +1,12 @@
 import { SimpleGrid, Table, TableContainer, Tbody, Td, Text, Thead } from "@chakra-ui/react";
+import { NQTDIVIDER } from "../../../../../data/CONSTANTS";
+import { getAsset } from "../../../../../utils/cardsUtils";
 import AskOrBidItem from "./AskOrBidItem";
 
-const AskAndBidGrid = () => {
+const AskAndBidGrid = ({ cards, askOrders, bidOrders }) => {
+    console.log("🚀 ~ file: AskAndBidGrid.js:5 ~ AskAndBidGrid ~ bidOrders", bidOrders)
+    console.log("🚀 ~ file: AskAndBidGrid.js:5 ~ AskAndBidGrid ~ askOrders", askOrders)
+    
     return (
         <SimpleGrid columns={2} mt={4} shadow="lg">
             <TableContainer
@@ -22,9 +27,17 @@ const AskAndBidGrid = () => {
                         <Td textAlign="center">Amount</Td>
                     </Thead>
                     <Tbody>
-                        <AskOrBidItem asset="123" ignis="321" amount="1" />
-                        <AskOrBidItem asset="123" ignis="321" amount="1" />
-                        <AskOrBidItem asset="123" ignis="321" amount="1" />
+                        {askOrders.map((order) => {
+                            const _asset = getAsset(order.asset, cards);
+                            return (
+                                <AskOrBidItem
+                                    key={order.orderFullHash}
+                                    asset={_asset}
+                                    ignis={order.priceNQTPerShare/NQTDIVIDER}
+                                    amount={order.quantityQNT}
+                                />
+                            );
+                        })}
                     </Tbody>
                 </Table>
             </TableContainer>
@@ -44,9 +57,17 @@ const AskAndBidGrid = () => {
                         <Td textAlign="center">Amount</Td>
                     </Thead>
                     <Tbody>
-                        <AskOrBidItem asset="123" ignis="321" amount="1" />
-                        <AskOrBidItem asset="123" ignis="321" amount="1" />
-                        <AskOrBidItem asset="123" ignis="321" amount="1" />
+                        {bidOrders.map((order) => {
+                            const _asset = getAsset(order.asset, cards);
+                            return (
+                                <AskOrBidItem
+                                    key={order.orderFullHash}
+                                    asset={_asset}
+                                    ignis={order.priceNQTPerShare/NQTDIVIDER}
+                                    amount={order.quantityQNT}
+                                />
+                            );
+                        })}
                     </Tbody>
                 </Table>
             </TableContainer>

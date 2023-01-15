@@ -1,5 +1,5 @@
 import { Stack, Td, Text, Tr } from "@chakra-ui/react";
-import InOutTxMarket from "./InOutTxMarket";
+import InOutTxMarket from "../InOutTxMarket";
 
 import { FaCoins } from "react-icons/fa";
 
