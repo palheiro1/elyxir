@@ -3,7 +3,7 @@ import axios from 'axios';
 import qs from 'qs';
 import ardorjs from 'ardorjs';
 
-import { GEMASSET, NODEURL, NQTDIVIDER, BUYPACKACCOUNT } from '../../data/CONSTANTS';
+import { GEMASSET, NODEURL, NQTDIVIDER } from '../../data/CONSTANTS';
 //import { APILIMIT, JACKPOTACCOUNT } from '../../data/CONSTANTS';
 
 const config = {
@@ -282,12 +282,12 @@ const sendIgnis = async ({
     const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
 
     const res = await axios.post(url_sendmoney, qs.stringify(query), config);
-    console.log("🚀 ~ file: ardorInterface.js:285 ~ res", res)
+    console.log('🚀 ~ file: ardorInterface.js:285 ~ res', res);
     const fee = recipientNew ? 14 * NQTDIVIDER : res.data.minimumFeeFQT * res.data.bundlerRateNQTPerFXT * 0.00000001;
     query.feeNQT = Math.ceil(fee);
     query.broadcast = false;
     const res2 = await axios.post(url_sendmoney, qs.stringify(query, config));
-    console.log("🚀 ~ file: ardorInterface.js:290 ~ res2", res2)
+    console.log('🚀 ~ file: ardorInterface.js:290 ~ res2', res2);
     const signed = ardorjs.signTransactionBytes(res2.data.unsignedTransactionBytes, passPhrase);
     let txdata;
     if (message !== '') {
@@ -581,128 +581,6 @@ const transferAsset = async ({
         const response_2 = await axios.post(url_broadcast, qs.stringify(txdata), config);
         return response_2;
     });
-};
-
-export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
-    const message = JSON.stringify({
-        contract: 'TarascaDaoOmno',
-        operation: [
-            {
-                service: 'cardmorph',
-                request: 'morph',
-                parameter: {
-                    asset: asset,
-                    count: ''.concat('', noCards, ''),
-                    withdraw: true,
-                },
-            },
-        ],
-    });
-
-    const transferedAsset = await transferAsset({
-        asset: asset,
-        quantityQNT: noCards,
-        recipient: BUYPACKACCOUNT,
-        passPhrase,
-        message,
-        messagePrunable: true,
-        deadline: 1440,
-        priority: 'HIGH',
-    })
-        .then(response => {
-            return {
-                response: response,
-                responseTime: response.data.requestProcessingTime,
-                bought: true,
-                status: 'success',
-            };
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-
-    console.log('TransferAsset -> ', transferedAsset);
-
-    // ----------------------------------
-
-    const transferedGEM = await transferGEM({
-        quantityQNT: cost * NQTDIVIDER,
-        recipient: BUYPACKACCOUNT,
-        passPhrase,
-        message,
-        messagePrunable: true,
-        deadline: 1440,
-        priority: 'HIGH',
-    })
-        .then(response => {
-            return {
-                response: response,
-                responseTime: response.data.requestProcessingTime,
-                bought: true,
-                status: 'success',
-            };
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-
-    console.log('TransferGEM -> ', transferedGEM);
-    return transferedAsset.status === 'success' && transferedGEM.status === 'success';
-};
-
-export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
-    const message = JSON.stringify({ contract: 'TarascaDAOCardCraft' });
-
-    //const noCrafts = Math.floor(noCards / CRAFTING_RATIO);
-    
-    const transferedAsset = await transferAsset({
-        asset: asset,
-        quantityQNT: noCards,
-        recipient: BUYPACKACCOUNT,
-        passPhrase,
-        message,
-        messagePrunable: true,
-        deadline: 1440,
-        priority: 'HIGH',
-    })
-        .then(response => {
-            return {
-                response: response,
-                responseTime: response.data.requestProcessingTime,
-                bought: true,
-                status: 'success',
-            };
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-
-    console.log('TransferAsset -> ', transferedAsset);
-
-    const transferedIgnis = await sendIgnis({
-        amountNQT: cost * NQTDIVIDER,
-        recipient: BUYPACKACCOUNT,
-        passPhrase,
-        message,
-        messagePrunable: true,
-        deadline: 1440,
-        priority: 'HIGH',
-    })
-        .then(response => {
-            return {
-                response: response,
-                responseTime: response.data.requestProcessingTime,
-                bought: true,
-                status: 'success',
-            };
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-
-    console.log('TransferGEM -> ', transferedIgnis);
-
-    return transferedIgnis.status === 'success';
 };
 
 const transferGEM = async ({

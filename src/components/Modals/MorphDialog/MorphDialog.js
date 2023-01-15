@@ -27,8 +27,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { MORPHINGCOMMON, MORPHINGEPIC, MORPHINGRARE } from '../../../data/CONSTANTS';
-import { sendToMorph } from '../../../services/Ardor/ardorInterface';
-import { checkPin } from '../../../services/Ardor/walletUtils';
+import { checkPin, sendToMorph } from '../../../services/Ardor/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 
 const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
@@ -71,7 +70,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
             setMorphingCost(input.value * MORPHINGCOMMON);
         } else if (rarity === 'Rare') {
             setMorphingCost(input.value * MORPHINGRARE);
-        } else if (rarity === 'ePIC') {
+        } else if (rarity === 'Epic') {
             setMorphingCost(input.value * MORPHINGEPIC);
         }
     }, [input, card]);
