@@ -1,14 +1,88 @@
 import { Grid, GridItem, useDisclosure } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from './Card';
 import DetailedCard from './DetailedCard';
 
 const GridCards = ({ cards, isMarket = false, onlyBuy = false, username }) => {
+
+    const [actualCards, setActualCards] = useState(cards);
+
     // Card clicked
     const [cardClicked, setCardClicked] = useState();
 
     // Open DetailedCardView
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    // State to keep track of the cards that have been loaded
+    const [loadedCards, setLoadedCards] = useState([]);
+
+    // State to keep track of if there are more cards to load
+    const [hasMoreCards, setHasMoreCards] = useState(true);
+    
+    // State to keep track of the loading status
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [isFirstTime, setIsFirstTime] = useState(true);
+
+    useEffect(() => {
+        // Function to handle scroll event
+        const handleScroll = () => {
+            console.log('scrolling');
+            // Get the current scroll position
+            const scrollY = window.scrollY;
+            // Get the height of the document
+            const docHeight = document.body.offsetHeight;
+            // Get the window height
+            const windowHeight = window.innerHeight;
+            // Check if the user has scrolled to the bottom of the page
+            if (scrollY + windowHeight >= (docHeight)) {
+                // Load more cards
+                loadMoreCards();
+                console.log('Scrolling -> loading more cards');
+            }
+        };
+
+        // Function to load more cards
+        const loadMoreCards = () => {
+            // Check if there are more cards to load and if we are not already loading
+            console.log("Calling but hasMoreCards: " + hasMoreCards + " isLoading: " + isLoading);
+            if (hasMoreCards && !isLoading) {
+                console.log("Loading more cards")
+                setIsLoading(true);
+                // Get the next batch of cards
+                const nextCards = actualCards.slice(loadedCards.length, loadedCards.length + 10);
+                // Check if there are no more cards to load
+                if (nextCards.length === 0) {
+                    setHasMoreCards(false);
+                }
+                // Add the new cards to the loaded cards
+                setLoadedCards([...loadedCards, ...nextCards]);
+                setIsLoading(false);
+            }
+        };
+
+        if(isFirstTime) {
+            setIsFirstTime(false);
+            // Load the first batch of cards
+            loadMoreCards();
+            
+        }
+
+        if(JSON.stringify(cards) !== JSON.stringify(actualCards)) {
+            setActualCards(cards);
+            setLoadedCards([]);
+            setHasMoreCards(true);
+            setIsFirstTime(true);
+        }
+
+        // Add event listener for scroll event
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            // Remove event listener on cleanup
+            window.removeEventListener('scroll', handleScroll);
+        };
+
+    }, [cards, actualCards, hasMoreCards, isLoading, loadedCards, isFirstTime]);
 
     return (
         <>
@@ -22,22 +96,22 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, username }) => {
                 ]}
                 gap={4}
                 my={4}>
-                {cards &&
-                    cards.map((card, index) => {
-                        return (
-                            <GridItem key={index}>
-                                <Card
-                                    username={username}
-                                    card={card}
-                                    setCardClicked={setCardClicked}
-                                    onOpen={onOpen}
-                                    isMarket={isMarket}
-                                    onlyBuy={onlyBuy}
-                                />
-                            </GridItem>
-                        );
-                    })}
+                {loadedCards.map((card, index) => {
+                    return (
+                        <GridItem key={index}>
+                            <Card
+                                username={username}
+                                card={card}
+                                setCardClicked={setCardClicked}
+                                onOpen={onOpen}
+                                isMarket={isMarket}
+                                onlyBuy={onlyBuy}
+                            />
+                        </GridItem>
+                    );
+                })}
             </Grid>
+            {isLoading && <p>Loading...</p>}
             {isOpen && <DetailedCard isOpen={isOpen} onClose={onClose} data={cardClicked} />}
         </>
     );
