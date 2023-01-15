@@ -27,7 +27,7 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
                 <Tbody>
                     {trades.map((trade, index) => {
                         const card = getAsset(trade.asset, cards);
-                        if (card === undefined && trade.name !== 'GEM') return;
+                        if (card === undefined && trade.name !== 'GEM') return null;
                         const type = imSeller(trade) ? 'out' : 'in';
                         const account = imSeller(trade) ? trade.buyerRS : trade.sellerRS;
                         const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
