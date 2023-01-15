@@ -61,7 +61,7 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
                         />
                     </Flex>
                 </Flex>
-                {isHeader && (
+                {(isHeader && isLogged) && (
                 <ButtonGroup size="sm" isAttached variant="outline" position="absolute" right="2%">
                     <Button display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'}>
                         IGNIS: {IGNISBalance}

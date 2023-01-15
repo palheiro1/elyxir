@@ -20,9 +20,11 @@ function App() {
   const [ infoAccount, setInfoAccount ] = useState(cleanInfoAccount);
   const isLogged = infoAccount.token !== null && infoAccount.accountRs !== null;
 
+  
+
   return (
     <ChakraProvider theme={ theme }> 
-      <Header isLogged = {isLogged} IGNISBalance={infoAccount.IGNISBalance} GIFTZBalance={infoAccount.GIFTZBalance}  />
+      <Header isLogged = {isLogged} IGNISBalance={infoAccount.IGNISBalance} GIFTZBalance={infoAccount.GIFTZBalance} GEMSBalance={infoAccount.GEMSBalance}  />
       <Routes>
 
         {/* LOGING PAGE / CREATE WALLET / RESTORE WALLET */}
