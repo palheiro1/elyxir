@@ -3,7 +3,7 @@ import axios from 'axios';
 import qs from 'qs';
 import ardorjs from 'ardorjs';
 
-import { GEMASSET, NODEURL, NQTDIVIDER } from '../../data/CONSTANTS';
+import { GEMASSET, JACKPOTACCOUNT, NODEURL, NQTDIVIDER } from '../../data/CONSTANTS';
 //import { APILIMIT, JACKPOTACCOUNT } from '../../data/CONSTANTS';
 
 const config = {
@@ -37,6 +37,14 @@ const getTransactionBytes = async query => {
     return axios.post(NODEURL, qs.stringify(query), config).then(function (response) {
         return response.data;
     });
+};
+
+export const fetchAssetCount = async asset => {
+    const response = await fetch(
+        NODEURL + '?requestType=getAccountAssets&account=' + JACKPOTACCOUNT + '&asset=' + asset
+    );
+    const result = await response.json();
+    return result.quantityQNT ? result.quantityQNT : 0;
 };
 
 //Account balance
@@ -91,6 +99,14 @@ export const getAccountCurrentBidOrders = async account => {
             // handle error
             console.log(error);
         });
+};
+
+export const getAskAndBids = async asset => {
+    const askOrders = (await getAskOrders(asset)).askOrders;
+    const bidOrders = (await getBidOrders(asset)).bidOrders;
+    const assetCount = await fetchAssetCount(asset);
+
+    return { askOrders, bidOrders, assetCount };
 };
 
 export const getAskOrders = async asset => {
