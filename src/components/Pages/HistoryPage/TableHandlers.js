@@ -7,7 +7,8 @@ import TableCard from '../../Cards/TableCard';
 
 // Utils
 import { calculateFixedAmount, getReason, parseJson, parseRecipient, parseSender } from '../../../utils/txUtils';
-import { GEMASSET, JACKPOTACCOUNT, NQTDIVIDER } from '../../../data/CONSTANTS';
+import { JACKPOTACCOUNT, NQTDIVIDER } from '../../../data/CONSTANTS';
+import { getAsset } from '../../../utils/cardsUtils';
 
 // -------------------------------------------- //
 // ------------------ HANDLERS ---------------- //
@@ -63,7 +64,7 @@ export const handleType2AndSubtype1 = (tx, timestamp, infoAccount, collectionCar
     const sender = parseSender(tx);
     if (!sender) return;
 
-    const asset = getAsset(tx, collectionCardsStatic);
+    const asset = getAsset(tx.attachment.asset, collectionCardsStatic);
     if (!asset) return;
 
     const amount = calculateFixedAmount(tx.attachment.quantityQNT);
@@ -85,7 +86,7 @@ export const handleType2AndSubtype1 = (tx, timestamp, infoAccount, collectionCar
  * @param {array} collectionCardsStatic - static collection of cards
  */
 export const handleType2AndSubtype2And3 = (tx, timestamp, infoAccount, collectionCardsStatic) => {
-    const asset = getAsset(tx, collectionCardsStatic);
+    const asset = getAsset(tx.attachment.asset, collectionCardsStatic);
     if (!asset) return;
 
     const orderType = tx.subtype === 2 ? 'ask' : 'bid';
@@ -152,14 +153,6 @@ const getJackpotAndReason = tx => {
         }
     }
     return { jackpot, reason };
-};
-
-const getAsset = (tx, collectionCardsStatic) => {
-    if (tx.attachment.asset === GEMASSET) {
-        return 'GEM';
-    } else {
-        return collectionCardsStatic.find(card => card.asset === tx.attachment.asset);
-    }
 };
 
 // NOT WORKING - FLOW IS NOT CORRECT

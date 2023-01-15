@@ -1,5 +1,6 @@
 import {
     CATOBLEPASASSETWRONG,
+    GEMASSET,
     IMGURL,
     IMG_MD_PATH,
     IMG_THUMB_PATH,
@@ -35,6 +36,14 @@ function getThumbsImage(name) {
     return imgurl;
 }
 
+export const getAsset = (asset, collectionCardsStatic) => {
+    if (asset === GEMASSET) {
+        return 'GEM';
+    } else {
+        return collectionCardsStatic.find(card => card.asset === asset);
+    }
+};
+
 // -------------------------------------------------
 //                  CARDS FETCH
 // -------------------------------------------------
@@ -49,6 +58,11 @@ export const fetchAllCards = async (accountRs, collectionRs, specialRs, fetchOrd
     const specialCards = specialAssets.filter(asset => !blacklistedAssets.includes(asset.asset));
     const fullCollection = collectionAssets.concat(specialCards).filter(asset => asset.asset !== CATOBLEPASASSETWRONG);
     return await cardsGenerator(account.accountAssets, fullCollection, fetchOrders);
+};
+
+export const fetchGemCards = async (accountRs, gemRs, fetchOrders = false) => {
+    const [account, gemAssets] = await Promise.all([getAccountAssets(accountRs), getAssetsByIssuer(gemRs)]);
+    return await cardsGenerator(account.accountAssets, gemAssets, fetchOrders);
 };
 
 // -------------------------------------------------
