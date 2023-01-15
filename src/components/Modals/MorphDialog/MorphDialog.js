@@ -27,7 +27,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { MORPHINGCOMMON, MORPHINGEPIC, MORPHINGRARE } from '../../../data/CONSTANTS';
-import { checkPin, sendToMorph } from '../../../services/Ardor/walletUtils';
+import { checkPin, sendToMorph } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 
 const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {

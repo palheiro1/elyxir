@@ -27,7 +27,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { CRAFTINGCOMMON, CRAFTINGRARE } from '../../../data/CONSTANTS';
-import { checkPin, sendToCraft } from '../../../services/Ardor/walletUtils';
+import { checkPin, sendToCraft } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 
 const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {

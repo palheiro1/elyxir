@@ -27,7 +27,7 @@ import {
 import { useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
 import { transferAsset } from '../../../services/Ardor/ardorInterface';
-import { checkPin } from '../../../services/Ardor/walletUtils';
+import { checkPin } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { isArdorAccount } from '../../../utils/validators';
 
