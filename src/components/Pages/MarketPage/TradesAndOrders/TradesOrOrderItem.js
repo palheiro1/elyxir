@@ -10,7 +10,7 @@ const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, car
         return (
             <Tr>
                 <Td><InOutTxMarket type={type} /></Td>
-                <Td textAlign="center" fontWeight="bold">{name}</Td>
+                <Td fontWeight="bold" fontSize="xl">{name}</Td>
                 <Td>{amount}</Td>
                 <Td>
                     <Stack direction="row" align="center">
