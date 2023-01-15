@@ -19,7 +19,11 @@ import { COLLECTIONACCOUNT, TARASCACARDACCOUNT } from '../../data/CONSTANTS';
 // Services
 import { fetchAllCards } from '../../utils/cardsUtils';
 import { getGIFTZBalance, getIGNISBalance } from '../../services/Ardor/walletUtils';
-import { getBlockchainTransactions, getUnconfirmedTransactions } from '../../services/Ardor/ardorInterface';
+import {
+    getAskAndBids,
+    getBlockchainTransactions,
+    getUnconfirmedTransactions,
+} from '../../services/Ardor/ardorInterface';
 
 /**
  * @name Home
@@ -35,12 +39,14 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     // All cards
     const [cards, setCards] = useState([]);
+
     // Filtered cards
     const [cardsFiltered, setCardsFiltered] = useState(cards);
 
     // Need reload data
     const [needReload, setNeedReload] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const [marketFetched, setMarketFetched] = useState(false);
 
     /*
      * 0 -> Overview
@@ -89,6 +95,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             ]);
 
             setCards(cards);
+            setMarketFetched(false);
             setInfoAccount({
                 ...infoAccount,
                 IGNISBalance: ignis,
@@ -111,6 +118,23 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
         return () => clearInterval(intervalId);
     }, [infoAccount, needReload, isLoading, setInfoAccount]);
+
+    useEffect(() => {
+        const fetchAskAndBids = async () => {
+            setMarketFetched(true);
+            console.log('Fetching ask and bids...');
+            const cardsWithAskAndBids = await Promise.all(
+                cards.map(async card => {
+                    const { askOrders, bidOrders, assetCount } = await getAskAndBids(card.asset);
+                    return { ...card, askOrders: askOrders, bidOrders: bidOrders, assetCount: assetCount };
+                })
+            );
+            console.log('Ask and bids fetched', cardsWithAskAndBids);
+            setCards(cardsWithAskAndBids);
+        };
+
+        !marketFetched && cards.length > 0 && fetchAskAndBids();
+    }, [cards, marketFetched]);
 
     useEffect(() => {
         switch (option) {
