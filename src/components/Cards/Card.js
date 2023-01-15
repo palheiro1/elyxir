@@ -161,7 +161,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                             Latest price
                                         </Text>
                                         <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                            200
+                                            SOON
                                         </Text>
                                     </Box>
                                 </SimpleGrid>
