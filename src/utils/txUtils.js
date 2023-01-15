@@ -121,11 +121,12 @@ export function parseRecipient(tx, contacts = DEFAULT_CONTACTS) {
     }
 }
 
-export function getTxTimestamp(tx, eb) {
+export function getTxTimestamp(tx, eb, showStatus = true) {
     const txstamp = new Date(eb.getTime() + tx.timestamp * 1000);
     const status = tx.confirmations === 1 ? 'just confirmed' : tx.confirmations > 1 ? 'confirmed' : 'unconfirmed';
     const datestring = formatDate(txstamp, 'yyyy-MM-dd');
     const timestring = formatTime(txstamp, 'HH:mm:ss');
-
+    
+    if (!showStatus) return `${datestring} ${timestring}`;
     return `${datestring} ${timestring} (${status})`;
 }
