@@ -22,12 +22,12 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, username }) => {
     // State to keep track of the loading status
     const [isLoading, setIsLoading] = useState(false);
 
+    // State to keep track of the first time
     const [isFirstTime, setIsFirstTime] = useState(true);
 
     useEffect(() => {
         // Function to handle scroll event
         const handleScroll = () => {
-            console.log('scrolling');
             // Get the current scroll position
             const scrollY = window.scrollY;
             // Get the height of the document
@@ -38,16 +38,13 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, username }) => {
             if (scrollY + windowHeight >= (docHeight)) {
                 // Load more cards
                 loadMoreCards();
-                console.log('Scrolling -> loading more cards');
             }
         };
 
         // Function to load more cards
         const loadMoreCards = () => {
             // Check if there are more cards to load and if we are not already loading
-            console.log("Calling but hasMoreCards: " + hasMoreCards + " isLoading: " + isLoading);
             if (hasMoreCards && !isLoading) {
-                console.log("Loading more cards")
                 setIsLoading(true);
                 // Get the next batch of cards
                 const nextCards = actualCards.slice(loadedCards.length, loadedCards.length + 10);

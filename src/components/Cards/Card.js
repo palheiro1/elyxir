@@ -15,20 +15,25 @@ import { useRef, useState } from 'react';
 
 import { BsArrowLeftRight, BsTools } from 'react-icons/bs';
 import { FaRegPaperPlane } from 'react-icons/fa';
+import { NQTDIVIDER } from '../../data/CONSTANTS';
 import CraftDialog from '../Modals/CraftDialog/CraftDialog';
 import MorphDialog from '../Modals/MorphDialog/MorphDialog';
 import SendDialog from '../Modals/SendDialog/SendDialog';
 
 const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, username }) => {
+
+    const { name, cardImgUrl: image, channel: continent, quantityQNT: quantity, rarity, askOrders, bidOrders } = card;
+
+    // ------------------------------
+
     const handleClick = ({ card }) => {
         setCardClicked(card);
         onOpen();
     };
 
-    const { name, cardImgUrl: image, channel: continent, quantityQNT: quantity, rarity } = card;
+    // ------------------------------
 
     const bgColor = useColorModeValue('white', 'transparent');
-
     const [hover, setHover] = useState(false);
     const initialStyle = {
         cursor: 'none',
@@ -43,14 +48,21 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
         shadow: 'xl',
     };
 
-    const { isOpen:isOpenCraft, onOpen:onOpenCraft, onClose:onCloseCraft } = useDisclosure()
-    const refCraft = useRef()
+    // ------------------------------
 
-    const { isOpen:isOpenMorph, onOpen:onOpenMorph, onClose:onCloseMorph } = useDisclosure()
-    const refMorph = useRef()
+    const { isOpen: isOpenCraft, onOpen: onOpenCraft, onClose: onCloseCraft } = useDisclosure();
+    const refCraft = useRef();
 
-    const { isOpen:isOpenSend, onOpen:onOpenSend, onClose:onCloseSend } = useDisclosure()
-    const refSend = useRef()
+    const { isOpen: isOpenMorph, onOpen: onOpenMorph, onClose: onCloseMorph } = useDisclosure();
+    const refMorph = useRef();
+
+    const { isOpen: isOpenSend, onOpen: onOpenSend, onClose: onCloseSend } = useDisclosure();
+    const refSend = useRef();
+
+    // ------------------------------
+    const lowedAskOrders = askOrders.length > 0 ? askOrders[0].priceNQTPerShare/NQTDIVIDER : "";
+    const highBidOrders = bidOrders.length > 0 ? bidOrders[0].priceNQTPerShare/NQTDIVIDER : "";
+    // ------------------------------
 
     return (
         <Box p={3} border="1px" rounded="lg" borderColor="gray" shadow="xl" bgColor={bgColor}>
@@ -90,15 +102,27 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                     </Box>
                 ) : !isMarket ? (
                     <SimpleGrid columns={3} gap={1}>
-                        <Button leftIcon={<FaRegPaperPlane />} _hover={{ fontWeight: 'bold', shadow: 'xl' }} onClick={onOpenSend} isDisabled={quantity === 0}>
+                        <Button
+                            leftIcon={<FaRegPaperPlane />}
+                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                            onClick={onOpenSend}
+                            isDisabled={quantity === 0}>
                             Send
                         </Button>
-                        
-                        <Button leftIcon={<BsTools />} _hover={{ fontWeight: 'bold', shadow: 'xl' }} onClick={onOpenCraft} isDisabled={quantity <= 4}>
+
+                        <Button
+                            leftIcon={<BsTools />}
+                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                            onClick={onOpenCraft}
+                            isDisabled={quantity <= 4}>
                             Craft
                         </Button>
 
-                        <Button leftIcon={<BsArrowLeftRight />} _hover={{ fontWeight: 'bold', shadow: 'xl' }}  onClick={onOpenMorph} isDisabled={quantity === 0}>
+                        <Button
+                            leftIcon={<BsArrowLeftRight />}
+                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                            onClick={onOpenMorph}
+                            isDisabled={quantity === 0}>
                             Morph
                         </Button>
                     </SimpleGrid>
@@ -121,7 +145,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                             Lowest ask
                                         </Text>
                                         <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                            32
+                                            {lowedAskOrders}
                                         </Text>
                                     </Box>
                                     <Box>
@@ -129,7 +153,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                             Highest bid
                                         </Text>
                                         <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                            15
+                                            {highBidOrders}
                                         </Text>
                                     </Box>
                                     <Box>
@@ -146,11 +170,23 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                     </Center>
                 )}
             </Stack>
-            
+
             {/* ------------------------------------ HIDE DIALOGs ------------------------------------ */}
             <SendDialog isOpen={isOpenSend} onClose={onCloseSend} reference={refSend} card={card} username={username} />
-            <CraftDialog isOpen={isOpenCraft} onClose={onCloseCraft} reference={refCraft} card={card} username={username} />
-            <MorphDialog isOpen={isOpenMorph} onClose={onCloseMorph} reference={refMorph} card={card} username={username} />
+            <CraftDialog
+                isOpen={isOpenCraft}
+                onClose={onCloseCraft}
+                reference={refCraft}
+                card={card}
+                username={username}
+            />
+            <MorphDialog
+                isOpen={isOpenMorph}
+                onClose={onCloseMorph}
+                reference={refMorph}
+                card={card}
+                username={username}
+            />
             {/* -------------------------------------------------------------------------------------- */}
         </Box>
     );
