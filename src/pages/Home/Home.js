@@ -77,14 +77,15 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     useEffect(() => {
         const loadAll = async () => {
             console.log('Loading all data...');
+            const { accountRs } = infoAccount;
             setIsLoading(true);
             setNeedReload(false);
             const [cards, ignis, giftz, txs, unconfirmed] = await Promise.all([
-                fetchAllCards(infoAccount.accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT),
-                getIGNISBalance(infoAccount.accountRs),
-                getGIFTZBalance(infoAccount.accountRs),
-                getBlockchainTransactions(2, infoAccount.accountRs, true),
-                getUnconfirmedTransactions(2, infoAccount.accountRs),
+                fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT),
+                getIGNISBalance(accountRs),
+                getGIFTZBalance(accountRs),
+                getBlockchainTransactions(2, accountRs, true),
+                getUnconfirmedTransactions(2, accountRs),
             ]);
 
             setCards(cards);
@@ -95,8 +96,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 transactions: txs.transactions,
                 unconfirmedTxs: unconfirmed.transactions,
             });
-            // Añadir toast para cuando haya transacciones pendientes
-            // Añadir toast cuando se detecte que ya no hay transacciones pendientes
             setIsLoading(false);
         };
 
