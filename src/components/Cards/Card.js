@@ -94,7 +94,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                             Send
                         </Button>
                         
-                        <Button leftIcon={<BsTools />} _hover={{ fontWeight: 'bold', shadow: 'xl' }} onClick={onOpenCraft} isDisabled={quantity < 4}>
+                        <Button leftIcon={<BsTools />} _hover={{ fontWeight: 'bold', shadow: 'xl' }} onClick={onOpenCraft} isDisabled={quantity <= 4}>
                             Craft
                         </Button>
 
