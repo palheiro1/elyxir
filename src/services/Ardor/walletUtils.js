@@ -2,6 +2,16 @@ import { BUYPACKACCOUNT, CURRENCY, NQTDIVIDER } from '../../data/CONSTANTS';
 import { decrypt, getUser } from '../../utils/storage';
 import { getAccountCurrencies, getIgnisBalance, sendIgnis, transferAsset, transferGEM } from './ardorInterface';
 
+/**
+ * @name checkPin
+ * @description Check pin user PIN and decrypt token
+ * @param {String} user - User
+ * @param {String} pin - Pin
+ * @returns {Object} - User info if success, false if not
+ * @author Jesús Sánchez Fernández
+ * @version 0.1
+ * @dev This function is used to check the pin
+ */
 export const checkPin = (user, pin) => {
     console.log('🚀 ~ file: walletUtils.js:6 ~ checkPin ~ user', user);
     const recoverUser = getUser(user);
@@ -37,7 +47,17 @@ export const getIGNISBalance = async account => {
     return Number(Math.min(response.balanceNQT / NQTDIVIDER, response.unconfirmedBalanceNQT / NQTDIVIDER)).toFixed(2);
 };
 
-export const getMorphMessage = (asset, noCards) => {
+/**
+ * @name getMorphMessage
+ * @description Get morph message
+ * @param {String} asset - Asset id
+ * @param {Number} noCards - Number of cards
+ * @returns {String} - Message to send to morph
+ * @author Jesús Sánchez Fernández
+ * @version 0.1
+ * @dev This function is used to get the message to send to morph
+ */
+const getMorphMessage = (asset, noCards) => {
     return JSON.stringify({
         contract: 'TarascaDaoOmno',
         operation: [
@@ -104,6 +124,18 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
     return transferedGEM && success;
 };
 
+/**
+ * @name sendToCraft
+ * @description Send cards to craft
+ * @param {String} asset - Asset id
+ * @param {Number} noCards - Number of cards
+ * @param {String} passPhrase - Passphrase
+ * @param {Number} cost - Cost of the craft
+ * @returns {Boolean} - True if success, false if not
+ * @author Jesús Sánchez Fernández
+ * @version 0.1
+ * @dev This function is used to send cards to craft
+ */
 export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
     const message = JSON.stringify({ contract: 'TarascaDAOCardCraft' });
     let success = true;
