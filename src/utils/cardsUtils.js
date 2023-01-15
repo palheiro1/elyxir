@@ -4,7 +4,6 @@ import {
     IMG_MD_PATH,
     IMG_THUMB_PATH,
     MARUXAINAASSETWRONG,
-    NODEURL,
     QUANT_COMMON,
     QUANT_RARE,
     QUANT_SPECIAL,
@@ -44,37 +43,38 @@ export const fetchAllCards = async (accountRs, collectionRs, specialRs, fetchOrd
     const [account, collectionAssets, specialAssets] = await Promise.all([
         getAccountAssets(accountRs),
         getAssetsByIssuer(collectionRs),
-        getAssetsByIssuer(specialRs)
+        getAssetsByIssuer(specialRs),
     ]);
     const blacklistedAssets = [REFERRALASSET, SASQUATCHASSET, MARUXAINAASSETWRONG];
     const specialCards = specialAssets.filter(asset => !blacklistedAssets.includes(asset.asset));
     const fullCollection = collectionAssets.concat(specialCards).filter(asset => asset.asset !== CATOBLEPASASSETWRONG);
-    return cardsGenerator(account.accountAssets, fullCollection, fetchOrders);
+    return await cardsGenerator(account.accountAssets, fullCollection, fetchOrders);
 };
-
 
 // -------------------------------------------------
 //            CARDS UTILS FOR INVENTORY
 // -------------------------------------------------
 
-export function cardsGenerator(accountAssets, collectionAssets, fetchOrders = false) {
+export const cardsGenerator = async (accountAssets, collectionAssets, fetchOrders = false) => {
     var ret = [];
 
-    collectionAssets.forEach(function (asset) {
+    for (let index = 0; index < collectionAssets.length; index++) {
+        const asset = collectionAssets[index];
         const accountAsset = accountAssets.find(a => a.asset === asset.asset);
         const quantityQNT = accountAsset ? accountAsset.quantityQNT : 0;
         const unconfirmedQuantityQNT = accountAsset ? accountAsset.unconfirmedQuantityQNT : 0;
         if (asset.description) {
-            let newAsset = cardInfoGenerator(asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders);
+            let newAsset = await cardInfoGenerator(asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders);
             if (newAsset !== undefined) {
                 ret.push(newAsset);
             }
         }
-    });
-    return ret;
-}
+    }
 
-export function cardInfoGenerator(asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders = false) {
+    return ret;
+};
+
+export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders = false) => {
     const new_description = asset.description.replace(/\bNaN\b/g, 'null').replace(/\t/g, 'null');
 
     if (new_description) {
@@ -86,10 +86,10 @@ export function cardInfoGenerator(asset, quantityQNT, unconfirmedQuantityQNT, fe
         let askOrders = [];
         let bidOrders = [];
         if (fetchOrders) {
-            getAskOrders(NODEURL, asset.asset).then(response => {
+            await getAskOrders(asset.asset).then(response => {
                 askOrders = response.askOrders;
             });
-            getBidOrders(NODEURL, asset.asset).then(response => {
+            await getBidOrders(asset.asset).then(response => {
                 bidOrders = response.bidOrders;
             });
         }
@@ -130,4 +130,4 @@ export function cardInfoGenerator(asset, quantityQNT, unconfirmedQuantityQNT, fe
     } else {
         return undefined;
     }
-}
+};
