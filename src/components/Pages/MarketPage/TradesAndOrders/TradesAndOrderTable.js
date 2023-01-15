@@ -1,9 +1,10 @@
 import { Table, TableContainer, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
 import { NQTDIVIDER } from '../../../../data/CONSTANTS';
+import { getAsset } from '../../../../utils/cardsUtils';
 import { getTxTimestamp } from '../../../../utils/txUtils';
 import TradesOrOrderItem from './TradesOrOrderItem';
 
-const TradesAndOrderTable = ({ account, trades }) => {
+const TradesAndOrderTable = ({ account, trades, cards }) => {
     console.log('🚀 ~ file: TradesAndOrderTable.js:5 ~ TradesAndOrderTable ~ trades', trades);
 
     const imSeller = trade => {
@@ -16,7 +17,7 @@ const TradesAndOrderTable = ({ account, trades }) => {
                 <Thead>
                     <Tr>
                         <Td></Td>
-                        <Td>Title</Td>
+                        <Td textAlign="center">Title</Td>
                         <Td>Amount</Td>
                         <Td>Price</Td>
                         <Td>Date and Time</Td>
@@ -30,6 +31,7 @@ const TradesAndOrderTable = ({ account, trades }) => {
                         const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
                         const timestamp = getTxTimestamp(trade, eb, false);
                         const amount = trade.name === "GEM" ? trade.quantityQNT / NQTDIVIDER : trade.quantityQNT
+                        const card = getAsset(trade.asset, cards)
                         return (
                             <TradesOrOrderItem
                                 key={index}
@@ -39,6 +41,7 @@ const TradesAndOrderTable = ({ account, trades }) => {
                                 price={trade.priceNQTPerShare / NQTDIVIDER}
                                 amount={amount}
                                 date={timestamp}
+                                card={card}
                             />
                         );
                     })}
