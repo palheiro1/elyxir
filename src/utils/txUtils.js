@@ -43,9 +43,9 @@ export const getReason = msg => {
     return reason;
 };
 
-export function parseSender(tx, contacts = DEFAULT_CONTACTS) {
+export function parseSender(tx) {
     const { senderRS: account } = tx;
-    const found = findContactByAccount(account, contacts);
+    const found = findContactByAccount(account, DEFAULT_CONTACTS);
     if (found === undefined) {
         return account;
     } else {
@@ -82,9 +82,9 @@ export function parseSender(tx, contacts = DEFAULT_CONTACTS) {
     }
 }
 
-export function parseRecipient(tx, contacts = DEFAULT_CONTACTS) {
+export function parseRecipient(tx) {
     const { recipientRS: account } = tx;
-    const found = findContactByAccount(account, contacts);
+    const found = findContactByAccount(account, DEFAULT_CONTACTS);
     if (found === undefined) {
         return account;
     } else if (found.accountRs === BRIDGEACCOUNT) {
