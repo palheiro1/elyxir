@@ -15,3 +15,9 @@ export const getJackpotBalanceUSD = async (jackpotBalance) => {
         (JACKPOTHALF ? jackpotBalance / 2 : jackpotBalance) * ignisPrice
     ).toFixed(2);
 }
+
+export const getJackpotParticipants = async () => {
+    // Get participants
+    const response = await fetch("https://api.mythicalbeings.io/index.php?action=winners");
+    return await response.json();
+}

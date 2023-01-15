@@ -2,7 +2,7 @@ import { Center, Table, Tbody, Td, Tr, useColorModeValue } from '@chakra-ui/reac
 
 const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
 
-    const pyStyle = cStyle === 1 ? 2.5 : 1;
+    const pyStyle = cStyle === 1 ? 2.5 : 2;
     const textColor = useColorModeValue("black", "white");
 
     return (

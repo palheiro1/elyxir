@@ -2,11 +2,12 @@ import { Box, Center, HStack, IconButton, Text, useColorModeValue, VStack } from
 import { useEffect, useState } from 'react';
 import { GiCutDiamond } from 'react-icons/gi';
 
-import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/utils';
+import { getJackpotBalance, getJackpotBalanceUSD, getJackpotParticipants } from '../../services/Jackpot/utils';
 
 const HCountdown = ({ jackpotTimer }) => {
     const [jackpotBalance, setJackpotBalance] = useState(0);
     const [jackpotBalanceUSD, setJackpotBalanceUSD] = useState(0);
+    const [participants, setParticipants] = useState({ numParticipants: 0, participants: []});
 
     useEffect(() => {
         const fetchJackpotBalance = async () => {
@@ -17,6 +18,19 @@ const HCountdown = ({ jackpotTimer }) => {
             // Recover Jackpot balance - USD
             const jackpotBalanceUSD = await getJackpotBalanceUSD(jackpotBalance);
             setJackpotBalanceUSD(jackpotBalanceUSD);
+
+            // Get participants
+            const response = await getJackpotParticipants();
+            let auxParticipants = [];
+            let numParticipants = 0;
+            Object.entries(response).forEach(entry => {
+                const [key, value] = entry;
+                if(value > 0) {
+                    auxParticipants.push(key);
+                    numParticipants += value;
+                }
+            });
+            setParticipants({ numParticipants, participants: auxParticipants });
         };
 
         fetchJackpotBalance();
@@ -27,8 +41,8 @@ const HCountdown = ({ jackpotTimer }) => {
 
     return (
         <Center>
+            <VStack>
             <HStack>
-                s
                 <IconButton
                     icon={<GiCutDiamond />}
                     size="xl"
@@ -77,6 +91,10 @@ const HCountdown = ({ jackpotTimer }) => {
                     </HStack>
                 </Center>
             </HStack>
+            <Text color="gray" fontSize="md">
+                Total tickets in this round: <strong>{participants.numParticipants}</strong>
+            </Text>
+            </VStack>
         </Center>
     );
 };
