@@ -5,7 +5,7 @@ import ConfirmDialog from "../../../Modals/ConfirmDialog/ConfirmDialog";
 import { ImCross } from "react-icons/im";
 
 import { useNavigate } from "react-router-dom";
-import { checkPin } from "../../../../services/Ardor/walletUtils";
+import { checkPin } from "../../../../utils/walletUtils";
 
 /**
  * This component is used to render the user login form

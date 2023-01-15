@@ -13,7 +13,7 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { checkPin } from '../../../services/Ardor/walletUtils';
+import { checkPin } from '../../../utils/walletUtils';
 import BackupDialog from '../../Modals/BackupDialog/BackupDialog';
 import ConfirmDialog from '../../Modals/ConfirmDialog/ConfirmDialog';
 import UserDataItem from './UserDataItem';
