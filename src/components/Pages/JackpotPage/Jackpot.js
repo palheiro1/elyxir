@@ -21,7 +21,7 @@ const Jackpot = ({ infoAccount, cards = [] }) => {
         <Box>
             <SortAndFilterMenu cards={remainingCards} setCardsFiltered={setCardsFiltered} needSpecials={false} />
             <JackpotWidget cStyle={2} />
-            <RemainingCards username={infoAccount.name} totalCards={noSpecialCards.length} remainingCards={0} cards={cardsFiltered} />
+            <RemainingCards username={infoAccount.name} totalCards={noSpecialCards.length} remainingCards={remainingCards.length} cards={cardsFiltered} />
         </Box>
     )
 }

@@ -31,11 +31,11 @@ const RemainingCards = ({ totalCards, remainingCards, cards, username }) => {
         </Box>
     ) : (
         <Box mt={8} textAlign="center">
-            <Heading>You have all the cards! Claim the jackpot!</Heading>
+            <Heading>Congratulations!</Heading>
             <Center>
                 <Box textAlign="center">
                     <Text fontSize="xs">
-                        You have {have} out of {totalCards} cards.
+                        You have {have} out of {totalCards} cards. You have all the cards!
                     </Text>
                 </Box>
             </Center>
@@ -46,13 +46,23 @@ const RemainingCards = ({ totalCards, remainingCards, cards, username }) => {
                     </Text>
                     <Divider />
                     <Text fontSize="xs" mt={2}>
-                        One of each card returned to Mythical Beings.
+                        <strong>
+                            One of each card <u>returned</u> to
+                        </strong>{' '}
+                        Mythical Beings.
                     </Text>
                     <Text fontSize="xs">
-                        Get a share of the jackpot (1 participation = 1 share)
+                        <strong>
+                            Get a <u>share</u>
+                        </strong>{' '}
+                        of the jackpot (1 participation = 1 share)
                     </Text>
                     <Text fontSize="xs">
-                        Enter into a drawing of 7 Special Cards per cycle
+                        Enter into a{' '}
+                        <strong>
+                            <u>drawing of 7</u> Special Cards
+                        </strong>{' '}
+                        per cycle
                     </Text>
                 </Box>
             </Center>
