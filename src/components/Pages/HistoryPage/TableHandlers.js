@@ -61,7 +61,7 @@ export const handleType2AndSubtype1 = (tx, timestamp, infoAccount, collectionCar
     const inOut = getInOut(tx, infoAccount);
     if (!inOut) return;
 
-    const sender = parseSender(tx);
+    const sender = inOut === "in" ? parseSender(tx) : parseRecipient(tx);
     if (!sender) return;
 
     const asset = getAsset(tx.attachment.asset, collectionCardsStatic);
