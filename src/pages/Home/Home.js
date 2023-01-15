@@ -181,7 +181,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 setRenderComponent(<Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />);
                 break;
             case 4:
-                setRenderComponent(<Jackpot cards={cards} />);
+                setRenderComponent(<Jackpot infoAccount={infoAccount} cards={cards} />);
                 break;
             case 5:
                 setRenderComponent(<Account infoAccount={infoAccount} />);

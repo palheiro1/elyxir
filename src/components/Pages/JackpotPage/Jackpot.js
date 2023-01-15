@@ -4,7 +4,7 @@ import RemainingCards from "../../Cards/RemainingCards";
 import JackpotWidget from "../../JackpotWidget/JackpotWidget";
 import SortAndFilterMenu from "../../SortAndFilters/SortAndFilterMenu";
 
-const Jackpot = ({ cards = [] }) => {
+const Jackpot = ({ infoAccount, cards = [] }) => {
 
     const noSpecialCards = cards.filter(card => card.rarity !== 'Special');
     const [ remainingCards, setRemainingCards ] = useState(noSpecialCards);
@@ -21,7 +21,7 @@ const Jackpot = ({ cards = [] }) => {
         <Box>
             <SortAndFilterMenu cards={remainingCards} setCardsFiltered={setCardsFiltered} needSpecials={false} />
             <JackpotWidget cStyle={2} />
-            <RemainingCards totalCards={noSpecialCards.length} remainingCards={remainingCards.length} cards={cardsFiltered} />
+            <RemainingCards username={infoAccount.name} totalCards={noSpecialCards.length} remainingCards={0} cards={cardsFiltered} />
         </Box>
     )
 }
