@@ -5,7 +5,7 @@ import { Animated } from 'react-animated-css';
 import Card from './Card';
 import DetailedCard from './DetailedCard';
 
-const GridCards = ({ cards, isMarket = false, onlyBuy = false, username }) => {
+const GridCards = ({ cards, isMarket = false, onlyBuy = false, username, ignis }) => {
 	const [actualCards, setActualCards] = useState(cards);
 
 	// Card clicked
@@ -111,6 +111,7 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, username }) => {
 									onOpen={onOpen}
 									isMarket={isMarket}
 									onlyBuy={onlyBuy}
+									ignis={ignis}
 								/>
 							</GridItem>
 						</Animated>

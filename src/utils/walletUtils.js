@@ -1,6 +1,19 @@
 import { BUYPACKACCOUNT, CURRENCY, NQTDIVIDER } from '../data/CONSTANTS';
 import { decrypt, getUser } from './storage';
-import { fetchAssetCount, getAccountCurrencies, getAccountCurrentAskOrders, getAccountCurrentBidOrders, getAskOrders, getBidOrders, getIgnisBalance, sendIgnis, transferAsset, transferGEM } from '../services/Ardor/ardorInterface';
+import {
+    createAskOrder,
+    createBidOrder,
+    fetchAssetCount,
+    getAccountCurrencies,
+    getAccountCurrentAskOrders,
+    getAccountCurrentBidOrders,
+    getAskOrders,
+    getBidOrders,
+    getIgnisBalance,
+    sendIgnis,
+    transferAsset,
+    transferGEM,
+} from '../services/Ardor/ardorInterface';
 
 /**
  * @name checkPin
@@ -72,7 +85,9 @@ export const getGIFTZBalance = async address => {
  */
 export const getIGNISBalance = async account => {
     const response = await getIgnisBalance(account);
-    return Number(Math.min(response.balanceNQT / NQTDIVIDER, response.unconfirmedBalanceNQT / NQTDIVIDER)).toFixed(2);
+    return Number(
+        Math.min(response.balanceNQT / NQTDIVIDER, response.unconfirmedBalanceNQT / NQTDIVIDER)
+    ).toFixed(2);
 };
 
 /**
@@ -198,4 +213,14 @@ export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
     });
 
     return transferedIgnis && success;
+};
+
+export const sendAskOrder = async ({ asset, price, quantity, passPhrase }) => {
+    const response = await createAskOrder({ asset, price, quantity, passPhrase });
+    return response;
+};
+
+export const sendBidOrder = async ({ asset, price, quantity, passPhrase }) => {
+    const response = await createBidOrder({ asset, price, quantity, passPhrase });
+    return response;
 };

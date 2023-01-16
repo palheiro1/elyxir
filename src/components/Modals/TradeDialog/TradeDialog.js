@@ -14,12 +14,16 @@ import {
 	Stack,
 	Text,
     useDisclosure,
+	useToast,
 } from '@chakra-ui/react';
 
 import AskDialog from './AskDialog/AskDialog';
 import BidDialog from './BidDialog/BidDialog';
+import { errorToast } from '../../../utils/alerts';
 
-const TradeDialog = ({ reference, isOpen, onClose, card, username }) => {
+const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
+
+	const toast = useToast();
 
     const { isOpen: isOpenAsk, onOpen: onOpenAsk, onClose: onCloseAsk } = useDisclosure();
     const refAsk = useRef();
@@ -28,6 +32,10 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username }) => {
     const refBid = useRef();
 
     const handleAsk = () => {
+		if (card.quantityQNT === 0) {
+			errorToast("You can't ask for a card you don't have", toast);
+			return;
+		}
         onClose();
         onOpenAsk();
     }
@@ -110,7 +118,7 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username }) => {
 				</AlertDialogContent>
 			</AlertDialog>
             <AskDialog reference={refAsk} isOpen={isOpenAsk} onClose={onCloseAsk} card={card} username={username} />
-            <BidDialog reference={refBid} isOpen={isOpenBid} onClose={onCloseBid} card={card} username={username} />
+            <BidDialog reference={refBid} isOpen={isOpenBid} onClose={onCloseBid} card={card} username={username} ignis={ignis} />
 		</>
 	);
 };

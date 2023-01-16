@@ -21,9 +21,16 @@ import MorphDialog from '../Modals/MorphDialog/MorphDialog';
 import SendDialog from '../Modals/SendDialog/SendDialog';
 import TradeDialog from '../Modals/TradeDialog/TradeDialog';
 
-const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, username }) => {
-
-    const { name, cardImgUrl: image, channel: continent, quantityQNT: quantity, rarity, askOrders, bidOrders } = card;
+const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, username, ignis }) => {
+    const {
+        name,
+        cardImgUrl: image,
+        channel: continent,
+        quantityQNT: quantity,
+        rarity,
+        askOrders,
+        bidOrders,
+    } = card;
 
     // ------------------------------
 
@@ -64,8 +71,8 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     const refTrade = useRef();
 
     // ------------------------------
-    const lowedAskOrders = askOrders.length > 0 ? askOrders[0].priceNQTPerShare/NQTDIVIDER : "";
-    const highBidOrders = bidOrders.length > 0 ? bidOrders[0].priceNQTPerShare/NQTDIVIDER : "";
+    const lowedAskOrders = askOrders.length > 0 ? askOrders[0].priceNQTPerShare / NQTDIVIDER : '';
+    const highBidOrders = bidOrders.length > 0 ? bidOrders[0].priceNQTPerShare / NQTDIVIDER : '';
     // ------------------------------
 
     return (
@@ -177,7 +184,13 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
             </Stack>
 
             {/* ------------------------------------ HIDE DIALOGs ------------------------------------ */}
-            <SendDialog isOpen={isOpenSend} onClose={onCloseSend} reference={refSend} card={card} username={username} />
+            <SendDialog
+                isOpen={isOpenSend}
+                onClose={onCloseSend}
+                reference={refSend}
+                card={card}
+                username={username}
+            />
             <CraftDialog
                 isOpen={isOpenCraft}
                 onClose={onCloseCraft}
@@ -192,7 +205,14 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                 card={card}
                 username={username}
             />
-            <TradeDialog isOpen={isOpenTrade} onClose={onCloseTrade} reference={refTrade} card={card} username={username} />
+            <TradeDialog
+                isOpen={isOpenTrade}
+                onClose={onCloseTrade}
+                reference={refTrade}
+                card={card}
+                username={username}
+                ignis={ignis}
+            />
             {/* -------------------------------------------------------------------------------------- */}
         </Box>
     );

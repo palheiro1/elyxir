@@ -3,7 +3,7 @@ import { NQTDIVIDER } from "../../../../../data/CONSTANTS";
 import { getAsset } from "../../../../../utils/cardsUtils";
 import AskOrBidItem from "./AskOrBidItem";
 
-const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyText = true }) => {
+const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyText = false }) => {
     
     return (
         <SimpleGrid columns={2} mt={4} shadow="lg">
@@ -26,7 +26,6 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyText = true }) => {
                     </Thead>
                     <Tbody>
                         {askOrders.map((order) => {
-                            console.log("🚀 ~ file: AskAndBidGrid.js:29 ~ {askOrders.map ~ order", order)
                             const _asset = onlyText ? Number(order.asset) : getAsset(order.asset, cards);
                             return (
                                 <AskOrBidItem

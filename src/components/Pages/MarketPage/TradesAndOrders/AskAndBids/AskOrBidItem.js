@@ -5,8 +5,7 @@ const AskOrBidItem = ({ asset, ignis, amount }) => {
 	let card;
 
     ignis = Number(ignis);
-    console.log("🚀 ~ file: AskOrBidItem.js:8 ~ AskOrBidItem ~ ignis", ignis, Number.isInteger(ignis))
-    const fixedIgnis = Number.isInteger(ignis) ? ignis.toFixed(0) : ignis;
+    const fixedIgnis = Number.isInteger(ignis) ? ignis.toFixed(0) : ignis.toFixed(2);
 
     if (Number.isInteger(asset)) {
 		return (
