@@ -3,7 +3,7 @@ import { NQTDIVIDER } from "../../../../../data/CONSTANTS";
 import { getAsset } from "../../../../../utils/cardsUtils";
 import AskOrBidItem from "./AskOrBidItem";
 
-const AskAndBidGrid = ({ cards, askOrders, bidOrders }) => {
+const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyText = true }) => {
     
     return (
         <SimpleGrid columns={2} mt={4} shadow="lg">
@@ -20,13 +20,14 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders }) => {
 
                 <Table variant="simple">
                     <Thead backgroundColor="whiteAlpha.300">
-                        <Td textAlign="center">Asset</Td>
+                        {!onlyText && <Td textAlign="center">Asset</Td>}
                         <Td textAlign="center">Ignis</Td>
                         <Td textAlign="center">Amount</Td>
                     </Thead>
                     <Tbody>
                         {askOrders.map((order) => {
-                            const _asset = getAsset(order.asset, cards);
+                            console.log("🚀 ~ file: AskAndBidGrid.js:29 ~ {askOrders.map ~ order", order)
+                            const _asset = onlyText ? Number(order.asset) : getAsset(order.asset, cards);
                             return (
                                 <AskOrBidItem
                                     key={order.orderFullHash}
@@ -50,18 +51,18 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders }) => {
                 </Text>
                 <Table variant="simple">
                     <Thead backgroundColor="whiteAlpha.300">
-                        <Td textAlign="center">Asset</Td>
+                        {!onlyText && <Td textAlign="center">Asset</Td>}
                         <Td textAlign="center">Ignis</Td>
                         <Td textAlign="center">Amount</Td>
                     </Thead>
                     <Tbody>
                         {bidOrders.map((order) => {
-                            const _asset = getAsset(order.asset, cards);
+                            const _asset = onlyText ? Number(order.asset) : getAsset(order.asset, cards);
                             return (
                                 <AskOrBidItem
                                     key={order.orderFullHash}
                                     asset={_asset}
-                                    ignis={order.priceNQTPerShare/NQTDIVIDER}
+                                    ignis={Number(order.priceNQTPerShare/NQTDIVIDER)}
                                     amount={order.quantityQNT}
                                 />
                             );

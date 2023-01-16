@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import {
 	AlertDialog,
 	AlertDialogBody,
@@ -11,9 +13,30 @@ import {
 	SimpleGrid,
 	Stack,
 	Text,
+    useDisclosure,
 } from '@chakra-ui/react';
 
+import AskDialog from './AskDialog/AskDialog';
+import BidDialog from './BidDialog/BidDialog';
+
 const TradeDialog = ({ reference, isOpen, onClose, card, username }) => {
+
+    const { isOpen: isOpenAsk, onOpen: onOpenAsk, onClose: onCloseAsk } = useDisclosure();
+    const refAsk = useRef();
+
+    const { isOpen: isOpenBid, onOpen: onOpenBid, onClose: onCloseBid } = useDisclosure();
+    const refBid = useRef();
+
+    const handleAsk = () => {
+        onClose();
+        onOpenAsk();
+    }
+
+    const handleBid = () => {
+        onClose();
+        onOpenBid();
+    }
+
 	return (
 		<>
 			<AlertDialog
@@ -34,7 +57,7 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username }) => {
 					<AlertDialogBody>
 						<Center rounded="lg" bgColor="whiteAlpha.100" p={4}>
 							<Stack direction="row" align="center" spacing={4}>
-								<Image src={card.cardImgUrl} maxH="5rem" />
+								<Image src={card.cardImgUrl} maxH="10rem" />
 								<Box>
 									<Text fontSize="2xl" fontWeight="bold" color="white">
 										{card.name}
@@ -51,6 +74,7 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username }) => {
 
 						<SimpleGrid columns={2} my={4} shadow="lg">
 							<Box
+                                onClick={handleAsk}
 								color="white"
 								bgColor="whiteAlpha.100"
 								p={4}
@@ -66,6 +90,7 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username }) => {
 								ASK
 							</Box>
 							<Box
+                                onClick={handleBid}
 								color="white"
 								bgColor="whiteAlpha.100"
 								p={4}
@@ -84,6 +109,8 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username }) => {
 					</AlertDialogBody>
 				</AlertDialogContent>
 			</AlertDialog>
+            <AskDialog reference={refAsk} isOpen={isOpenAsk} onClose={onCloseAsk} card={card} username={username} />
+            <BidDialog reference={refBid} isOpen={isOpenBid} onClose={onCloseBid} card={card} username={username} />
 		</>
 	);
 };
