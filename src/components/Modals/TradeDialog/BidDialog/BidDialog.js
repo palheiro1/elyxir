@@ -64,7 +64,6 @@ const BidDialog = ({ reference, isOpen, onClose, card, username }) => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
 
         const account = checkPin(username, pin);
-        console.log('🚀 ~ file: SendDialog.js:48 ~ handleCompletePin ~ account', account);
         if (account) {
             setIsValidPin(true);
             setPassphrase(account.passphrase);

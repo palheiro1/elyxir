@@ -5,7 +5,6 @@ import { getTxTimestamp } from '../../../../utils/txUtils';
 import TradesOrOrderItem from './TradesOrOrderItem';
 
 const TradesAndOrderTable = ({ account, trades, cards }) => {
-    console.log('🚀 ~ file: TradesAndOrderTable.js:5 ~ TradesAndOrderTable ~ trades', trades);
 
     const imSeller = trade => {
         return trade.sellerRS === account;

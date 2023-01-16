@@ -13,7 +13,6 @@ import { fetchAssetCount, getAccountCurrencies, getAccountCurrentAskOrders, getA
  * @dev This function is used to check the pin
  */
 export const checkPin = (user, pin) => {
-    console.log('🚀 ~ file: walletUtils.js:6 ~ checkPin ~ user', user);
     const recoverUser = getUser(user);
     const { token } = recoverUser;
 

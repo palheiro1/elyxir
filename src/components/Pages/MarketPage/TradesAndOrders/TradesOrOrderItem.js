@@ -5,7 +5,6 @@ import { FaCoins } from "react-icons/fa";
 import TableCard from "../../../Cards/TableCard";
 
 const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, card }) => {
-    console.log("🚀 ~ file: TradesOrOrderItem.js:8 ~ TradesOrOrderItem ~ card", card)
     if(card === "GEM" || card === undefined) {
         return (
             <Tr>

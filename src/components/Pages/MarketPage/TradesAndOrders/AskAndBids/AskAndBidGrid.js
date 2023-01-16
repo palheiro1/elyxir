@@ -4,8 +4,6 @@ import { getAsset } from "../../../../../utils/cardsUtils";
 import AskOrBidItem from "./AskOrBidItem";
 
 const AskAndBidGrid = ({ cards, askOrders, bidOrders }) => {
-    console.log("🚀 ~ file: AskAndBidGrid.js:5 ~ AskAndBidGrid ~ bidOrders", bidOrders)
-    console.log("🚀 ~ file: AskAndBidGrid.js:5 ~ AskAndBidGrid ~ askOrders", askOrders)
     
     return (
         <SimpleGrid columns={2} mt={4} shadow="lg">

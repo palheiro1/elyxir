@@ -10,7 +10,6 @@ const UserDataItem = ({ accountRs, name, IGNISBalance, GIFTZBalance, GEMSBalance
         const calculateUSD = async () => {
             const ignisPrice = await getIgnisPrice();
             setIGNISUSDBalance(Number(IGNISBalance * ignisPrice).toFixed(2));
-            console.log("cALCULATE")
         }
         calculateUSD();
     }, [IGNISBalance])
