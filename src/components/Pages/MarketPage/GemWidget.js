@@ -1,10 +1,8 @@
 import {
     Box,
-    Button,
     Center,
     Grid,
     GridItem,
-    Heading,
     HStack,
     IconButton,
     Text,
