@@ -23,9 +23,10 @@ import { useNavigate } from 'react-router-dom';
 const Account = ({ infoAccount }) => {
 
     const { accountRs, name, IGNISBalance, GIFTZBalance, GEMSBalance } = infoAccount;
-    const [ isInvalidPinBackup, setIsInvalidPinBackup ] = useState(false);
-    const [ isInvalidPinDelete, setIsInvalidPinDelete ] = useState(false);
+    const [ isInvalidPinBackup, setIsInvalidPinBackup ] = useState(true);
+    const [ isInvalidPinDelete, setIsInvalidPinDelete ] = useState(true);
     const [ needReload, setNeedReload ] = useState(false);
+    const [ passphrase, setPassphrase ] = useState();
     const bgColor = useColorModeValue("blackAlpha.100", "whiteAlpha.100");
 
     const navigate = useNavigate();
@@ -51,6 +52,7 @@ const Account = ({ infoAccount }) => {
             return;
         }
         setIsInvalidPinBackup(false);
+        setPassphrase(user.passphrase)
     }
 
     const handleCheckPinDelete = (pin) => {
@@ -125,7 +127,7 @@ const Account = ({ infoAccount }) => {
                 </Box>
             </GridItem>
         </Grid>
-        <BackupDialog reference={refBackup} isOpen={isOpenBackup} onClose={onCloseBackup} account={infoAccount.accountRs} passphrase={infoAccount.passphrase} />
+        <BackupDialog reference={refBackup} isOpen={isOpenBackup} onClose={onCloseBackup} account={infoAccount.accountRs} passphrase={passphrase} />
         <ConfirmDialog reference={refDelete} isOpen={isOpenDelete} onClose={onCloseDelete} user={name} setNeedReload={setNeedReload} />
         </>
     );
