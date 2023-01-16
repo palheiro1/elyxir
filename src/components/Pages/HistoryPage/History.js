@@ -1,4 +1,16 @@
-import { Box, Button, Select, Stack, Table, TableContainer, Tbody, Td, Text, Thead, Tr } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Select,
+    Stack,
+    Table,
+    TableContainer,
+    Tbody,
+    Td,
+    Text,
+    Thead,
+    Tr,
+} from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaRegPaperPlane, FaFilter } from 'react-icons/fa';
 import { getBlockchainStatus } from '../../../services/Ardor/ardorInterface';
@@ -54,6 +66,11 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
     const [blockchainStatus, setBlockchainStatus] = useState({});
     const [needReload, setNeedReload] = useState(true);
     const [filter, setFilter] = useState('all');
+    const [sort, setSort] = useState('newest');
+
+    const handleSort = e => {
+        setSort(e.target.value);
+    };
 
     // -------------------------------------------------
     const [visibleTransactions, setVisibleTransactions] = useState(10);
@@ -73,7 +90,9 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
             setBlockchainStatus({
                 status: response.data,
                 epoch_beginning: new Date(
-                    response.data.isTestnet ? Date.UTC(2017, 11, 26, 14, 0, 0) : Date.UTC(2018, 0, 1, 0, 0, 0)
+                    response.data.isTestnet
+                        ? Date.UTC(2017, 11, 26, 14, 0, 0)
+                        : Date.UTC(2018, 0, 1, 0, 0, 0)
                 ),
             });
         };
@@ -109,10 +128,20 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
                     case 2:
                         if (subtype === 1)
                             // GEM & Card transfer
-                            handler = handleType2AndSubtype1(tx, timestamp, infoAccount, collectionCardsStatic);
+                            handler = handleType2AndSubtype1(
+                                tx,
+                                timestamp,
+                                infoAccount,
+                                collectionCardsStatic
+                            );
                         if (subtype === 2 || subtype === 3)
                             // GEM & Card exchange
-                            handler = handleType2AndSubtype2And3(tx, timestamp, infoAccount, collectionCardsStatic);
+                            handler = handleType2AndSubtype2And3(
+                                tx,
+                                timestamp,
+                                infoAccount,
+                                collectionCardsStatic
+                            );
                         if (subtype === 4 || subtype === 5)
                             // Cancelled order
                             handler = handleType2AndSubtype4And5(tx, timestamp, infoAccount);
@@ -141,52 +170,92 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
             collectionCardsStatic !== undefined &&
             needReload &&
             processTransactions();
-    }, [infoAccount, transactions, blockchainStatus.epoch_beginning, needReload, collectionCardsStatic]);
+    }, [
+        infoAccount,
+        transactions,
+        blockchainStatus.epoch_beginning,
+        needReload,
+        collectionCardsStatic,
+    ]);
 
     useEffect(() => {
+        const sortTransactions = transactions => {
+            if (sort === 'older') {
+                transactions.reverse();
+            }
+        };
+
         if (transactions.length > 0) {
             console.log('Filtering transactions... ' + filter);
-            if (filter !== 'all') {
-                if (filter === 'placed') {
-                    setFilteredTransactions(transactions.filter(tx => tx.type === 'ask' || tx.type === 'bid'));
-                } else if (filter === 'cards') {
-                    setFilteredTransactions(transactions.filter(tx => tx.isCard === true));
-                } else if (filter === 'currency') {
-                    setFilteredTransactions(transactions.filter(tx => tx.isCurrency === true));
-                } else {
-                    setFilteredTransactions(transactions.filter(tx => tx.type === filter));
-                }
-            } else {
-                setFilteredTransactions(transactions);
+
+            let filteredTransactions = new Array(...transactions);
+            switch (filter) {
+                case 'all':
+                    break;
+                case 'placed':
+                    filteredTransactions = filteredTransactions.filter(
+                        tx => tx.type === 'ask' || tx.type === 'bid'
+                    );
+                    break;
+                case 'cards':
+                    filteredTransactions = filteredTransactions.filter(tx => tx.isCard === true);
+                    break;
+                case 'currency':
+                    filteredTransactions = filteredTransactions.filter(
+                        tx => tx.isCurrency === true
+                    );
+                    break;
+                default:
+                    filteredTransactions = filteredTransactions.filter(tx => tx.type === filter);
+                    break;
             }
+            sortTransactions(filteredTransactions);
+            setFilteredTransactions(filteredTransactions);
             setVisibleTransactions(10);
         }
-    }, [transactions, filter]);
+    }, [transactions, filter, sort]);
 
     return (
         <Box>
             <Stack direction="row" pb={2}>
-                <Stack direction="row" border="1px" borderColor="gray.600" rounded="lg" px={2} align="center">
+                <Stack
+                    direction="row"
+                    border="1px"
+                    borderColor="gray.600"
+                    rounded="lg"
+                    px={2}
+                    align="center">
                     <Box pl={1} py={2}>
                         <FaRegPaperPlane />
                     </Box>
                     <Text fontSize="sm" color="gray.400">
                         Sort:{' '}
                     </Text>
-                    <Select border="0px" borderColor="gray.800" size="xs">
-                        <option value="option1">Unnavailable</option>
+                    <Select border="0px" borderColor="gray.800" size="xs" onChange={handleSort}>
+                        <option value="recent">Newest</option>
+                        <option value="older">Older</option>
                     </Select>
                 </Stack>
 
                 <Stack position="absolute" right="3%" direction="row">
-                    <Stack direction="row" border="1px" borderColor="gray.600" rounded="lg" px={2} align="center">
+                    <Stack
+                        direction="row"
+                        border="1px"
+                        borderColor="gray.600"
+                        rounded="lg"
+                        px={2}
+                        align="center">
                         <Box pl={1} py={2}>
                             <FaFilter />
                         </Box>
                         <Text fontSize="sm" color="gray.400">
                             Show:{' '}
                         </Text>
-                        <Select border="0px" borderColor="gray.800" size="xs" onChange={handleFilter}>
+                        <Select
+                            border="0px"
+                            borderColor="gray.800"
+                            size="xs"
+                            onChange={handleFilter}>
                             <option value="all">All transactions</option>
                             <option value="in">Received</option>
                             <option value="out">Send</option>
@@ -198,7 +267,12 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
                 </Stack>
             </Stack>
 
-            <TableContainer border="1px" borderColor="gray" rounded="2xl" shadow="inner" boxShadow="md">
+            <TableContainer
+                border="1px"
+                borderColor="gray"
+                rounded="2xl"
+                shadow="inner"
+                boxShadow="md">
                 {needReload && <Text>Loading</Text>}
                 <Table variant="simple">
                     <Thead>
