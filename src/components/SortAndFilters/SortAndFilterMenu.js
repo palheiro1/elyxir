@@ -11,6 +11,7 @@ const SortAndFilterMenu = ({
     const bgButtons = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
     const [rarity, setRarity] = useState('All');
     const [sort, setSort] = useState('none');
+    const [needReload, setNeedReload] = useState(true);
 
     /**
      * @description Filter cards by rarity
@@ -30,14 +31,24 @@ const SortAndFilterMenu = ({
                 filteredCards = filteredCards.sort((a, b) => a.quantityQNT - b.quantityQNT);
             }
             setCardsFiltered(filteredCards);
+            setNeedReload(false);
         };
 
-        console.log(rarity, sort);
-        filterCards();
-    }, [cards, rarity, setCardsFiltered, sort]);
+        needReload && filterCards();
+    }, [cards, rarity, setCardsFiltered, sort, needReload]);
 
     const handleChange = e => {
-        setSort(e.target.value);
+        if(e.target.value !== sort) {
+            setSort(e.target.value);
+            setNeedReload(true);
+        }
+    };
+
+    const handleRarity = auxRarity => {
+        if(auxRarity !== rarity) {
+            setRarity(rarity);
+            setNeedReload(true);
+        }
     };
 
     return (
@@ -68,28 +79,28 @@ const SortAndFilterMenu = ({
                     size="sm"
                     bgColor={bgButtons}
                     isActive={rarity === 'All'}
-                    onClick={() => setRarity('All')}>
+                    onClick={() => handleRarity('All')}>
                     All rarities
                 </Button>
                 <Button
                     size="sm"
                     bgColor={bgButtons}
                     isActive={rarity === 'Common'}
-                    onClick={() => setRarity('Common')}>
+                    onClick={() => handleRarity('Common')}>
                     Common
                 </Button>
                 <Button
                     size="sm"
                     bgColor={bgButtons}
                     isActive={rarity === 'Rare'}
-                    onClick={() => setRarity('Rare')}>
+                    onClick={() => handleRarity('Rare')}>
                     Rare
                 </Button>
                 <Button
                     size="sm"
                     bgColor={bgButtons}
                     isActive={rarity === 'Epic'}
-                    onClick={() => setRarity('Epic')}>
+                    onClick={() => handleRarity('Epic')}>
                     Epic
                 </Button>
                 {needSpecials && (
@@ -97,7 +108,7 @@ const SortAndFilterMenu = ({
                         size="sm"
                         bgColor={bgButtons}
                         isActive={rarity === 'Special'}
-                        onClick={() => setRarity('Special')}>
+                        onClick={() => handleRarity('Special')}>
                         Special
                     </Button>
                 )}
