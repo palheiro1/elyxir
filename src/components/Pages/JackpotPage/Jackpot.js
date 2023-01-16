@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import RemainingCards from '../../Cards/RemainingCards';
 import JackpotWidget from '../../JackpotWidget/JackpotWidget';
 import SortAndFilterMenu from '../../SortAndFilters/SortAndFilterMenu';
+import ClaimJackpot from './ClaimJackpot';
 
 const Jackpot = ({ infoAccount, cards = [] }) => {
     const noSpecialCards = cards.filter(card => card.rarity !== 'Special');
@@ -19,18 +20,25 @@ const Jackpot = ({ infoAccount, cards = [] }) => {
     return (
         <Box>
             <JackpotWidget cStyle={2} />
-            <SortAndFilterMenu
-                cards={remainingCards}
-                setCardsFiltered={setCardsFiltered}
-                needSpecials={false}
-                needSorting={false}
-            />
-            <RemainingCards
-                username={infoAccount.name}
-                totalCards={noSpecialCards.length}
-                remainingCards={remainingCards.length}
-                cards={cardsFiltered}
-            />
+
+            {remainingCards.length < 0 ? (
+                <>
+                    <SortAndFilterMenu
+                        cards={remainingCards}
+                        setCardsFiltered={setCardsFiltered}
+                        needSpecials={false}
+                        needSorting={false}
+                    />
+                    <RemainingCards
+                        username={infoAccount.name}
+                        totalCards={noSpecialCards.length}
+                        remainingCards={remainingCards.length}
+                        cards={cardsFiltered}
+                    />
+                </>
+            ) : (
+                <ClaimJackpot username={infoAccount.name} cards={cards} />
+            )}
         </Box>
     );
 };
