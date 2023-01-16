@@ -5,6 +5,14 @@ import JackpotWidget from '../../JackpotWidget/JackpotWidget';
 import SortAndFilterMenu from '../../SortAndFilters/SortAndFilterMenu';
 import ClaimJackpot from './ClaimJackpot';
 
+
+/**
+ * @name Jackpot
+ * @description Jackpot page
+ * @param {object} infoAccount - account info
+ * @param {array} cards - All cards
+ * @returns {JSX.Element} - JSX to display
+ */
 const Jackpot = ({ infoAccount, cards = [] }) => {
     const noSpecialCards = cards.filter(card => card.rarity !== 'Special');
     const [remainingCards, setRemainingCards] = useState(noSpecialCards);

@@ -13,11 +13,22 @@ import {
 
 import { setBackupDone } from '../../../utils/storage';
 
-const BackupDialog = ({ reference, isOpen, onClose, account, passphrase }) => {
+
+/**
+ * @name BackupDialog
+ * @description Modal to confirm passphrase backup
+ * @param {ref} reference - reference to the button that opens the modal
+ * @param {boolean} isOpen - if the modal is open or not
+ * @param {function} onClose - function to close the modal
+ * @param {string} account - account address
+ * @param {string} passphrase - account passphrase
+ * @param {string} username - account username
+ */
+const BackupDialog = ({ reference, isOpen, onClose, account, passphrase, username }) => {
 
     const handleOk = (e) => {
         e.preventDefault();
-        setBackupDone(account);
+        setBackupDone(username);
         onClose();
     };
 

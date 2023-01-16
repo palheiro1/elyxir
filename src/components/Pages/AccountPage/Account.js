@@ -20,6 +20,13 @@ import UserDataItem from './UserDataItem';
 
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * @name Account
+ * @description Account page
+ * @param {object} infoAccount - account info
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const Account = ({ infoAccount }) => {
 
     const { accountRs, name, IGNISBalance, GIFTZBalance, GEMSBalance } = infoAccount;
@@ -127,7 +134,7 @@ const Account = ({ infoAccount }) => {
                 </Box>
             </GridItem>
         </Grid>
-        <BackupDialog reference={refBackup} isOpen={isOpenBackup} onClose={onCloseBackup} account={infoAccount.accountRs} passphrase={passphrase} />
+        <BackupDialog reference={refBackup} isOpen={isOpenBackup} onClose={onCloseBackup} account={accountRs} username={name} passphrase={passphrase} />
         <ConfirmDialog reference={refDelete} isOpen={isOpenDelete} onClose={onCloseDelete} user={name} setNeedReload={setNeedReload} />
         </>
     );
