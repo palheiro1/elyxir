@@ -162,13 +162,14 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         const fetchAskAndBids = async () => {
             setIsMarketReloading(true);
             console.log('Fetching ask and bids...');
+            
             const cardsWithAskAndBids = await Promise.all(
                 cards.map(async card => {
                     const { askOrders, bidOrders, assetCount } = await getAskAndBids(card.asset);
                     return { ...card, askOrders: askOrders, bidOrders: bidOrders, assetCount: assetCount };
                 })
             );
-            console.log('Ask and bids fetched', cardsWithAskAndBids);
+
             if(JSON.stringify(cards) !== JSON.stringify(cardsWithAskAndBids)) {
                 console.log('Market cards changed');
                 setCards(cardsWithAskAndBids);

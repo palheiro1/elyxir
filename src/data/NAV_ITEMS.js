@@ -17,5 +17,9 @@ export const NAV_ITEMS = [
     {
         label: 'Blog',
         href: '#',
+    },
+    {
+        label: 'Shop',
+        href: '#',
     }
 ]
