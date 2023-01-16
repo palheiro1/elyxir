@@ -9,7 +9,7 @@ import SectionSwitch from './SectionSwitch';
 import TradesAndOrderTable from './TradesAndOrders/TradesAndOrderTable';
 
 const Market = ({ infoAccount, cards, gemCards }) => {
-    console.log("🚀 ~ file: Market.js:12 ~ Market ~ infoAccount", infoAccount)
+    console.log('🚀 ~ file: Market.js:12 ~ Market ~ infoAccount', infoAccount);
     // Option
     // 0 -> Market
     // 1 -> Trades and orders
@@ -24,12 +24,28 @@ const Market = ({ infoAccount, cards, gemCards }) => {
 
             <SortAndFilterMenu cards={cards} setCardsFiltered={setCardsFiltered} />
             <SectionSwitch option={option} setOption={setOption} />
-            {option === 0 && <GridCards cards={cardsFiltered} isMarket={true} username={infoAccount.name} ignis={infoAccount.IGNISBalance} />}
+            {option === 0 && (
+                <GridCards
+                    cards={cardsFiltered}
+                    isMarket={true}
+                    username={infoAccount.name}
+                    ignis={infoAccount.IGNISBalance}
+                />
+            )}
 
             {option === 1 && (
                 <Box>
-                    <TradesAndOrderTable account={infoAccount.accountRs} cards={cards} trades={infoAccount.trades} />
-                    <AskAndBidGrid cards = {cards} askOrders={infoAccount.currentAsks} bidOrders={infoAccount.currentBids} />
+                    <TradesAndOrderTable
+                        account={infoAccount.accountRs}
+                        cards={cards}
+                        trades={infoAccount.trades}
+                    />
+                    <AskAndBidGrid
+                        username={infoAccount.name}
+                        cards={cards}
+                        askOrders={infoAccount.currentAsks}
+                        bidOrders={infoAccount.currentBids}
+                    />
                 </Box>
             )}
         </Box>

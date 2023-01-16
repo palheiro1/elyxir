@@ -327,15 +327,20 @@ export const cancelAskOrder = async (order, passPhrase) => {
     const url_cancel = `${NODEURL}?requestType=cancelAskOrder`;
     const url_broadcast = `${NODEURL}?requestType=broadcastTransaction`;
 
-    const { data: res1 } = await axios.post(url_cancel, qs.stringify(query), config);
+    try {
+        const { data: res1 } = await axios.post(url_cancel, qs.stringify(query), config);
 
-    query.feeNQT = Math.ceil(res1.minimumFeeFQT * res1.bundlerRateNQTPerFXT * 0.00000001);
-    query.broadcast = false;
+        query.feeNQT = Math.ceil(res1.minimumFeeFQT * res1.bundlerRateNQTPerFXT * 0.00000001);
+        query.broadcast = false;
 
-    const { data: res2 } = await axios.post(url_cancel, qs.stringify(query), config);
-    const signed = ardorjs.signTransactionBytes(res2.unsignedTransactionBytes, passPhrase);
-
-    return axios.post(url_broadcast, qs.stringify({ transactionBytes: signed }), config);
+        const { data: res2 } = await axios.post(url_cancel, qs.stringify(query), config);
+        const signed = ardorjs.signTransactionBytes(res2.unsignedTransactionBytes, passPhrase);
+        await axios.post(url_broadcast, qs.stringify({ transactionBytes: signed }), config);
+        return true;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:341 ~ error', error);
+        return false;
+    }
 };
 
 export const cancelBidOrder = async (order, passPhrase) => {
@@ -364,11 +369,11 @@ export const cancelBidOrder = async (order, passPhrase) => {
             passPhrase
         );
         const txdata = { transactionBytes: signed };
-        const finalResponse = await axios.post(url_broadcast, qs.stringify(txdata), config);
-        return finalResponse;
+        await axios.post(url_broadcast, qs.stringify(txdata), config);
+        return true;
     } catch (error) {
         console.error(error);
-        throw error;
+        return false;
     }
 };
 
