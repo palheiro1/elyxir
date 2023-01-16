@@ -19,6 +19,7 @@ import { NQTDIVIDER } from '../../data/CONSTANTS';
 import CraftDialog from '../Modals/CraftDialog/CraftDialog';
 import MorphDialog from '../Modals/MorphDialog/MorphDialog';
 import SendDialog from '../Modals/SendDialog/SendDialog';
+import TradeDialog from '../Modals/TradeDialog/TradeDialog';
 
 const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, username }) => {
 
@@ -58,6 +59,9 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
 
     const { isOpen: isOpenSend, onOpen: onOpenSend, onClose: onCloseSend } = useDisclosure();
     const refSend = useRef();
+
+    const { isOpen: isOpenTrade, onOpen: onOpenTrade, onClose: onCloseTrade } = useDisclosure();
+    const refTrade = useRef();
 
     // ------------------------------
     const lowedAskOrders = askOrders.length > 0 ? askOrders[0].priceNQTPerShare/NQTDIVIDER : "";
@@ -131,6 +135,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                         <Stack direction="column" w="100%">
                             <Box w="100%">
                                 <Button
+                                    onClick={onOpenTrade}
                                     size="lg"
                                     w="100%"
                                     leftIcon={<BsArrowLeftRight />}
@@ -187,6 +192,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                 card={card}
                 username={username}
             />
+            <TradeDialog isOpen={isOpenTrade} onClose={onCloseTrade} reference={refTrade} card={card} username={username} />
             {/* -------------------------------------------------------------------------------------- */}
         </Box>
     );
