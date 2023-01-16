@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Account = ({ infoAccount }) => {
 
-    const { accountRs, name, IGNISBalance, GIFTZBalance } = infoAccount;
+    const { accountRs, name, IGNISBalance, GIFTZBalance, GEMSBalance } = infoAccount;
     const [ isInvalidPinBackup, setIsInvalidPinBackup ] = useState(false);
     const [ isInvalidPinDelete, setIsInvalidPinDelete ] = useState(false);
     const [ needReload, setNeedReload ] = useState(false);
@@ -65,7 +65,7 @@ const Account = ({ infoAccount }) => {
     return (
         <>
         <Grid templateColumns="repeat(3, 1fr)" gap={4}>
-            <UserDataItem name={name} accountRs={accountRs} IGNISBalance={IGNISBalance} GIFTZBalance={GIFTZBalance} bgColor={bgColor} />
+            <UserDataItem name={name} accountRs={accountRs} IGNISBalance={IGNISBalance} GIFTZBalance={GIFTZBalance} GEMSBalance={GEMSBalance} bgColor={bgColor} />
             <GridItem>
                 <Box p={4} bgColor={bgColor} rounded="lg" mb={2}>
                     <Heading fontSize="lg" pb={2}>

@@ -2,7 +2,7 @@ import { Box, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getIgnisPrice } from "../../../services/coingecko/utils";
 
-const UserDataItem = ({ accountRs, name, IGNISBalance, GIFTZBalance, bgColor }) => {
+const UserDataItem = ({ accountRs, name, IGNISBalance, GIFTZBalance, GEMSBalance, bgColor }) => {
 
     const [ IGNISUSDBalance, setIGNISUSDBalance ] = useState(0);
 
@@ -29,7 +29,7 @@ const UserDataItem = ({ accountRs, name, IGNISBalance, GIFTZBalance, bgColor }) 
                 </Heading>
                 <Text>{name}</Text>
             </Box>
-            <Grid templateColumns="repeat(2, 1fr)" p={6} bgColor={bgColor} rounded="lg">
+            <Grid templateColumns="repeat(3, 1fr)" p={6} bgColor={bgColor} rounded="lg">
                 <GridItem>
                     <Heading fontSize="lg" pb={2}>
                         IGNIS
@@ -41,6 +41,12 @@ const UserDataItem = ({ accountRs, name, IGNISBalance, GIFTZBalance, bgColor }) 
                         GIFTZ
                     </Heading>
                     <Text fontSize="sm">{GIFTZBalance}</Text>
+                </GridItem>
+                <GridItem>
+                    <Heading fontSize="lg" pb={2}>
+                        GEM
+                    </Heading>
+                    <Text fontSize="sm">{GEMSBalance}</Text>
                 </GridItem>
             </Grid>
         </GridItem>
