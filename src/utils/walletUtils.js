@@ -1,4 +1,4 @@
-import { BUYPACKACCOUNT, CURRENCY, NQTDIVIDER } from '../data/CONSTANTS';
+import { BUYPACKACCOUNT, CURRENCY, JACKPOTACCOUNT, NQTDIVIDER } from '../data/CONSTANTS';
 import { decrypt, getUser } from './storage';
 import {
     createAskOrder,
@@ -224,3 +224,36 @@ export const sendBidOrder = async ({ asset, price, quantity, passPhrase }) => {
     const response = await createBidOrder({ asset, price, quantity, passPhrase });
     return response;
 };
+
+export const sendToJackpot = async ({ cards, passPhrase }) => {
+    const isBlocked = cards.some(card => card.quantityQNT === 0 || card.unconfirmedQuantityQNT === 0);
+    if (!isBlocked) {
+        const promises = cards.map(card => transferAsset(card.asset, 1, JACKPOTACCOUNT, passPhrase, { contract: 'Jackpot' }, true, 60, 'HIGH'));
+        const responses = await Promise.allSettled(promises);
+        return responses;
+    }
+};
+
+
+/*
+export const sendToJackpot = async ({ cards, passPhrase }) => {
+    const checkFunction = card => card.quantityQNT === 0 || card.unconfirmedQuantityQNT === 0;
+    const haveBlocked = cards.some(checkFunction);
+    console.log('🚀 ~ file: walletUtils.js:231 ~ haveBlocked', haveBlocked);
+    if (!haveBlocked) {
+        let promises = [];
+        cards.forEach((card) => {
+            const message = JSON.stringify({ contract: 'Jackpot' });
+            console.log('claimThePot(): call transferAsset now for: ' + card.asset);
+            promises.push(
+                transferAsset(card.asset, 1, JACKPOTACCOUNT, passPhrase, message, true, 60, 'HIGH')
+            );
+        });
+        Promise.all(promises).then(responses => {
+            console.log('all transfers submitted');
+            return true;
+        });
+    }
+};
+*/
+
