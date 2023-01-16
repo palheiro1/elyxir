@@ -14,7 +14,7 @@ import Market from '../../components/Pages/MarketPage/Market';
 import Account from '../../components/Pages/AccountPage/Account';
 
 // Data
-import { COLLECTIONACCOUNT, GEMASSETACCOUNT, NQTDIVIDER, REFRESH_DATA_TIME, TARASCACARDACCOUNT } from '../../data/CONSTANTS';
+import { COLLECTIONACCOUNT, GEMASSETACCOUNT, NQTDIVIDER, REFRESH_DATA_TIME, REFRESH_MARKET_TIME, TARASCACARDACCOUNT } from '../../data/CONSTANTS';
 
 // Services
 import { fetchAllCards, fetchGemCards } from '../../utils/cardsUtils';
@@ -49,7 +49,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // Need reload data
     const [needReload, setNeedReload] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    const [marketFetched, setMarketFetched] = useState(false);
+    const [isMarketReloading, setIsMarketReloading] = useState(false);
 
     /*
      * 0 -> Overview
@@ -85,7 +85,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
      */
     useEffect(() => {
         const loadAll = async () => {
-            console.log('Loading all data...');
+            console.log('Fetching all data...');
             const { accountRs } = infoAccount;
             setIsLoading(true);
             setNeedReload(false);
@@ -102,20 +102,28 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 getTrades(2,accountRs)
             ]);
 
+            // -----------------------------------------------------------------
             // Get "quantityQNT" from "cards" and "loadCards" and compare them
+            // -----------------------------------------------------------------
             const cardsQuantity = cards.map(card => card.quantityQNT);
             const loadCardsQuantity = loadCards.map(card => card.quantityQNT);
             if (JSON.stringify(cardsQuantity) !== JSON.stringify(loadCardsQuantity)) {
                 console.log('Cards changed');
                 setCards(loadCards);
-                setMarketFetched(false);
+                setIsMarketReloading(false);
             }
 
+            // -----------------------------------------------------------------
+            // Get "quantityQNT" from "gemCards" and "gems" and compare them
+            // -----------------------------------------------------------------
             if(JSON.stringify(gemCards) !== JSON.stringify(gems[0]) && gems.length > 0) {
                 console.log('Gems changed');
                 setGemCards(gems[0]);
             }
 
+            // -----------------------------------------------------------------
+            // Rebuild infoAccount and compare it with the old one
+            // -----------------------------------------------------------------
             const _auxInfo = {
                 ...infoAccount,
                 IGNISBalance: ignis,
@@ -152,7 +160,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     useEffect(() => {
         const fetchAskAndBids = async () => {
-            setMarketFetched(true);
+            setIsMarketReloading(true);
             console.log('Fetching ask and bids...');
             const cardsWithAskAndBids = await Promise.all(
                 cards.map(async card => {
@@ -161,11 +169,21 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 })
             );
             console.log('Ask and bids fetched', cardsWithAskAndBids);
-            setCards(cardsWithAskAndBids);
+            if(JSON.stringify(cards) !== JSON.stringify(cardsWithAskAndBids)) {
+                console.log('Market cards changed');
+                setCards(cardsWithAskAndBids);
+            }
+            setIsMarketReloading(false);
         };
 
-        !marketFetched && cards.length > 0 && fetchAskAndBids();
-    }, [cards, marketFetched]);
+        const intervalId = setInterval(() => {
+            if (!isMarketReloading && cards.length > 0) {
+                fetchAskAndBids();
+            }
+        }, REFRESH_MARKET_TIME);
+
+        return () => clearInterval(intervalId);
+    }, [cards, isMarketReloading]);
 
     useEffect(() => {
         switch (option) {

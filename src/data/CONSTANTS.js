@@ -10,7 +10,7 @@
 // ------------------ APP CONFIGURATION --------------------
 // ---------------------------------------------------------
 export const REFRESH_DATA_TIME =  5 * 1000; // 5 seconds
-export const REFRESH_MARKE_TIME =  3 * 1000; // 3 seconds
+export const REFRESH_MARKET_TIME =  3 * 1000; // 3 seconds
 
 // -------------------------------------------------
 // ------------------ CURRENCIES -------------------
