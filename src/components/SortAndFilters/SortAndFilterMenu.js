@@ -24,6 +24,7 @@ const SortAndFilterMenu = ({
     const [rarity, setRarity] = useState('All');
     const [sort, setSort] = useState('none');
     const [needReload, setNeedReload] = useState(true);
+    const [actualCards, setActualCards] = useState(cards);
 
     /**
      * @description Filter cards by rarity
@@ -44,7 +45,10 @@ const SortAndFilterMenu = ({
             }
             setCardsFiltered(filteredCards);
             setNeedReload(false);
+            setActualCards(filteredCards);
         };
+
+        if(cards.length !== actualCards.length) setNeedReload(true);
 
         needReload && filterCards();
     }, [cards, rarity, setCardsFiltered, sort, needReload]);
