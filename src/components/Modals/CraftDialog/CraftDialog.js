@@ -133,7 +133,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
                                         {card.channel} / {card.rarity}
                                     </Text>
                                     <Text fontSize="sm" color="gray.500">
-                                        Quantity: {card.quantityQNT}
+                                        Quantity: {maxCards}
                                     </Text>
                                 </Box>
                             </Stack>
