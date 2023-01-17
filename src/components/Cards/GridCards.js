@@ -112,6 +112,7 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, username, ignis }
                     const delay = cardsDelay[index%10];
 					return (
 						<Animated
+							key={index}
 							animationIn="fadeIn"
 							animationOut="fadeOut"
 							isVisible={true}
