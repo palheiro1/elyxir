@@ -2,12 +2,11 @@ import { Box } from '@chakra-ui/react';
 
 import { useState } from 'react';
 import GridCards from '../../Cards/GridCards';
-import SortAndFilterMenu from '../../SortAndFilters/SortAndFilterMenu';
+import SortAndFilterCards from '../../SortAndFilters/SortAndFilterCards';
 import AskAndBidGrid from './TradesAndOrders/AskAndBids/AskAndBidGrid';
 import GemWidget from './GemWidget';
 import SectionSwitch from './SectionSwitch';
 import TradesAndOrderTable from './TradesAndOrders/TradesAndOrderTable';
-
 
 /**
  * @name Market
@@ -32,15 +31,17 @@ const Market = ({ infoAccount, cards, gemCards }) => {
         <Box>
             <GemWidget username={infoAccount.name} gemCards={gemCards} />
 
-            <SortAndFilterMenu cards={cards} setCardsFiltered={setCardsFiltered} />
             <SectionSwitch option={option} setOption={setOption} />
             {option === 0 && (
-                <GridCards
-                    cards={cardsFiltered}
-                    isMarket={true}
-                    username={infoAccount.name}
-                    ignis={infoAccount.IGNISBalance}
-                />
+                <>
+                    <SortAndFilterCards cards={cards} setCardsFiltered={setCardsFiltered} />
+                    <GridCards
+                        cards={cardsFiltered}
+                        isMarket={true}
+                        username={infoAccount.name}
+                        ignis={infoAccount.IGNISBalance}
+                    />
+                </>
             )}
 
             {option === 1 && (
