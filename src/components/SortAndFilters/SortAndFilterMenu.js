@@ -51,7 +51,7 @@ const SortAndFilterMenu = ({
         if(cards.length !== actualCards.length) setNeedReload(true);
 
         needReload && filterCards();
-    }, [cards, rarity, setCardsFiltered, sort, needReload]);
+    }, [cards, rarity, setCardsFiltered, sort, needReload, actualCards.length]);
 
     const handleChange = e => {
         if(e.target.value !== sort) {
