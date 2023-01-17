@@ -20,7 +20,6 @@ import TradesAndOrderTable from './TradesAndOrders/TradesAndOrderTable';
  * @version 1.0
  */
 const Market = ({ infoAccount, cards, gemCards }) => {
-    console.log('🚀 ~ file: Market.js:12 ~ Market ~ infoAccount', infoAccount);
     // Option
     // 0 -> Market
     // 1 -> Trades and orders

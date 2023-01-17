@@ -45,7 +45,7 @@ export const handleType1AndSubtype0 = (tx, timestamp, infoAccount) => {
         if (msg.reason === 'confirmParticipation') {
             return handleMessage('Participation', 'Our Jackpot contract confirmed your participation.', timestamp);
         } else {
-            console.log('TXHistory -> Unhandled message received.');
+            console.log('TXHistory -> Unhandled message received.', msg);
         }
     }
 };

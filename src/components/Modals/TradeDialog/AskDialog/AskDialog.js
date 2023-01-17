@@ -81,7 +81,6 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
     };
 
     const handleSend = async () => {
-        console.log(card.asset, input.value, priceCard, priceCard * NQTDIVIDER)
         const value = Number(input.value);
         const quantity = !isGem ? value : value * NQTDIVIDER;
         const response = await sendAskOrder({

@@ -41,10 +41,6 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyText = false, username
                         </Thead>
                         <Tbody>
                             {askOrders.map(order => {
-                                console.log(
-                                    '🚀 ~ file: AskAndBidGrid.js:29 ~ {askOrders.map ~ order',
-                                    order
-                                );
                                 const _asset = onlyText
                                     ? Number(order.asset)
                                     : getAsset(order.asset, cards);

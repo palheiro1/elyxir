@@ -103,7 +103,6 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
     // -------------------------------------------------
     useEffect(() => {
         const processTransactions = () => {
-            console.log('Processing transactions...');
             let transactions = [];
 
             const dirtyTransactions = infoAccount.transactions.slice(0, 50);
@@ -186,8 +185,6 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
         };
 
         if (transactions.length > 0) {
-            console.log('Filtering transactions... ' + filter);
-
             let filteredTransactions = new Array(...transactions);
             switch (filter) {
                 case 'all':

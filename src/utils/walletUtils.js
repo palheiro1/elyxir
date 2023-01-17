@@ -235,27 +235,3 @@ export const sendToJackpot = async ({ cards, passPhrase }) => {
         return responses;
     }
 };
-
-
-/*
-export const sendToJackpot = async ({ cards, passPhrase }) => {
-    const checkFunction = card => card.quantityQNT === 0 || card.unconfirmedQuantityQNT === 0;
-    const haveBlocked = cards.some(checkFunction);
-    console.log('🚀 ~ file: walletUtils.js:231 ~ haveBlocked', haveBlocked);
-    if (!haveBlocked) {
-        let promises = [];
-        cards.forEach((card) => {
-            const message = JSON.stringify({ contract: 'Jackpot' });
-            console.log('claimThePot(): call transferAsset now for: ' + card.asset);
-            promises.push(
-                transferAsset(card.asset, 1, JACKPOTACCOUNT, passPhrase, message, true, 60, 'HIGH')
-            );
-        });
-        Promise.all(promises).then(responses => {
-            console.log('all transfers submitted');
-            return true;
-        });
-    }
-};
-*/
-

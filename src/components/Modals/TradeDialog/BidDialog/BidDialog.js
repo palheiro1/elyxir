@@ -87,9 +87,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
 			if(max === maxPrice) return;
 			setMaxPrice(max);
 	
-			console.log(actualPrice, max , actualPrice > max)
 			if(actualPrice > max) {
-				console.log("Actualizo desde useEffect")
 				setPriceCard(max);
 			}
 		}

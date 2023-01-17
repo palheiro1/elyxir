@@ -32,7 +32,6 @@ const ClaimJackpot = ({ username, totalCards }) => {
     const handleSend = async () => {
         if (isValidPin) {
             const response = await sendToJackpot(totalCards, passPhrase);
-            console.log("🚀 ~ file: RemainingCards.js:27 ~ handleSend ~ response", response)
             
             if(response) okToast("Cards sent to the jackpot", toast)
             else errorToast("Error sending cards to the jackpot", toast)
