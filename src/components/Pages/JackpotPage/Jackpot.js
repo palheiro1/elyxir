@@ -31,7 +31,7 @@ const Jackpot = ({ infoAccount, cards = [] }) => {
         <Box>
             <JackpotWidget cStyle={2} />
 
-            {remainingCards.length < 0 ? (
+            {remainingCards.length > 0 ? (
                 <>
                     <SortAndFilterMenu
                         cards={remainingCards}
