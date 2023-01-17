@@ -1,6 +1,5 @@
 import { Box, Image, Stack, Text } from '@chakra-ui/react';
 
-
 /**
  * @name TableCard
  * @description Component to show the card in the table
@@ -21,10 +20,13 @@ const TableCard = ({ image, title, continent, rarity, needDelete = false }) => {
             <Stack direction={'row'} align="center">
                 {!needDelete ? (
                     <Box>
-                        <Text fontWeight="bold" fontSize="2xl">
-                            {title}
-                        </Text>
-                        <Stack direction={'row'} align="center" pt={2}>
+                        <Stack direction={'row'}>
+                            <Text fontWeight="bold" fontSize="2xl">
+                                {title}
+                            </Text>
+                        </Stack>
+
+                        <Stack direction={'row'} pt={2}>
                             <Text color="grey">{continent}</Text>
                             <Text color="grey">/</Text>
                             <Text color="grey">{rarity}</Text>
