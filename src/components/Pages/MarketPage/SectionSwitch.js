@@ -12,7 +12,7 @@ import { Box, Button } from '@chakra-ui/react';
  */
 const SectionSwitch = ({ option, setOption }) => {
     return (
-        <Box w="100%">
+        <Box w="100%" my={2}>
             <Button
                 isActive={option === 0}
                 w="50%"
