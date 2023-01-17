@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import RemainingCards from '../../Cards/RemainingCards';
 import JackpotWidget from '../../JackpotWidget/JackpotWidget';
-import SortAndFilterMenu from '../../SortAndFilters/SortAndFilterMenu';
+import SortAndFilterCards from '../../SortAndFilters/SortAndFilterCards';
 import ClaimJackpot from './ClaimJackpot';
 
 
@@ -33,7 +33,7 @@ const Jackpot = ({ infoAccount, cards = [] }) => {
 
             {remainingCards.length > 0 ? (
                 <>
-                    <SortAndFilterMenu
+                    <SortAndFilterCards
                         cards={remainingCards}
                         setCardsFiltered={setCardsFiltered}
                         needSpecials={false}

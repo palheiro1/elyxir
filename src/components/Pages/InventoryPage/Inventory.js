@@ -4,7 +4,7 @@ import {
 } from '@chakra-ui/react';
 
 import GridCards from '../../Cards/GridCards';
-import SortAndFilterMenu from '../../SortAndFilters/SortAndFilterMenu';
+import SortAndFilterCards from '../../SortAndFilters/SortAndFilterCards';
 
 /**
  * Inventory component
@@ -23,7 +23,7 @@ const Inventory = ({ infoAccount, cards }) => {
 
     return (
         <Box>
-            <SortAndFilterMenu cards = {cards} setCardsFiltered = {setCardsFiltered} />
+            <SortAndFilterCards cards = {cards} setCardsFiltered = {setCardsFiltered} />
             <GridCards cards={cardsFiltered} username={infoAccount.name} />
         </Box>
     );

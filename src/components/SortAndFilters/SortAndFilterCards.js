@@ -4,7 +4,7 @@ import { FaRegPaperPlane } from 'react-icons/fa';
 
 
 /**
- * @name SortAndFilterMenu
+ * @name SortAndFilterCards
  * @description Menu to sort and filter cards
  * @param {Array} cards - Array with the cards
  * @param {Function} setCardsFiltered - Function to set the filtered cards
@@ -14,7 +14,7 @@ import { FaRegPaperPlane } from 'react-icons/fa';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const SortAndFilterMenu = ({
+const SortAndFilterCards = ({
     cards = [],
     setCardsFiltered,
     needSpecials = true,
@@ -133,4 +133,4 @@ const SortAndFilterMenu = ({
     );
 };
 
-export default SortAndFilterMenu;
+export default SortAndFilterCards;
