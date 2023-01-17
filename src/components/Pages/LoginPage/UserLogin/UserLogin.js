@@ -70,7 +70,7 @@ const UserLogin = ({ setInfoAccount }) => {
                 <IconButton p={6} icon={<ImCross />} onClick={onOpen} />
             </HStack>
 
-            <ConfirmDialog reference={reference} isOpen={isOpen} onClose={onClose} setNeedReload={setNeedReload} />
+            <ConfirmDialog reference={reference} isOpen={isOpen} onClose={onClose} setNeedReload={setNeedReload} user={user} />
 
             <HStack spacing={7}>
                 <PinInput size="lg"
