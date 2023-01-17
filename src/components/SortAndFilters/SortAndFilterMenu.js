@@ -46,7 +46,7 @@ const SortAndFilterMenu = ({
 
     const handleRarity = auxRarity => {
         if(auxRarity !== rarity) {
-            setRarity(rarity);
+            setRarity(auxRarity);
             setNeedReload(true);
         }
     };
