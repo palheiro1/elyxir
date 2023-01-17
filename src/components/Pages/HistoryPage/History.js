@@ -1,18 +1,5 @@
-import {
-    Box,
-    Button,
-    Select,
-    Stack,
-    Table,
-    TableContainer,
-    Tbody,
-    Td,
-    Text,
-    Thead,
-    Tr,
-} from '@chakra-ui/react';
+import { Box, Button, Table, TableContainer, Tbody, Td, Text, Thead, Tr } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { FaRegPaperPlane, FaFilter } from 'react-icons/fa';
 import { getBlockchainStatus } from '../../../services/Ardor/ardorInterface';
 import { getTxTimestamp } from '../../../utils/txUtils';
 import SortAndFilterTxs from '../../SortAndFilters/SortAndFilterTxs';

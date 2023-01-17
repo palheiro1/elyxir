@@ -47,7 +47,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
             setFilteredTransactions(filteredTransactions);
             setVisibleTransactions(10);
         }
-    }, [transactions, filter, sort]);
+    }, [transactions, filter, sort, setFilteredTransactions, setVisibleTransactions]);
 
     return (
         <Stack direction="row" pb={2}>

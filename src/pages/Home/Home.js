@@ -14,11 +14,23 @@ import Market from '../../components/Pages/MarketPage/Market';
 import Account from '../../components/Pages/AccountPage/Account';
 
 // Data
-import { COLLECTIONACCOUNT, GEMASSETACCOUNT, NQTDIVIDER, REFRESH_DATA_TIME, REFRESH_MARKET_TIME, TARASCACARDACCOUNT } from '../../data/CONSTANTS';
+import {
+    COLLECTIONACCOUNT,
+    GEMASSETACCOUNT,
+    NQTDIVIDER,
+    REFRESH_DATA_TIME,
+    REFRESH_MARKET_TIME,
+    TARASCACARDACCOUNT,
+} from '../../data/CONSTANTS';
 
 // Services
 import { fetchAllCards, fetchGemCards } from '../../utils/cardsUtils';
-import { getAskAndBids, getCurrentAskAndBids, getGIFTZBalance, getIGNISBalance } from '../../utils/walletUtils';
+import {
+    getAskAndBids,
+    getCurrentAskAndBids,
+    getGIFTZBalance,
+    getIGNISBalance,
+} from '../../utils/walletUtils';
 import {
     getBlockchainTransactions,
     getTrades,
@@ -91,16 +103,17 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             setNeedReload(false);
 
             // Fetch all info
-            const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades] = await Promise.all([
-                fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT),
-                fetchGemCards(accountRs, GEMASSETACCOUNT, true),
-                getIGNISBalance(accountRs),
-                getGIFTZBalance(accountRs),
-                getBlockchainTransactions(2, accountRs, true),
-                getUnconfirmedTransactions(2, accountRs),
-                getCurrentAskAndBids(accountRs),
-                getTrades(2,accountRs)
-            ]);
+            const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades] =
+                await Promise.all([
+                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT),
+                    fetchGemCards(accountRs, GEMASSETACCOUNT, true),
+                    getIGNISBalance(accountRs),
+                    getGIFTZBalance(accountRs),
+                    getBlockchainTransactions(2, accountRs, true),
+                    getUnconfirmedTransactions(2, accountRs),
+                    getCurrentAskAndBids(accountRs),
+                    getTrades(2, accountRs),
+                ]);
 
             // -----------------------------------------------------------------
             // Get "quantityQNT" from "cards" and "loadCards" and compare them
@@ -116,7 +129,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             // -----------------------------------------------------------------
             // Get "quantityQNT" from "gemCards" and "gems" and compare them
             // -----------------------------------------------------------------
-            if(JSON.stringify(gemCards) !== JSON.stringify(gems[0]) && gems.length > 0) {
+            if (JSON.stringify(gemCards) !== JSON.stringify(gems[0]) && gems.length > 0) {
                 console.log('Gems changed');
                 setGemCards(gems[0]);
             }
@@ -133,17 +146,16 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 unconfirmedTxs: unconfirmed.transactions,
                 currentAsks: currentAskOrBids.askOrders,
                 currentBids: currentAskOrBids.bidOrders,
-                trades: trades.trades
-            }
+                trades: trades.trades,
+            };
 
-            if(JSON.stringify(infoAccount) !== JSON.stringify(_auxInfo)) {
+            if (JSON.stringify(infoAccount) !== JSON.stringify(_auxInfo)) {
                 console.log('Account info changed');
                 setInfoAccount(_auxInfo);
             }
 
             setIsLoading(false);
         };
-            
 
         if (infoAccount.accountRs && needReload && !isLoading) {
             loadAll();
@@ -162,15 +174,20 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         const fetchAskAndBids = async () => {
             setIsMarketReloading(true);
             console.log('Fetching ask and bids...');
-            
+
             const cardsWithAskAndBids = await Promise.all(
                 cards.map(async card => {
                     const { askOrders, bidOrders, assetCount } = await getAskAndBids(card.asset);
-                    return { ...card, askOrders: askOrders, bidOrders: bidOrders, assetCount: assetCount };
+                    return {
+                        ...card,
+                        askOrders: askOrders,
+                        bidOrders: bidOrders,
+                        assetCount: assetCount,
+                    };
                 })
             );
 
-            if(JSON.stringify(cards) !== JSON.stringify(cardsWithAskAndBids)) {
+            if (JSON.stringify(cards) !== JSON.stringify(cardsWithAskAndBids)) {
                 console.log('Market cards changed');
                 setCards(cardsWithAskAndBids);
             }
@@ -195,13 +212,19 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 setRenderComponent(<Inventory infoAccount={infoAccount} cards={cardsFiltered} />);
                 break;
             case 2:
-                setRenderComponent(<History infoAccount={infoAccount} collectionCardsStatic={cards} />);
+                setRenderComponent(
+                    <History infoAccount={infoAccount} collectionCardsStatic={cards} />
+                );
                 break;
             case 3:
-                setRenderComponent(<Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />);
+                setRenderComponent(
+                    <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />
+                );
                 break;
             case 4:
-                setRenderComponent(<Jackpot infoAccount={infoAccount} cards={cards} />);
+                setRenderComponent(
+                    <Jackpot infoAccount={infoAccount} cards={cards} yourCards={cardsFiltered} />
+                );
                 break;
             case 5:
                 setRenderComponent(<Account infoAccount={infoAccount} />);
