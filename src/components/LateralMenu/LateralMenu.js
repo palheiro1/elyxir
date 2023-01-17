@@ -6,6 +6,19 @@ import { GiCardRandom, GiCutDiamond } from 'react-icons/gi';
 import { AiOutlineSetting, AiOutlineShoppingCart } from 'react-icons/ai';
 import { BiPackage } from 'react-icons/bi';
 
+
+/**
+ * @name LateralMenu
+ * @description Component that shows the lateral menu of the app
+ * @param {Number} option - Option selected
+ * @param {Function} setOption - Function to set the option
+ * @param {JSX.Element} children - Components to show in the main section
+ * @param {Boolean} showAllCards - Boolean to show all cards
+ * @param {Function} handleShowAllCards - Function to handle the show all cards
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const LateralMenu = ({ option = 0, setOption, children, showAllCards, handleShowAllCards }) => {
     const isActive = index => {
         return index === option;

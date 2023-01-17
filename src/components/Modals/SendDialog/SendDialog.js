@@ -31,6 +31,19 @@ import { checkPin } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { isArdorAccount } from '../../../utils/validators';
 
+
+/**
+ * @name SendDialog
+ * @description Component to send cards
+ * @param {Object} reference - Object with the reference to the modal
+ * @param {Boolean} isOpen - Boolean to know if the modal is open
+ * @param {Function} onClose - Function to close the modal
+ * @param {Object} card - Object with the card data
+ * @param {String} username - String with the username
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
 
     const toast = useToast();

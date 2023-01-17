@@ -4,6 +4,16 @@ import { GiCutDiamond } from 'react-icons/gi';
 
 import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/utils';
 
+
+/**
+ * @name VCountdown
+ * @description Component that shows the Jackpot balance and the countdown to the next draw
+ * @dev Used in JackpotWidget
+ * @param {Object} jackpotTimer - Object with the Jackpot timer data
+ * @returns {JSX.Element} - JSX Element with the component
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const VCountdown = ({ jackpotTimer }) => {
     const [jackpotBalance, setJackpotBalance] = useState(0);
     const [jackpotBalanceUSD, setJackpotBalanceUSD] = useState(0);

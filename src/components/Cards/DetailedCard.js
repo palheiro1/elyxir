@@ -1,5 +1,16 @@
 import { Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 
+
+/**
+ * @name DetailedCard
+ * @description Modal to show the details of a card
+ * @param {Boolean} isOpen - Boolean to know if the modal is open
+ * @param {Function} onClose - Function to close the modal
+ * @param {Object} data - Object with the card data
+ * @returns {JSX.Element} - JSX to display
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const DetailedCard = ({ isOpen, onClose, data }) => {
 
     const { name, cardImgUrl:image, channel:continent, rarity, description } = data;

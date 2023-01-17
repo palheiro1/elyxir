@@ -1,5 +1,16 @@
 import { Center, Table, Tbody, Td, Tr, useColorModeValue } from '@chakra-ui/react';
 
+
+/**
+ * @name BlockInfo
+ * @description Component to show the block info of the jackpot
+ * @param {Object} jackpotStatus - Jackpot status
+ * @param {Object} jackpotTimer - Jackpot timer
+ * @param {Number} cStyle - Style of the component
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
 
     const pyStyle = 3;

@@ -5,6 +5,19 @@ import { Animated } from 'react-animated-css';
 import Card from './Card';
 import DetailedCard from './DetailedCard';
 
+
+/**
+ * @name GridCards
+ * @description GridCards component - Shows the cards in a grid
+ * @param {Array} cards - Array with the cards
+ * @param {Boolean} isMarket - Boolean to know if the cards are in the market
+ * @param {Boolean} onlyBuy - Boolean to know if the cards are only buyable
+ * @param {String} username - String with the username
+ * @param {Object} ignis - Object with the ignis data
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const GridCards = ({ cards, isMarket = false, onlyBuy = false, username, ignis }) => {
 	const [actualCards, setActualCards] = useState(cards);
 

@@ -16,6 +16,10 @@ import HCountdown from './HCountdown';
  * @author Jesús Sánchez Fernández
  * @version 0.1
  * @param {Number} cStyle - Style of the component
+ * @returns {JSX.Element} - JSX element
+ * @example
+ * <JackpotWidget cStyle = 1 /> // Default style - Same as the home page
+ * <JackpotWidget cStyle = 2 /> // Style for the jackpot page
  */
 const JackpotWidget = ({ cStyle = 1 }) => {
     const [jackpotStatus, setJackpotStatus] = useState({

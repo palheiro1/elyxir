@@ -19,6 +19,19 @@ import { cancelAskOrder, cancelBidOrder } from '../../../../services/Ardor/ardor
 import { errorToast, okToast } from '../../../../utils/alerts';
 import { checkPin } from '../../../../utils/walletUtils';
 
+
+/**
+ * @name CancelDialog
+ * @description Component to cancel orders
+ * @param {Object} reference - Object with the reference to the modal
+ * @param {Boolean} isOpen - Boolean to know if the modal is open
+ * @param {Function} onClose - Function to close the modal
+ * @param {String} username - String with the username
+ * @param {Object} selectedOrder - Object with the order data
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const CancelDialog = ({ reference, isOpen, onClose, username, selectedOrder }) => {
     const toast = useToast();
     const [passphrase, setPassphrase] = useState('');

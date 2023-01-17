@@ -1,6 +1,17 @@
 import { Box, Text } from '@chakra-ui/react';
 import GridCards from './GridCards';
 
+
+/**
+ * @name RemainingCards
+ * @description Component to show the remaining cards to complete the collection
+ * @param {number} totalCards - Total cards
+ * @param {number} remainingCards - Remaining cards
+ * @param {array} cards - Cards to show
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const RemainingCards = ({ totalCards, remainingCards, cards }) => {
     const have = totalCards - remainingCards;
 

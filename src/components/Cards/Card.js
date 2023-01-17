@@ -21,6 +21,21 @@ import MorphDialog from '../Modals/MorphDialog/MorphDialog';
 import SendDialog from '../Modals/SendDialog/SendDialog';
 import TradeDialog from '../Modals/TradeDialog/TradeDialog';
 
+
+/**
+ * @name Card
+ * @description Card component - Shows the card data and the actions
+ * @param {Object} card - Object with the card data
+ * @param {Function} setCardClicked - Function to set the card clicked
+ * @param {Function} onOpen - Function to open the dialog
+ * @param {Boolean} isMarket - Boolean to know if the card is in the market
+ * @param {Boolean} onlyBuy - Boolean to know if the card is only buyable
+ * @param {String} username - String with the username
+ * @param {Object} ignis - Object with the ignis data
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, username, ignis }) => {
     const {
         name,
