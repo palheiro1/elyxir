@@ -25,12 +25,14 @@ import {
  * @version 0.1
  * @dev This function is used to check the pin
  */
-export const checkPin = (user, pin) => {
+export const checkPin = (user, pin, needPassphrase = true) => {
     const recoverUser = getUser(user);
     const { token } = recoverUser;
 
     const passphrase = decrypt(token, pin);
     if (!passphrase) return false;
+
+    if(!needPassphrase) return recoverUser;
     return {
         ...recoverUser,
         passphrase: passphrase,

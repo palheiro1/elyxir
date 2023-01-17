@@ -50,7 +50,7 @@ const UserLogin = ({ setInfoAccount }) => {
     }, [needReload])
 
     const handleLogin = (pin) => {
-        const account = checkPin(user, pin);
+        const account = checkPin(user, pin, false);
         if (!account) {
             setIsInvalidPin(true);
             return;
