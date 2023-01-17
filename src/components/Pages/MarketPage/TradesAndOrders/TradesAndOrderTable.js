@@ -4,6 +4,17 @@ import { getAsset } from '../../../../utils/cardsUtils';
 import { getTxTimestamp } from '../../../../utils/txUtils';
 import TradesOrOrderItem from './TradesOrOrderItem';
 
+
+/**
+ * @name TradesAndOrderTable
+ * @description Component to show the trades and orders of a user - TABLE
+ * @param {String} account - Account of the user
+ * @param {Array} trades - Array with the trades of the user
+ * @param {Array} cards - Array with the cards data
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const TradesAndOrderTable = ({ account, trades, cards }) => {
 
     const imSeller = trade => {

@@ -1,5 +1,14 @@
 import { ArrowUpIcon, ArrowDownIcon } from '@chakra-ui/icons';
 
+
+/**
+ * @name InOutTxMarket
+ * @description Component to show the type of transaction
+ * @param {String} type - Type of transaction
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const InOutTxMarket = ({ type }) => {
 
     const typeTx = type.toLowerCase();

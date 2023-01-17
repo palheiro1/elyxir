@@ -22,6 +22,18 @@ import BidDialog from './BidDialog/BidDialog';
 import { errorToast } from '../../../utils/alerts';
 import { NQTDIVIDER } from '../../../data/CONSTANTS';
 
+
+/**
+ * @name TradeDialog
+ * @description Dialog to trade a card
+ * @param {Object} reference - Reference to the button that opens the dialog
+ * @param {Boolean} isOpen - Boolean to know if the dialog is open
+ * @param {Function} onClose - Function to close the dialog
+ * @param {Object} card - Object with the card data
+ * @param {String} username - String with the username
+ * @param {Object} ignis - Object with the ignis data
+ * @param {Object} gemCards - Gem cards data - Optional
+ */
 const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCards = false }) => {
     const toast = useToast();
 

@@ -29,6 +29,21 @@ import { errorToast, okToast } from '../../../../utils/alerts';
 import { checkPin, sendBidOrder } from '../../../../utils/walletUtils';
 import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
 
+
+/**
+ * @name BidDialog
+ * @description BID dialog component - used to bid for a card
+ * @dev Called by TradeDialog
+ * @param {Object} reference - reference to the dialog
+ * @param {Boolean} isOpen - dialog open flag
+ * @param {Function} onClose - dialog close function
+ * @param {Object} card - card to bid for (or gem)
+ * @param {String} username - user's name
+ * @param {Number} ignis - user's ignis balance
+ * @returns {JSX.Element} - BidDialog component
+ * @author Jesús Sánchez Fernández
+ * @version 1.0.0
+ */
 const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
     const toast = useToast();
 

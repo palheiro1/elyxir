@@ -4,6 +4,21 @@ import InOutTxMarket from "../InOutTxMarket";
 import { FaCoins } from "react-icons/fa";
 import TableCard from "../../../Cards/TableCard";
 
+
+/**
+ * @name TradesOrOrderItem
+ * @description Component to show the trades or orders - ITEM
+ * @param {String} type - Type of transaction
+ * @param {String} name - Name of the card
+ * @param {Number} amount - Amount of the card
+ * @param {Number} price - Price of the card
+ * @param {String} date - Date of the transaction
+ * @param {String} sellerOrBuyer - Seller or buyer of the card
+ * @param {Object} card - Card data
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, card }) => {
     if(card === "GEM" || card === undefined) {
         return (

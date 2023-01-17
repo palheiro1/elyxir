@@ -12,6 +12,8 @@ import ClaimJackpot from './ClaimJackpot';
  * @param {object} infoAccount - account info
  * @param {array} cards - All cards
  * @returns {JSX.Element} - JSX to display
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
  */
 const Jackpot = ({ infoAccount, cards = [] }) => {
     const noSpecialCards = cards.filter(card => card.rarity !== 'Special');

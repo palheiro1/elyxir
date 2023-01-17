@@ -3,6 +3,16 @@ import { useState } from 'react';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { checkPin, sendToJackpot } from '../../../utils/walletUtils';
 
+
+/**
+ * @name ClaimJackpot
+ * @description Component to claim the jackpot
+ * @param {String} username - String with the username
+ * @param {Number} totalCards - Number with the total cards
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const ClaimJackpot = ({ username, totalCards }) => {
 
     const toast = useToast();

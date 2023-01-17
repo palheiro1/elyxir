@@ -29,6 +29,20 @@ import { errorToast, okToast } from '../../../../utils/alerts';
 import { checkPin, sendAskOrder } from '../../../../utils/walletUtils';
 import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
 
+
+/**
+ * @name AskDialog - Ask dialog component
+ * @description This component is the ask dialog component
+ * @dev This component is used in the TradeDialog component
+ * @param {Object} reference - Reference to the dialog
+ * @param {Boolean} isOpen - Flag to open the dialog
+ * @param {Function} onClose - Function to close the dialog
+ * @param {Object} card - Card object (or GEM)
+ * @param {String} username - Username
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0.0
+ */
 const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
     const toast = useToast();
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag

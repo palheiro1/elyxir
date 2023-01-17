@@ -8,6 +8,17 @@ import GemWidget from './GemWidget';
 import SectionSwitch from './SectionSwitch';
 import TradesAndOrderTable from './TradesAndOrders/TradesAndOrderTable';
 
+
+/**
+ * @name Market
+ * @description Market page
+ * @param {Object} infoAccount - Info of the account
+ * @param {Array} cards - Array with the cards data
+ * @param {Object} gemCards - Object with the gem cards data
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const Market = ({ infoAccount, cards, gemCards }) => {
     console.log('🚀 ~ file: Market.js:12 ~ Market ~ infoAccount', infoAccount);
     // Option

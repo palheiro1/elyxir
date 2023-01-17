@@ -1,5 +1,15 @@
 import { Box, Button } from '@chakra-ui/react';
 
+
+/**
+ * @name SectionSwitch
+ * @description Component to switch between the sections of the market page
+ * @param {Number} option - Option selected
+ * @param {Function} setOption - Function to set the option
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const SectionSwitch = ({ option, setOption }) => {
     return (
         <Box w="100%">

@@ -2,6 +2,18 @@ import { Box, Button, Select, Stack, Text, useColorModeValue } from '@chakra-ui/
 import { useEffect, useState } from 'react';
 import { FaRegPaperPlane } from 'react-icons/fa';
 
+
+/**
+ * @name SortAndFilterMenu
+ * @description Menu to sort and filter cards
+ * @param {Array} cards - Array with the cards
+ * @param {Function} setCardsFiltered - Function to set the filtered cards
+ * @param {Boolean} needSpecials - If the menu needs the specials cards options
+ * @param {Boolean} needSorting - If the menu needs the sorting options
+ * @returns {JSX.Element} - JSX element
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
 const SortAndFilterMenu = ({
     cards = [],
     setCardsFiltered,
