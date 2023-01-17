@@ -30,11 +30,14 @@ import { checkPin, sendAskOrder } from '../../../../utils/walletUtils';
 import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
 
 const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
-	const toast = useToast();
+    const toast = useToast();
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
 
     const [passphrase, setPassphrase] = useState('');
     const maxCards = Number(card.quantityQNT);
+
+    const isGem = card.assetname === "GEM";
+    const gemImg = "./images/gems.svg"
 
     const [priceCard, setPriceCard] = useState(0);
     const handlePriceCard = e => {
@@ -64,20 +67,25 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
     };
 
     const handleSend = async () => {
-		const response = await sendAskOrder({
-			asset: card.asset,
-			quantity: input.value,
-			price: priceCard*NQTDIVIDER,
-			passPhrase: passphrase
-		})
+        console.log(card.asset, input.value, priceCard, priceCard * NQTDIVIDER)
+        const value = Number(input.value);
+        const quantity = !isGem ? value : value * NQTDIVIDER;
+        const response = await sendAskOrder({
+            asset: card.asset,
+            quantity: quantity,
+            price: priceCard * NQTDIVIDER,
+            passPhrase: passphrase,
+        });
 
-		if(response) {
-			okToast("Ask order sent successfully", toast);
-			onClose();
-		} else {
-			errorToast("Error sending ask order", toast);
-		}
-	};
+        if (response) {
+            okToast('Ask order sent successfully', toast);
+            onClose();
+        } else {
+            errorToast('Error sending ask order', toast);
+        }
+    };
+
+    
 
     return (
         <>
@@ -97,7 +105,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                     shadow="dark-lg">
                     <AlertDialogHeader textAlign="center" color="white">
                         <Center>
-                            <Text>ASK FOR CARD</Text>
+                            <Text>ASK FOR {!isGem ? 'CARD' : 'GEM'}</Text>
                         </Center>
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
@@ -105,16 +113,18 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                         <VStack>
                             <HStack spacing={4}>
                                 <Box minW="50%">
-                                    <Image src={card.cardImgUrl} maxH="25rem" />
+                                    <Image src={!isGem ? card.cardImgUrl : gemImg} maxH="25rem" />
                                 </Box>
                                 <VStack spacing={4}>
                                     <Box w="100%">
                                         <Text color="white" fontWeight="bold" fontSize="xl">
-                                            {card.name}
+                                            {!isGem ? card.name : 'GEM'}
                                         </Text>
-                                        <Text color="gray">
-                                            {card.channel} / {card.rarity}
-                                        </Text>
+                                        {!isGem && (
+                                            <Text color="gray">
+                                                {card.channel} / {card.rarity}
+                                            </Text>
+                                        )}
                                     </Box>
                                     <Box py={2}>
                                         <FormControl variant="floatingGray" id="PricePerCard">
@@ -147,7 +157,9 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                                     +
                                                 </Button>
                                             </HStack>
-                                            <FormLabel>Amount of cards</FormLabel>
+                                            <FormLabel>
+                                                Amount of {!isGem ? 'cards' : 'GEMs'}{' '}
+                                            </FormLabel>
                                         </FormControl>
                                     </Box>
                                     <Box py={2}>
@@ -175,7 +187,9 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                                     borderLeftRadius="lg"
                                                 />
                                             </InputGroup>
-                                            <FormLabel>Price per card</FormLabel>
+                                            <FormLabel>
+                                                Price per {!isGem ? 'card' : 'GEM'}
+                                            </FormLabel>
                                         </FormControl>
                                     </Box>
                                     <Box py={2}>

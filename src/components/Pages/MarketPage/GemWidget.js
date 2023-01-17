@@ -7,18 +7,37 @@ import {
     IconButton,
     Text,
     useColorModeValue,
+    useDisclosure,
     VStack,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { GiCutDiamond } from 'react-icons/gi';
 import { NQTDIVIDER } from '../../../data/CONSTANTS';
+import TradeDialog from '../../Modals/TradeDialog/TradeDialog';
 
-const GemWidget = ({ gemCards }) => {
-    const lowestGemAsk = gemCards.askOrders.length > 0 ? gemCards.askOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
-    const highestGemBid = gemCards.bidOrders.length > 0 ? gemCards.bidOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
+/**
+ * @name GemWidget
+ * @description Widget that shows the amount of GEMs the user has
+ * @param {Object} gemCards - Object with the gemCards data
+ * @returns {JSX.Element} - JSX Element with the widget
+ * @author Jesús Sánchez Fernández
+ * @version 1.0
+ */
+const GemWidget = ({ username, gemCards }) => {
+
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const tradeRef = useRef();
+    // ------------------------------
+    const lowestGemAsk =
+        gemCards.askOrders.length > 0 ? gemCards.askOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
+    const highestGemBid =
+        gemCards.bidOrders.length > 0 ? gemCards.bidOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
 
     let confirmedBalance = Number(gemCards.quantityQNT / NQTDIVIDER);
-    confirmedBalance = Number.isInteger(confirmedBalance) ? confirmedBalance.toFixed(0) : confirmedBalance.toFixed(2);
+    confirmedBalance = Number.isInteger(confirmedBalance)
+        ? confirmedBalance.toFixed(0)
+        : confirmedBalance.toFixed(2);
 
     let unconfirmedBalance = Number(gemCards.unconfirmedQuantityQNT / NQTDIVIDER);
     unconfirmedBalance = Number.isInteger(unconfirmedBalance)
@@ -47,131 +66,88 @@ const GemWidget = ({ gemCards }) => {
     // ------------------------------
 
     return (
-        <Center mt={4}>
-            <Grid
-                templateColumns="repeat(3, 1fr)"
-                border="1px"
-                borderColor="whiteAlpha.300"
-                rounded="lg"
-                bg="blackAlpha"
-                shadow="dark-lg"
-                direction="row">
-                <GridItem colSpan={2} p={4} borderLeftRadius="lg">
-                    <Center>
-                        <HStack>
-                            <IconButton
-                                icon={<GiCutDiamond />}
-                                size="xl"
-                                p={4}
-                                mr={2}
-                                fontSize="4xl"
-                                bg={bgColor}
-                                color={textColor}
-                            />
-                            <VStack align="flex-start">
-                                <Text color={textColor} fontSize="3xl" fontWeight="bold" mb={-3}>
-                                    {confirmedBalance} GEMs
-                                </Text>
-                                <Text color={textColor} fontSize="md">
-                                    ({unconfirmedBalance} unconfirmed)
-                                </Text>
-                            </VStack>
-                            <Center pl={4}>
-                                <HStack spacing={4} color={textColor}>
-                                    <Box p={2} bg={bgColor} rounded="lg" minW="90px">
-                                        <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                                            {lowestGemAsk}
-                                        </Text>
-                                        <Text textAlign="center" fontSize="xs">
-                                            LOWEST ASK
-                                        </Text>
-                                    </Box>
+        <>
+            <Center mt={4}>
+                <Grid
+                    templateColumns="repeat(3, 1fr)"
+                    border="1px"
+                    borderColor="whiteAlpha.300"
+                    rounded="lg"
+                    bg="blackAlpha"
+                    shadow="dark-lg"
+                    direction="row">
+                    <GridItem colSpan={2} p={4} borderLeftRadius="lg">
+                        <Center>
+                            <HStack>
+                                <IconButton
+                                    icon={<GiCutDiamond />}
+                                    size="xl"
+                                    p={4}
+                                    mr={2}
+                                    fontSize="4xl"
+                                    bg={bgColor}
+                                    color={textColor}
+                                />
+                                <VStack align="flex-start">
+                                    <Text
+                                        color={textColor}
+                                        fontSize="3xl"
+                                        fontWeight="bold"
+                                        mb={-3}>
+                                        {confirmedBalance} GEMs
+                                    </Text>
+                                    <Text color={textColor} fontSize="md">
+                                        ({unconfirmedBalance} unconfirmed)
+                                    </Text>
+                                </VStack>
+                                <Center pl={4}>
+                                    <HStack spacing={4} color={textColor}>
+                                        <Box p={2} bg={bgColor} rounded="lg" minW="90px">
+                                            <Text
+                                                textAlign="center"
+                                                fontSize="xl"
+                                                fontWeight="bold">
+                                                {lowestGemAsk}
+                                            </Text>
+                                            <Text textAlign="center" fontSize="xs">
+                                                LOWEST ASK
+                                            </Text>
+                                        </Box>
 
-                                    <Box p={2} bg={bgColor} rounded="lg" minW="90px">
-                                        <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                                            {highestGemBid}
-                                        </Text>
-                                        <Text textAlign="center" fontSize="xs">
-                                            HIGHEST BID
-                                        </Text>
-                                    </Box>
-                                </HStack>
-                            </Center>
-                        </HStack>
-                    </Center>
-                </GridItem>
+                                        <Box p={2} bg={bgColor} rounded="lg" minW="90px">
+                                            <Text
+                                                textAlign="center"
+                                                fontSize="xl"
+                                                fontWeight="bold">
+                                                {highestGemBid}
+                                            </Text>
+                                            <Text textAlign="center" fontSize="xs">
+                                                HIGHEST BID
+                                            </Text>
+                                        </Box>
+                                    </HStack>
+                                </Center>
+                            </HStack>
+                        </Center>
+                    </GridItem>
 
-                <GridItem bgColor={bgColor} p={4} borderRightRadius="lg">
-                    <Center
-                        h="100%"
-                        fontWeight="bolder"
-                        textTransform="full-width"
-                        style={hover ? hoverStyle : initialStyle}
-                        onMouseEnter={() => setHover(true)}
-                        onMouseLeave={() => setHover(false)}>
-                        TRADE NOW
-                    </Center>
-                </GridItem>
-            </Grid>
-        </Center>
+                    <GridItem bgColor={bgColor} p={4} borderRightRadius="lg">
+                        <Center
+                            h="100%"
+                            fontWeight="bolder"
+                            textTransform="full-width"
+                            onClick={onOpen}
+                            style={hover ? hoverStyle : initialStyle}
+                            onMouseEnter={() => setHover(true)}
+                            onMouseLeave={() => setHover(false)}>
+                            TRADE NOW
+                        </Center>
+                    </GridItem>
+                </Grid>
+            </Center>
+            <TradeDialog isOpen={isOpen} onClose={onClose} ref={tradeRef} username={username} gemCards={gemCards} />
+        </>
     );
 };
 
 export default GemWidget;
-
-/*
-<Center mb={2}>
-            <Grid
-                templateColumns="repeat(5, 1fr)"
-                bgColor="whiteAlpha.200"
-                p={2}
-                rounded="full"
-                textAlign="center"
-                gap={4}>
-                <Center borderRight="1px" borderColor="whiteAlpha.300">
-                    <GridItem>
-                        <Box>
-                            <Heading fontSize="3xl">GEM</Heading>
-                            <Text>Currency</Text>
-                        </Box>
-                    </GridItem>
-                </Center>
-                <Center borderRight="1px" borderColor="whiteAlpha.300">
-                    <GridItem>
-                        <Box>
-                            <Heading fontSize="lg">Amount</Heading>
-                            <Text>
-                                {confirmedBalance} ({unconfirmedBalance})
-                            </Text>
-                        </Box>
-                    </GridItem>
-                </Center>
-                <Center borderRight="1px" borderColor="whiteAlpha.300">
-                    <GridItem>
-                        <Box>
-                            <Heading fontSize="lg">Low</Heading>
-                            <Text>{lowestGemAsk} IGNIS</Text>
-                        </Box>
-                    </GridItem>
-                </Center>
-                <Center borderRight="1px" borderColor="whiteAlpha.300">
-                    <GridItem>
-                        <Box>
-                            <Heading fontSize="lg">High</Heading>
-                            <Text>{highestGemBid} IGNIS</Text>
-                        </Box>
-                    </GridItem>
-                </Center>
-                <Center
-                    style={hover ? hoverStyle : initialStyle}
-                    onMouseEnter={() => setHover(true)}
-                    onMouseLeave={() => setHover(false)}>
-                    <GridItem>
-                        <Button p={4} variant="ghost" h="100%" _hover={{ bgColor: 'transparent' }} fontWeight="bolder" textTransform="full-width">
-                            TRADE NOW
-                        </Button>
-                    </GridItem>
-                </Center>
-            </Grid>
-        </Center>
-*/

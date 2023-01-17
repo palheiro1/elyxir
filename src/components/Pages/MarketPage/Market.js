@@ -20,7 +20,7 @@ const Market = ({ infoAccount, cards, gemCards }) => {
 
     return (
         <Box>
-            <GemWidget gemCards={gemCards} />
+            <GemWidget username={infoAccount.name} gemCards={gemCards} />
 
             <SortAndFilterMenu cards={cards} setCardsFiltered={setCardsFiltered} />
             <SectionSwitch option={option} setOption={setOption} />

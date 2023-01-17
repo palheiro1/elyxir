@@ -38,13 +38,14 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
 
     const [priceCard, setPriceCard] = useState(0);
     const [maxPrice, setMaxPrice] = useState(0);
+
+    const isGem = card.assetname === "GEM";
+    const gemImg = "./images/gems.svg"
+
     const handlePriceCard = e => {
         e.preventDefault();
 		
 		const readValue = Number(e.target.value);
-		console.log("🚀 ~ file: BidDialog.js:46 ~ handlePriceCard ~ readValue", readValue)
-		console.log("🚀 ~ file: BidDialog.js:49 ~ handlePriceCard ~ maxPrice", maxPrice)
-		console.log("isGreaterThan", readValue < maxPrice)
 
 		if(readValue < maxPrice) {
         	setPriceCard(e.target.value);
@@ -68,7 +69,6 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
 		const checkNumbers = () => {
 			const max = parseFloat(Number(ignis / input.value).toFixed(2));
 			const actualPrice = parseFloat(Number(priceCard).toFixed(2));
-			console.log("useEffect")
 			if(max === maxPrice) return;
 			setMaxPrice(max);
 	
@@ -93,9 +93,11 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
     };
 
     const handleSend = async () => {
+        const value = Number(input.value);
+        const quantity = !isGem ? value : value * NQTDIVIDER;
         const response = await sendBidOrder({
             asset: card.asset,
-            quantity: input.value,
+            quantity: quantity,
             price: priceCard * NQTDIVIDER,
             passPhrase: passphrase,
         });
@@ -126,7 +128,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                     shadow="dark-lg">
                     <AlertDialogHeader textAlign="center" color="white">
                         <Center>
-                            <Text>BID FOR CARD</Text>
+                            <Text>BID FOR {!isGem ? 'CARDs' : 'GEMs'}{' '}</Text>
                         </Center>
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
@@ -134,19 +136,21 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                         <VStack>
                             <HStack spacing={4}>
                                 <Box minW="50%">
-                                    <Image src={card.cardImgUrl} maxH="25rem" />
+                                    <Image src={!isGem ? card.cardImgUrl : gemImg} maxH="25rem" />
                                 </Box>
                                 <VStack spacing={4}>
                                     <Box w="100%">
                                         <Text color="white" fontWeight="bold" fontSize="xl">
-                                            {card.name}
+                                        {!isGem ? 'cards' : 'GEMs'}{' '}
                                         </Text>
+                                        {!isGem && (
                                         <Text color="gray">
                                             {card.channel} / {card.rarity}
                                         </Text>
+                                        )}
                                     </Box>
                                     <Box py={2}>
-                                        <Text color="white">Amount of cards</Text>
+                                        <Text color="white">Amount of {!isGem ? 'cards' : 'GEMs'}{' '}</Text>
                                         <HStack
                                             spacing={0}
                                             border="1px"
@@ -194,7 +198,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                                     borderLeftRadius="lg"
                                                 />
                                             </InputGroup>
-                                            <FormLabel>Price per card (Max: {maxPrice})</FormLabel>
+                                            <FormLabel>Price per {!isGem ? 'cards' : 'GEMs'}{' '} (Max: {maxPrice})</FormLabel>
                                         </FormControl>
                                     </Box>
                                     <Box py={2}>
