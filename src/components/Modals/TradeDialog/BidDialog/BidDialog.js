@@ -223,6 +223,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                                     size="lg"
                                                     placeholder="🔒"
                                                     onComplete={handleCompletePin}
+                                                    onChange={handleCompletePin}
                                                     isInvalid={!isValidPin}
                                                     variant="filled"
                                                     mask>

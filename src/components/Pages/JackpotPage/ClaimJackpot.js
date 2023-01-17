@@ -82,6 +82,7 @@ const ClaimJackpot = ({ username, totalCards }) => {
                         size="lg"
                         placeholder="🔒"
                         onComplete={handleCompletePin}
+                        onChange={handleCompletePin}
                         isInvalid={!isValidPin}
                         variant="filled"
                         mask>

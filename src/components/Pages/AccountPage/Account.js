@@ -92,7 +92,7 @@ const Account = ({ infoAccount }) => {
                     <Box>
                         <Center>
                             <HStack spacing={2} pt={4}>
-                                <PinInput size="lg" placeholder="🔒" variant="filled" mask onComplete={handleCheckPinBackup} isInvalid={isInvalidPinBackup}>
+                                <PinInput size="lg" placeholder="🔒" variant="filled" mask onComplete={handleCheckPinBackup} onChange={handleCheckPinBackup} isInvalid={isInvalidPinBackup}>
                                     <PinInputField />
                                     <PinInputField />
                                     <PinInputField />
@@ -119,7 +119,7 @@ const Account = ({ infoAccount }) => {
                     <Box>
                         <Center>
                             <HStack spacing={2} pt={4}>
-                                <PinInput size="lg" placeholder="🔒" variant="filled" mask onComplete={handleCheckPinDelete} isInvalid={isInvalidPinDelete}>
+                                <PinInput size="lg" placeholder="🔒" variant="filled" mask onComplete={handleCheckPinDelete} onChange={handleCheckPinDelete} isInvalid={isInvalidPinDelete}>
                                     <PinInputField />
                                     <PinInputField />
                                     <PinInputField />

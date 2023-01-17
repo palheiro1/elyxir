@@ -75,7 +75,7 @@ export const decrypt = (token, userPin) => {
         return decrypted.toString();
     }
     catch(exception) {
-        console.log("🚀 ~ file: storage.js:52 ~ decrypt ~ exception", exception)
+        //console.log("🚀 ~ file: storage.js:52 ~ decrypt ~ exception", exception)
         return false;
         //throw new Error(exception.message);
     }

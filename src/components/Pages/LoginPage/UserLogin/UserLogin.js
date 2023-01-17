@@ -76,6 +76,7 @@ const UserLogin = ({ setInfoAccount }) => {
                 <PinInput size="lg"
                     placeholder='🔒'
                     onComplete={handleCompletePin}
+                    onChange={handleCompletePin}
                     isInvalid={isInvalidPin}
                     variant="filled"
                     mask

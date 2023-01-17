@@ -185,6 +185,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
                                     size="lg"
                                     placeholder="🔒"
                                     onComplete={handleCompletePin}
+                                    onChange={handleCompletePin}
                                     isInvalid={!isValidPin}
                                     variant="filled"
                                     mask>

@@ -87,6 +87,7 @@ const CancelDialog = ({ reference, isOpen, onClose, username, selectedOrder }) =
                                         size="lg"
                                         placeholder="🔒"
                                         onComplete={handleCompletePin}
+                                        onChange={handleCompletePin}
                                         isInvalid={!isValidPin}
                                         variant="filled"
                                         mask>
