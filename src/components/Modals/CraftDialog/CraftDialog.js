@@ -47,12 +47,13 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
 
     const toast = useToast();
     const maxCards = Number(card.quantityQNT);
+    const maxCrafts = Math.floor(maxCards / 5);
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
-        step: 5,
-        defaultValue: 5,
-        min: 5,
-        max: maxCards,
+        step: 1,
+        defaultValue: 1,
+        min: 1,
+        max: maxCrafts,
     });
 
     const inc = getIncrementButtonProps();
@@ -60,6 +61,8 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
     const input = getInputProps();
     const [craftingCost, setCraftingCost] = useState(0);
     const [passPhrase, setPassPhrase] = useState('');
+    const [noCards, setNoCards] = useState(0);
+    const [noCrafts, setNoCrafts] = useState(0);
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -78,18 +81,27 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
 
     useEffect(() => {
         const { rarity } = card;
-        const noCrafts = Math.floor(input.value / 5);
+        const nCrafts = Math.floor(input.value);
+        setNoCards(nCrafts*5);
+        setNoCrafts(nCrafts);
         if (rarity === 'Common') {
-            setCraftingCost(noCrafts * CRAFTINGCOMMON);
+            setCraftingCost(nCrafts * CRAFTINGCOMMON);
         } else if (rarity === 'Rare') {
-            setCraftingCost(noCrafts * CRAFTINGRARE);
+            setCraftingCost(nCrafts * CRAFTINGRARE);
         }
     }, [input, card]);
 
     const handleCrafting = async () => {
+        if(!isValidPin) return errorToast('Invalid PIN', toast);
+        if(!passPhrase) return errorToast('Invalid PIN', toast);
+        if(noCrafts > maxCrafts) return errorToast('Invalid number of crafts', toast)
+        if(noCrafts === 0) return errorToast('Invalid number of crafts', toast);
+        if(craftingCost === 0) return errorToast('Invalid number of crafts', toast);
+        if(noCards % 5 !== 0) return errorToast('Invalid number of crafts', toast);
+
         const ok = await sendToCraft({
             asset: card.asset,
-            noCards: input.value,
+            noCards: noCards,
             passPhrase: passPhrase,
             cost: craftingCost,
         });
@@ -140,7 +152,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
                         </Center>
                         <Box my={4}>
                             <Text textAlign="center" color="white">
-                                Carft cards (max: {maxCards})
+                                Carfts (max: {maxCrafts})
                             </Text>
                             <Center my={2}>
                                 <HStack maxW="50%" spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
@@ -165,7 +177,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
 
                         <FormControl variant="floatingGray" id="name" my={4} mt={8}>
                             <InputGroup size="lg">
-                                <Input placeholder=" " value={input.value} disabled />
+                                <Input placeholder=" " value={input.value*5} disabled />
                                 <InputRightAddon bgColor="transparent" children={card.name} />
                             </InputGroup>
 
@@ -183,6 +195,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
                                     size="lg"
                                     placeholder="🔒"
                                     onComplete={handleCompletePin}
+                                    onChange={handleCompletePin}
                                     isInvalid={!isValidPin}
                                     variant="filled"
                                     mask>
