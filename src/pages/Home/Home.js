@@ -185,12 +185,13 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     useEffect(() => {
         const components = [
-            <Overview />,
-            <Inventory infoAccount={infoAccount} cards={cardsFiltered} />,
-            <History infoAccount={infoAccount} collectionCardsStatic={cards} />,
-            <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />,
-            <Jackpot infoAccount={infoAccount} cards={cards} yourCards={cardsFiltered} />,
-            <Account infoAccount={infoAccount} />,
+            <Overview />, // Option 0 - Overview
+            <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // Option 1 - Inventory
+            <History infoAccount={infoAccount} collectionCardsStatic={cards} />, // Option 2 - History
+            <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />, // Option 3 - Market
+            <Jackpot infoAccount={infoAccount} cards={cards} yourCards={cardsFiltered} />, // Option 4 - Jackpot
+            <Account infoAccount={infoAccount} />, // Option 5 - Account
+            // Option 6 - BuyPack - Modal
         ];
 
         const loadComponent = async () => {
@@ -218,7 +219,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                     handleShowAllCards={handleShowAllCards}
                 />
             </Box>
-            <BuyPackDialog isOpen={isOpen} onClose={onClose} reference={buyRef} />
+            <BuyPackDialog isOpen={isOpen} onClose={onClose} reference={buyRef} infoAccount={infoAccount} />
         </>
     );
 };

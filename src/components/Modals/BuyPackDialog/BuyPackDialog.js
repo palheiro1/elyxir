@@ -3,7 +3,6 @@ import {
     AlertDialogBody,
     AlertDialogCloseButton,
     AlertDialogContent,
-    AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogOverlay,
     Box,
@@ -21,21 +20,30 @@ import {
     Stack,
     Text,
     useNumberInput,
+    useToast,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { PACKPRICE, PACKPRICEGIFTZ } from '../../../data/CONSTANTS';
+import { errorToast, okToast } from '../../../utils/alerts';
+import { buyPackWithGiftz, buyPackWithIgnis } from '../../../utils/cardsUtils';
 import { checkPin } from '../../../utils/walletUtils';
 
-const BuyPackDialog = ({ reference, isOpen, onClose, username }) => {
-    
+const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [value, setValue] = useState('1');
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
+    const [ignisPrice, setIgnisPrice] = useState(0);
+    const [giftzPrice, setGiftzPrice] = useState(0);
+
+    const { name, GIFTZBalance, IGNISBalance } = infoAccount;
+
+    const toast = useToast();
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: 1,
         defaultValue: 1,
         min: 1,
-        max: 10,
+        max: 999,
     });
 
     const inc = getIncrementButtonProps();
@@ -45,15 +53,71 @@ const BuyPackDialog = ({ reference, isOpen, onClose, username }) => {
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
 
-        const account = checkPin(username, pin);
+        const account = checkPin(name, pin);
         if (account) {
             setIsValidPin(true);
             setPassphrase(account.passphrase);
         }
     };
 
-    const handleBuyPack = () => {
+    useEffect(() => {
+        const calculatePrices = () => {
+            setIgnisPrice(input.value * PACKPRICE);
+            setGiftzPrice(input.value * PACKPRICEGIFTZ);
+        };
 
+        calculatePrices();
+    }, [input.value]);
+
+    const checker = () => {
+        if (!isValidPin || !passphrase) {
+            errorToast('You must enter a valid pin', toast);
+            return false;
+        }
+
+        if (!input.value) {
+            errorToast('You must enter a valid number of packs', toast);
+            return false;
+        }
+        if (!ignisPrice || giftzPrice) {
+            errorToast('Error calculating prices', toast);
+            return false;
+        }
+
+        if (IGNISBalance < ignisPrice || GIFTZBalance < giftzPrice) {
+            errorToast("You don't have enough funds", toast);
+            return false;
+        }
+
+        return true;
+    };
+
+    const handleBuyPack = async () => {
+        if (checker() === false) return;
+        let itsOk = false;
+
+        try {
+            if (value === '1') {
+                // buy pack with ignis
+                await buyPackWithIgnis(passphrase, input.value, IGNISBalance);
+                itsOk = true;
+            } else if (value === '2') {
+                // buy pack with giftz
+                await buyPackWithGiftz(passphrase, input.value, GIFTZBalance);
+                itsOk = true;
+            } else {
+                itsOk = false;
+            }
+        } catch (error) {
+            console.log('🚀 ~ file: BuyPackDialog.js:82 ~ handleBuyPack ~ error', error);
+        }
+
+        if (itsOk) {
+            okToast('Pack bought successfully', toast);
+            onClose();
+        } else {
+            errorToast('Error buying pack', toast);
+        }
     };
 
     return (
@@ -80,12 +144,12 @@ const BuyPackDialog = ({ reference, isOpen, onClose, username }) => {
                             <Center>
                                 <GridItem>
                                     <Box>
-                                        <Text textAlign="center" my={2}>
+                                        <Text textAlign="center" mb={2}>
                                             Payment method
                                         </Text>
                                         <Center w="100%">
                                             <Stack direction="row" w="100%">
-                                                <RadioGroup onChange={setValue} value={value}  w="100%">
+                                                <RadioGroup onChange={setValue} value={value} w="100%">
                                                     <Stack direction="row">
                                                         <Box
                                                             textAlign="center"
