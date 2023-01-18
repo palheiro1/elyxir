@@ -100,7 +100,7 @@ const Account = ({ infoAccount }) => {
                                 </PinInput>
                             </HStack>
                         </Center>
-                        <Button color="white" mt={4} w="100%" bgColor="blue.800" onClick={!isInvalidPinBackup && onOpenBackup}>
+                        <Button color="white" mt={4} w="100%" bgColor="blue.800" onClick={!isInvalidPinBackup ? onOpenBackup : undefined}>
                             Export passphrase
                         </Button>
                     </Box>
@@ -127,7 +127,7 @@ const Account = ({ infoAccount }) => {
                                 </PinInput>
                             </HStack>
                         </Center>
-                        <Button color="white" mt={4} w="100%" bgColor="blue.800" onClick={!isInvalidPinDelete && onOpenDelete}>
+                        <Button color="white" mt={4} w="100%" bgColor="blue.800" onClick={!isInvalidPinDelete ? onOpenDelete : undefined}>
                             Delete account
                         </Button>
                     </Box>
