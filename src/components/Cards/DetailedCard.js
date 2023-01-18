@@ -21,7 +21,7 @@ import monsters from '../../data/monsters.json';
 
 function Iframe({ iframe }) {
     return (
-        <div
+        <Box
             dangerouslySetInnerHTML={{
                 __html: iframe ? iframe : '',
             }}
@@ -95,7 +95,7 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                                 ))}
 
                                 <Center my={4}>
-                                    <Image src={monsterLandscape} alt={name} maxH="15rem" rounded="lg" align="center" />
+                                    <Image src={monsterLandscape} alt={name} maxH="30rem" rounded="lg" align="center" />
                                 </Center>
 
                                 <Heading textAlign="center" my={4}>
@@ -118,13 +118,13 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                                                 : imgMapURL
                                         }
                                         alt={name}
-                                        maxH="15rem"
+                                        maxH="30rem"
                                         rounded="lg"
                                         align="center"
                                     />
                                 </Center>
 
-                                <Center>
+                                <Center w="100%">
                                     <Iframe iframe={MapIframe} />
                                 </Center>
                             </ModalBody>
