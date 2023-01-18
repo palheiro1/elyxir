@@ -1,5 +1,5 @@
-import { Box, useColorModeValue } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { Box, useColorModeValue, useDisclosure } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Crypto from 'crypto-browserify';
@@ -29,6 +29,7 @@ import {
 import { fetchAllCards, fetchGemCards } from '../../utils/cardsUtils';
 import { getCurrentAskAndBids, getGIFTZBalance, getIGNISBalance } from '../../utils/walletUtils';
 import { getBlockchainTransactions, getTrades, getUnconfirmedTransactions } from '../../services/Ardor/ardorInterface';
+import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
 
 /**
  * @name Home
@@ -39,6 +40,9 @@ import { getBlockchainTransactions, getTrades, getUnconfirmedTransactions } from
  * @returns {JSX.Element} Home component
  */
 const Home = ({ infoAccount, setInfoAccount }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const buyRef = useRef();
+
     // Navigate
     const navigate = useNavigate();
 
@@ -62,6 +66,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     // Menu
     const [option, setOption] = useState(0);
+    const [lastOption, setLastOption] = useState(0);
 
     // Component to render
     const [renderComponent, setRenderComponent] = useState(<Overview />);
@@ -87,8 +92,14 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     }, [infoAccount, navigate]);
 
     // -----------------------------------------------------------------
+    const handleChangeOption = newOption => {
+        setLastOption(option);
+        setOption(newOption);
+    };
 
+    // -----------------------------------------------------------------
     // Load all data from blockchain
+    // -----------------------------------------------------------------
     useEffect(() => {
         const loadAll = async () => {
             console.log('Mythical Beings: Fetching all data...');
@@ -168,47 +179,52 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         return () => clearInterval(intervalId);
     }, [infoAccount, needReload, isLoading, setInfoAccount, cards, gemCards, infoAccountHash, cardsHash, gemCardsHash]);
 
+    // -----------------------------------------------------------------
+    // Load component to render
+    // -----------------------------------------------------------------
+
     useEffect(() => {
-        switch (option) {
-            case 0:
-                setRenderComponent(<Overview />);
-                break;
-            case 1:
-                setRenderComponent(<Inventory infoAccount={infoAccount} cards={cardsFiltered} />);
-                break;
-            case 2:
-                setRenderComponent(<History infoAccount={infoAccount} collectionCardsStatic={cards} />);
-                break;
-            case 3:
-                setRenderComponent(<Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />);
-                break;
-            case 4:
-                setRenderComponent(<Jackpot infoAccount={infoAccount} cards={cards} yourCards={cardsFiltered} />);
-                break;
-            case 5:
-                setRenderComponent(<Account infoAccount={infoAccount} />);
-                break;
-            case 6:
-                setRenderComponent(<Overview />);
-                break;
-            default:
-                setRenderComponent(<Overview />);
-                break;
+
+        const components = [
+            <Overview />,
+            <Inventory infoAccount={infoAccount} cards={cardsFiltered} />,
+            <History infoAccount={infoAccount} collectionCardsStatic={cards} />,
+            <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />,
+            <Jackpot infoAccount={infoAccount} cards={cards} yourCards={cardsFiltered} />,
+            <Account infoAccount={infoAccount} />
+        ];
+
+        const handleOptionChange = () => {
+            if(option === 6) {
+                onOpen();
+                setOption(lastOption);
+            } else {
+                setRenderComponent(components[option]);
+            }
         }
-    }, [option, infoAccount, cards, cardsFiltered, gemCards]);
+
+        const loadComponent = async () => {
+            handleOptionChange();
+        };
+
+        loadComponent();
+    }, [option, infoAccount, cards, cardsFiltered, gemCards, onOpen, lastOption]);
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
 
     return (
-        <Box bg={bgColor} m={4} p={8} rounded="lg">
-            <LateralMenu
-                option={option}
-                setOption={setOption}
-                children={renderComponent}
-                showAllCards={showAllCards}
-                handleShowAllCards={handleShowAllCards}
-            />
-        </Box>
+        <>
+            <Box bg={bgColor} m={4} p={8} rounded="lg">
+                <LateralMenu
+                    option={option}
+                    setOption={handleChangeOption}
+                    children={renderComponent}
+                    showAllCards={showAllCards}
+                    handleShowAllCards={handleShowAllCards}
+                />
+            </Box>
+            <BuyPackDialog isOpen={isOpen} onClose={onClose} reference={buyRef} />
+        </>
     );
 };
 
