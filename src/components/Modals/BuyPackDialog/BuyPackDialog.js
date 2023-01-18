@@ -84,7 +84,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             errorToast('You must enter a valid number of packs', toast);
             return false;
         }
-        if (!ignisPrice || giftzPrice) {
+        if (!ignisPrice || !giftzPrice) {
             errorToast('Error calculating prices', toast);
             return false;
         }
@@ -104,17 +104,18 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         try {
             if (value === '1') {
                 // buy pack with ignis
-                await buyPackWithIgnis(passphrase, input.value, IGNISBalance);
-                itsOk = true;
+                const response = await buyPackWithIgnis(passphrase, input.value, IGNISBalance);
+                if(response) itsOk = true;
             } else if (value === '2') {
                 // buy pack with giftz
-                await buyPackWithGiftz(passphrase, input.value, GIFTZBalance);
-                itsOk = true;
+                const response2 = await buyPackWithGiftz(passphrase, input.value, GIFTZBalance, IGNISBalance);
+                if(response2) itsOk = true;
             } else {
                 itsOk = false;
             }
         } catch (error) {
             console.log('🚀 ~ file: BuyPackDialog.js:82 ~ handleBuyPack ~ error', error);
+            itsOk = false;
         }
 
         if (itsOk) {
@@ -143,7 +144,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                         <Grid templateColumns="repeat(2, 1fr)">
                             <GridItem w="100%">
                                 <Center w="100%">
-                                    <Hover scale={1.2} perspective={200}>
+                                    <Hover scale={1.15} perspective={200}>
                                         <Image src="/images/cardPack.png" alt="Card Pack" maxH="25rem" />
                                     </Hover>
                                 </Center>
@@ -218,26 +219,28 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         </Center>
                                     </Box>
 
-                                    <Box py={2} mt={4}>
-                                        <HStack spacing={4}>
-                                            <PinInput
-                                                size="lg"
-                                                placeholder="🔒"
-                                                onComplete={handleCompletePin}
-                                                onChange={handleCompletePin}
-                                                isInvalid={!isValidPin}
-                                                variant="filled"
-                                                mask>
-                                                <PinInputField />
-                                                <PinInputField />
-                                                <PinInputField />
-                                                <PinInputField />
-                                            </PinInput>
-                                        </HStack>
-                                    </Box>
-                                    <Box w="100%" mt={8}>
+                                    <Center>
+                                        <Box py={2} mt={2}>
+                                            <HStack spacing={4}>
+                                                <PinInput
+                                                    size="lg"
+                                                    placeholder="🔒"
+                                                    onComplete={handleCompletePin}
+                                                    onChange={handleCompletePin}
+                                                    isInvalid={!isValidPin}
+                                                    variant="filled"
+                                                    mask>
+                                                    <PinInputField />
+                                                    <PinInputField />
+                                                    <PinInputField />
+                                                    <PinInputField />
+                                                </PinInput>
+                                            </HStack>
+                                        </Box>
+                                    </Center>
+                                    <Box w="100%" mt={2}>
                                         <Button
-                                            isDisabled={!isValidPin}
+                                            isDisabled={!isValidPin || passphrase === ''}
                                             bgColor="blue.700"
                                             w="100%"
                                             py={6}
