@@ -1,5 +1,6 @@
 import { Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 
+import Hover from 'react-3d-hover';
 
 /**
  * @name DetailedCard
@@ -21,9 +22,11 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="3xl" isCentered>
                 <ModalOverlay />
-                <ModalContent p={6} backgroundColor="blackAlpha.900" border="1px" rounded="3xl" borderTop="2px" borderBottom="2px" shadow="dark-lg">
+                <ModalContent p={8} backgroundColor="blackAlpha.900" border="1px" rounded="3xl" borderTop="2px" borderBottom="2px" shadow="dark-lg">
                     <Stack direction="row">
-                        <Image src={image} alt={name} minW="50%" rounded="lg" />
+                        <Hover perspective={300}>
+                            <Image src={image} alt={name} minW="50%" rounded="lg" />
+                        </Hover>
 
                         <Stack direction="column">
                             <ModalHeader>

@@ -22,6 +22,9 @@ import {
     useNumberInput,
     useToast,
 } from '@chakra-ui/react';
+
+import Hover from 'react-3d-hover';
+
 import { useEffect, useState } from 'react';
 import { PACKPRICE, PACKPRICEGIFTZ } from '../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../utils/alerts';
@@ -125,7 +128,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     return (
         <>
             <AlertDialog
-                size="xl"
+                size="3xl"
                 motionPreset="slideInBottom"
                 leastDestructiveRef={reference}
                 onClose={onClose}
@@ -136,13 +139,16 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
                     <AlertDialogHeader textAlign="center">BUY A PACK OF CARDS</AlertDialogHeader>
                     <AlertDialogCloseButton />
-                    <AlertDialogBody mb={8}>
-                        <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-                            <Center>
-                                <GridItem w="100%" alignContent="center">
-                                    <Image src="/images/cardPack.png" alt="Card Pack" w="15rem" />
-                                </GridItem>
-                            </Center>
+                    <AlertDialogBody mb={4}>
+                        <Grid templateColumns="repeat(2, 1fr)">
+                            <GridItem w="100%">
+                                <Center w="100%">
+                                    <Hover scale={1.2} perspective={200}>
+                                        <Image src="/images/cardPack.png" alt="Card Pack" maxH="25rem" />
+                                    </Hover>
+                                </Center>
+                            </GridItem>
+
                             <Center>
                                 <GridItem>
                                     <Box>
