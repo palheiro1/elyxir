@@ -31,6 +31,17 @@ import { errorToast, okToast } from '../../../utils/alerts';
 import { buyPackWithGiftz, buyPackWithIgnis } from '../../../utils/cardsUtils';
 import { checkPin } from '../../../utils/walletUtils';
 
+/**
+ * @name BuyPackDialog
+ * @description This component is used to render the buy pack dialog
+ * @param {Object} reference - Reference to the dialog
+ * @param {Boolean} isOpen - Flag to open/close the dialog
+ * @param {Function} onClose - Function to close the dialog
+ * @param {Object} infoAccount - Account info
+ * @returns {JSX.Element} BuyPackDialog component
+ * @author Jesús Sánchez Fernández
+ * @version 0.1
+ */
 const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [value, setValue] = useState('1');
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag

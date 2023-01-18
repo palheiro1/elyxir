@@ -250,7 +250,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                 <AskAndBidGrid
                                     askOrders={card.askOrders.slice(0, 3)}
                                     bidOrders={card.bidOrders.slice(0, 3)}
-                                    onlyText={true}
+                                    onlyOneAsset={true}
                                 />
                             </Box>
                         </VStack>

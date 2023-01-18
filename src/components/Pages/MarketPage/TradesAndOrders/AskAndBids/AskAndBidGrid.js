@@ -14,7 +14,20 @@ import { getAsset } from '../../../../../utils/cardsUtils';
 import CancelDialog from '../../../../Modals/TradeDialog/CancelDialog/CancelDialog';
 import AskOrBidItem from './AskOrBidItem';
 
-const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyText = false, username }) => {
+
+/**
+ * @name AskAndBidGrid
+ * @description Grid for the asks and bids
+ * @param {Array} cards - Array of cards
+ * @param {Array} askOrders - Array of ask orders
+ * @param {Array} bidOrders - Array of bid orders
+ * @param {Boolean} onlyOneAsset - Only show text -> One asset
+ * @param {String} username - Username
+ * @returns {JSX.Element} - JSX to display
+ * @author Jesús Sánchez Fernández
+ * @version 1.0.0
+ */
+const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, username }) => {
 
     const [selectedOrder, setSelectedOrder] = useState();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -35,14 +48,15 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyText = false, username
 
                     <Table variant="simple">
                         <Thead backgroundColor="whiteAlpha.300">
-                            {!onlyText && <Td textAlign="center">Asset</Td>}
+                            {!onlyOneAsset && <Td textAlign="center">Asset</Td>}
                             <Td textAlign="center">Ignis</Td>
                             <Td textAlign="center">Amount</Td>
                         </Thead>
                         <Tbody>
                             {askOrders.map(order => {
-                                const _asset = onlyText
-                                    ? Number(order.asset)
+                                console.log("🚀 ~ file: AskAndBidGrid.js:44 ~ AskAndBidGrid ~ order", order)
+                                const _asset = onlyOneAsset
+                                    ? order.asset
                                     : getAsset(order.asset, cards);
                                 return (
                                     <AskOrBidItem
@@ -71,14 +85,14 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyText = false, username
                     </Text>
                     <Table variant="simple">
                         <Thead backgroundColor="whiteAlpha.300">
-                            {!onlyText && <Td textAlign="center">Asset</Td>}
+                            {!onlyOneAsset && <Td textAlign="center">Asset</Td>}
                             <Td textAlign="center">Ignis</Td>
                             <Td textAlign="center">Amount</Td>
                         </Thead>
                         <Tbody>
                             {bidOrders.map(order => {
-                                const _asset = onlyText
-                                    ? Number(order.asset)
+                                const _asset = onlyOneAsset
+                                    ? order.asset
                                     : getAsset(order.asset, cards);
                                 return (
                                     <AskOrBidItem
