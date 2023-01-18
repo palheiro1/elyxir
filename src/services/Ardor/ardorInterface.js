@@ -267,9 +267,7 @@ const sendIgnis = async ({
     priority = 'NORMAL',
 }) => {
     const account = await getAccount(recipient);
-    console.log('🚀 ~ file: ardorInterface.js:263 ~ account', account);
     const recipientNew = account.data.errorCode === 5;
-    console.log('🚀 ~ file: ardorInterface.js:265 ~ recipientNew', recipientNew);
 
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
     const query = Object.assign({
@@ -291,9 +289,7 @@ const sendIgnis = async ({
 
     const res = await axios.post(url_sendmoney, qs.stringify(query), config);
     console.log('🚀 ~ file: ardorInterface.js:285 ~ res', res);
-    const fee = recipientNew
-        ? 14 * NQTDIVIDER
-        : res.data.minimumFeeFQT * res.data.bundlerRateNQTPerFXT * 0.00000001;
+    const fee = recipientNew ? 14 * NQTDIVIDER : res.data.minimumFeeFQT * res.data.bundlerRateNQTPerFXT * 0.00000001;
     query.feeNQT = Math.ceil(fee);
     query.broadcast = false;
     const res2 = await axios.post(url_sendmoney, qs.stringify(query, config));
@@ -364,10 +360,7 @@ export const cancelBidOrder = async (order, passPhrase) => {
         query.feeNQT = Math.ceil(fee);
         query.broadcast = false;
         const response2 = await axios.post(url_sendmoney, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(
-            response2.data.unsignedTransactionBytes,
-            passPhrase
-        );
+        const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
         const txdata = { transactionBytes: signed };
         await axios.post(url_broadcast, qs.stringify(txdata), config);
         return true;
@@ -397,15 +390,7 @@ export const getTrades = async (chain, account, timestamp) => {
         });
 };
 
-function transferCurrency(
-    nodeurl,
-    currency,
-    unitsQNT,
-    recipient,
-    passPhrase,
-    message = '',
-    messagePrunable = true
-) {
+function transferCurrency(nodeurl, currency, unitsQNT, recipient, passPhrase, message = '', messagePrunable = true) {
     console.log('transferCurrency()');
     let recipientNew = false;
 
@@ -443,10 +428,7 @@ function transferCurrency(
         console.log('get transactionBytes');
 
         return axios.post(url_sendmoney, qs.stringify(query), config).then(response => {
-            const signed = ardorjs.signTransactionBytes(
-                response.data.unsignedTransactionBytes,
-                passPhrase
-            );
+            const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
             let txdata;
 
             if (message !== '') {
@@ -460,24 +442,21 @@ function transferCurrency(
             }
 
             console.log('sending signed transaction');
-            return axios
-                .post(url_broadcast, qs.stringify(txdata), config)
-                .then(function (response) {
-                    return response;
-                });
+            return axios.post(url_broadcast, qs.stringify(txdata), config).then(function (response) {
+                return response;
+            });
         });
     });
 }
 
-function transferCurrencyZeroFee(
-    nodeurl,
+const transferCurrencyZeroFee = async (
     currency,
     unitsQNT,
     recipient,
     passPhrase,
     message = '',
     messagePrunable = true
-) {
+) => {
     console.log('transferCurrencyZeroFee()');
 
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
@@ -496,38 +475,33 @@ function transferCurrencyZeroFee(
     };
 
     console.log('get minimumFee');
-    const url_sendmoney = nodeurl + '?requestType=transferCurrency';
-    const url_broadcast = nodeurl + '?requestType=broadcastTransaction';
+    const url_sendmoney = NODEURL + '?requestType=transferCurrency';
+    const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
 
-    return axios.post(url_sendmoney, qs.stringify(query), config).then(response => {
+    try {
+        const response = await axios.post(url_sendmoney, qs.stringify(query), config);
         console.log(response);
         query.feeNQT = 0;
 
         query.broadcast = false;
         console.log('get transactionBytes');
-        return axios.post(url_sendmoney, qs.stringify(query), config).then(response => {
-            const signed = ardorjs.signTransactionBytes(
-                response.data.unsignedTransactionBytes,
-                passPhrase
-            );
-            let txdata;
+        const response2 = await axios.post(url_sendmoney, qs.stringify(query), config);
+        const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
+        let txdata;
 
-            if (message !== '') {
-                let txattachment = JSON.stringify(response.data.transactionJSON.attachment);
-                txdata = { transactionBytes: signed, prunableAttachmentJSON: txattachment };
-            } else {
-                txdata = { transactionBytes: signed };
-            }
+        if (message !== '') {
+            let txattachment = JSON.stringify(response2.data.transactionJSON.attachment);
+            txdata = { transactionBytes: signed, prunableAttachmentJSON: txattachment };
+        } else {
+            txdata = { transactionBytes: signed };
+        }
 
-            console.log('sending signed transaction');
-            return axios
-                .post(url_broadcast, qs.stringify(txdata), config)
-                .then(function (response) {
-                    return response;
-                });
-        });
-    });
-}
+        console.log('sending signed transaction');
+        return await axios.post(url_broadcast, qs.stringify(txdata), config);
+    } catch (error) {
+        console.error(error);
+    }
+};
 
 const getCurrency = async currency => {
     return await axios
@@ -573,19 +547,12 @@ export const createAskOrder = async ({ asset, price, quantity, passPhrase }) => 
 
     try {
         const postOrderResponse = await axios.post(url_postOrder, qs.stringify(query), config);
-        let fee =
-            postOrderResponse.data.minimumFeeFQT *
-            postOrderResponse.data.bundlerRateNQTPerFXT *
-            0.00000001;
+        let fee = postOrderResponse.data.minimumFeeFQT * postOrderResponse.data.bundlerRateNQTPerFXT * 0.00000001;
         query.feeNQT = Math.ceil(fee);
         console.log('fee from node: ' + fee + ', set to:' + query.feeNQT);
         query.broadcast = false;
         console.log('get transactionBytes');
-        const postOrderTransactionBytesResponse = await axios.post(
-            url_postOrder,
-            qs.stringify(query),
-            config
-        );
+        const postOrderTransactionBytesResponse = await axios.post(url_postOrder, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(
             postOrderTransactionBytesResponse.data.unsignedTransactionBytes,
             passPhrase
@@ -628,19 +595,12 @@ export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => 
 
     try {
         const postOrderResponse = await axios.post(url_postOrder, qs.stringify(query), config);
-        let fee =
-            postOrderResponse.data.minimumFeeFQT *
-            postOrderResponse.data.bundlerRateNQTPerFXT *
-            0.00000001;
+        let fee = postOrderResponse.data.minimumFeeFQT * postOrderResponse.data.bundlerRateNQTPerFXT * 0.00000001;
         query.feeNQT = Math.ceil(fee);
         console.log('fee from node: ' + fee + ', set to:' + query.feeNQT);
         query.broadcast = false;
         console.log('get transactionBytes');
-        const postOrderTransactionBytesResponse = await axios.post(
-            url_postOrder,
-            qs.stringify(query),
-            config
-        );
+        const postOrderTransactionBytesResponse = await axios.post(url_postOrder, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(
             postOrderTransactionBytesResponse.data.unsignedTransactionBytes,
             passPhrase
@@ -711,14 +671,8 @@ const transferAsset = async ({
 
         console.log('get transactionBytes');
         const response_1 = await axios.post(url_tx, qs.stringify(query), config);
-        console.log(
-            '🚀 ~ file: ardorInterface.js:561 ~ returnawaitaxios.post ~ response_1',
-            response_1
-        );
-        const signed = ardorjs.signTransactionBytes(
-            response_1.data.unsignedTransactionBytes,
-            passPhrase
-        );
+        console.log('🚀 ~ file: ardorInterface.js:561 ~ returnawaitaxios.post ~ response_1', response_1);
+        const signed = ardorjs.signTransactionBytes(response_1.data.unsignedTransactionBytes, passPhrase);
         let txdata;
         if (message !== '') {
             let txattachment = JSON.stringify(response_1.data.transactionJSON.attachment);
@@ -783,10 +737,7 @@ const transferGEM = async ({
 
         console.log('get transactionBytes');
         return await axios.post(url_tx, qs.stringify(query), config).then(async response => {
-            const signed = ardorjs.signTransactionBytes(
-                response.data.unsignedTransactionBytes,
-                passPhrase
-            );
+            const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
             var txdata;
 
             if (message !== '') {
@@ -797,22 +748,14 @@ const transferGEM = async ({
             }
             console.log('sending signed transaction');
 
-            return await axios
-                .post(url_broadcast, qs.stringify(txdata), config)
-                .then(function (response) {
-                    return response;
-                });
+            return await axios.post(url_broadcast, qs.stringify(txdata), config).then(function (response) {
+                return response;
+            });
         });
     });
 };
 
-const getBlockchainTransactions = async (
-    chain,
-    account,
-    executedOnly = true,
-    timestamp,
-    lastIndex
-) => {
+const getBlockchainTransactions = async (chain, account, executedOnly = true, timestamp, lastIndex) => {
     try {
         const response = await axios.get(NODEURL, {
             params: {
@@ -903,15 +846,7 @@ function getPrunableMessages(nodeurl, chain, userRs, otherRs, timestamp, firstIn
         });
 }
 
-export function getPrunableMessages2(
-    nodeurl,
-    chain,
-    userRs,
-    otherRs,
-    timestamp,
-    firstIndex,
-    lastIndex
-) {
+export function getPrunableMessages2(nodeurl, chain, userRs, otherRs, timestamp, firstIndex, lastIndex) {
     let query = {
         chain: 2,
         account: userRs,

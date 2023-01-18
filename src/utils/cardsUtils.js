@@ -1,10 +1,15 @@
 import {
+    BUYPACKACCOUNT,
     CATOBLEPASASSETWRONG,
+    CURRENCY,
     GEMASSET,
     IMGURL,
     IMG_MD_PATH,
     IMG_THUMB_PATH,
     MARUXAINAASSETWRONG,
+    NQTDIVIDER,
+    PACKPRICE,
+    PACKPRICEGIFTZ,
     QUANT_COMMON,
     QUANT_RARE,
     QUANT_SPECIAL,
@@ -12,7 +17,14 @@ import {
     REFERRALASSET,
     SASQUATCHASSET,
 } from '../data/CONSTANTS';
-import { getAccountAssets, getAskOrders, getAssetsByIssuer, getBidOrders } from '../services/Ardor/ardorInterface';
+import {
+    getAccountAssets,
+    getAskOrders,
+    getAssetsByIssuer,
+    getBidOrders,
+    sendIgnis,
+    transferCurrencyZeroFee,
+} from '../services/Ardor/ardorInterface';
 
 // -------------------------------------------------
 //                  CARDS UTILS
@@ -62,6 +74,34 @@ export const fetchAllCards = async (accountRs, collectionRs, specialRs, fetchOrd
 export const fetchGemCards = async (accountRs, gemRs, fetchOrders = false) => {
     const [account, gemAssets] = await Promise.all([getAccountAssets(accountRs), getAssetsByIssuer(gemRs)]);
     return await cardsGenerator(account.accountAssets, gemAssets, fetchOrders);
+};
+
+// -------------------------------------------------
+//                  BUY PACKS
+// -------------------------------------------------
+
+export const buyPackWithIgnis = async (passphrase, noPacks, ignisBalance) => {
+    const amountNQT = noPacks * PACKPRICE * NQTDIVIDER;
+    if (ignisBalance < amountNQT) return false;
+
+    const message = JSON.stringify({ contract: 'IgnisAssetLottery' });
+
+    return await sendIgnis({
+        amountNQT: amountNQT,
+        recipient: BUYPACKACCOUNT,
+        passPhrase: passphrase,
+        message: message,
+        messagePrunable: true,
+    });
+};
+
+export const buyPackWithGiftz = async (passphrase, noPacks, giftzBalance) => {
+    const amountNQT = noPacks * PACKPRICEGIFTZ;
+    if (giftzBalance < amountNQT) return false;
+
+    const message = JSON.stringify({ contract: 'IgnisAssetLottery' });
+
+    return await transferCurrencyZeroFee(CURRENCY, amountNQT, BUYPACKACCOUNT, passphrase, message, true);
 };
 
 // -------------------------------------------------
@@ -134,8 +174,7 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
             cardImgUrl: getTarascaImage(asset.name),
             cardThumbUrl: getThumbsImage(asset.name),
             askOrders: askOrders,
-            bidOrders: bidOrders
+            bidOrders: bidOrders,
         };
     }
 };
-
