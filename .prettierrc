@@ -6,7 +6,7 @@
   "tabWidth": 4,
   "bracketSameLine": true,
   "proseWrap": "always",
-  "printWidth": 100,
+  "printWidth": 120,
   "bracketSpacing": true,
   "singleAttributePerLine": false
 }
