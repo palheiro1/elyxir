@@ -47,7 +47,6 @@ export const getAsset = (asset, collectionCardsStatic) => {
 // -------------------------------------------------
 //                  CARDS FETCH
 // -------------------------------------------------
-
 export const fetchAllCards = async (accountRs, collectionRs, specialRs, fetchOrders = false) => {
     const [account, collectionAssets, specialAssets] = await Promise.all([
         getAccountAssets(accountRs),
@@ -68,24 +67,21 @@ export const fetchGemCards = async (accountRs, gemRs, fetchOrders = false) => {
 // -------------------------------------------------
 //            CARDS UTILS FOR INVENTORY
 // -------------------------------------------------
-
 export const cardsGenerator = async (accountAssets, collectionAssets, fetchOrders = false) => {
-    var ret = [];
-
-    for (let index = 0; index < collectionAssets.length; index++) {
-        const asset = collectionAssets[index];
-        const accountAsset = accountAssets.find(a => a.asset === asset.asset);
-        const quantityQNT = accountAsset ? accountAsset.quantityQNT : 0;
-        const unconfirmedQuantityQNT = accountAsset ? accountAsset.unconfirmedQuantityQNT : 0;
-        if (asset.description) {
-            let newAsset = await cardInfoGenerator(asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders);
-            if (newAsset !== undefined) {
-                ret.push(newAsset);
+    var ret = await Promise.all(
+        collectionAssets.map(async asset => {
+            const accountAsset = accountAssets.find(a => a.asset === asset.asset);
+            const quantityQNT = accountAsset ? accountAsset.quantityQNT : 0;
+            const unconfirmedQuantityQNT = accountAsset ? accountAsset.unconfirmedQuantityQNT : 0;
+            if (asset.description) {
+                let newAsset = await cardInfoGenerator(asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders);
+                if (newAsset !== undefined) {
+                    return newAsset;
+                }
             }
-        }
-    }
-
-    return ret;
+        })
+    );
+    return ret.filter(Boolean);
 };
 
 export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders = false) => {
@@ -135,13 +131,11 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
             quantityQNT: quantityQNT,
             totalQuantityQNT: totalQuantityQNT,
             unconfirmedQuantityQNT: unconfirmedQuantityQNT,
-            totalQuantitiyQNT: asset.quantityQNT,
             cardImgUrl: getTarascaImage(asset.name),
             cardThumbUrl: getThumbsImage(asset.name),
             askOrders: askOrders,
-            bidOrders: bidOrders,
+            bidOrders: bidOrders
         };
-    } else {
-        return undefined;
     }
 };
+
