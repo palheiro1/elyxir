@@ -1,11 +1,11 @@
-import { HStack, IconButton, PinInput, PinInputField, Select, Stack, useDisclosure } from "@chakra-ui/react"
-import { useEffect, useRef, useState } from "react"
-import { getAllUsers } from "../../../../utils/storage";
-import ConfirmDialog from "../../../Modals/ConfirmDialog/ConfirmDialog";
-import { ImCross } from "react-icons/im";
+import { HStack, IconButton, PinInput, PinInputField, Select, Stack, useDisclosure } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
+import { getAllUsers } from '../../../../utils/storage';
+import ConfirmDialog from '../../../Modals/ConfirmDialog/ConfirmDialog';
+import { ImCross } from 'react-icons/im';
 
-import { useNavigate } from "react-router-dom";
-import { checkPin } from "../../../../utils/walletUtils";
+import { useNavigate } from 'react-router-dom';
+import { checkPin } from '../../../../utils/walletUtils';
 
 /**
  * This component is used to render the user login form
@@ -17,23 +17,21 @@ import { checkPin } from "../../../../utils/walletUtils";
  * @todo Add logic to check if the user is already logged in
  */
 const UserLogin = ({ setInfoAccount }) => {
-
     const navigate = useNavigate();
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const reference = useRef()
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const reference = useRef();
 
     const [accounts, setAccounts] = useState([]); // list of accounts
 
     const [user, setUser] = useState(); // username
-    const handleSelectUser = (e) => {
+    const handleSelectUser = e => {
         setUser(e.target.value);
-    }
+    };
 
-
-    const handleCompletePin = (value) => {
+    const handleCompletePin = value => {
         isInvalidPin && setIsInvalidPin(false); // reset invalid pin flag
         handleLogin(value);
-    }
+    };
 
     const [isInvalidPin, setIsInvalidPin] = useState(false); // invalid pin flag
     const [needReload, setNeedReload] = useState(true); // reload flag
@@ -44,43 +42,51 @@ const UserLogin = ({ setInfoAccount }) => {
             const users = getAllUsers();
             setAccounts(users);
             if (users.length > 0) setUser(users[0]);
-        }
+        };
 
         needReload && recoverUsers();
-    }, [needReload])
+    }, [needReload]);
 
-    const handleLogin = (pin) => {
+    const handleLogin = pin => {
         const account = checkPin(user, pin, false);
         if (!account) {
             setIsInvalidPin(true);
             return;
         }
         setInfoAccount(account);
-        navigate("/home");
-    }
+        navigate('/home');
+    };
 
     return (
         <Stack spacing={3} pt={4}>
             <HStack>
                 <Select size="lg" w="66%" onChange={handleSelectUser} variant="filled">
-                    {accounts.map((account) => (
-                        <option key={account} value={account}>{account}</option>
+                    {accounts.map(account => (
+                        <option key={account} value={account}>
+                            {account}
+                        </option>
                     ))}
                 </Select>
-                <IconButton p={6} icon={<ImCross />} onClick={onOpen} />
+                {accounts.length > 0 && <IconButton p={6} icon={<ImCross />} onClick={onOpen} />}
             </HStack>
 
-            <ConfirmDialog reference={reference} isOpen={isOpen} onClose={onClose} setNeedReload={setNeedReload} user={user} />
+            <ConfirmDialog
+                reference={reference}
+                isOpen={isOpen}
+                onClose={onClose}
+                setNeedReload={setNeedReload}
+                user={user}
+            />
 
             <HStack spacing={7}>
-                <PinInput size="lg"
-                    placeholder='🔒'
+                <PinInput
+                    size="lg"
+                    placeholder="🔒"
                     onComplete={handleCompletePin}
                     onChange={handleCompletePin}
                     isInvalid={isInvalidPin}
                     variant="filled"
-                    mask
-                >
+                    mask>
                     <PinInputField />
                     <PinInputField />
                     <PinInputField />
@@ -88,7 +94,7 @@ const UserLogin = ({ setInfoAccount }) => {
                 </PinInput>
             </HStack>
         </Stack>
-    )
-}
+    );
+};
 
-export default UserLogin
+export default UserLogin;
