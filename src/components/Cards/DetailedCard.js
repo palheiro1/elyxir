@@ -1,6 +1,33 @@
-import { Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Stack, Text, useColorModeValue } from "@chakra-ui/react";
-
+import {
+    Box,
+    Center,
+    Heading,
+    Image,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalHeader,
+    ModalOverlay,
+    Stack,
+    Text,
+    useColorModeValue,
+} from '@chakra-ui/react';
 import Hover from 'react-3d-hover';
+import { GiSeaCreature } from 'react-icons/gi';
+import { MdLandscape } from 'react-icons/md';
+
+import monsters from '../../data/monsters.json';
+
+function Iframe(props) {
+    return (
+        <div
+            dangerouslySetInnerHTML={{
+                __html: props.iframe ? props.iframe : "",
+            }}
+        />
+    );
+}
 
 /**
  * @name DetailedCard
@@ -13,30 +40,89 @@ import Hover from 'react-3d-hover';
  * @version 1.0
  */
 const DetailedCard = ({ isOpen, onClose, data }) => {
+    const { name, cardImgUrl: image, assetname } = data;
 
-    const { name, cardImgUrl:image, channel:continent, rarity, description } = data;
+    // ------------------------------------------------------------
+    const monster = monsters.find(m => m.assetname === assetname);
+    console.log(monster);
+    const monsterPicture = 'https://media.mythicalbeings.io/creatures/' + monster.picture;
+    const monsterLandscape = 'https://media.mythicalbeings.io/landscapes/' + monster.landscape;
+    const imgMapURL = 'https://media.mythicalbeings.io/maps/Map_' + monster.name + '.jpg';
 
-    const textColor = useColorModeValue("gray.200", "gray.200")
+    const textColor = useColorModeValue('gray.200', 'gray.200');
 
     return (
         <>
-            <Modal isOpen={isOpen} onClose={onClose} size="3xl" isCentered>
+            <Modal isOpen={isOpen} onClose={onClose} size="full">
                 <ModalOverlay />
-                <ModalContent p={8} backgroundColor="blackAlpha.900" border="1px" rounded="3xl" borderTop="2px" borderBottom="2px" shadow="dark-lg">
+                <ModalContent p={12} backgroundColor="blackAlpha.900" shadow="dark-lg">
                     <Stack direction="row">
-                        <Hover perspective={300}>
-                            <Image src={image} alt={name} minW="50%" rounded="lg" />
-                        </Hover>
+                        <Box position="fixed" top="15%">
+                            <Hover perspective={300}>
+                                <Image src={image} alt={name} maxH="40rem" rounded="lg" />
+                            </Hover>
+                        </Box>
 
-                        <Stack direction="column">
+                        <Box w="35%" />
+
+                        <Stack direction="column" align="center" w="100%">
                             <ModalHeader>
-                                <Text color="white" fontSize="3xl" fontWeight="bolder">{name}</Text>
-                                <Text fontSize="md" color="gray">{continent} / {rarity}</Text>
+                                <Text color="white" fontSize="4xl" fontWeight="bolder" my={-4}>
+                                    {name}
+                                </Text>
                             </ModalHeader>
                             <ModalCloseButton />
 
-                            <ModalBody color={textColor}>
-                                {description}
+                            <ModalBody color={textColor} w="100%">
+                                <Center mb={4}>
+                                    <Image src={monsterPicture} alt={name} maxH="15rem" rounded="lg" align="center" />
+                                </Center>
+
+                                <Text fontSize="md" color="gray" textAlign="center">
+                                    {monster.continent} / {monster.country} / {monster.name}
+                                </Text>
+
+                                <Heading textAlign="center" my={4}>
+                                    <Center>
+                                        Creature <GiSeaCreature />
+                                    </Center>
+                                </Heading>
+
+                                {monster.creature.map((c, i) => (
+                                    <Text key={i} fontSize="md" color="gray" textAlign="justify">
+                                        {c}
+                                    </Text>
+                                ))}
+
+                                <Center my={4}>
+                                    <Image src={monsterLandscape} alt={name} maxH="15rem" rounded="lg" align="center" />
+                                </Center>
+
+                                <Heading textAlign="center" my={4}>
+                                    <Center>
+                                        Culture <MdLandscape />
+                                    </Center>
+                                </Heading>
+
+                                {monster.culture.map((c, i) => (
+                                    <Text key={i} fontSize="md" color="gray" textAlign="justify">
+                                        {c}
+                                    </Text>
+                                ))}
+
+                                <Center my={4}>
+                                    <Image
+                                        src={
+                                            imgMapURL === 'https://media.mythicalbeings.io/maps/Map_/Kaggen.jpg'
+                                                ? 'https://media.mythicalbeings.io/maps/Map_Mantis.jpg'
+                                                : imgMapURL
+                                        }
+                                        alt={name}
+                                        maxH="15rem"
+                                        rounded="lg"
+                                        align="center"
+                                    />
+                                </Center>
                             </ModalBody>
                         </Stack>
                     </Stack>
