@@ -145,7 +145,7 @@ const GemWidget = ({ username, gemCards }) => {
                     </GridItem>
                 </Grid>
             </Center>
-            <TradeDialog isOpen={isOpen} onClose={onClose} ref={tradeRef} username={username} gemCards={gemCards} />
+            <TradeDialog isOpen={isOpen} onClose={onClose} reference={tradeRef} username={username} gemCards={gemCards} />
         </>
     );
 };
