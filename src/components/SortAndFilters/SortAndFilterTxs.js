@@ -15,49 +15,39 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
     };
 
     useEffect(() => {
+        const filterTransactions = transactions => {
+            switch (filter) {
+                case 'all':
+                    return transactions;
+                case 'placed':
+                    return transactions.filter(({ type }) => type === 'ask' || type === 'bid');
+                case 'cards':
+                    return transactions.filter(({ isCard }) => isCard);
+                case 'currency':
+                    return transactions.filter(({ isCurrency }) => isCurrency);
+                default:
+                    return transactions.filter(({ type }) => type === filter);
+            }
+        };
+
         const sortTransactions = transactions => {
             if (sort === 'older') {
                 transactions.reverse();
             }
+            return transactions;
         };
 
         if (transactions.length > 0) {
-            let filteredTransactions = new Array(...transactions);
-            switch (filter) {
-                case 'all':
-                    break;
-                case 'placed':
-                    filteredTransactions = filteredTransactions.filter(
-                        tx => tx.type === 'ask' || tx.type === 'bid'
-                    );
-                    break;
-                case 'cards':
-                    filteredTransactions = filteredTransactions.filter(tx => tx.isCard === true);
-                    break;
-                case 'currency':
-                    filteredTransactions = filteredTransactions.filter(
-                        tx => tx.isCurrency === true
-                    );
-                    break;
-                default:
-                    filteredTransactions = filteredTransactions.filter(tx => tx.type === filter);
-                    break;
-            }
-            sortTransactions(filteredTransactions);
-            setFilteredTransactions(filteredTransactions);
+            const filteredTransactions = filterTransactions([...transactions]);
+            const sortedTransactions = sortTransactions(filteredTransactions);
+            setFilteredTransactions(sortedTransactions);
             setVisibleTransactions(10);
         }
     }, [transactions, filter, sort, setFilteredTransactions, setVisibleTransactions]);
 
     return (
         <Stack direction="row" pb={2}>
-            <Stack
-                direction="row"
-                border="1px"
-                borderColor="gray.600"
-                rounded="lg"
-                px={2}
-                align="center">
+            <Stack direction="row" border="1px" borderColor="gray.600" rounded="lg" px={2} align="center">
                 <Box pl={1} py={2}>
                     <FaRegPaperPlane />
                 </Box>
@@ -71,13 +61,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
             </Stack>
 
             <Stack position="absolute" right="3%" direction="row">
-                <Stack
-                    direction="row"
-                    border="1px"
-                    borderColor="gray.600"
-                    rounded="lg"
-                    px={2}
-                    align="center">
+                <Stack direction="row" border="1px" borderColor="gray.600" rounded="lg" px={2} align="center">
                     <Box pl={1} py={2}>
                         <FaFilter />
                     </Box>
