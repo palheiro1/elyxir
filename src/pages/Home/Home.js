@@ -2,6 +2,9 @@ import { Box, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Crypto from 'crypto-browserify';
+import equal from 'fast-deep-equal';
+
 // Menu
 import LateralMenu from '../../components/LateralMenu/LateralMenu';
 
@@ -19,30 +22,20 @@ import {
     GEMASSETACCOUNT,
     NQTDIVIDER,
     REFRESH_DATA_TIME,
-    REFRESH_MARKET_TIME,
     TARASCACARDACCOUNT,
 } from '../../data/CONSTANTS';
 
 // Services
 import { fetchAllCards, fetchGemCards } from '../../utils/cardsUtils';
-import {
-    getAskAndBids,
-    getCurrentAskAndBids,
-    getGIFTZBalance,
-    getIGNISBalance,
-} from '../../utils/walletUtils';
-import {
-    getBlockchainTransactions,
-    getTrades,
-    getUnconfirmedTransactions,
-} from '../../services/Ardor/ardorInterface';
+import { getCurrentAskAndBids, getGIFTZBalance, getIGNISBalance } from '../../utils/walletUtils';
+import { getBlockchainTransactions, getTrades, getUnconfirmedTransactions } from '../../services/Ardor/ardorInterface';
 
 /**
  * @name Home
- * @description Home page
+ * @description Home page (main page)
  * @author Jesús Sánchez Fernández
  * @version 0.1
- * @dev This page is used to render the home page
+ * @dev This page is used to render all the pages
  * @returns {JSX.Element} Home component
  */
 const Home = ({ infoAccount, setInfoAccount }) => {
@@ -55,32 +48,28 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // All cards
     const [cards, setCards] = useState([]);
 
+    // Hashes
+    const [infoAccountHash, setInfoAccountHash] = useState('');
+    const [gemCardsHash, setGemCardsHash] = useState('');
+    const [cardsHash, setCardsHash] = useState('');
+
     // Filtered cards
     const [cardsFiltered, setCardsFiltered] = useState(cards);
 
     // Need reload data
     const [needReload, setNeedReload] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    const [isMarketReloading, setIsMarketReloading] = useState(false);
 
-    /*
-     * 0 -> Overview
-     * 1 -> Inventory
-     * 2 -> History
-     * 3 -> Market
-     * 4 -> Jackpot
-     * 5 -> Account
-     * 6 -> Buy pack
-     */
+    // Menu
     const [option, setOption] = useState(0);
+
+    // Component to render
     const [renderComponent, setRenderComponent] = useState(<Overview />);
+
+    // -----------------------------------------------------------------
+    // Show all cards - Toggle button
     const [showAllCards, setShowAllCards] = useState(true);
     const handleShowAllCards = () => setShowAllCards(!showAllCards);
-
-    // Check if user is logged
-    useEffect(() => {
-        if (infoAccount.token === null && infoAccount.accountRs === null) navigate('/login');
-    }, [infoAccount, navigate]);
 
     useEffect(() => {
         if (showAllCards) {
@@ -90,68 +79,77 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         }
     }, [showAllCards, cards]);
 
-    /**
-     * @description Get all cards
-     * @param {Object} infoAccount - Account info
-     * @returns {Array} - All cards
-     */
+    // -----------------------------------------------------------------
+
+    // Check if user is logged
+    useEffect(() => {
+        if (infoAccount.token === null && infoAccount.accountRs === null) navigate('/login');
+    }, [infoAccount, navigate]);
+
+    // -----------------------------------------------------------------
+
+    // Load all data from blockchain
     useEffect(() => {
         const loadAll = async () => {
-            console.log('Fetching all data...');
+            console.log('Mythical Beings: Fetching all data...');
             const { accountRs } = infoAccount;
             setIsLoading(true);
             setNeedReload(false);
 
             // Fetch all info
-            const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades] =
-                await Promise.all([
-                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT),
-                    fetchGemCards(accountRs, GEMASSETACCOUNT, true),
-                    getIGNISBalance(accountRs),
-                    getGIFTZBalance(accountRs),
-                    getBlockchainTransactions(2, accountRs, true),
-                    getUnconfirmedTransactions(2, accountRs),
-                    getCurrentAskAndBids(accountRs),
-                    getTrades(2, accountRs),
-                ]);
+            const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades] = await Promise.all([
+                fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
+                fetchGemCards(accountRs, GEMASSETACCOUNT, true),
+                getIGNISBalance(accountRs),
+                getGIFTZBalance(accountRs),
+                getBlockchainTransactions(2, accountRs, true),
+                getUnconfirmedTransactions(2, accountRs),
+                getCurrentAskAndBids(accountRs),
+                getTrades(2, accountRs),
+            ]);
 
             // -----------------------------------------------------------------
-            // Get "quantityQNT" from "cards" and "loadCards" and compare them
+            // Rebuild infoAccount
             // -----------------------------------------------------------------
-            const cardsQuantity = cards.map(card => card.quantityQNT);
-            const loadCardsQuantity = loadCards.map(card => card.quantityQNT);
-            if (JSON.stringify(cardsQuantity) !== JSON.stringify(loadCardsQuantity)) {
-                console.log('Cards changed');
-                setCards(loadCards);
-                setIsMarketReloading(false);
-            }
 
-            // -----------------------------------------------------------------
-            // Get "quantityQNT" from "gemCards" and "gems" and compare them
-            // -----------------------------------------------------------------
-            if (JSON.stringify(gemCards) !== JSON.stringify(gems[0]) && gems.length > 0) {
-                console.log('Gems changed');
-                setGemCards(gems[0]);
-            }
-
-            // -----------------------------------------------------------------
-            // Rebuild infoAccount and compare it with the old one
-            // -----------------------------------------------------------------
             const _auxInfo = {
                 ...infoAccount,
                 IGNISBalance: ignis,
                 GIFTZBalance: giftz.unitsQNT,
                 GEMSBalance: gems[0].quantityQNT / NQTDIVIDER,
                 transactions: txs.transactions,
-                unconfirmedTxs: unconfirmed.transactions,
+                unconfirmedTxs: unconfirmed.unconfirmedTransactions,
                 currentAsks: currentAskOrBids.askOrders,
                 currentBids: currentAskOrBids.bidOrders,
                 trades: trades.trades,
             };
 
-            if (JSON.stringify(infoAccount) !== JSON.stringify(_auxInfo)) {
-                console.log('Account info changed');
+            // -----------------------------------------------------------------
+            // Get all hashes and compare
+            // -----------------------------------------------------------------
+            const loadCardsHash = Crypto.createHash('sha256').update(JSON.stringify(loadCards)).digest('hex');
+            const loadGemCardHash = Crypto.createHash('sha256').update(JSON.stringify(gems[0])).digest('hex');
+            const loadInfoAccountHash = Crypto.createHash('sha256').update(JSON.stringify(_auxInfo)).digest('hex');
+
+            // Check if cardData has changed
+            if (!equal(cardsHash, loadCardsHash)) {
+                console.log('Mythical Beings: Cards changed');
+                setCards(loadCards);
+                setCardsHash(loadCardsHash);
+            }
+
+            // Check if gemCards has changed
+            if (!equal(gemCardsHash, loadGemCardHash)) {
+                console.log('Mythical Beings: Gems changed');
+                setGemCards(gems[0]);
+                setGemCardsHash(loadGemCardHash);
+            }
+
+            // Check if infoAccount has changed
+            if (!equal(infoAccountHash, loadInfoAccountHash)) {
+                console.log('Mythical Beings: Account info changed');
                 setInfoAccount(_auxInfo);
+                setInfoAccountHash(loadInfoAccountHash);
             }
 
             setIsLoading(false);
@@ -168,40 +166,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         }, REFRESH_DATA_TIME);
 
         return () => clearInterval(intervalId);
-    }, [infoAccount, needReload, isLoading, setInfoAccount, cards, gemCards]);
-
-    useEffect(() => {
-        const fetchAskAndBids = async () => {
-            setIsMarketReloading(true);
-            console.log('Fetching ask and bids...');
-
-            const cardsWithAskAndBids = await Promise.all(
-                cards.map(async card => {
-                    const { askOrders, bidOrders, assetCount } = await getAskAndBids(card.asset);
-                    return {
-                        ...card,
-                        askOrders: askOrders,
-                        bidOrders: bidOrders,
-                        assetCount: assetCount,
-                    };
-                })
-            );
-
-            if (JSON.stringify(cards) !== JSON.stringify(cardsWithAskAndBids)) {
-                console.log('Market cards changed');
-                setCards(cardsWithAskAndBids);
-            }
-            setIsMarketReloading(false);
-        };
-
-        const intervalId = setInterval(() => {
-            if (!isMarketReloading && cards.length > 0) {
-                fetchAskAndBids();
-            }
-        }, REFRESH_MARKET_TIME);
-
-        return () => clearInterval(intervalId);
-    }, [cards, isMarketReloading]);
+    }, [infoAccount, needReload, isLoading, setInfoAccount, cards, gemCards, infoAccountHash, cardsHash, gemCardsHash]);
 
     useEffect(() => {
         switch (option) {
@@ -212,19 +177,13 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 setRenderComponent(<Inventory infoAccount={infoAccount} cards={cardsFiltered} />);
                 break;
             case 2:
-                setRenderComponent(
-                    <History infoAccount={infoAccount} collectionCardsStatic={cards} />
-                );
+                setRenderComponent(<History infoAccount={infoAccount} collectionCardsStatic={cards} />);
                 break;
             case 3:
-                setRenderComponent(
-                    <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />
-                );
+                setRenderComponent(<Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />);
                 break;
             case 4:
-                setRenderComponent(
-                    <Jackpot infoAccount={infoAccount} cards={cards} yourCards={cardsFiltered} />
-                );
+                setRenderComponent(<Jackpot infoAccount={infoAccount} cards={cards} yourCards={cardsFiltered} />);
                 break;
             case 5:
                 setRenderComponent(<Account infoAccount={infoAccount} />);
