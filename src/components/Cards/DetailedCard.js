@@ -89,7 +89,7 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                                 </Heading>
 
                                 {monster.creature.map((c, i) => (
-                                    <Text key={i} fontSize="md" color="gray" textAlign="justify">
+                                    <Text key={i} fontSize="md" color="gray" textAlign="justify" my={6}>
                                         {c}
                                     </Text>
                                 ))}
@@ -105,7 +105,7 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                                 </Heading>
 
                                 {monster.culture.map((c, i) => (
-                                    <Text key={i} fontSize="md" color="gray" textAlign="justify">
+                                    <Text key={i} fontSize="md" color="gray" textAlign="justify" my={6}>
                                         {c}
                                     </Text>
                                 ))}
