@@ -2,7 +2,6 @@ import { Box, Button, Select, Stack, Text, useColorModeValue } from '@chakra-ui/
 import { useEffect, useState } from 'react';
 import { FaRegPaperPlane } from 'react-icons/fa';
 
-
 /**
  * @name SortAndFilterCards
  * @description Menu to sort and filter cards
@@ -14,12 +13,7 @@ import { FaRegPaperPlane } from 'react-icons/fa';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const SortAndFilterCards = ({
-    cards = [],
-    setCardsFiltered,
-    needSpecials = true,
-    needSorting = true,
-}) => {
+const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true, needSorting = true }) => {
     const bgButtons = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
     const [rarity, setRarity] = useState('All');
     const [sort, setSort] = useState('none');
@@ -44,25 +38,25 @@ const SortAndFilterCards = ({
             } else if (sort === 'lessQuantity') {
                 filteredCards = filteredCards.sort((a, b) => a.quantityQNT - b.quantityQNT);
             }
-            
+
             setCardsFiltered(filteredCards);
             setActualCards(filteredCards);
         };
 
-        if(cards.length !== actualCards.length) setNeedReload(true);
+        if (cards.length !== actualCards.length) setNeedReload(true);
 
         needReload && filterCards();
     }, [cards, rarity, setCardsFiltered, sort, needReload, actualCards.length]);
 
     const handleChange = e => {
-        if(e.target.value !== sort) {
+        if (e.target.value !== sort) {
             setSort(e.target.value);
             setNeedReload(true);
         }
     };
 
     const handleRarity = auxRarity => {
-        if(auxRarity !== rarity) {
+        if (auxRarity !== rarity) {
             setRarity(auxRarity);
             setNeedReload(true);
         }
@@ -71,13 +65,7 @@ const SortAndFilterCards = ({
     return (
         <Stack direction="row" pb={2}>
             {needSorting && (
-                <Stack
-                    direction="row"
-                    border="1px"
-                    borderColor="gray.600"
-                    rounded="lg"
-                    px={2}
-                    align="center">
+                <Stack direction="row" border="1px" borderColor="gray.600" rounded="lg" px={2} align="center">
                     <Box pl={1} py={2}>
                         <FaRegPaperPlane />
                     </Box>
@@ -92,11 +80,7 @@ const SortAndFilterCards = ({
                 </Stack>
             )}
             <Stack position="absolute" right="70px" direction="row" spacing={2}>
-                <Button
-                    size="sm"
-                    bgColor={bgButtons}
-                    isActive={rarity === 'All'}
-                    onClick={() => handleRarity('All')}>
+                <Button size="sm" bgColor={bgButtons} isActive={rarity === 'All'} onClick={() => handleRarity('All')}>
                     All rarities
                 </Button>
                 <Button
@@ -106,18 +90,10 @@ const SortAndFilterCards = ({
                     onClick={() => handleRarity('Common')}>
                     Common
                 </Button>
-                <Button
-                    size="sm"
-                    bgColor={bgButtons}
-                    isActive={rarity === 'Rare'}
-                    onClick={() => handleRarity('Rare')}>
+                <Button size="sm" bgColor={bgButtons} isActive={rarity === 'Rare'} onClick={() => handleRarity('Rare')}>
                     Rare
                 </Button>
-                <Button
-                    size="sm"
-                    bgColor={bgButtons}
-                    isActive={rarity === 'Epic'}
-                    onClick={() => handleRarity('Epic')}>
+                <Button size="sm" bgColor={bgButtons} isActive={rarity === 'Epic'} onClick={() => handleRarity('Epic')}>
                     Epic
                 </Button>
                 {needSpecials && (
