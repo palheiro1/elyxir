@@ -390,13 +390,16 @@ export const getTrades = async (chain, account, timestamp) => {
         });
 };
 
-function transferCurrency(nodeurl, currency, unitsQNT, recipient, passPhrase, message = '', messagePrunable = true) {
+const transferCurrency = async (currency, unitsQNT, recipient, passPhrase, message = '', messagePrunable = true) => {
     console.log('transferCurrency()');
     let recipientNew = false;
 
-    getAccount(recipient).then(response => {
+    try {
+        const response = await getAccount(recipient);
         if (response.data.errorCode === 5 || response.data.errorCode === 4) recipientNew = true;
-    });
+    } catch (error) {
+        console.error(error);
+    }
 
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
     let query = {
@@ -414,9 +417,11 @@ function transferCurrency(nodeurl, currency, unitsQNT, recipient, passPhrase, me
     };
 
     console.log('get minimumFee');
-    const url_sendmoney = nodeurl + '?requestType=transferCurrency';
-    const url_broadcast = nodeurl + '?requestType=broadcastTransaction';
-    return axios.post(url_sendmoney, qs.stringify(query), config).then(response => {
+    const url_sendmoney = NODEURL + '?requestType=transferCurrency';
+    const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
+    try {
+        const response = await axios.post(url_sendmoney, qs.stringify(query), config);
+
         let fee = recipientNew
             ? 14 * NQTDIVIDER
             : response.data.minimumFeeFQT * response.data.bundlerRateNQTPerFXT * 0.00000001;
@@ -427,27 +432,26 @@ function transferCurrency(nodeurl, currency, unitsQNT, recipient, passPhrase, me
         query.broadcast = false;
         console.log('get transactionBytes');
 
-        return axios.post(url_sendmoney, qs.stringify(query), config).then(response => {
-            const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
-            let txdata;
+        const response2 = await axios.post(url_sendmoney, qs.stringify(query), config);
+        const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
+        let txdata;
 
-            if (message !== '') {
-                let txattachment = JSON.stringify(response.data.transactionJSON.attachment);
-                txdata = {
-                    transactionBytes: signed,
-                    prunableAttachmentJSON: txattachment,
-                };
-            } else {
-                txdata = { transactionBytes: signed };
-            }
+        if (message !== '') {
+            let txattachment = JSON.stringify(response2.data.transactionJSON.attachment);
+            txdata = {
+                transactionBytes: signed,
+                prunableAttachmentJSON: txattachment,
+            };
+        } else {
+            txdata = { transactionBytes: signed };
+        }
 
-            console.log('sending signed transaction');
-            return axios.post(url_broadcast, qs.stringify(txdata), config).then(function (response) {
-                return response;
-            });
-        });
-    });
-}
+        console.log('sending signed transaction');
+        return await axios.post(url_broadcast, qs.stringify(txdata), config);
+    } catch (error) {
+        console.error(error);
+    }
+};
 
 const transferCurrencyZeroFee = async (
     currency,
