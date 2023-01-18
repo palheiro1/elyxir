@@ -182,8 +182,8 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
                     </Thead>
                     <Tbody>
                         {!needReload &&
-                            filteredTransactions.slice(0, visibleTransactions).map(transaction => {
-                                return <transaction.component />;
+                            filteredTransactions.slice(0, visibleTransactions).map((transaction, index) => {
+                                return <transaction.component key={index} />;
                             })}
                     </Tbody>
                 </Table>
