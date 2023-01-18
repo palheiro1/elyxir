@@ -184,27 +184,22 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
 
     useEffect(() => {
-
         const components = [
             <Overview />,
             <Inventory infoAccount={infoAccount} cards={cardsFiltered} />,
             <History infoAccount={infoAccount} collectionCardsStatic={cards} />,
             <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />,
             <Jackpot infoAccount={infoAccount} cards={cards} yourCards={cardsFiltered} />,
-            <Account infoAccount={infoAccount} />
+            <Account infoAccount={infoAccount} />,
         ];
 
-        const handleOptionChange = () => {
-            if(option === 6) {
+        const loadComponent = async () => {
+            if (option === 6) {
                 onOpen();
                 setOption(lastOption);
             } else {
                 setRenderComponent(components[option]);
             }
-        }
-
-        const loadComponent = async () => {
-            handleOptionChange();
         };
 
         loadComponent();
