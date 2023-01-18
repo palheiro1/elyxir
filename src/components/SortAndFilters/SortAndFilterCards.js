@@ -33,6 +33,7 @@ const SortAndFilterCards = ({
      */
     useEffect(() => {
         const filterCards = () => {
+            setNeedReload(false);
             let filteredCards = new Array(...cards);
 
             if (rarity !== 'All') {
@@ -43,8 +44,8 @@ const SortAndFilterCards = ({
             } else if (sort === 'lessQuantity') {
                 filteredCards = filteredCards.sort((a, b) => a.quantityQNT - b.quantityQNT);
             }
+            
             setCardsFiltered(filteredCards);
-            setNeedReload(false);
             setActualCards(filteredCards);
         };
 
