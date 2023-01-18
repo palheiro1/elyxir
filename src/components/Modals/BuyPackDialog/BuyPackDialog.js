@@ -156,7 +156,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                             <GridItem w="100%">
                                 <Center w="100%">
                                     <Hover scale={1.15} perspective={200}>
-                                        <Image src="/images/cardPack.png" alt="Card Pack" maxH="25rem" />
+                                        <Image src="/images/cardPacks/cardPack.svg" alt="Card Pack" maxH="25rem" />
                                     </Hover>
                                 </Center>
                             </GridItem>
