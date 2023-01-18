@@ -75,7 +75,7 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
 
                             <ModalBody color={textColor} w="100%">
                                 <Center mb={4}>
-                                    <Image src={monsterPicture} alt={name} maxH="15rem" rounded="lg" align="center" />
+                                    <Image src={monsterPicture} alt={name} maxH="30vh" rounded="lg" align="center" />
                                 </Center>
 
                                 <Text fontSize="md" color="gray" textAlign="center">
