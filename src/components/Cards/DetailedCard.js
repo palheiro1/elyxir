@@ -19,11 +19,11 @@ import { MdLandscape } from 'react-icons/md';
 
 import monsters from '../../data/monsters.json';
 
-function Iframe(props) {
+function Iframe({ iframe }) {
     return (
         <div
             dangerouslySetInnerHTML={{
-                __html: props.iframe ? props.iframe : "",
+                __html: iframe ? iframe : '',
             }}
         />
     );
@@ -44,10 +44,10 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
 
     // ------------------------------------------------------------
     const monster = monsters.find(m => m.assetname === assetname);
-    console.log(monster);
     const monsterPicture = 'https://media.mythicalbeings.io/creatures/' + monster.picture;
     const monsterLandscape = 'https://media.mythicalbeings.io/landscapes/' + monster.landscape;
     const imgMapURL = 'https://media.mythicalbeings.io/maps/Map_' + monster.name + '.jpg';
+    const MapIframe = monster.maplink;
 
     const textColor = useColorModeValue('gray.200', 'gray.200');
 
@@ -122,6 +122,10 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                                         rounded="lg"
                                         align="center"
                                     />
+                                </Center>
+
+                                <Center>
+                                    <Iframe iframe={MapIframe} />
                                 </Center>
                             </ModalBody>
                         </Stack>
