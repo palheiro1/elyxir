@@ -36,6 +36,8 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [giftzPrice, setGiftzPrice] = useState(0);
 
     const { name, GIFTZBalance, IGNISBalance } = infoAccount;
+    const maxPacksWithIgnis = Math.floor(IGNISBalance / PACKPRICE);
+    const maxPacksWithGiftz = Math.floor(GIFTZBalance / PACKPRICEGIFTZ);
 
     const toast = useToast();
 
@@ -43,7 +45,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         step: 1,
         defaultValue: 1,
         min: 1,
-        max: 999,
+        max: value === '1' ? maxPacksWithIgnis : maxPacksWithGiftz,
     });
 
     const inc = getIncrementButtonProps();
@@ -205,7 +207,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         </Text>
                                         <Center>
                                             <Text color="white" fontWeight="bold" fontSize="2xl">
-                                                0.00000000 IGNIS
+                                                {value === '1' ? `${ignisPrice} IGNIS` : `${giftzPrice} GIFTZ`}
                                             </Text>
                                         </Center>
                                     </Box>
