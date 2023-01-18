@@ -17,12 +17,15 @@ import {
     REFERRALASSET,
     SASQUATCHASSET,
 } from '../data/CONSTANTS';
+
+
 import {
     getAccountAssets,
     getAskOrders,
     getAssetsByIssuer,
     getBidOrders,
     sendIgnis,
+    transferCurrency,
     transferCurrencyZeroFee,
 } from '../services/Ardor/ardorInterface';
 
@@ -82,7 +85,9 @@ export const fetchGemCards = async (accountRs, gemRs, fetchOrders = false) => {
 
 export const buyPackWithIgnis = async (passphrase, noPacks, ignisBalance) => {
     const amountNQT = noPacks * PACKPRICE * NQTDIVIDER;
-    if (ignisBalance < amountNQT) return false;
+    const balance = ignisBalance * NQTDIVIDER;
+
+    if (balance < amountNQT) return false;
 
     const message = JSON.stringify({ contract: 'IgnisAssetLottery' });
 
@@ -95,14 +100,17 @@ export const buyPackWithIgnis = async (passphrase, noPacks, ignisBalance) => {
     });
 };
 
-export const buyPackWithGiftz = async (passphrase, noPacks, giftzBalance) => {
+export const buyPackWithGiftz = async (passphrase, noPacks, giftzBalance, ignisBalance) => {
     const amountNQT = noPacks * PACKPRICEGIFTZ;
     if (giftzBalance < amountNQT) return false;
 
     const message = JSON.stringify({ contract: 'IgnisAssetLottery' });
 
-    return await transferCurrencyZeroFee(CURRENCY, amountNQT, BUYPACKACCOUNT, passphrase, message, true);
-};
+    if(parseFloat(Number(ignisBalance)) < parseFloat(0.1))
+        return await transferCurrencyZeroFee(CURRENCY, amountNQT, BUYPACKACCOUNT, passphrase, message, true);
+    else
+        return await transferCurrency(CURRENCY, amountNQT, BUYPACKACCOUNT, passphrase, message, true);
+}
 
 // -------------------------------------------------
 //            CARDS UTILS FOR INVENTORY
