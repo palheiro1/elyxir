@@ -4,15 +4,23 @@ import qs from 'qs';
 import ardorjs from 'ardorjs';
 
 import { GEMASSET, JACKPOTACCOUNT, NODEURL, NQTDIVIDER } from '../../data/CONSTANTS';
-//import { APILIMIT, JACKPOTACCOUNT } from '../../data/CONSTANTS';
 
+// -------------------------------------------------
 const config = {
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
     },
 };
+// -------------------------------------------------
 
-//building the logo url
+
+
+
+
+// -------------------------------------------------
+//                   BASIC UTILS
+// -------------------------------------------------
+
 export const getImageURL = async (nodeurl, fullHash) => {
     const params = new URLSearchParams();
     const queryparams = {
@@ -47,7 +55,6 @@ export const fetchAssetCount = async asset => {
     return result.quantityQNT ? result.quantityQNT : 0;
 };
 
-//Account balance
 export const getIgnisBalance = async account => {
     return await axios
         .get(NODEURL, {
@@ -239,6 +246,30 @@ export const getAccountAssets = async (accountId, assetId = '') => {
     }
 };
 
+export const getTrades = async (chain, account, timestamp) => {
+    return await axios
+        .get(NODEURL, {
+            params: {
+                requestType: 'getTrades',
+                chain: chain,
+                account: account,
+                timestamp: timestamp,
+                includeAssetInfo: true,
+            },
+        })
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            // handle error
+            console.log(error);
+        });
+};
+
+// ----------------------------------------------
+// CURRENCY
+// ----------------------------------------------
+
 export const getAccountCurrencies = async (account, currency) => {
     return axios
         .get(NODEURL, {
@@ -306,88 +337,6 @@ const sendIgnis = async ({
         txdata = { transactionBytes: signed };
     }
     return await axios.post(url_broadcast, qs.stringify(txdata), config);
-};
-
-export const cancelAskOrder = async (order, passPhrase) => {
-    const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
-    const query = {
-        chain: 2,
-        order,
-        feeNQT: -1,
-        feeRateNQTPerFXT: -1,
-        deadline: 15,
-        broadcast: false,
-        publicKey,
-    };
-
-    const url_cancel = `${NODEURL}?requestType=cancelAskOrder`;
-    const url_broadcast = `${NODEURL}?requestType=broadcastTransaction`;
-
-    try {
-        const { data: res1 } = await axios.post(url_cancel, qs.stringify(query), config);
-
-        query.feeNQT = Math.ceil(res1.minimumFeeFQT * res1.bundlerRateNQTPerFXT * 0.00000001);
-        query.broadcast = false;
-
-        const { data: res2 } = await axios.post(url_cancel, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(res2.unsignedTransactionBytes, passPhrase);
-        await axios.post(url_broadcast, qs.stringify({ transactionBytes: signed }), config);
-        return true;
-    } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:341 ~ error', error);
-        return false;
-    }
-};
-
-export const cancelBidOrder = async (order, passPhrase) => {
-    const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
-    const query = {
-        chain: 2,
-        order,
-        feeNQT: -1,
-        feeRateNQTPerFXT: -1,
-        deadline: 15,
-        broadcast: false,
-        publicKey,
-    };
-
-    const url_sendmoney = `${NODEURL}?requestType=cancelBidOrder`;
-    const url_broadcast = `${NODEURL}?requestType=broadcastTransaction`;
-
-    try {
-        const response = await axios.post(url_sendmoney, qs.stringify(query), config);
-        const fee = response.data.minimumFeeFQT * response.data.bundlerRateNQTPerFXT * 0.00000001;
-        query.feeNQT = Math.ceil(fee);
-        query.broadcast = false;
-        const response2 = await axios.post(url_sendmoney, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
-        const txdata = { transactionBytes: signed };
-        await axios.post(url_broadcast, qs.stringify(txdata), config);
-        return true;
-    } catch (error) {
-        console.error(error);
-        return false;
-    }
-};
-
-export const getTrades = async (chain, account, timestamp) => {
-    return await axios
-        .get(NODEURL, {
-            params: {
-                requestType: 'getTrades',
-                chain: chain,
-                account: account,
-                timestamp: timestamp,
-                includeAssetInfo: true,
-            },
-        })
-        .then(response => {
-            return response.data;
-        })
-        .catch(error => {
-            // handle error
-            console.log(error);
-        });
 };
 
 const transferCurrency = async (currency, unitsQNT, recipient, passPhrase, message = '', messagePrunable = true) => {
@@ -524,6 +473,10 @@ const getCurrency = async currency => {
         });
 };
 
+// ----------------------------------------------
+// AKS & BID ORDERS
+// ----------------------------------------------
+
 export const createAskOrder = async ({ asset, price, quantity, passPhrase }) => {
     if (!passPhrase) throw new Error('PassPhrase is required');
     if (!asset) throw new Error('Asset is required');
@@ -568,6 +521,37 @@ export const createAskOrder = async ({ asset, price, quantity, passPhrase }) => 
         return true;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
+        return false;
+    }
+};
+
+export const cancelAskOrder = async (order, passPhrase) => {
+    const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
+    const query = {
+        chain: 2,
+        order,
+        feeNQT: -1,
+        feeRateNQTPerFXT: -1,
+        deadline: 15,
+        broadcast: false,
+        publicKey,
+    };
+
+    const url_cancel = `${NODEURL}?requestType=cancelAskOrder`;
+    const url_broadcast = `${NODEURL}?requestType=broadcastTransaction`;
+
+    try {
+        const { data: res1 } = await axios.post(url_cancel, qs.stringify(query), config);
+
+        query.feeNQT = Math.ceil(res1.minimumFeeFQT * res1.bundlerRateNQTPerFXT * 0.00000001);
+        query.broadcast = false;
+
+        const { data: res2 } = await axios.post(url_cancel, qs.stringify(query), config);
+        const signed = ardorjs.signTransactionBytes(res2.unsignedTransactionBytes, passPhrase);
+        await axios.post(url_broadcast, qs.stringify({ transactionBytes: signed }), config);
+        return true;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:341 ~ error', error);
         return false;
     }
 };
@@ -619,6 +603,41 @@ export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => 
         return false;
     }
 };
+
+export const cancelBidOrder = async (order, passPhrase) => {
+    const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
+    const query = {
+        chain: 2,
+        order,
+        feeNQT: -1,
+        feeRateNQTPerFXT: -1,
+        deadline: 15,
+        broadcast: false,
+        publicKey,
+    };
+
+    const url_sendmoney = `${NODEURL}?requestType=cancelBidOrder`;
+    const url_broadcast = `${NODEURL}?requestType=broadcastTransaction`;
+
+    try {
+        const response = await axios.post(url_sendmoney, qs.stringify(query), config);
+        const fee = response.data.minimumFeeFQT * response.data.bundlerRateNQTPerFXT * 0.00000001;
+        query.feeNQT = Math.ceil(fee);
+        query.broadcast = false;
+        const response2 = await axios.post(url_sendmoney, qs.stringify(query), config);
+        const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
+        const txdata = { transactionBytes: signed };
+        await axios.post(url_broadcast, qs.stringify(txdata), config);
+        return true;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+};
+
+// ----------------------------------------------
+// TRANSFERING ASSETS
+// ----------------------------------------------
 
 const transferAsset = async ({
     asset,
@@ -693,6 +712,10 @@ const transferAsset = async ({
     });
 };
 
+// ----------------------------------------------
+// TRANSFERING GEMS
+// ----------------------------------------------
+
 const transferGEM = async ({
     quantityQNT,
     recipient,
@@ -759,6 +782,10 @@ const transferGEM = async ({
     });
 };
 
+// ----------------------------------------------
+// GET BLOCKCHAIN STATUS & TRANSACTIONS
+// ----------------------------------------------
+
 const getBlockchainTransactions = async (chain, account, executedOnly = true, timestamp, lastIndex) => {
     try {
         const response = await axios.get(NODEURL, {
@@ -796,24 +823,8 @@ const getUnconfirmedTransactions = async (chain, account, type, subtype) => {
     }
 };
 
-function getConstants(nodeurl) {
-    return axios
-        .get(nodeurl, {
-            params: {
-                requestType: 'getConstants',
-            },
-        })
-        .then(function (response) {
-            return response;
-        })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        });
-}
-
-function getBlockchainStatus() {
-    return axios
+const getBlockchainStatus = async () => {
+    return await axios
         .get(NODEURL, {
             params: {
                 requestType: 'getBlockchainStatus',
@@ -826,189 +837,10 @@ function getBlockchainStatus() {
             // handle error
             console.log(error);
         });
-}
-
-function getPrunableMessages(nodeurl, chain, userRs, otherRs, timestamp, firstIndex, lastIndex) {
-    return axios
-        .get(nodeurl, {
-            params: {
-                requestType: 'getPrunableMessages',
-                chain: chain,
-                account: userRs,
-                otherAccount: otherRs,
-                timestamp: timestamp,
-                firstIndex: firstIndex,
-                lastIndex: lastIndex,
-            },
-        })
-        .then(function (response) {
-            return response.data;
-        })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        });
-}
-
-export function getPrunableMessages2(nodeurl, chain, userRs, otherRs, timestamp, firstIndex, lastIndex) {
-    let query = {
-        chain: 2,
-        account: userRs,
-        otherAccount: otherRs,
-        timestamp: timestamp,
-        firstIndex: firstIndex,
-        lastIndex: lastIndex,
-    };
-
-    const url = nodeurl + '?requestType=getPrunableMessages';
-    return axios.post(url, qs.stringify(query), config);
-}
-
-function getBlock(nodeurl, height) {
-    return axios
-        .get(nodeurl, {
-            params: {
-                requestType: 'getBlock',
-                height: height,
-            },
-        })
-        .then(function (response) {
-            return response.data;
-        })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        });
-}
-
-/*
-// TO-DO: REFACTOR THIS!!!
-
-function getNumParticipations(nodeurl,accountRs,timestamp){
-    let numParticipations = 0;
-    let promises = [];
-
-    for (var i=0; i<8; i++) {
-        const firstIndex = i*APILIMIT;
-        const lastIndex = (i+1)*APILIMIT-1;
-        console.log("firstindex: "+firstIndex+", lastIndex:"+lastIndex);
-        //const response = await getPrunableMessages(nodeurl,2,accountRs,JACKPOTACCOUNT,timestamp,firstIndex,lastIndex);
-        promises.push(getPrunableMessages2(nodeurl,2,accountRs,JACKPOTACCOUNT,timestamp,firstIndex,lastIndex));
-    }
-    Promise.all(promises).then((responses) => {
-        for (var i=0;i<10; i++){
-            const response = responses[i];
-
-            if(response.data && response.data.prunableMessages){
-                response.data.prunableMessages.forEach((prunableMessage) => {
-                    const msg = JSON.parse(prunableMessage.message.replace(/\bNaN\b/g, "null"));
-                    if (msg.submittedBy === "Jackpot" && msg.reason === "confirmParticipation") {
-                        console.log("detected a confirmParticipation Message");
-                        console.log(msg)
-                        numParticipations++;
-                    }
-                })
-
-                if (response.data.prunableMessages.length<APILIMIT){  // I think this indicates the last set of data, if not filled to API limit!
-                    console.log("last data set detected? exit loop..");
-                }            
-            }
-        }        
-    })
-
-    return numParticipations;
-}
-*/
-
-function getAssetDividends(nodeurl, chain, assetId) {
-    return axios
-        .get(nodeurl, {
-            params: {
-                requestType: 'getAssetDividends',
-                chain: chain,
-                asset: assetId,
-            },
-        })
-        .then(function (response) {
-            console.log(response);
-            return response.data;
-        })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        });
-}
-
-function getAccountLedger(nodeurl, accountRs, firstIndex = '', lastIndex = '', eventType = '') {
-    return axios
-        .get(nodeurl, {
-            params: {
-                requestType: 'getAccountLedger',
-                account: accountRs,
-                firstIndex: firstIndex,
-                lastIndex: lastIndex,
-                eventType: eventType,
-                includeHoldingInfo: true,
-            },
-        })
-        .then(function (response) {
-            //console.log(response);
-            return response.data;
-        })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        });
-}
-
-function getAccountProperties(nodeurl, accountRs, setterRs, property = '') {
-    return axios
-        .get(nodeurl, {
-            params: {
-                requestType: 'getAccountProperties',
-                setter: setterRs,
-                recipient: accountRs,
-                property: property,
-            },
-        })
-        .then(function (response) {
-            //console.log(response);
-            return response.data;
-        });
-}
-
-export function getCurrencySellOffers(nodeurl, currency, sellerRs = '') {
-    return axios
-        .get(nodeurl, {
-            params: {
-                requestType: 'getSellOffers',
-                chain: 2,
-                currency: currency,
-                account: sellerRs,
-            },
-        })
-        .then(function (response) {
-            //console.log(response);
-            return response.data;
-        });
-}
-
-export function getTime(nodeurl) {
-    return axios
-        .get(nodeurl, {
-            params: {
-                requestType: 'getTime',
-            },
-        })
-        .then(function (response) {
-            //console.log(response);
-            return response.data;
-        });
-}
+};
 
 export {
     getTransactionBytes,
-    getConstants,
     sendIgnis,
     transferCurrency,
     transferCurrencyZeroFee,
@@ -1018,9 +850,4 @@ export {
     getBlockchainStatus,
     getBlockchainTransactions,
     getUnconfirmedTransactions,
-    getPrunableMessages,
-    getBlock,
-    getAssetDividends,
-    getAccountLedger,
-    getAccountProperties,
 };
