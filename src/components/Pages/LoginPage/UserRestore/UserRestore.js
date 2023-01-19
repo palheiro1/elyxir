@@ -1,5 +1,5 @@
 import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, Input, PinInput, PinInputField, Stack, Text, Textarea, useToast } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { errorToast, okToast } from "../../../../utils/alerts";
 import { addToAllUsers, initUser } from "../../../../utils/storage";
 import { validatePassPhrase } from "../../../../utils/validators";
@@ -19,6 +19,7 @@ const UserRestore = () => {
     const handleChangeName = (e) => setName(e.target.value);
     const handleChangeAccount = (e) => setAccount(e.target.value);
     const handleChangePin = (e) => setPin(e);
+
     const handleChangePassphrase = (e) => {
         const auxPassphrase = e.target.value;
         const validate = validatePassPhrase(auxPassphrase, account);
@@ -30,6 +31,18 @@ const UserRestore = () => {
 
         setPassphrase(auxPassphrase);
     }
+
+    useEffect(() => {
+        const checkPassphrase = () => {
+            const validate = validatePassPhrase(passphrase, account);
+            if(validate.invalid) 
+                setIsValidPassphrase(false);
+            else
+                setIsValidPassphrase(true);
+        }
+        
+        if(account !== "" && passphrase !== "") checkPassphrase();
+    }, [account, passphrase]);
 
     const handleRestoreWallet = () => {
         if(!name || !account || !passphrase || !pin) {
