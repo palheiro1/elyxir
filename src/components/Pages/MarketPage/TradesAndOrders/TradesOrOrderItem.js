@@ -1,5 +1,5 @@
 import { Stack, Td, Text, Tr } from "@chakra-ui/react";
-import InOutTxMarket from "../InOutTxMarket";
+import InOutTransaction from "../../../Tables/InOutTransaction";
 
 import { FaCoins } from "react-icons/fa";
 import TableCard from "../../../Cards/TableCard";
@@ -23,7 +23,7 @@ const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, car
     if(card === "GEM" || card === undefined) {
         return (
             <Tr>
-                <Td><InOutTxMarket type={type} /></Td>
+                <Td><InOutTransaction type={type} /></Td>
                 <Td fontWeight="bold" fontSize="xl">{name}</Td>
                 <Td>{amount}</Td>
                 <Td>
@@ -39,7 +39,7 @@ const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, car
     }
     return (
         <Tr>
-            <Td><InOutTxMarket type={type} /></Td>
+            <Td><InOutTransaction type={type} /></Td>
             <Td>
                 <TableCard
                     image={card.cardImgUrl}
