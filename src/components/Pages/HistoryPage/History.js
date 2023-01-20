@@ -173,11 +173,11 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
                 <Table variant="simple">
                     <Thead>
                         <Tr>
+                            <Td></Td>
                             <Td textAlign="center">Title</Td>
                             <Td>Amount</Td>
                             <Td>Date and Time</Td>
                             <Td>To/From</Td>
-                            <Td>Status</Td>
                         </Tr>
                     </Thead>
                     <Tbody>

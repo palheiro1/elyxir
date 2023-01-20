@@ -61,7 +61,7 @@ export const handleType2AndSubtype1 = (tx, timestamp, infoAccount, collectionCar
     const inOut = getInOut(tx, infoAccount);
     if (!inOut) return;
 
-    const sender = inOut === "in" ? parseSender(tx) : parseRecipient(tx);
+    const sender = inOut === 'in' ? parseSender(tx) : parseRecipient(tx);
     if (!sender) return;
 
     const asset = getAsset(tx.attachment.asset, collectionCardsStatic);
@@ -161,14 +161,14 @@ export const handleIncomingGIFTZ = (amount, date) => {
         return (
             <Tr>
                 <Td>
+                    <InOutTransaction type={'in'} />
+                </Td>
+                <Td>
                     <FaFilter /> INCOMING GIFTZ
                 </Td>
                 <Td>{amount}</Td>
                 <Td>{date}</Td>
                 <Td>You</Td>
-                <Td>
-                    <InOutTransaction type={'in'} />
-                </Td>
             </Tr>
         );
     };
@@ -209,14 +209,14 @@ export const cancelledOrder = (type, date, account) => {
         return (
             <Tr>
                 <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+                <Td>
                     <FaFilter /> Cancelled Order
                 </Td>
                 <Td>-</Td>
                 <Td>{date}</Td>
                 <Td>{account}</Td>
-                <Td>
-                    <InOutTransaction type={type} />
-                </Td>
             </Tr>
         );
     };
@@ -235,6 +235,9 @@ export const handleGEM = (type, amount, date, account) => {
         return (
             <Tr>
                 <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+                <Td>
                     <SimpleGrid columns={2} spacing={2}>
                         <Center>
                             <FaGem />
@@ -249,9 +252,6 @@ export const handleGEM = (type, amount, date, account) => {
                 <Td>{amount}</Td>
                 <Td>{date}</Td>
                 <Td>{account}</Td>
-                <Td>
-                    <InOutTransaction type={type} />
-                </Td>
             </Tr>
         );
     };
@@ -270,14 +270,14 @@ export const handleCardTransfer = (type, amount, date, account, card) => {
         return (
             <Tr>
                 <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+                <Td>
                     <TableCard image={image} title={title} continent={continent} rarity={rarity} />
                 </Td>
                 <Td>{amount}</Td>
                 <Td>{date}</Td>
                 <Td>{account}</Td>
-                <Td>
-                    <InOutTransaction type={type} />
-                </Td>
             </Tr>
         );
     };
@@ -298,6 +298,9 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
     const component = () => {
         return (
             <Tr>
+                <Td>
+                    <InOutTransaction type={'placed'} />
+                </Td>
                 <Td>
                     <SimpleGrid columns={2}>
                         <Center>
@@ -322,9 +325,6 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
                 <Td>{amount}</Td>
                 <Td>{date}</Td>
                 <Td>{account}</Td>
-                <Td>
-                    <InOutTransaction type={'placed'} />
-                </Td>
             </Tr>
         );
     };
@@ -341,6 +341,9 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
         return (
             <Tr>
                 <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+                <Td>
                     <SimpleGrid columns={2}>
                         <Center>
                             <FaGem />
@@ -355,9 +358,6 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
                 <Td>{amount}</Td>
                 <Td>{date}</Td>
                 <Td>{account}</Td>
-                <Td>
-                    <InOutTransaction type={type} />
-                </Td>
             </Tr>
         );
     };
@@ -376,6 +376,9 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
         return (
             <Tr>
                 <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+                <Td>
                     <SimpleGrid columns={2}>
                         <Center>
                             <FaCoins />
@@ -390,9 +393,6 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
                 <Td>{amount}</Td>
                 <Td>{date}</Td>
                 <Td>{account}</Td>
-                <Td>
-                    <InOutTransaction type={type} />
-                </Td>
             </Tr>
         );
     };
