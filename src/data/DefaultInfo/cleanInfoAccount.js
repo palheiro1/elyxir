@@ -1,12 +1,18 @@
 export const cleanInfoAccount = () => {
-    return { 
-        name: null, 
-        accountRs: null,
-        usePin: null,
+    return {
         token: null,
-        IGNISBalance: 0,
-        GIFTZBalance: 0,
+        accountRs: null,
+        name: null,
+        IGNISBalance: null,
+        GIFTZBalance: null,
+        GEMSBalance: null,
+        transactions: null,
+        unconfirmedTxs: null,
+        currentAsks: null,
+        currentBids: null,
+        trades: null,
+        usePin: null,
         timestamp: null,
-        backupDone: false
-    }
-}
+        backupDone: false,
+    };
+};

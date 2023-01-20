@@ -30,6 +30,7 @@ import { fetchAllCards, fetchGemCards } from '../../utils/cardsUtils';
 import { getCurrentAskAndBids, getGIFTZBalance, getIGNISBalance } from '../../utils/walletUtils';
 import { getBlockchainTransactions, getTrades, getUnconfirmedTransactions } from '../../services/Ardor/ardorInterface';
 import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
+import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 
 /**
  * @name Home
@@ -53,7 +54,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     const [cards, setCards] = useState([]);
 
     // Hashes
-    const [infoAccountHash, setInfoAccountHash] = useState('');
+    const [infoAccountHash, setInfoAccountHash] = useState(cleanInfoAccount);
     const [gemCardsHash, setGemCardsHash] = useState('');
     const [cardsHash, setCardsHash] = useState('');
 
@@ -208,10 +209,22 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
 
+    // -----------------------------------------------------------------
+    // Handle logout
+    // -----------------------------------------------------------------
+
+    const handleLogout = () => {
+        setInfoAccount(cleanInfoAccount);
+        navigate('/login');
+    };
+
     return (
         <>
             <Box bg={bgColor} m={4} p={8} rounded="lg">
                 <LateralMenu
+                    account={infoAccount.accountRs}
+                    username={infoAccount.name}
+                    handleLogout={handleLogout}
                     option={option}
                     setOption={handleChangeOption}
                     children={renderComponent}
