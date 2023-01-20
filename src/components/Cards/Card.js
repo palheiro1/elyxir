@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Center,
+    Flex,
     Grid,
     GridItem,
     Image,
@@ -21,7 +22,6 @@ import CraftDialog from '../Modals/CraftDialog/CraftDialog';
 import MorphDialog from '../Modals/MorphDialog/MorphDialog';
 import SendDialog from '../Modals/SendDialog/SendDialog';
 import TradeDialog from '../Modals/TradeDialog/TradeDialog';
-
 
 /**
  * @name Card
@@ -46,7 +46,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
         rarity,
         askOrders,
         bidOrders,
-        lastPrice
+        lastPrice,
     } = card;
 
     // ------------------------------
@@ -60,8 +60,19 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
 
     const bgColor = useColorModeValue('white', 'transparent');
     const [hover, setHover] = useState(false);
+
+    const rarityColor =
+        rarity === 'Common'
+            ? 'linear-gradient(45deg, #8e9eab, #eef2f3) 1'
+            : rarity === 'Rare'
+            ? 'linear-gradient(45deg, #2F80ED, #56CCF2) 1'
+            : rarity === 'Epic'
+            ? 'linear-gradient(45deg, #F09819, #EDDE5D) 1'
+            : rarity === 'Special'
+            ? 'linear-gradient(60deg, #53AF53, #2D5B53) 1'
+            : 'linear-gradient(45deg, #8e9eab, #eef2f3) 1';
+
     const initialStyle = {
-        cursor: 'none',
         transform: 'scale(1)',
         transition: 'all 0.3s ease-in-out',
         shadow: 'none',
@@ -73,6 +84,8 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
         shadow: 'xl',
     };
 
+    const haveThisCard = quantity > 0;
+    const cardOpacity = haveThisCard ? 1 : 0.5;
     // ------------------------------
 
     const { isOpen: isOpenCraft, onOpen: onOpenCraft, onClose: onCloseCraft } = useDisclosure();
@@ -99,10 +112,11 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                     src={image}
                     alt={name}
                     rounded="lg"
-                    onClick={() => handleClick({ card: card })}
+                    onClick={() => haveThisCard ? handleClick({ card: card }) : null}
                     style={hover ? hoverStyle : initialStyle}
-                    onMouseEnter={() => setHover(true)}
-                    onMouseLeave={() => setHover(false)}
+                    onMouseEnter={() => haveThisCard ? setHover(true) : null}
+                    onMouseLeave={() => haveThisCard ? setHover(false) : null}
+                    opacity={cardOpacity}
                 />
 
                 <Grid templateColumns="repeat(4, 1fr)" alignContent="center">
@@ -110,9 +124,27 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                         <Text fontSize="xl" fontWeight="bolder" minW="100%">
                             {name}
                         </Text>
-                        <Text color="gray" fontSize="md">
-                            {continent} / {rarity}{' '}
-                        </Text>
+
+                        <Flex gap={2}>
+                            <Text
+                                color="white"
+                                fontSize="md"
+                                rounded="lg"
+                                fontWeight="bolder"
+                                bgColor="whiteAlpha.300"
+                                px={2}>
+                                {continent}
+                            </Text>
+                            <Text
+                                fontWeight="bolder"
+                                color="black"
+                                fontSize="md"
+                                bgGradient={rarityColor}
+                                rounded="lg"
+                                px={2}>
+                                {rarity}
+                            </Text>
+                        </Flex>
                     </GridItem>
                     <GridItem alignContent="center" minH="100%">
                         <Center minHeight="100%">
@@ -174,7 +206,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                             Lowest ask
                                         </Text>
                                         <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                            {lowedAskOrders === "" ? <Spinner size='md' /> : lowedAskOrders}
+                                            {lowedAskOrders === '' ? <Spinner size="md" /> : lowedAskOrders}
                                         </Text>
                                     </Box>
                                     <Box>
@@ -182,7 +214,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                             Highest bid
                                         </Text>
                                         <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                            {highBidOrders === "" ? <Spinner size='md' /> : highBidOrders}
+                                            {highBidOrders === '' ? <Spinner size="md" /> : highBidOrders}
                                         </Text>
                                     </Box>
                                     <Box>
@@ -190,7 +222,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                             Latest price
                                         </Text>
                                         <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                            {lastPrice === "" ? <Spinner size='md' /> : lastPrice}
+                                            {lastPrice === '' ? <Spinner size="md" /> : lastPrice}
                                         </Text>
                                     </Box>
                                 </SimpleGrid>
@@ -201,13 +233,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
             </Stack>
 
             {/* ------------------------------------ HIDE DIALOGs ------------------------------------ */}
-            <SendDialog
-                isOpen={isOpenSend}
-                onClose={onCloseSend}
-                reference={refSend}
-                card={card}
-                username={username}
-            />
+            <SendDialog isOpen={isOpenSend} onClose={onCloseSend} reference={refSend} card={card} username={username} />
             <CraftDialog
                 isOpen={isOpenCraft}
                 onClose={onCloseCraft}
