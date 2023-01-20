@@ -220,7 +220,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     return (
         <>
-            <Box bg={bgColor} m={4} p={8} rounded="lg">
+            <Box bg={bgColor} m={4} px={4} py={2} rounded="lg">
                 <LateralMenu
                     account={infoAccount.accountRs}
                     username={infoAccount.name}
