@@ -266,6 +266,24 @@ export const getTrades = async (chain, account, timestamp) => {
         });
 };
 
+export const getLastTrades = async (assets) => {
+    return await axios
+        .get(NODEURL, {
+            params: {
+                requestType: 'getLastTrades',
+                chain: 2,
+                assets: assets
+            },
+        })
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            // handle error
+            console.log(error);
+        });
+};
+
 // ----------------------------------------------
 // CURRENCY
 // ----------------------------------------------

@@ -24,6 +24,7 @@ import {
     getAskOrders,
     getAssetsByIssuer,
     getBidOrders,
+    getLastTrades,
     sendIgnis,
     transferCurrency,
     transferCurrencyZeroFee,
@@ -143,12 +144,16 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
 
         let askOrders = [];
         let bidOrders = [];
+        let lastPrice = 0;
         if (fetchOrders) {
             await getAskOrders(asset.asset).then(response => {
                 askOrders = response.askOrders;
             });
             await getBidOrders(asset.asset).then(response => {
                 bidOrders = response.bidOrders;
+            });
+            await getLastTrades(asset.asset).then(response => {
+                lastPrice = response.trades.length > 0 && response.trades[0].priceNQTPerShare/NQTDIVIDER;
             });
         }
 
@@ -179,6 +184,7 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
             quantityQNT: quantityQNT,
             totalQuantityQNT: totalQuantityQNT,
             unconfirmedQuantityQNT: unconfirmedQuantityQNT,
+            lastPrice: lastPrice,
             cardImgUrl: getTarascaImage(asset.name),
             cardThumbUrl: getThumbsImage(asset.name),
             askOrders: askOrders,
