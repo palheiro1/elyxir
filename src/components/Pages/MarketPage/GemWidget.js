@@ -23,26 +23,9 @@ import TradeDialog from '../../Modals/TradeDialog/TradeDialog';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const GemWidget = ({ username, gemCards }) => {
-
-
+const GemWidget = ({ username, gemCards = [] }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const tradeRef = useRef();
-    // ------------------------------
-    const lowestGemAsk =
-        gemCards.askOrders.length > 0 ? gemCards.askOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
-    const highestGemBid =
-        gemCards.bidOrders.length > 0 ? gemCards.bidOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
-
-    let confirmedBalance = Number(gemCards.quantityQNT / NQTDIVIDER);
-    confirmedBalance = Number.isInteger(confirmedBalance)
-        ? confirmedBalance.toFixed(0)
-        : confirmedBalance.toFixed(2);
-
-    let unconfirmedBalance = Number(gemCards.unconfirmedQuantityQNT / NQTDIVIDER);
-    unconfirmedBalance = Number.isInteger(unconfirmedBalance)
-        ? unconfirmedBalance.toFixed(0)
-        : unconfirmedBalance.toFixed(2);
 
     // ------------------------------
 
@@ -64,6 +47,17 @@ const GemWidget = ({ username, gemCards }) => {
     const bgColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
 
     // ------------------------------
+    if (gemCards.length === 0) return null;
+    const lowestGemAsk = gemCards.askOrders.length > 0 ? gemCards.askOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
+    const highestGemBid = gemCards.bidOrders.length > 0 ? gemCards.bidOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
+
+    let confirmedBalance = Number(gemCards.quantityQNT / NQTDIVIDER);
+    confirmedBalance = Number.isInteger(confirmedBalance) ? confirmedBalance.toFixed(0) : confirmedBalance.toFixed(2);
+
+    let unconfirmedBalance = Number(gemCards.unconfirmedQuantityQNT / NQTDIVIDER);
+    unconfirmedBalance = Number.isInteger(unconfirmedBalance)
+        ? unconfirmedBalance.toFixed(0)
+        : unconfirmedBalance.toFixed(2);
 
     return (
         <>
@@ -89,11 +83,7 @@ const GemWidget = ({ username, gemCards }) => {
                                     color={textColor}
                                 />
                                 <VStack align="flex-start">
-                                    <Text
-                                        color={textColor}
-                                        fontSize="3xl"
-                                        fontWeight="bold"
-                                        mb={-3}>
+                                    <Text color={textColor} fontSize="3xl" fontWeight="bold" mb={-3}>
                                         {confirmedBalance} GEMs
                                     </Text>
                                     <Text color={textColor} fontSize="md">
@@ -103,10 +93,7 @@ const GemWidget = ({ username, gemCards }) => {
                                 <Center pl={4}>
                                     <HStack spacing={4} color={textColor}>
                                         <Box p={2} bg={bgColor} rounded="lg" minW="90px">
-                                            <Text
-                                                textAlign="center"
-                                                fontSize="xl"
-                                                fontWeight="bold">
+                                            <Text textAlign="center" fontSize="xl" fontWeight="bold">
                                                 {lowestGemAsk}
                                             </Text>
                                             <Text textAlign="center" fontSize="xs">
@@ -115,10 +102,7 @@ const GemWidget = ({ username, gemCards }) => {
                                         </Box>
 
                                         <Box p={2} bg={bgColor} rounded="lg" minW="90px">
-                                            <Text
-                                                textAlign="center"
-                                                fontSize="xl"
-                                                fontWeight="bold">
+                                            <Text textAlign="center" fontSize="xl" fontWeight="bold">
                                                 {highestGemBid}
                                             </Text>
                                             <Text textAlign="center" fontSize="xs">
@@ -145,7 +129,13 @@ const GemWidget = ({ username, gemCards }) => {
                     </GridItem>
                 </Grid>
             </Center>
-            <TradeDialog isOpen={isOpen} onClose={onClose} reference={tradeRef} username={username} gemCards={gemCards} />
+            <TradeDialog
+                isOpen={isOpen}
+                onClose={onClose}
+                reference={tradeRef}
+                username={username}
+                gemCards={gemCards}
+            />
         </>
     );
 };
