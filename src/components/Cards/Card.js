@@ -6,6 +6,7 @@ import {
     GridItem,
     Image,
     SimpleGrid,
+    Spinner,
     Stack,
     Text,
     useColorModeValue,
@@ -45,6 +46,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
         rarity,
         askOrders,
         bidOrders,
+        lastPrice
     } = card;
 
     // ------------------------------
@@ -172,7 +174,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                             Lowest ask
                                         </Text>
                                         <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                            {lowedAskOrders}
+                                            {lowedAskOrders === "" ? <Spinner size='md' /> : lowedAskOrders}
                                         </Text>
                                     </Box>
                                     <Box>
@@ -180,7 +182,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                             Highest bid
                                         </Text>
                                         <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                            {highBidOrders}
+                                            {highBidOrders === "" ? <Spinner size='md' /> : highBidOrders}
                                         </Text>
                                     </Box>
                                     <Box>
@@ -188,7 +190,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                             Latest price
                                         </Text>
                                         <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                            SOON
+                                            {lastPrice === "" ? <Spinner size='md' /> : lastPrice}
                                         </Text>
                                     </Box>
                                 </SimpleGrid>
