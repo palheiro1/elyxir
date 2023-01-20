@@ -41,6 +41,8 @@ import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
  * @returns {JSX.Element} Home component
  */
 const Home = ({ infoAccount, setInfoAccount }) => {
+
+    // Buy pack dialog
     const { isOpen, onOpen, onClose } = useDisclosure();
     const buyRef = useRef();
 
@@ -89,6 +91,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     // Check if user is logged
     useEffect(() => {
+        console.log(infoAccount)
         if (infoAccount.token === null && infoAccount.accountRs === null) navigate('/login');
     }, [infoAccount, navigate]);
 
@@ -187,8 +190,8 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     useEffect(() => {
         const components = [
             <Overview />, // Option 0 - Overview
-            <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // Option 1 - Inventory
-            <History infoAccount={infoAccount} collectionCardsStatic={cards} />, // Option 2 - History
+            <Inventory infoAccount={infoAccount} cards={cardsFiltered}  />, // Option 1 - Inventory
+            <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={infoAccount.unconfirmedTxs.length > 0} />, // Option 2 - History
             <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />, // Option 3 - Market
             <Jackpot infoAccount={infoAccount} cards={cards} yourCards={cardsFiltered} />, // Option 4 - Jackpot
             <Account infoAccount={infoAccount} />, // Option 5 - Account

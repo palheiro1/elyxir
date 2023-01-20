@@ -1,4 +1,4 @@
-import { Box, Button, Table, TableContainer, Tbody, Td, Text, Thead, Tr } from '@chakra-ui/react';
+import { Box, Button, Center, Spinner, Table, TableContainer, Tbody, Td, Text, Thead, Tr } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getBlockchainStatus } from '../../../services/Ardor/ardorInterface';
 import { getTxTimestamp } from '../../../utils/txUtils';
@@ -22,7 +22,7 @@ import {
  * @returns {JSX.Element} History component
  *
  */
-const History = ({ infoAccount, collectionCardsStatic }) => {
+const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }) => {
     /**
      * Tipos
      * 1. IncomingGEM
@@ -53,6 +53,7 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
     const [filteredTransactions, setFilteredTransactions] = useState(transactions);
     const [blockchainStatus, setBlockchainStatus] = useState({});
     const [needReload, setNeedReload] = useState(true);
+    const [lastConfirmation, setLastConfirmation] = useState(false);
 
     // -------------------------------------------------
     const [visibleTransactions, setVisibleTransactions] = useState(10);
@@ -68,9 +69,7 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
             setBlockchainStatus({
                 status: response.data,
                 epoch_beginning: new Date(
-                    response.data.isTestnet
-                        ? Date.UTC(2017, 11, 26, 14, 0, 0)
-                        : Date.UTC(2018, 0, 1, 0, 0, 0)
+                    response.data.isTestnet ? Date.UTC(2017, 11, 26, 14, 0, 0) : Date.UTC(2018, 0, 1, 0, 0, 0)
                 ),
             });
         };
@@ -78,12 +77,27 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
         fetchBlockchainStatus();
     }, []);
 
+    useEffect(() => {
+        const checkConfirmation = () => {
+            if (haveUnconfirmed) {
+                setLastConfirmation(true);
+            }
+
+            if (lastConfirmation && !haveUnconfirmed) {
+                setNeedReload(true);
+                setLastConfirmation(false);
+            }
+        };
+
+        checkConfirmation();
+    }, [haveUnconfirmed, lastConfirmation]);
+
     // -------------------------------------------------
     useEffect(() => {
         const processTransactions = () => {
-            let transactions = [];
+            let newTransactions = [];
 
-            const dirtyTransactions = infoAccount.transactions.slice(0, 50);
+            const dirtyTransactions = infoAccount.transactions;
 
             dirtyTransactions.forEach(tx => {
                 const timestamp = getTxTimestamp(tx, blockchainStatus.epoch_beginning);
@@ -105,20 +119,10 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
                     case 2:
                         if (subtype === 1)
                             // GEM & Card transfer
-                            handler = handleType2AndSubtype1(
-                                tx,
-                                timestamp,
-                                infoAccount,
-                                collectionCardsStatic
-                            );
+                            handler = handleType2AndSubtype1(tx, timestamp, infoAccount, collectionCardsStatic);
                         if (subtype === 2 || subtype === 3)
                             // GEM & Card exchange
-                            handler = handleType2AndSubtype2And3(
-                                tx,
-                                timestamp,
-                                infoAccount,
-                                collectionCardsStatic
-                            );
+                            handler = handleType2AndSubtype2And3(tx, timestamp, infoAccount, collectionCardsStatic);
                         if (subtype === 4 || subtype === 5)
                             // Cancelled order
                             handler = handleType2AndSubtype4And5(tx, timestamp, infoAccount);
@@ -135,10 +139,10 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
                         break;
                 }
 
-                if (handler) transactions.push(handler);
+                if (handler) newTransactions.push(handler);
             });
 
-            setTransactions(transactions);
+            setTransactions(newTransactions);
             setNeedReload(false);
         };
 
@@ -147,13 +151,7 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
             collectionCardsStatic !== undefined &&
             needReload &&
             processTransactions();
-    }, [
-        infoAccount,
-        transactions,
-        blockchainStatus.epoch_beginning,
-        needReload,
-        collectionCardsStatic,
-    ]);
+    }, [infoAccount, transactions, blockchainStatus.epoch_beginning, needReload, collectionCardsStatic]);
 
     return (
         <Box>
@@ -163,13 +161,16 @@ const History = ({ infoAccount, collectionCardsStatic }) => {
                 transactions={transactions}
             />
 
-            <TableContainer
-                border="1px"
-                borderColor="gray"
-                rounded="2xl"
-                shadow="inner"
-                boxShadow="md">
+            <TableContainer border="1px" borderColor="gray" rounded="2xl" shadow="inner" boxShadow="md">
                 {needReload && <Text>Loading</Text>}
+                {haveUnconfirmed && (
+                    <Center w="100%" textAlign="center" py={4} gap={4}>
+                        <Spinner size="md" />{' '}
+                        <Text fontWeight="bolder" bgGradient="linear(to-l, #478299, #957bd2)" bgClip="text">
+                            New transactions are being processed.
+                        </Text>
+                    </Center>
+                )}
                 <Table variant="simple">
                     <Thead>
                         <Tr>
