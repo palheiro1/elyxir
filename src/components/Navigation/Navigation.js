@@ -67,7 +67,7 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
 							GIFTZ: {GIFTZBalance}
 						</Button>
 						<Button display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'}>
-							GEM: {GEMSBalance}
+							GEM: {GEMSBalance.toFixed(2)}
 						</Button>
 					</ButtonGroup>
 				)}
