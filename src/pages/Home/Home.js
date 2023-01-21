@@ -1,4 +1,4 @@
-import { Box, useColorModeValue, useDisclosure } from '@chakra-ui/react';
+import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -31,6 +31,7 @@ import { getCurrentAskAndBids, getGIFTZBalance, getIGNISBalance } from '../../ut
 import { getBlockchainTransactions, getTrades, getUnconfirmedTransactions } from '../../services/Ardor/ardorInterface';
 import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
 import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
+import { handleConfirmateNotification, handleNewNotification } from '../../utils/alerts';
 
 /**
  * @name Home
@@ -41,6 +42,7 @@ import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
  * @returns {JSX.Element} Home component
  */
 const Home = ({ infoAccount, setInfoAccount }) => {
+    const toast = useToast();
 
     // Buy pack dialog
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -62,6 +64,9 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     // Filtered cards
     const [cardsFiltered, setCardsFiltered] = useState(cards);
+
+    // Uncorfirmed transactions
+    const [unconfirmedTransactions, setUnconfirmedTransactions] = useState([]);
 
     // Need reload data
     const [needReload, setNeedReload] = useState(true);
@@ -91,7 +96,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     // Check if user is logged
     useEffect(() => {
-        console.log(infoAccount)
         if (infoAccount.token === null && infoAccount.accountRs === null) navigate('/login');
     }, [infoAccount, navigate]);
 
@@ -123,6 +127,8 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 getTrades(2, accountRs),
             ]);
 
+            const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
+
             // -----------------------------------------------------------------
             // Rebuild infoAccount
             // -----------------------------------------------------------------
@@ -133,11 +139,30 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 GIFTZBalance: giftz.unitsQNT,
                 GEMSBalance: gems[0].quantityQNT / NQTDIVIDER,
                 transactions: txs.transactions,
-                unconfirmedTxs: unconfirmed.unconfirmedTransactions,
+                unconfirmedTxs: unconfirmedTxs,
                 currentAsks: currentAskOrBids.askOrders,
                 currentBids: currentAskOrBids.bidOrders,
                 trades: trades.trades,
             };
+
+            if (unconfirmedTxs.length > 0 || unconfirmedTransactions.length > 0) {
+                setUnconfirmedTransactions(unconfirmedTxs);
+
+                const isNew = unconfirmedTxs.length > unconfirmedTransactions.length;
+                const isConfirmed = unconfirmedTxs.length < unconfirmedTransactions.length;
+                
+                switch (true) {
+                    case isNew:
+                        handleNewNotification(unconfirmedTxs, toast);
+                        break;
+                    case isConfirmed:
+                        handleConfirmateNotification(unconfirmedTxs, toast);
+                        break;
+                    default:
+                        console.log('Unhandled notification');
+                }
+                
+            }
 
             // -----------------------------------------------------------------
             // Get all hashes and compare
@@ -181,17 +206,31 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         }, REFRESH_DATA_TIME);
 
         return () => clearInterval(intervalId);
-    }, [infoAccount, needReload, isLoading, setInfoAccount, cards, gemCards, infoAccountHash, cardsHash, gemCardsHash]);
+    }, [
+        infoAccount,
+        needReload,
+        isLoading,
+        setInfoAccount,
+        cards,
+        gemCards,
+        infoAccountHash,
+        cardsHash,
+        gemCardsHash,
+        toast,
+        unconfirmedTransactions,
+    ]);
 
     // -----------------------------------------------------------------
     // Load component to render
     // -----------------------------------------------------------------
 
     useEffect(() => {
+        const haveUnconfirmed = infoAccount.unconfirmedTxs && infoAccount.unconfirmedTxs.length > 0;
+
         const components = [
             <Overview />, // Option 0 - Overview
-            <Inventory infoAccount={infoAccount} cards={cardsFiltered}  />, // Option 1 - Inventory
-            <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={infoAccount.unconfirmedTxs.length > 0} />, // Option 2 - History
+            <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // Option 1 - Inventory
+            <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />, // Option 2 - History
             <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />, // Option 3 - Market
             <Jackpot infoAccount={infoAccount} cards={cards} yourCards={cardsFiltered} />, // Option 4 - Jackpot
             <Account infoAccount={infoAccount} />, // Option 5 - Account
