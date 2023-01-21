@@ -109,6 +109,29 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // Load all data from blockchain
     // -----------------------------------------------------------------
     useEffect(() => {
+        const handleNotifications = unconfirmedTxs => {
+            const newUnconfirmedTransactions = [...unconfirmedTransactions];
+
+            // Check for new transactions
+            for (const tx of unconfirmedTxs) {
+                const index = newUnconfirmedTransactions.findIndex(t => t.transaction === tx.transaction);
+                if (index === -1) {
+                    const isIncoming = tx.recipient === infoAccount.accountRs;
+                    handleNewNotification(tx, isIncoming, toast);
+                }
+            }
+            // Check for confirmed transactions
+            for (const tx of unconfirmedTransactions) {
+                const index = unconfirmedTxs.findIndex(t => t.transaction === tx.transaction);
+                if (index === -1) {
+                    const isIncoming = tx.recipient === infoAccount.accountRs;
+                    handleConfirmateNotification(tx, isIncoming, toast);
+                }
+            }
+
+            setUnconfirmedTransactions(unconfirmedTxs.filter(tx => !unconfirmedTransactions.includes(tx)));
+        };
+
         const loadAll = async () => {
             console.log('Mythical Beings: Fetching all data...');
             const { accountRs } = infoAccount;
@@ -128,6 +151,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             ]);
 
             const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
+            console.log('🚀 ~ file: Home.js:165 ~ loadAll ~ unconfirmedTxs', unconfirmedTxs);
 
             // -----------------------------------------------------------------
             // Rebuild infoAccount
@@ -145,24 +169,10 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 trades: trades.trades,
             };
 
-            if (unconfirmedTxs.length > 0 || unconfirmedTransactions.length > 0) {
-                setUnconfirmedTransactions(unconfirmedTxs);
-
-                const isNew = unconfirmedTxs.length > unconfirmedTransactions.length;
-                const isConfirmed = unconfirmedTxs.length < unconfirmedTransactions.length;
-                
-                switch (true) {
-                    case isNew:
-                        handleNewNotification(unconfirmedTxs, toast);
-                        break;
-                    case isConfirmed:
-                        handleConfirmateNotification(unconfirmedTxs, toast);
-                        break;
-                    default:
-                        console.log('Unhandled notification');
-                }
-                
-            }
+            // -----------------------------------------------------------------
+            // Check notifications - Unconfirmed transactions
+            handleNotifications(unconfirmedTxs);
+            // -----------------------------------------------------------------
 
             // -----------------------------------------------------------------
             // Get all hashes and compare

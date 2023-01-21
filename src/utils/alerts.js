@@ -1,26 +1,26 @@
-export const handleNewNotification = (tx, toast) => {
+export const handleNewNotification = (tx, isIncoming, toast) => {
     const id = tx.fullHash;
     if (toast.isActive(id)) return;
 
     toast({
-        title: 'Info',
-        description: "New transation waiting for confirmation",
+        title: isIncoming ? 'New incoming transaction' : 'New outgoing transaction',
+        description: isIncoming ? 'New incoming transaction waiting for confirmation' : 'New outgoing transaction waiting for confirmation',
         status: 'info',
-        duration: 15000,
+        duration: 25000,
         isClosable: true,
         position: 'bottom-right',
     });
 };
 
-export const handleConfirmateNotification = (tx, toast) => {
+export const handleConfirmateNotification = (tx, isIncoming, toast) => {
     const id = tx.fullHash;
     if (toast.isActive(id)) return;
 
     toast({
-        title: 'Success',
-        description: "New transaction has been confirmed",
+        title: "Transaction confirmed",
+        description: isIncoming ? 'New incoming transaction confirmed' : 'New outgoing transaction confirmed',
         status: 'success',
-        duration: 15000,
+        duration: 25000,
         isClosable: true,
         position: 'bottom-right',
     });
