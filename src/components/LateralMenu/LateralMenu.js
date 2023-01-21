@@ -36,6 +36,7 @@ const LateralMenu = ({ option = 0, setOption, children, showAllCards, handleShow
     const textColor = index => (isActive(index) ? sTextActiveColor : sTextColor);
     const iconColor = index => (isActive(index) ? sIconColor : 'white');
 
+    if(!username || !account) return null;
     const splitAccount = account.slice(0, 5) + ' ... ' + account.slice(-5);
 
     return (
