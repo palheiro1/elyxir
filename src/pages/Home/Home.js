@@ -110,11 +110,10 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
     useEffect(() => {
         const handleNotifications = unconfirmedTxs => {
-            const newUnconfirmedTransactions = [...unconfirmedTransactions];
 
             // Check for new transactions
             for (const tx of unconfirmedTxs) {
-                const index = newUnconfirmedTransactions.findIndex(t => t.transaction === tx.transaction);
+                const index = unconfirmedTransactions.findIndex(t => t.transaction === tx.transaction);
                 if (index === -1) {
                     const isIncoming = tx.recipient === infoAccount.accountRs;
                     handleNewNotification(tx, isIncoming, toast);
@@ -129,7 +128,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 }
             }
 
-            setUnconfirmedTransactions(unconfirmedTxs.filter(tx => !unconfirmedTransactions.includes(tx)));
+            setUnconfirmedTransactions(unconfirmedTxs);
         };
 
         const loadAll = async () => {
