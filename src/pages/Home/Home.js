@@ -151,7 +151,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             ]);
 
             const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
-            console.log('🚀 ~ file: Home.js:165 ~ loadAll ~ unconfirmedTxs', unconfirmedTxs);
 
             // -----------------------------------------------------------------
             // Rebuild infoAccount
