@@ -116,17 +116,21 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
     useEffect(() => {
         const handleNotifications = unconfirmedTxs => {
+
+            const auxUnconfirmed = [...unconfirmedTransactions];
+
             // Check for new transactions
             for (const tx of unconfirmedTxs) {
-                const index = unconfirmedTransactions.findIndex(t => t.transaction === tx.transaction);
+                const index = auxUnconfirmed.findIndex(t => t.transaction === tx.transaction);
                 if (index === -1) {
                     const isIncoming = tx.recipientRS === infoAccount.accountRs;
                     handleNewNotification(tx, isIncoming, toast);
+                    auxUnconfirmed.push(tx);
                 }
             }
             // Check for confirmed transactions
             const cardsForNotify = [...cardsNotification];
-            for (const tx of unconfirmedTransactions) {
+            for (const tx of auxUnconfirmed) {
                 const index = unconfirmedTxs.findIndex(t => t.transaction === tx.transaction);
                 if (index === -1) {
                     const isIncoming = tx.recipientRS === infoAccount.accountRs;
@@ -134,12 +138,14 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
                     if (asset !== 'GEM' && isIncoming) cardsForNotify.push(asset);
                     else handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived);
+
+                    auxUnconfirmed.splice(auxUnconfirmed.indexOf(tx), 1);
                 }
             }
 
             setCardsNotification(cardsForNotify);
             // Set unconfirmed transactions
-            setUnconfirmedTransactions(unconfirmedTxs);
+            setUnconfirmedTransactions(auxUnconfirmed);
         };
 
         const loadAll = async () => {
