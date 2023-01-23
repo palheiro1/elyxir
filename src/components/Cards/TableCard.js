@@ -35,7 +35,7 @@ const TableCard = ({ image, title, continent, rarity, needDelete = false }) => {
                 ) : (
                     <Box>
                         <Text fontWeight="bold" fontSize="2xl">
-                            Delete this order
+                            Delete order
                         </Text>
                     </Box>
                 )}
