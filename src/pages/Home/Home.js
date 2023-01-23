@@ -120,7 +120,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             for (const tx of unconfirmedTxs) {
                 const index = unconfirmedTransactions.findIndex(t => t.transaction === tx.transaction);
                 if (index === -1) {
-                    const isIncoming = tx.recipient === infoAccount.accountRs;
+                    const isIncoming = tx.recipientRS === infoAccount.accountRs;
                     handleNewNotification(tx, isIncoming, toast);
                 }
             }
@@ -129,7 +129,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             for (const tx of unconfirmedTransactions) {
                 const index = unconfirmedTxs.findIndex(t => t.transaction === tx.transaction);
                 if (index === -1) {
-                    const isIncoming = tx.recipient === infoAccount.accountRs;
+                    const isIncoming = tx.recipientRS === infoAccount.accountRs;
                     const asset = getAsset(tx.attachment.asset, cards);
 
                     if (asset !== "GEM") 
