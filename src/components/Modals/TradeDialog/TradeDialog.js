@@ -22,7 +22,6 @@ import BidDialog from './BidDialog/BidDialog';
 import { errorToast } from '../../../utils/alerts';
 import { NQTDIVIDER } from '../../../data/CONSTANTS';
 
-
 /**
  * @name TradeDialog
  * @description Dialog to trade a card
@@ -34,7 +33,7 @@ import { NQTDIVIDER } from '../../../data/CONSTANTS';
  * @param {Object} ignis - Object with the ignis data
  * @param {Object} gemCards - Gem cards data - Optional
  */
-const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCards = false }) => {
+const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCards = false, onlyBid = false }) => {
     const toast = useToast();
 
     const { isOpen: isOpenAsk, onOpen: onOpenAsk, onClose: onCloseAsk } = useDisclosure();
@@ -67,11 +66,7 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCar
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent
-                    bgColor="#1D1D1D"
-                    border="1px"
-                    borderColor="whiteAlpha.400"
-                    shadow="dark-lg">
+                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
                     <AlertDialogHeader textAlign="center" color="white">
                         <Center>
                             <Text>TRADE CARD</Text>
@@ -110,29 +105,32 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCar
                                 </Stack>
                             </Center>
                         )}
-                        <SimpleGrid columns={2} my={4} shadow="lg">
-                            <Box
-                                onClick={handleAsk}
-                                color="white"
-                                bgColor="whiteAlpha.100"
-                                p={4}
-                                borderLeftRadius="lg"
-                                textAlign="center"
-                                fontSize="xl"
-                                _hover={{ bgColor: 'whiteAlpha.300', cursor: 'pointer' }}
-                                borderRight="0px"
-                                borderBottom="1px"
-                                borderLeft="1px"
-                                borderTop="1px"
-                                borderColor="whiteAlpha.300">
-                                ASK
-                            </Box>
+                        <SimpleGrid columns={onlyBid ? 1 : 2} my={4} shadow="lg">
+                            {!onlyBid && (
+                                <Box
+                                    onClick={handleAsk}
+                                    color="white"
+                                    bgColor="whiteAlpha.100"
+                                    p={4}
+                                    borderLeftRadius="lg"
+                                    textAlign="center"
+                                    fontSize="xl"
+                                    _hover={{ bgColor: 'whiteAlpha.300', cursor: 'pointer' }}
+                                    borderRight="0px"
+                                    borderBottom="1px"
+                                    borderLeft="1px"
+                                    borderTop="1px"
+                                    borderColor="whiteAlpha.300">
+                                    ASK
+                                </Box>
+                            )}
                             <Box
                                 onClick={handleBid}
                                 color="white"
                                 bgColor="whiteAlpha.100"
                                 p={4}
                                 borderRightRadius="lg"
+                                borderLeftRadius={onlyBid ? 'lg' : '0px'}
                                 textAlign="center"
                                 fontSize="xl"
                                 _hover={{ bgColor: 'whiteAlpha.300', cursor: 'pointer' }}

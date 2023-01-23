@@ -49,6 +49,10 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
         lastPrice,
     } = card;
 
+    let fixOnlyBuy = onlyBuy;
+    if(quantity === 0 && !isMarket)
+        fixOnlyBuy = true;
+
     // ------------------------------
 
     const handleClick = ({ card }) => {
@@ -154,10 +158,10 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                         </Center>
                     </GridItem>
                 </Grid>
-                {onlyBuy ? (
+                {fixOnlyBuy ? (
                     <Box w="100%">
-                        <Button size="lg" w="100%" _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
-                            Buy
+                        <Button w="100%" variant="solid" _hover={{ fontWeight: 'bold', shadow: 'xl' }} onClick={onOpenTrade}>
+                            BUY
                         </Button>
                     </Box>
                 ) : !isMarket ? (
@@ -255,6 +259,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                 card={card}
                 username={username}
                 ignis={ignis}
+                onlyBid={fixOnlyBuy}
             />
             {/* -------------------------------------------------------------------------------------- */}
         </Box>
