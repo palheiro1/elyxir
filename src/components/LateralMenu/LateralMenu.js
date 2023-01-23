@@ -24,8 +24,8 @@ const LateralMenu = ({ option = 0, setOption, children, showAllCards, handleShow
         return index === option;
     };
 
-    const sBgActiveColor = useColorModeValue('blackAlpha.900', 'whiteAlpha.800');
-    const sBgColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.100');
+    const sBgActiveColor = useColorModeValue('blackAlpha.900', '#FFFFFF');
+    const sBgColor = useColorModeValue('blackAlpha.600', '#282828');
 
     const sTextActiveColor = useColorModeValue('white', 'black');
     const sTextColor = useColorModeValue('white', 'white');
@@ -39,10 +39,12 @@ const LateralMenu = ({ option = 0, setOption, children, showAllCards, handleShow
     if(!username || !account) return null;
     const splitAccount = account.slice(0, 5) + ' ... ' + account.slice(-5);
 
+    const widthBotones = "130px";
+
     return (
         <Stack direction="row">
             <Box>
-                <Stack direction="column" mb={4} maxW="115px">
+                <Stack direction="column" mb={4} maxW={widthBotones}>
                     <Text fontSize="xl" textAlign="center" fontWeight="bold">
                         {username}
                     </Text>
@@ -52,21 +54,21 @@ const LateralMenu = ({ option = 0, setOption, children, showAllCards, handleShow
                 </Stack>
                 <VStack align="flex-start" spacing={2}>
                     <Button
-                        minW="115px"
+                        minW={widthBotones}
                         minH="50px"
-                        bgColor="orange.600"
-                        _hover={{ background: 'orange.700' }}
-                        _active={{ background: 'orange.700' }}
+                        bgColor="#F18800"
+                        _hover={{ background: '#F18000' }}
+                        _active={{ background: '#F18000' }}
                         textColor={'white'}
                         onClick={() => setOption(6)}>
                         <Stack direction="row" align="center" w="100%">
                             <BiPackage color={iconColor(6)} />
-                            <Text fontSize="sm">Buy pack</Text>
+                            <Text fontSize="sm" fontWeight="bolder">BUY PACK</Text>
                         </Stack>
                     </Button>
 
                     <Button
-                        minW="115px"
+                        minW={widthBotones}
                         minH="50px"
                         _hover={{ background: 'white.600' }}
                         _active={{ background: 'white.600' }}
@@ -80,7 +82,7 @@ const LateralMenu = ({ option = 0, setOption, children, showAllCards, handleShow
                     </Button>
 
                     <Button
-                        minW="115px"
+                        minW={widthBotones}
                         minH="50px"
                         _hover={{ background: 'white.600' }}
                         _active={{ background: 'white.600' }}
@@ -94,7 +96,7 @@ const LateralMenu = ({ option = 0, setOption, children, showAllCards, handleShow
                     </Button>
 
                     <Button
-                        minW="115px"
+                        minW={widthBotones}
                         minH="50px"
                         _hover={{ background: 'white.600' }}
                         _active={{ background: 'white.600' }}
@@ -108,7 +110,7 @@ const LateralMenu = ({ option = 0, setOption, children, showAllCards, handleShow
                     </Button>
 
                     <Button
-                        minW="115px"
+                        minW={widthBotones}
                         minH="50px"
                         _hover={{ background: 'white.600' }}
                         _active={{ background: 'white.600' }}
@@ -122,7 +124,7 @@ const LateralMenu = ({ option = 0, setOption, children, showAllCards, handleShow
                     </Button>
 
                     <Button
-                        minW="115px"
+                        minW={widthBotones}
                         minH="50px"
                         _hover={{ background: 'white.600' }}
                         _active={{ background: 'white.600' }}
@@ -136,7 +138,7 @@ const LateralMenu = ({ option = 0, setOption, children, showAllCards, handleShow
                     </Button>
 
                     <Button
-                        minW="115px"
+                        minW={widthBotones}
                         minH="50px"
                         _hover={{ background: 'white.600' }}
                         _active={{ background: 'white.600' }}
@@ -150,7 +152,7 @@ const LateralMenu = ({ option = 0, setOption, children, showAllCards, handleShow
                     </Button>
 
                     <Button
-                        minW="115px"
+                        minW={widthBotones}
                         minH="50px"
                         _hover={{ background: 'white.600' }}
                         _active={{ background: 'white.600' }}
