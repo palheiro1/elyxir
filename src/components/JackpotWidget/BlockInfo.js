@@ -21,7 +21,7 @@ const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
             <Table variant="simple" my={cStyle === 1 && 6} color={textColor} size={cStyle === 1 ? "lg" : "sm"}>
                 <Tbody>
                     <Tr>
-                        <Td py={pyStyle} borderBottom="0px">
+                        <Td py={pyStyle} borderBottom="0px" color="white">
                             Remaining blocks
                         </Td>
                         <Td py={pyStyle} borderBottom="0px" color="gray">
@@ -30,7 +30,7 @@ const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
                     </Tr>
 
                     <Tr>
-                        <Td py={pyStyle} borderBottom="0px">
+                        <Td py={pyStyle} borderBottom="0px" color="white">
                             Jackpot block
                         </Td>
                         <Td py={pyStyle} borderBottom="0px" color="gray">
@@ -39,7 +39,7 @@ const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
                     </Tr>
 
                     <Tr>
-                        <Td py={pyStyle} borderBottom="0px">
+                        <Td py={pyStyle} borderBottom="0px" color="white">
                             Current block
                         </Td>
                         <Td py={pyStyle} borderBottom="0px" color="gray">
