@@ -40,7 +40,6 @@ export const handleType0AndSubtype0 = (tx, timestamp, infoAccount) => {
  * @param {object} infoAccount - account info
  */
 export const handleType1AndSubtype0 = (tx, timestamp, infoAccount) => {
-    console.log('🚀 ~ file: TableHandlers.js:43 ~ handleType1AndSubtype0 ~ tx', tx);
     if (tx.recipientRS === infoAccount.accountRs && tx.senderRS === JACKPOTACCOUNT) {
         const msg = parseJson(tx.attachment.message);
         if (msg.reason === 'confirmParticipation') {
