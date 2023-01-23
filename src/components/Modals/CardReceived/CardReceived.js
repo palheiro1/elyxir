@@ -7,6 +7,7 @@ import {
     AlertDialogOverlay,
     Button,
     Center,
+    Flex,
     Heading,
     Image,
     SimpleGrid,
@@ -17,6 +18,7 @@ import Hover from 'react-3d-hover';
 
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { RARITY_COLORS } from '../../../data/CONSTANTS';
 
 const CardReceived = ({ reference, isOpen, onClose, cards }) => {
     console.log('🚀 ~ file: CardReceived.js:19 ~ CardReceived ~ cards', cards);
@@ -26,7 +28,15 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
     const RenderCard = ({ card }) => {
         return (
             <Center>
-                <SimpleGrid columns={1} py={4} px={6} mt={4} border="1px" rounded="lg" shadow="lg" borderColor="whiteAlpha.400">
+                <SimpleGrid
+                    columns={1}
+                    py={4}
+                    px={6}
+                    mt={4}
+                    border="1px"
+                    rounded="lg"
+                    shadow="lg"
+                    borderColor="whiteAlpha.400">
                     <Center w="100%">
                         <Hover scale={1.075} perspective={200}>
                             <Image src={card.cardImgUrl} alt="Card Pack" maxH="25rem" />
@@ -34,9 +44,28 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
                     </Center>
                     <SimpleGrid columns={1} mt={2}>
                         <Heading textAlign="center">{card.name}</Heading>
-                        <Text textAlign="center">
-                            {card.channel} / {card.rarity}
-                        </Text>
+                        <Center>
+                            <Flex gap={2}>
+                                <Text
+                                    color="white"
+                                    fontSize="md"
+                                    rounded="lg"
+                                    fontWeight="bolder"
+                                    bgColor="whiteAlpha.300"
+                                    px={2}>
+                                    {card.channel}
+                                </Text>
+                                <Text
+                                    fontWeight="bolder"
+                                    color="black"
+                                    fontSize="md"
+                                    bgGradient={RARITY_COLORS[card.rarity]}
+                                    rounded="lg"
+                                    px={2}>
+                                    {card.rarity}
+                                </Text>
+                            </Flex>
+                        </Center>
                     </SimpleGrid>
                 </SimpleGrid>
             </Center>

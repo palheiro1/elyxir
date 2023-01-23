@@ -17,7 +17,7 @@ import { useRef, useState } from 'react';
 
 import { BsArrowLeftRight, BsTools } from 'react-icons/bs';
 import { FaRegPaperPlane } from 'react-icons/fa';
-import { NQTDIVIDER } from '../../data/CONSTANTS';
+import { NQTDIVIDER, RARITY_COLORS } from '../../data/CONSTANTS';
 import CraftDialog from '../Modals/CraftDialog/CraftDialog';
 import MorphDialog from '../Modals/MorphDialog/MorphDialog';
 import SendDialog from '../Modals/SendDialog/SendDialog';
@@ -64,17 +64,6 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
 
     const bgColor = useColorModeValue('white', 'transparent');
     const [hover, setHover] = useState(false);
-
-    const rarityColor =
-        rarity === 'Common'
-            ? 'linear-gradient(45deg, #8e9eab, #eef2f3) 1'
-            : rarity === 'Rare'
-            ? 'linear-gradient(45deg, #2F80ED, #56CCF2) 1'
-            : rarity === 'Epic'
-            ? 'linear-gradient(45deg, #F09819, #EDDE5D) 1'
-            : rarity === 'Special'
-            ? 'linear-gradient(60deg, #53AF53, #2D5B53) 1'
-            : 'linear-gradient(45deg, #8e9eab, #eef2f3) 1';
 
     const initialStyle = {
         transform: 'scale(1)',
@@ -143,7 +132,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                 fontWeight="bolder"
                                 color="black"
                                 fontSize="md"
-                                bgGradient={rarityColor}
+                                bgGradient={RARITY_COLORS[rarity]}
                                 rounded="lg"
                                 px={2}>
                                 {rarity}

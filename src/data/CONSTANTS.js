@@ -12,6 +12,13 @@
 export const REFRESH_DATA_TIME =  5 * 1000; // 5 seconds
 export const REFRESH_MARKET_TIME =  3 * 1000; // 3 seconds
 
+export const RARITY_COLORS = {
+    Common: 'linear-gradient(45deg, #8e9eab, #eef2f3) 1',
+    Rare: 'linear-gradient(45deg, #2F80ED, #56CCF2) 1',
+    Epic: 'linear-gradient(45deg, #F09819, #EDDE5D) 1',
+    Special: 'linear-gradient(60deg, #53AF53, #2D5B53) 1',
+};
+
 // -------------------------------------------------
 // ------------------ CURRENCIES -------------------
 // -------------------------------------------------
