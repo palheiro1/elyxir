@@ -60,10 +60,10 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
     };
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
-        step: 1,
+        step: 0.01,
         defaultValue: 1,
         min: 1,
-        max: maxCards,
+        max: !isGem ? maxCards : parseFloat(maxCards / NQTDIVIDER),
     });
 
     const inc = getIncrementButtonProps();
@@ -160,7 +160,6 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                                     color="white"
                                                     textAlign="center"
                                                     fontWeight="bold"
-                                                    disabled
                                                 />
 
                                                 <Button

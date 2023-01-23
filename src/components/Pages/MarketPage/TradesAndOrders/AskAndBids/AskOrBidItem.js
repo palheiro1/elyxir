@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { GEMASSET, NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import TableCard from '../../../../Cards/TableCard';
 
-
 /**
  * @name AskOrBidItem
  * @description Item for the ask or bid table
@@ -18,8 +17,7 @@ import TableCard from '../../../../Cards/TableCard';
  * @author Jesús Sánchez Fernández
  * @version 1.0.0
  */
-const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setSelectedOrder }) => {
-
+const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setSelectedOrder, isGem = false }) => {
     // ------------------------------------------------------------
     const [hover, setHover] = useState(false);
     // ------------------------------------------------------------
@@ -27,7 +25,7 @@ const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setS
     ignis = Number(ignis);
     const fixedIgnis = Number.isInteger(ignis) ? ignis.toFixed(0) : ignis.toFixed(2);
 
-    amount = asset === GEMASSET ? Number(amount/NQTDIVIDER) : Number(amount);
+    amount = asset === GEMASSET ? Number(amount / NQTDIVIDER) : Number(amount);
     const fixedAmount = Number.isInteger(amount) ? amount.toFixed(0) : amount.toFixed(2);
 
     // ------------------------------------------------------------
@@ -62,18 +60,22 @@ const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setS
         cursor: 'none',
     };
 
-    if (asset !== 'GEM') {
-        card = (
-            <TableCard
-                key={asset.asset}
-                image={asset.cardImgUrl}
-                title={asset.name}
-                rarity={asset.rarity}
-                continent={asset.channel}
-                needDelete={hover ? true : false}
-            />
-        );
-    }
+    // ------------------------------------------------------------
+
+    card = asset !== 'GEM' && (
+        <TableCard
+            key={asset.asset}
+            image={asset.cardImgUrl}
+            title={asset.name}
+            rarity={asset.rarity}
+            continent={asset.channel}
+            needDelete={hover ? true : false}
+        />
+    );
+
+    const name = asset === 'GEM' ? 'GEM' : card;
+    const nameHover = hover && asset === 'GEM' ? 'Delete order' : name;
+    const showAmount = asset === 'GEM' ? amount / NQTDIVIDER : amount;
 
     return (
         <Tr
@@ -81,9 +83,9 @@ const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setS
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             onClick={handleDeleteOrder}>
-            <Td textAlign="center">{asset === 'GEM' ? 'GEM' : card}</Td>
+            <Td textAlign="center">{nameHover}</Td>
             <Td textAlign="center">{fixedIgnis}</Td>
-            <Td textAlign="center">{amount}</Td>
+            <Td textAlign="center">{showAmount}</Td>
         </Tr>
     );
 };

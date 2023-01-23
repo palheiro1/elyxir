@@ -9,7 +9,7 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
-import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
+import { GEMASSET, NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getAsset } from '../../../../../utils/cardsUtils';
 import CancelDialog from '../../../../Modals/TradeDialog/CancelDialog/CancelDialog';
 import AskOrBidItem from './AskOrBidItem';
@@ -54,7 +54,7 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
                         </Thead>
                         <Tbody>
                             {askOrders.map(order => {
-                                console.log("🚀 ~ file: AskAndBidGrid.js:44 ~ AskAndBidGrid ~ order", order)
+                                const isGem = order.asset === GEMASSET;
                                 const _asset = onlyOneAsset
                                     ? order.asset
                                     : getAsset(order.asset, cards);
@@ -68,6 +68,7 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
                                         isAsk={true}
                                         onOpen={onOpen}
                                         setSelectedOrder={setSelectedOrder}
+                                        isGem={isGem}
                                     />
                                 );
                             })}
