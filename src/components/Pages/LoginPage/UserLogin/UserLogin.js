@@ -1,4 +1,4 @@
-import { HStack, IconButton, PinInput, PinInputField, Select, Stack, useDisclosure } from '@chakra-ui/react';
+import { HStack, IconButton, PinInput, PinInputField, Select, Stack, useDisclosure, useToast } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { getAllUsers } from '../../../../utils/storage';
 import ConfirmDialog from '../../../Modals/ConfirmDialog/ConfirmDialog';
@@ -6,6 +6,7 @@ import { ImCross } from 'react-icons/im';
 
 import { useNavigate } from 'react-router-dom';
 import { checkPin } from '../../../../utils/walletUtils';
+import { backupToast } from '../../../../utils/alerts';
 
 /**
  * This component is used to render the user login form
@@ -18,6 +19,7 @@ import { checkPin } from '../../../../utils/walletUtils';
  */
 const UserLogin = ({ setInfoAccount }) => {
     const navigate = useNavigate();
+    const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const reference = useRef();
 
@@ -35,6 +37,8 @@ const UserLogin = ({ setInfoAccount }) => {
 
     const [isInvalidPin, setIsInvalidPin] = useState(false); // invalid pin flag
     const [needReload, setNeedReload] = useState(true); // reload flag
+
+    let activeToast = false;
 
     useEffect(() => {
         const recoverUsers = () => {
@@ -55,6 +59,14 @@ const UserLogin = ({ setInfoAccount }) => {
         }
         setInfoAccount(account);
         navigate('/home');
+
+        // Alerta de backup
+        if (!account.backupDone && !activeToast) {
+            backupToast(toast);
+            activeToast = true;
+        }
+
+        return;
     };
 
     return (

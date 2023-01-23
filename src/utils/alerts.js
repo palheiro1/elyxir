@@ -103,16 +103,12 @@ export const infoToast = (text, toast) => {
 };
 
 export const backupToast = (toast) => {
-    const id = "backupToast";
-    if (toast.isActive(id)) return;
-
     toast({
         title: 'No backup of your passphrase!',
-        description: "You don't have a backup of your passphrase. We recommend you to make a backup of your passphrase to avoid losing your account.",
+        description: "You don't have a backup of your passphrase. We recommend you to make a backup of your passphrase to avoid losing your account. Please, go to the account page and click on the 'Backup passphrase' button.",
         status: 'warning',
-        duration: 9000,
+        duration: 15000,
         isClosable: true,
-
     });
 }
 
