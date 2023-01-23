@@ -667,6 +667,8 @@ const transferAsset = async ({
             ? 14 * NQTDIVIDER
             : response.data.minimumFeeFQT * response.data.bundlerRateNQTPerFXT * 0.00000001;
 
+        if(response.data.errorCode === 6) return false;
+
         query.feeNQT = Math.ceil(fee);
 
         query.broadcast = false;
