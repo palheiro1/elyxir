@@ -49,7 +49,7 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, username, ignis }
 			// Get the window height
 			const windowHeight = window.innerHeight;
 			// Check if the user has scrolled to the bottom of the page
-			if (scrollY + windowHeight >= docHeight) {
+			if (scrollY + windowHeight >= docHeight - 100) {
 				// Load more cards
 				loadMoreCards();
 			}
