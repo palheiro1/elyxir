@@ -1,6 +1,9 @@
 import { Box, Button, Select, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaRegPaperPlane } from 'react-icons/fa';
+import equal from 'fast-deep-equal';
+import Crypto from 'crypto-browserify';
+
 
 /**
  * @name SortAndFilterCards
@@ -19,6 +22,7 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
     const [sort, setSort] = useState('none');
     const [needReload, setNeedReload] = useState(true);
     const [actualCards, setActualCards] = useState(cards);
+    const [cardsHash, setCardsHash] = useState("");
 
     /**
      * @description Filter cards by rarity
@@ -27,6 +31,7 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
      */
     useEffect(() => {
         const filterCards = () => {
+            console.log('Filtering cards');
             setNeedReload(false);
             let filteredCards = new Array(...cards);
 
@@ -43,10 +48,17 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
             setActualCards(filteredCards);
         };
 
-        if (cards.length !== actualCards.length) setNeedReload(true);
+        const checkHash = () => {
+            const loadCardsHash = Crypto.createHash('sha256').update(JSON.stringify(cards)).digest('hex');
+            if (!equal(cardsHash, loadCardsHash)) {
+                setNeedReload(true);
+                setCardsHash(loadCardsHash);
+            }
+        }
 
+        checkHash();
         needReload && filterCards();
-    }, [cards, rarity, setCardsFiltered, sort, needReload, actualCards.length]);
+    }, [cards, rarity, setCardsFiltered, sort, needReload, actualCards.length, cardsHash]);
 
     const handleChange = e => {
         if (e.target.value !== sort) {
