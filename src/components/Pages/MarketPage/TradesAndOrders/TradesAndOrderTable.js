@@ -31,7 +31,7 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
                         <Td>Amount</Td>
                         <Td>Price</Td>
                         <Td>Date and Time</Td>
-                        <Td>Seller/Buller</Td>
+                        <Td>Seller/Buyer</Td>
                     </Tr>
                 </Thead>
                 <Tbody>
