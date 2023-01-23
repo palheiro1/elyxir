@@ -13,17 +13,32 @@ import {
     SimpleGrid,
     Text,
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
 import Hover from 'react-3d-hover';
+
+import Crypto from 'crypto-browserify';
+import equals from 'fast-deep-equal';
 
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { RARITY_COLORS } from '../../../data/CONSTANTS';
 
 const CardReceived = ({ reference, isOpen, onClose, cards }) => {
-    console.log('🚀 ~ file: CardReceived.js:19 ~ CardReceived ~ cards', cards);
+    const [currentCards, setCurrentCards] = useState(cards);
 
-    if (cards.length === 0) return null;
+    useEffect(() => {
+        const check = () => {
+            const hash = Crypto.createHash('sha256').update(JSON.stringify(cards)).digest('hex');
+            const hash2 = Crypto.createHash('sha256').update(JSON.stringify(currentCards)).digest('hex');
+            if (!equals(hash, hash2)) {
+                setCurrentCards(cards);
+            }
+        };
+        check();
+    }, [cards, currentCards]);
+
+    if (currentCards.length === 0) return null;
 
     const RenderCard = ({ card }) => {
         return (
@@ -85,7 +100,7 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
 
                 <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
                     <AlertDialogHeader textAlign="center">CARD RECEIVED</AlertDialogHeader>
-                    <AlertDialogCloseButton />
+                    <AlertDialogCloseButton onClick={onClose} />
                     <AlertDialogBody mb={2}>
                         <Text textAlign="center" fontSize="sm" color="gray.400">
                             You have received {cards.length} new card{cards.length > 1 ? 's' : ''} in your inventory!

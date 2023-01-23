@@ -125,21 +125,19 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 }
             }
             // Check for confirmed transactions
-            const unconfirmedTxsCopy = [...unconfirmedTxs];
+            const cardsForNotify = [...cardsNotification];
             for (const tx of unconfirmedTransactions) {
                 const index = unconfirmedTxs.findIndex(t => t.transaction === tx.transaction);
                 if (index === -1) {
                     const isIncoming = tx.recipientRS === infoAccount.accountRs;
                     const asset = getAsset(tx.attachment.asset, cards);
 
-                    if (asset !== "GEM") 
-                        unconfirmedTxsCopy.push(asset);
-                    else
-                        handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived);
+                    if (asset !== 'GEM' && isIncoming) cardsForNotify.push(asset);
+                    else handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived);
                 }
             }
 
-            //setCardsNotification(unconfirmedTxsCopy);
+            setCardsNotification(cardsForNotify);
             // Set unconfirmed transactions
             setUnconfirmedTransactions(unconfirmedTxs);
         };
@@ -196,7 +194,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             if (!equal(cardsHash, loadCardsHash)) {
                 console.log('Mythical Beings: Cards changed');
                 setCards(loadCards);
-                setCardsNotification(loadCards);
                 setCardsHash(loadCardsHash);
             }
 
@@ -240,8 +237,17 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         gemCardsHash,
         toast,
         unconfirmedTransactions,
-        onOpenCardReceived
+        onOpenCardReceived,
+        cardsNotification,
     ]);
+
+    useEffect(() => {
+        setInterval(() => {
+            if (cardsNotification.length > 0) {
+                onOpenCardReceived();
+            }
+        }, REFRESH_DATA_TIME*5);
+    }, [cardsNotification, onOpenCardReceived]);
 
     // -----------------------------------------------------------------
     // Load component to render
@@ -279,11 +285,13 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
 
     const handleLogout = () => {
-        onOpenCardReceived()
-        /*
         setInfoAccount(cleanInfoAccount);
         navigate('/login');
-        */
+    };
+
+    const handleOnCloseCardReceived = () => {
+        setCardsNotification([]);
+        onCloseCardReceived();
     };
 
     return (
@@ -301,7 +309,12 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 />
             </Box>
             <BuyPackDialog isOpen={isOpen} onClose={onClose} reference={buyRef} infoAccount={infoAccount} />
-            <CardReceived isOpen={isOpenCardReceived} onClose={onCloseCardReceived} reference={cardReceivedRef} cards={cardsNotification} />
+            <CardReceived
+                isOpen={isOpenCardReceived}
+                onClose={handleOnCloseCardReceived}
+                reference={cardReceivedRef}
+                cards={cardsNotification}
+            />
         </>
     );
 };
