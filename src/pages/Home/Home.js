@@ -26,12 +26,13 @@ import {
 } from '../../data/CONSTANTS';
 
 // Services
-import { fetchAllCards, fetchGemCards } from '../../utils/cardsUtils';
+import { fetchAllCards, fetchGemCards, getAsset } from '../../utils/cardsUtils';
 import { getCurrentAskAndBids, getGIFTZBalance, getIGNISBalance } from '../../utils/walletUtils';
 import { getBlockchainTransactions, getTrades, getUnconfirmedTransactions } from '../../services/Ardor/ardorInterface';
 import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
 import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 import { handleConfirmateNotification, handleNewNotification } from '../../utils/alerts';
+import CardReceived from '../../components/Modals/CardReceived/CardReceived';
 
 /**
  * @name Home
@@ -47,6 +48,9 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // Buy pack dialog
     const { isOpen, onOpen, onClose } = useDisclosure();
     const buyRef = useRef();
+
+    const { isOpen: isOpenCardReceived, onOpen: onOpenCardReceived, onClose: onCloseCardReceived } = useDisclosure();
+    const cardReceivedRef = useRef();
 
     // Navigate
     const navigate = useNavigate();
@@ -79,6 +83,8 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // Component to render
     const [renderComponent, setRenderComponent] = useState(<Overview />);
 
+    const [cardsNotification, setCardsNotification] = useState(cards);
+
     // -----------------------------------------------------------------
     // Show all cards - Toggle button
     const [showAllCards, setShowAllCards] = useState(true);
@@ -96,7 +102,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     // Check if user is logged
     useEffect(() => {
-        if (infoAccount.token === null && infoAccount.accountRs === null) navigate('/login');
+        if (infoAccount.token === null || infoAccount.accountRs === null) navigate('/login');
     }, [infoAccount, navigate]);
 
     // -----------------------------------------------------------------
@@ -110,7 +116,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
     useEffect(() => {
         const handleNotifications = unconfirmedTxs => {
-
             // Check for new transactions
             for (const tx of unconfirmedTxs) {
                 const index = unconfirmedTransactions.findIndex(t => t.transaction === tx.transaction);
@@ -120,14 +125,22 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 }
             }
             // Check for confirmed transactions
+            const unconfirmedTxsCopy = [...unconfirmedTxs];
             for (const tx of unconfirmedTransactions) {
                 const index = unconfirmedTxs.findIndex(t => t.transaction === tx.transaction);
                 if (index === -1) {
                     const isIncoming = tx.recipient === infoAccount.accountRs;
-                    handleConfirmateNotification(tx, isIncoming, toast);
+                    const asset = getAsset(tx.attachment.asset, cards);
+
+                    if (asset !== "GEM") 
+                        unconfirmedTxsCopy.push(asset);
+                    else
+                        handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived);
                 }
             }
 
+            //setCardsNotification(unconfirmedTxsCopy);
+            // Set unconfirmed transactions
             setUnconfirmedTransactions(unconfirmedTxs);
         };
 
@@ -183,6 +196,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             if (!equal(cardsHash, loadCardsHash)) {
                 console.log('Mythical Beings: Cards changed');
                 setCards(loadCards);
+                setCardsNotification(loadCards);
                 setCardsHash(loadCardsHash);
             }
 
@@ -226,6 +240,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         gemCardsHash,
         toast,
         unconfirmedTransactions,
+        onOpenCardReceived
     ]);
 
     // -----------------------------------------------------------------
@@ -264,8 +279,11 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
 
     const handleLogout = () => {
+        onOpenCardReceived()
+        /*
         setInfoAccount(cleanInfoAccount);
         navigate('/login');
+        */
     };
 
     return (
@@ -283,6 +301,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 />
             </Box>
             <BuyPackDialog isOpen={isOpen} onClose={onClose} reference={buyRef} infoAccount={infoAccount} />
+            <CardReceived isOpen={isOpenCardReceived} onClose={onCloseCardReceived} reference={cardReceivedRef} cards={cardsNotification} />
         </>
     );
 };
