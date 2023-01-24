@@ -32,7 +32,7 @@ export const checkPin = (user, pin, needPassphrase = true) => {
     const passphrase = decrypt(token, pin);
     if (!passphrase) return false;
 
-    if(!needPassphrase) return recoverUser;
+    if (!needPassphrase) return recoverUser;
     return {
         ...recoverUser,
         passphrase: passphrase,
@@ -87,9 +87,7 @@ export const getGIFTZBalance = async address => {
  */
 export const getIGNISBalance = async account => {
     const response = await getIgnisBalance(account);
-    return Number(
-        Math.min(response.balanceNQT / NQTDIVIDER, response.unconfirmedBalanceNQT / NQTDIVIDER)
-    ).toFixed(2);
+    return Number(Math.min(response.balanceNQT / NQTDIVIDER, response.unconfirmedBalanceNQT / NQTDIVIDER)).toFixed(2);
 };
 
 /**
@@ -228,9 +226,22 @@ export const sendBidOrder = async ({ asset, price, quantity, passPhrase }) => {
 };
 
 export const sendToJackpot = async ({ cards, passPhrase }) => {
-    const isBlocked = cards.some(card => card.quantityQNT === 0 || card.unconfirmedQuantityQNT === 0);
+    const isBlocked = cards.some(card => card.quantityQNT < card.unconfirmedQuantityQNT);
     if (!isBlocked) {
-        const promises = cards.map(card => transferAsset(card.asset, 1, JACKPOTACCOUNT, passPhrase, { contract: 'Jackpot' }, true, 60, 'HIGH'));
+        const message = JSON.stringify({ contract: 'Jackpot' });
+        const promises = cards.map(card => 
+            transferAsset({
+                asset: card.asset,
+                quantityQNT: 1,
+                passPhrase: passPhrase,
+                recipient: JACKPOTACCOUNT,
+                message: message,
+                messagePrunable: true,
+                deadline: 60,
+                priority: 'HIGH',
+            })
+        );
+        console.log('🚀 ~ file: walletUtils.js:234 ~ sendToJackpot ~ promises', promises);
         const responses = await Promise.allSettled(promises);
         return responses;
     }
