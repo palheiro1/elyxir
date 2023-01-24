@@ -116,12 +116,11 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
     useEffect(() => {
         const handleNotifications = unconfirmedTxs => {
-
             const auxUnconfirmed = [...unconfirmedTransactions];
 
             // Check for new transactions
             for (const tx of unconfirmedTxs) {
-                const index = auxUnconfirmed.findIndex(t => t.transaction === tx.transaction);
+                const index = auxUnconfirmed.findIndex(t => t.fullHash === tx.fullHash);
                 if (index === -1) {
                     const isIncoming = tx.recipientRS === infoAccount.accountRs;
                     handleNewNotification(tx, isIncoming, toast);
@@ -131,12 +130,13 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             // Check for confirmed transactions
             const cardsForNotify = [...cardsNotification];
             for (const tx of auxUnconfirmed) {
-                const index = unconfirmedTxs.findIndex(t => t.transaction === tx.transaction);
+                const index = unconfirmedTxs.findIndex(t => t.fullHash === tx.fullHash);
                 if (index === -1) {
                     const isIncoming = tx.recipientRS === infoAccount.accountRs;
                     const asset = getAsset(tx.attachment.asset, cards);
+                    const amount = Number(tx.attachment.quantityQNT);
 
-                    if (asset !== 'GEM' && isIncoming) cardsForNotify.push(asset);
+                    if (asset !== 'GEM' && isIncoming) cardsForNotify.push({ asset, amount });
                     else handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived);
 
                     auxUnconfirmed.splice(auxUnconfirmed.indexOf(tx), 1);
@@ -187,6 +187,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             // -----------------------------------------------------------------
             // Check notifications - Unconfirmed transactions
             handleNotifications(unconfirmedTxs);
+
             // -----------------------------------------------------------------
 
             // -----------------------------------------------------------------
@@ -247,13 +248,23 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         cardsNotification,
     ]);
 
+    // -----------------------------------------------------------------
+    // Check for new cards notifications
+    // -----------------------------------------------------------------
+
+    const [intervalId, setIntervalId] = useState(null);
+
     useEffect(() => {
-        setInterval(() => {
-            if (cardsNotification.length > 0) {
-                onOpenCardReceived();
-            }
-        }, REFRESH_DATA_TIME*5);
-    }, [cardsNotification, onOpenCardReceived]);
+        if (!intervalId) {
+            const id = setInterval(() => {
+                if (cardsNotification.length > 0) {
+                    onOpenCardReceived();
+                }
+            }, REFRESH_DATA_TIME);
+            setIntervalId(id);
+        }
+        return () => clearInterval(intervalId);
+    }, [cardsNotification, onOpenCardReceived, intervalId]);
 
     // -----------------------------------------------------------------
     // Load component to render

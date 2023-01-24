@@ -41,6 +41,7 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
     if (currentCards.length === 0) return null;
 
     const RenderCard = ({ card }) => {
+        const { asset, amount } = card;
         return (
             <Center>
                 <SimpleGrid
@@ -54,11 +55,11 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
                     borderColor="whiteAlpha.400">
                     <Center w="100%">
                         <Hover scale={1.075} perspective={200}>
-                            <Image src={card.cardImgUrl} alt="Card Pack" maxH="25rem" />
+                            <Image src={asset.cardImgUrl} alt="Card Pack" maxH="25rem" />
                         </Hover>
                     </Center>
                     <SimpleGrid columns={1} mt={2}>
-                        <Heading textAlign="center">{card.name}</Heading>
+                        <Heading textAlign="center">{asset.name}</Heading>
                         <Center>
                             <Flex gap={2}>
                                 <Text
@@ -68,18 +69,23 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
                                     fontWeight="bolder"
                                     bgColor="whiteAlpha.300"
                                     px={2}>
-                                    {card.channel}
+                                    {asset.channel}
                                 </Text>
                                 <Text
                                     fontWeight="bolder"
                                     color="black"
                                     fontSize="md"
-                                    bgGradient={RARITY_COLORS[card.rarity]}
+                                    bgGradient={RARITY_COLORS[asset.rarity]}
                                     rounded="lg"
                                     px={2}>
-                                    {card.rarity}
+                                    {asset.rarity}
                                 </Text>
                             </Flex>
+                        </Center>
+                        <Center>
+                            <Text fontSize="md" color="gray.400">
+                                {amount}x
+                            </Text>
                         </Center>
                     </SimpleGrid>
                 </SimpleGrid>
