@@ -15,7 +15,7 @@ const Login = ({ setInfoAccount }) => {
         <Box px={8}>
             <Center>
                 <Stack direction={"row"} spacing={4} pt={8} align="center">
-                    <Box w="60%">
+                    <Box w={[ "100%", "100%", "60%", "60%" ]} p={4}>
                         <LoginButtons showNewUser={true} showRestore={true} />
 
                         <Heading>
