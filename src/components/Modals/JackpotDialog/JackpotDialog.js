@@ -41,10 +41,13 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
 
     const handleSend = async () => {
         if (isValidPin) {
-            const response = await sendToJackpot(totalCards, passPhrase);
+            const response = await sendToJackpot({ cards: totalCards, passPhrase: passPhrase });
+            console.log('🚀 ~ file: JackpotDialog.js:45 ~ handleSend ~ response', response);
 
             if (response) okToast('Cards sent to the jackpot', toast);
             else errorToast('Error sending cards to the jackpot', toast);
+
+            onClose();
         }
     };
 
@@ -112,7 +115,13 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                                         </Flex>
                                     </GridItem>
                                     <GridItem colSpan={7}>
-                                        <Text>One of each card is <strong><u>returned</u></strong> to Mythical Beings.</Text>
+                                        <Text>
+                                            One of each card is{' '}
+                                            <strong>
+                                                <u>returned</u>
+                                            </strong>{' '}
+                                            to Mythical Beings.
+                                        </Text>
                                     </GridItem>
                                 </Grid>
 
@@ -125,7 +134,13 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                                         </Flex>
                                     </GridItem>
                                     <GridItem colSpan={7}>
-                                        <Text>Get a <strong><u>share</u></strong> of the jackpot (1 participation = 1 share)</Text>
+                                        <Text>
+                                            Get a{' '}
+                                            <strong>
+                                                <u>share</u>
+                                            </strong>{' '}
+                                            of the jackpot (1 participation = 1 share)
+                                        </Text>
                                     </GridItem>
                                 </Grid>
 
@@ -138,7 +153,13 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                                         </Flex>
                                     </GridItem>
                                     <GridItem colSpan={7}>
-                                        <Text>Enter into a <strong><u>drawing of 2</u></strong> Tarasca Cards per cucle.</Text>
+                                        <Text>
+                                            Enter into a{' '}
+                                            <strong>
+                                                <u>drawing of 2</u>
+                                            </strong>{' '}
+                                            Tarasca Cards per cucle.
+                                        </Text>
                                     </GridItem>
                                 </Grid>
                             </Stack>

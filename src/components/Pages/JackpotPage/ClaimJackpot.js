@@ -1,5 +1,5 @@
 import { Box, Button, Center, Heading, Text, useDisclosure } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import JackpotDialog from '../../Modals/JackpotDialog/JackpotDialog';
 
 /**
@@ -11,11 +11,21 @@ import JackpotDialog from '../../Modals/JackpotDialog/JackpotDialog';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const ClaimJackpot = ({ username, totalCards }) => {
+const ClaimJackpot = ({ username, cards }) => {
+    console.log("🚀 ~ file: ClaimJackpot.js:15 ~ ClaimJackpot ~ cards", cards)
+    const [haveLockedCards, setHaveLockedCards] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const reference = useRef();
 
-    const haveLockedCards = false;
+    useEffect(() => {
+        const checkCards = () => {
+            const lockedCards = cards.some(card => card.quantityQNT < card.unconfirmedQuantityQNT);
+            console.log("🚀 ~ file: ClaimJackpot.js:22 ~ checkCards ~ lockedCards", lockedCards)
+            setHaveLockedCards(lockedCards);
+        }
+
+        cards && checkCards();
+    }, [cards]);
 
     return (
         <>
@@ -52,7 +62,7 @@ const ClaimJackpot = ({ username, totalCards }) => {
                 onClose={onClose}
                 reference={reference}
                 username={username}
-                totalCards={totalCards}
+                totalCards={cards}
             />
         </>
     );

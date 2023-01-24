@@ -55,7 +55,7 @@ const Jackpot = ({ infoAccount, cards = [], yourCards = [] }) => {
                     />
                 </>
             ) : (
-                <ClaimJackpot username={infoAccount.name} cards={cards} />
+                <ClaimJackpot username={infoAccount.name} cards={totalNoSpecialCards} />
             )}
         </Box>
     );
