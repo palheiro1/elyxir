@@ -4,7 +4,6 @@ import { FaRegPaperPlane } from 'react-icons/fa';
 import equal from 'fast-deep-equal';
 import Crypto from 'crypto-browserify';
 
-
 /**
  * @name SortAndFilterCards
  * @description Menu to sort and filter cards
@@ -22,7 +21,7 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
     const [sort, setSort] = useState('none');
     const [needReload, setNeedReload] = useState(true);
     const [actualCards, setActualCards] = useState(cards);
-    const [cardsHash, setCardsHash] = useState("");
+    const [cardsHash, setCardsHash] = useState('');
 
     /**
      * @description Filter cards by rarity
@@ -54,7 +53,7 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
                 setNeedReload(true);
                 setCardsHash(loadCardsHash);
             }
-        }
+        };
 
         checkHash();
         needReload && filterCards();
@@ -75,9 +74,16 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
     };
 
     return (
-        <Stack direction="row" pb={2}>
+        <Stack direction={['column', 'row']} align="center" justify="space-between" position="relative" mb={4}>
             {needSorting && (
-                <Stack direction="row" border="1px" borderColor="gray.600" rounded="lg" px={2} align="center">
+                <Stack
+                    direction="row"
+                    border="1px"
+                    borderColor="gray.600"
+                    rounded="lg"
+                    px={2}
+                    align="center"
+                    w={{ base: '100%', md: 'unset' }}>
                     <Box pl={1} py={2}>
                         <FaRegPaperPlane />
                     </Box>
@@ -91,11 +97,17 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
                     </Select>
                 </Stack>
             )}
-            <Stack position="absolute" right="70px" direction="row" spacing={2}>
+            <Stack
+                position={{ base: 'unset', md: 'absolute' }}
+                w={{ base: '100%', md: 'unset' }}
+                right={{ base: 'unset', md: '0.25%' }}
+                direction={['column', 'row']}
+                spacing={2}>
                 <Button size="sm" bgColor={bgButtons} isActive={rarity === 'All'} onClick={() => handleRarity('All')}>
                     All rarities
                 </Button>
                 <Button
+                    w={{ base: '100%', md: 'unset' }}
                     size="sm"
                     bgColor={bgButtons}
                     isActive={rarity === 'Common'}
