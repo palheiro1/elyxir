@@ -1,0 +1,177 @@
+import {
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogCloseButton,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogOverlay,
+    Box,
+    Button,
+    Center,
+    Flex,
+    Grid,
+    GridItem,
+    Heading,
+    HStack,
+    PinInput,
+    PinInputField,
+    Stack,
+    Text,
+    useToast,
+} from '@chakra-ui/react';
+import { useState } from 'react';
+import { AiFillCheckCircle } from 'react-icons/ai';
+import { errorToast, okToast } from '../../../utils/alerts';
+import { checkPin, sendToJackpot } from '../../../utils/walletUtils';
+
+const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => {
+    const toast = useToast();
+    const [passPhrase, setPassPhrase] = useState('');
+    const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
+
+    const handleCompletePin = pin => {
+        isValidPin && setIsValidPin(false); // reset invalid pin flag
+
+        const account = checkPin(username, pin);
+        if (account) {
+            setIsValidPin(true);
+            setPassPhrase(account.passphrase);
+        }
+    };
+
+    const handleSend = async () => {
+        if (isValidPin) {
+            const response = await sendToJackpot(totalCards, passPhrase);
+
+            if (response) okToast('Cards sent to the jackpot', toast);
+            else errorToast('Error sending cards to the jackpot', toast);
+        }
+    };
+
+    return (
+        <>
+            <AlertDialog
+                size="xl"
+                motionPreset="slideInBottom"
+                leastDestructiveRef={reference}
+                onClose={onClose}
+                isOpen={isOpen}
+                isCentered>
+                <AlertDialogOverlay />
+
+                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
+                    <AlertDialogHeader textAlign="center" fontWeight="bolder">
+                        <Heading>Claim the Jackpot</Heading>
+                    </AlertDialogHeader>
+                    <AlertDialogCloseButton />
+                    <AlertDialogBody>
+                        <Center>
+                            <Stack direction="column" spacing={1} p={2}>
+                                <Grid templateColumns="repeat(6, 1fr)">
+                                    <GridItem>
+                                        <AiFillCheckCircle size={25} />
+                                    </GridItem>
+                                    <GridItem colSpan={5}>
+                                        <Text fontSize="sm">You've participated once for this round.</Text>
+                                    </GridItem>
+                                </Grid>
+                                <Grid templateColumns="repeat(6, 1fr)">
+                                    <GridItem>
+                                        <AiFillCheckCircle size={25} />
+                                    </GridItem>
+                                    <GridItem colSpan={5}>
+                                        <Text fontSize="sm">Your collection is complete.</Text>
+                                    </GridItem>
+                                </Grid>
+                            </Stack>
+                        </Center>
+
+                        <Center>
+                            <Stack
+                                minW="90%"
+                                direction="column"
+                                spacing={4}
+                                pt={4}
+                                p={4}
+                                border="1px"
+                                borderColor="whiteAlpha.400"
+                                rounded="md"
+                                shadow="lg"
+                                my={4}
+                                bgColor="blackAlpha.600">
+                                <Text textAlign="center" color="gray">
+                                    Please read before claiming
+                                </Text>
+
+                                <Grid templateColumns="repeat(8, 1fr)">
+                                    <GridItem>
+                                        <Flex>
+                                            <Box bgColor="white" color="black" rounded="full" p={1} px={3}>
+                                                <Text>1</Text>
+                                            </Box>
+                                        </Flex>
+                                    </GridItem>
+                                    <GridItem colSpan={7}>
+                                        <Text>One of each card is <strong><u>returned</u></strong> to Mythical Beings.</Text>
+                                    </GridItem>
+                                </Grid>
+
+                                <Grid templateColumns="repeat(8, 1fr)">
+                                    <GridItem>
+                                        <Flex>
+                                            <Box bgColor="white" color="black" rounded="full" p={1} px={3}>
+                                                <Text>2</Text>
+                                            </Box>
+                                        </Flex>
+                                    </GridItem>
+                                    <GridItem colSpan={7}>
+                                        <Text>Get a <strong><u>share</u></strong> of the jackpot (1 participation = 1 share)</Text>
+                                    </GridItem>
+                                </Grid>
+
+                                <Grid templateColumns="repeat(8, 1fr)">
+                                    <GridItem>
+                                        <Flex>
+                                            <Box bgColor="white" color="black" rounded="full" p={1} px={3}>
+                                                <Text>3</Text>
+                                            </Box>
+                                        </Flex>
+                                    </GridItem>
+                                    <GridItem colSpan={7}>
+                                        <Text>Enter into a <strong><u>drawing of 2</u></strong> Tarasca Cards per cucle.</Text>
+                                    </GridItem>
+                                </Grid>
+                            </Stack>
+                        </Center>
+
+                        <Center my={4}>
+                            <HStack spacing={7}>
+                                <PinInput
+                                    size="lg"
+                                    placeholder="🔒"
+                                    onComplete={handleCompletePin}
+                                    onChange={handleCompletePin}
+                                    isInvalid={!isValidPin}
+                                    variant="filled"
+                                    mask>
+                                    <PinInputField />
+                                    <PinInputField />
+                                    <PinInputField />
+                                    <PinInputField />
+                                </PinInput>
+                            </HStack>
+                        </Center>
+
+                        <Center my={2}>
+                            <Button colorScheme="blue" onClick={handleSend} minW="90%" size="lg">
+                                Submit
+                            </Button>
+                        </Center>
+                    </AlertDialogBody>
+                </AlertDialogContent>
+            </AlertDialog>
+        </>
+    );
+};
+
+export default JackpotDialog;
