@@ -5,6 +5,7 @@ import {
     GridItem,
     HStack,
     IconButton,
+    Stack,
     Text,
     useColorModeValue,
     useDisclosure,
@@ -63,16 +64,17 @@ const GemWidget = ({ username, gemCards = [] }) => {
         <>
             <Center mt={4}>
                 <Grid
-                    templateColumns="repeat(3, 1fr)"
+                    templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
                     border="1px"
                     borderColor="whiteAlpha.300"
                     rounded="lg"
                     bg="blackAlpha"
                     shadow="dark-lg"
+                    w={{ base: '100%', md: 'unset' }}
                     direction="row">
                     <GridItem colSpan={2} p={4} borderLeftRadius="lg">
                         <Center>
-                            <HStack>
+                            <Stack direction={{ base: 'column', xl: 'row' }} spacing={4} align="center">
                                 <IconButton
                                     icon={<GiCutDiamond />}
                                     size="xl"
@@ -86,7 +88,7 @@ const GemWidget = ({ username, gemCards = [] }) => {
                                     <Text color={textColor} fontSize="3xl" fontWeight="bold" mb={-3}>
                                         {confirmedBalance} GEMs
                                     </Text>
-                                    <Text color={textColor} fontSize="md">
+                                    <Text color={textColor} fontSize="md" textAlign={{ base: 'center', xl: 'left' }}>
                                         ({unconfirmedBalance} unconfirmed)
                                     </Text>
                                 </VStack>
@@ -111,7 +113,7 @@ const GemWidget = ({ username, gemCards = [] }) => {
                                         </Box>
                                     </HStack>
                                 </Center>
-                            </HStack>
+                            </Stack>
                         </Center>
                     </GridItem>
 

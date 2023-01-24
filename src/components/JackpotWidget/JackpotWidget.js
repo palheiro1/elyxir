@@ -98,7 +98,7 @@ const JackpotWidget = ({ cStyle = 1 }) => {
                             shadow="dark-lg"
                             rounded="lg"
                             p={4}
-                            direction="row"
+                            direction={['column', 'column', 'row', 'row']}
                             divider={<StackDivider borderColor="blue.800" />}>
                             <VCountdown jackpotTimer={jackpotTimer} />
 
