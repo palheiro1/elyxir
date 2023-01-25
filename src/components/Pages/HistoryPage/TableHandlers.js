@@ -1,4 +1,4 @@
-import { Center, SimpleGrid, Td, Text, Tr } from '@chakra-ui/react';
+import { Box, Center, SimpleGrid, Stack, Td, Text, Tr } from '@chakra-ui/react';
 import { FaFilter, FaGem, FaCoins } from 'react-icons/fa';
 
 // Components
@@ -381,16 +381,16 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
                     <InOutTransaction type={type} />
                 </Td>
                 <Td>
-                    <SimpleGrid columns={2}>
-                        <Center>
+                    <Stack direction={['column', 'row']} align="start" spacing={24}>
+                        <Box>
                             <FaCoins />
-                        </Center>
-                        <Center>
+                        </Box>
+                        <Box>
                             <Text fontSize="xl" fontWeight="bold">
                                 IGNIS
                             </Text>
-                        </Center>
-                    </SimpleGrid>
+                        </Box>
+                    </Stack>
                 </Td>
                 <Td>{amount}</Td>
                 <Td>{date}</Td>
