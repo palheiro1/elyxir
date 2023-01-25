@@ -1,4 +1,4 @@
-import { Box, Center, HStack, IconButton, Text, useColorModeValue, VStack } from '@chakra-ui/react';
+import { Box, Center, HStack, IconButton, Stack, Text, useColorModeValue, VStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { GiCutDiamond } from 'react-icons/gi';
 
@@ -50,8 +50,8 @@ const HCountdown = ({ jackpotTimer }) => {
 
     return (
         <Center>
-            <VStack>
-                <HStack>
+            <Stack direction="column">
+                <Stack direction={{ base: 'column', md: 'row' }} spacing={4} align="center">
                     <IconButton
                         icon={<GiCutDiamond />}
                         size="xl"
@@ -69,7 +69,7 @@ const HCountdown = ({ jackpotTimer }) => {
                             ({jackpotBalanceUSD} USD)
                         </Text>
                     </VStack>
-                    <Center pl={4}>
+                    <Center pl={{ base: 0, md: 4 }} w={{ base: '100%', md: 'auto' }}>
                         <HStack spacing={4} color={textColor}>
                             <Box p={2} bg={bgColor} rounded="lg" minW="90px">
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
@@ -99,13 +99,13 @@ const HCountdown = ({ jackpotTimer }) => {
                             </Box>
                         </HStack>
                     </Center>
-                </HStack>
-                <Box p={2} bg={bgColor} rounded="lg" minW="90px" w="100%">
+                </Stack>
+                <Box py={2} bg={bgColor} rounded="lg" minW="90px" w="100%">
                     <Text textAlign="center">
                         Total claims in this round: <strong>{participants.numParticipants}</strong>
                     </Text>
                 </Box>
-            </VStack>
+            </Stack>
         </Center>
     );
 };

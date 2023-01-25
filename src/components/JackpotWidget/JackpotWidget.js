@@ -108,9 +108,9 @@ const JackpotWidget = ({ cStyle = 1 }) => {
                 </Box>
             )}
             {cStyle === 2 && (
-                <Center mt={4}>
+                <Center my={4} mb={8}>
                     <Grid
-                        templateColumns="repeat(3, 1fr)"
+                        templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
                         border="1px"
                         borderColor="whiteAlpha.300"
                         rounded="lg"
@@ -122,7 +122,7 @@ const JackpotWidget = ({ cStyle = 1 }) => {
                             <HCountdown jackpotTimer={jackpotTimer} />
                         </GridItem>
 
-                        <GridItem bgColor={bgColor} p={4} borderRightRadius="lg">
+                        <GridItem colSpan={{ base: 1, md: 2, lg: 1 }} p={4} borderRightRadius={{ base: 'none', md: 'none', lg: 'lg' }} bgColor={bgColor}>
                             <BlockInfo
                                 jackpotStatus={jackpotStatus}
                                 jackpotTimer={jackpotTimer}

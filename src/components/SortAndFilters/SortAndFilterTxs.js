@@ -46,7 +46,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
     }, [transactions, filter, sort, setFilteredTransactions, setVisibleTransactions]);
 
     return (
-        <Stack direction="row" pb={2}>
+        <Stack direction={{ base: 'column', md: 'row' }} pb={2}>
             <Stack direction="row" border="1px" borderColor="gray.600" rounded="lg" px={2} align="center">
                 <Box pl={1} py={2}>
                     <FaRegPaperPlane />
@@ -60,8 +60,12 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                 </Select>
             </Stack>
 
-            <Stack position="absolute" right="3%" direction="row">
-                <Stack direction="row" border="1px" borderColor="gray.600" rounded="lg" px={2} align="center">
+            <Stack
+                position={{ base: 'unset', md: 'absolute' }}
+                right="3%"
+                direction="row"
+                w={{ base: '100%', md: 'unset' }}>
+                <Stack direction="row" border="1px" borderColor="gray.600" rounded="lg" px={2} align="center" w={{ base: '100%', md: 'unset' }}>
                     <Box pl={1} py={2}>
                         <FaFilter />
                     </Box>
