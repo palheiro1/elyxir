@@ -252,19 +252,13 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // Check for new cards notifications
     // -----------------------------------------------------------------
 
-    const [intervalId, setIntervalId] = useState(null);
-
     useEffect(() => {
-        if (!intervalId) {
-            const id = setInterval(() => {
-                if (cardsNotification.length > 0) {
-                    onOpenCardReceived();
-                }
-            }, REFRESH_DATA_TIME);
-            setIntervalId(id);
+        if (cardsNotification.length > 0) {
+            console.log("🚀 ~ file: Home.js:257 ~ useEffect ~ cardsNotification", cardsNotification)
+            onOpenCardReceived();
         }
-        return () => clearInterval(intervalId);
-    }, [cardsNotification, onOpenCardReceived, intervalId]);
+
+    }, [cardsNotification, onOpenCardReceived]);
 
     // -----------------------------------------------------------------
     // Load component to render
