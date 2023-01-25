@@ -35,7 +35,7 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
 
     return (
         <>
-            <SimpleGrid columns={2} mt={4} shadow="lg">
+            <SimpleGrid columns={{ base: 1, md: 2}} mt={4} shadow="lg">
                 <TableContainer
                     mt={4}
                     border="2px"
