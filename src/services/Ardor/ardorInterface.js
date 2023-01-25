@@ -667,7 +667,7 @@ const transferAsset = async ({
             ? 14 * NQTDIVIDER
             : response.data.minimumFeeFQT * response.data.bundlerRateNQTPerFXT * 0.00000001;
 
-        if(response.data.errorCode === 6) return false;
+        if (response.data.errorCode === 6) return false;
 
         query.feeNQT = Math.ceil(fee);
 
@@ -688,6 +688,41 @@ const transferAsset = async ({
         const response_2 = await axios.post(url_broadcast, qs.stringify(txdata), config);
         return response_2;
     });
+};
+
+export const getAssetDividends = async (chain, assetId) => {
+    try {
+        const response = await axios.get(NODEURL, {
+            params: {
+                requestType: 'getAssetDividends',
+                chain,
+                asset: assetId,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(`Error al obtener los dividendos del activo: ${error.message}`);
+    }
+};
+
+export const getAccountLedger = async ({ accountRs, firstIndex = 0, lastIndex = 20, eventType = '' }) => {
+    try {
+        const response = await axios.get(NODEURL, {
+            params: {
+                requestType: 'getAccountLedger',
+                account: accountRs,
+                firstIndex,
+                lastIndex,
+                eventType,
+                includeHoldingInfo: true,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log("🚀 ~ file: ardorInterface.js:722 ~ getAccountLedger ~ error", error)
+        // handle error
+        throw new Error(`Error al obtener el libro de cuentas: ${error.message}`);
+    }
 };
 
 // ----------------------------------------------
