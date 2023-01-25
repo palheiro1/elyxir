@@ -55,16 +55,26 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
     const toast = useToast();
 
-    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
+    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps} = useNumberInput({
         step: 1,
-        defaultValue: 1,
-        min: 1,
+        defaultValue: 0,
+        min: 0,
         max: value === '1' ? maxPacksWithIgnis : maxPacksWithGiftz,
-    });
+    }, { 
+        isReadOnly: false,
+    }
+    );
+
 
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
     const input = getInputProps();
+
+    const handleCurrencyChange = () => {
+        setValue(value === '1' ? '2' : '1');
+        console.log(input)
+        input.onChange({ target: { value: 0 } }); // reset input value
+    }
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -116,11 +126,11 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             if (value === '1') {
                 // buy pack with ignis
                 const response = await buyPackWithIgnis(passphrase, input.value, IGNISBalance);
-                if(response) itsOk = true;
+                if (response) itsOk = true;
             } else if (value === '2') {
                 // buy pack with giftz
                 const response2 = await buyPackWithGiftz(passphrase, input.value, GIFTZBalance, IGNISBalance);
-                if(response2) itsOk = true;
+                if (response2) itsOk = true;
             } else {
                 itsOk = false;
             }
@@ -164,12 +174,24 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                             <Center>
                                 <GridItem>
                                     <Box>
+                                        {maxPacksWithIgnis === 0 && value === '1' && (
+                                            <Text textAlign="center" color="red.500" fontWeight="bold">
+                                                You don't have enough IGNIS to buy a pack
+                                            </Text>
+                                        )}
+
+                                        {maxPacksWithGiftz === 0 && value === '2' && (
+                                            <Text textAlign="center" color="red.500" fontWeight="bold">
+                                                You don't have enough GIFTZ to buy a pack
+                                            </Text>
+                                        )}
+
                                         <Text textAlign="center" mb={2}>
                                             Payment method
                                         </Text>
                                         <Center w="100%">
                                             <Stack direction="row" w="100%">
-                                                <RadioGroup onChange={setValue} value={value} w="100%">
+                                                <RadioGroup onChange={handleCurrencyChange} value={value} w="100%">
                                                     <Stack direction="row">
                                                         <Box
                                                             textAlign="center"
@@ -251,7 +273,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     </Center>
                                     <Box w="100%" mt={2}>
                                         <Button
-                                            isDisabled={!isValidPin || passphrase === ''}
+                                            isDisabled={!isValidPin || passphrase === '' || (value === "1" && input.value > maxPacksWithIgnis) || (value === "2" && input.value > maxPacksWithGiftz)}
                                             bgColor="blue.700"
                                             w="100%"
                                             py={6}
