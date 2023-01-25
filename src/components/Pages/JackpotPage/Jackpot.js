@@ -14,26 +14,22 @@ import ClaimJackpot from './ClaimJackpot';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const Jackpot = ({ infoAccount, cards = [], yourCards = [] }) => {
-
+const Jackpot = ({ infoAccount, cards = [] }) => {
     const totalNoSpecialCards = cards.filter(card => card.rarity !== 'Special');
-    const noSpecialCards = yourCards.filter(card => card.rarity !== 'Special');
 
-    const [remainingCards, setRemainingCards] = useState(noSpecialCards);
-    const [cardsFiltered, setCardsFiltered] = useState(noSpecialCards);
+    const [remainingCards, setRemainingCards] = useState([]);
+    const [cardsFiltered, setCardsFiltered] = useState([]);
     const [needReload, setNeedReload] = useState(true);
 
     useEffect(() => {
         const getRemainingCards = () => {
-            if (yourCards.length > 0) {
-                const cardWithZero = totalNoSpecialCards.filter(card => Number(card.quantityQNT) === 0);
-                setRemainingCards(cardWithZero);
-                setNeedReload(false);
-            }
+            const cardWithZero = totalNoSpecialCards.filter(card => Number(card.quantityQNT) === 0);
+            setRemainingCards(cardWithZero);
+            setNeedReload(false);
         };
 
         needReload && getRemainingCards();
-    }, [yourCards, needReload, totalNoSpecialCards]);
+    }, [needReload, totalNoSpecialCards]);
 
     return (
         <Box>
@@ -42,7 +38,7 @@ const Jackpot = ({ infoAccount, cards = [], yourCards = [] }) => {
             {remainingCards.length > 0 ? (
                 <>
                     <SortAndFilterCards
-                        cards={noSpecialCards}
+                        cards={remainingCards}
                         setCardsFiltered={setCardsFiltered}
                         needSpecials={false}
                         needSorting={false}
@@ -50,7 +46,7 @@ const Jackpot = ({ infoAccount, cards = [], yourCards = [] }) => {
                     <RemainingCards
                         username={infoAccount.name}
                         totalCards={totalNoSpecialCards.length}
-                        remainingCards={remainingCards.length}
+                        remainingCards={remainingCards}
                         cards={cardsFiltered}
                     />
                 </>

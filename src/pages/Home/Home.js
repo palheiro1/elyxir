@@ -272,7 +272,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // Option 1 - Inventory
             <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />, // Option 2 - History
             <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />, // Option 3 - Market
-            <Jackpot infoAccount={infoAccount} cards={cards} yourCards={cardsFiltered} />, // Option 4 - Jackpot
+            <Jackpot infoAccount={infoAccount} cards={cards} />, // Option 4 - Jackpot
             <Account infoAccount={infoAccount} />, // Option 5 - Account
             // Option 6 - BuyPack - Modal
         ];

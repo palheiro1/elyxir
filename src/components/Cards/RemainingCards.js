@@ -13,7 +13,7 @@ import GridCards from './GridCards';
  * @version 1.0
  */
 const RemainingCards = ({ totalCards, remainingCards, cards }) => {
-    const have = totalCards - remainingCards;
+    const have = totalCards - remainingCards.length;
 
     return (
         <Box mt={4}>
@@ -21,7 +21,7 @@ const RemainingCards = ({ totalCards, remainingCards, cards }) => {
                 <Text fontSize="xl">
                     You have {have} out of {totalCards} cards.
                 </Text>
-                <Text fontSize="xs">Complete the collection to claim the jackpot. {remainingCards} cards missing.</Text>
+                <Text fontSize="xs">Complete the collection to claim the jackpot. {remainingCards.length } cards missing.</Text>
             </Box>
             <GridCards cards={cards} onlyBuy={true} />
         </Box>
