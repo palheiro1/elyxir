@@ -13,13 +13,11 @@ import {
     FormLabel,
     HStack,
     IconButton,
-    Image,
     Input,
     InputGroup,
     InputRightAddon,
     PinInput,
     PinInputField,
-    Stack,
     Text,
     useNumberInput,
     useToast,
@@ -31,9 +29,7 @@ import { checkPin } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { isArdorAccount } from '../../../utils/validators';
 
-
 const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username }) => {
-
     const toast = useToast();
 
     const [ardorAccount, setArdorAccount] = useState('');
@@ -41,13 +37,13 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username }) 
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
 
     const [passphrase, setPassphrase] = useState('');
-    const maxCurrency = Number(currency.quantityQNT);
-    console.log("🚀 ~ file: SendCurrencyDialog.js:45 ~ SendCurrencyDialog ~ maxCurrency", maxCurrency)
+    const maxCurrency = Math.floor(Number(currency.balance));
+    console.log('🚀 ~ file: SendCurrencyDialog.js:45 ~ SendCurrencyDialog ~ maxCurrency', maxCurrency);
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
-        step: 1,
-        defaultValue: 1,
-        min: 1,
+        step: 0.01,
+        defaultValue: 0,
+        min: 0,
         max: maxCurrency,
     });
 
@@ -73,21 +69,33 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username }) 
     };
 
     const handleSend = async () => {
-        /*
-        const response = await transferAsset({
-            asset: card.asset,
-            quantityQNT: input.value,
-            recipient: ardorAccount,
-            passPhrase: passphrase,
-        });
+        if (!isValidPin) return;
+        if (!isValidArdorAccount) return;
+        if (!passphrase) return;
+        if (!input.value) return;
+        if (input.value > maxCurrency) return;
 
-        if(response && response.data.fullHash) {
-            okToast("Card sent successfully", toast); 
-            onClose();
+        if (currency.name === 'IGNIS') {
+            const response = await transferAsset(passphrase, ardorAccount, input.value);
+            if (response.errorCode) {
+                errorToast(toast, response.errorDescription);
+            } else {
+                okToast(toast, 'Transaction sent');
+                onClose();
+            }
+        } else if (currency.name === 'GIFTZ') {
+            const response = false;
+            if (response.errorCode) {
+                errorToast(toast, response.errorDescription);
+            }
+        } else if (currency.name === 'GEMS') {
+            const response = false;
+            if (response.errorCode) {
+                errorToast(toast, response.errorDescription);
+            }
         } else {
-            errorToast("Error sending card", toast);
+            errorToast(toast, 'Currency not supported');
         }
-        */
     };
 
     return (
@@ -113,7 +121,7 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username }) 
                                 Amount to send (max: {maxCurrency})
                             </Text>
                             <Center my={2}>
-                                <HStack maxW="50%" spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
+                                <HStack spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
                                     <Button {...dec} rounded="none" borderLeftRadius="lg">
                                         -
                                     </Button>
@@ -124,7 +132,6 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username }) 
                                         color="white"
                                         textAlign="center"
                                         fontWeight="bold"
-                                        disabled
                                     />
                                     <Button {...inc} rounded="none" borderRightRadius="lg">
                                         +

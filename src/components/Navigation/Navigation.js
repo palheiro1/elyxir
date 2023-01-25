@@ -41,8 +41,8 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
     // ----------------------- SEND CURRENCY -----------------------
     const {
         isOpen: isOpenSendCurrency,
-        onToggle: onToggleSendCurrency,
         onClose: onCloseSendCurrency,
+        onOpen: onOpenSendCurrency,
     } = useDisclosure();
     const reference = useRef();
 
@@ -57,7 +57,7 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
             setCurrency({ name: 'GEMS', balance: GEMSBalance });
         }
 
-        onToggleSendCurrency();
+        onOpenSendCurrency();
     };
     // -------------------------------------------------------------
     const needTarascaLogo = isHeader ? false : true;
@@ -192,25 +192,6 @@ const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
                         </Box>
                     </Fragment>
                 ))}
-                {/*
-                (!isLogged && !needTarascaLogo) && (
-					<Button
-						as={RouterLink}
-						display={{ base: 'none', md: 'inline-flex' }}
-						fontSize={'sm'}
-						fontWeight={'bold'}
-						border={'2px'}
-						borderColor={'orange.400'}
-						to="/login"
-						px={8}
-						variant="outline"
-						key="login"
-						_hover={{
-							bg: 'orange.400',
-						}}>
-						Login
-					</Button>
-                    )*/}
             </Stack>
             {needTarascaLogo && (
                 <Text textAlign="center" fontSize="small" textColor="gray.600" pb={2} w="100%">
