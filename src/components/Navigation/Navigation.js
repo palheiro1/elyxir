@@ -15,6 +15,7 @@ import {
     MenuButton,
     MenuList,
     MenuItem,
+    Portal,
 } from '@chakra-ui/react';
 
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
@@ -22,7 +23,8 @@ import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { ColorModeSwitcher } from '../ColorModeSwitch/ColorModeSwitcher';
 import { NAV_ITEMS } from '../../data/NAV_ITEMS';
 import Logo from '../Logo/Logo';
-import { Fragment } from 'react';
+import { Fragment, useRef, useState } from 'react';
+import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog';
 //import { Link as RouterLink } from 'react-router-dom';
 
 /**
@@ -35,6 +37,29 @@ import { Fragment } from 'react';
  */
 const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBalance, GEMSBalance }) => {
     const { isOpen, onToggle } = useDisclosure();
+
+    // ----------------------- SEND CURRENCY -----------------------
+    const {
+        isOpen: isOpenSendCurrency,
+        onToggle: onToggleSendCurrency,
+        onClose: onCloseSendCurrency,
+    } = useDisclosure();
+    const reference = useRef();
+
+    const [currency, setCurrency] = useState({ name: 'IGNIS', balance: IGNISBalance });
+
+    const handleOpenSendCurrency = currency => {
+        if (currency === 'IGNIS') {
+            setCurrency({ name: 'IGNIS', balance: IGNISBalance });
+        } else if (currency === 'GIFTZ') {
+            setCurrency({ name: 'GIFTZ', balance: GIFTZBalance });
+        } else if (currency === 'GEMS') {
+            setCurrency({ name: 'GEMS', balance: GEMSBalance });
+        }
+
+        onToggleSendCurrency();
+    };
+    // -------------------------------------------------------------
     const needTarascaLogo = isHeader ? false : true;
     const needChangeColor = isHeader ? true : false;
 
@@ -78,28 +103,34 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
                         <Button>
                             <Menu>
                                 <MenuButton>IGNIS: {IGNISBalance}</MenuButton>
-                                <MenuList>
-                                    <MenuItem>Send IGNIS</MenuItem>
-                                    <MenuItem>Get IGNIS</MenuItem>
-                                </MenuList>
+                                <Portal>
+                                    <MenuList>
+                                        <MenuItem onClick={() => handleOpenSendCurrency('IGNIS')}>Send IGNIS</MenuItem>
+                                        <MenuItem>Get IGNIS</MenuItem>
+                                    </MenuList>
+                                </Portal>
                             </Menu>
                         </Button>
                         <Button>
                             <Menu>
                                 <MenuButton>GIFTZ: {GIFTZBalance}</MenuButton>
-                                <MenuList>
-                                    <MenuItem>Send GIFTZ</MenuItem>
-                                    <MenuItem>Get GIFTZ</MenuItem>
-                                </MenuList>
+                                <Portal>
+                                    <MenuList>
+                                        <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
+                                        <MenuItem>Get GIFTZ</MenuItem>
+                                    </MenuList>
+                                </Portal>
                             </Menu>
                         </Button>
                         <Button>
                             <Menu>
                                 <MenuButton>GEM: {GEMSBalance.toFixed(2)}</MenuButton>
-                                <MenuList>
-                                    <MenuItem>Send GEM</MenuItem>
-                                    <MenuItem>Get GEM</MenuItem>
-                                </MenuList>
+                                <Portal>
+                                    <MenuList>
+                                        <MenuItem onClick={() => handleOpenSendCurrency('GEMS')}>Send GEM</MenuItem>
+                                        <MenuItem>Get GEM</MenuItem>
+                                    </MenuList>
+                                </Portal>
                             </Menu>
                         </Button>
                     </ButtonGroup>
@@ -107,6 +138,15 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
 
                 {needChangeColor && <ColorModeSwitcher ml={-10} justifySelf="flex-end" />}
             </Flex>
+
+            {isOpenSendCurrency && (
+                <SendCurrencyDialog
+                    isOpen={isOpenSendCurrency}
+                    onClose={onCloseSendCurrency}
+                    reference={reference}
+                    currency={currency}
+                />
+            )}
 
             {isHeader && (
                 <Collapse in={isOpen} animateOpacity>
