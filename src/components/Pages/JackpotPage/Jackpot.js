@@ -33,7 +33,7 @@ const Jackpot = ({ infoAccount, cards = [] }) => {
 
     return (
         <Box>
-            <JackpotWidget cStyle={2} />
+            <JackpotWidget cStyle={2} account={infoAccount.accountRs} />
 
             {remainingCards.length > 0 ? (
                 <>

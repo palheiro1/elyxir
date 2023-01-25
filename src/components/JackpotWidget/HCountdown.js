@@ -2,7 +2,7 @@ import { Box, Center, HStack, IconButton, Stack, Text, useColorModeValue, VStack
 import { useEffect, useState } from 'react';
 import { GiCutDiamond } from 'react-icons/gi';
 
-import { getJackpotBalance, getJackpotBalanceUSD, getJackpotParticipants } from '../../services/Jackpot/utils';
+import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/utils';
 
 
 /**
@@ -13,10 +13,9 @@ import { getJackpotBalance, getJackpotBalanceUSD, getJackpotParticipants } from 
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const HCountdown = ({ jackpotTimer }) => {
+const HCountdown = ({ jackpotTimer, numParticipants }) => {
     const [jackpotBalance, setJackpotBalance] = useState(0);
     const [jackpotBalanceUSD, setJackpotBalanceUSD] = useState(0);
-    const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
 
     useEffect(() => {
         const fetchJackpotBalance = async () => {
@@ -28,18 +27,7 @@ const HCountdown = ({ jackpotTimer }) => {
             const jackpotBalanceUSD = await getJackpotBalanceUSD(jackpotBalance);
             setJackpotBalanceUSD(jackpotBalanceUSD);
 
-            // Get participants
-            const response = await getJackpotParticipants();
-            let auxParticipants = [];
-            let numParticipants = 0;
-            Object.entries(response).forEach(entry => {
-                const [key, value] = entry;
-                if (value > 0) {
-                    auxParticipants.push(key);
-                    numParticipants += value;
-                }
-            });
-            setParticipants({ numParticipants, participants: auxParticipants });
+            
         };
 
         fetchJackpotBalance();
@@ -102,7 +90,7 @@ const HCountdown = ({ jackpotTimer }) => {
                 </Stack>
                 <Box py={2} bg={bgColor} rounded="lg" minW="90px" w="100%">
                     <Text textAlign="center">
-                        Total claims in this round: <strong>{participants.numParticipants}</strong>
+                        Total claims in this round: <strong>{numParticipants}</strong>
                     </Text>
                 </Box>
             </Stack>

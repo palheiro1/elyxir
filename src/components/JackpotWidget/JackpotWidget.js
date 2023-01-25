@@ -9,6 +9,7 @@ import { BLOCKTIME, FREQUENCY } from '../../data/CONSTANTS';
 
 import { getBlockchainStatus } from '../../services/Ardor/ardorInterface';
 import HCountdown from './HCountdown';
+import { getJackpotParticipants } from '../../services/Jackpot/utils';
 
 /**
  * @name JackpotWidget
@@ -21,7 +22,7 @@ import HCountdown from './HCountdown';
  * <JackpotWidget cStyle = 1 /> // Default style - Same as the home page
  * <JackpotWidget cStyle = 2 /> // Style for the jackpot page
  */
-const JackpotWidget = ({ cStyle = 1 }) => {
+const JackpotWidget = ({ cStyle = 1, account = '' }) => {
     const [jackpotStatus, setJackpotStatus] = useState({
         prev_height: 0,
         status: false,
@@ -34,6 +35,36 @@ const JackpotWidget = ({ cStyle = 1 }) => {
         minutes: 0,
         remainingBlocks: 'loading',
     });
+
+    const [participants, setParticipants] = useState({ numParticipants: 0, participants: [], imParticipant: false });
+
+    useEffect(() => {
+        const getParticipants = async () => {
+            // Get participants
+            const response = await getJackpotParticipants();
+            let auxParticipants = [];
+            let numParticipants = 0;
+            let imParticipant = false;
+            Object.entries(response).forEach(entry => {
+                const [key, value] = entry;
+                if (value > 0) {
+                    auxParticipants.push(key);
+                    numParticipants += value;
+                    if (key === account) {
+                        imParticipant = true;
+                    }
+                }
+            });
+            setParticipants({ numParticipants, participants: auxParticipants, imParticipant });
+        };
+
+        getParticipants();
+
+        const interval = setInterval(() => {
+            getParticipants();
+        }, 12500);
+        return () => clearInterval(interval);
+    }, [account]);
 
     useEffect(() => {
         const getJackpotStatus = async () => {
@@ -83,7 +114,7 @@ const JackpotWidget = ({ cStyle = 1 }) => {
         jackpotStatus.status && getJackpotTimer();
     }, [jackpotStatus]);
 
-    const bgColor = useColorModeValue("blackAlpha.200", "whiteAlpha.200")
+    const bgColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
 
     return (
         <>
@@ -108,29 +139,38 @@ const JackpotWidget = ({ cStyle = 1 }) => {
                 </Box>
             )}
             {cStyle === 2 && (
-                <Center my={4} mb={8}>
-                    <Grid
-                        templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
-                        border="1px"
-                        borderColor="whiteAlpha.300"
-                        rounded="lg"
-                        bg="blackAlpha"
-                        shadow="dark-lg"
-                        direction="row">
+                <>
+                    <Center my={4} mb={8}>
+                        <Grid
+                            templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
+                            border="1px"
+                            borderColor="whiteAlpha.300"
+                            rounded="lg"
+                            bg="blackAlpha"
+                            shadow="dark-lg"
+                            direction="row">
+                            <GridItem colSpan={2} p={4} borderLeftRadius="lg">
+                                <HCountdown
+                                    jackpotTimer={jackpotTimer}
+                                    numParticipants={participants.numParticipants}
+                                />
+                            </GridItem>
 
-                        <GridItem colSpan={2} p={4} borderLeftRadius="lg">
-                            <HCountdown jackpotTimer={jackpotTimer} />
-                        </GridItem>
-
-                        <GridItem colSpan={{ base: 1, md: 2, lg: 1 }} p={4} borderRightRadius={{ base: 'none', md: 'none', lg: 'lg' }} bgColor={bgColor}>
-                            <BlockInfo
-                                jackpotStatus={jackpotStatus}
-                                jackpotTimer={jackpotTimer}
-                                cStyle={cStyle}
-                            />
-                        </GridItem>
-                    </Grid>
-                </Center>
+                            <GridItem
+                                colSpan={{ base: 1, md: 2, lg: 1 }}
+                                p={4}
+                                borderRightRadius={{ base: 'none', md: 'none', lg: 'lg' }}
+                                bgColor={bgColor}>
+                                <BlockInfo jackpotStatus={jackpotStatus} jackpotTimer={jackpotTimer} cStyle={cStyle} />
+                            </GridItem>
+                        </Grid>
+                    </Center>
+                    {participants.imParticipant && (
+                        <Text mt={4} fontSize="2xl" textAlign="center" fontWeight="bolder">
+                            ✅ You've participated once for this round!
+                        </Text>
+                    )}
+                </>
             )}
         </>
     );
