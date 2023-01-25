@@ -11,6 +11,10 @@ import {
     useColorModeValue,
     useDisclosure,
     ButtonGroup,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
 } from '@chakra-ui/react';
 
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
@@ -63,15 +67,40 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
                 </Flex>
 
                 {isHeader && isLogged && (
-                    <ButtonGroup size="sm" isAttached variant="outline" position="absolute" right="3%">
-                        <Button display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'}>
-                            IGNIS: {IGNISBalance}
+                    <ButtonGroup
+                        size="sm"
+                        fontSize={'sm'}
+                        isAttached
+                        variant="outline"
+                        position="absolute"
+                        right="3%"
+                        display={{ base: 'none', lg: 'inline-flex' }}>
+                        <Button>
+                            <Menu>
+                                <MenuButton>IGNIS: {IGNISBalance}</MenuButton>
+                                <MenuList>
+                                    <MenuItem>Send IGNIS</MenuItem>
+                                    <MenuItem>Get IGNIS</MenuItem>
+                                </MenuList>
+                            </Menu>
                         </Button>
-                        <Button display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'}>
-                            GIFTZ: {GIFTZBalance}
+                        <Button>
+                            <Menu>
+                                <MenuButton>GIFTZ: {GIFTZBalance}</MenuButton>
+                                <MenuList>
+                                    <MenuItem>Send GIFTZ</MenuItem>
+                                    <MenuItem>Get GIFTZ</MenuItem>
+                                </MenuList>
+                            </Menu>
                         </Button>
-                        <Button display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'}>
-                            GEM: {GEMSBalance.toFixed(2)}
+                        <Button>
+                            <Menu>
+                                <MenuButton>GEM: {GEMSBalance.toFixed(2)}</MenuButton>
+                                <MenuList>
+                                    <MenuItem>Send GEM</MenuItem>
+                                    <MenuItem>Get GEM</MenuItem>
+                                </MenuList>
+                            </Menu>
                         </Button>
                     </ButtonGroup>
                 )}
