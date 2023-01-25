@@ -175,7 +175,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             const _auxInfo = {
                 ...infoAccount,
                 IGNISBalance: ignis,
-                GIFTZBalance: giftz.unitsQNT,
+                GIFTZBalance: giftz.unitsQNT || 0,
                 GEMSBalance: gems[0].quantityQNT / NQTDIVIDER,
                 transactions: txs.transactions,
                 unconfirmedTxs: unconfirmedTxs,
