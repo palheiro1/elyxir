@@ -78,7 +78,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     };
 
     const haveThisCard = quantity > 0;
-    const cardOpacity = haveThisCard ? 1 : 0.5;
+    const cardOpacity = haveThisCard ? 1 : 0.25;
     // ------------------------------
 
     const { isOpen: isOpenCraft, onOpen: onOpenCraft, onClose: onCloseCraft } = useDisclosure();
