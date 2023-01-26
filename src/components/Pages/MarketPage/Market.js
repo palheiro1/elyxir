@@ -46,17 +46,13 @@ const Market = ({ infoAccount, cards, gemCards }) => {
 
             {option === 1 && (
                 <Box>
-                    <TradesAndOrderTable
-                        account={infoAccount.accountRs}
-                        cards={cards}
-                        trades={infoAccount.trades}
-                    />
                     <AskAndBidGrid
                         username={infoAccount.name}
                         cards={cards}
                         askOrders={infoAccount.currentAsks}
                         bidOrders={infoAccount.currentBids}
                     />
+                    <TradesAndOrderTable account={infoAccount.accountRs} cards={cards} trades={infoAccount.trades} />
                 </Box>
             )}
         </Box>
