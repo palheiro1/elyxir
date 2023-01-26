@@ -145,6 +145,7 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
                     onClose={onCloseSendCurrency}
                     reference={reference}
                     currency={currency}
+                    IGNISBalance={IGNISBalance}
                     username={username}
                 />
             )}

@@ -24,12 +24,14 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
-import { transferAsset } from '../../../services/Ardor/ardorInterface';
-import { checkPin } from '../../../utils/walletUtils';
+import { sendIgnis } from '../../../services/Ardor/ardorInterface';
+import { checkPin, sendGiftz } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { isArdorAccount } from '../../../utils/validators';
+import { NQTDIVIDER } from '../../../data/CONSTANTS';
 
-const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username }) => {
+const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IGNISBalance }) => {
+    console.log('🚀 ~ file: SendCurrencyDialog.js:34 ~ SendCurrencyDialog ~ currency', currency);
     const toast = useToast();
 
     const [ardorAccount, setArdorAccount] = useState('');
@@ -76,22 +78,36 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username }) 
         if (input.value > maxCurrency) return;
 
         if (currency.name === 'IGNIS') {
-            const response = await transferAsset(passphrase, ardorAccount, input.value);
+            const response = await sendIgnis({
+                amountNQT: input.value * NQTDIVIDER,
+                recipient: ardorAccount,
+                passPhrase: passphrase,
+                message: '',
+            });
             if (response.errorCode) {
-                errorToast(toast, response.errorDescription);
+                errorToast('Error sending IGNIS: ' + response.errorDescription, toast);
             } else {
-                okToast(toast, 'Transaction sent');
+                okToast('IGNIS sent successfully', toast);
                 onClose();
             }
         } else if (currency.name === 'GIFTZ') {
-            const response = false;
+            const response = await sendGiftz({
+                amountNQT: input.value,
+                recipient: ardorAccount,
+                passphrase: passphrase,
+                ignisBalance: IGNISBalance,
+            });
+            console.log(response)
             if (response.errorCode) {
-                errorToast(toast, response.errorDescription);
+                errorToast('Error sending GIFTZ: ' + response.errorDescription, toast);
+            } else {
+                okToast('GIFTZ sent successfully', toast);
+                onClose();
             }
         } else if (currency.name === 'GEMS') {
             const response = false;
             if (response.errorCode) {
-                errorToast(toast, response.errorDescription);
+                errorToast('Error sending GEMS: ' + response.errorDescription, toast);
             }
         } else {
             errorToast(toast, 'Currency not supported');

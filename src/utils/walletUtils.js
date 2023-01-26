@@ -12,6 +12,8 @@ import {
     getIgnisBalance,
     sendIgnis,
     transferAsset,
+    transferCurrency,
+    transferCurrencyZeroFee,
     transferGEM,
 } from '../services/Ardor/ardorInterface';
 
@@ -215,6 +217,15 @@ export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
     return transferedIgnis && success;
 };
 
+export const sendGiftz = async ({ passphrase, amountNQT, ignisBalance, recipient }) => {
+    const amount = Number(amountNQT);
+    
+    if (parseFloat(Number(ignisBalance)) < parseFloat(0.1))
+        return await transferCurrencyZeroFee(CURRENCY, amount, recipient, passphrase, '');
+    else return await transferCurrency(CURRENCY, amount, recipient, passphrase, '');
+    
+};
+
 export const sendAskOrder = async ({ asset, price, quantity, passPhrase }) => {
     const response = await createAskOrder({ asset, price, quantity, passPhrase });
     return response;
@@ -229,7 +240,7 @@ export const sendToJackpot = async ({ cards, passPhrase }) => {
     const isBlocked = cards.some(card => card.quantityQNT < card.unconfirmedQuantityQNT);
     if (!isBlocked) {
         const message = JSON.stringify({ contract: 'Jackpot' });
-        const promises = cards.map(card => 
+        const promises = cards.map(card =>
             transferAsset({
                 asset: card.asset,
                 quantityQNT: 1,
