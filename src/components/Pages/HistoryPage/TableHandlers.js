@@ -159,6 +159,7 @@ const getJackpotAndReason = tx => {
 
 // NOT WORKING - FLOW IS NOT CORRECT
 export const handleIncomingGIFTZ = (amount, date) => {
+    const realAmount = amount.attachment.unitsQNT;
     const component = () => {
         return (
             <Tr>
@@ -166,9 +167,18 @@ export const handleIncomingGIFTZ = (amount, date) => {
                     <InOutTransaction type={'in'} />
                 </Td>
                 <Td>
-                    <FaFilter /> INCOMING GIFTZ
+                    <Stack direction={['column', 'row']} align="start" spacing={24}>
+                        <Box>
+                            <FaFilter />
+                        </Box>
+                        <Box>
+                            <Text fontSize="xl" fontWeight="bold">
+                                INCOMING GIFTZ
+                            </Text>
+                        </Box>
+                    </Stack>
                 </Td>
-                <Td>{amount}</Td>
+                <Td>{realAmount}</Td>
                 <Td>{date}</Td>
                 <Td>You</Td>
             </Tr>
@@ -188,7 +198,16 @@ export const handleMessage = (type, msg, date) => {
             <Tr>
                 <Td>{msg}</Td>
                 <Td>
-                    <FaFilter /> Message
+                    <Stack direction={['column', 'row']} align="start" spacing={24}>
+                        <Box>
+                            <FaFilter />
+                        </Box>
+                        <Box>
+                            <Text fontSize="xl" fontWeight="bold">
+                                Message
+                            </Text>
+                        </Box>
+                    </Stack>
                 </Td>
                 <Td>{date}</Td>
                 <Td>You</Td>
@@ -214,7 +233,16 @@ export const cancelledOrder = (type, date, account) => {
                     <InOutTransaction type={type} />
                 </Td>
                 <Td>
-                    <FaFilter /> Cancelled Order
+                    <Stack direction={['column', 'row']} align="start" spacing={24}>
+                        <Box>
+                            <FaFilter />
+                        </Box>
+                        <Box>
+                            <Text fontSize="xl" fontWeight="bold">
+                                Cancelled Order
+                            </Text>
+                        </Box>
+                    </Stack>
                 </Td>
                 <Td>-</Td>
                 <Td>{date}</Td>
