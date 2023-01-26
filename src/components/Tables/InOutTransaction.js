@@ -17,9 +17,9 @@ const InOutTransaction = ({ type, style = 2 }) => {
         return (
             <Stack direction="row">
                 <Text color={color}> {msg} </Text>
-                {type === 'in' && <ArrowDownIcon fontSize="xl" fontWeight="bold" color={color} />}
-                {type === 'out' && <ArrowUpIcon fontSize="xl" color={color} />}
-                {type === 'placed' && <ArrowUpDownIcon fontSize="xl" color={color} />}
+                {type === 'in' && <ArrowDownIcon fontSize="xl" fontWeight="bolder" color={color} />}
+                {type === 'out' && <ArrowUpIcon fontSize="xl" fontWeight="bolder" color={color} />}
+                {type === 'placed' && <ArrowUpDownIcon fontSize="xl" fontWeight="bolder" color={color} />}
             </Stack>
         );
     } else {
@@ -29,13 +29,13 @@ const InOutTransaction = ({ type, style = 2 }) => {
         let icon;
         if (typeTx === 'in') {
             color = 'green';
-            icon = <ArrowDownIcon fontSize="xl" fontWeight="bold" bgColor={color} rounded="full" />;
+            icon = <ArrowDownIcon fontSize="2xl" border="1px" borderColor="whiteAlpha.400" bgColor={color} rounded="full" />;
         } else if (typeTx === 'out') {
             color = 'blue.600';
-            icon = <ArrowUpIcon fontSize="xl" fontWeight="bold" bgColor={color} rounded="full" />;
+            icon = <ArrowUpIcon fontSize="2xl" border="1px" borderColor="whiteAlpha.400" bgColor={color} rounded="full" />;
         } else if (typeTx === 'placed') {
             color = 'orange.600';
-            icon = <ArrowUpDownIcon fontSize="xl" fontWeight="bold" bgColor={color} rounded="full" />;
+            icon = <ArrowUpDownIcon fontSize="2xl" border="1px" borderColor="whiteAlpha.400" bgColor={color} rounded="full" />;
         }
 
         return icon;
