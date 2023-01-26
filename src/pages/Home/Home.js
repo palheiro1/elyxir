@@ -28,7 +28,7 @@ import {
 // Services
 import { fetchAllCards, fetchGemCards, getAsset } from '../../utils/cardsUtils';
 import { getCurrentAskAndBids, getGIFTZBalance, getIGNISBalance } from '../../utils/walletUtils';
-import { getBlockchainTransactions, getTrades, getUnconfirmedTransactions } from '../../services/Ardor/ardorInterface';
+import { getAccountLedger, getBlockchainTransactions, getTrades, getUnconfirmedTransactions } from '../../services/Ardor/ardorInterface';
 import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
 import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 import { handleConfirmateNotification, handleNewNotification } from '../../utils/alerts';
@@ -162,7 +162,7 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
             setNeedReload(false);
 
             // Fetch all info
-            const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades] = await Promise.all([
+            const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades, dividends] = await Promise.all([
                 fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
                 fetchGemCards(accountRs, GEMASSETACCOUNT, true),
                 getIGNISBalance(accountRs),
@@ -171,10 +171,15 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
                 getUnconfirmedTransactions(2, accountRs),
                 getCurrentAskAndBids(accountRs),
                 getTrades(2, accountRs),
+                getAccountLedger({ accountRs: accountRs, firstIndex: 0, lastIndex: 99, eventType: 'ASSET_DIVIDEND_PAYMENT' }),
             ]);
 
+            // -----------------------------------------------------------------
+            // Check notifications - Unconfirmed transactions
             const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
-            //console.log(dividends)
+            handleNotifications(unconfirmedTxs);
+            // -----------------------------------------------------------------
+
 
             // -----------------------------------------------------------------
             // Rebuild infoAccount
@@ -186,20 +191,14 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
                 GIFTZBalance: giftz.unitsQNT || 0,
                 GEMSBalance: gems[0].quantityQNT / NQTDIVIDER,
                 transactions: txs.transactions,
+                dividends: dividends.entries,
                 unconfirmedTxs: unconfirmedTxs,
                 currentAsks: currentAskOrBids.askOrders,
                 currentBids: currentAskOrBids.bidOrders,
                 trades: trades.trades,
             };
 
-            //console.log(txs)
-
-            // -----------------------------------------------------------------
-            // Check notifications - Unconfirmed transactions
-            handleNotifications(unconfirmedTxs);
-
-            // -----------------------------------------------------------------
-
+            
             // -----------------------------------------------------------------
             // Get all hashes and compare
             // -----------------------------------------------------------------
