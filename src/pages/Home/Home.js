@@ -143,7 +143,7 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
                     const asset = getAsset(tx.attachment.asset, cards);
                     const amount = Number(tx.attachment.quantityQNT);
 
-                    if (asset !== 'GEM' && isIncoming) cardsForNotify.push({ asset, amount });
+                    if (asset && asset !== 'GEM' && isIncoming) cardsForNotify.push({ asset, amount });
                     else handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived);
 
                     auxUnconfirmed.splice(auxUnconfirmed.indexOf(tx), 1);
