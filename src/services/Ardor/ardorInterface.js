@@ -3,7 +3,7 @@ import axios from 'axios';
 import qs from 'qs';
 import ardorjs from 'ardorjs';
 
-import { GEMASSET, JACKPOTACCOUNT, NODEURL, NQTDIVIDER } from '../../data/CONSTANTS';
+import { CURRENCY, EXCHANGERATE, GEMASSET, JACKPOTACCOUNT, NODEURL, NQTDIVIDER } from '../../data/CONSTANTS';
 
 // -------------------------------------------------
 const config = {
@@ -468,6 +468,39 @@ const getCurrency = async currency => {
         });
 };
 
+export const buyGiftz = async ({ passphrase, amountNQT }) => {
+    const message = JSON.stringify({ contract: 'IgnisAssetLottery' });
+    const publicKey = ardorjs.secretPhraseToPublicKey(passphrase);
+    var query = {
+        chain: 2,
+        currency: CURRENCY,
+        rateNQTPerUnit: EXCHANGERATE * NQTDIVIDER,
+        unitsQNT: amountNQT,
+        feeNQT: -1,
+        deadline: 15,
+        broadcast: false,
+        publicKey: publicKey,
+    };
+    const url_sendmoney = NODEURL + '?requestType=currencyBuy';
+    const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
+    const sendMoney = axios.post(url_sendmoney, qs.stringify(query), config);
+    const minimumFee = (await sendMoney).data.minimumFeeFQT * (await sendMoney).data.bundlerRateNQTPerFXT * 0.00000001;
+    query.feeNQT = minimumFee;
+    query.broadcast = false;
+    const sendMoneyWithFee = axios.post(url_sendmoney, qs.stringify(query), config);
+    const signed = ardorjs.signTransactionBytes((await sendMoneyWithFee).data.unsignedTransactionBytes, passphrase);
+    let txdata;
+    if (message !== '') {
+        let txattachment = JSON.stringify((await sendMoneyWithFee).data.transactionJSON.attachment);
+        txdata = { transactionBytes: signed, prunableAttachmentJSON: txattachment };
+    } else {
+        txdata = { transactionBytes: signed };
+    }
+    return await axios.post(url_broadcast, qs.stringify(txdata), config).then(function (response) {
+        return true;
+    });
+};
+
 // ----------------------------------------------
 // AKS & BID ORDERS
 // ----------------------------------------------
@@ -719,7 +752,7 @@ export const getAccountLedger = async ({ accountRs, firstIndex = 0, lastIndex = 
         });
         return response.data;
     } catch (error) {
-        console.log("🚀 ~ file: ardorInterface.js:722 ~ getAccountLedger ~ error", error)
+        console.log('🚀 ~ file: ardorInterface.js:722 ~ getAccountLedger ~ error', error);
         // handle error
         throw new Error(`Error al obtener el libro de cuentas: ${error.message}`);
     }
