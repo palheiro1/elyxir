@@ -16,33 +16,34 @@ import Home from './pages/Home/Home';
 import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
 
 function App() {
+    const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
+    const isLogged = infoAccount.token !== null && infoAccount.accountRs !== null;
 
-  const [ infoAccount, setInfoAccount ] = useState(cleanInfoAccount);
-  const isLogged = infoAccount.token !== null && infoAccount.accountRs !== null;
+    return (
+        <ChakraProvider theme={theme}>
+            <Header
+                isLogged={isLogged}
+                IGNISBalance={infoAccount.IGNISBalance}
+                GIFTZBalance={infoAccount.GIFTZBalance}
+                GEMSBalance={infoAccount.GEMSBalance}
+                username={infoAccount.name}
+            />
+            <Routes>
+                {/* LOGING PAGE / CREATE WALLET / RESTORE WALLET */}
+                <Route path="/" element={<Navigate replace to="/login" />} />
 
-  
+                <Route path="/login" element={<Login setInfoAccount={setInfoAccount} />} />
 
-  return (
-    <ChakraProvider theme={ theme }> 
-      <Header isLogged = {isLogged} IGNISBalance={infoAccount.IGNISBalance} GIFTZBalance={infoAccount.GIFTZBalance} GEMSBalance={infoAccount.GEMSBalance} username={infoAccount.name}  />
-      <Routes>
+                <Route path="/register" element={<Register />} />
 
-        {/* LOGING PAGE / CREATE WALLET / RESTORE WALLET */}
-        <Route path="/" element={ <Navigate replace to="/login" />} />
+                <Route path="/restore" element={<Restore />} />
 
-        <Route path="/login" element={ <Login setInfoAccount = {setInfoAccount} /> } />
-
-        <Route path="/register" element={ <Register/> } />
-
-        <Route path="/restore" element={ <Restore/> } />
-
-        {/* HOME PAGE */}
-        <Route path="/home" element={ <Home infoAccount = {infoAccount} setInfoAccount = {setInfoAccount} /> } />
-
-      </Routes>
-      <Footer isLogged = {isLogged} />
-    </ChakraProvider>
-  );
+                {/* HOME PAGE */}
+                <Route path="/home" element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />} />
+            </Routes>
+            <Footer isLogged={isLogged} />
+        </ChakraProvider>
+    );
 }
 
 export default App;

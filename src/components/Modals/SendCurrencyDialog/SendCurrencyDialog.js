@@ -71,54 +71,46 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
     };
 
     const handleSend = async () => {
-        if (!isValidPin) return;
-        if (!isValidArdorAccount) return;
-        if (!passphrase) return;
-        if (!input.value) return;
-        if (input.value > maxCurrency) return;
+        if (!isValidPin || !isValidArdorAccount || !passphrase || !input.value || input.value > maxCurrency) {
+            errorToast('Invalid data', toast);
+            return;
+        }
 
         let response;
+        switch (currency.name) {
+            case 'IGNIS':
+                response = await sendIgnis({
+                    amountNQT: input.value * NQTDIVIDER,
+                    recipient: ardorAccount,
+                    passPhrase: passphrase,
+                    message: '',
+                });
+                break;
+            case 'GIFTZ':
+                response = await sendGiftz({
+                    amountNQT: input.value,
+                    recipient: ardorAccount,
+                    passphrase: passphrase,
+                    ignisBalance: IGNISBalance,
+                });
+                break;
+            case 'GEMS':
+                response = await sendGem({
+                    amountNQT: input.value,
+                    recipient: ardorAccount,
+                    passphrase: passphrase,
+                });
+                break;
+            default:
+                errorToast(toast, 'Currency not supported');
+                return;
+        }
 
-        if (currency.name === 'IGNIS') {
-            const response = await sendIgnis({
-                amountNQT: input.value * NQTDIVIDER,
-                recipient: ardorAccount,
-                passPhrase: passphrase,
-                message: '',
-            });
-            if (response.errorCode) {
-                errorToast('Error sending IGNIS: ' + response.errorDescription, toast);
-            } else {
-                okToast('IGNIS sent successfully', toast);
-                onClose();
-            }
-        } else if (currency.name === 'GIFTZ') {
-            const response = await sendGiftz({
-                amountNQT: input.value,
-                recipient: ardorAccount,
-                passphrase: passphrase,
-                ignisBalance: IGNISBalance,
-            });
-            if (response.errorCode) {
-                errorToast('Error sending GIFTZ: ' + response.errorDescription, toast);
-            } else {
-                okToast('GIFTZ sent successfully', toast);
-                onClose();
-            }
-        } else if (currency.name === 'GEMS') {
-            const response = await sendGem({
-                amountNQT: input.value,
-                recipient: ardorAccount,
-                passphrase: passphrase,
-            });
-            if (response.errorCode) {
-                errorToast('Error sending GEMS: ' + response.errorDescription, toast);
-            } else {
-                okToast('GEMs sent successfully', toast);
-                onClose();
-            }
+        if (response.errorCode) {
+            errorToast(`Error sending ${currency.name}: ${response.errorDescription}`, toast);
         } else {
-            errorToast(toast, 'Currency not supported');
+            okToast(`${currency.name} sent successfully`, toast);
+            onClose();
         }
     };
 
