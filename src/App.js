@@ -24,7 +24,7 @@ function App() {
 
   return (
     <ChakraProvider theme={ theme }> 
-      <Header isLogged = {isLogged} IGNISBalance={infoAccount.IGNISBalance} GIFTZBalance={infoAccount.GIFTZBalance} GEMSBalance={infoAccount.GEMSBalance}  />
+      <Header isLogged = {isLogged} IGNISBalance={infoAccount.IGNISBalance} GIFTZBalance={infoAccount.GIFTZBalance} GEMSBalance={infoAccount.GEMSBalance} username={infoAccount.name}  />
       <Routes>
 
         {/* LOGING PAGE / CREATE WALLET / RESTORE WALLET */}

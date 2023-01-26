@@ -35,7 +35,7 @@ import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog'
  * @dev With "isHeader" parameter we can calculate logos and if need ColorSwitcher
  * @author Jesús Sánchez Fernández
  */
-const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBalance, GEMSBalance }) => {
+const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBalance, GEMSBalance, username }) => {
     const { isOpen, onToggle } = useDisclosure();
 
     // ----------------------- SEND CURRENCY -----------------------
@@ -145,6 +145,7 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
                     onClose={onCloseSendCurrency}
                     reference={reference}
                     currency={currency}
+                    username={username}
                 />
             )}
 

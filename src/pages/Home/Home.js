@@ -167,6 +167,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             ]);
 
             const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
+            //console.log(dividends)
 
             // -----------------------------------------------------------------
             // Rebuild infoAccount
@@ -183,6 +184,8 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 currentBids: currentAskOrBids.bidOrders,
                 trades: trades.trades,
             };
+
+            //console.log(txs)
 
             // -----------------------------------------------------------------
             // Check notifications - Unconfirmed transactions
