@@ -14,10 +14,19 @@ import Register from './pages/Register/Register';
 import Restore from './pages/Restore/Restore';
 import Home from './pages/Home/Home';
 import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
+import Exchange from './pages/Exchange/Exchange';
 
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
     const isLogged = infoAccount.token !== null && infoAccount.accountRs !== null;
+    const [marketFlag, setMarketFlag] = useState(false);
+
+    const goToMarket = () => {
+        setMarketFlag(true);
+        setTimeout(() => {
+            setMarketFlag(false);
+        }, 10);
+    };
 
     return (
         <ChakraProvider theme={theme}>
@@ -27,6 +36,7 @@ function App() {
                 GIFTZBalance={infoAccount.GIFTZBalance}
                 GEMSBalance={infoAccount.GEMSBalance}
                 username={infoAccount.name}
+                goToMarket={goToMarket}
             />
             <Routes>
                 {/* LOGING PAGE / CREATE WALLET / RESTORE WALLET */}
@@ -39,7 +49,16 @@ function App() {
                 <Route path="/restore" element={<Restore />} />
 
                 {/* HOME PAGE */}
-                <Route path="/home" element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />} />
+                <Route
+                    path="/home"
+                    element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} marketFlag={marketFlag} />}
+                />
+
+                {/* EXCHANGE PAGE */}
+                <Route path="/exchange" element={<Exchange />} />
+
+                {/* 404 - NOT FOUND */}
+                <Route path="*" element={<Navigate replace to="/login" />} />
             </Routes>
             <Footer isLogged={isLogged} />
         </ChakraProvider>
