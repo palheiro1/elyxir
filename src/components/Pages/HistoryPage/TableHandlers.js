@@ -240,16 +240,16 @@ export const handleGEM = (type, amount, date, account) => {
                     <InOutTransaction type={type} />
                 </Td>
                 <Td>
-                    <SimpleGrid columns={2} spacing={2}>
-                        <Center>
+                    <Stack direction={['column', 'row']} align="start" spacing={24}>
+                        <Box>
                             <FaGem />
-                        </Center>
-                        <Center>
+                        </Box>
+                        <Box>
                             <Text fontSize="xl" fontWeight="bold">
                                 GEM
                             </Text>
-                        </Center>
-                    </SimpleGrid>
+                        </Box>
+                    </Stack>
                 </Td>
                 <Td>{amount}</Td>
                 <Td>{date}</Td>
@@ -346,16 +346,16 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
                     <InOutTransaction type={type} />
                 </Td>
                 <Td>
-                    <SimpleGrid columns={2}>
-                        <Center>
+                    <Stack direction={['column', 'row']} align="start" spacing={24}>
+                        <Box>
                             <FaGem />
-                        </Center>
-                        <Center>
+                        </Box>
+                        <Box>
                             <Text fontSize="xl" fontWeight="bold">
                                 GIFTZ
                             </Text>
-                        </Center>
-                    </SimpleGrid>
+                        </Box>
+                    </Stack>
                 </Td>
                 <Td>{amount}</Td>
                 <Td>{date}</Td>
