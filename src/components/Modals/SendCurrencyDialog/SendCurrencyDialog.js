@@ -25,7 +25,7 @@ import {
 import { useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
 import { sendIgnis } from '../../../services/Ardor/ardorInterface';
-import { checkPin, sendGiftz } from '../../../utils/walletUtils';
+import { checkPin, sendGem, sendGiftz } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { isArdorAccount } from '../../../utils/validators';
 import { NQTDIVIDER } from '../../../data/CONSTANTS';
@@ -77,6 +77,8 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
         if (!input.value) return;
         if (input.value > maxCurrency) return;
 
+        let response;
+
         if (currency.name === 'IGNIS') {
             const response = await sendIgnis({
                 amountNQT: input.value * NQTDIVIDER,
@@ -97,7 +99,6 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                 passphrase: passphrase,
                 ignisBalance: IGNISBalance,
             });
-            console.log(response)
             if (response.errorCode) {
                 errorToast('Error sending GIFTZ: ' + response.errorDescription, toast);
             } else {
@@ -105,9 +106,16 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                 onClose();
             }
         } else if (currency.name === 'GEMS') {
-            const response = false;
+            const response = await sendGem({
+                amountNQT: input.value,
+                recipient: ardorAccount,
+                passphrase: passphrase,
+            });
             if (response.errorCode) {
                 errorToast('Error sending GEMS: ' + response.errorDescription, toast);
+            } else {
+                okToast('GEMs sent successfully', toast);
+                onClose();
             }
         } else {
             errorToast(toast, 'Currency not supported');

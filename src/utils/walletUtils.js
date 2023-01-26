@@ -1,4 +1,4 @@
-import { BUYPACKACCOUNT, CURRENCY, JACKPOTACCOUNT, NQTDIVIDER } from '../data/CONSTANTS';
+import { BUYPACKACCOUNT, CURRENCY, GEMASSET, JACKPOTACCOUNT, NQTDIVIDER } from '../data/CONSTANTS';
 import { decrypt, getUser } from './storage';
 import {
     createAskOrder,
@@ -223,8 +223,16 @@ export const sendGiftz = async ({ passphrase, amountNQT, ignisBalance, recipient
     if (parseFloat(Number(ignisBalance)) < parseFloat(0.1))
         return await transferCurrencyZeroFee(CURRENCY, amount, recipient, passphrase, '');
     else return await transferCurrency(CURRENCY, amount, recipient, passphrase, '');
-    
 };
+
+export const sendGem = async ({ passphrase, amountNQT, recipient }) => {
+    return await transferAsset({
+        asset: GEMASSET,
+        quantityQNT: amountNQT*NQTDIVIDER,
+        recipient: recipient,
+        passPhrase: passphrase,
+    });
+}
 
 export const sendAskOrder = async ({ asset, price, quantity, passPhrase }) => {
     const response = await createAskOrder({ asset, price, quantity, passPhrase });
