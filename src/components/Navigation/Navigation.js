@@ -25,6 +25,8 @@ import { NAV_ITEMS } from '../../data/NAV_ITEMS';
 import Logo from '../Logo/Logo';
 import { Fragment, useRef, useState } from 'react';
 import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog';
+import { useNavigate } from 'react-router-dom';
+import BuyGiftzDialog from '../Modals/BuyGiftzDialog/BuyGiftzDialog';
 //import { Link as RouterLink } from 'react-router-dom';
 
 /**
@@ -35,8 +37,13 @@ import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog'
  * @dev With "isHeader" parameter we can calculate logos and if need ColorSwitcher
  * @author Jesús Sánchez Fernández
  */
-const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBalance, GEMSBalance, username }) => {
+const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBalance, GEMSBalance, username, goToMarket }) => {
+
     const { isOpen, onToggle } = useDisclosure();
+    const navigate = useNavigate();
+
+    const { isOpen: isOpenBuyGiftz, onClose: onCloseBuyGiftz, onOpen: onOpenBuyGiftz } = useDisclosure();
+    const referenceBuyGiftz = useRef();
 
     // ----------------------- SEND CURRENCY -----------------------
     const {
@@ -59,6 +66,16 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
 
         onOpenSendCurrency();
     };
+
+    const handleOpenGetMoreCurrency = currency => {
+        if (currency === 'IGNIS') {
+            navigate('/exchange');
+        } else if (currency === 'GIFTZ') {
+            //setCurrency({ name: 'GIFTZ', balance: GIFTZBalance });
+        } else if (currency === 'GEMS') {
+            goToMarket();
+        }
+    }
     // -------------------------------------------------------------
     const needTarascaLogo = isHeader ? false : true;
     const needChangeColor = isHeader ? true : false;
@@ -106,7 +123,7 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
                                 <Portal>
                                     <MenuList>
                                         <MenuItem onClick={() => handleOpenSendCurrency('IGNIS')}>Send IGNIS</MenuItem>
-                                        <MenuItem>Get IGNIS</MenuItem>
+                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('IGNIS')}>Get IGNIS</MenuItem>
                                     </MenuList>
                                 </Portal>
                             </Menu>
@@ -117,7 +134,7 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
                                 <Portal>
                                     <MenuList>
                                         <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
-                                        <MenuItem>Get GIFTZ</MenuItem>
+                                        <MenuItem onClick={onOpenBuyGiftz}>Get GIFTZ</MenuItem>
                                     </MenuList>
                                 </Portal>
                             </Menu>
@@ -128,7 +145,7 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
                                 <Portal>
                                     <MenuList>
                                         <MenuItem onClick={() => handleOpenSendCurrency('GEMS')}>Send GEM</MenuItem>
-                                        <MenuItem>Get GEM</MenuItem>
+                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('GEMS') }>Get GEM</MenuItem>
                                     </MenuList>
                                 </Portal>
                             </Menu>
@@ -149,6 +166,8 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
                     username={username}
                 />
             )}
+
+            <BuyGiftzDialog isOpen={isOpenBuyGiftz} onClose={onCloseBuyGiftz} reference={referenceBuyGiftz} name={username} IGNISBalance={IGNISBalance} />
 
             {isHeader && (
                 <Collapse in={isOpen} animateOpacity>

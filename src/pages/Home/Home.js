@@ -42,7 +42,7 @@ import CardReceived from '../../components/Modals/CardReceived/CardReceived';
  * @dev This page is used to render all the pages
  * @returns {JSX.Element} Home component
  */
-const Home = ({ infoAccount, setInfoAccount }) => {
+const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
     const toast = useToast();
 
     // Buy pack dialog
@@ -84,6 +84,13 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     const [renderComponent, setRenderComponent] = useState(<Overview />);
 
     const [cardsNotification, setCardsNotification] = useState(cards);
+
+    // -----------------------------------------------------------------
+    useEffect(() => {
+        if (marketFlag) {
+            setOption(4);
+        }
+    }, [marketFlag]);
 
     // -----------------------------------------------------------------
     // Show all cards - Toggle button
@@ -257,10 +264,8 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     useEffect(() => {
         if (cardsNotification.length > 0) {
-            console.log("🚀 ~ file: Home.js:257 ~ useEffect ~ cardsNotification", cardsNotification)
             onOpenCardReceived();
         }
-
     }, [cardsNotification, onOpenCardReceived]);
 
     // -----------------------------------------------------------------
