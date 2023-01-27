@@ -72,7 +72,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
     const handleCurrencyChange = () => {
         setValue(value === '1' ? '2' : '1');
-        console.log(input)
         input.onChange({ target: { value: 0 } }); // reset input value
     }
 

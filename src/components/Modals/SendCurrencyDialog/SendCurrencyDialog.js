@@ -31,7 +31,6 @@ import { isArdorAccount } from '../../../utils/validators';
 import { NQTDIVIDER } from '../../../data/CONSTANTS';
 
 const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IGNISBalance }) => {
-    console.log('🚀 ~ file: SendCurrencyDialog.js:34 ~ SendCurrencyDialog ~ currency', currency);
     const toast = useToast();
 
     const [ardorAccount, setArdorAccount] = useState('');
@@ -40,7 +39,6 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
 
     const [passphrase, setPassphrase] = useState('');
     const maxCurrency = Math.floor(Number(currency.balance));
-    console.log('🚀 ~ file: SendCurrencyDialog.js:45 ~ SendCurrencyDialog ~ maxCurrency', maxCurrency);
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: 0.01,

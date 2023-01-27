@@ -61,7 +61,7 @@ const UserRegister = () => {
         }
 
         // Prepare user object
-        const user = initUser(name, account, true, passphrase, pin);
+        const user = initUser(name, account, true, passphrase, pin, true);
         // Save user in local storage
         saveUserAndRedirect(user);
     }

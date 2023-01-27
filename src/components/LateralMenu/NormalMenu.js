@@ -16,7 +16,7 @@ const NormalMenu = ({ option, setOption, handleLogout, account, username, showAl
                     </Text>
                 </Stack>
 
-                <VerticalMenuButtons setOption={setOption} option={option} handleLogout={handleLogout} widthBotones="130px" />
+                <VerticalMenuButtons setOption={setOption} option={option} handleLogout={handleLogout} widthBotones="140px" />
 
                 <Stack p={2} align="center" pt={8}>
                     <Text fontWeight="bold" textAlign="center" fontSize="sm">

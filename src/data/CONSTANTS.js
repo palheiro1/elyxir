@@ -1,4 +1,3 @@
-
 /**
  * @fileoverview Constants for mainnet.
  * @dev This file is used to store the constants for the mainnet.
@@ -9,8 +8,8 @@
 // ---------------------------------------------------------
 // ------------------ APP CONFIGURATION --------------------
 // ---------------------------------------------------------
-export const REFRESH_DATA_TIME =  5 * 1000; // 5 seconds
-export const REFRESH_MARKET_TIME =  3 * 1000; // 3 seconds
+export const REFRESH_DATA_TIME = 5 * 1000; // 5 seconds
+export const REFRESH_MARKET_TIME = 3 * 1000; // 3 seconds
 
 export const RARITY_COLORS = {
     Common: 'linear-gradient(45deg, #8e9eab, #eef2f3) 1',
@@ -22,32 +21,32 @@ export const RARITY_COLORS = {
 // -------------------------------------------------
 // ------------------ CURRENCIES -------------------
 // -------------------------------------------------
-export const CURRENCY = "9375231913536683768";
-export const CURRENCYOFFER = "14399941215024895112";
+export const CURRENCY = '9375231913536683768';
+export const CURRENCYOFFER = '14399941215024895112';
 export const EXCHANGERATE = 295;
 
 // ---------------------------------------------
 // ------------------ ASSETS -------------------
 // ---------------------------------------------
-export const TARASCACARDASSET = "13187825386854631652"; 
-export const GEMASSET = "10230963490193589789";
-export const REFERRALASSET = "15893499867718551186"; // mainnet
-export const SASQUATCHASSET = "13270129604409279596";
-export const MARUXAINAASSETWRONG = "7783220465634719235";
-export const CATOBLEPASASSETWRONG = "16992402711643280652";
+export const TARASCACARDASSET = '13187825386854631652';
+export const GEMASSET = '10230963490193589789';
+export const REFERRALASSET = '15893499867718551186'; // mainnet
+export const SASQUATCHASSET = '13270129604409279596';
+export const MARUXAINAASSETWRONG = '7783220465634719235';
+export const CATOBLEPASASSETWRONG = '16992402711643280652';
 
 // ---------------------------------------------
 // ------------------ ADDRESS ------------------
 // ---------------------------------------------
-export const CURRENCYSELLER = "ARDOR-TU3S-47Y5-6GSM-8ZSJ8";
-export const COLLECTIONACCOUNT = "ARDOR-4V3B-TVQA-Q6LF-GMH3T";  
-export const JACKPOTACCOUNT = "ARDOR-4V3B-TVQA-Q6LF-GMH3T";
-export const BUYPACKACCOUNT = "ARDOR-4V3B-TVQA-Q6LF-GMH3T"; 
-export const TARASCACARDACCOUNT = "ARDOR-5NCL-DRBZ-XBWF-DDN5T";  
-export const BRIDGEACCOUNT = "ARDOR-3YEX-JZFZ-UATF-EKGLN";  
-export const GEMASSETACCOUNT = "ARDOR-XG7G-V7BV-GT4P-FUGW6";  
-export const BURNACCOUNT = "ARDOR-Q9KZ-74XD-WERK-CV6GB";
-export const REFERRALCONTRACTACCOUNT = "ARDOR-YAAE-KL8S-28Y4-BNQW3";
+export const CURRENCYSELLER = 'ARDOR-TU3S-47Y5-6GSM-8ZSJ8';
+export const COLLECTIONACCOUNT = 'ARDOR-4V3B-TVQA-Q6LF-GMH3T';
+export const JACKPOTACCOUNT = 'ARDOR-4V3B-TVQA-Q6LF-GMH3T';
+export const BUYPACKACCOUNT = 'ARDOR-4V3B-TVQA-Q6LF-GMH3T';
+export const TARASCACARDACCOUNT = 'ARDOR-5NCL-DRBZ-XBWF-DDN5T';
+export const BRIDGEACCOUNT = 'ARDOR-3YEX-JZFZ-UATF-EKGLN';
+export const GEMASSETACCOUNT = 'ARDOR-XG7G-V7BV-GT4P-FUGW6';
+export const BURNACCOUNT = 'ARDOR-Q9KZ-74XD-WERK-CV6GB';
+export const REFERRALCONTRACTACCOUNT = 'ARDOR-YAAE-KL8S-28Y4-BNQW3';
 
 // ---------------------------------------------
 // -------------- GAME PARAMETERS --------------
@@ -60,24 +59,24 @@ export const NQTDIVIDER = 100000000;
 // ---------------------------------------------
 // ---------------- IMAGE PATHS-- --------------
 // ---------------------------------------------
-export const IMGURL = "https://media.mythicalbeings.io/";
-export const IMG_HI_PATH = "md/"
-export const IMG_MD_PATH = "sm/"
-export const IMG_THUMB_PATH = "thumbs/"
+export const IMGURL = 'https://media.mythicalbeings.io/';
+export const IMG_HI_PATH = 'md/';
+export const IMG_MD_PATH = 'sm/';
+export const IMG_THUMB_PATH = 'thumbs/';
 
 // ---------------------------------------------
 // -------------- REFERRAL SYSTEM --------------
 // ---------------------------------------------
-export const VIEW_ONLY_DISABLES = [];  // if user.viewonly && VIEW_ONLY_DISABLES.find(e=>e==gameaction) sozusagen..
-export const VIEW_ONLY_REASON = "This function is disabled until start of Season 01!";
+export const VIEW_ONLY_DISABLES = []; // if user.viewonly && VIEW_ONLY_DISABLES.find(e=>e==gameaction) sozusagen..
+export const VIEW_ONLY_REASON = 'This function is disabled until start of Season 01!';
 export const WHITELIST = [];
 export const SEASON1TIMESTAMP = 105800000;
-export const CURRENTSEASON = "season01";
+export const CURRENTSEASON = 'season01';
 
 // ---------------------------------------------
 // ------------------- JACKPOT -----------------
 // ---------------------------------------------
-export const FREQUENCY = 5040;  
+export const FREQUENCY = 5040;
 export const JACKPOTHALF = true;
 export const BLOCKTIME = 60;
 export const LOWIGNIS = 65;
@@ -94,7 +93,7 @@ export const QUANT_UNBURNED = 100000000000000000;
 // ---------------------------------------------
 // --------- LOCAL STORAGE AND CRYPT -----------
 // ---------------------------------------------
-export const CIPHER_ALGORITHM = "aes-256-cbc";
+export const CIPHER_ALGORITHM = 'aes-256-cbc';
 export const IV_LENGTH = 16;
 
 // ---------------------------------------------
@@ -107,10 +106,10 @@ export const CRAFTINGRARE = 450;
 // ---------------------------------------------
 // ----------------- MORPHING ------------------
 // ---------------------------------------------
-export const MORPHING_ACCOUNT = "ARDOR-J45A-8UPL-XYHR-DAUD8"
-export const MORPHINGCOMMON = 50
-export const MORPHINGRARE = 250
-export const MORPHINGEPIC = 750
+export const MORPHING_ACCOUNT = 'ARDOR-J45A-8UPL-XYHR-DAUD8';
+export const MORPHINGCOMMON = 50;
+export const MORPHINGRARE = 250;
+export const MORPHINGEPIC = 750;
 
 // ---------------------------------------------
 // --------------- TRANSACTIONS ----------------
@@ -127,7 +126,78 @@ export const DEFAULT_CONTACTS = [
 // ---------------------------------------------
 // ----------------- APIS URL ------------------
 // ---------------------------------------------
-export const GAMEAPIURL = "https://api.mythicalbeings.io/";
-export const BRIDGEAPIURL = "https://api.mythicalbeings.io/";
-export const NODEURL = "https://node1.mythicalbeings.io:27876/nxt";
+export const GAMEAPIURL = 'https://api.mythicalbeings.io/';
+export const BRIDGEAPIURL = 'https://api.mythicalbeings.io/';
+export const NODEURL = 'https://node1.mythicalbeings.io:27876/nxt';
 export const APILIMIT = 125;
+
+// ---------------------------------------------
+// ----------------- EXTERNAL -----------------
+// ---------------------------------------------
+export const EXCHANGES = [
+    {
+        name: 'Bittrex',
+        url: 'https://bittrex.com',
+        image: 'images/exchanges/bittrex.png',
+    },
+    {
+        name: 'Bilaxy',
+        url: 'https://bilaxy.com',
+        image: 'images/exchanges/bilaxy.png',
+    },
+    {
+        name: 'Biteeu',
+        url: 'https://biteeu.com',
+        image: 'images/exchanges/biteeu.png',
+    },
+    {
+        name: 'Changelly',
+        url: 'https://changelly.com',
+        image: 'images/exchanges/changelly.png',
+    },
+    {
+        name: 'ChangeNOW',
+        url: 'https://changenow.io',
+        image: 'images/exchanges/changenow.png',
+    },
+    {
+        name: 'Hanbitco',
+        url: 'https://hanbitco.com',
+        image: 'images/exchanges/hanbitco.png',
+    },
+    {
+        name: 'Indodax',
+        url: 'https://indodax.com',
+        image: 'images/exchanges/indodax.png',
+    },
+    {
+        name: 'p2pb2b',
+        url: 'https://p2pb2b.io',
+        image: 'images/exchanges/p2pb2b.png',
+    },
+    {
+        name: 'STEX',
+        url: 'https://stex.com',
+        image: 'images/exchanges/stex.png',
+    },
+    {
+        name: 'ProBit',
+        url: 'https://probit.com',
+        image: 'images/exchanges/probit.png',
+    },
+    {
+        name: 'SimpleSwap',
+        url: 'https://simpleswap.io',
+        image: 'images/exchanges/simpleswap.png',
+    },
+    {
+        name: 'TOKOK',
+        url: 'https://tokok.com',
+        image: 'images/exchanges/tokok.png',
+    },
+    {
+        name: 'VCC Exchange',
+        url: 'https://vcc.exchange',
+        image: 'images/exchanges/vcc.png',
+    },
+];

@@ -12,7 +12,6 @@ import JackpotDialog from '../../Modals/JackpotDialog/JackpotDialog';
  * @version 1.0
  */
 const ClaimJackpot = ({ username, cards }) => {
-    console.log("🚀 ~ file: ClaimJackpot.js:15 ~ ClaimJackpot ~ cards", cards)
     const [haveLockedCards, setHaveLockedCards] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const reference = useRef();
@@ -20,9 +19,8 @@ const ClaimJackpot = ({ username, cards }) => {
     useEffect(() => {
         const checkCards = () => {
             const lockedCards = cards.some(card => card.quantityQNT < card.unconfirmedQuantityQNT);
-            console.log("🚀 ~ file: ClaimJackpot.js:22 ~ checkCards ~ lockedCards", lockedCards)
             setHaveLockedCards(lockedCards);
-        }
+        };
 
         cards && checkCards();
     }, [cards]);
@@ -33,7 +31,7 @@ const ClaimJackpot = ({ username, cards }) => {
                 <Heading>Congratulations!</Heading>
                 <Center>
                     <Box textAlign="center">
-                        <Text fontSize="xs">You have all the cards!</Text>
+                        <Text fontSize="xs">You can participate in the Jackpot, you have all the necessary cards.</Text>
                     </Box>
                 </Center>
 

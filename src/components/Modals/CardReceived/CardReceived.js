@@ -60,7 +60,7 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
                     </Center>
                     <SimpleGrid columns={1} mt={2}>
                         <Heading textAlign="center">{asset.name}</Heading>
-                        <Center>
+                        <Center mt={2}>
                             <Flex gap={2}>
                                 <Text
                                     color="white"

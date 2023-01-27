@@ -34,7 +34,7 @@ const SectionSwitch = ({ option, setOption }) => {
                 fontSize="md"
                 onClick={() => setOption(1)}
                 borderRightRadius="lg">
-                Trades and orders
+                Orders & Trades
             </Button>
         </Box>
     );

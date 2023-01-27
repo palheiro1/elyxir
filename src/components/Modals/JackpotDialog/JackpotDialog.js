@@ -20,7 +20,6 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { AiFillCheckCircle } from 'react-icons/ai';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { checkPin, sendToJackpot } from '../../../utils/walletUtils';
 
@@ -42,10 +41,8 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
     const handleSend = async () => {
         if (isValidPin) {
             const response = await sendToJackpot({ cards: totalCards, passPhrase: passPhrase });
-            console.log('🚀 ~ file: JackpotDialog.js:45 ~ handleSend ~ response', response);
-
-            if (response) okToast('Cards sent to the jackpot', toast);
-            else errorToast('Error sending cards to the jackpot', toast);
+            if (response) okToast('Jackpot participation registered', toast);
+            else errorToast('Error registering participation', toast);
 
             onClose();
         }
@@ -68,27 +65,6 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
-                        <Center>
-                            <Stack direction="column" spacing={1} p={2}>
-                                <Grid templateColumns="repeat(6, 1fr)">
-                                    <GridItem>
-                                        <AiFillCheckCircle size={25} />
-                                    </GridItem>
-                                    <GridItem colSpan={5}>
-                                        <Text fontSize="sm">You've participated once for this round.</Text>
-                                    </GridItem>
-                                </Grid>
-                                <Grid templateColumns="repeat(6, 1fr)">
-                                    <GridItem>
-                                        <AiFillCheckCircle size={25} />
-                                    </GridItem>
-                                    <GridItem colSpan={5}>
-                                        <Text fontSize="sm">Your collection is complete.</Text>
-                                    </GridItem>
-                                </Grid>
-                            </Stack>
-                        </Center>
-
                         <Center>
                             <Stack
                                 minW="90%"
@@ -156,9 +132,9 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                                         <Text>
                                             Enter into a{' '}
                                             <strong>
-                                                <u>drawing of 2</u>
+                                                <u>drawing of 7</u>
                                             </strong>{' '}
-                                            Tarasca Cards per cucle.
+                                            Special Cards per cucle.
                                         </Text>
                                     </GridItem>
                                 </Grid>

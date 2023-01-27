@@ -9,7 +9,6 @@ import { BLOCKTIME, FREQUENCY } from '../../data/CONSTANTS';
 
 import { getBlockchainStatus } from '../../services/Ardor/ardorInterface';
 import HCountdown from './HCountdown';
-import { getJackpotParticipants } from '../../services/Jackpot/utils';
 
 /**
  * @name JackpotWidget
@@ -22,7 +21,7 @@ import { getJackpotParticipants } from '../../services/Jackpot/utils';
  * <JackpotWidget cStyle = 1 /> // Default style - Same as the home page
  * <JackpotWidget cStyle = 2 /> // Style for the jackpot page
  */
-const JackpotWidget = ({ cStyle = 1, account = '' }) => {
+const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
     const [jackpotStatus, setJackpotStatus] = useState({
         prev_height: 0,
         status: false,
@@ -36,35 +35,7 @@ const JackpotWidget = ({ cStyle = 1, account = '' }) => {
         remainingBlocks: 'loading',
     });
 
-    const [participants, setParticipants] = useState({ numParticipants: 0, participants: [], imParticipant: false });
-
-    useEffect(() => {
-        const getParticipants = async () => {
-            // Get participants
-            const response = await getJackpotParticipants();
-            let auxParticipants = [];
-            let numParticipants = 0;
-            let imParticipant = false;
-            Object.entries(response).forEach(entry => {
-                const [key, value] = entry;
-                if (value > 0) {
-                    auxParticipants.push(key);
-                    numParticipants += value;
-                    if (key === account) {
-                        imParticipant = true;
-                    }
-                }
-            });
-            setParticipants({ numParticipants, participants: auxParticipants, imParticipant });
-        };
-
-        getParticipants();
-
-        const interval = setInterval(() => {
-            getParticipants();
-        }, 12500);
-        return () => clearInterval(interval);
-    }, [account]);
+    
 
     useEffect(() => {
         const getJackpotStatus = async () => {
@@ -152,7 +123,7 @@ const JackpotWidget = ({ cStyle = 1, account = '' }) => {
                             <GridItem colSpan={2} p={4} borderLeftRadius="lg">
                                 <HCountdown
                                     jackpotTimer={jackpotTimer}
-                                    numParticipants={participants.numParticipants}
+                                    numParticipants={numParticipants}
                                 />
                             </GridItem>
 
@@ -165,11 +136,7 @@ const JackpotWidget = ({ cStyle = 1, account = '' }) => {
                             </GridItem>
                         </Grid>
                     </Center>
-                    {participants.imParticipant && (
-                        <Text mt={4} fontSize="2xl" textAlign="center" fontWeight="bolder">
-                            ✅ You've participated once for this round!
-                        </Text>
-                    )}
+                    
                 </>
             )}
         </>

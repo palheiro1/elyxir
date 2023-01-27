@@ -1,6 +1,6 @@
 import { HStack, IconButton, PinInput, PinInputField, Select, Stack, useDisclosure, useToast } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { getAllUsers } from '../../../../utils/storage';
+import { getAllUsers, setNotFirstTime } from '../../../../utils/storage';
 import ConfirmDialog from '../../../Modals/ConfirmDialog/ConfirmDialog';
 import { ImCross } from 'react-icons/im';
 
@@ -57,16 +57,20 @@ const UserLogin = ({ setInfoAccount }) => {
             setIsInvalidPin(true);
             return;
         }
+
         setInfoAccount(account);
-        navigate('/home');
 
-        // Alerta de backup
-        if (!account.backupDone && !activeToast) {
-            backupToast(toast);
-            activeToast = true;
+        if (account.firstTime) {
+            navigate('/welcome');
+            setNotFirstTime(user);
+        } else {
+            navigate('/home');
+            // Alerta de backup
+            if (!account.backupDone && !activeToast) {
+                backupToast(toast);
+                activeToast = true;
+            }
         }
-
-        return;
     };
 
     return (
@@ -94,7 +98,6 @@ const UserLogin = ({ setInfoAccount }) => {
                 <PinInput
                     size="lg"
                     placeholder="🔒"
-                    onComplete={handleCompletePin}
                     onChange={handleCompletePin}
                     isInvalid={isInvalidPin}
                     variant="filled"

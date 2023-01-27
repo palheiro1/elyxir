@@ -15,6 +15,7 @@ import Restore from './pages/Restore/Restore';
 import Home from './pages/Home/Home';
 import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
 import Exchange from './pages/Exchange/Exchange';
+import Welcome from './components/Pages/WelcomePage/Welcome';
 
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
@@ -53,6 +54,8 @@ function App() {
                     path="/home"
                     element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} marketFlag={marketFlag} />}
                 />
+
+                <Route path="/welcome" element={<Welcome />} />
 
                 {/* EXCHANGE PAGE */}
                 <Route path="/exchange" element={<Exchange />} />

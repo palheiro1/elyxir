@@ -11,14 +11,15 @@ import { CIPHER_ALGORITHM, IV_LENGTH } from '../data/CONSTANTS';
  * @returns {object} user object
  * @description initialises the user information for localStorage
  */
-export const initUser = (name, accountRs, usePin, passPhrase="", pin="") => {
+export const initUser = (name, accountRs, usePin, passPhrase="", pin="", firstTime = false) => {
     return {
         name: name, 
         accountRs: accountRs,
         usePin: usePin,
         token: (usePin) ? encrypt(passPhrase, pin) : "",
         timestamp: undefined,
-        backupDone: false
+        backupDone: false,
+        firstTime: firstTime,
     } 
 }
 
@@ -197,5 +198,16 @@ export const getBackupDone = (name) => {
 export const setBackupDone = (name) => {
     let user = getUser(name);
     user.backupDone = true;
+    registerOrUpdateUser(user);
+}
+
+/**
+ * @param {string} name - user name
+ * @returns {boolean} true if the user has been registered
+ * @description true if the user has been registered
+ */
+export const setNotFirstTime = (name) => {
+    let user = getUser(name);
+    user.firstTime = false;
     registerOrUpdateUser(user);
 }

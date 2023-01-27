@@ -29,13 +29,43 @@ const InOutTransaction = ({ type, style = 2 }) => {
         let icon;
         if (typeTx === 'in') {
             color = 'green';
-            icon = <ArrowDownIcon fontSize="2xl" border="1px" borderColor="whiteAlpha.400" bgColor={color} rounded="full" />;
+            icon = (
+                <ArrowDownIcon
+                    shadow="dark-lg"
+                    fontSize="2xl"
+                    color="white"
+                    border="1px"
+                    borderColor="whiteAlpha.400"
+                    bgColor={color}
+                    rounded="full"
+                />
+            );
         } else if (typeTx === 'out') {
             color = 'blue.600';
-            icon = <ArrowUpIcon fontSize="2xl" border="1px" borderColor="whiteAlpha.400" bgColor={color} rounded="full" />;
+            icon = (
+                <ArrowUpIcon
+                    shadow="dark-lg"
+                    fontSize="2xl"
+                    color="white"
+                    border="1px"
+                    borderColor="whiteAlpha.400"
+                    bgColor={color}
+                    rounded="full"
+                />
+            );
         } else if (typeTx === 'placed') {
             color = 'orange.600';
-            icon = <ArrowUpDownIcon fontSize="2xl" border="1px" borderColor="whiteAlpha.400" bgColor={color} rounded="full" />;
+            icon = (
+                <ArrowUpDownIcon
+                    shadow="dark-lg"
+                    fontSize="2xl"
+                    color="white"
+                    border="1px"
+                    borderColor="whiteAlpha.400"
+                    bgColor={color}
+                    rounded="full"
+                />
+            );
         }
 
         return icon;

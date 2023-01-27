@@ -88,7 +88,7 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
     // -----------------------------------------------------------------
     useEffect(() => {
         if (marketFlag) {
-            setOption(4);
+            setOption(3);
         }
     }, [marketFlag]);
 
@@ -314,7 +314,7 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
 
     return (
         <>
-            <Box bg={bgColor} m={4} px={4} py={2} rounded="lg">
+            <Box bg={bgColor} m={12} px={8} py={4} rounded="lg">
                 <LateralMenu
                     account={infoAccount.accountRs}
                     username={infoAccount.name}

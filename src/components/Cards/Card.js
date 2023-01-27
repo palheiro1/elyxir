@@ -98,6 +98,8 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     const highBidOrders = bidOrders.length > 0 ? bidOrders[0].priceNQTPerShare / NQTDIVIDER : '';
     // ------------------------------
 
+    const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
+
     return (
         <Box p={3} border="1px" rounded="lg" borderColor="gray" shadow="xl" bgColor={bgColor}>
             <Stack direction="column" spacing={4}>
@@ -121,17 +123,15 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                         <Flex gap={2}>
                             <Text
                                 color="white"
-                                fontSize="md"
+                                fontSize="sm"
                                 rounded="lg"
-                                fontWeight="bolder"
-                                bgColor="whiteAlpha.300"
+                                bgColor={badgeColor}
                                 px={2}>
                                 {continent}
                             </Text>
                             <Text
-                                fontWeight="bolder"
                                 color="black"
-                                fontSize="md"
+                                fontSize="sm"
                                 bgGradient={RARITY_COLORS[rarity]}
                                 rounded="lg"
                                 px={2}>
@@ -149,13 +149,14 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                 </Grid>
                 {fixOnlyBuy ? (
                     <Box w="100%">
-                        <Button w="100%" variant="solid" _hover={{ fontWeight: 'bold', shadow: 'xl' }} onClick={onOpenTrade}>
+                        <Button w="100%" color="black" variant="solid" bgColor="#F18800" _hover={{ fontWeight: 'bold', shadow: 'xl' }} onClick={onOpenTrade}>
                             BUY
                         </Button>
                     </Box>
                 ) : !isMarket ? (
                     <SimpleGrid columns={3} gap={1}>
                         <Button
+                            fontWeight="medium"
                             leftIcon={<FaRegPaperPlane />}
                             _hover={{ fontWeight: 'bold', shadow: 'xl' }}
                             onClick={onOpenSend}
@@ -164,6 +165,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                         </Button>
 
                         <Button
+                            fontWeight="medium"
                             leftIcon={<BsTools />}
                             _hover={{ fontWeight: 'bold', shadow: 'xl' }}
                             onClick={onOpenCraft}
@@ -172,6 +174,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                         </Button>
 
                         <Button
+                            fontWeight="medium"
                             leftIcon={<BsArrowLeftRight />}
                             _hover={{ fontWeight: 'bold', shadow: 'xl' }}
                             onClick={onOpenMorph}
