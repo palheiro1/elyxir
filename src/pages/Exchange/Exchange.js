@@ -4,10 +4,8 @@ import {
     ButtonGroup,
     Center,
     Heading,
-    SimpleGrid,
     Stack,
     Text,
-    useColorModeValue,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +17,7 @@ function Iframe(props) {
 const Exchange = ({ infoAccount }) => {
     const navigate = useNavigate();
     const [option, setOption] = useState('crypto');
-    const bgColor = useColorModeValue('gray.100', 'gray.700');
+    //const bgColor = useColorModeValue('gray.100', 'gray.700');
 
     useEffect(() => {
         if (infoAccount === undefined || !infoAccount.token) {
@@ -29,10 +27,6 @@ const Exchange = ({ infoAccount }) => {
 
     if (!infoAccount) return null;
     const { accountRs } = infoAccount;
-
-    const showCrypto = () => {
-        return;
-    };
 
     return (
         <>
