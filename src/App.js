@@ -58,7 +58,7 @@ function App() {
                 <Route path="/welcome" element={<Welcome />} />
 
                 {/* EXCHANGE PAGE */}
-                <Route path="/exchange" element={<Exchange />} />
+                <Route path="/exchange" element={<Exchange infoAccount={infoAccount} />} />
 
                 {/* 404 - NOT FOUND */}
                 <Route path="*" element={<Navigate replace to="/login" />} />

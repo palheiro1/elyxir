@@ -37,8 +37,15 @@ import BuyGiftzDialog from '../Modals/BuyGiftzDialog/BuyGiftzDialog';
  * @dev With "isHeader" parameter we can calculate logos and if need ColorSwitcher
  * @author Jesús Sánchez Fernández
  */
-const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBalance, GEMSBalance, username, goToMarket }) => {
-
+const Navigation = ({
+    isHeader = true,
+    isLogged = false,
+    IGNISBalance,
+    GIFTZBalance,
+    GEMSBalance,
+    username,
+    goToMarket,
+}) => {
     const { isOpen, onToggle } = useDisclosure();
     const navigate = useNavigate();
 
@@ -46,11 +53,7 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
     const referenceBuyGiftz = useRef();
 
     // ----------------------- SEND CURRENCY -----------------------
-    const {
-        isOpen: isOpenSendCurrency,
-        onClose: onCloseSendCurrency,
-        onOpen: onOpenSendCurrency,
-    } = useDisclosure();
+    const { isOpen: isOpenSendCurrency, onClose: onCloseSendCurrency, onOpen: onOpenSendCurrency } = useDisclosure();
     const reference = useRef();
 
     const [currency, setCurrency] = useState({ name: 'IGNIS', balance: IGNISBalance });
@@ -71,11 +74,11 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
         if (currency === 'IGNIS') {
             navigate('/exchange');
         } else if (currency === 'GIFTZ') {
-            //setCurrency({ name: 'GIFTZ', balance: GIFTZBalance });
+            onOpenBuyGiftz();
         } else if (currency === 'GEMS') {
             goToMarket();
         }
-    }
+    };
     // -------------------------------------------------------------
     const needTarascaLogo = isHeader ? false : true;
     const needChangeColor = isHeader ? true : false;
@@ -123,7 +126,9 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
                                 <Portal>
                                     <MenuList>
                                         <MenuItem onClick={() => handleOpenSendCurrency('IGNIS')}>Send IGNIS</MenuItem>
-                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('IGNIS')}>Get IGNIS</MenuItem>
+                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('IGNIS')}>
+                                            Get IGNIS
+                                        </MenuItem>
                                     </MenuList>
                                 </Portal>
                             </Menu>
@@ -134,7 +139,9 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
                                 <Portal>
                                     <MenuList>
                                         <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
-                                        <MenuItem onClick={onOpenBuyGiftz}>Get GIFTZ</MenuItem>
+                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('GIFTZ')}>
+                                            Get GIFTZ
+                                        </MenuItem>
                                     </MenuList>
                                 </Portal>
                             </Menu>
@@ -145,7 +152,7 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
                                 <Portal>
                                     <MenuList>
                                         <MenuItem onClick={() => handleOpenSendCurrency('GEMS')}>Send GEM</MenuItem>
-                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('GEMS') }>Get GEM</MenuItem>
+                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('GEMS')}>Get GEM</MenuItem>
                                     </MenuList>
                                 </Portal>
                             </Menu>
@@ -167,7 +174,13 @@ const Navigation = ({ isHeader = true, isLogged = false, IGNISBalance, GIFTZBala
                 />
             )}
 
-            <BuyGiftzDialog isOpen={isOpenBuyGiftz} onClose={onCloseBuyGiftz} reference={referenceBuyGiftz} name={username} IGNISBalance={IGNISBalance} />
+            <BuyGiftzDialog
+                isOpen={isOpenBuyGiftz}
+                onClose={onCloseBuyGiftz}
+                reference={referenceBuyGiftz}
+                name={username}
+                IGNISBalance={IGNISBalance}
+            />
 
             {isHeader && (
                 <Collapse in={isOpen} animateOpacity>
