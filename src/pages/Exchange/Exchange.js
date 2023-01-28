@@ -1,12 +1,4 @@
-import {
-    Box,
-    Button,
-    ButtonGroup,
-    Center,
-    Heading,
-    Stack,
-    Text,
-} from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Center, Heading, Stack, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -69,6 +61,12 @@ const Exchange = ({ infoAccount }) => {
                     </Box>
                 </Center>
             )}
+
+            <Center>
+                <Button p={4} variant="outline" onClick={() => navigate('/home')}>
+                    Back to my wallet
+                </Button>
+            </Center>
         </>
     );
 };

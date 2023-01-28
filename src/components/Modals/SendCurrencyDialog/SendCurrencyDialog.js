@@ -41,7 +41,7 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
     const maxCurrency = Math.floor(Number(currency.balance));
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
-        step: 0.01,
+        step: currency.name === 'GIFTZ' ? 1 : 0.1,
         defaultValue: 0,
         min: 0,
         max: maxCurrency,

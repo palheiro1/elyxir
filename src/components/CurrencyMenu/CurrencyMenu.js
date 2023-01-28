@@ -18,6 +18,7 @@ import BuyGiftzDialog from '../Modals/BuyGiftzDialog/BuyGiftzDialog';
 const CurrencyMenu = ({ infoAccount = "", goToMarket }) => {
 
     const { IGNISBalance, GIFTZBalance, GEMSBalance, name:username } = infoAccount;
+    
     const navigate = useNavigate();
 
     const { isOpen: isOpenBuyGiftz, onClose: onCloseBuyGiftz, onOpen: onOpenBuyGiftz } = useDisclosure();
@@ -49,6 +50,8 @@ const CurrencyMenu = ({ infoAccount = "", goToMarket }) => {
             goToMarket();
         }
     };
+
+    if(!IGNISBalance || !GIFTZBalance || !GEMSBalance || !username) return null;
 
     return (
         <>
