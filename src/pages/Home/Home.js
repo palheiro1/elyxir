@@ -28,7 +28,12 @@ import {
 // Services
 import { fetchAllCards, fetchGemCards, getAsset } from '../../utils/cardsUtils';
 import { getCurrentAskAndBids, getGIFTZBalance, getIGNISBalance } from '../../utils/walletUtils';
-import { getAccountLedger, getBlockchainTransactions, getTrades, getUnconfirmedTransactions } from '../../services/Ardor/ardorInterface';
+import {
+    getAccountLedger,
+    getBlockchainTransactions,
+    getTrades,
+    getUnconfirmedTransactions,
+} from '../../services/Ardor/ardorInterface';
 import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
 import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 import { handleConfirmateNotification, handleNewNotification } from '../../utils/alerts';
@@ -162,24 +167,29 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
             setNeedReload(false);
 
             // Fetch all info
-            const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades, dividends] = await Promise.all([
-                fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
-                fetchGemCards(accountRs, GEMASSETACCOUNT, true),
-                getIGNISBalance(accountRs),
-                getGIFTZBalance(accountRs),
-                getBlockchainTransactions(2, accountRs, true),
-                getUnconfirmedTransactions(2, accountRs),
-                getCurrentAskAndBids(accountRs),
-                getTrades(2, accountRs),
-                getAccountLedger({ accountRs: accountRs, firstIndex: 0, lastIndex: 99, eventType: 'ASSET_DIVIDEND_PAYMENT' }),
-            ]);
+            const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades, dividends] =
+                await Promise.all([
+                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
+                    fetchGemCards(accountRs, GEMASSETACCOUNT, true),
+                    getIGNISBalance(accountRs),
+                    getGIFTZBalance(accountRs),
+                    getBlockchainTransactions(2, accountRs, true),
+                    getUnconfirmedTransactions(2, accountRs),
+                    getCurrentAskAndBids(accountRs),
+                    getTrades(2, accountRs),
+                    getAccountLedger({
+                        accountRs: accountRs,
+                        firstIndex: 0,
+                        lastIndex: 99,
+                        eventType: 'ASSET_DIVIDEND_PAYMENT',
+                    }),
+                ]);
 
             // -----------------------------------------------------------------
             // Check notifications - Unconfirmed transactions
             const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
             handleNotifications(unconfirmedTxs);
             // -----------------------------------------------------------------
-
 
             // -----------------------------------------------------------------
             // Rebuild infoAccount
@@ -198,7 +208,6 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
                 trades: trades.trades,
             };
 
-            
             // -----------------------------------------------------------------
             // Get all hashes and compare
             // -----------------------------------------------------------------
@@ -316,8 +325,7 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
         <>
             <Box bg={bgColor} m={12} px={8} py={4} rounded="lg">
                 <LateralMenu
-                    account={infoAccount.accountRs}
-                    username={infoAccount.name}
+                    infoAccount={infoAccount}
                     handleLogout={handleLogout}
                     option={option}
                     setOption={handleChangeOption}

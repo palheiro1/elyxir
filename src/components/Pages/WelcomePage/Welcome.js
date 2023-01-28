@@ -30,7 +30,8 @@ const Welcome = () => {
                             rounded="lg"
                             borderColor="whiteAlpha.300"
                             bgColor={bgColor}
-                            _hover={{ cursor: 'pointer', bgColor: bgHoverColor }}>
+                            _hover={{ cursor: 'pointer', bgColor: bgHoverColor }}
+                            onClick={() => navigate("/exchange")}>
                             <Text>Simplex</Text>
                             <Text>(Fiat to IGNIS)</Text>
                         </Box>
@@ -40,7 +41,8 @@ const Welcome = () => {
                             bgColor={bgColor}
                             rounded="lg"
                             borderColor="whiteAlpha.300"
-                            _hover={{ cursor: 'pointer', bgColor: bgHoverColor }}>
+                            _hover={{ cursor: 'pointer', bgColor: bgHoverColor }}
+                            onClick={() => navigate("/exchange")}>
                             <Text>Changelly</Text>
                             <Text>(Crypto to IGNIS)</Text>
                         </Box>

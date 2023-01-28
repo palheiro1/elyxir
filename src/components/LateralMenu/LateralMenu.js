@@ -1,5 +1,6 @@
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 import { Box, Collapse, Flex, IconButton, useDisclosure } from '@chakra-ui/react';
+import TopMenu from '../../pages/Home/TopMenu';
 import MobileMenu from './MobileMenu';
 
 import NormalMenu from './NormalMenu';
@@ -22,18 +23,19 @@ const LateralMenu = ({
     children,
     showAllCards,
     handleShowAllCards,
-    username,
-    account,
+    infoAccount,
     handleLogout,
 }) => {
     const { isOpen, onToggle, onClose } = useDisclosure();
 
-    if (!username || !account) return null;
+    
 
     const handleSetOption = (option) => {
         setOption(option);
         onClose();
     }
+    if(!infoAccount) return null;
+    const { account, username } = infoAccount;
 
     return (
         <Box>
@@ -46,12 +48,13 @@ const LateralMenu = ({
                 />
             </Flex>
             <Flex display={{ base: 'none', md: 'unset' }}>
+                <TopMenu infoAccount={infoAccount}  />
+            </Flex>
+            <Flex display={{ base: 'none', md: 'unset' }}>
                 <NormalMenu
                     option={option}
                     setOption={setOption}
                     handleLogout={handleLogout}
-                    username={username}
-                    account={account}
                     showAllCards={showAllCards}
                     handleShowAllCards={handleShowAllCards}
                     children={children}
