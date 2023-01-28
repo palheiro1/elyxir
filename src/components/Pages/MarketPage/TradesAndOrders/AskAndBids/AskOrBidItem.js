@@ -17,9 +17,14 @@ import TableCard from '../../../../Cards/TableCard';
  * @author Jesús Sánchez Fernández
  * @version 1.0.0
  */
-const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setSelectedOrder, isGem = false }) => {
+const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setSelectedOrder, onlyOneAsset, canDelete = false }) => {
     // ------------------------------------------------------------
     const [hover, setHover] = useState(false);
+    const handleHover = (value) => {
+        if(canDelete) {
+            setHover(value);
+        }
+    };
     // ------------------------------------------------------------
 
     ignis = Number(ignis);
@@ -57,7 +62,6 @@ const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setS
 
     const normalStyle = {
         opacity: 1,
-        cursor: 'none',
     };
 
     // ------------------------------------------------------------
@@ -80,10 +84,10 @@ const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setS
     return (
         <Tr
             style={hover ? hoverStyle : normalStyle}
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
-            onClick={handleDeleteOrder}>
-            <Td textAlign="center">{nameHover}</Td>
+            onMouseEnter={() => handleHover(true)}
+            onMouseLeave={() => handleHover(false)}
+            onClick={canDelete ? handleDeleteOrder : null}>
+            {!onlyOneAsset && <Td textAlign="center">{nameHover}</Td> }
             <Td textAlign="center">{fixedIgnis}</Td>
             <Td textAlign="center">{showAmount}</Td>
         </Tr>

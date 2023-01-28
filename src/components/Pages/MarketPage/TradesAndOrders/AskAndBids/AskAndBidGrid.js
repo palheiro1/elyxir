@@ -9,7 +9,7 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
-import { GEMASSET, NQTDIVIDER } from '../../../../../data/CONSTANTS';
+import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getAsset } from '../../../../../utils/cardsUtils';
 import CancelDialog from '../../../../Modals/TradeDialog/CancelDialog/CancelDialog';
 import AskOrBidItem from './AskOrBidItem';
@@ -27,7 +27,7 @@ import AskOrBidItem from './AskOrBidItem';
  * @author Jesús Sánchez Fernández
  * @version 1.0.0
  */
-const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, username }) => {
+const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, username, canDelete }) => {
 
     const [selectedOrder, setSelectedOrder] = useState();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -54,7 +54,6 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
                         </Thead>
                         <Tbody>
                             {askOrders.map(order => {
-                                const isGem = order.asset === GEMASSET;
                                 const _asset = onlyOneAsset
                                     ? order.asset
                                     : getAsset(order.asset, cards);
@@ -68,7 +67,8 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
                                         isAsk={true}
                                         onOpen={onOpen}
                                         setSelectedOrder={setSelectedOrder}
-                                        isGem={isGem}
+                                        onlyOneAsset={onlyOneAsset}
+                                        canDelete={canDelete}
                                     />
                                 );
                             })}
@@ -104,6 +104,8 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
                                         amount={order.quantityQNT}
                                         onOpen={onOpen}
                                         setSelectedOrder={setSelectedOrder}
+                                        onlyOneAsset={onlyOneAsset}
+                                        canDelete={canDelete}
                                     />
                                 );
                             })}

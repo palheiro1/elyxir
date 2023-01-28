@@ -51,6 +51,7 @@ const Market = ({ infoAccount, cards, gemCards }) => {
                         cards={cards}
                         askOrders={infoAccount.currentAsks}
                         bidOrders={infoAccount.currentBids}
+                        canDelete={true}
                     />
                     <TradesAndOrderTable account={infoAccount.accountRs} cards={cards} trades={infoAccount.trades} />
                 </Box>
