@@ -15,7 +15,7 @@ import { Box, Image, Stack, Text } from '@chakra-ui/react';
 const TableCard = ({ image, title, continent, rarity, needDelete = false }) => {
     return (
         <Stack direction={'row'}>
-            <Image maxW="75px" src={image} alt={title} mr={6} />
+            <Image maxW="75px" src={image} alt={title} mr={6} shadow="lg" rounded="sm" />
 
             <Stack direction={'row'} align="center">
                 {!needDelete ? (
