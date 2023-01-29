@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormLabel, Heading, Input, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Divider, FormControl, FormLabel, Heading, Input, Stack, Text } from '@chakra-ui/react';
 
 const SwapToArdor = ({ infoAccount, cards }) => {
     const depositAddress = '0x0000000000000000000000000000000000000000';
@@ -15,6 +15,8 @@ const SwapToArdor = ({ infoAccount, cards }) => {
                 <FormLabel>Deposit address</FormLabel>
             </FormControl>
 
+            <Divider />
+
             <Box>
                 <Heading fontSize="3xl" fontWeight="light">
                     2. Wait until the transaction is
@@ -23,6 +25,8 @@ const SwapToArdor = ({ infoAccount, cards }) => {
                     well confirmed.
                 </Text>
             </Box>
+
+            <Divider />
 
             <Heading fontSize="3xl" fontWeight="light">
                 3. Initiate the swap to this wallet
