@@ -289,7 +289,7 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
             <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // Option 1 - Inventory
             <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />, // Option 2 - History
             <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />, // Option 3 - Market
-            <Bridge />, // Option 4 - Bridge
+            <Bridge infoAccount={infoAccount} cards={cardsFiltered} />, // Option 4 - Bridge
             <Jackpot infoAccount={infoAccount} cards={cards} />, // Option 5 - Jackpot
             <Account infoAccount={infoAccount} />, // Option 6 - Account
             // Option 7 - BuyPack - Modal
