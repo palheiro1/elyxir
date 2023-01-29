@@ -11,7 +11,7 @@ import { Button, SimpleGrid } from '@chakra-ui/react';
  */
 const SectionSwitch = ({ option, setOption }) => {
     return (
-        <SimpleGrid columns={2} w="100%" my={6} shadow="md" rounded="lg">
+        <SimpleGrid columns={2} w="100%" mb={6} shadow="md" rounded="lg">
             <Button
                 isActive={option === 0}
                 w="100%"
