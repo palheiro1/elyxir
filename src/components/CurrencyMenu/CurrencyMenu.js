@@ -56,6 +56,8 @@ const CurrencyMenu = ({ infoAccount = "", goToMarket }) => {
     return (
         <>
             <ButtonGroup
+                rounded="lg"
+                shadow="md"
                 size="sm"
                 fontSize={'sm'}
                 isAttached

@@ -1,4 +1,4 @@
-import { Table, TableContainer, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
+import { Table, TableContainer, Tbody, Td, Thead, Tr, useColorModeValue } from '@chakra-ui/react';
 import { NQTDIVIDER } from '../../../../data/CONSTANTS';
 import { getAsset } from '../../../../utils/cardsUtils';
 import { getTxTimestamp } from '../../../../utils/txUtils';
@@ -21,10 +21,12 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
         return trade.sellerRS === account;
     };
 
+    const bgHeadColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+
     return (
         <TableContainer mt={4} border="1px" borderColor="whiteAlpha.100" rounded="lg" shadow="lg" boxShadow="md">
-            <Table variant="simple">
-                <Thead>
+            <Table>
+                <Thead bgColor={bgHeadColor}>
                     <Tr>
                         <Td></Td>
                         <Td textAlign="center">Title</Td>

@@ -6,6 +6,7 @@ import {
     Td,
     Text,
     Thead,
+    useColorModeValue,
     useDisclosure,
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
@@ -33,21 +34,26 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
     const { isOpen, onOpen, onClose } = useDisclosure();
     const refCancel = useRef();
 
+    const bgTitleColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+    const bgHeadColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+    const borderColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+
     return (
         <>
             <SimpleGrid columns={{ base: 1, md: 2}} mt={2} shadow="lg">
                 <TableContainer
                     mt={4}
                     border="2px"
-                    borderColor="whiteAlpha.100"
+                    borderColor={borderColor}
+                    borderLeftRadius="lg"
                     shadow="inner"
                     boxShadow="md">
-                    <Text textAlign="center" p={4} fontSize="lg" borderBottom="1px">
+                    <Text textAlign="center" p={4} fontSize="lg" borderBottom="1px" bgColor={bgTitleColor}>
                         Asks
                     </Text>
 
                     <Table variant="simple">
-                        <Thead backgroundColor="whiteAlpha.300">
+                        <Thead backgroundColor={bgHeadColor}>
                             {!onlyOneAsset && <Td textAlign="center">Asset</Td>}
                             <Td textAlign="center">Ignis</Td>
                             <Td textAlign="center">Amount</Td>
@@ -78,14 +84,15 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
                 <TableContainer
                     mt={4}
                     border="2px"
-                    borderColor="whiteAlpha.100"
+                    borderColor={borderColor}
+                    borderRightRadius="lg"
                     shadow="inner"
                     boxShadow="md">
-                    <Text textAlign="center" p={4} fontSize="lg" borderBottom="1px">
+                    <Text textAlign="center" p={4} fontSize="lg" borderBottom="1px" bgColor={bgTitleColor}>
                         Bids
                     </Text>
                     <Table variant="simple">
-                        <Thead backgroundColor="whiteAlpha.300">
+                        <Thead backgroundColor={bgHeadColor}>
                             {!onlyOneAsset && <Td textAlign="center">Asset</Td>}
                             <Td textAlign="center">Ignis</Td>
                             <Td textAlign="center">Amount</Td>
