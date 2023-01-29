@@ -119,8 +119,8 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                                         <Tab _selected={{ borderColor: '#F18800' }}>Culture</Tab>
                                         <Tab _selected={{ borderColor: '#F18800' }}>Location</Tab>
                                     </TabList>
-                                    <TabPanels>
-                                        <TabPanel overflow="auto" maxH="27.5rem">
+                                    <TabPanels overflowY="auto" maxH="27.5rem">
+                                        <TabPanel>
                                             <Center mb={4}>
                                                 <Box maxW="50%">
                                                     <Image
@@ -147,7 +147,7 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                                                 />
                                             </Center>
                                         </TabPanel>
-                                        <TabPanel overflow="auto" maxH="27.5rem">
+                                        <TabPanel>
                                             {monster.culture.map((c, i) => (
                                                 <Text key={i} fontSize="md" color="gray" textAlign="justify" mb={4}>
                                                     {c}
@@ -169,7 +169,7 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                                                 />
                                             </Center>
                                         </TabPanel>
-                                        <TabPanel overflow="auto" maxH="27.5rem" pb={8}>
+                                        <TabPanel>
                                             <Center w="100%">
                                                 <Iframe iframe={MapIframe} />
                                             </Center>
