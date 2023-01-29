@@ -69,7 +69,7 @@ const GemWidget = ({ username, gemCards = [] }) => {
                     borderColor="whiteAlpha.300"
                     rounded="lg"
                     bg="blackAlpha"
-                    shadow="dark-lg"
+                    shadow="lg"
                     w={{ base: '100%', md: 'unset' }}
                     direction="row">
                     <GridItem colSpan={2} p={4} borderLeftRadius="lg">
