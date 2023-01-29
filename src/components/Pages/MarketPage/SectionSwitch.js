@@ -1,6 +1,5 @@
 import { Box, Button } from '@chakra-ui/react';
 
-
 /**
  * @name SectionSwitch
  * @description Component to switch between the sections of the market page
@@ -12,10 +11,10 @@ import { Box, Button } from '@chakra-ui/react';
  */
 const SectionSwitch = ({ option, setOption }) => {
     return (
-        <Box w="100%" my={2}>
+        <Box w="100%" my={6} shadow="md" rounded="lg">
             <Button
                 isActive={option === 0}
-                w="50%"
+                w="33.333%"
                 size="lg"
                 rounded="node"
                 fontWeight="medium"
@@ -27,14 +26,25 @@ const SectionSwitch = ({ option, setOption }) => {
 
             <Button
                 isActive={option === 1}
-                w="50%"
+                w="33.333%"
                 size="lg"
                 rounded="node"
                 fontWeight="medium"
                 fontSize="md"
-                onClick={() => setOption(1)}
+                onClick={() => setOption(1)}>
+                Orders
+            </Button>
+
+            <Button
+                isActive={option === 2}
+                w="33.333%"
+                size="lg"
+                rounded="node"
+                fontWeight="medium"
+                fontSize="md"
+                onClick={() => setOption(2)}
                 borderRightRadius="lg">
-                Orders & Trades
+                Trades
             </Button>
         </Box>
     );

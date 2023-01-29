@@ -46,7 +46,9 @@ const Market = ({ infoAccount, cards, gemCards }) => {
 
             {option === 1 && (
                 <Box>
-                    <Heading textAlign="center" mt={4}>Orders</Heading>
+                    <Heading textAlign="center" mt={4}>
+                        Orders
+                    </Heading>
                     <AskAndBidGrid
                         username={infoAccount.name}
                         cards={cards}
@@ -54,7 +56,14 @@ const Market = ({ infoAccount, cards, gemCards }) => {
                         bidOrders={infoAccount.currentBids}
                         canDelete={true}
                     />
-                    <Heading textAlign="center" mt={4}>Trades</Heading>
+                </Box>
+            )}
+
+            {option === 2 && (
+                <Box>
+                    <Heading textAlign="center" mt={4}>
+                        Trades
+                    </Heading>
                     <TradesAndOrderTable account={infoAccount.accountRs} cards={cards} trades={infoAccount.trades} />
                 </Box>
             )}
