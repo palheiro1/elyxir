@@ -38,6 +38,7 @@ import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
 import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 import { handleConfirmateNotification, handleNewNotification } from '../../utils/alerts';
 import CardReceived from '../../components/Modals/CardReceived/CardReceived';
+import Bridge from '../../components/Pages/Bridge/Bridge';
 
 /**
  * @name Home
@@ -288,13 +289,14 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
             <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // Option 1 - Inventory
             <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />, // Option 2 - History
             <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />, // Option 3 - Market
-            <Jackpot infoAccount={infoAccount} cards={cards} />, // Option 4 - Jackpot
-            <Account infoAccount={infoAccount} />, // Option 5 - Account
-            // Option 6 - BuyPack - Modal
+            <Bridge />, // Option 4 - Bridge
+            <Jackpot infoAccount={infoAccount} cards={cards} />, // Option 5 - Jackpot
+            <Account infoAccount={infoAccount} />, // Option 6 - Account
+            // Option 7 - BuyPack - Modal
         ];
 
         const loadComponent = async () => {
-            if (option === 6) {
+            if (option === 7) {
                 onOpen();
                 setOption(lastOption);
             } else {

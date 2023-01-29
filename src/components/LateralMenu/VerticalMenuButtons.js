@@ -6,7 +6,7 @@ import {
     VStack,
 } from '@chakra-ui/react';
 
-import { BsReverseLayoutTextWindowReverse, BsClockHistory } from 'react-icons/bs';
+import { BsReverseLayoutTextWindowReverse, BsClockHistory, BsArrowLeftRight } from 'react-icons/bs';
 
 import { GiCardRandom, GiCutDiamond } from 'react-icons/gi';
 import { AiOutlineLogout, AiOutlineSetting, AiOutlineShoppingCart } from 'react-icons/ai';
@@ -39,9 +39,9 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
                 _hover={{ background: '#F18000' }}
                 _active={{ background: '#F18000' }}
                 textColor={'white'}
-                onClick={() => setOption(6)}>
+                onClick={() => setOption(7)}>
                 <Stack direction="row" align="center" w="100%">
-                    <BiPackage color={iconColor(6)} />
+                    <BiPackage color={iconColor(7)} />
                     <Text fontSize="sm" fontWeight="bolder">
                         BUY PACK
                     </Text>
@@ -113,8 +113,8 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
                 textColor={textColor(4)}
                 onClick={() => setOption(4)}>
                 <Stack direction="row" align="center" w="100%">
-                    <GiCutDiamond color={iconColor(4)} />
-                    <Text fontSize="sm">Jackpot</Text>
+                    <BsArrowLeftRight color={iconColor(4)} />
+                    <Text fontSize="sm">Bridge</Text>
                 </Stack>
             </Button>
 
@@ -127,7 +127,21 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
                 textColor={textColor(5)}
                 onClick={() => setOption(5)}>
                 <Stack direction="row" align="center" w="100%">
-                    <AiOutlineSetting color={iconColor(5)} />
+                    <GiCutDiamond color={iconColor(5)} />
+                    <Text fontSize="sm">Jackpot</Text>
+                </Stack>
+            </Button>
+
+            <Button
+                minW={widthBotones}
+                minH="50px"
+                _hover={{ background: 'white.600' }}
+                _active={{ background: 'white.600' }}
+                bgColor={bgColor(6)}
+                textColor={textColor(6)}
+                onClick={() => setOption(6)}>
+                <Stack direction="row" align="center" w="100%">
+                    <AiOutlineSetting color={iconColor(6)} />
                     <Text fontSize="sm">Account</Text>
                 </Stack>
             </Button>
@@ -137,11 +151,11 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
                 minH="50px"
                 _hover={{ background: 'white.600' }}
                 _active={{ background: 'white.600' }}
-                bgColor={bgColor(7)}
-                textColor={textColor(7)}
+                bgColor={bgColor(8)}
+                textColor={textColor(8)}
                 onClick={handleLogout}>
                 <Stack direction="row" align="center" w="100%">
-                    <AiOutlineLogout color={iconColor(7)} />
+                    <AiOutlineLogout color={iconColor(8)} />
                     <Text fontSize="sm">Logout</Text>
                 </Stack>
             </Button>
