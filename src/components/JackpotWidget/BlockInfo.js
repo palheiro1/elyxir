@@ -14,14 +14,15 @@ import { Center, Table, Tbody, Td, Tr, useColorModeValue } from '@chakra-ui/reac
 const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
 
     const pyStyle = 3;
-    const textColor = useColorModeValue("black", "white");
+    const _color = useColorModeValue("black", "white");
+    const textColor = cStyle === 1 ? "white" : _color;
 
     return (
         <Center rounded="lg">
             <Table variant="simple" my={cStyle === 1 && 6} color={textColor} size={cStyle === 1 ? "lg" : "sm"}>
                 <Tbody>
                     <Tr>
-                        <Td py={pyStyle} borderBottom="0px" color="white">
+                        <Td py={pyStyle} borderBottom="0px">
                             Remaining blocks
                         </Td>
                         <Td py={pyStyle} borderBottom="0px" color="gray">
@@ -30,7 +31,7 @@ const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
                     </Tr>
 
                     <Tr>
-                        <Td py={pyStyle} borderBottom="0px" color="white">
+                        <Td py={pyStyle} borderBottom="0px">
                             Jackpot block
                         </Td>
                         <Td py={pyStyle} borderBottom="0px" color="gray">
@@ -39,7 +40,7 @@ const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
                     </Tr>
 
                     <Tr>
-                        <Td py={pyStyle} borderBottom="0px" color="white">
+                        <Td py={pyStyle} borderBottom="0px">
                             Current block
                         </Td>
                         <Td py={pyStyle} borderBottom="0px" color="gray">
