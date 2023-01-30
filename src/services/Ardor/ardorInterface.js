@@ -3,7 +3,15 @@ import axios from 'axios';
 import qs from 'qs';
 import ardorjs from 'ardorjs';
 
-import { CURRENCY, EXCHANGERATE, GEMASSET, JACKPOTACCOUNT, NODEURL, NQTDIVIDER } from '../../data/CONSTANTS';
+import {
+    BRIDGEAPIURL,
+    CURRENCY,
+    EXCHANGERATE,
+    GEMASSET,
+    JACKPOTACCOUNT,
+    NODEURL,
+    NQTDIVIDER,
+} from '../../data/CONSTANTS';
 
 // -------------------------------------------------
 const config = {
@@ -876,6 +884,39 @@ const getBlockchainStatus = async () => {
             // handle error
             console.log('🚀 ~ file: ardorInterface.js:820 ~ getBlockchainStatus ~ error', error);
         });
+};
+
+// ----------------------------------------------
+// |                  B R I D G E               |
+// ----------------------------------------------
+
+export const getEthDepositAddress = async accountRs => {
+    try {
+        const response = await axios.get(BRIDGEAPIURL, {
+            params: {
+                action: 'getUnwrapDepositAddress',
+                account: accountRs,
+            },
+        });
+        return response.data.depositAddress;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+export const getPegAddresses = async () => {
+    try {
+        const response = await axios.get(BRIDGEAPIURL, {
+            params: {
+                action: 'getPegAddresses',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 };
 
 export {
