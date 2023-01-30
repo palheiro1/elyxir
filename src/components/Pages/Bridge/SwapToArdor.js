@@ -1,6 +1,25 @@
-import { Box, Button, Divider, FormControl, FormLabel, Heading, Input, Stack, Text } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Divider,
+    FormControl,
+    FormLabel,
+    Heading,
+    Input,
+    Stack,
+    Text,
+    Tooltip,
+    useToast,
+} from '@chakra-ui/react';
+import { okToast } from '../../../utils/alerts';
 
 const SwapToArdor = ({ infoAccount, ethAddress, cards }) => {
+    const toast = useToast();
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(ethAddress);
+        okToast('Copied to clipboard', toast);
+    };
 
     return (
         <Stack direction="column" spacing={8} align="center">
@@ -10,7 +29,15 @@ const SwapToArdor = ({ infoAccount, ethAddress, cards }) => {
             <Text fontWeight="light">to your deposit address</Text>
 
             <FormControl variant="floating" id="cards">
-                <Input value={ethAddress} isReadOnly />
+                <Tooltip label="Click to copy">
+                    <Input
+                        value={ethAddress}
+                        isReadOnly
+                        onClick={() => {
+                            copyToClipboard();
+                        }}
+                    />
+                </Tooltip>
                 <FormLabel>Deposit address</FormLabel>
             </FormControl>
 
