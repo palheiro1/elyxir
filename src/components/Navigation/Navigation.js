@@ -38,7 +38,7 @@ const Navigation = ({
 
     return (
         <Box>
-            <Flex
+            <Flex   
                 color={useColorModeValue('gray.600', 'white')}
                 minH={'60px'}
                 py={{ base: isHeader ? 2 : 0 }}

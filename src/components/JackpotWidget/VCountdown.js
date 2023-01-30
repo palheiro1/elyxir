@@ -1,4 +1,4 @@
-import { Box, Center, HStack, IconButton, Stack, Text, VStack } from '@chakra-ui/react';
+import { Box, Center, IconButton, Stack, Text, VStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { GiCutDiamond } from 'react-icons/gi';
 

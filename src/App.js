@@ -33,10 +33,6 @@ function App() {
         <ChakraProvider theme={theme}>
             <Header
                 isLogged={isLogged}
-                IGNISBalance={infoAccount.IGNISBalance}
-                GIFTZBalance={infoAccount.GIFTZBalance}
-                GEMSBalance={infoAccount.GEMSBalance}
-                username={infoAccount.name}
                 goToMarket={goToMarket}
             />
             <Routes>
