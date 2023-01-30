@@ -265,3 +265,32 @@ export const sendToJackpot = async ({ cards, passPhrase }) => {
         return responses;
     }
 };
+
+export const sendToPolygonBridge = async ({ cards, ardorAccount, ethAccount, passPhrase }) => {
+    const promises = cards.map(card =>
+        transferAsset({
+            asset: card.asset,
+            quantityQNT: card.quantity,
+            recipient: ardorAccount,
+            passPhrase: passPhrase,
+            message: ethAccount,
+            messagePrunable: true,
+            deadline: 361,
+            priority: 'HIGH',
+        })
+    );
+
+    try {
+        const results = await Promise.all(promises);
+        const success = results.every(result => result.status === 200);
+        if (success) {
+            return true;
+        } else {
+            console.error('Error transferring assets: Not all promises resolved successfully');
+            return false;
+        }
+    } catch (error) {
+        console.error(`Error transferring assets: ${error.message}`);
+        return false;
+    }
+};
