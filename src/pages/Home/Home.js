@@ -325,7 +325,7 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
 
     return (
         <>
-            <Box bg={bgColor} m={12} px={8} py={4} rounded="lg">
+            <Box bg={bgColor} m={{base: 2, md: 12}} px={{base: 2, md: 8}} py={4} rounded="lg">
                 <LateralMenu
                     infoAccount={infoAccount}
                     handleLogout={handleLogout}

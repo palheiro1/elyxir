@@ -28,14 +28,10 @@ const LateralMenu = ({
 }) => {
     const { isOpen, onToggle, onClose } = useDisclosure();
 
-    
-
-    const handleSetOption = (option) => {
+    const handleSetOption = option => {
         setOption(option);
         onClose();
-    }
-    if(!infoAccount) return null;
-    const { account, username } = infoAccount;
+    };
 
     return (
         <Box>
@@ -48,7 +44,7 @@ const LateralMenu = ({
                 />
             </Flex>
             <Flex display={{ base: 'none', md: 'unset' }}>
-                <TopMenu infoAccount={infoAccount}  />
+                <TopMenu infoAccount={infoAccount} />
             </Flex>
             <Flex display={{ base: 'none', md: 'unset' }}>
                 <NormalMenu
@@ -61,15 +57,16 @@ const LateralMenu = ({
                 />
             </Flex>
             <Collapse in={isOpen} animateOpacity>
-                <MobileMenu
-                    option={option}
-                    setOption={handleSetOption}
-                    handleLogout={handleLogout}
-                    username={username}
-                    account={account}
-                    showAllCards={showAllCards}
-                    handleShowAllCards={handleShowAllCards}
-                />
+                {infoAccount && (
+                    <MobileMenu
+                        option={option}
+                        setOption={handleSetOption}
+                        handleLogout={handleLogout}
+                        infoAccount={infoAccount}
+                        showAllCards={showAllCards}
+                        handleShowAllCards={handleShowAllCards}
+                    />
+                )}
             </Collapse>
             <Flex display={{ base: 'block', md: 'none' }}>{!isOpen ? children : null}</Flex>
         </Box>
