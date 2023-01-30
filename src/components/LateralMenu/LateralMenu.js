@@ -1,6 +1,7 @@
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
-import { Box, Collapse, Flex, IconButton, useDisclosure } from '@chakra-ui/react';
+import { Box, Collapse, Flex, IconButton, Spacer, useDisclosure } from '@chakra-ui/react';
 import TopMenu from '../../pages/Home/TopMenu';
+import { ColorModeSwitcher } from '../ColorModeSwitch/ColorModeSwitcher';
 import MobileMenu from './MobileMenu';
 
 import NormalMenu from './NormalMenu';
@@ -42,6 +43,8 @@ const LateralMenu = ({
                     variant={'ghost'}
                     aria-label={'Toggle Navigation'}
                 />
+                <Spacer />
+                <ColorModeSwitcher justifySelf="flex-end" />
             </Flex>
             <Flex display={{ base: 'none', md: 'unset' }}>
                 <TopMenu infoAccount={infoAccount} />
