@@ -1,9 +1,8 @@
-import { Box, Center, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
+import { Box, Center, HStack, IconButton, Stack, Text, VStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { GiCutDiamond } from 'react-icons/gi';
 
 import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/utils';
-
 
 /**
  * @name VCountdown
@@ -34,27 +33,29 @@ const VCountdown = ({ jackpotTimer }) => {
 
     return (
         <Box>
-            <HStack mr={6} my={6}>
-                <IconButton
-                    icon={<GiCutDiamond />}
-                    size="xl"
-                    p={4}
-                    mr={2}
-                    fontSize="4xl"
-                    bg="whiteAlpha.100"
-                    color="white"
-                />
-                <VStack align="flex-start">
-                    <Text color="white" fontSize="3xl" fontWeight="bold" mb={-3}>
-                        {jackpotBalance} IGNIS
-                    </Text>
-                    <Text color="white" fontSize="md">
-                        ({jackpotBalanceUSD} USD)
-                    </Text>
-                </VStack>
-            </HStack>
             <Center>
-                <HStack spacing={4} color="white">
+                <Stack direction={{ base: 'column', md: 'row' }} spacing={2} align="center" p={6}>
+                    <IconButton
+                        icon={<GiCutDiamond />}
+                        size="xl"
+                        p={4}
+                        mr={2}
+                        fontSize="4xl"
+                        bg="whiteAlpha.100"
+                        color="white"
+                    />
+                    <VStack textAlign="center">
+                        <Text color="white" fontSize="3xl" fontWeight="bold" mb={-3}>
+                            {jackpotBalance} IGNIS
+                        </Text>
+                        <Text color="white" fontSize="md">
+                            ({jackpotBalanceUSD} USD)
+                        </Text>
+                    </VStack>
+                </Stack>
+            </Center>
+            <Center>
+                <Stack direction="row" spacing={4} align="center">
                     <Box p={2} bg="#121D31" rounded="lg" minW="90px">
                         <Text textAlign="center" fontSize="xl" fontWeight="bold">
                             {jackpotTimer.days}
@@ -81,7 +82,7 @@ const VCountdown = ({ jackpotTimer }) => {
                             minutes
                         </Text>
                     </Box>
-                </HStack>
+                </Stack>
             </Center>
         </Box>
     );

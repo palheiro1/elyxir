@@ -100,7 +100,7 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
                             shadow="dark-lg"
                             rounded="lg"
                             p={4}
-                            direction={['column', 'column', 'row', 'row']}
+                            direction={{ base: 'column', lg: 'row' }}
                             divider={<StackDivider borderColor="blue.800" />}>
                             <VCountdown jackpotTimer={jackpotTimer} />
 
