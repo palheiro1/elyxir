@@ -1,7 +1,6 @@
 import { Box, Button, Divider, FormControl, FormLabel, Heading, Input, Stack, Text } from '@chakra-ui/react';
 
-const SwapToArdor = ({ infoAccount, cards }) => {
-    const depositAddress = '0x0000000000000000000000000000000000000000';
+const SwapToArdor = ({ infoAccount, ethAddress, cards }) => {
 
     return (
         <Stack direction="column" spacing={8} align="center">
@@ -11,7 +10,7 @@ const SwapToArdor = ({ infoAccount, cards }) => {
             <Text fontWeight="light">to your deposit address</Text>
 
             <FormControl variant="floating" id="cards">
-                <Input value={depositAddress} isReadOnly />
+                <Input value={ethAddress} isReadOnly />
                 <FormLabel>Deposit address</FormLabel>
             </FormControl>
 
