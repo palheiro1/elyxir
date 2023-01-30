@@ -24,7 +24,6 @@ import ethereum_address from 'ethereum-address';
 import { errorToast, okToast } from '../../../utils/alerts';
 
 const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
-
     const toast = useToast();
 
     const [polygonAccount, setPolygonAccount] = useState('');
@@ -85,15 +84,14 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
             ardorAccount: ardorAddress,
             ethAccount: polygonAccount,
             passPhrase: passphrase,
-        })
+        });
 
-        if(response) {
-            okToast("Swap completed successfully", toast)
+        if (response) {
+            okToast('Swap completed successfully', toast);
             setSelectedCards([]);
             setPolygonAccount('');
         } else {
-            errorToast("Swap failed", toast)
-            console.log('error');
+            errorToast('Swap failed', toast);
         }
     };
 
