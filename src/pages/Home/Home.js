@@ -129,36 +129,28 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
     // -----------------------------------------------------------------
     useEffect(() => {
         const handleNotifications = unconfirmedTxs => {
-            const auxUnconfirmed = [...unconfirmedTransactions];
+            const unconfirmed = [...unconfirmedTransactions];
+            const cardsToNotify = [];
 
-            // Check for new transactions
             for (const tx of unconfirmedTxs) {
-                const index = auxUnconfirmed.findIndex(t => t.fullHash === tx.fullHash);
-                if (index === -1) {
-                    const isIncoming = tx.recipientRS === infoAccount.accountRs;
+                const existingTxIndex = unconfirmed.findIndex(t => t.fullHash === tx.fullHash);
+                const isIncoming = tx.recipientRS === infoAccount.accountRs;
+                if (existingTxIndex === -1) {
                     handleNewNotification(tx, isIncoming, toast);
-                    auxUnconfirmed.push(tx);
-                }
-            }
-            // Check for confirmed transactions
-            const cardsForNotify = [...cardsNotification];
-            for (const tx of auxUnconfirmed) {
-                const index = unconfirmedTxs.findIndex(t => t.fullHash === tx.fullHash);
-                if (index === -1) {
-                    const isIncoming = tx.recipientRS === infoAccount.accountRs;
+                    unconfirmed.push(tx);
+                } else {
                     const asset = getAsset(tx.attachment.asset, cards);
                     const amount = Number(tx.attachment.quantityQNT);
-
-                    if (asset && asset !== 'GEM' && isIncoming) cardsForNotify.push({ asset, amount });
-                    else handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived);
-
-                    auxUnconfirmed.splice(auxUnconfirmed.indexOf(tx), 1);
+                    if (asset && asset !== 'GEM' && isIncoming) {
+                        cardsToNotify.push({ asset, amount });
+                    } else {
+                        handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived);
+                    }
+                    unconfirmed.splice(existingTxIndex, 1);
                 }
             }
-
-            setCardsNotification(cardsForNotify);
-            // Set unconfirmed transactions
-            setUnconfirmedTransactions(auxUnconfirmed);
+            setCardsNotification(cardsToNotify);
+            setUnconfirmedTransactions(unconfirmed);
         };
 
         const loadAll = async () => {
@@ -325,7 +317,7 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
 
     return (
         <>
-            <Box bg={bgColor} m={{base: 2, md: 12}} px={{base: 2, md: 8}} py={4} rounded="lg">
+            <Box bg={bgColor} m={{ base: 2, md: 12 }} px={{ base: 2, md: 8 }} py={4} rounded="lg">
                 <LateralMenu
                     infoAccount={infoAccount}
                     handleLogout={handleLogout}
