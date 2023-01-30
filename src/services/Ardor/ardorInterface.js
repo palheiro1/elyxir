@@ -919,6 +919,21 @@ export const getPegAddresses = async () => {
     }
 };
 
+export const processUnwrapsForAccount = async accountRs => {
+    try {
+        const response = await axios.get(BRIDGEAPIURL, {
+            params: {
+                action: 'processUnwrapsForAccount',
+                account: accountRs,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(`Error processing unwraps for account: ${error.message}`);
+        throw error;
+    }
+};
+
 export {
     getTransactionBytes,
     sendIgnis,
