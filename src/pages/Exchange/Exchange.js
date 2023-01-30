@@ -52,12 +52,7 @@ const Exchange = ({ infoAccount }) => {
             {option === 'fiat' && (
                 <Center my={10} rounded="lg">
                     <Box w="30%" h="400px" border="2px" borderColor="gray">
-                        <form id="simplex-form">
-                            <div id="checkout-element"></div>
-                        </form>
-                        <script
-                            src="https://iframe.sandbox.test-simplexcc.com/form-sdk.js"
-                            type="text/javascript"></script>
+                        <Iframe iframe={'<iframe src="/simplex.html" width="100%" height="400" class="simplex" scrolling="no" style="min-width: 100%; width: 100px; overflow-y: hidden; border: none">Cant load widget</iframe>'} />
                     </Box>
                 </Center>
             )}
