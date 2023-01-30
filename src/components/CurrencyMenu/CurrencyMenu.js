@@ -7,6 +7,7 @@ import {
     MenuList,
     MenuItem,
     Portal,
+    Flex,
 } from '@chakra-ui/react';
 
 import { useRef, useState } from 'react';
@@ -15,10 +16,9 @@ import { useNavigate } from 'react-router-dom';
 import BuyGiftzDialog from '../Modals/BuyGiftzDialog/BuyGiftzDialog';
 //import { Link as RouterLink } from 'react-router-dom';
 
-const CurrencyMenu = ({ infoAccount = "", goToMarket }) => {
+const CurrencyMenu = ({ infoAccount = '', goToMarket }) => {
+    const { IGNISBalance, GIFTZBalance, GEMSBalance, name: username } = infoAccount;
 
-    const { IGNISBalance, GIFTZBalance, GEMSBalance, name:username } = infoAccount;
-    
     const navigate = useNavigate();
 
     const { isOpen: isOpenBuyGiftz, onClose: onCloseBuyGiftz, onOpen: onOpenBuyGiftz } = useDisclosure();
@@ -51,54 +51,47 @@ const CurrencyMenu = ({ infoAccount = "", goToMarket }) => {
         }
     };
 
-    if(!IGNISBalance || !GIFTZBalance || !GEMSBalance || !username) return null;
+    if (!IGNISBalance || !GIFTZBalance || !GEMSBalance || !username) return null;
 
     return (
         <>
-            <ButtonGroup
-                rounded="lg"
-                shadow="md"
-                size="sm"
-                fontSize={'sm'}
-                isAttached
-                variant="outline"
-                position="absolute"
-                right="4.8%"
-                display={{ base: 'none', lg: 'inline-flex' }}>
-                <Button>
-                    <Menu>
-                        <MenuButton>IGNIS: {IGNISBalance}</MenuButton>
-                        <Portal>
-                            <MenuList>
-                                <MenuItem onClick={() => handleOpenSendCurrency('IGNIS')}>Send IGNIS</MenuItem>
-                                <MenuItem onClick={() => handleOpenGetMoreCurrency('IGNIS')}>Get IGNIS</MenuItem>
-                            </MenuList>
-                        </Portal>
-                    </Menu>
-                </Button>
-                <Button>
-                    <Menu>
-                        <MenuButton>GIFTZ: {GIFTZBalance}</MenuButton>
-                        <Portal>
-                            <MenuList>
-                                <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
-                                <MenuItem onClick={() => handleOpenGetMoreCurrency('GIFTZ')}>Get GIFTZ</MenuItem>
-                            </MenuList>
-                        </Portal>
-                    </Menu>
-                </Button>
-                <Button>
-                    <Menu>
-                        <MenuButton>GEM: {GEMSBalance.toFixed(2)}</MenuButton>
-                        <Portal>
-                            <MenuList>
-                                <MenuItem onClick={() => handleOpenSendCurrency('GEMS')}>Send GEM</MenuItem>
-                                <MenuItem onClick={() => handleOpenGetMoreCurrency('GEMS')}>Get GEM</MenuItem>
-                            </MenuList>
-                        </Portal>
-                    </Menu>
-                </Button>
-            </ButtonGroup>
+            <Flex align="flex-end">
+                <ButtonGroup rounded="lg" shadow="md" size="sm" fontSize={'sm'} isAttached variant="outline">
+                    <Button>
+                        <Menu>
+                            <MenuButton>IGNIS: {IGNISBalance}</MenuButton>
+                            <Portal>
+                                <MenuList>
+                                    <MenuItem onClick={() => handleOpenSendCurrency('IGNIS')}>Send IGNIS</MenuItem>
+                                    <MenuItem onClick={() => handleOpenGetMoreCurrency('IGNIS')}>Get IGNIS</MenuItem>
+                                </MenuList>
+                            </Portal>
+                        </Menu>
+                    </Button>
+                    <Button>
+                        <Menu>
+                            <MenuButton>GIFTZ: {GIFTZBalance}</MenuButton>
+                            <Portal>
+                                <MenuList>
+                                    <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
+                                    <MenuItem onClick={() => handleOpenGetMoreCurrency('GIFTZ')}>Get GIFTZ</MenuItem>
+                                </MenuList>
+                            </Portal>
+                        </Menu>
+                    </Button>
+                    <Button>
+                        <Menu>
+                            <MenuButton>GEM: {GEMSBalance.toFixed(2)}</MenuButton>
+                            <Portal>
+                                <MenuList>
+                                    <MenuItem onClick={() => handleOpenSendCurrency('GEMS')}>Send GEM</MenuItem>
+                                    <MenuItem onClick={() => handleOpenGetMoreCurrency('GEMS')}>Get GEM</MenuItem>
+                                </MenuList>
+                            </Portal>
+                        </Menu>
+                    </Button>
+                </ButtonGroup>
+            </Flex>
             {isOpenSendCurrency && (
                 <SendCurrencyDialog
                     isOpen={isOpenSendCurrency}
