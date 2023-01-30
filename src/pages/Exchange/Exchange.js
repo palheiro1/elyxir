@@ -39,7 +39,7 @@ const Exchange = ({ infoAccount }) => {
             </Center>
             {option === 'crypto' && (
                 <Center my={10} rounded="lg">
-                    <Box w="30%" h="400px" border="2px" borderColor="gray">
+                    <Box w={{base: "90%", md: "30%"}} h="400px" border="2px" borderColor="gray">
                         <Iframe
                             iframe={
                                 '<iframe src="https://widget.changelly.com?from=*&to=ignis&amount=0.005&address=&fromDefault=BTC&toDefault=ignis&theme=default&merchant_id=5zk2vil3u4s8witr&payment_id=&v=2" width="100%" height="400" class="changelly" scrolling="no" style="min-width: 100%; width: 100px; overflow-y: hidden; border: none">Cant load widget</iframe>'
@@ -51,7 +51,7 @@ const Exchange = ({ infoAccount }) => {
 
             {option === 'fiat' && (
                 <Center my={10} rounded="lg">
-                    <Box w="30%" h="400px" border="2px" borderColor="gray">
+                    <Box w={{base: "90%", md: "30%"}} h="400px" border="2px" borderColor="gray">
                         <Iframe iframe={'<iframe src="/simplex.html" width="100%" height="400" class="simplex" scrolling="no" style="min-width: 100%; width: 100px; overflow-y: hidden; border: none">Cant load widget</iframe>'} />
                     </Box>
                 </Center>

@@ -139,7 +139,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
                             bgColor="whiteAlpha.100"
                             p={4}
                             rounded="lg"
-                            maxH="30rem"
+                            maxH="20rem"
                             overflowY="auto">
                             {selectedCards.map(card => (
                                 <BridgeCard
