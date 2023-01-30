@@ -11,7 +11,8 @@ import {
     Tooltip,
     useToast,
 } from '@chakra-ui/react';
-import { okToast } from '../../../utils/alerts';
+import { processUnwrapsForAccount } from '../../../services/Ardor/ardorInterface';
+import { errorToast, okToast } from '../../../utils/alerts';
 
 const SwapToArdor = ({ infoAccount, ethAddress, cards }) => {
     const toast = useToast();
@@ -19,6 +20,17 @@ const SwapToArdor = ({ infoAccount, ethAddress, cards }) => {
     const copyToClipboard = () => {
         navigator.clipboard.writeText(ethAddress);
         okToast('Copied to clipboard', toast);
+    };
+
+    const swap = async () => {
+        const response = await processUnwrapsForAccount(infoAccount.accountRs);
+        if (response && response.starts) {
+            okToast(response.starts + ' transfers started.', toast);
+        } else if (response && response.requestProcessingTime) {
+            errorToast('No transfer started.', toast);
+        } else {
+            errorToast('Something went wrong.', toast);
+        }
     };
 
     return (
@@ -63,7 +75,7 @@ const SwapToArdor = ({ infoAccount, ethAddress, cards }) => {
                 <FormLabel>ARDOR address</FormLabel>
             </FormControl>
 
-            <Button w="100%" colorScheme="blue" variant="outline" letterSpacing="widest">
+            <Button w="100%" colorScheme="blue" variant="outline" letterSpacing="widest" onClick={swap}>
                 SWAP
             </Button>
         </Stack>
