@@ -25,8 +25,10 @@ const Bridge = ({ infoAccount, cards }) => {
 
             <Center>
                 <Box maxW="50%">
-                    {option === 0 && <SwapToPolygon infoAccount={infoAccount} ardorAddress={swapAddresses.ardor} cards={cards} />}
-                    {option === 1 && <SwapToArdor infoAccount={infoAccount} ethAddress={swapAddresses.eth} cards={cards} />}
+                    {option === 0 && (
+                        <SwapToPolygon infoAccount={infoAccount} ardorAddress={swapAddresses.ardor} cards={cards} />
+                    )}
+                    {option === 1 && <SwapToArdor infoAccount={infoAccount} ethAddress={swapAddresses.eth} />}
                 </Box>
             </Center>
         </>

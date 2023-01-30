@@ -14,7 +14,7 @@ import {
 import { processUnwrapsForAccount } from '../../../services/Ardor/ardorInterface';
 import { errorToast, okToast } from '../../../utils/alerts';
 
-const SwapToArdor = ({ infoAccount, ethAddress, cards }) => {
+const SwapToArdor = ({ infoAccount, ethAddress }) => {
     const toast = useToast();
 
     const copyToClipboard = () => {
@@ -24,6 +24,7 @@ const SwapToArdor = ({ infoAccount, ethAddress, cards }) => {
 
     const swap = async () => {
         const response = await processUnwrapsForAccount(infoAccount.accountRs);
+        console.log("🚀 ~ file: SwapToArdor.js:27 ~ swap ~ response", response)
         if (response && response.starts) {
             okToast(response.starts + ' transfers started.', toast);
         } else if (response && response.requestProcessingTime) {
