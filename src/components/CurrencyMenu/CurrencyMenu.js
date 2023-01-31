@@ -29,31 +29,25 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     const { isOpen: isOpenSendCurrency, onClose: onCloseSendCurrency, onOpen: onOpenSendCurrency } = useDisclosure();
     const reference = useRef();
 
-    const [currency, setCurrency] = useState({ name: 'IGNIS', balance: IGNISBalance });
+    const currencies = {
+        IGNIS: { name: 'IGNIS', balance: IGNISBalance, handler: () => navigate('/exchange') },
+        GIFTZ: { name: 'GIFTZ', balance: GIFTZBalance, handler: onOpenBuyGiftz },
+        GEMS: { name: 'GEMS', balance: GEMSBalance, handler: () => goToSection(3) },
+    };
 
-    const handleOpenSendCurrency = currency => {
-        if (currency === 'IGNIS') {
-            setCurrency({ name: 'IGNIS', balance: IGNISBalance });
-        } else if (currency === 'GIFTZ') {
-            setCurrency({ name: 'GIFTZ', balance: GIFTZBalance });
-        } else if (currency === 'GEMS') {
-            setCurrency({ name: 'GEMS', balance: GEMSBalance });
-        }
+    const [currency, setCurrency] = useState(currencies.IGNIS);
 
+    const handleOpenSendCurrency = currencyName => {
+        setCurrency(currencies[currencyName]);
         onOpenSendCurrency();
     };
 
-    const handleOpenGetMoreCurrency = currency => {
-        if (currency === 'IGNIS') {
-            navigate('/exchange');
-        } else if (currency === 'GIFTZ') {
-            onOpenBuyGiftz();
-        } else if (currency === 'GEMS') {
-            goToSection(3);
+    const handleOpenGetMoreCurrency = currencyName => {
+        const { handler } = currencies[currencyName];
+        if (handler) {
+            handler();
         }
     };
-
-    if (!IGNISBalance || !GIFTZBalance || !GEMSBalance || !username) return null;
 
     return (
         <>
