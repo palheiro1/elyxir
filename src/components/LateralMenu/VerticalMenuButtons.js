@@ -21,6 +21,9 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
     const textColor = index => (isActive(index) ? sTextActiveColor : sTextColor);
     const iconColor = index => (isActive(index) ? sIconColor : 'white');
 
+    const hoverChangeColor = useColorModeValue('blackAlpha.700', 'whiteAlpha.300');
+    const hoverColor = index => (isActive(index) ? null : hoverChangeColor);
+
     return (
         <VStack align="flex-start" spacing={2} width={widthBotones}>
             <Button
@@ -28,7 +31,6 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
                 minH="50px"
                 bgColor="#F18800"
                 _hover={{ background: '#F18000' }}
-                _active={{ background: '#F18000' }}
                 textColor={'white'}
                 onClick={() => setOption(7)}>
                 <Stack direction="row" align="center" w="100%">
@@ -42,8 +44,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             <Button
                 minW={widthBotones}
                 minH="50px"
-                _hover={{ background: 'white.600' }}
-                _active={{ background: 'white.600' }}
+                _hover={{ background: hoverColor(0) }}
                 bgColor={bgColor(0)}
                 textColor={textColor(0)}
                 onClick={() => setOption(0)}>
@@ -59,8 +60,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             <Button
                 minW={widthBotones}
                 minH="50px"
-                _hover={{ background: 'white.600' }}
-                _active={{ background: 'white.600' }}
+                _hover={{ background: hoverColor(1) }}
                 bgColor={bgColor(1)}
                 textColor={textColor(1)}
                 onClick={() => setOption(1)}>
@@ -73,8 +73,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             <Button
                 minW={widthBotones}
                 minH="50px"
-                _hover={{ background: 'white.600' }}
-                _active={{ background: 'white.600' }}
+                _hover={{ background: hoverColor(2) }}
                 bgColor={bgColor(2)}
                 textColor={textColor(2)}
                 onClick={() => setOption(2)}>
@@ -87,8 +86,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             <Button
                 minW={widthBotones}
                 minH="50px"
-                _hover={{ background: 'white.600' }}
-                _active={{ background: 'white.600' }}
+                _hover={{ background: hoverColor(3) }}
                 bgColor={bgColor(3)}
                 textColor={textColor(3)}
                 onClick={() => setOption(3)}>
@@ -101,8 +99,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             <Button
                 minW={widthBotones}
                 minH="50px"
-                _hover={{ background: 'white.600' }}
-                _active={{ background: 'white.600' }}
+                _hover={{ background: hoverColor(4) }}
                 bgColor={bgColor(4)}
                 textColor={textColor(4)}
                 onClick={() => setOption(4)}>
@@ -115,8 +112,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             <Button
                 minW={widthBotones}
                 minH="50px"
-                _hover={{ background: 'white.600' }}
-                _active={{ background: 'white.600' }}
+                _hover={{ background: hoverColor(5) }}
                 bgColor={bgColor(5)}
                 textColor={textColor(5)}
                 onClick={() => setOption(5)}>
@@ -129,8 +125,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             <Button
                 minW={widthBotones}
                 minH="50px"
-                _hover={{ background: 'white.600' }}
-                _active={{ background: 'white.600' }}
+                _hover={{ background: hoverColor(6) }}
                 bgColor={bgColor(6)}
                 textColor={textColor(6)}
                 onClick={() => setOption(6)}>
@@ -143,8 +138,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             <Button
                 minW={widthBotones}
                 minH="50px"
-                _hover={{ background: 'white.600' }}
-                _active={{ background: 'white.600' }}
+                _hover={{ background: hoverColor(8) }}
                 bgColor={bgColor(8)}
                 textColor={textColor(8)}
                 onClick={handleLogout}>
