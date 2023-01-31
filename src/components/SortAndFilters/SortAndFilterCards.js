@@ -30,7 +30,6 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
      */
     useEffect(() => {
         const filterCards = () => {
-            console.log('Filtering cards');
             setNeedReload(false);
             let filteredCards = new Array(...cards);
 

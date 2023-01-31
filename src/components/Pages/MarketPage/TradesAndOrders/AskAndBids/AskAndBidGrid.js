@@ -5,7 +5,9 @@ import {
     Tbody,
     Td,
     Text,
+    Th,
     Thead,
+    Tr,
     useColorModeValue,
     useDisclosure,
 } from '@chakra-ui/react';
@@ -14,7 +16,6 @@ import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getAsset } from '../../../../../utils/cardsUtils';
 import CancelDialog from '../../../../Modals/TradeDialog/CancelDialog/CancelDialog';
 import AskOrBidItem from './AskOrBidItem';
-
 
 /**
  * @name AskAndBidGrid
@@ -29,7 +30,6 @@ import AskOrBidItem from './AskOrBidItem';
  * @version 1.0.0
  */
 const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, username, canDelete }) => {
-
     const [selectedOrder, setSelectedOrder] = useState();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const refCancel = useRef();
@@ -40,7 +40,7 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
 
     return (
         <>
-            <SimpleGrid columns={{ base: 1, md: 2}} mt={2} shadow="lg">
+            <SimpleGrid columns={{ base: 1, md: 2 }} mt={2} shadow="lg">
                 <TableContainer
                     mt={4}
                     border="2px"
@@ -54,15 +54,15 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
 
                     <Table variant="simple">
                         <Thead backgroundColor={bgHeadColor}>
-                            {!onlyOneAsset && <Td textAlign="center">Asset</Td>}
-                            <Td textAlign="center">Ignis</Td>
-                            <Td textAlign="center">Amount</Td>
+                            <Tr>
+                                {!onlyOneAsset && <Th textAlign="center">Asset</Th>}
+                                <Th textAlign="center">Ignis</Th>
+                                <Th textAlign="center">Amount</Th>
+                            </Tr>
                         </Thead>
                         <Tbody>
                             {askOrders.map(order => {
-                                const _asset = onlyOneAsset
-                                    ? order.asset
-                                    : getAsset(order.asset, cards);
+                                const _asset = onlyOneAsset ? order.asset : getAsset(order.asset, cards);
                                 return (
                                     <AskOrBidItem
                                         key={order.orderFullHash}
@@ -93,15 +93,15 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
                     </Text>
                     <Table variant="simple">
                         <Thead backgroundColor={bgHeadColor}>
-                            {!onlyOneAsset && <Td textAlign="center">Asset</Td>}
-                            <Td textAlign="center">Ignis</Td>
-                            <Td textAlign="center">Amount</Td>
+                            <Tr>
+                                {!onlyOneAsset && <Th textAlign="center">Asset</Th>}
+                                <Th textAlign="center">Ignis</Th>
+                                <Th textAlign="center">Amount</Th>
+                            </Tr>
                         </Thead>
                         <Tbody>
                             {bidOrders.map(order => {
-                                const _asset = onlyOneAsset
-                                    ? order.asset
-                                    : getAsset(order.asset, cards);
+                                const _asset = onlyOneAsset ? order.asset : getAsset(order.asset, cards);
                                 return (
                                     <AskOrBidItem
                                         key={order.orderFullHash}
@@ -120,7 +120,13 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
                     </Table>
                 </TableContainer>
             </SimpleGrid>
-            <CancelDialog reference={refCancel} isOpen={isOpen} onClose={onClose} username={username} selectedOrder={selectedOrder} />
+            <CancelDialog
+                reference={refCancel}
+                isOpen={isOpen}
+                onClose={onClose}
+                username={username}
+                selectedOrder={selectedOrder}
+            />
         </>
     );
 };
