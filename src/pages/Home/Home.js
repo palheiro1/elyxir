@@ -253,9 +253,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
 
     useEffect(() => {
-        if (cardsNotification.length > 0) {
-            onOpenCardReceived();
-        }
+        if (cardsNotification.length > 0) onOpenCardReceived();
     }, [cardsNotification, onOpenCardReceived]);
 
     // -----------------------------------------------------------------
