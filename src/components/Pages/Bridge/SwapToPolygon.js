@@ -133,7 +133,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
                         {notSelectedCards.map(card => (
                             <MenuItem
                                 minW="100%"
-                                key={card.id}
+                                key={card.asset}
                                 onClick={() => setSelectedCards([...selectedCards, card])}>
                                 <BridgeCard card={card} />
                             </MenuItem>
@@ -157,6 +157,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
                             overflowY="auto">
                             {selectedCards.map(card => (
                                 <BridgeCard
+                                    key={card.asset}
                                     card={card}
                                     canEdit={true}
                                     handleDeleteSelectedCard={handleDeleteSelectedCard}
