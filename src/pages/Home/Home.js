@@ -48,7 +48,7 @@ import Bridge from '../../components/Pages/Bridge/Bridge';
  * @dev This page is used to render all the pages
  * @returns {JSX.Element} Home component
  */
-const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
+const Home = ({ infoAccount, setInfoAccount }) => {
     const toast = useToast();
 
     // Buy pack dialog
@@ -90,13 +90,6 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
     const [renderComponent, setRenderComponent] = useState(<Overview />);
 
     const [cardsNotification, setCardsNotification] = useState(cards);
-
-    // -----------------------------------------------------------------
-    useEffect(() => {
-        if (marketFlag) {
-            setOption(3);
-        }
-    }, [marketFlag]);
 
     // -----------------------------------------------------------------
     // Show all cards - Toggle button
@@ -315,6 +308,14 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
         onCloseCardReceived();
     };
 
+    // -----------------------------------------------------------------
+    // Handle change option with flag
+    // -----------------------------------------------------------------
+
+    const goToSection = (option) => {
+        setOption(option);
+    };
+
     return (
         <>
             <Box bg={bgColor} m={{ base: 2, md: 12 }} px={{ base: 2, md: 8 }} py={4} rounded="lg">
@@ -326,6 +327,7 @@ const Home = ({ infoAccount, setInfoAccount, marketFlag }) => {
                     children={renderComponent}
                     showAllCards={showAllCards}
                     handleShowAllCards={handleShowAllCards}
+                    goToSection={goToSection}
                 />
             </Box>
             <BuyPackDialog isOpen={isOpen} onClose={onClose} reference={buyRef} infoAccount={infoAccount} />
