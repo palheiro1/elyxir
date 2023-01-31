@@ -9,13 +9,8 @@ import Navigation from '../Navigation';
  * @dev This component is used to render the header navigation
  * @author Jesús Sánchez Fernández
  */
-const Header = ({ isLogged, goToMarket }) => {
-    return (
-        <Navigation
-            isLogged={isLogged}
-            goToMarket={goToMarket}
-        />
-    );
+const Header = ({ isLogged }) => {
+    return <Navigation isLogged={isLogged} />;
 };
 
 export default Header;

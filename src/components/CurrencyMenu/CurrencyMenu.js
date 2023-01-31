@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import BuyGiftzDialog from '../Modals/BuyGiftzDialog/BuyGiftzDialog';
 //import { Link as RouterLink } from 'react-router-dom';
 
-const CurrencyMenu = ({ infoAccount = '', goToMarket }) => {
+const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     const { IGNISBalance, GIFTZBalance, GEMSBalance, name: username } = infoAccount;
 
     const navigate = useNavigate();
@@ -47,7 +47,7 @@ const CurrencyMenu = ({ infoAccount = '', goToMarket }) => {
         } else if (currency === 'GIFTZ') {
             onOpenBuyGiftz();
         } else if (currency === 'GEMS') {
-            goToMarket();
+            goToSection(3);
         }
     };
 

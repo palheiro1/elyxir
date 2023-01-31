@@ -20,21 +20,10 @@ import Welcome from './components/Pages/WelcomePage/Welcome';
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
     const isLogged = infoAccount.token !== null && infoAccount.accountRs !== null;
-    const [marketFlag, setMarketFlag] = useState(false);
-
-    const goToMarket = () => {
-        setMarketFlag(true);
-        setTimeout(() => {
-            setMarketFlag(false);
-        }, 10);
-    };
 
     return (
         <ChakraProvider theme={theme}>
-            <Header
-                isLogged={isLogged}
-                goToMarket={goToMarket}
-            />
+            <Header isLogged={isLogged} />
             <Routes>
                 {/* LOGING PAGE / CREATE WALLET / RESTORE WALLET */}
                 <Route path="/" element={<Navigate replace to="/login" />} />
@@ -48,7 +37,7 @@ function App() {
                 {/* HOME PAGE */}
                 <Route
                     path="/home"
-                    element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} marketFlag={marketFlag} />}
+                    element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />}
                 />
 
                 <Route path="/welcome" element={<Welcome />} />

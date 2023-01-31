@@ -26,6 +26,7 @@ const LateralMenu = ({
     handleShowAllCards,
     infoAccount,
     handleLogout,
+    goToSection
 }) => {
     const { isOpen, onToggle, onClose } = useDisclosure();
 
@@ -47,7 +48,7 @@ const LateralMenu = ({
                 <ColorModeSwitcher justifySelf="flex-end" />
             </Flex>
             <Flex display={{ base: 'none', md: 'unset' }}>
-                <TopMenu infoAccount={infoAccount} />
+                <TopMenu infoAccount={infoAccount} goToSection={goToSection} />
             </Flex>
             <Flex display={{ base: 'none', md: 'unset' }}>
                 <NormalMenu
@@ -68,6 +69,7 @@ const LateralMenu = ({
                         infoAccount={infoAccount}
                         showAllCards={showAllCards}
                         handleShowAllCards={handleShowAllCards}
+                        goToSection={goToSection}
                     />
                 )}
             </Collapse>
