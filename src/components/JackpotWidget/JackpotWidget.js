@@ -35,8 +35,6 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
         remainingBlocks: 'loading',
     });
 
-    
-
     useEffect(() => {
         const getJackpotStatus = async () => {
             const response = await getBlockchainStatus();
@@ -121,10 +119,7 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
                             shadow="dark-lg"
                             direction="row">
                             <GridItem colSpan={2} p={4} borderLeftRadius="lg">
-                                <HCountdown
-                                    jackpotTimer={jackpotTimer}
-                                    numParticipants={numParticipants}
-                                />
+                                <HCountdown jackpotTimer={jackpotTimer} numParticipants={numParticipants} />
                             </GridItem>
 
                             <GridItem
@@ -136,7 +131,6 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
                             </GridItem>
                         </Grid>
                     </Center>
-                    
                 </>
             )}
         </>
