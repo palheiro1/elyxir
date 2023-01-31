@@ -2,7 +2,7 @@ import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/reac
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Crypto from 'crypto-browserify';
+
 import equal from 'fast-deep-equal';
 
 // Menu
@@ -39,6 +39,7 @@ import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 import { handleConfirmateNotification, handleNewNotification } from '../../utils/alerts';
 import CardReceived from '../../components/Modals/CardReceived/CardReceived';
 import Bridge from '../../components/Pages/Bridge/Bridge';
+import { generateHash } from '../../utils/hash';
 
 /**
  * @name Home
@@ -197,9 +198,9 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             // -----------------------------------------------------------------
             // Get all hashes and compare
             // -----------------------------------------------------------------
-            const loadCardsHash = Crypto.createHash('sha256').update(JSON.stringify(loadCards)).digest('hex');
-            const loadGemCardHash = Crypto.createHash('sha256').update(JSON.stringify(gems[0])).digest('hex');
-            const loadInfoAccountHash = Crypto.createHash('sha256').update(JSON.stringify(_auxInfo)).digest('hex');
+            const loadCardsHash = generateHash(loadCards);
+            const loadGemCardHash = generateHash(gems[0]);
+            const loadInfoAccountHash = generateHash(_auxInfo);
 
             // Check if cardData has changed
             if (!equal(cardsHash, loadCardsHash)) {
