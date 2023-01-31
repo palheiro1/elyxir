@@ -3,12 +3,11 @@ import CurrencyMenu from '../../components/CurrencyMenu/CurrencyMenu';
 import { copyToast } from '../../utils/alerts';
 
 const TopMenu = ({ infoAccount, goToSection }) => {
-
     const toast = useToast();
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(infoAccount.accountRs);
-        copyToast("ARDOR Account", toast)
+        copyToast('ARDOR Account', toast);
     };
 
     return (
@@ -18,14 +17,15 @@ const TopMenu = ({ infoAccount, goToSection }) => {
                     <Text fontSize="sm" fontWeight="bold" mb={-3}>
                         {infoAccount.name}
                     </Text>
-                    <Tooltip label="Click to copy" hasArrow placement='top-end'>
-                        <Text fontSize="md" fontWeight="bold" onClick={copyToClipboard} _hover={{ cursor: "pointer"}}>
+                    <Tooltip label="Click to copy" hasArrow placement="top-end">
+                        <Text fontSize="md" fontWeight="bold" onClick={copyToClipboard} _hover={{ cursor: 'pointer' }}>
                             {infoAccount.accountRs}
                         </Text>
                     </Tooltip>
                 </Stack>
                 <Spacer />
-                <CurrencyMenu infoAccount={infoAccount} goToSection={goToSection} />
+
+                {infoAccount && <CurrencyMenu infoAccount={infoAccount} goToSection={goToSection} />}
             </Flex>
         </>
     );
