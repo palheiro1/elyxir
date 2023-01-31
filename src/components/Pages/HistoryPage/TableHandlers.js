@@ -167,7 +167,7 @@ export const handleIncomingGIFTZ = (amount, date) => {
                     <InOutTransaction type={'in'} />
                 </Td>
                 <Td>
-                    <Stack direction={['column', 'row']} align="start" spacing={24}>
+                    <Stack direction="row" align="start" spacing={24}>
                         <Box>
                             <FaFilter />
                         </Box>
@@ -198,7 +198,7 @@ export const handleMessage = (type, msg, date) => {
             <Tr>
                 <Td>{msg}</Td>
                 <Td>
-                    <Stack direction={['column', 'row']} align="start" spacing={24}>
+                    <Stack direction="row" align="start" spacing={24}>
                         <Box>
                             <FaFilter />
                         </Box>
@@ -233,7 +233,7 @@ export const cancelledOrder = (type, date, account) => {
                     <InOutTransaction type={type} />
                 </Td>
                 <Td>
-                    <Stack direction={['column', 'row']} align="start" spacing={24}>
+                    <Stack direction="row" align="start" spacing={24}>
                         <Box>
                             <FaFilter />
                         </Box>
@@ -268,7 +268,7 @@ export const handleGEM = (type, amount, date, account) => {
                     <InOutTransaction type={type} />
                 </Td>
                 <Td>
-                    <Stack direction={['column', 'row']} align="start" spacing={24}>
+                    <Stack direction="row" align="start" spacing={24}>
                         <Box>
                             <FaGem />
                         </Box>
@@ -374,7 +374,7 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
                     <InOutTransaction type={type} />
                 </Td>
                 <Td>
-                    <Stack direction={['column', 'row']} align="start" spacing={24}>
+                    <Stack direction="row" align="start" spacing={24}>
                         <Box>
                             <FaGem />
                         </Box>
@@ -409,13 +409,13 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
                     <InOutTransaction type={type} />
                 </Td>
                 <Td>
-                    <Stack direction={['column', 'row']} align="start" spacing={24}>
+                    <Stack direction="row" align="start" spacing={24}>
                         <Box>
                             <FaCoins />
                         </Box>
                         <Box>
                             <Text fontSize="xl" fontWeight="bold">
-                                IGNIS
+                                IGNIS {isJackpot ? 'Jackpot' : ''}
                             </Text>
                         </Box>
                     </Stack>
