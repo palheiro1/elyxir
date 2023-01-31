@@ -51,7 +51,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
 
     return (
         <>
-            <Flex align="flex-end">
+            <Flex align="flex-end" pr={"0.55%"}>
                 <ButtonGroup rounded="lg" shadow="md" size="sm" fontSize={'sm'} isAttached variant="outline">
                     <Box p={1} border="1px" borderColor={borderColor} borderLeftRadius="lg" px={2}>
                         <Menu>
