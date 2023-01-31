@@ -318,6 +318,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     return (
         <>
+            {/* MAIN COMPONENT - LATERAL MENU & CHILDREN */}
             <Box bg={bgColor} m={{ base: 2, md: 12 }} px={{ base: 2, md: 8 }} py={4} rounded="lg">
                 <LateralMenu
                     infoAccount={infoAccount}
@@ -330,6 +331,8 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                     goToSection={goToSection}
                 />
             </Box>
+
+            {/* DIALOGS */}
             <BuyPackDialog isOpen={isOpen} onClose={onClose} reference={buyRef} infoAccount={infoAccount} />
             <CardReceived
                 isOpen={isOpenCardReceived}

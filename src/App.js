@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
@@ -13,9 +13,12 @@ import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Restore from './pages/Restore/Restore';
 import Home from './pages/Home/Home';
-import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
 import Exchange from './pages/Exchange/Exchange';
 import Welcome from './components/Pages/WelcomePage/Welcome';
+
+// Data
+import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
+
 
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);

@@ -1,5 +1,4 @@
 import {
-    Button,
     useDisclosure,
     ButtonGroup,
     Menu,
@@ -16,7 +15,6 @@ import { useRef, useState } from 'react';
 import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog';
 import { useNavigate } from 'react-router-dom';
 import BuyGiftzDialog from '../Modals/BuyGiftzDialog/BuyGiftzDialog';
-//import { Link as RouterLink } from 'react-router-dom';
 
 const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     const { IGNISBalance, GIFTZBalance, GEMSBalance, name: username } = infoAccount;
