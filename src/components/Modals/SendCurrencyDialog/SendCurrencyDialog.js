@@ -38,10 +38,11 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
 
     const [passphrase, setPassphrase] = useState('');
-    const maxCurrency = Math.floor(Number(currency.balance));
+    const maxCurrency =
+        currency.name === 'GIFTZ' ? Math.floor(currency.balance) : parseFloat(Number(currency.balance).toFixed(2));
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
-        step: currency.name === 'GIFTZ' ? 1 : 0.1,
+        step: currency.name === 'GIFTZ' ? 1 : 0.01,
         defaultValue: 0,
         min: 0,
         max: maxCurrency,
