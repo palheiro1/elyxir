@@ -169,10 +169,10 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                 boxShadow="md"
                 maxW={{ base: '100%', md: '80%', lg: '100%' }}>
                 {needReload && (
-                    <>
+                    <Center w="100%" textAlign="center" py={4} gap={4}>
                         <Spinner size="md" />
                         <Text>Loading</Text>
-                    </>
+                    </Center>
                 )}
                 {haveUnconfirmed && (
                     <Center w="100%" textAlign="center" py={4} gap={4}>
