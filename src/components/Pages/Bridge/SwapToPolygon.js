@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ethereum_address from 'ethereum-address';
 import {
     Box,
     Button,
@@ -17,12 +18,25 @@ import {
     useToast,
 } from '@chakra-ui/react';
 
-import { checkPin, sendToPolygonBridge } from '../../../utils/walletUtils';
 import { ChevronDownIcon } from '@chakra-ui/icons';
+
+// Components
 import BridgeCard from '../../Cards/BridgeCard';
-import ethereum_address from 'ethereum-address';
+
+// Utils
+import { checkPin, sendToPolygonBridge } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 
+/**
+ * @name SwapToPolygon
+ * @description This component is used to swap cards to Polygon
+ * @author Jesús Sánchez Fernández
+ * @version 0.1
+ * @param {Object} infoAccount - Account info
+ * @param {String} ardorAddress - Ardor address
+ * @param {Array} cards - Cards
+ * @returns {JSX.Element} - JSX element
+ */
 const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
     const toast = useToast();
 

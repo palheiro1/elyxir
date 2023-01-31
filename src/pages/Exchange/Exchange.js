@@ -6,6 +6,14 @@ function Iframe(props) {
     return <div dangerouslySetInnerHTML={{ __html: props.iframe ? props.iframe : '' }} />;
 }
 
+/**
+ * @name Exchange
+ * @description This component is the exchange page
+ * @author Jesús Sánchez Fernández
+ * @version 0.1
+ * @param {Object} infoAccount - Account information
+ * @returns {JSX.Element} - JSX element
+ */
 const Exchange = ({ infoAccount }) => {
     const navigate = useNavigate();
     const [option, setOption] = useState('crypto');

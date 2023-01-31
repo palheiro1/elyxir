@@ -5,6 +5,15 @@ import SectionSwitch from './SectionSwitch';
 import SwapToArdor from './SwapToArdor';
 import SwapToPolygon from './SwapToPolygon';
 
+/**
+ * @name Bridge
+ * @description This component is the bridge page
+ * @author Jesús Sánchez Fernández
+ * @version 0.1
+ * @param {Object} infoAccount - Account info
+ * @param {Array} cards - Cards
+ * @returns {JSX.Element} - JSX element
+ */
 const Bridge = ({ infoAccount, cards }) => {
     const [option, setOption] = useState(0);
     const [swapAddresses, setSwapAddresses] = useState({ eth: '', ardor: '', isLoaded: false });

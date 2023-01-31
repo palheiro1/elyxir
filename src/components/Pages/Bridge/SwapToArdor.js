@@ -11,9 +11,20 @@ import {
     Tooltip,
     useToast,
 } from '@chakra-ui/react';
+
+// Utils
 import { processUnwrapsForAccount } from '../../../services/Ardor/ardorInterface';
 import { errorToast, okToast } from '../../../utils/alerts';
 
+/**
+ * @name SwapToArdor
+ * @description This component is used to swap cards to Ardor
+ * @author Jesús Sánchez Fernández
+ * @version 0.1
+ * @param {Object} infoAccount - Account info
+ * @param {String} ethAddress - Ethereum address
+ * @returns {JSX.Element} - JSX element
+ */
 const SwapToArdor = ({ infoAccount, ethAddress }) => {
     const toast = useToast();
 
