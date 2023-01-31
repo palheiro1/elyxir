@@ -42,6 +42,7 @@ import {
 import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
 import CardReceived from '../../components/Modals/CardReceived/CardReceived';
 import Bridge from '../../components/Pages/Bridge/Bridge';
+import { isNotLogged } from '../../utils/validators';
 
 /**
  * @name Home
@@ -112,7 +113,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // Check if user is logged
     // -----------------------------------------------------------------
     useEffect(() => {
-        if (infoAccount.token === null || infoAccount.accountRs === null) navigate('/login');
+        if (isNotLogged(infoAccount)) navigate('/login');
     }, [infoAccount, navigate]);
 
     // -----------------------------------------------------------------
@@ -120,28 +121,36 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
     useEffect(() => {
         const handleNotifications = unconfirmedTxs => {
-            const unconfirmed = [...unconfirmedTransactions];
-            const cardsToNotify = [];
+            const auxUnconfirmed = [...unconfirmedTransactions];
 
+            // Check for new transactions
             for (const tx of unconfirmedTxs) {
-                const existingTxIndex = unconfirmed.findIndex(t => t.fullHash === tx.fullHash);
-                const isIncoming = tx.recipientRS === infoAccount.accountRs;
-                if (existingTxIndex === -1) {
+                const index = auxUnconfirmed.findIndex(t => t.fullHash === tx.fullHash);
+                if (index === -1) {
+                    const isIncoming = tx.recipientRS === infoAccount.accountRs;
                     handleNewNotification(tx, isIncoming, toast);
-                    unconfirmed.push(tx);
-                } else {
-                    const asset = getAsset(tx.attachment.asset, cards);
-                    const amount = Number(tx.attachment.quantityQNT);
-                    if (asset && asset !== 'GEM' && isIncoming) {
-                        cardsToNotify.push({ asset, amount });
-                    } else {
-                        handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived);
-                    }
-                    unconfirmed.splice(existingTxIndex, 1);
+                    auxUnconfirmed.push(tx);
                 }
             }
-            setCardsNotification(cardsToNotify);
-            setUnconfirmedTransactions(unconfirmed);
+            // Check for confirmed transactions
+            const cardsForNotify = [...cardsNotification];
+            for (const tx of auxUnconfirmed) {
+                const index = unconfirmedTxs.findIndex(t => t.fullHash === tx.fullHash);
+                if (index === -1) {
+                    const isIncoming = tx.recipientRS === infoAccount.accountRs;
+                    const asset = getAsset(tx.attachment.asset, cards);
+                    const amount = Number(tx.attachment.quantityQNT);
+
+                    if (asset && asset !== 'GEM' && isIncoming) cardsForNotify.push({ asset, amount });
+                    else handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived);
+
+                    auxUnconfirmed.splice(auxUnconfirmed.indexOf(tx), 1);
+                }
+            }
+
+            setCardsNotification(cardsForNotify);
+            // Set unconfirmed transactions
+            setUnconfirmedTransactions(auxUnconfirmed);
         };
 
         function checkDataChange(name, currentHash, newHash, setState, setHash, newData) {
