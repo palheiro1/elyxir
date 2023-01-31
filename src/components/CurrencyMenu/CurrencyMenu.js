@@ -8,6 +8,8 @@ import {
     MenuItem,
     Portal,
     Flex,
+    Box,
+    useColorModeValue,
 } from '@chakra-ui/react';
 
 import { useRef, useState } from 'react';
@@ -18,6 +20,8 @@ import BuyGiftzDialog from '../Modals/BuyGiftzDialog/BuyGiftzDialog';
 
 const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     const { IGNISBalance, GIFTZBalance, GEMSBalance, name: username } = infoAccount;
+
+    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     const navigate = useNavigate();
 
@@ -57,7 +61,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
         <>
             <Flex align="flex-end">
                 <ButtonGroup rounded="lg" shadow="md" size="sm" fontSize={'sm'} isAttached variant="outline">
-                    <Button>
+                    <Box p={1} border="1px" borderColor={borderColor} borderLeftRadius="lg" px={2}>
                         <Menu>
                             <MenuButton>IGNIS: {IGNISBalance}</MenuButton>
                             <Portal>
@@ -67,8 +71,8 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                 </MenuList>
                             </Portal>
                         </Menu>
-                    </Button>
-                    <Button>
+                    </Box>
+                    <Box p={1} border="1px" borderColor={borderColor} px={2}>
                         <Menu>
                             <MenuButton>GIFTZ: {GIFTZBalance}</MenuButton>
                             <Portal>
@@ -78,8 +82,8 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                 </MenuList>
                             </Portal>
                         </Menu>
-                    </Button>
-                    <Button>
+                    </Box>
+                    <Box p={1} border="1px" borderColor={borderColor} borderRightRadius="lg" px={2}>
                         <Menu>
                             <MenuButton>GEM: {GEMSBalance.toFixed(2)}</MenuButton>
                             <Portal>
@@ -89,7 +93,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                 </MenuList>
                             </Portal>
                         </Menu>
-                    </Button>
+                    </Box>
                 </ButtonGroup>
             </Flex>
             {isOpenSendCurrency && (
