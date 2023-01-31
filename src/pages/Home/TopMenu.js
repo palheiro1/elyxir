@@ -1,7 +1,7 @@
 import { Flex, Spacer, Stack, Text } from '@chakra-ui/react';
 import CurrencyMenu from '../../components/CurrencyMenu/CurrencyMenu';
 
-const TopMenu = ({ infoAccount }) => {
+const TopMenu = ({ infoAccount, goToSection }) => {
     return (
         <>
             <Flex w="100%">
@@ -14,7 +14,7 @@ const TopMenu = ({ infoAccount }) => {
                     </Text>
                 </Stack>
                 <Spacer />
-                <CurrencyMenu infoAccount={infoAccount} />
+                <CurrencyMenu infoAccount={infoAccount} goToSection={goToSection} />
             </Flex>
         </>
     );
