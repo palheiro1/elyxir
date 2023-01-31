@@ -1,9 +1,11 @@
-import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 
-
+// Utils
 import equal from 'fast-deep-equal';
+import { generateHash } from '../../utils/hash';
+import { handleConfirmateNotification, handleNewNotification } from '../../utils/alerts';
 
 // Menu
 import LateralMenu from '../../components/LateralMenu/LateralMenu';
@@ -24,6 +26,7 @@ import {
     REFRESH_DATA_TIME,
     TARASCACARDACCOUNT,
 } from '../../data/CONSTANTS';
+import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 
 // Services
 import { fetchAllCards, fetchGemCards, getAsset } from '../../utils/cardsUtils';
@@ -34,19 +37,20 @@ import {
     getTrades,
     getUnconfirmedTransactions,
 } from '../../services/Ardor/ardorInterface';
+
+// Modals
 import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
-import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
-import { handleConfirmateNotification, handleNewNotification } from '../../utils/alerts';
 import CardReceived from '../../components/Modals/CardReceived/CardReceived';
 import Bridge from '../../components/Pages/Bridge/Bridge';
-import { generateHash } from '../../utils/hash';
 
 /**
  * @name Home
  * @description Home page (main page)
  * @author Jesús Sánchez Fernández
  * @version 0.1
- * @dev This page is used to render all the pages
+ * @dev Load all the data and render the pages
+ * @param {Object} infoAccount - Info account
+ * @param {Function} setInfoAccount - Set info account
  * @returns {JSX.Element} Home component
  */
 const Home = ({ infoAccount, setInfoAccount }) => {
@@ -56,6 +60,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const buyRef = useRef();
 
+    // Card received dialog
     const { isOpen: isOpenCardReceived, onOpen: onOpenCardReceived, onClose: onCloseCardReceived } = useDisclosure();
     const cardReceivedRef = useRef();
 
@@ -90,19 +95,17 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // Component to render
     const [renderComponent, setRenderComponent] = useState(<Overview />);
 
+    // -----------------------------------------------------------------
+    // Stack of cards to notify
     const [cardsNotification, setCardsNotification] = useState(cards);
 
-    // -----------------------------------------------------------------
     // Show all cards - Toggle button
     const [showAllCards, setShowAllCards] = useState(true);
     const handleShowAllCards = () => setShowAllCards(!showAllCards);
 
     useEffect(() => {
-        if (showAllCards) {
-            setCardsFiltered(cards);
-        } else {
-            setCardsFiltered(cards.filter(card => Number(card.quantityQNT) > 0));
-        }
+        if (showAllCards) setCardsFiltered(cards);
+        else setCardsFiltered(cards.filter(card => Number(card.quantityQNT) > 0));
     }, [showAllCards, cards]);
 
     // -----------------------------------------------------------------
@@ -140,6 +143,14 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             setCardsNotification(cardsToNotify);
             setUnconfirmedTransactions(unconfirmed);
         };
+
+        function checkDataChange(name, currentHash, newHash, setState, setHash, newData) {
+            if (!equal(currentHash, newHash)) {
+                console.log(`Mythical Beings: ${name} changed`);
+                setState(newData);
+                setHash(newHash);
+            }
+        }
 
         const loadAll = async () => {
             console.log('Mythical Beings: Fetching all data...');
@@ -196,26 +207,16 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             const loadGemCardHash = generateHash(gems[0]);
             const loadInfoAccountHash = generateHash(_auxInfo);
 
-            // Check if cardData has changed
-            if (!equal(cardsHash, loadCardsHash)) {
-                console.log('Mythical Beings: Cards changed');
-                setCards(loadCards);
-                setCardsHash(loadCardsHash);
-            }
-
-            // Check if gemCards has changed
-            if (!equal(gemCardsHash, loadGemCardHash)) {
-                console.log('Mythical Beings: Gems changed');
-                setGemCards(gems[0]);
-                setGemCardsHash(loadGemCardHash);
-            }
-
-            // Check if infoAccount has changed
-            if (!equal(infoAccountHash, loadInfoAccountHash)) {
-                console.log('Mythical Beings: Account info changed');
-                setInfoAccount(_auxInfo);
-                setInfoAccountHash(loadInfoAccountHash);
-            }
+            checkDataChange('Cards', cardsHash, loadCardsHash, setCards, setCardsHash, loadCards);
+            checkDataChange('Gems', gemCardsHash, loadGemCardHash, setGemCards, setGemCardsHash, gems[0]);
+            checkDataChange(
+                'Account info',
+                infoAccountHash,
+                loadInfoAccountHash,
+                setInfoAccount,
+                setInfoAccountHash,
+                _auxInfo
+            );
 
             setIsLoading(false);
         };
@@ -312,7 +313,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         setOption(newOption);
     };
 
-    const goToSection = (option) => {
+    const goToSection = option => {
         handleChangeOption(option);
     };
 
