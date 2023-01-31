@@ -4,11 +4,14 @@ import { Box, Center, Grid, GridItem, Stack, StackDivider, Text, useColorModeVal
 // Components
 import BlockInfo from './BlockInfo';
 import VCountdown from './VCountdown';
+import HCountdown from './HCountdown';
 
+// Data
 import { BLOCKTIME, FREQUENCY } from '../../data/CONSTANTS';
 
+// Services
 import { getBlockchainStatus } from '../../services/Ardor/ardorInterface';
-import HCountdown from './HCountdown';
+import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/utils';
 
 /**
  * @name JackpotWidget
@@ -34,6 +37,23 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
         minutes: 0,
         remainingBlocks: 'loading',
     });
+
+    const [jackpotBalance, setJackpotBalance] = useState(0);
+    const [jackpotBalanceUSD, setJackpotBalanceUSD] = useState(0);
+
+    useEffect(() => {
+        const fetchJackpotBalance = async () => {
+            // Recover Jackpot balance - IGNIS
+            const jackpotBalance = await getJackpotBalance();
+            setJackpotBalance(jackpotBalance);
+
+            // Recover Jackpot balance - USD
+            const jackpotBalanceUSD = await getJackpotBalanceUSD(jackpotBalance);
+            setJackpotBalanceUSD(jackpotBalanceUSD);
+        };
+
+        fetchJackpotBalance();
+    }, []);
 
     useEffect(() => {
         const getJackpotStatus = async () => {
@@ -100,7 +120,7 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
                             p={4}
                             direction={{ base: 'column', lg: 'row' }}
                             divider={<StackDivider borderColor="blue.800" />}>
-                            <VCountdown jackpotTimer={jackpotTimer} />
+                            <VCountdown jackpotTimer={jackpotTimer} jackpotBalance={jackpotBalance} jackpotBalanceUSD={jackpotBalanceUSD} />
 
                             <BlockInfo jackpotStatus={jackpotStatus} jackpotTimer={jackpotTimer} />
                         </Stack>
@@ -119,7 +139,7 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
                             shadow="dark-lg"
                             direction="row">
                             <GridItem colSpan={2} p={4} borderLeftRadius="lg">
-                                <HCountdown jackpotTimer={jackpotTimer} numParticipants={numParticipants} />
+                                <HCountdown jackpotTimer={jackpotTimer} numParticipants={numParticipants} jackpotBalance={jackpotBalance} jackpotBalanceUSD={jackpotBalanceUSD}  />
                             </GridItem>
 
                             <GridItem

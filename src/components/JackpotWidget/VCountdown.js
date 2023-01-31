@@ -1,8 +1,5 @@
 import { Box, Center, IconButton, Stack, Text, VStack } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 import { GiCutDiamond } from 'react-icons/gi';
-
-import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/utils';
 
 /**
  * @name VCountdown
@@ -13,23 +10,7 @@ import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const VCountdown = ({ jackpotTimer }) => {
-    const [jackpotBalance, setJackpotBalance] = useState(0);
-    const [jackpotBalanceUSD, setJackpotBalanceUSD] = useState(0);
-
-    useEffect(() => {
-        const fetchJackpotBalance = async () => {
-            // Recover Jackpot balance - IGNIS
-            const jackpotBalance = await getJackpotBalance();
-            setJackpotBalance(jackpotBalance);
-
-            // Recover Jackpot balance - USD
-            const jackpotBalanceUSD = await getJackpotBalanceUSD(jackpotBalance);
-            setJackpotBalanceUSD(jackpotBalanceUSD);
-        };
-
-        fetchJackpotBalance();
-    }, []);
+const VCountdown = ({ jackpotTimer, jackpotBalance, jackpotBalanceUSD }) => {
 
     return (
         <Box>

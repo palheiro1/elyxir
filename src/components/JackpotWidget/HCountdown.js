@@ -1,9 +1,5 @@
 import { Box, Center, HStack, IconButton, Stack, Text, useColorModeValue, VStack } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 import { GiCutDiamond } from 'react-icons/gi';
-
-import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/utils';
-
 
 /**
  * @name HCountdown
@@ -13,26 +9,7 @@ import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const HCountdown = ({ jackpotTimer, numParticipants }) => {
-    const [jackpotBalance, setJackpotBalance] = useState(0);
-    const [jackpotBalanceUSD, setJackpotBalanceUSD] = useState(0);
-
-    useEffect(() => {
-        const fetchJackpotBalance = async () => {
-            // Recover Jackpot balance - IGNIS
-            const jackpotBalance = await getJackpotBalance();
-            setJackpotBalance(jackpotBalance);
-
-            // Recover Jackpot balance - USD
-            const jackpotBalanceUSD = await getJackpotBalanceUSD(jackpotBalance);
-            setJackpotBalanceUSD(jackpotBalanceUSD);
-
-            
-        };
-
-        fetchJackpotBalance();
-    }, []);
-
+const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBalanceUSD }) => {
     const textColor = useColorModeValue('black', 'white');
     const bgColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
 
