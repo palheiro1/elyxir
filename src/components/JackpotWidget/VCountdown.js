@@ -6,6 +6,8 @@ import { GiCutDiamond } from 'react-icons/gi';
  * @description Component that shows the Jackpot balance and the countdown to the next draw
  * @dev Used in JackpotWidget
  * @param {Object} jackpotTimer - Object with the Jackpot timer data
+ * @param {Number} jackpotBalance - Jackpot balance in IGNIS
+ * @param {Number} jackpotBalanceUSD - Jackpot balance in USD
  * @returns {JSX.Element} - JSX Element with the component
  * @author Jesús Sánchez Fernández
  * @version 1.0
@@ -36,7 +38,7 @@ const VCountdown = ({ jackpotTimer, jackpotBalance, jackpotBalanceUSD }) => {
                 </Stack>
             </Center>
             <Center>
-                <Stack direction="row" spacing={4} align="center">
+                <Stack direction="row" spacing={4} align="center" color="white">
                     <Box p={2} bg="#121D31" rounded="lg" minW="90px">
                         <Text textAlign="center" fontSize="xl" fontWeight="bold">
                             {jackpotTimer.days}
