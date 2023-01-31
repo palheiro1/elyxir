@@ -16,6 +16,41 @@ import {
     transferCurrencyZeroFee,
     transferGEM,
 } from '../services/Ardor/ardorInterface';
+import { getAsset } from './cardsUtils';
+import { handleConfirmateNotification, handleNewNotification } from './alerts';
+
+export const handleNotifications = ({ unconfirmedTransactions, newsTransactions, accountRs, cardsNotification, setCardsNotification, toast, cards, onOpenCardReceived, setUnconfirmedTransactions }) => {
+    const auxUnconfirmed = [...unconfirmedTransactions];
+
+    // Check for new transactions
+    for (const tx of newsTransactions) {
+        const index = auxUnconfirmed.findIndex(t => t.fullHash === tx.fullHash);
+        if (index === -1) {
+            const isIncoming = tx.recipientRS === accountRs;
+            handleNewNotification(tx, isIncoming, toast);
+            auxUnconfirmed.push(tx);
+        }
+    }
+    // Check for confirmed transactions
+    const cardsForNotify = [...cardsNotification];
+    for (const tx of auxUnconfirmed) {
+        const index = newsTransactions.findIndex(t => t.fullHash === tx.fullHash);
+        if (index === -1) {
+            const isIncoming = tx.recipientRS === accountRs;
+            const asset = getAsset(tx.attachment.asset, cards);
+            const amount = Number(tx.attachment.quantityQNT);
+
+            if (asset && asset !== 'GEM' && isIncoming) cardsForNotify.push({ asset, amount });
+            else handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived);
+
+            auxUnconfirmed.splice(auxUnconfirmed.indexOf(tx), 1);
+        }
+    }
+
+    setCardsNotification(cardsForNotify);
+    // Set unconfirmed transactions
+    setUnconfirmedTransactions(auxUnconfirmed);
+};
 
 /**
  * @name checkPin

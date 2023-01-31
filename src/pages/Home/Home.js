@@ -5,7 +5,6 @@ import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/reac
 // Utils
 import equal from 'fast-deep-equal';
 import { generateHash } from '../../utils/hash';
-import { handleConfirmateNotification, handleNewNotification } from '../../utils/alerts';
 
 // Menu
 import LateralMenu from '../../components/LateralMenu/LateralMenu';
@@ -29,8 +28,8 @@ import {
 import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 
 // Services
-import { fetchAllCards, fetchGemCards, getAsset } from '../../utils/cardsUtils';
-import { getCurrentAskAndBids, getGIFTZBalance, getIGNISBalance } from '../../utils/walletUtils';
+import { fetchAllCards, fetchGemCards } from '../../utils/cardsUtils';
+import { getCurrentAskAndBids, getGIFTZBalance, getIGNISBalance, handleNotifications } from '../../utils/walletUtils';
 import {
     getAccountLedger,
     getBlockchainTransactions,
@@ -120,39 +119,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // Load all data from blockchain - Main flow
     // -----------------------------------------------------------------
     useEffect(() => {
-        const handleNotifications = unconfirmedTxs => {
-            const auxUnconfirmed = [...unconfirmedTransactions];
-
-            // Check for new transactions
-            for (const tx of unconfirmedTxs) {
-                const index = auxUnconfirmed.findIndex(t => t.fullHash === tx.fullHash);
-                if (index === -1) {
-                    const isIncoming = tx.recipientRS === infoAccount.accountRs;
-                    handleNewNotification(tx, isIncoming, toast);
-                    auxUnconfirmed.push(tx);
-                }
-            }
-            // Check for confirmed transactions
-            const cardsForNotify = [...cardsNotification];
-            for (const tx of auxUnconfirmed) {
-                const index = unconfirmedTxs.findIndex(t => t.fullHash === tx.fullHash);
-                if (index === -1) {
-                    const isIncoming = tx.recipientRS === infoAccount.accountRs;
-                    const asset = getAsset(tx.attachment.asset, cards);
-                    const amount = Number(tx.attachment.quantityQNT);
-
-                    if (asset && asset !== 'GEM' && isIncoming) cardsForNotify.push({ asset, amount });
-                    else handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived);
-
-                    auxUnconfirmed.splice(auxUnconfirmed.indexOf(tx), 1);
-                }
-            }
-
-            setCardsNotification(cardsForNotify);
-            // Set unconfirmed transactions
-            setUnconfirmedTransactions(auxUnconfirmed);
-        };
-
         function checkDataChange(name, currentHash, newHash, setState, setHash, newData) {
             if (!equal(currentHash, newHash)) {
                 console.log(`Mythical Beings: ${name} changed`);
@@ -189,7 +155,17 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             // -----------------------------------------------------------------
             // Check notifications - Unconfirmed transactions
             const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
-            handleNotifications(unconfirmedTxs);
+            handleNotifications({
+                unconfirmedTransactions,
+                newsTransactions: unconfirmedTxs,
+                accountRs,
+                cardsNotification,
+                setCardsNotification,
+                toast,
+                cards,
+                onOpenCardReceived,
+                setUnconfirmedTransactions,
+            });
             // -----------------------------------------------------------------
 
             // -----------------------------------------------------------------
