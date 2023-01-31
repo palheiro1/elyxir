@@ -106,20 +106,14 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     }, [showAllCards, cards]);
 
     // -----------------------------------------------------------------
-
     // Check if user is logged
+    // -----------------------------------------------------------------
     useEffect(() => {
         if (infoAccount.token === null || infoAccount.accountRs === null) navigate('/login');
     }, [infoAccount, navigate]);
 
     // -----------------------------------------------------------------
-    const handleChangeOption = newOption => {
-        setLastOption(option);
-        setOption(newOption);
-    };
-
-    // -----------------------------------------------------------------
-    // Load all data from blockchain
+    // Load all data from blockchain - Main flow
     // -----------------------------------------------------------------
     useEffect(() => {
         const handleNotifications = unconfirmedTxs => {
@@ -313,8 +307,13 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // Handle change option with flag
     // -----------------------------------------------------------------
 
+    const handleChangeOption = newOption => {
+        setLastOption(option);
+        setOption(newOption);
+    };
+
     const goToSection = (option) => {
-        setOption(option);
+        handleChangeOption(option);
     };
 
     return (

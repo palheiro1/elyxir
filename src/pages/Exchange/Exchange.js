@@ -17,23 +17,17 @@ function Iframe(props) {
 const Exchange = ({ infoAccount }) => {
     const navigate = useNavigate();
     const [option, setOption] = useState('crypto');
-    //const bgColor = useColorModeValue('gray.100', 'gray.700');
 
     useEffect(() => {
-        if (infoAccount === undefined || !infoAccount.token) {
-            navigate('/login');
-        }
+        if (infoAccount.token === null || infoAccount.accountRs === null) navigate('/login');
     }, [infoAccount, navigate]);
-
-    if (!infoAccount) return null;
-    const { accountRs } = infoAccount;
 
     return (
         <>
             <Center>
                 <Stack direction="column" spacing={4} align="center">
                     <Heading my={2}>FUND ACCOUNT</Heading>
-                    <Text textAlign="center">{accountRs}</Text>
+                    <Text textAlign="center">{infoAccount.accountRs}</Text>
 
                     <ButtonGroup variant="outline">
                         <Button isActive={option === 'crypto'} minW="120px" onClick={() => setOption('crypto')}>
@@ -47,7 +41,7 @@ const Exchange = ({ infoAccount }) => {
             </Center>
             {option === 'crypto' && (
                 <Center my={10} rounded="lg">
-                    <Box w={{base: "90%", md: "30%"}} h="400px" border="2px" borderColor="gray">
+                    <Box w={{ base: '90%', md: '30%' }} h="400px" border="2px" borderColor="gray">
                         <Iframe
                             iframe={
                                 '<iframe src="https://widget.changelly.com?from=*&to=ignis&amount=0.005&address=&fromDefault=BTC&toDefault=ignis&theme=default&merchant_id=5zk2vil3u4s8witr&payment_id=&v=2" width="100%" height="400" class="changelly" scrolling="no" style="min-width: 100%; width: 100px; overflow-y: hidden; border: none">Cant load widget</iframe>'
@@ -59,8 +53,12 @@ const Exchange = ({ infoAccount }) => {
 
             {option === 'fiat' && (
                 <Center my={10} rounded="lg">
-                    <Box w={{base: "90%", md: "30%"}} h="400px" border="2px" borderColor="gray">
-                        <Iframe iframe={'<iframe src="/simplex.html" width="100%" height="400" class="simplex" scrolling="no" style="min-width: 100%; width: 100px; overflow-y: hidden; border: none">Cant load widget</iframe>'} />
+                    <Box w={{ base: '90%', md: '30%' }} h="400px" border="2px" borderColor="gray">
+                        <Iframe
+                            iframe={
+                                '<iframe src="/simplex.html" width="100%" height="400" class="simplex" scrolling="no" style="min-width: 100%; width: 100px; overflow-y: hidden; border: none">Cant load widget</iframe>'
+                            }
+                        />
                     </Box>
                 </Center>
             )}
