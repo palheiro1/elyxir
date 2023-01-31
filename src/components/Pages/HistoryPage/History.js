@@ -1,4 +1,4 @@
-import { Box, Button, Center, Spinner, Table, TableContainer, Tbody, Td, Text, Thead, Tr } from '@chakra-ui/react';
+import { Box, Button, Center, Spinner, TableContainer, Table, Thead, Tbody, Tr, Th, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getBlockchainStatus } from '../../../services/Ardor/ardorInterface';
 import { getTxTimestamp } from '../../../utils/txUtils';
@@ -161,8 +161,19 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                 transactions={transactions}
             />
 
-            <TableContainer border="1px" borderColor="gray" rounded="2xl" shadow="inner" boxShadow="md">
-                {needReload && <Text>Loading</Text>}
+            <TableContainer
+                border="1px"
+                borderColor="gray"
+                rounded="2xl"
+                shadow="inner"
+                boxShadow="md"
+                maxW={{ base: '100%', md: '80%', lg: '100%' }}>
+                {needReload && (
+                    <>
+                        <Spinner size="md" />
+                        <Text>Loading</Text>
+                    </>
+                )}
                 {haveUnconfirmed && (
                     <Center w="100%" textAlign="center" py={4} gap={4}>
                         <Spinner size="md" />{' '}
@@ -171,14 +182,14 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                         </Text>
                     </Center>
                 )}
-                <Table variant="simple">
+                <Table variant="simple" size={{ base: 'sm', lg: 'md' }}>
                     <Thead>
                         <Tr>
-                            <Td></Td>
-                            <Td textAlign="center">Title</Td>
-                            <Td>Amount</Td>
-                            <Td>Date and Time</Td>
-                            <Td>To/From</Td>
+                            <Th />
+                            <Th textAlign="center">Title</Th>
+                            <Th>Amount</Th>
+                            <Th>Date and Time</Th>
+                            <Th>To/From</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
