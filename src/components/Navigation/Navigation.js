@@ -61,7 +61,7 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
                     </Flex>
                 </Flex>
 
-                {needChangeColor && <ColorModeSwitcher ml={-10} justifySelf="flex-end" />}
+                {needChangeColor && <ColorModeSwitcher position="absolute" right="2.5%" />}
             </Flex>
 
             {isHeader && (
