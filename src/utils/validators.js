@@ -1,5 +1,9 @@
 import ardorjs from 'ardorjs';
 
+export const isNotLogged = infoAccount => {
+    return infoAccount.token === null || infoAccount.accountRs === null;
+};
+
 /**
  * @param {string} value - user name
  * @param {array} userList - list of all users
@@ -71,9 +75,9 @@ export function validateAddress(value, status) {
     return { invalid: invalid, error: error };
 }
 
-export const isArdorAccount = (account) => {
-    return (account.match('^ARDOR-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{5}'));
-}
+export const isArdorAccount = account => {
+    return account.match('^ARDOR-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{5}');
+};
 
 /**
  * @description - checks if the user has all the cards of the collection
