@@ -25,11 +25,7 @@ import { Fragment } from 'react';
  * @dev With "isHeader" parameter we can calculate logos and if need ColorSwitcher
  * @author Jesús Sánchez Fernández
  */
-const Navigation = ({
-    isHeader = true,
-    isLogged = false,
-
-}) => {
+const Navigation = ({ isHeader = true, isLogged = false }) => {
     const { isOpen, onToggle } = useDisclosure();
 
     // -------------------------------------------------------------
@@ -39,7 +35,7 @@ const Navigation = ({
     return (
         <Box>
             <Flex
-                display={{ base: 'none', md: 'unset' }}
+                display={{ base: 'none', md: 'flex' }}
                 color={useColorModeValue('gray.600', 'white')}
                 minH={'60px'}
                 py={{ base: isHeader ? 2 : 0 }}

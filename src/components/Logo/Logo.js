@@ -8,11 +8,11 @@ import { Image, useColorModeValue } from "@chakra-ui/react"
  */
 const Logo = ({isLogoGame = true}) => {
 
-    const filtro = useColorModeValue("invert(1)", "invert(0)");
-    const logoImg = isLogoGame ? "images/logo_transparent.png" : "images/logo_tarasca.png"
+    const logoGame = useColorModeValue("images/logos/logo_black.png", "images/logos/logo_white.png");
+    const logoImg = isLogoGame ? logoGame : "images/logo_tarasca.png"
 
     return (
-        <Image src={logoImg} alt="Logo" filter={filtro} maxH="100px" key="logo" />
+        <Image src={logoImg} alt="Logo" maxH="100px" key="logo" />
     )
 }
 
