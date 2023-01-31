@@ -52,9 +52,9 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
 
     const handleInput = e => {
         e.preventDefault();
-        setPolygonAccount(e.target.value);
-        const isValid = ethereum_address.isAddress(e.target.value);
-        setIsValidAccount(isValid);
+        const { value } = e.target;
+        setPolygonAccount(value);
+        setIsValidAccount(ethereum_address.isAddress(value));
     };
 
     const handleCompletePin = pin => {
@@ -84,23 +84,21 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
     };
 
     const handleSwap = async () => {
-        if (!isValidPin) return;
-        if (!isValidAccount) return;
-        if (selectedCards.length === 0) return;
+        if (!isValidPin || !isValidAccount || selectedCards.length === 0) return;
 
         const cardsToSwap = selectedCards.map(card => ({
             asset: card.asset,
             quantity: card.selectQuantity || 1,
         }));
 
-        const response = await sendToPolygonBridge({
+        const success = await sendToPolygonBridge({
             cards: cardsToSwap,
             ardorAccount: ardorAddress,
             ethAccount: polygonAccount,
             passPhrase: passphrase,
         });
 
-        if (response) {
+        if (success) {
             okToast('Swap completed successfully', toast);
             setSelectedCards([]);
             setPolygonAccount('');
@@ -174,7 +172,8 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
                 </Heading>
 
                 <Input
-                    placeholder="Polygon address"
+                    isDisabled={selectedCards.length === 0}
+                    placeholder={selectedCards.length === 0 ? 'Select cards first' : '0x...'}
                     value={polygonAccount}
                     onChange={handleInput}
                     isInvalid={!isValidAccount}
@@ -188,6 +187,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
                 <Center>
                     <HStack spacing={7}>
                         <PinInput
+                            isDisabled={selectedCards.length === 0 || !isValidAccount}
                             size="lg"
                             placeholder="🔒"
                             onComplete={handleCompletePin}
