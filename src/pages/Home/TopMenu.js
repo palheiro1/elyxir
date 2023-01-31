@@ -23,9 +23,10 @@ const TopMenu = ({ infoAccount, goToSection }) => {
                         </Text>
                     </Tooltip>
                 </Stack>
+
                 <Spacer />
 
-                {infoAccount && <CurrencyMenu infoAccount={infoAccount} goToSection={goToSection} />}
+                {infoAccount.GEMSBalance && <CurrencyMenu infoAccount={infoAccount} goToSection={goToSection} />}
             </Flex>
         </>
     );

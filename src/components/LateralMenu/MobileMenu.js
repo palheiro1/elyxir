@@ -2,7 +2,15 @@ import { Box, Center, Stack, Switch, Text } from '@chakra-ui/react';
 import CurrencyMenu from '../CurrencyMenu/CurrencyMenu';
 import VerticalMenuButtons from './VerticalMenuButtons';
 
-const MobileMenu = ({ option, setOption, handleLogout, infoAccount, showAllCards, handleShowAllCards, goToSection }) => {
+const MobileMenu = ({
+    option,
+    setOption,
+    handleLogout,
+    infoAccount,
+    showAllCards,
+    handleShowAllCards,
+    goToSection,
+}) => {
     const { name: username, accountRs: account } = infoAccount;
     return (
         <Stack direction="column" w="100%">
@@ -16,9 +24,11 @@ const MobileMenu = ({ option, setOption, handleLogout, infoAccount, showAllCards
                     </Text>
                 </Stack>
 
-                <Center my={2}>
-                    <CurrencyMenu infoAccount={infoAccount} goToSection={goToSection} />
-                </Center>
+                {infoAccount.GEMSBalance && (
+                    <Center my={2}>
+                        <CurrencyMenu infoAccount={infoAccount} goToSection={goToSection} />
+                    </Center>
+                )}
 
                 <Center w="100%">
                     <VerticalMenuButtons
@@ -29,7 +39,7 @@ const MobileMenu = ({ option, setOption, handleLogout, infoAccount, showAllCards
                     />
                 </Center>
 
-                <Stack p={2} align="center" pt={{ base: 4, md: 8}}>
+                <Stack p={2} align="center" pt={{ base: 4, md: 8 }}>
                     <Text fontWeight="bold" textAlign="center" fontSize="sm">
                         Show all cards
                     </Text>
