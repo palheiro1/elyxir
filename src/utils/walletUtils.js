@@ -327,6 +327,15 @@ export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
     return transferedIgnis && success;
 };
 
+/**
+ * @name sendIgnis
+ * @description Send ignis
+ * @param {String} passphrase - Passphrase
+ * @param {Number} amountNQT - Amount to send
+ * @param {String} ignisBalance - IGNIS balance
+ * @param {String} recipient - Recipient address
+ * @returns {Object} - Transaction object
+ */
 export const sendGiftz = async ({ passphrase, amountNQT, ignisBalance, recipient }) => {
     const amount = Number(amountNQT);
 
@@ -335,6 +344,13 @@ export const sendGiftz = async ({ passphrase, amountNQT, ignisBalance, recipient
     else return await transferCurrency(CURRENCY, amount, recipient, passphrase, '');
 };
 
+/**
+ * @name sendGem
+ * @description Send gem to an address
+ * @param {String} passphrase - Passphrase
+ * @param {Number} amountNQT - Amount to send
+ * @param {String} recipient - Recipient address
+ */
 export const sendGem = async ({ passphrase, amountNQT, recipient }) => {
     return await transferAsset({
         asset: GEMASSET,
@@ -344,16 +360,41 @@ export const sendGem = async ({ passphrase, amountNQT, recipient }) => {
     });
 };
 
+/**
+ * @name sendAskOrder
+ * @description Send an ask order - Easy wrapper
+ * @param {String} asset - Asset id
+ * @param {Number} price - Price
+ * @param {Number} quantity - Quantity
+ * @param {String} passPhrase - Passphrase
+ * @returns {Object} - Transaction object
+ */
 export const sendAskOrder = async ({ asset, price, quantity, passPhrase }) => {
     const response = await createAskOrder({ asset, price, quantity, passPhrase });
     return response;
 };
 
+/**
+ * @name sendBidOrder
+ * @description Send a bid order - Easy wrapper
+ * @param {String} asset - Asset id
+ * @param {Number} price - Price
+ * @param {Number} quantity - Quantity
+ * @param {String} passPhrase - Passphrase
+ * @returns {Object} - Transaction object
+ */
 export const sendBidOrder = async ({ asset, price, quantity, passPhrase }) => {
     const response = await createBidOrder({ asset, price, quantity, passPhrase });
     return response;
 };
 
+/**
+ * @name sendToJackpot
+ * @description Send cards to the jackpot
+ * @param {Array} cards - Array of cards
+ * @param {String} passPhrase - Passphrase
+ * @returns {Array} - Array of responses
+ */
 export const sendToJackpot = async ({ cards, passPhrase }) => {
     const isBlocked = cards.some(card => card.quantityQNT < card.unconfirmedQuantityQNT);
     if (!isBlocked) {
@@ -376,6 +417,16 @@ export const sendToJackpot = async ({ cards, passPhrase }) => {
     }
 };
 
+/**
+ * @name sendToPolygonBridge
+ * @description Send cards to the polygon bridge
+ * @param {Array} cards - Array of cards
+ * @param {String} ardorAccount - Ardor account
+ * @param {String} ethAccount - Ethereum account
+ * @param {String} passPhrase - Passphrase
+ * @returns {Boolean} - True if success, false if not
+ * @dev This function is used to send cards to the polygon bridge
+ */
 export const sendToPolygonBridge = async ({ cards, ardorAccount, ethAccount, passPhrase }) => {
     const promises = cards.map(card =>
         transferAsset({
