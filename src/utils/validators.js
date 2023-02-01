@@ -1,5 +1,11 @@
 import ardorjs from 'ardorjs';
+import { getAllUsers } from './storage';
 
+/**
+ * @param {object} infoAccount - object with accountRs and token properties
+ * @returns {boolean} - true if the user is logged in, false otherwise
+ * @description - checks if the user is logged in
+ */
 export const isNotLogged = infoAccount => {
     return infoAccount.token === null || infoAccount.accountRs === null;
 };
@@ -10,18 +16,7 @@ export const isNotLogged = infoAccount => {
  * @returns {object} - object with invalid and error properties
  * @description - checks if the user name is already taken
  */
-export function validateUsername(value, userList) {
-    const user_existing = userList.find(el => el === value);
-    const length = value.length;
-
-    if (user_existing) {
-        return { invalid: true, error: 'User name is already taken' };
-    } else if (length === 0) {
-        return { invalid: true, error: "User name can't be empty" };
-    }
-
-    return { invalid: false, error: '' };
-}
+export const existUser = value => getAllUsers().includes(value);
 
 /**
  * @param {string} value - user name
@@ -29,54 +24,14 @@ export function validateUsername(value, userList) {
  * @returns {object} - object with invalid and error properties
  * @description - checks if the pass phrase belongs to the account
  */
-export function validatePassPhrase(value, account) {
-    let invalid = false;
-    let error = '';
-    const accountFromPhrase = ardorjs.secretPhraseToAccountId(value, false);
-
-    if (accountFromPhrase !== account) {
-        invalid = true;
-        error = 'This pass phrase belongs to account ' + accountFromPhrase;
-    }
-
-    return { invalid: invalid, error: error };
+export function checkIsValidPassphrase(passphrase, expectedAccount) {
+    const actualAccount = ardorjs.secretPhraseToAccountId(passphrase, false);
+    return actualAccount === expectedAccount;
 }
 
-/**
- * @param {string} value - user name
- * @returns {object} - object with invalid and error properties
- * @description - checks if the ethreum address is valid
- */
-export function validateEthAddress(value) {
-    let invalid = false;
-    let error = '';
-
-    if (value !== '') {
-        if (value.length < 40) {
-            invalid = true;
-            error = 'address looks too short.';
-        } else if (!(value.charAt(0) === '0' && value.charAt(1) === 'x')) {
-            invalid = true;
-            error = 'address must begin with 0x';
-        }
-    } else {
-        // case if field is empty
-        invalid = false;
-        error = '';
-    }
-    return { invalid: invalid, error: error };
-}
-
-export function validateAddress(value, status) {
-    let invalid = status.invalid;
-    let error = status.error;
-    invalid = value.match('^ARDOR-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{5}') ? false : true;
-    error = invalid ? "this doesn't look like a valid ARDOR address." : '';
-    return { invalid: invalid, error: error };
-}
 
 export const isArdorAccount = account => {
-    return account.match('^ARDOR-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{5}');
+    return /^ARDOR-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{5}/.test(account);
 };
 
 /**
