@@ -42,6 +42,20 @@ export function checkDataChange(name, currentHash, setState, setHash, newData) {
     }
 }
 
+/**
+ * @name handleNotifications
+ * @description Handle new and confirmed transactions
+ * @param {Object} unconfirmedTransactions - Unconfirmed transactions
+ * @param {Object} newsTransactions - New transactions
+ * @param {String} accountRs - Account RS
+ * @param {Object} cardsNotification - Cards notification
+ * @param {Function} setCardsNotification - Function to update cards notification
+ * @param {Function} toast - Function to show a toast
+ * @param {Object} cards - Cards
+ * @param {Function} onOpenCardReceived - Function to open a card received
+ * @param {Function} setUnconfirmedTransactions - Function to update unconfirmed transactions
+ * @returns {void} - Nothing
+ */
 export const handleNotifications = ({
     unconfirmedTransactions,
     newsTransactions,
@@ -80,6 +94,7 @@ export const handleNotifications = ({
         }
     }
 
+    // Set cards to notify
     setCardsNotification(cardsForNotify);
     // Set unconfirmed transactions
     setUnconfirmedTransactions(auxUnconfirmed);
@@ -118,10 +133,18 @@ export const checkPin = (user, pin, needPassphrase = true) => {
  * @version 0.1
  */
 export const getCurrentAskAndBids = async account => {
-    const askOrders = (await getAccountCurrentAskOrders(account)).askOrders;
-    const bidOrders = (await getAccountCurrentBidOrders(account)).bidOrders;
-
-    return { askOrders, bidOrders };
+    try {
+        const [askOrdersResponse, bidOrdersResponse] = await Promise.all([
+            getAccountCurrentAskOrders(account),
+            getAccountCurrentBidOrders(account),
+        ]);
+        const askOrders = askOrdersResponse.askOrders;
+        const bidOrders = bidOrdersResponse.bidOrders;
+        return { askOrders, bidOrders };
+    } catch (error) {
+        console.log('🚀 ~ file: walletUtils.js:141 ~ error', error);
+        return { askOrders: [], bidOrders: [] };
+    }
 };
 
 /**
@@ -131,11 +154,19 @@ export const getCurrentAskAndBids = async account => {
  * @returns {Object} - Ask and bids orders and asset count
  */
 export const getAskAndBids = async asset => {
-    const askOrders = (await getAskOrders(asset)).askOrders;
-    const bidOrders = (await getBidOrders(asset)).bidOrders;
-    const assetCount = await fetchAssetCount(asset);
-
-    return { askOrders, bidOrders, assetCount };
+    try {
+        const [askOrders, bidOrders, assetCount] = await Promise.all([
+            getAskOrders(asset),
+            getBidOrders(asset),
+            fetchAssetCount(asset),
+        ]);
+        const askOrdersResponse = askOrders.askOrders;
+        const bidOrdersResponse = bidOrders.bidOrders;
+        return { askOrders: askOrdersResponse, bidOrders: bidOrdersResponse, assetCount };
+    } catch (error) {
+        console.log('🚀 ~ file: walletUtils.js:167 ~ getAskAndBids ~ error', error);
+        return { askOrders: [], bidOrders: [], assetCount: 0 };
+    }
 };
 
 /**
@@ -145,8 +176,13 @@ export const getAskAndBids = async asset => {
  * @author Jesús Sánchez Fernández
  */
 export const getGIFTZBalance = async address => {
-    const response = await getAccountCurrencies(address, CURRENCY);
-    return Object.keys(response).length > 0 ? response : 0;
+    try {
+        const balanceData = await getAccountCurrencies(address, CURRENCY);
+        return balanceData.GIFTZ && balanceData.GIFTZ > 0 ? balanceData.GIFTZ : 0;
+    } catch (error) {
+        console.log('🚀 ~ file: walletUtils.js:183 ~ getGIFTZBalance ~ error', error);
+        return 0;
+    }
 };
 
 /**
@@ -156,8 +192,14 @@ export const getGIFTZBalance = async address => {
  * @author Jesús Sánchez Fernández
  */
 export const getIGNISBalance = async account => {
-    const response = await getIgnisBalance(account);
-    return Number(Math.min(response.balanceNQT / NQTDIVIDER, response.unconfirmedBalanceNQT / NQTDIVIDER)).toFixed(2);
+    try {
+        const balanceData = await getIgnisBalance(account);
+        const balance = Number((balanceData.balanceNQT + balanceData.unconfirmedBalanceNQT) / NQTDIVIDER).toFixed(2);
+        return balance;
+    } catch (error) {
+        console.error(error);
+        return 0;
+    }
 };
 
 /**
