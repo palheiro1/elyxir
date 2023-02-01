@@ -161,51 +161,52 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                 transactions={transactions}
             />
 
-            <TableContainer
-                border="1px"
-                borderColor="gray"
-                rounded="2xl"
-                shadow="inner"
-                boxShadow="md"
-                maxW={{ base: '100%', md: '80%', lg: '100%' }}>
-                {needReload && (
-                    <Center w="100%" textAlign="center" py={4} gap={4}>
-                        <Spinner size="md" />
-                        <Text>Loading</Text>
-                    </Center>
-                )}
-                {haveUnconfirmed && (
-                    <Center w="100%" textAlign="center" py={4} gap={4}>
-                        <Spinner size="md" />{' '}
-                        <Text fontWeight="bolder" bgGradient="linear(to-l, #478299, #957bd2)" bgClip="text">
-                            New transactions are being processed.
-                        </Text>
-                    </Center>
-                )}
-                <Table variant="simple" size={{ base: 'sm', lg: 'md' }}>
-                    <Thead>
-                        <Tr>
-                            <Th />
-                            <Th textAlign="center">Title</Th>
-                            <Th>Amount</Th>
-                            <Th>Date and Time</Th>
-                            <Th>To/From</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {!needReload &&
-                            filteredTransactions.slice(0, visibleTransactions).map((transaction, index) => {
-                                return <transaction.component key={index} />;
-                            })}
-                    </Tbody>
-                </Table>
+            {needReload ? (
+                <Center w="100%" textAlign="center" py={4} gap={4}>
+                    <Spinner size="md" />
+                    <Text>Loading</Text>
+                </Center>
+            ) : (
+                <TableContainer
+                    border="1px"
+                    borderColor="gray"
+                    rounded="2xl"
+                    shadow="inner"
+                    boxShadow="md"
+                    maxW={{ base: '100%', md: '80%', lg: '100%' }}>
+                    {haveUnconfirmed && (
+                        <Center w="100%" textAlign="center" py={4} gap={4}>
+                            <Spinner size="md" />{' '}
+                            <Text fontWeight="bolder" bgGradient="linear(to-l, #478299, #957bd2)" bgClip="text">
+                                New transactions are being processed.
+                            </Text>
+                        </Center>
+                    )}
+                    <Table variant="simple" size={{ base: 'sm', lg: 'md' }}>
+                        <Thead>
+                            <Tr>
+                                <Th />
+                                <Th textAlign="center">Title</Th>
+                                <Th>Amount</Th>
+                                <Th>Date and Time</Th>
+                                <Th>To/From</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {!needReload &&
+                                filteredTransactions.slice(0, visibleTransactions).map((transaction, index) => {
+                                    return <transaction.component key={index} />;
+                                })}
+                        </Tbody>
+                    </Table>
 
-                {filteredTransactions.length > visibleTransactions && (
-                    <Button size="lg" w="100%" p={6} onClick={loadMoreTransactions}>
-                        Load More
-                    </Button>
-                )}
-            </TableContainer>
+                    {filteredTransactions.length > visibleTransactions && (
+                        <Button size="lg" w="100%" p={6} onClick={loadMoreTransactions}>
+                            Load More
+                        </Button>
+                    )}
+                </TableContainer>
+            )}
         </Box>
     );
 };
