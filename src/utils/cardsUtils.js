@@ -149,13 +149,14 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
         let bidOrders = [];
         let lastPrice = 0;
         if (fetchOrders) {
-            const askResponse = await getAskOrders(asset.asset);
+            const [askResponse, bidResponse, lastTradesResponse] = await Promise.all([
+                getAskOrders(asset.asset),
+                getBidOrders(asset.asset),
+                getLastTrades(asset.asset),
+            ]);
+
             askOrders = askResponse.askOrders;
-
-            const bidResponse = await getBidOrders(asset.asset);
             bidOrders = bidResponse.bidOrders;
-
-            const lastTradesResponse = await getLastTrades(asset.asset);
             lastPrice =
                 lastTradesResponse.trades.length > 0 && lastTradesResponse.trades[0].priceNQTPerShare / NQTDIVIDER;
         }
