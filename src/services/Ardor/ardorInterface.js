@@ -1,8 +1,9 @@
-// Ardor Interface
+// Ardor Interface and other libraries
 import axios from 'axios';
 import qs from 'qs';
 import ardorjs from 'ardorjs';
 
+// Constants
 import {
     BRIDGEAPIURL,
     CURRENCY,
@@ -19,218 +20,119 @@ const config = {
         'Content-Type': 'application/x-www-form-urlencoded',
     },
 };
-// -------------------------------------------------
+
+const URL_SEND_MONEY = `${NODEURL}?requestType=cancelBidOrder`;
+const URL_BROADCAST = `${NODEURL}?requestType=broadcastTransaction`;
 
 // -------------------------------------------------
 //                   BASIC UTILS
 // -------------------------------------------------
 
-export const getImageURL = async (nodeurl, fullHash) => {
-    const params = new URLSearchParams();
-    const queryparams = {
-        requestType: 'downloadTaggedData',
-        chain: 'IGNIS',
-        transactionFullHash: fullHash,
-        retrieve: true,
-    };
-
-    Object.entries(queryparams).forEach(([key, val]) => {
-        params.set(key, val);
-    });
-
-    return `${nodeurl}?${params.toString()}`;
-};
-
 export const getAccountFromPhrase = async value => {
+    if (!value || typeof value !== 'string') throw new Error('Invalid secret phrase');
     return ardorjs.secretPhraseToAccountId(value, false);
 };
 
-const getTransactionBytes = async query => {
-    return axios.post(NODEURL, qs.stringify(query), config).then(function (response) {
-        return response.data;
-    });
-};
-
 export const fetchAssetCount = async asset => {
-    const response = await fetch(
-        NODEURL + '?requestType=getAccountAssets&account=' + JACKPOTACCOUNT + '&asset=' + asset
-    );
-    const result = await response.json();
-    return result.quantityQNT ? result.quantityQNT : 0;
-};
-
-export const getIgnisBalance = async account => {
-    return await axios
-        .get(NODEURL, {
-            params: {
-                requestType: 'getBalance',
-                chain: 'IGNIS',
-                account: account,
-            },
-        })
-        .then(response => {
-            return response.data;
-        })
-        .catch(error => {
-            console.log('🚀 ~ file: ardorInterface.js:71 ~ getIgnisBalance ~ error', error);
-        });
-};
-
-export const getAccountCurrentAskOrders = async account => {
-    return await axios
-        .get(NODEURL, {
-            params: {
-                requestType: 'getAccountCurrentAskOrders',
-                chain: 'IGNIS',
-                account: account,
-            },
-        })
-        .then(response => {
-            return response.data;
-        })
-        .catch(error => {
-            // handle error
-            console.log('🚀 ~ file: ardorInterface.js:92 ~ getAccountCurrentAskOrders ~ error', error);
-        });
-};
-
-export const getAccountCurrentBidOrders = async account => {
-    return await axios
-        .get(NODEURL, {
-            params: {
-                requestType: 'getAccountCurrentBidOrders',
-                chain: 'IGNIS',
-                account: account,
-            },
-        })
-        .then(response => {
-            return response.data;
-        })
-        .catch(error => {
-            // handle error
-            console.log('🚀 ~ file: ardorInterface.js:109 ~ getAccountCurrentBidOrders ~ error', error);
-        });
-};
-
-export const getAskOrders = async asset => {
-    return axios
-        .get(NODEURL, {
-            params: {
-                requestType: 'getAskOrders',
-                chain: 'IGNIS',
-                asset: asset,
-            },
-        })
-        .then(response => {
-            return response.data;
-        })
-        .catch(error => {
-            // handle error
-            console.log('🚀 ~ file: ardorInterface.js:127 ~ getAskOrders ~ error', error);
-        });
-};
-
-export const getBidOrders = async asset => {
-    return axios
-        .get(NODEURL, {
-            params: {
-                requestType: 'getBidOrders',
-                chain: 'IGNIS',
-                asset: asset,
-            },
-        })
-        .then(response => {
-            return response.data;
-        })
-        .catch(error => {
-            console.log('🚀 ~ file: ardorInterface.js:144 ~ getBidOrders ~ error', error);
-        });
-};
-
-export const getAskOrder = async order => {
-    return axios
-        .get(NODEURL, {
-            params: {
-                requestType: 'getAskOrder',
-                chain: 'IGNIS',
-                order: order,
-            },
-        })
-        .then(function (response) {
-            return response.data;
-        })
-        .catch(function (error) {
-            // handle error
-            console.log('🚀 ~ file: ardorInterface.js:162 ~ getAskOrder ~ error', error);
-        });
-};
-
-export const getBidOrder = async order => {
-    return axios
-        .get(NODEURL, {
-            params: {
-                requestType: 'getBidOrder',
-                chain: 'IGNIS',
-                order: order,
-            },
-        })
-        .then(function (response) {
-            return response.data;
-        })
-        .catch(function (error) {
-            // handle error
-            console.log('🚀 ~ file: ardorInterface.js:180 ~ getBidOrder ~ error', error);
-        });
-};
-
-export const getAssetsByIssuer = async issuerAccount => {
     try {
-        const {
-            data: { assets },
-        } = await axios.get(NODEURL, {
-            params: {
-                requestType: 'getAssetsByIssuer',
-                account: issuerAccount,
-            },
-        });
-        return assets[0];
+        const response = await fetch(
+            NODEURL + '?requestType=getAccountAssets&account=' + JACKPOTACCOUNT + '&asset=' + asset
+        );
+        const result = await response.json();
+        return result.quantityQNT ? result.quantityQNT : 0;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:196 ~ getAssetsByIssuer ~ error', error);
+        console.log('🚀 ~ file: ardorInterface.js:53 ~ fetchAssetCount ~ error', error);
+        return 0;
     }
 };
 
-export const getAccount = async account => {
-    return await axios
-        .get(NODEURL, {
+// -------------------------------------------------
+//                  ARDOR REQUESTS
+// -------------------------------------------------
+
+const getRequestToIgnisByAccount = async (type, account) => {
+    try {
+        const response = await axios.get(NODEURL, {
             params: {
-                requestType: 'getAccount',
-                account: account,
+                requestType: type,
+                chain: 'IGNIS',
+                account,
             },
-        })
-        .then(function (response) {
-            return response;
-        })
-        .catch(function (error) {
-            // handle error
-            console.log('🚀 ~ file: ardorInterface.js:213 ~ getAccount ~ error', error);
         });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:68 ~ getRequestToIgnisByAccount ~ error', error);
+    }
+};
+
+const getRequestToIgnisByAsset = async (type, asset) => {
+    try {
+        const response = await axios.get(NODEURL, {
+            params: {
+                requestType: type,
+                chain: 'IGNIS',
+                asset,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:95 ~ getRequestToIgnisByAsset ~ error', error);
+    }
+};
+
+const getRequestToIgnisByOrder = async (type, order) => {
+    try {
+        const response = await axios.get(NODEURL, {
+            params: {
+                requestType: type,
+                chain: 'IGNIS',
+                order,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:118 ~ getRequestToIgnisByOrder ~ error', error);
+    }
+};
+
+export const getIgnisBalance = async account => {
+    return await getRequestToIgnisByAccount('getBalance', account);
+};
+
+export const getAccountCurrentAskOrders = async account => {
+    return await getRequestToIgnisByAccount('getAccountCurrentAskOrders', account);
+};
+
+export const getAccountCurrentBidOrders = async account => {
+    return await getRequestToIgnisByAccount('getAccountCurrentBidOrders', account);
+};
+
+export const getAskOrders = async asset => {
+    return await getRequestToIgnisByAsset('getAskOrders', asset);
+};
+
+export const getBidOrders = async asset => {
+    return await getRequestToIgnisByAsset('getBidOrders', asset);
+};
+
+export const getAskOrder = async order => {
+    return await getRequestToIgnisByOrder('getAskOrder', order);
+};
+
+export const getBidOrder = async order => {
+    return await getRequestToIgnisByOrder('getBidOrder', order);
+};
+
+export const getAssetsByIssuer = async account => {
+    return (await getRequestToIgnisByAccount('getAssetsByIssuer', account)).assets[0];
+};
+
+export const getAccount = async account => {
+    return await getRequestToIgnisByAccount('getAccount', account);
 };
 
 export const getAsset = async asset => {
-    return axios
-        .get(NODEURL, {
-            params: {
-                requestType: 'getAsset',
-                asset: asset,
-            },
-        })
-        .then(function (response) {
-            return response.data;
-        })
-        .catch(function (error) {
-            // handle error
-            console.log('🚀 ~ file: ardorInterface.js:230 ~ getAsset ~ error', error);
-        });
+    return await getRequestToIgnisByAsset('getAsset', asset);
 };
 
 export const getAccountAssets = async (accountId, assetId = '') => {
@@ -250,63 +152,83 @@ export const getAccountAssets = async (accountId, assetId = '') => {
 };
 
 export const getTrades = async (chain, account, timestamp) => {
-    return await axios
-        .get(NODEURL, {
+    try {
+        const response = await axios.get(NODEURL, {
             params: {
                 requestType: 'getTrades',
-                chain: chain,
-                account: account,
-                timestamp: timestamp,
+                chain,
+                account,
+                timestamp,
                 includeAssetInfo: true,
             },
-        })
-        .then(response => {
-            return response.data;
-        })
-        .catch(error => {
-            // handle error
-            console.log('🚀 ~ file: ardorInterface.js:266 ~ getTrades ~ error', error);
         });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:167 ~ getTrades ~ error', error);
+    }
 };
 
 export const getLastTrades = async assets => {
-    return await axios
-        .get(NODEURL, {
+    try {
+        const response = await axios.get(NODEURL, {
             params: {
                 requestType: 'getLastTrades',
                 chain: 2,
-                assets: assets,
+                assets,
             },
-        })
-        .then(response => {
-            return response.data;
-        })
-        .catch(error => {
-            // handle error
-            console.log('🚀 ~ file: ardorInterface.js:284 ~ getLastTrades ~ error', error);
         });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:182 ~ getLastTrades ~ error', error);
+    }
+};
+
+const calculateFeeByRecipient = async (recipient, query) => {
+    const account = await getAccount(recipient);
+    const isRecipientNew = account.data.errorCode === 5;
+    const { data: sendMoneyData } = await axios.post(URL_SEND_MONEY, qs.stringify(query), config);
+    const fee = isRecipientNew
+        ? 14 * NQTDIVIDER
+        : sendMoneyData.minimumFeeFQT * sendMoneyData.bundlerRateNQTPerFXT * 0.00000001;
+    return Math.ceil(fee);
+};
+
+const calculateFee = async query => {
+    const { data: sendMoneyData } = await axios.post(URL_SEND_MONEY, qs.stringify(query), config);
+    return Math.ceil(sendMoneyData.minimumFeeFQT * sendMoneyData.bundlerRateNQTPerFXT * 0.00000001);
 };
 
 // ----------------------------------------------
 // CURRENCY
 // ----------------------------------------------
 
+const getCurrency = async currency => {
+    try {
+        const response = await axios.get(NODEURL, {
+            params: {
+                requestType: 'getCurrency',
+                currency,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:210 ~ getCurrency ~ error', error);
+    }
+};
+
 export const getAccountCurrencies = async (account, currency) => {
-    return axios
-        .get(NODEURL, {
+    try {
+        const response = await axios.get(NODEURL, {
             params: {
                 requestType: 'getAccountCurrencies',
-                account: account,
-                currency: currency,
+                account,
+                currency,
             },
-        })
-        .then(function (response) {
-            return response.data;
-        })
-        .catch(function (error) {
-            // handle error
-            console.log('🚀 ~ file: ardorInterface.js:306 ~ getAccountCurrencies ~ error', error);
         });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:198 ~ getAccountCurrencies ~ error', error);
+    }
 };
 
 const sendIgnis = async ({
@@ -318,57 +240,50 @@ const sendIgnis = async ({
     deadline = 30,
     priority = 'NORMAL',
 }) => {
-    const account = await getAccount(recipient);
-    const recipientNew = account.data.errorCode === 5;
+    try {
+        const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 
-    const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
-    const query = Object.assign({
-        chain: 2,
-        recipient: recipient,
-        amountNQT: amountNQT,
-        feeNQT: -1,
-        feeRateNQTPerFXT: -1,
-        deadline: deadline,
-        broadcast: false,
-        publicKey: publicKey,
-        message: message,
-        messageIsPrunable: messagePrunable,
-        transactionPriority: priority,
-    });
+        const query = Object.assign({
+            chain: 2,
+            recipient: recipient,
+            amountNQT: amountNQT,
+            feeNQT: -1,
+            feeRateNQTPerFXT: -1,
+            deadline: deadline,
+            broadcast: false,
+            publicKey: publicKey,
+            message: message,
+            messageIsPrunable: messagePrunable,
+            transactionPriority: priority,
+        });
 
-    const url_sendmoney = NODEURL + '?requestType=sendMoney';
-    const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
+        const fee = await calculateFeeByRecipient(recipient, query);
+        query.feeNQT = Math.ceil(fee);
+        query.broadcast = false;
 
-    const res = await axios.post(url_sendmoney, qs.stringify(query), config);
-    const fee = recipientNew ? 14 * NQTDIVIDER : res.data.minimumFeeFQT * res.data.bundlerRateNQTPerFXT * 0.00000001;
-    query.feeNQT = Math.ceil(fee);
-    query.broadcast = false;
-    const res2 = await axios.post(url_sendmoney, qs.stringify(query, config));
-    const signed = ardorjs.signTransactionBytes(res2.data.unsignedTransactionBytes, passPhrase);
-    let txdata;
-    if (message !== '') {
-        const txattachment = JSON.stringify(res2.data.transactionJSON.attachment);
-        txdata = {
-            transactionBytes: signed,
-            prunableAttachmentJSON: txattachment,
-        };
-    } else {
-        txdata = { transactionBytes: signed };
+        const res2 = await axios.post(URL_SEND_MONEY, qs.stringify(query, config));
+        const signed = ardorjs.signTransactionBytes(res2.data.unsignedTransactionBytes, passPhrase);
+
+        let txdata;
+        if (message !== '') {
+            const txattachment = JSON.stringify(res2.data.transactionJSON.attachment);
+            txdata = {
+                transactionBytes: signed,
+                prunableAttachmentJSON: txattachment,
+            };
+        } else {
+            txdata = { transactionBytes: signed };
+        }
+
+        return await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:262 ~ error', error);
     }
-    return await axios.post(url_broadcast, qs.stringify(txdata), config);
 };
 
 const transferCurrency = async (currency, unitsQNT, recipient, passPhrase, message = '', messagePrunable = true) => {
-    let recipientNew = false;
-
-    try {
-        const response = await getAccount(recipient);
-        if (response.data.errorCode === 5 || response.data.errorCode === 4) recipientNew = true;
-    } catch (error) {
-        console.error(error);
-    }
-
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
+
     let query = {
         chain: 2,
         recipient: recipient,
@@ -383,19 +298,12 @@ const transferCurrency = async (currency, unitsQNT, recipient, passPhrase, messa
         messageIsPrunable: messagePrunable,
     };
 
-    const url_sendmoney = NODEURL + '?requestType=transferCurrency';
-    const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
     try {
-        const response = await axios.post(url_sendmoney, qs.stringify(query), config);
-
-        let fee = recipientNew
-            ? 14 * NQTDIVIDER
-            : response.data.minimumFeeFQT * response.data.bundlerRateNQTPerFXT * 0.00000001;
-
+        const fee = await calculateFeeByRecipient(recipient, query);
         query.feeNQT = Math.ceil(fee);
         query.broadcast = false;
 
-        const response2 = await axios.post(url_sendmoney, qs.stringify(query), config);
+        const response2 = await axios.post(URL_SEND_MONEY, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
         let txdata;
 
@@ -409,9 +317,9 @@ const transferCurrency = async (currency, unitsQNT, recipient, passPhrase, messa
             txdata = { transactionBytes: signed };
         }
 
-        return await axios.post(url_broadcast, qs.stringify(txdata), config);
+        return await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
     } catch (error) {
-        console.error(error);
+        console.log('🚀 ~ file: ardorInterface.js:305 ~ transferCurrency ~ error', error);
     }
 };
 
@@ -438,11 +346,8 @@ const transferCurrencyZeroFee = async (
         messageIsPrunable: messagePrunable,
     };
 
-    const url_sendmoney = NODEURL + '?requestType=transferCurrency';
-    const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
-
     try {
-        const response2 = await axios.post(url_sendmoney, qs.stringify(query), config);
+        const response2 = await axios.post(URL_SEND_MONEY, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
         let txdata;
 
@@ -453,27 +358,10 @@ const transferCurrencyZeroFee = async (
             txdata = { transactionBytes: signed };
         }
 
-        return await axios.post(url_broadcast, qs.stringify(txdata), config);
+        return await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
     } catch (error) {
-        console.error(error);
+        console.log('🚀 ~ file: ardorInterface.js:346 ~ error', error);
     }
-};
-
-const getCurrency = async currency => {
-    return await axios
-        .get(NODEURL, {
-            params: {
-                requestType: 'getCurrency',
-                currency: currency,
-            },
-        })
-        .then(function (response) {
-            return response;
-        })
-        .catch(function (error) {
-            // handle error
-            console.log('🚀 ~ file: ardorInterface.js:480 ~ getCurrency ~ error', error);
-        });
 };
 
 export const buyGiftz = async ({ passphrase, amountNQT }) => {
@@ -489,24 +377,28 @@ export const buyGiftz = async ({ passphrase, amountNQT }) => {
         broadcast: false,
         publicKey: publicKey,
     };
-    const url_sendmoney = NODEURL + '?requestType=currencyBuy';
-    const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
-    const sendMoney = axios.post(url_sendmoney, qs.stringify(query), config);
-    const minimumFee = (await sendMoney).data.minimumFeeFQT * (await sendMoney).data.bundlerRateNQTPerFXT * 0.00000001;
-    query.feeNQT = minimumFee;
-    query.broadcast = false;
-    const sendMoneyWithFee = axios.post(url_sendmoney, qs.stringify(query), config);
-    const signed = ardorjs.signTransactionBytes((await sendMoneyWithFee).data.unsignedTransactionBytes, passphrase);
-    let txdata;
-    if (message !== '') {
-        let txattachment = JSON.stringify((await sendMoneyWithFee).data.transactionJSON.attachment);
-        txdata = { transactionBytes: signed, prunableAttachmentJSON: txattachment };
-    } else {
-        txdata = { transactionBytes: signed };
+    try {
+        const minimumFee = await calculateFee(query);
+        query.feeNQT = minimumFee;
+        query.broadcast = false;
+
+        const sendMoneyWithFee = await axios.post(URL_SEND_MONEY, qs.stringify(query), config);
+        const signed = ardorjs.signTransactionBytes(sendMoneyWithFee.data.unsignedTransactionBytes, passphrase);
+        let txdata;
+
+        if (message !== '') {
+            let txattachment = JSON.stringify(sendMoneyWithFee.data.transactionJSON.attachment);
+            txdata = { transactionBytes: signed, prunableAttachmentJSON: txattachment };
+        } else {
+            txdata = { transactionBytes: signed };
+        }
+
+        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
+        return respuesta.status === 200;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:397 ~ error', error);
+        return false;
     }
-    return await axios.post(url_broadcast, qs.stringify(txdata), config).then(function (response) {
-        return true;
-    });
 };
 
 // ----------------------------------------------
@@ -514,11 +406,6 @@ export const buyGiftz = async ({ passphrase, amountNQT }) => {
 // ----------------------------------------------
 
 export const createAskOrder = async ({ asset, price, quantity, passPhrase }) => {
-    if (!passPhrase) throw new Error('PassPhrase is required');
-    if (!asset) throw new Error('Asset is required');
-    if (!price) throw new Error('Price is required');
-    if (!quantity) throw new Error('Quantity is required');
-
     const ORDERTYPE = 'placeAskOrder';
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 
@@ -536,20 +423,20 @@ export const createAskOrder = async ({ asset, price, quantity, passPhrase }) => 
     };
 
     const url_postOrder = NODEURL + '?requestType=' + ORDERTYPE;
-    const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
 
     try {
-        const postOrderResponse = await axios.post(url_postOrder, qs.stringify(query), config);
-        let fee = postOrderResponse.data.minimumFeeFQT * postOrderResponse.data.bundlerRateNQTPerFXT * 0.00000001;
-        query.feeNQT = Math.ceil(fee);
+        query.feeNQT = await calculateFee(query);
         query.broadcast = false;
+
         const postOrderTransactionBytesResponse = await axios.post(url_postOrder, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(
             postOrderTransactionBytesResponse.data.unsignedTransactionBytes,
             passPhrase
         );
+
         let txdata = { transactionBytes: signed };
-        await axios.post(url_broadcast, qs.stringify(txdata), config);
+
+        await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
         return true;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
@@ -570,17 +457,14 @@ export const cancelAskOrder = async (order, passPhrase) => {
     };
 
     const url_cancel = `${NODEURL}?requestType=cancelAskOrder`;
-    const url_broadcast = `${NODEURL}?requestType=broadcastTransaction`;
 
     try {
-        const { data: res1 } = await axios.post(url_cancel, qs.stringify(query), config);
-
-        query.feeNQT = Math.ceil(res1.minimumFeeFQT * res1.bundlerRateNQTPerFXT * 0.00000001);
+        query.feeNQT = await calculateFee(query);
         query.broadcast = false;
 
         const { data: res2 } = await axios.post(url_cancel, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(res2.unsignedTransactionBytes, passPhrase);
-        await axios.post(url_broadcast, qs.stringify({ transactionBytes: signed }), config);
+        await axios.post(URL_BROADCAST, qs.stringify({ transactionBytes: signed }), config);
         return true;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:341 ~ error', error);
@@ -611,12 +495,9 @@ export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => 
     };
 
     const url_postOrder = NODEURL + '?requestType=' + ORDERTYPE;
-    const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
 
     try {
-        const postOrderResponse = await axios.post(url_postOrder, qs.stringify(query), config);
-        let fee = postOrderResponse.data.minimumFeeFQT * postOrderResponse.data.bundlerRateNQTPerFXT * 0.00000001;
-        query.feeNQT = Math.ceil(fee);
+        query.feeNQT = await calculateFee(query);
         query.broadcast = false;
         const postOrderTransactionBytesResponse = await axios.post(url_postOrder, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(
@@ -624,7 +505,7 @@ export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => 
             passPhrase
         );
         let txdata = { transactionBytes: signed };
-        await axios.post(url_broadcast, qs.stringify(txdata), config);
+        await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
         return true;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
@@ -644,18 +525,15 @@ export const cancelBidOrder = async (order, passPhrase) => {
         publicKey,
     };
 
-    const url_sendmoney = `${NODEURL}?requestType=cancelBidOrder`;
-    const url_broadcast = `${NODEURL}?requestType=broadcastTransaction`;
-
     try {
-        const response = await axios.post(url_sendmoney, qs.stringify(query), config);
-        const fee = response.data.minimumFeeFQT * response.data.bundlerRateNQTPerFXT * 0.00000001;
-        query.feeNQT = Math.ceil(fee);
+        query.feeNQT = await calculateFee(query);
         query.broadcast = false;
-        const response2 = await axios.post(url_sendmoney, qs.stringify(query), config);
+
+        const response2 = await axios.post(URL_SEND_MONEY, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
         const txdata = { transactionBytes: signed };
-        await axios.post(url_broadcast, qs.stringify(txdata), config);
+
+        await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
         return true;
     } catch (error) {
         console.error(error);
@@ -677,12 +555,6 @@ const transferAsset = async ({
     deadline = 30,
     priority = 'NORMAL',
 }) => {
-    let recipientNew = false;
-
-    await getAccount(recipient).then(response => {
-        recipientNew = response.data.errorCode === 5;
-    });
-
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 
     let query = {
@@ -701,48 +573,27 @@ const transferAsset = async ({
     };
 
     const url_tx = NODEURL + '?requestType=transferAsset';
-    const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
 
-    return await axios.post(url_tx, qs.stringify(query), config).then(async response => {
-        let fee = recipientNew
-            ? 14 * NQTDIVIDER
-            : response.data.minimumFeeFQT * response.data.bundlerRateNQTPerFXT * 0.00000001;
-
-        if (response.data.errorCode === 6) return false;
-
-        query.feeNQT = Math.ceil(fee);
-
+    try {
+        query.feeNQT = await calculateFee(query);
         query.broadcast = false;
 
-        const response_1 = await axios.post(url_tx, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(response_1.data.unsignedTransactionBytes, passPhrase);
-        let txdata;
-        if (message !== '') {
-            let txattachment = JSON.stringify(response_1.data.transactionJSON.attachment);
-            txdata = {
-                transactionBytes: signed,
-                prunableAttachmentJSON: txattachment,
-            };
-        } else {
-            txdata = { transactionBytes: signed };
-        }
-        const response_2 = await axios.post(url_broadcast, qs.stringify(txdata), config);
-        return response_2;
-    });
-};
+        const response = await axios.post(url_tx, qs.stringify(query), config);
+        const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
 
-export const getAssetDividends = async (chain, assetId) => {
-    try {
-        const response = await axios.get(NODEURL, {
-            params: {
-                requestType: 'getAssetDividends',
-                chain,
-                asset: assetId,
-            },
-        });
-        return response.data;
+        const txData = {
+            transactionBytes: signed,
+        };
+
+        if (message !== '') {
+            txData.prunableAttachmentJSON = JSON.stringify(response.data.transactionJSON.attachment);
+        }
+
+        const response_2 = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
+        return response_2;
     } catch (error) {
-        throw new Error(`Error al obtener los dividendos del activo: ${error.message}`);
+        console.log('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
+        return false;
     }
 };
 
@@ -760,7 +611,7 @@ export const getAccountLedger = async ({ accountRs, firstIndex = 0, lastIndex = 
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:722 ~ getAccountLedger ~ error', error);
+        console.log('🚀 ~ file: ardorInterface.js:614 ~ getAccountLedger ~ error', error);
         // handle error
         throw new Error(`Error al obtener el libro de cuentas: ${error.message}`);
     }
@@ -779,11 +630,6 @@ const transferGEM = async ({
     deadline = 30,
     priority = 'NORMAL',
 }) => {
-    let recipientNew = false;
-    await getAccount(recipient).then(response => {
-        recipientNew = response.data.errorCode === 5 || response.data.errorCode === 4;
-    });
-
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 
     let query = {
@@ -802,31 +648,28 @@ const transferGEM = async ({
     };
 
     const url_tx = NODEURL + '?requestType=transferAsset';
-    const url_broadcast = NODEURL + '?requestType=broadcastTransaction';
-    return await axios.post(url_tx, qs.stringify(query), config).then(async response => {
-        let fee = recipientNew
-            ? 14 * NQTDIVIDER
-            : response.data.minimumFeeFQT * response.data.bundlerRateNQTPerFXT * 0.00000001;
 
-        query.feeNQT = Math.ceil(fee);
+    try {
+        query.feeNQT = await calculateFee(query);
         query.broadcast = false;
 
-        return await axios.post(url_tx, qs.stringify(query), config).then(async response => {
-            const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
-            var txdata;
+        const response = await axios.post(url_tx, qs.stringify(query), config);
+        const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
 
-            if (message !== '') {
-                let txattachment = JSON.stringify(response.data.transactionJSON.attachment);
-                txdata = { transactionBytes: signed, prunableAttachmentJSON: txattachment };
-            } else {
-                txdata = { transactionBytes: signed };
-            }
+        const txData = {
+            transactionBytes: signed,
+        };
 
-            return await axios.post(url_broadcast, qs.stringify(txdata), config).then(function (response) {
-                return response;
-            });
-        });
-    });
+        if (message !== '') {
+            txData.prunableAttachmentJSON = JSON.stringify(response.data.transactionJSON.attachment);
+        }
+
+        const response_2 = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
+        return response_2;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:670 ~ error', error);
+        return false;
+    }
 };
 
 // ----------------------------------------------
@@ -847,8 +690,7 @@ const getBlockchainTransactions = async (chain, account, executedOnly = true, ti
         });
         return response.data;
     } catch (error) {
-        console.error(error);
-        throw new Error('Failed to fetch transactions');
+        console.log('🚀 ~ file: ardorInterface.js:693 ~ getBlockchainTransactions ~ error', error);
     }
 };
 
@@ -865,25 +707,21 @@ const getUnconfirmedTransactions = async (chain, account, type, subtype) => {
         });
         return response.data;
     } catch (error) {
-        console.error(error);
-        throw new Error('Failed to fetch unconfirmed transactions');
+        console.log('🚀 ~ file: ardorInterface.js:711 ~ getUnconfirmedTransactions ~ error', error);
     }
 };
 
 const getBlockchainStatus = async () => {
-    return await axios
-        .get(NODEURL, {
+    try {
+        const response = await axios.get(NODEURL, {
             params: {
                 requestType: 'getBlockchainStatus',
             },
-        })
-        .then(function (response) {
-            return response;
-        })
-        .catch(function (error) {
-            // handle error
-            console.log('🚀 ~ file: ardorInterface.js:820 ~ getBlockchainStatus ~ error', error);
         });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:723 ~ getBlockchainStatus ~ error', error);
+    }
 };
 
 // ----------------------------------------------
@@ -900,8 +738,7 @@ export const getEthDepositAddress = async accountRs => {
         });
         return response.data.depositAddress;
     } catch (error) {
-        console.error(error);
-        throw error;
+        console.log('🚀 ~ file: ardorInterface.js:741 ~ getEthDepositAddress ~ error', error);
     }
 };
 
@@ -914,8 +751,7 @@ export const getPegAddresses = async () => {
         });
         return response.data;
     } catch (error) {
-        console.error(error);
-        throw error;
+        console.log('🚀 ~ file: ardorInterface.js:754 ~ getPegAddresses ~ error', error);
     }
 };
 
@@ -929,13 +765,11 @@ export const processUnwrapsForAccount = async accountRs => {
         });
         return response.data;
     } catch (error) {
-        console.error(`Error processing unwraps for account: ${error.message}`);
-        throw error;
+        console.log('🚀 ~ file: ardorInterface.js:768 ~ processUnwrapsForAccount ~ error', error);
     }
 };
 
 export {
-    getTransactionBytes,
     sendIgnis,
     transferCurrency,
     transferCurrencyZeroFee,
