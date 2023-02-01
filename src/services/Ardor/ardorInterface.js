@@ -21,7 +21,15 @@ const config = {
     },
 };
 
-const URL_SEND_MONEY = `${NODEURL}?requestType=cancelBidOrder`;
+const URL_SEND_MONEY = `${NODEURL}?requestType=sendMoney`;
+const URL_CURRENCY_BUY = `${NODEURL}?requestType=currencyBuy`;
+
+const URL_TRANSFER_CURRENCY = `${NODEURL}?requestType=transferCurrency`;
+const URL_TRANSFER_ASSET = `${NODEURL}?requestType=transferAsset`;
+
+const URL_CANCEL_ASK_ORDER = `${NODEURL}?requestType=cancelAskOrder`;
+const URL_CANCEL_BID_ORDER = `${NODEURL}?requestType=cancelBidOrder`;
+
 const URL_BROADCAST = `${NODEURL}?requestType=broadcastTransaction`;
 
 // -------------------------------------------------
@@ -183,18 +191,18 @@ export const getLastTrades = async assets => {
     }
 };
 
-const calculateFeeByRecipient = async (recipient, query) => {
+const calculateFeeByRecipient = async (recipient, query, URL_TO_CALL) => {
     const account = await getAccount(recipient);
-    const isRecipientNew = account.data.errorCode === 5;
-    const { data: sendMoneyData } = await axios.post(URL_SEND_MONEY, qs.stringify(query), config);
+    const isRecipientNew = account.errorCode === 5;
+    const data = (await axios.post(URL_TO_CALL, qs.stringify(query), config)).data;
     const fee = isRecipientNew
         ? 14 * NQTDIVIDER
-        : sendMoneyData.minimumFeeFQT * sendMoneyData.bundlerRateNQTPerFXT * 0.00000001;
+        : data.minimumFeeFQT * data.bundlerRateNQTPerFXT * 0.00000001;
     return Math.ceil(fee);
 };
 
-const calculateFee = async query => {
-    const { data: sendMoneyData } = await axios.post(URL_SEND_MONEY, qs.stringify(query), config);
+const calculateFee = async (query, URL_TO_CALL) => {
+    const { data: sendMoneyData } = await axios.post(URL_TO_CALL, qs.stringify(query), config);
     return Math.ceil(sendMoneyData.minimumFeeFQT * sendMoneyData.bundlerRateNQTPerFXT * 0.00000001);
 };
 
@@ -257,8 +265,7 @@ const sendIgnis = async ({
             transactionPriority: priority,
         });
 
-        const fee = await calculateFeeByRecipient(recipient, query);
-        query.feeNQT = Math.ceil(fee);
+        query.feeNQT = await calculateFeeByRecipient(recipient, query, URL_SEND_MONEY);
         query.broadcast = false;
 
         const res2 = await axios.post(URL_SEND_MONEY, qs.stringify(query, config));
@@ -299,11 +306,11 @@ const transferCurrency = async (currency, unitsQNT, recipient, passPhrase, messa
     };
 
     try {
-        const fee = await calculateFeeByRecipient(recipient, query);
+        const fee = await calculateFeeByRecipient(recipient, query, URL_TRANSFER_CURRENCY);
         query.feeNQT = Math.ceil(fee);
         query.broadcast = false;
 
-        const response2 = await axios.post(URL_SEND_MONEY, qs.stringify(query), config);
+        const response2 = await axios.post(URL_TRANSFER_CURRENCY, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
         let txdata;
 
@@ -347,7 +354,7 @@ const transferCurrencyZeroFee = async (
     };
 
     try {
-        const response2 = await axios.post(URL_SEND_MONEY, qs.stringify(query), config);
+        const response2 = await axios.post(URL_TRANSFER_CURRENCY, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
         let txdata;
 
@@ -378,11 +385,11 @@ export const buyGiftz = async ({ passphrase, amountNQT }) => {
         publicKey: publicKey,
     };
     try {
-        const minimumFee = await calculateFee(query);
+        const minimumFee = await calculateFee(query, URL_CURRENCY_BUY);
         query.feeNQT = minimumFee;
         query.broadcast = false;
 
-        const sendMoneyWithFee = await axios.post(URL_SEND_MONEY, qs.stringify(query), config);
+        const sendMoneyWithFee = await axios.post(URL_CURRENCY_BUY, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(sendMoneyWithFee.data.unsignedTransactionBytes, passphrase);
         let txdata;
 
@@ -425,7 +432,7 @@ export const createAskOrder = async ({ asset, price, quantity, passPhrase }) => 
     const url_postOrder = NODEURL + '?requestType=' + ORDERTYPE;
 
     try {
-        query.feeNQT = await calculateFee(query);
+        query.feeNQT = await calculateFee(query, url_postOrder);
         query.broadcast = false;
 
         const postOrderTransactionBytesResponse = await axios.post(url_postOrder, qs.stringify(query), config);
@@ -456,13 +463,11 @@ export const cancelAskOrder = async (order, passPhrase) => {
         publicKey,
     };
 
-    const url_cancel = `${NODEURL}?requestType=cancelAskOrder`;
-
     try {
-        query.feeNQT = await calculateFee(query);
+        query.feeNQT = await calculateFee(query, URL_CANCEL_ASK_ORDER);
         query.broadcast = false;
 
-        const { data: res2 } = await axios.post(url_cancel, qs.stringify(query), config);
+        const { data: res2 } = await axios.post(URL_CANCEL_ASK_ORDER, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(res2.unsignedTransactionBytes, passPhrase);
         await axios.post(URL_BROADCAST, qs.stringify({ transactionBytes: signed }), config);
         return true;
@@ -497,7 +502,7 @@ export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => 
     const url_postOrder = NODEURL + '?requestType=' + ORDERTYPE;
 
     try {
-        query.feeNQT = await calculateFee(query);
+        query.feeNQT = await calculateFee(query, url_postOrder);
         query.broadcast = false;
         const postOrderTransactionBytesResponse = await axios.post(url_postOrder, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(
@@ -526,10 +531,10 @@ export const cancelBidOrder = async (order, passPhrase) => {
     };
 
     try {
-        query.feeNQT = await calculateFee(query);
+        query.feeNQT = await calculateFee(query, URL_CANCEL_BID_ORDER);
         query.broadcast = false;
 
-        const response2 = await axios.post(URL_SEND_MONEY, qs.stringify(query), config);
+        const response2 = await axios.post(URL_CANCEL_BID_ORDER, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
         const txdata = { transactionBytes: signed };
 
@@ -572,13 +577,11 @@ const transferAsset = async ({
         transactionPriority: priority,
     };
 
-    const url_tx = NODEURL + '?requestType=transferAsset';
-
     try {
-        query.feeNQT = await calculateFee(query);
+        query.feeNQT = await calculateFee(query, URL_TRANSFER_ASSET);
         query.broadcast = false;
 
-        const response = await axios.post(url_tx, qs.stringify(query), config);
+        const response = await axios.post(URL_TRANSFER_ASSET, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
 
         const txData = {
