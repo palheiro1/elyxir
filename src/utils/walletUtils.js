@@ -178,7 +178,7 @@ export const getAskAndBids = async asset => {
 export const getGIFTZBalance = async address => {
     try {
         const balanceData = await getAccountCurrencies(address, CURRENCY);
-        return balanceData.GIFTZ && balanceData.GIFTZ > 0 ? balanceData.GIFTZ : 0;
+        return Object.keys(balanceData).length > 0 ? balanceData : 0;
     } catch (error) {
         console.log('🚀 ~ file: walletUtils.js:183 ~ getGIFTZBalance ~ error', error);
         return 0;
@@ -194,7 +194,9 @@ export const getGIFTZBalance = async address => {
 export const getIGNISBalance = async account => {
     try {
         const balanceData = await getIgnisBalance(account);
-        const balance = Number((balanceData.balanceNQT + balanceData.unconfirmedBalanceNQT) / NQTDIVIDER).toFixed(2);
+        const balance = Number(
+            Math.min(balanceData.balanceNQT / NQTDIVIDER, balanceData.unconfirmedBalanceNQT / NQTDIVIDER)
+        ).toFixed(2);
         return balance;
     } catch (error) {
         console.error(error);
