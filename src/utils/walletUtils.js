@@ -20,9 +20,21 @@ import {
 } from '../services/Ardor/ardorInterface';
 import { getAsset } from './cardsUtils';
 import { handleConfirmateNotification, handleNewNotification } from './alerts';
+import { generateHash } from './hash';
 
-
-export function checkDataChange(name, currentHash, newHash, setState, setHash, newData) {
+/**
+ * @name checkDataChange
+ * @description Check if data has changed and update it
+ * @param {String} name - Name of the data
+ * @param {Object} currentHash - Current hash of the data
+ * @param {Object} newHash - New hash of the data
+ * @param {Function} setState - Function to update the data
+ * @param {Function} setHash - Function to update the hash
+ * @param {Object} newData - New data
+ * @returns {void} - Nothing
+ */
+export function checkDataChange(name, currentHash, setState, setHash, newData) {
+    const newHash = generateHash(newData);
     if (!equal(currentHash, newHash)) {
         console.log(`Mythical Beings: ${name} changed`);
         setState(newData);

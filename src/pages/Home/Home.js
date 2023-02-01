@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 
-// Utils
-
-import { generateHash } from '../../utils/hash';
+// -----------------------------------------------------------------
+// ------------------------- Components ----------------------------
+// -----------------------------------------------------------------
 
 // Menu
 import LateralMenu from '../../components/LateralMenu/LateralMenu';
@@ -17,6 +17,15 @@ import Jackpot from '../../components/Pages/JackpotPage/Jackpot';
 import Market from '../../components/Pages/MarketPage/Market';
 import Account from '../../components/Pages/AccountPage/Account';
 
+// Modals
+import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
+import CardReceived from '../../components/Modals/CardReceived/CardReceived';
+import Bridge from '../../components/Pages/Bridge/Bridge';
+import { isNotLogged } from '../../utils/validators';
+
+// -----------------------------------------------------------------
+// ------------------------- Constants -----------------------------
+// -----------------------------------------------------------------
 // Data
 import {
     COLLECTIONACCOUNT,
@@ -29,6 +38,7 @@ import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 
 // Services
 import { fetchAllCards, fetchGemCards } from '../../utils/cardsUtils';
+
 import {
     checkDataChange,
     getCurrentAskAndBids,
@@ -36,18 +46,13 @@ import {
     getIGNISBalance,
     handleNotifications,
 } from '../../utils/walletUtils';
+
 import {
     getAccountLedger,
     getBlockchainTransactions,
     getTrades,
     getUnconfirmedTransactions,
 } from '../../services/Ardor/ardorInterface';
-
-// Modals
-import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
-import CardReceived from '../../components/Modals/CardReceived/CardReceived';
-import Bridge from '../../components/Pages/Bridge/Bridge';
-import { isNotLogged } from '../../utils/validators';
 
 /**
  * @name Home
@@ -213,20 +218,9 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             // -----------------------------------------------------------------
             // Get all hashes and compare
             // -----------------------------------------------------------------
-            const loadCardsHash = generateHash(loadCards);
-            const loadGemCardHash = generateHash(gems[0]);
-            const loadInfoAccountHash = generateHash(_auxInfo);
-
-            checkDataChange('Cards', cardsHash, loadCardsHash, setCards, setCardsHash, loadCards);
-            checkDataChange('Gems', gemCardsHash, loadGemCardHash, setGemCards, setGemCardsHash, gems[0]);
-            checkDataChange(
-                'Account info',
-                infoAccountHash,
-                loadInfoAccountHash,
-                setInfoAccount,
-                setInfoAccountHash,
-                _auxInfo
-            );
+            checkDataChange('Cards', cardsHash, setCards, setCardsHash, loadCards);
+            checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems[0]);
+            checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
 
             setIsLoading(false);
         };
