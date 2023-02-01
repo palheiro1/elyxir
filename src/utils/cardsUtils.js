@@ -18,7 +18,6 @@ import {
     SASQUATCHASSET,
 } from '../data/CONSTANTS';
 
-
 import {
     getAccountAssets,
     getAskOrders,
@@ -34,30 +33,24 @@ import {
 //                  CARDS UTILS
 // -------------------------------------------------
 
-export function isJSON(str) {
+export const isJSON = str => {
     try {
-        return JSON.parse(str) && !!str;
+        return str && JSON.parse(str);
     } catch (e) {
         return false;
     }
-}
+};
 
-function getTarascaImage(name) {
-    const imgurl = IMGURL + IMG_MD_PATH + name + '.jpg';
-    return imgurl;
-}
+export const getTarascaImage = name => {
+    return `${IMGURL}${IMG_MD_PATH}${name}.jpg`;
+};
 
-function getThumbsImage(name) {
-    const imgurl = IMGURL + IMG_THUMB_PATH + name + '.jpg';
-    return imgurl;
-}
+export const getThumbsImage = name => {
+    return `${IMGURL}${IMG_THUMB_PATH}${name}.jpg`;
+};
 
 export const getAsset = (asset, collectionCardsStatic) => {
-    if (asset === GEMASSET) {
-        return 'GEM';
-    } else {
-        return collectionCardsStatic.find(card => card.asset === asset);
-    }
+    return asset === GEMASSET ? 'GEM' : collectionCardsStatic.find(card => card.asset === asset);
 };
 
 // -------------------------------------------------
@@ -107,11 +100,10 @@ export const buyPackWithGiftz = async (passphrase, noPacks, giftzBalance, ignisB
 
     const message = JSON.stringify({ contract: 'IgnisAssetLottery' });
 
-    if(parseFloat(Number(ignisBalance)) < parseFloat(0.1))
+    if (parseFloat(Number(ignisBalance)) < parseFloat(0.1))
         return await transferCurrencyZeroFee(CURRENCY, amountNQT, BUYPACKACCOUNT, passphrase, message, true);
-    else
-        return await transferCurrency(CURRENCY, amountNQT, BUYPACKACCOUNT, passphrase, message, true);
-}
+    else return await transferCurrency(CURRENCY, amountNQT, BUYPACKACCOUNT, passphrase, message, true);
+};
 
 // -------------------------------------------------
 //            CARDS UTILS FOR INVENTORY
@@ -133,6 +125,17 @@ export const cardsGenerator = async (accountAssets, collectionAssets, fetchOrder
     return ret.filter(Boolean);
 };
 
+// -------------------------------------------------
+
+const RARITY_MAP = {
+    special: { quantity: QUANT_SPECIAL, name: 'Special' },
+    'very rare': { quantity: QUANT_VERYRARE, name: 'Epic' },
+    rare: { quantity: QUANT_RARE, name: 'Rare' },
+    common: { quantity: QUANT_COMMON, name: 'Common' },
+};
+
+const getTruncatedName = name => (name === 'Kăk-whăn’-û-ghăt Kǐg-û-lu’-nǐk' ? 'Kăk-whăn’ ...' : name);
+
 export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders = false) => {
     const new_description = asset.description.replace(/\bNaN\b/g, 'null').replace(/\t/g, 'null');
 
@@ -146,33 +149,25 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
         let bidOrders = [];
         let lastPrice = 0;
         if (fetchOrders) {
-            await getAskOrders(asset.asset).then(response => {
-                askOrders = response.askOrders;
-            });
-            await getBidOrders(asset.asset).then(response => {
-                bidOrders = response.bidOrders;
-            });
-            await getLastTrades(asset.asset).then(response => {
-                lastPrice = response.trades.length > 0 && response.trades[0].priceNQTPerShare/NQTDIVIDER;
-            });
+            const askResponse = await getAskOrders(asset.asset);
+            askOrders = askResponse.askOrders;
+
+            const bidResponse = await getBidOrders(asset.asset);
+            bidOrders = bidResponse.bidOrders;
+
+            const lastTradesResponse = await getLastTrades(asset.asset);
+            lastPrice =
+                lastTradesResponse.trades.length > 0 && lastTradesResponse.trades[0].priceNQTPerShare / NQTDIVIDER;
         }
 
         let totalQuantityQNT = 0;
-        if (cardDetails.rarity === 'special') {
-            totalQuantityQNT = QUANT_SPECIAL;
-            cardDetails.rarity = 'Special';
-        } else if (cardDetails.rarity === 'very rare') {
-            totalQuantityQNT = QUANT_VERYRARE;
-            cardDetails.rarity = 'Epic';
-        } else if (cardDetails.rarity === 'rare') {
-            totalQuantityQNT = QUANT_RARE;
-            cardDetails.rarity = 'Rare';
-        } else if (cardDetails.rarity === 'common') {
-            totalQuantityQNT = QUANT_COMMON;
-            cardDetails.rarity = 'Common';
+        let rarity = RARITY_MAP[cardDetails.rarity];
+        if (rarity) {
+            totalQuantityQNT = rarity.quantity;
+            cardDetails.rarity = rarity.name;
         }
 
-        let cardname = cardDetails.name === 'Kăk-whăn’-û-ghăt Kǐg-û-lu’-nǐk' ? 'Kăk-whăn’ ...' : cardDetails.name;
+        let cardname = getTruncatedName(cardDetails.name);
 
         return {
             asset: asset.asset,
