@@ -718,7 +718,7 @@ const getBlockchainStatus = async () => {
                 requestType: 'getBlockchainStatus',
             },
         });
-        return response.data;
+        return response;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:723 ~ getBlockchainStatus ~ error', error);
     }
