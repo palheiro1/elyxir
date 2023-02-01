@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 
 // Utils
-import equal from 'fast-deep-equal';
+
 import { generateHash } from '../../utils/hash';
 
 // Menu
@@ -29,7 +29,13 @@ import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 
 // Services
 import { fetchAllCards, fetchGemCards } from '../../utils/cardsUtils';
-import { getCurrentAskAndBids, getGIFTZBalance, getIGNISBalance, handleNotifications } from '../../utils/walletUtils';
+import {
+    checkDataChange,
+    getCurrentAskAndBids,
+    getGIFTZBalance,
+    getIGNISBalance,
+    handleNotifications,
+} from '../../utils/walletUtils';
 import {
     getAccountLedger,
     getBlockchainTransactions,
@@ -116,17 +122,36 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     }, [infoAccount, navigate]);
 
     // -----------------------------------------------------------------
+    // Handle logout
+    // -----------------------------------------------------------------
+
+    const handleLogout = () => {
+        setInfoAccount(cleanInfoAccount);
+        navigate('/login');
+    };
+
+    const handleOnCloseCardReceived = () => {
+        setCardsNotification([]);
+        onCloseCardReceived();
+    };
+
+    // -----------------------------------------------------------------
+    // Handle change option with flag
+    // -----------------------------------------------------------------
+
+    const handleChangeOption = newOption => {
+        setLastOption(option);
+        setOption(newOption);
+    };
+
+    const goToSection = option => {
+        handleChangeOption(option);
+    };
+
+    // -----------------------------------------------------------------
     // Load all data from blockchain - Main flow
     // -----------------------------------------------------------------
     useEffect(() => {
-        function checkDataChange(name, currentHash, newHash, setState, setHash, newData) {
-            if (!equal(currentHash, newHash)) {
-                console.log(`Mythical Beings: ${name} changed`);
-                setState(newData);
-                setHash(newHash);
-            }
-        }
-
         const loadAll = async () => {
             console.log('Mythical Beings: Fetching all data...');
             const { accountRs } = infoAccount;
@@ -272,33 +297,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     }, [option, infoAccount, cards, cardsFiltered, gemCards, onOpen, lastOption]);
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
-
-    // -----------------------------------------------------------------
-    // Handle logout
-    // -----------------------------------------------------------------
-
-    const handleLogout = () => {
-        setInfoAccount(cleanInfoAccount);
-        navigate('/login');
-    };
-
-    const handleOnCloseCardReceived = () => {
-        setCardsNotification([]);
-        onCloseCardReceived();
-    };
-
-    // -----------------------------------------------------------------
-    // Handle change option with flag
-    // -----------------------------------------------------------------
-
-    const handleChangeOption = newOption => {
-        setLastOption(option);
-        setOption(newOption);
-    };
-
-    const goToSection = option => {
-        handleChangeOption(option);
-    };
 
     return (
         <>

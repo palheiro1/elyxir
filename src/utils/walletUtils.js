@@ -1,3 +1,5 @@
+import equal from 'fast-deep-equal';
+
 import { BUYPACKACCOUNT, CURRENCY, GEMASSET, JACKPOTACCOUNT, NQTDIVIDER } from '../data/CONSTANTS';
 import { decrypt, getUser } from './storage';
 import {
@@ -19,7 +21,26 @@ import {
 import { getAsset } from './cardsUtils';
 import { handleConfirmateNotification, handleNewNotification } from './alerts';
 
-export const handleNotifications = ({ unconfirmedTransactions, newsTransactions, accountRs, cardsNotification, setCardsNotification, toast, cards, onOpenCardReceived, setUnconfirmedTransactions }) => {
+
+export function checkDataChange(name, currentHash, newHash, setState, setHash, newData) {
+    if (!equal(currentHash, newHash)) {
+        console.log(`Mythical Beings: ${name} changed`);
+        setState(newData);
+        setHash(newHash);
+    }
+}
+
+export const handleNotifications = ({
+    unconfirmedTransactions,
+    newsTransactions,
+    accountRs,
+    cardsNotification,
+    setCardsNotification,
+    toast,
+    cards,
+    onOpenCardReceived,
+    setUnconfirmedTransactions,
+}) => {
     const auxUnconfirmed = [...unconfirmedTransactions];
 
     // Check for new transactions
