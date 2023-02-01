@@ -4,7 +4,9 @@ export const handleNewNotification = (tx, isIncoming, toast) => {
 
     toast({
         title: isIncoming ? 'New incoming transaction' : 'New outgoing transaction',
-        description: isIncoming ? 'New incoming transaction waiting for confirmation' : 'New outgoing transaction waiting for confirmation',
+        description: isIncoming
+            ? 'New incoming transaction waiting for confirmation'
+            : 'New outgoing transaction waiting for confirmation',
         status: 'info',
         duration: 25000,
         isClosable: true,
@@ -17,7 +19,7 @@ export const handleConfirmateNotification = (tx, isIncoming, toast) => {
     if (toast.isActive(id)) return;
 
     toast({
-        title: "Transaction confirmed",
+        title: 'Transaction confirmed',
         description: isIncoming ? 'New incoming transaction confirmed' : 'New outgoing transaction confirmed',
         status: 'success',
         duration: 25000,
@@ -102,15 +104,20 @@ export const infoToast = (text, toast) => {
     });
 };
 
-export const backupToast = (toast) => {
+export const backupToast = toast => {
+    const id = 'backup-toast';
+    if (toast.isActive(id)) return;
+
     toast({
+        id,
         title: 'No backup of your passphrase!',
-        description: "You don't have a backup of your passphrase. We recommend you to make a backup of your passphrase to avoid losing your account. Please, go to the account page and click on the 'Backup passphrase' button.",
+        description:
+            "You don't have a backup of your passphrase. We recommend you to make a backup of your passphrase to avoid losing your account. Please, go to the account page and click on the 'Backup passphrase' button.",
         status: 'warning',
         duration: 15000,
         isClosable: true,
     });
-}
+};
 
 /**
  * @param {string} text - Text to display in the toast
@@ -119,13 +126,13 @@ export const backupToast = (toast) => {
  * @description This function is used to display a toast with a copy to clipboard button
  */
 export const copyToast = (text, toast) => {
-    const id = text;
+    const id = 'copy-toast';
     if (toast.isActive(id)) return;
 
     toast({
         id,
-        title: 'Copied to clipboard!',
-        description: text + ' copied to clipboard',
+        title: 'Copied to Clipboard',
+        description: `${text} has been copied to the clipboard.`,
         status: 'success',
         duration: 9000,
         isClosable: true,
