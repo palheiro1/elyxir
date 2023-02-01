@@ -284,7 +284,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             // Option 7 - BuyPack - Modal
         ];
 
-        const loadComponent = async () => {
+        const loadComponent = () => {
             if (option === 7) {
                 onOpen();
                 setOption(lastOption);
