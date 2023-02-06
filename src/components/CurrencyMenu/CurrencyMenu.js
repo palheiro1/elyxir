@@ -13,15 +13,12 @@ import {
 
 import { useRef, useState } from 'react';
 import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog';
-import { useNavigate } from 'react-router-dom';
 import BuyGiftzDialog from '../Modals/BuyGiftzDialog/BuyGiftzDialog';
 
 const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     const { IGNISBalance, GIFTZBalance, GEMSBalance, name: username } = infoAccount;
 
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
-
-    const navigate = useNavigate();
 
     const { isOpen: isOpenBuyGiftz, onClose: onCloseBuyGiftz, onOpen: onOpenBuyGiftz } = useDisclosure();
     const referenceBuyGiftz = useRef();
@@ -30,7 +27,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     const reference = useRef();
 
     const currencies = {
-        IGNIS: { name: 'IGNIS', balance: IGNISBalance, handler: () => navigate('/exchange') },
+        IGNIS: { name: 'IGNIS', balance: IGNISBalance, handler: () => goToSection(8) },
         GIFTZ: { name: 'GIFTZ', balance: GIFTZBalance, handler: onOpenBuyGiftz },
         GEMS: { name: 'GEMS', balance: GEMSBalance, handler: () => goToSection(3) },
     };
@@ -51,7 +48,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
 
     return (
         <>
-            <Flex align="flex-end" pr={"0.55%"}>
+            <Flex align="flex-end" pr={'0.55%'}>
                 <ButtonGroup rounded="lg" shadow="md" size="sm" fontSize={'sm'} isAttached variant="outline">
                     <Box p={1} border="1px" borderColor={borderColor} borderLeftRadius="lg" px={2}>
                         <Menu>

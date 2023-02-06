@@ -53,6 +53,7 @@ import {
     getTrades,
     getUnconfirmedTransactions,
 } from '../../services/Ardor/ardorInterface';
+import Exchange from '../Exchange/Exchange';
 
 /**
  * @name Home
@@ -275,7 +276,8 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             <Bridge infoAccount={infoAccount} cards={cardsFiltered} />, // Option 4 - Bridge
             <Jackpot infoAccount={infoAccount} cards={cards} />, // Option 5 - Jackpot
             <Account infoAccount={infoAccount} />, // Option 6 - Account
-            // Option 7 - BuyPack - Modal
+            "", // Option 7 - Buy packs
+            <Exchange infoAccount={infoAccount} />, // Option 8 - Exchange
         ];
 
         const loadComponent = () => {

@@ -101,12 +101,11 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             textColor: textColor(6),
         },
         {
-            icon: <AiOutlineLogout style={{ stroke: iconColor(8), strokeWidth: '1' }} color={iconColor(8)} />,
+            icon: <AiOutlineLogout />,
             text: 'Logout',
             onClick: handleLogout,
-            bgColor: bgColor(8),
+            bgColor: sBgColor,
             hoverBg: hoverColor(8),
-            textColor: textColor(8),
         },
     ];
 
