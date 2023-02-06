@@ -13,7 +13,6 @@ import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Restore from './pages/Restore/Restore';
 import Home from './pages/Home/Home';
-import Exchange from './pages/Exchange/Exchange';
 import Welcome from './components/Pages/WelcomePage/Welcome';
 
 // Data
@@ -44,9 +43,6 @@ function App() {
                 />
 
                 <Route path="/welcome" element={<Welcome />} />
-
-                {/* EXCHANGE PAGE */}
-                <Route path="/exchange" element={<Exchange infoAccount={infoAccount} />} />
 
                 {/* 404 - NOT FOUND */}
                 <Route path="*" element={<Navigate replace to="/login" />} />
