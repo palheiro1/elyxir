@@ -1,4 +1,4 @@
-import { Box, Center, SimpleGrid, Stack, Text, Tr, Td } from '@chakra-ui/react';
+import { Box, Stack, Text, Tr, Td } from '@chakra-ui/react';
 import { FaFilter, FaGem, FaCoins } from 'react-icons/fa';
 
 // Components
@@ -260,6 +260,7 @@ export const cancelledOrder = (type, date, account) => {
 export const handleGEM = (type, amount, date, account) => {
     // MANEAJR DATE CON TIMESTAMP!!!
     type = type.toLowerCase();
+    const fixedAmount = amount / NQTDIVIDER;
 
     const component = () => {
         return (
@@ -279,7 +280,7 @@ export const handleGEM = (type, amount, date, account) => {
                         </Box>
                     </Stack>
                 </Td>
-                <Td>{amount}</Td>
+                <Td>{fixedAmount}</Td>
                 <Td>{date}</Td>
                 <Td>{account}</Td>
             </Tr>
@@ -323,7 +324,7 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
     // CONTROLAR PARA GEMAS O ASSETS
 
     const isGem = asset === 'GEM';
-    const fixedType = type === 'ask' ? 'ASK' : 'BID';
+    const fixedType = type === 'ask' ? 'Market ASK' : 'Market BID';
 
     const component = () => {
         return (
@@ -332,29 +333,20 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
                     <InOutTransaction type={'placed'} />
                 </Td>
                 <Td>
-                    <SimpleGrid columns={2}>
-                        <Center>
-                            {isGem ? (
-                                <FaGem />
-                            ) : (
-                                <TableCard
-                                    title={asset.name}
-                                    image={asset.cardImgUrl}
-                                    continent={asset.channel}
-                                    rarity={asset.rarity}
-                                />
-                            )}
-                        </Center>
-                        <Center>
-                            <Text fontSize="xl" fontWeight="bold">
-                                {fixedType}
-                            </Text>
-                        </Center>
-                    </SimpleGrid>
+                    {isGem ? (
+                        <FaGem />
+                    ) : (
+                        <TableCard
+                            title={asset.name}
+                            image={asset.cardImgUrl}
+                            continent={asset.channel}
+                            rarity={asset.rarity}
+                        />
+                    )}
                 </Td>
                 <Td>{amount}</Td>
                 <Td>{date}</Td>
-                <Td>{account}</Td>
+                <Td>{fixedType}</Td>
             </Tr>
         );
     };
