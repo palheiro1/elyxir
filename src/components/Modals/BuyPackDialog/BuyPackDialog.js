@@ -19,6 +19,7 @@ import {
     RadioGroup,
     Stack,
     Text,
+    useColorModeValue,
     useNumberInput,
     useToast,
 } from '@chakra-ui/react';
@@ -54,6 +55,8 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const maxPacksWithGiftz = Math.floor(GIFTZBalance / PACKPRICEGIFTZ);
 
     const toast = useToast();
+
+    const colorText = useColorModeValue("black", "white");
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps} = useNumberInput({
         step: 1,
@@ -157,7 +160,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
+                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg" color="white">
                     <AlertDialogHeader textAlign="center">BUY A PACK OF CARDS</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>
@@ -221,7 +224,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         </Text>
                                         <Center>
                                             <HStack spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
-                                                <Button {...dec} rounded="none" borderLeftRadius="lg">
+                                                <Button {...dec} rounded="none" borderLeftRadius="lg" color={colorText}>
                                                     -
                                                 </Button>
                                                 <Input
@@ -233,7 +236,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     fontWeight="bold"
                                                     disabled
                                                 />
-                                                <Button {...inc} rounded="none" borderRightRadius="lg">
+                                                <Button {...inc} rounded="none" borderRightRadius="lg" color={colorText}>
                                                     +
                                                 </Button>
                                             </HStack>
