@@ -82,8 +82,8 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
                                 </Text>
                             </Flex>
                         </Center>
-                        <Center>
-                            <Text fontSize="md" color="gray.400">
+                        <Center mt={4}>
+                            <Text fontSize="lg" color="gray.400">
                                 {amount}x
                             </Text>
                         </Center>
@@ -109,7 +109,7 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
                     <AlertDialogCloseButton onClick={onClose} />
                     <AlertDialogBody mb={2}>
                         <Text textAlign="center" fontSize="sm" color="gray.400">
-                            You have received {cards.length} new card{cards.length > 1 ? 's' : ''} in your inventory!
+                            You have received new cards in your inventory!
                         </Text>
                         <Carousel
                             infiniteLoop
