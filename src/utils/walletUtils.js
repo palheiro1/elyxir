@@ -278,7 +278,7 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
         success = false;
     });
 
-    return transferedGEM && success;
+    return success;
 };
 
 /**

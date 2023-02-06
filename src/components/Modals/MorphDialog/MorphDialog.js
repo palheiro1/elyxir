@@ -95,6 +95,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
             passPhrase: passPhrase,
             cost: morphingCost,
         })
+        
         if(ok){
             okToast('Morphing successful', toast)
             onClose();
