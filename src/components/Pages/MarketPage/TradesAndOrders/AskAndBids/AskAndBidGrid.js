@@ -31,6 +31,7 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
                     onOpen={onOpen}
                     setSelectedOrder={setSelectedOrder}
                     canDelete={canDelete}
+                    isLeft={true}
                 />
                 <AskBidTable
                     type={'Bids'}

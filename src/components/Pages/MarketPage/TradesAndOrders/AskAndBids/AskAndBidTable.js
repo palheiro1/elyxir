@@ -3,16 +3,21 @@ import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getAsset } from '../../../../../utils/cardsUtils';
 import AskOrBidItem from './AskOrBidItem';
 
-const AskBidTable = ({ type, onlyOneAsset, orders, cards, onOpen, setSelectedOrder, canDelete }) => {
+const AskBidTable = ({ type, onlyOneAsset, orders, cards, onOpen, setSelectedOrder, canDelete, isLeft = false }) => {
     const bgTitleColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
     const bgHeadColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
     const borderColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+
+    const borderLeft = isLeft ? 'lg' : 'none';
+    const borderRight = !isLeft ? 'lg' : 'none';
+
     return (
         <TableContainer
             mt={4}
             border="2px"
             borderColor={borderColor}
-            borderLeftRadius="lg"
+            borderLeftRadius={borderLeft}
+            borderRightRadius={borderRight}
             shadow="inner"
             boxShadow="md">
             <Text textAlign="center" p={4} fontSize="lg" borderBottom="1px" bgColor={bgTitleColor}>
