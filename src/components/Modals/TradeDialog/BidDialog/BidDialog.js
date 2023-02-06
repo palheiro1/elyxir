@@ -49,7 +49,6 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
     const toast = useToast();
 
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
-
     const [passphrase, setPassphrase] = useState('');
 
     const [priceCard, setPriceCard] = useState(0);
@@ -74,7 +73,6 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
         step: 1,
         defaultValue: 1,
         min: 1,
-        max: 10,
     });
 
     const inc = getIncrementButtonProps();
