@@ -1,6 +1,7 @@
-import { Box, Button, ButtonGroup, Center, Heading, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Center, Heading, Stack, Text, Tooltip, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { copyToast } from '../../utils/alerts';
 
 function Iframe(props) {
     return <div dangerouslySetInnerHTML={{ __html: props.iframe ? props.iframe : '' }} />;
@@ -18,16 +19,27 @@ const Exchange = ({ infoAccount }) => {
     const navigate = useNavigate();
     const [option, setOption] = useState('crypto');
 
+    const toast = useToast();
+
     useEffect(() => {
         if (infoAccount.token === null || infoAccount.accountRs === null) navigate('/login');
     }, [infoAccount, navigate]);
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(infoAccount.accountRs);
+        copyToast('ARDOR Account', toast);
+    };
 
     return (
         <>
             <Center>
                 <Stack direction="column" spacing={4} align="center">
                     <Heading my={2}>FUND ACCOUNT</Heading>
-                    <Text textAlign="center">{infoAccount.accountRs}</Text>
+                    <Tooltip label="Click to copy" hasArrow placement="top-end">
+                        <Text textAlign="center" onClick={copyToClipboard} _hover={{ cursor: 'pointer' }}>
+                            {infoAccount.accountRs}
+                        </Text>
+                    </Tooltip>
 
                     <ButtonGroup variant="outline">
                         <Button isActive={option === 'crypto'} minW="120px" onClick={() => setOption('crypto')}>

@@ -134,7 +134,7 @@ export const copyToast = (text, toast) => {
         title: 'Copied to Clipboard',
         description: `${text} has been copied to the clipboard.`,
         status: 'success',
-        duration: 9000,
+        duration: 4000,
         isClosable: true,
     });
 };
