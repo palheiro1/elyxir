@@ -55,12 +55,12 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
 
     return (
         <>
-            <Modal isOpen={isOpen} onClose={onClose} size="6xl">
+            <Modal isOpen={isOpen} onClose={onClose} size="6xl" isCentered="true">
                 <ModalOverlay bgColor="blackAlpha.900" />
                 <ModalContent
                     p={2}
                     px={12}
-                    backgroundColor="blackAlpha.900"
+                    bgColor="#1D1D1D"
                     shadow="dark-lg"
                     border="1px"
                     borderColor="whiteAlpha.400">
@@ -186,86 +186,3 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
 };
 
 export default DetailedCard;
-
-/*
-    return (
-        <>
-            <Modal isOpen={isOpen} onClose={onClose} size="6xl">
-                <ModalOverlay />
-                <ModalContent p={12} backgroundColor="blackAlpha.900" shadow="dark-lg">
-                    <Stack direction="row">
-                        <Box position="fixed" top="15%">
-                            <Hover perspective={300}>
-                                <Image src={image} alt={name} maxH="20rem" rounded="lg" />
-                            </Hover>
-                        </Box>
-
-                        <Box w="35%" />
-
-                        <Stack direction="column" align="center" w="100%">
-                            <ModalBody color={textColor} w="100%">
-                                <Text color="white" fontSize="4xl" fontWeight="bolder">
-                                    {name}
-                                </Text>
-                                <Center mb={4}>
-                                    <Image src={monsterPicture} alt={name} maxH="30vh" rounded="lg" align="center" />
-                                </Center>
-
-                                <Text fontSize="md" color="gray" textAlign="center">
-                                    {monster.continent} / {monster.country} / {monster.name}
-                                </Text>
-
-                                <Heading textAlign="center" my={4}>
-                                    <Center>
-                                        Creature <GiSeaCreature />
-                                    </Center>
-                                </Heading>
-
-                                {monster.creature.map((c, i) => (
-                                    <Text key={i} fontSize="md" color="gray" textAlign="justify" my={6}>
-                                        {c}
-                                    </Text>
-                                ))}
-
-                                <Center my={4}>
-                                    <Image src={monsterLandscape} alt={name} maxH="30rem" rounded="lg" align="center" />
-                                </Center>
-
-                                <Heading textAlign="center" my={4}>
-                                    <Center>
-                                        Culture <MdLandscape />
-                                    </Center>
-                                </Heading>
-
-                                {monster.culture.map((c, i) => (
-                                    <Text key={i} fontSize="md" color="gray" textAlign="justify" my={6}>
-                                        {c}
-                                    </Text>
-                                ))}
-
-                                <Center my={4}>
-                                    <Image
-                                        src={
-                                            imgMapURL === 'https://media.mythicalbeings.io/maps/Map_/Kaggen.jpg'
-                                                ? 'https://media.mythicalbeings.io/maps/Map_Mantis.jpg'
-                                                : imgMapURL
-                                        }
-                                        alt={name}
-                                        maxH="30rem"
-                                        rounded="lg"
-                                        align="center"
-                                    />
-                                </Center>
-
-                                <Center w="100%">
-                                    <Iframe iframe={MapIframe} />
-                                </Center>
-                            </ModalBody>
-                        </Stack>
-                    </Stack>
-                </ModalContent>
-            </Modal>
-        </>
-    );
-};
-*/
