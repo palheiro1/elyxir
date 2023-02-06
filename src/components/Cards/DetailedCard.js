@@ -9,7 +9,6 @@ import {
     Stack,
     Tab,
     TabList,
-    TabPanel,
     TabPanels,
     Tabs,
     Text,
@@ -19,16 +18,11 @@ import Hover from 'react-3d-hover';
 import { RARITY_COLORS } from '../../data/CONSTANTS';
 
 import monsters from '../../data/monsters.json';
+import CreatureTabs from './DetailedCardViewTabs/CreatureTabs';
+import CultureTabs from './DetailedCardViewTabs/CultureTabs';
+import LocationTabs from './DetailedCardViewTabs/LocationTabs';
 
-function Iframe({ iframe }) {
-    return (
-        <Box
-            dangerouslySetInnerHTML={{
-                __html: iframe ? iframe : '',
-            }}
-        />
-    );
-}
+
 
 /**
  * @name DetailedCard
@@ -45,11 +39,6 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
 
     // ------------------------------------------------------------
     const monster = monsters.find(m => m.assetname === assetname);
-    const monsterPicture = 'https://media.mythicalbeings.io/creatures/' + monster.picture;
-    const monsterLandscape = 'https://media.mythicalbeings.io/landscapes/' + monster.landscape;
-    const imgMapURL = 'https://media.mythicalbeings.io/maps/Map_' + monster.name + '.jpg';
-    const MapIframe = monster.maplink;
-
     const textColor = useColorModeValue('gray.200', 'gray.200');
     const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
 
@@ -67,7 +56,7 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                     <Stack direction="row">
                         <Box mt="6%">
                             <Hover perspective={300}>
-                                <Image src={image} alt={name} maxH="40rem" rounded="lg" />
+                                <Image src={image} alt={name} maxH="45rem" rounded="lg" />
                             </Hover>
                         </Box>
 
@@ -107,7 +96,7 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                                         <Text fontSize="md" color="gray">
                                             Continent
                                         </Text>
-                                        <Text fontSize="md" bgColor={badgeColor} rounded="lg" color="white" px={2}>
+                                        <Text fontSize="md" bgColor={badgeColor} rounded="lg" color="white" px={2} textAlign="center">
                                             {monster.continent}
                                         </Text>
                                     </Stack>
@@ -119,61 +108,10 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                                         <Tab _selected={{ borderColor: '#F18800' }}>Culture</Tab>
                                         <Tab _selected={{ borderColor: '#F18800' }}>Location</Tab>
                                     </TabList>
-                                    <TabPanels overflowY="auto" maxH="27.5rem">
-                                        <TabPanel>
-                                            <Center mb={4}>
-                                                <Box maxW="50%">
-                                                    <Image
-                                                        src={monsterPicture}
-                                                        alt={name}
-                                                        rounded="lg"
-                                                        align="center"
-                                                    />
-                                                </Box>
-                                            </Center>
-                                            {monster.creature.map((c, i) => (
-                                                <Text key={i} fontSize="md" color="gray" textAlign="justify" mb={4}>
-                                                    {c}
-                                                </Text>
-                                            ))}
-
-                                            <Center my={4}>
-                                                <Image
-                                                    src={monsterLandscape}
-                                                    alt={name}
-                                                    maxH="30rem"
-                                                    rounded="lg"
-                                                    align="center"
-                                                />
-                                            </Center>
-                                        </TabPanel>
-                                        <TabPanel>
-                                            {monster.culture.map((c, i) => (
-                                                <Text key={i} fontSize="md" color="gray" textAlign="justify" mb={4}>
-                                                    {c}
-                                                </Text>
-                                            ))}
-
-                                            <Center my={4}>
-                                                <Image
-                                                    src={
-                                                        imgMapURL ===
-                                                        'https://media.mythicalbeings.io/maps/Map_/Kaggen.jpg'
-                                                            ? 'https://media.mythicalbeings.io/maps/Map_Mantis.jpg'
-                                                            : imgMapURL
-                                                    }
-                                                    alt={name}
-                                                    maxH="30rem"
-                                                    rounded="lg"
-                                                    align="center"
-                                                />
-                                            </Center>
-                                        </TabPanel>
-                                        <TabPanel>
-                                            <Center w="100%">
-                                                <Iframe iframe={MapIframe} />
-                                            </Center>
-                                        </TabPanel>
+                                    <TabPanels overflowY="auto" h="27.5rem">
+                                        <CreatureTabs monster={monster} name={name} />
+                                        <CultureTabs monster={monster} name={name} />
+                                        <LocationTabs monster={monster} />
                                     </TabPanels>
                                 </Tabs>
                             </ModalBody>
