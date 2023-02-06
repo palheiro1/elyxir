@@ -1,4 +1,5 @@
-import { Box, Button, Center, Spinner, TableContainer, Table, Thead, Tbody, Tr, Th, Text } from '@chakra-ui/react';
+import React from 'react';
+import { Box, Button, Center, Spinner, TableContainer, Text, Table, Thead, Tbody, Tr, Th } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getBlockchainStatus } from '../../../services/Ardor/ardorInterface';
 import { getTxTimestamp } from '../../../utils/txUtils';
@@ -171,8 +172,10 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                     border="1px"
                     borderColor="gray"
                     rounded="2xl"
+                    p={2}
                     shadow="inner"
                     boxShadow="md"
+                    textAlign="center"
                     maxW={{ base: '100%', md: '80%', lg: '100%' }}>
                     {haveUnconfirmed && (
                         <Center w="100%" textAlign="center" py={4} gap={4}>
@@ -186,7 +189,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                         <Thead>
                             <Tr>
                                 <Th />
-                                <Th textAlign="center">Title</Th>
+                                <Th>Title</Th>
                                 <Th>Amount</Th>
                                 <Th>Date and Time</Th>
                                 <Th>To/From</Th>
