@@ -16,6 +16,8 @@ import {
     Input,
     InputGroup,
     InputRightAddon,
+    NumberInput,
+    NumberInputField,
     PinInput,
     PinInputField,
     Text,
@@ -28,7 +30,6 @@ import { NQTDIVIDER } from '../../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../../utils/alerts';
 import { checkPin, sendBidOrder } from '../../../../utils/walletUtils';
 import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
-
 
 /**
  * @name BidDialog
@@ -54,19 +55,19 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
     const [priceCard, setPriceCard] = useState(0);
     const [maxPrice, setMaxPrice] = useState(0);
 
-    const isGem = card.assetname === "GEM";
-    const gemImg = "./images/gems.svg"
+    const isGem = card.assetname === 'GEM';
+    const gemImg = './images/gems.svg';
 
     const handlePriceCard = e => {
         e.preventDefault();
-		
-		const readValue = Number(e.target.value);
 
-		if(readValue < maxPrice) {
-        	setPriceCard(e.target.value);
-		} else {
-			setPriceCard(maxPrice);
-		}
+        const readValue = Number(e.target.value);
+
+        if (readValue < maxPrice) {
+            setPriceCard(e.target.value);
+        } else {
+            setPriceCard(maxPrice);
+        }
     };
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
@@ -81,18 +82,18 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
     const input = getInputProps();
 
     useEffect(() => {
-		const checkNumbers = () => {
-			const max = parseFloat(Number(ignis / input.value).toFixed(2));
-			const actualPrice = parseFloat(Number(priceCard).toFixed(2));
-			if(max === maxPrice) return;
-			setMaxPrice(max);
-	
-			if(actualPrice > max) {
-				setPriceCard(max);
-			}
-		}
-		
-		ignis && input.value && checkNumbers();
+        const checkNumbers = () => {
+            const max = parseFloat(Number(ignis / input.value).toFixed(2));
+            const actualPrice = parseFloat(Number(priceCard).toFixed(2));
+            if (max === maxPrice) return;
+            setMaxPrice(max);
+
+            if (actualPrice > max) {
+                setPriceCard(max);
+            }
+        };
+
+        ignis && input.value && checkNumbers();
     }, [priceCard, ignis, input.value, maxPrice]);
 
     const handleCompletePin = pin => {
@@ -134,14 +135,10 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent
-                    bgColor="#1D1D1D"
-                    border="1px"
-                    borderColor="whiteAlpha.400"
-                    shadow="dark-lg">
+                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
                     <AlertDialogHeader textAlign="center" color="white">
                         <Center>
-                            <Text>BID FOR {!isGem ? 'CARDs' : 'GEMs'}{' '}</Text>
+                            <Text>BID FOR {!isGem ? 'CARDs' : 'GEMs'} </Text>
                         </Center>
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
@@ -154,21 +151,17 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                 <VStack spacing={4}>
                                     <Box w="100%">
                                         <Text color="white" fontWeight="bold" fontSize="xl">
-                                        {!isGem ? 'cards' : 'GEMs'}{' '}
+                                            {!isGem ? 'cards' : 'GEMs'}{' '}
                                         </Text>
                                         {!isGem && (
-                                        <Text color="gray">
-                                            {card.channel} / {card.rarity}
-                                        </Text>
+                                            <Text color="gray">
+                                                {card.channel} / {card.rarity}
+                                            </Text>
                                         )}
                                     </Box>
                                     <Box py={2}>
-                                        <Text color="white">Amount of {!isGem ? 'cards' : 'GEMs'}{' '}</Text>
-                                        <HStack
-                                            spacing={0}
-                                            border="1px"
-                                            rounded="lg"
-                                            borderColor="whiteAlpha.200">
+                                        <Text color="white">Amount of {!isGem ? 'cards' : 'GEMs'} </Text>
+                                        <HStack spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
                                             <Button {...dec} rounded="none" borderLeftRadius="lg">
                                                 -
                                             </Button>
@@ -188,19 +181,17 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                     </Box>
                                     <Box py={2}>
                                         <FormControl variant="floatingGray" id="PricePerCard">
-                                            <InputGroup
-                                                border="1px"
-                                                borderColor="whiteAlpha.300"
-                                                rounded="lg">
-                                                <Input
-                                                    value={priceCard}
-                                                    rounded="none"
-                                                    border="none"
-                                                    color="white"
-                                                    textAlign="center"
-                                                    fontWeight="bold"
-                                                    onChange={handlePriceCard}
-                                                />
+                                            <InputGroup border="1px" borderColor="whiteAlpha.300" rounded="lg">
+                                                <NumberInput value={priceCard}>
+                                                    <NumberInputField
+                                                        rounded="none"
+                                                        border="none"
+                                                        color="white"
+                                                        textAlign="center"
+                                                        fontWeight="bold"
+                                                        onChange={handlePriceCard}
+                                                    />
+                                                </NumberInput>
                                                 <InputRightAddon
                                                     fontSize="sm"
                                                     border="none"
@@ -211,7 +202,9 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                                     borderLeftRadius="lg"
                                                 />
                                             </InputGroup>
-                                            <FormLabel>Price per {!isGem ? 'cards' : 'GEMs'}{' '} (Max: {maxPrice})</FormLabel>
+                                            <FormLabel>
+                                                Price per {!isGem ? 'cards' : 'GEMs'} (Max: {maxPrice})
+                                            </FormLabel>
                                         </FormControl>
                                     </Box>
                                     <Box py={2}>

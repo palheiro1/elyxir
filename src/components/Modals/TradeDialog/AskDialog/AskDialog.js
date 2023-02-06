@@ -16,6 +16,8 @@ import {
     Input,
     InputGroup,
     InputRightAddon,
+    NumberInput,
+    NumberInputField,
     PinInput,
     PinInputField,
     Text,
@@ -180,15 +182,16 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                                 border="1px"
                                                 borderColor="whiteAlpha.300"
                                                 rounded="lg">
-                                                <Input
-                                                    value={priceCard}
-                                                    rounded="none"
-                                                    border="none"
-                                                    color="white"
-                                                    textAlign="center"
-                                                    fontWeight="bold"
-                                                    onChange={handlePriceCard}
-                                                />
+                                                <NumberInput value={priceCard}>
+                                                    <NumberInputField
+                                                        rounded="none"
+                                                        border="none"
+                                                        color="white"
+                                                        textAlign="center"
+                                                        fontWeight="bold"
+                                                        onChange={handlePriceCard}
+                                                    />
+                                                </NumberInput>
                                                 <InputRightAddon
                                                     fontSize="sm"
                                                     border="none"
