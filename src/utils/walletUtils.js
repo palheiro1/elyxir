@@ -247,7 +247,7 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
     let success = true;
     const message = getMorphMessage(asset, noCards);
 
-    const transferedAsset = await transferAsset({
+    await transferAsset({
         asset: asset,
         quantityQNT: noCards,
         recipient: BUYPACKACCOUNT,
@@ -257,15 +257,15 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
         deadline: 1440,
         priority: 'HIGH',
     }).catch(error => {
-        console.log('🚀 ~ file: ardorInterface.js:615 ~ sendToMorph ~ error', error);
+        console.log("🚀 ~ file: walletUtils.js:260 ~ sendToMorph ~ transferAsset", error)
         success = false;
     });
 
-    if (!transferedAsset || !success) return false;
+    if (!success) return false;
 
     // ----------------------------------
 
-    const transferedGEM = await transferGEM({
+    await transferGEM({
         quantityQNT: cost * NQTDIVIDER,
         recipient: BUYPACKACCOUNT,
         passPhrase,
@@ -274,7 +274,7 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
         deadline: 1440,
         priority: 'HIGH',
     }).catch(error => {
-        console.log('🚀 ~ file: ardorInterface.js:634 ~ sendToMorph ~ error', error);
+        console.log("🚀 ~ file: walletUtils.js:277 ~ sendToMorph ~ transferGEM", error)
         success = false;
     });
 
