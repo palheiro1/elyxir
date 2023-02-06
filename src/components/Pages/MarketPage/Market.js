@@ -29,7 +29,7 @@ const Market = ({ infoAccount, cards, gemCards }) => {
 
     return (
         <Box>
-            <GemWidget username={infoAccount.name} gemCards={gemCards} />
+            <GemWidget username={infoAccount.name} gemCards={gemCards} IGNISBalance={infoAccount.IGNISBalance} />
 
             <SectionSwitch option={option} setOption={setOption} />
             {option === 0 && (

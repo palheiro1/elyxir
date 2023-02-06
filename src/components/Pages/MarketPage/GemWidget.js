@@ -19,12 +19,14 @@ import TradeDialog from '../../Modals/TradeDialog/TradeDialog';
 /**
  * @name GemWidget
  * @description Widget that shows the amount of GEMs the user has
+ * @param {String} username - String with the username
  * @param {Object} gemCards - Object with the gemCards data
+ * @param {Number} IGNISBalance - Object with the IGNIS balance data
  * @returns {JSX.Element} - JSX Element with the widget
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const GemWidget = ({ username, gemCards = [] }) => {
+const GemWidget = ({ username, gemCards = [], IGNISBalance }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const tradeRef = useRef();
 
@@ -137,6 +139,7 @@ const GemWidget = ({ username, gemCards = [] }) => {
                 reference={tradeRef}
                 username={username}
                 gemCards={gemCards}
+                ignis={IGNISBalance}
             />
         </>
     );

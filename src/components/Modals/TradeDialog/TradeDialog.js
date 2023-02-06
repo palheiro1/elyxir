@@ -32,6 +32,7 @@ import { NQTDIVIDER } from '../../../data/CONSTANTS';
  * @param {String} username - String with the username
  * @param {Object} ignis - Object with the ignis data
  * @param {Object} gemCards - Gem cards data - Optional
+ * @param {Object} onlyBid - Boolean to know if the dialog only has the bid option - Optional
  */
 const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCards = false, onlyBid = false }) => {
     const toast = useToast();

@@ -31,7 +31,6 @@ import { errorToast, okToast } from '../../../../utils/alerts';
 import { checkPin, sendAskOrder } from '../../../../utils/walletUtils';
 import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
 
-
 /**
  * @name AskDialog - Ask dialog component
  * @description This component is the ask dialog component
@@ -50,10 +49,10 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
 
     const [passphrase, setPassphrase] = useState('');
-    const maxCards = Number(card.quantityQNT);
 
-    const isGem = card.assetname === "GEM";
-    const gemImg = "./images/gems.svg"
+    const isGem = card.assetname === 'GEM';
+    const gemImg = './images/gems.svg';
+    const maxCards = isGem ? card.quantityQNT / NQTDIVIDER : card.quantityQNT;
 
     const [priceCard, setPriceCard] = useState(0);
     const handlePriceCard = e => {
@@ -62,10 +61,10 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
     };
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
-        step: 0.01,
-        defaultValue: 1,
-        min: 1,
-        max: !isGem ? maxCards : parseFloat(maxCards / NQTDIVIDER),
+        step: isGem ? 0.01 : 1,
+        defaultValue: 0,
+        min: 0,
+        max: maxCards,
     });
 
     const inc = getIncrementButtonProps();
@@ -100,8 +99,6 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
         }
     };
 
-    
-
     return (
         <>
             <AlertDialog
@@ -113,11 +110,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent
-                    bgColor="#1D1D1D"
-                    border="1px"
-                    borderColor="whiteAlpha.400"
-                    shadow="dark-lg">
+                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
                     <AlertDialogHeader textAlign="center" color="white">
                         <Center>
                             <Text>ASK FOR {!isGem ? 'CARD' : 'GEM'}</Text>
@@ -143,15 +136,8 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                     </Box>
                                     <Box py={2}>
                                         <FormControl variant="floatingGray" id="PricePerCard">
-                                            <HStack
-                                                spacing={0}
-                                                border="1px"
-                                                rounded="lg"
-                                                borderColor="whiteAlpha.200">
-                                                <Button
-                                                    {...dec}
-                                                    rounded="none"
-                                                    borderLeftRadius="lg">
+                                            <HStack spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
+                                                <Button {...dec} rounded="none" borderLeftRadius="lg">
                                                     -
                                                 </Button>
 
@@ -164,24 +150,16 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                                     fontWeight="bold"
                                                 />
 
-                                                <Button
-                                                    {...inc}
-                                                    rounded="none"
-                                                    borderRightRadius="lg">
+                                                <Button {...inc} rounded="none" borderRightRadius="lg">
                                                     +
                                                 </Button>
                                             </HStack>
-                                            <FormLabel>
-                                                Amount of {!isGem ? 'cards' : 'GEMs'}{' '}
-                                            </FormLabel>
+                                            <FormLabel>Amount of {!isGem ? 'cards' : 'GEMs'} </FormLabel>
                                         </FormControl>
                                     </Box>
                                     <Box py={2}>
                                         <FormControl variant="floatingGray" id="PricePerCard">
-                                            <InputGroup
-                                                border="1px"
-                                                borderColor="whiteAlpha.300"
-                                                rounded="lg">
+                                            <InputGroup border="1px" borderColor="whiteAlpha.300" rounded="lg">
                                                 <NumberInput value={priceCard}>
                                                     <NumberInputField
                                                         rounded="none"
@@ -202,9 +180,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                                     borderLeftRadius="lg"
                                                 />
                                             </InputGroup>
-                                            <FormLabel>
-                                                Price per {!isGem ? 'card' : 'GEM'}
-                                            </FormLabel>
+                                            <FormLabel>Price per {!isGem ? 'card' : 'GEM'}</FormLabel>
                                         </FormControl>
                                     </Box>
                                     <Box py={2}>
