@@ -152,7 +152,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
                         </Center>
                         <Box my={4}>
                             <Text textAlign="center" color="white">
-                                Carfts (max: {maxCrafts})
+                                Crafts (max: {maxCrafts})
                             </Text>
                             <Center my={2}>
                                 <HStack maxW="50%" spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
