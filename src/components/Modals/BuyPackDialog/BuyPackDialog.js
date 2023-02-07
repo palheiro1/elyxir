@@ -97,7 +97,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         calculatePrices();
     }, [input.value]);
 
-    const checker = () => {
+    const checker = (option) => {
         if (!isValidPin || !passphrase) {
             errorToast('You must enter a valid pin', toast);
             return false;
@@ -112,8 +112,13 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             return false;
         }
 
-        if (IGNISBalance < ignisPrice || GIFTZBalance < giftzPrice) {
-            errorToast("You don't have enough funds", toast);
+        if (option === 1 && IGNISBalance < ignisPrice) {
+            errorToast("You don't have enough funds (IGNIS)", toast);
+            return false;
+        }
+
+        if (option === 2 && GIFTZBalance < giftzPrice) {
+            errorToast("You don't have enough funds (GIFTZ)", toast);
             return false;
         }
 
@@ -121,7 +126,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     };
 
     const handleBuyPack = async () => {
-        if (checker() === false) return;
+        if (checker(value) === false) return;
         let itsOk = false;
 
         try {
