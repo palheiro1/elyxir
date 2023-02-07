@@ -70,6 +70,24 @@ const components = {
             transformOrigin: "left top"
           }
         }
+      }),
+      floatingTransparent: (props) => ({
+        container: {
+          label: {
+            bg: 'transparent',
+            color: props.colorMode === 'dark' ? 'white' : "black",
+            top: -6,
+            left: 0,
+            zIndex: 2,
+            position: "absolute",
+            fontSize: "sm",
+            fontWeight: "bold",
+            pointerEvents: "none",
+            px: 1,
+            my: 2,
+            transformOrigin: "left top"
+          }
+        }
       })
     },
   }

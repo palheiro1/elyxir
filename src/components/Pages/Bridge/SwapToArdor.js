@@ -52,7 +52,7 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
             </Heading>
             <Text fontWeight="light">to your deposit address</Text>
 
-            <FormControl variant="floating" id="cards">
+            <FormControl variant="floatingTransparent" id="cards">
                 <Tooltip label="Click to copy">
                     <Input
                         value={ethAddress}
@@ -82,7 +82,7 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
                 3. Initiate the swap to this wallet
             </Heading>
 
-            <FormControl variant="floating" id="cards">
+            <FormControl variant="floatingTransparent" id="cards">
                 <Input value={infoAccount.accountRs} isReadOnly />
                 <FormLabel>ARDOR address</FormLabel>
             </FormControl>
