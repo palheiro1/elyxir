@@ -106,6 +106,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             onClick: handleLogout,
             bgColor: sBgColor,
             hoverBg: hoverColor(8),
+            textColor: sTextColor,
         },
     ];
 
