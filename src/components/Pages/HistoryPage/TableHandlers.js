@@ -258,10 +258,12 @@ export const cancelledOrder = (type, date, account) => {
 };
 
 export const handleGEM = (type, amount, date, account) => {
-    // MANEAJR DATE CON TIMESTAMP!!!
     type = type.toLowerCase();
-    const fixedAmount = amount / NQTDIVIDER;
-
+    if (amount > 1000000) {
+        amount = amount / NQTDIVIDER;
+    }
+    amount = Number(amount);
+    const fixedAmount = Number.isInteger(amount) ? amount.toFixed(0) : amount.toFixed(2);
     const component = () => {
         return (
             <Tr>
@@ -275,7 +277,7 @@ export const handleGEM = (type, amount, date, account) => {
                         </Box>
                         <Box>
                             <Text fontSize="xl" fontWeight="bold">
-                                GEM
+                                GEM1
                             </Text>
                         </Box>
                     </Stack>
