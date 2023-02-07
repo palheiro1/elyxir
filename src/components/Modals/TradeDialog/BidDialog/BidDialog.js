@@ -73,6 +73,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
         step: 1,
         defaultValue: 1,
         min: 1,
+        max: isGem ? 999999 : 999,
     });
 
     const inc = getIncrementButtonProps();
@@ -170,7 +171,6 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                                 color="white"
                                                 textAlign="center"
                                                 fontWeight="bold"
-                                                disabled
                                             />
                                             <Button {...inc} rounded="none" borderRightRadius="lg">
                                                 +
