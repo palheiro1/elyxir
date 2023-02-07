@@ -2,7 +2,6 @@ import {
     Box,
     Button,
     Center,
-    Flex,
     Grid,
     GridItem,
     Image,
@@ -17,11 +16,12 @@ import { useRef, useState } from 'react';
 
 import { BsArrowLeftRight, BsTools } from 'react-icons/bs';
 import { FaRegPaperPlane } from 'react-icons/fa';
-import { NQTDIVIDER, RARITY_COLORS } from '../../data/CONSTANTS';
+import { NQTDIVIDER } from '../../data/CONSTANTS';
 import CraftDialog from '../Modals/CraftDialog/CraftDialog';
 import MorphDialog from '../Modals/MorphDialog/MorphDialog';
 import SendDialog from '../Modals/SendDialog/SendDialog';
 import TradeDialog from '../Modals/TradeDialog/TradeDialog';
+import CardBadges from './CardBadges';
 
 /**
  * @name Card
@@ -98,8 +98,6 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     const highBidOrders = bidOrders.length > 0 ? bidOrders[0].priceNQTPerShare / NQTDIVIDER : '';
     // ------------------------------
 
-    const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
-
     return (
         <Box p={3} border="1px" rounded="lg" borderColor="gray" shadow="xl" bgColor={bgColor}>
             <Stack direction="column" spacing={4}>
@@ -120,24 +118,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                             {name}
                         </Text>
 
-                        <Flex gap={2}>
-                            <Text
-                                color="white"
-                                fontSize="sm"
-                                rounded="lg"
-                                bgColor={badgeColor}
-                                px={2}>
-                                {continent}
-                            </Text>
-                            <Text
-                                color="black"
-                                fontSize="sm"
-                                bgGradient={RARITY_COLORS[rarity]}
-                                rounded="lg"
-                                px={2}>
-                                {rarity}
-                            </Text>
-                        </Flex>
+                        <CardBadges rarity={rarity} continent={continent} size="sm" />
                     </GridItem>
                     <GridItem alignContent="center" minH="100%">
                         <Center minHeight="100%">

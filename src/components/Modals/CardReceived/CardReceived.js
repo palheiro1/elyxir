@@ -7,7 +7,6 @@ import {
     AlertDialogOverlay,
     Button,
     Center,
-    Flex,
     Heading,
     Image,
     SimpleGrid,
@@ -23,7 +22,7 @@ import equals from 'fast-deep-equal';
 
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { RARITY_COLORS } from '../../../data/CONSTANTS';
+import CardBadges from '../../Cards/CardBadges';
 
 const CardReceived = ({ reference, isOpen, onClose, cards }) => {
     const [currentCards, setCurrentCards] = useState(cards);
@@ -65,20 +64,7 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
                     <SimpleGrid columns={1} mt={2}>
                         <Heading textAlign="center">{asset.name}</Heading>
                         <Center mt={2}>
-                            <Flex gap={2}>
-                                <Text fontSize="md" rounded="lg" fontWeight="bolder" bgColor={borderColor} px={2}>
-                                    {asset.channel}
-                                </Text>
-                                <Text
-                                    fontWeight="bolder"
-                                    color="black"
-                                    fontSize="md"
-                                    bgGradient={RARITY_COLORS[asset.rarity]}
-                                    rounded="lg"
-                                    px={2}>
-                                    {asset.rarity}
-                                </Text>
-                            </Flex>
+                            <CardBadges rarity={asset.rarity} continent={asset.channel} />
                         </Center>
                         <Center mt={4}>
                             <Text fontSize="lg" color="gray.400">

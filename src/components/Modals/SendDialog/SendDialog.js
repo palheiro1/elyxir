@@ -31,7 +31,7 @@ import { transferAsset } from '../../../services/Ardor/ardorInterface';
 import { checkPin } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { isArdorAccount } from '../../../utils/validators';
-import { RARITY_COLORS } from '../../../data/CONSTANTS';
+import CardBadges from '../../Cards/CardBadges';
 
 /**
  * @name SendDialog
@@ -101,7 +101,6 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
 
     const bgColor = useColorModeValue('', '#1D1D1D');
     const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
-    const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
 
     return (
         <>
@@ -128,26 +127,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                                     <Text fontSize="2xl" fontWeight="bold">
                                         {card.name}
                                     </Text>
-                                    <Stack direction={'row'} spacing={1}>
-                                        <Text
-                                            textAlign="center"
-                                            fontSize="sm"
-                                            bgGradient={RARITY_COLORS[card.rarity]}
-                                            rounded="lg"
-                                            color="black"
-                                            px={2}>
-                                            {card.rarity}
-                                        </Text>
-                                        <Text
-                                            fontSize="sm"
-                                            bgColor={badgeColor}
-                                            rounded="lg"
-                                            color="white"
-                                            px={2}
-                                            textAlign="center">
-                                            {card.channel}
-                                        </Text>
-                                    </Stack>
+                                    <CardBadges rarity={card.rarity} continent={card.channel} size="sm" />
                                     <Text fontSize="sm">Quantity: {card.quantityQNT}</Text>
                                 </Box>
                             </Stack>
