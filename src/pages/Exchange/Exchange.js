@@ -31,7 +31,7 @@ const Exchange = ({ infoAccount }) => {
     };
 
     const changellyIframe =
-        '<iframe src="https://widget.changelly.com?from=*&to=ignis&amount=0.005&address=&fromDefault=BTC&toDefault=ignis&theme=default&merchant_id=5zk2vil3u4s8witr&payment_id=&v=2" height="325px" class="changelly" style="min-width: 100%;">Cant load widget</iframe>';
+        '<iframe src="https://widget.changelly.com?from=*&to=ignis&amount=0.005&address=&fromDefault=BTC&toDefault=ignis&theme=default&merchant_id=5zk2vil3u4s8witr&payment_id=&v=2" height="385px" class="changelly" style="min-width: 100%;">Cant load widget</iframe>';
     const simplexIframe =
         '<iframe src="/simplex.html" height="325px" style="min-width: 100%;">Cant load widget</iframe>';
 
