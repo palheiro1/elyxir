@@ -30,6 +30,11 @@ const Exchange = ({ infoAccount }) => {
         copyToast('ARDOR Account', toast);
     };
 
+    const changellyIframe =
+        '<iframe src="https://widget.changelly.com?from=*&to=ignis&amount=0.005&address=&fromDefault=BTC&toDefault=ignis&theme=default&merchant_id=5zk2vil3u4s8witr&payment_id=&v=2" height="325px" class="changelly" style="min-width: 100%;">Cant load widget</iframe>';
+    const simplexIframe =
+        '<iframe src="/simplex.html" height="325px" style="min-width: 100%;">Cant load widget</iframe>';
+
     return (
         <>
             <Center>
@@ -51,29 +56,11 @@ const Exchange = ({ infoAccount }) => {
                     </ButtonGroup>
                 </Stack>
             </Center>
-            {option === 'crypto' && (
-                <Center my={10} rounded="lg">
-                    <Box w={{ base: '90%', md: '50%' }} border="2px" borderColor="gray">
-                        <Iframe
-                            iframe={
-                                '<iframe src="https://widget.changelly.com?from=*&to=ignis&amount=0.005&address=&fromDefault=BTC&toDefault=ignis&theme=default&merchant_id=5zk2vil3u4s8witr&payment_id=&v=2" height="300px" class="changelly" scrolling="no" style="min-width: 100%; width: 100px; overflow-y: hidden; border: none">Cant load widget</iframe>'
-                            }
-                        />
-                    </Box>
-                </Center>
-            )}
-
-            {option === 'fiat' && (
-                <Center my={10} rounded="lg">
-                    <Box w={{ base: '90%', md: '50%' }} border="2px" borderColor="gray">
-                        <Iframe
-                            iframe={
-                                '<iframe src="/simplex.html" height="300px" class="simplex" scrolling="no" style="min-width: 100%; width: 100px; overflow-y: hidden; border: none">Cant load widget</iframe>'
-                            }
-                        />
-                    </Box>
-                </Center>
-            )}
+            <Center my={10} rounded="lg">
+                <Box w={{ base: '90%', md: '50%' }} border="2px" borderColor="gray" overflow="hidden">
+                    <Iframe iframe={option === 'crypto' ? changellyIframe : simplexIframe} />
+                </Box>
+            </Center>
         </>
     );
 };
