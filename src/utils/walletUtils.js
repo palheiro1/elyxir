@@ -247,7 +247,7 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
     let success = true;
     const message = getMorphMessage(asset, noCards);
 
-    await transferAsset({
+    const response_1 = await transferAsset({
         asset: asset,
         quantityQNT: noCards,
         recipient: BUYPACKACCOUNT,
@@ -261,11 +261,11 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
         success = false;
     });
 
-    if (!success) return false;
+    if (!success || !response_1) return false;
 
     // ----------------------------------
-
-    await transferGEM({
+    console.log(cost)
+    const response_2 = await transferGEM({
         quantityQNT: cost * NQTDIVIDER,
         recipient: BUYPACKACCOUNT,
         passPhrase,
@@ -278,8 +278,10 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
         success = false;
     });
 
+    if(!success || !response_2) return false;
     return success;
 };
+    
 
 /**
  * @name sendToCraft

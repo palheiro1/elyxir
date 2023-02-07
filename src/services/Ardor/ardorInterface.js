@@ -659,7 +659,7 @@ const transferGEM = async ({
     const url_tx = NODEURL + '?requestType=transferAsset';
 
     try {
-        query.feeNQT = await calculateFee(query);
+        query.feeNQT = await calculateFee(query, url_tx);
         query.broadcast = false;
 
         const response = await axios.post(url_tx, qs.stringify(query), config);

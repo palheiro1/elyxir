@@ -1,4 +1,5 @@
-import { Box, Image, Stack, Text } from '@chakra-ui/react';
+import { Box, Image, Stack, Text, useColorModeValue } from '@chakra-ui/react';
+import { RARITY_COLORS } from '../../data/CONSTANTS';
 
 /**
  * @name TableCard
@@ -13,6 +14,7 @@ import { Box, Image, Stack, Text } from '@chakra-ui/react';
  * @version 1.0
  */
 const TableCard = ({ image, title, continent, rarity, needDelete = false }) => {
+    const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
     return (
         <Stack direction={'row'}>
             <Image maxW="75px" src={image} alt={title} mr={6} shadow="lg" rounded="sm" />
@@ -27,9 +29,24 @@ const TableCard = ({ image, title, continent, rarity, needDelete = false }) => {
                         </Stack>
 
                         <Stack direction={'row'} pt={2}>
-                            <Text color="grey">{continent}</Text>
-                            <Text color="grey">/</Text>
-                            <Text color="grey">{rarity}</Text>
+                            <Text
+                                fontSize="md"
+                                bgColor={badgeColor}
+                                rounded="lg"
+                                color="white"
+                                px={2}
+                                textAlign="center">
+                                {continent}
+                            </Text>
+                            <Text
+                                fontSize="md"
+                                bgGradient={RARITY_COLORS[rarity]}
+                                rounded="lg"
+                                color="black"
+                                px={2}
+                                textAlign="center">
+                                {rarity}
+                            </Text>
                         </Stack>
                     </Box>
                 ) : (
