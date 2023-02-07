@@ -13,6 +13,7 @@ import {
     SimpleGrid,
     Stack,
     Text,
+    useColorModeValue,
     useDisclosure,
     useToast,
 } from '@chakra-ui/react';
@@ -57,6 +58,10 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCar
         onOpenBid();
     };
 
+    const bgColor = useColorModeValue("", "#1D1D1D");
+    const bgMarkedColor = useColorModeValue("blackAlpha.100", "whiteAlpha.100");
+    const borderColor = useColorModeValue("blackAlpha.300", "whiteAlpha.300");
+
     return (
         <>
             <AlertDialog
@@ -67,8 +72,8 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCar
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
-                    <AlertDialogHeader textAlign="center" color="white">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
+                    <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text>TRADE CARD</Text>
                         </Center>
@@ -76,11 +81,11 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCar
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
                         {!gemCards ? (
-                            <Center rounded="lg" bgColor="whiteAlpha.100" p={4}>
+                            <Center rounded="lg" bgColor={bgMarkedColor} p={4}>
                                 <Stack direction="row" align="center" spacing={4}>
                                     <Image src={card.cardImgUrl} maxH="10rem" />
                                     <Box>
-                                        <Text fontSize="2xl" fontWeight="bold" color="white">
+                                        <Text fontSize="2xl" fontWeight="bold">
                                             {card.name}
                                         </Text>
                                         <Text fontSize="sm" color="gray.500">
@@ -96,7 +101,7 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCar
                             <Center rounded="lg" bgColor="whiteAlpha.100" p={4}>
                                 <Stack direction="row" align="center" spacing={4}>
                                     <Box>
-                                        <Text fontSize="2xl" fontWeight="bold" textAlign="center" color="white">
+                                        <Text fontSize="2xl" fontWeight="bold" textAlign="center">
                                             GEM
                                         </Text>
                                         <Text fontSize="sm" color="gray.500">
@@ -110,8 +115,8 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCar
                             {!onlyBid && (
                                 <Box
                                     onClick={handleAsk}
-                                    color="white"
-                                    bgColor="whiteAlpha.100"
+                                   
+                                    bgColor={bgMarkedColor}
                                     p={4}
                                     borderLeftRadius="lg"
                                     textAlign="center"
@@ -121,25 +126,25 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCar
                                     borderBottom="1px"
                                     borderLeft="1px"
                                     borderTop="1px"
-                                    borderColor="whiteAlpha.300">
+                                    borderColor={borderColor}>
                                     ASK
                                 </Box>
                             )}
                             <Box
                                 onClick={handleBid}
-                                color="white"
+                               
                                 bgColor="whiteAlpha.100"
                                 p={4}
                                 borderRightRadius="lg"
                                 borderLeftRadius={onlyBid ? 'lg' : '0px'}
                                 textAlign="center"
                                 fontSize="xl"
-                                _hover={{ bgColor: 'whiteAlpha.300', cursor: 'pointer' }}
+                                _hover={{ bgColor: borderColor, cursor: 'pointer' }}
                                 borderRight="1px"
                                 borderBottom="1px"
                                 borderLeft="0px"
                                 borderTop="1px"
-                                borderColor="whiteAlpha.300">
+                                borderColor={borderColor}>
                                 BID
                             </Box>
                         </SimpleGrid>
