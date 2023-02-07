@@ -91,7 +91,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
             passPhrase: passphrase,
         });
 
-        if(response && response.data.fullHash) {
+        if(response) {
             okToast("Card sent successfully", toast); 
             onClose();
         } else {
