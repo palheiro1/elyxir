@@ -1,5 +1,18 @@
-import { Box, Button, Center, HStack, IconButton, Image, Input, Stack, Text, useNumberInput } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Center,
+    HStack,
+    IconButton,
+    Image,
+    Input,
+    Stack,
+    Text,
+    useColorModeValue,
+    useNumberInput,
+} from '@chakra-ui/react';
 import { AiFillDelete } from 'react-icons/ai';
+import { RARITY_COLORS } from '../../data/CONSTANTS';
 
 /**
  * @name BridgeCard
@@ -27,9 +40,11 @@ const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdi
     const dec = getDecrementButtonProps();
     const input = getInputProps();
 
+    const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
+
     return (
-        <Stack direction={'row'} minWidth="350px">
-            <Image maxW="75px" src={image} alt={title} mr={6} shadow="lg" rounded="sm" />
+        <Stack direction={'row'} minWidth="375px" spacing={4}>
+            <Image maxW="75px" src={image} alt={title} shadow="lg" rounded="sm" />
 
             <Stack direction={'row'} align="center" minW="35%">
                 <Box>
@@ -37,10 +52,19 @@ const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdi
                         {title}
                     </Text>
 
-                    <Stack direction={'row'}>
-                        <Text color="grey">{continent}</Text>
-                        <Text color="grey">/</Text>
-                        <Text color="grey">{rarity}</Text>
+                    <Stack direction={'row'} spacing={1}>
+                        <Text
+                            textAlign="center"
+                            fontSize="md"
+                            bgGradient={RARITY_COLORS[rarity]}
+                            rounded="lg"
+                            color="black"
+                            px={2}>
+                            {rarity}
+                        </Text>
+                        <Text fontSize="md" bgColor={badgeColor} rounded="lg" color="white" px={2} textAlign="center">
+                            {continent}
+                        </Text>
                     </Stack>
 
                     <Text color="grey">Available: {quantity}</Text>
@@ -50,7 +74,7 @@ const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdi
             {canEdit && (
                 <>
                     <HStack>
-                        <HStack maxW="160px" spacing={0}>
+                        <HStack maxW="200px" spacing={0}>
                             <Button rounded="none" {...dec} onClick={() => handleEdit(card.asset, input.value)}>
                                 -
                             </Button>

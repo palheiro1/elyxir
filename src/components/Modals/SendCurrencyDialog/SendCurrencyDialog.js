@@ -19,6 +19,7 @@ import {
     PinInput,
     PinInputField,
     Text,
+    useColorModeValue,
     useNumberInput,
     useToast,
 } from '@chakra-ui/react';
@@ -113,6 +114,9 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
         }
     };
 
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+
     return (
         <>
             <AlertDialog
@@ -123,40 +127,40 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
-                    <AlertDialogHeader textAlign="center" color="white">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                    <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text>SEND {currency.name}</Text>
                         </Center>
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
-                        <Box my={4}>
-                            <Text textAlign="center" color="white">
-                                Amount to send (max: {maxCurrency})
-                            </Text>
-                            <Center my={2}>
-                                <HStack spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
-                                    <Button {...dec} rounded="none" borderLeftRadius="lg">
-                                        -
-                                    </Button>
-                                    <Input
-                                        {...input}
-                                        rounded="none"
-                                        border="none"
-                                        color="white"
-                                        textAlign="center"
-                                        fontWeight="bold"
-                                    />
-                                    <Button {...inc} rounded="none" borderRightRadius="lg">
-                                        +
-                                    </Button>
-                                </HStack>
+                        <Box>
+                            <Center>
+                                <FormControl variant="floatingGray" id="Recipient" my={4}>
+                                    <HStack spacing={0} border="1px" rounded="lg" borderColor={borderColor}>
+                                        <Button {...dec} rounded="none" borderLeftRadius="lg" size="lg">
+                                            -
+                                        </Button>
+                                        <Input
+                                            {...input}
+                                            rounded="none"
+                                            border="none"
+                                            textAlign="center"
+                                            fontWeight="bold"
+                                            size="lg"
+                                        />
+                                        <Button {...inc} rounded="none" borderRightRadius="lg" size="lg">
+                                            +
+                                        </Button>
+                                    </HStack>
+                                    <FormLabel>Amount to send (max: {maxCurrency})</FormLabel>
+                                </FormControl>
                             </Center>
                         </Box>
 
-                        <FormControl variant="floatingGray" id="Recipient" my={4} mt={8}>
-                            <InputGroup size="lg" border="1px" borderColor="whiteAlpha.300" rounded="lg">
+                        <FormControl variant="floatingGray" id="Recipient" my={4}>
+                            <InputGroup size="lg" border="1px" borderColor={borderColor} rounded="lg">
                                 <Input
                                     placeholder=" "
                                     value={ardorAccount}
@@ -199,12 +203,7 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                         </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button
-                            isDisabled={!isValidPin || !isValidArdorAccount}
-                            bgColor="blue.700"
-                            w="100%"
-                            py={6}
-                            onClick={handleSend}>
+                        <Button isDisabled={!isValidPin || !isValidArdorAccount} w="100%" py={6} onClick={handleSend}>
                             Submit
                         </Button>
                     </AlertDialogFooter>

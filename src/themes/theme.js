@@ -56,16 +56,15 @@ const components = {
       floatingGray: (props) => ({
         container: {
           label: {
-            bg: props.colorMode === 'dark' ? '#1D1D1D' : '#1D1D1D',
-            color: 'white',
-            top: -5,
+            bg: props.colorMode === 'dark' ? '#1D1D1D' : 'transparent',
+            color: props.colorMode === 'dark' ? 'white' : "black",
+            top: -6,
             left: 0,
             zIndex: 2,
             position: "absolute",
             fontSize: "sm",
             fontWeight: "bold",
             pointerEvents: "none",
-            mx: 3,
             px: 1,
             my: 2,
             transformOrigin: "left top"

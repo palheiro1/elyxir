@@ -15,6 +15,7 @@ import {
     PinInput,
     PinInputField,
     Stack,
+    useColorModeValue,
     useToast,
 } from '@chakra-ui/react';
 
@@ -107,6 +108,8 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
         }
     };
 
+    const bgColor = useColorModeValue("blackAlpha.100", "whiteAlpha.100");
+
     return (
         <Center>
             <Stack direction="column" spacing={8}>
@@ -148,8 +151,9 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
                         <Stack
                             direction="column"
                             spacing={4}
-                            bgColor="whiteAlpha.100"
-                            p={4}
+                            bgColor={bgColor}
+                            py={4}
+                            px={6}
                             rounded="lg"
                             maxH="20rem"
                             overflowY="auto">

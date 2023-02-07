@@ -21,6 +21,7 @@ import {
     PinInput,
     PinInputField,
     Text,
+    useColorModeValue,
     useNumberInput,
     useToast,
     VStack,
@@ -99,6 +100,9 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
         }
     };
 
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+
     return (
         <>
             <AlertDialog
@@ -110,8 +114,8 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
-                    <AlertDialogHeader textAlign="center" color="white">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                    <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text>ASK FOR {!isGem ? 'CARD' : 'GEM'}</Text>
                         </Center>
@@ -125,7 +129,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                 </Box>
                                 <VStack spacing={4}>
                                     <Box w="100%">
-                                        <Text color="white" fontWeight="bold" fontSize="xl">
+                                        <Text fontWeight="bold" fontSize="xl">
                                             {!isGem ? card.name : 'GEM'}
                                         </Text>
                                         {!isGem && (
@@ -136,7 +140,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                     </Box>
                                     <Box py={2}>
                                         <FormControl variant="floatingGray" id="PricePerCard">
-                                            <HStack spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
+                                            <HStack spacing={0} border="1px" rounded="lg" borderColor={borderColor}>
                                                 <Button {...dec} rounded="none" borderLeftRadius="lg">
                                                     -
                                                 </Button>
@@ -145,7 +149,6 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                                     {...input}
                                                     rounded="none"
                                                     border="none"
-                                                    color="white"
                                                     textAlign="center"
                                                     fontWeight="bold"
                                                 />
@@ -159,12 +162,11 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                     </Box>
                                     <Box py={2}>
                                         <FormControl variant="floatingGray" id="PricePerCard">
-                                            <InputGroup border="1px" borderColor="whiteAlpha.300" rounded="lg">
+                                            <InputGroup border="1px" borderColor={borderColor} rounded="lg">
                                                 <NumberInput value={priceCard}>
                                                     <NumberInputField
                                                         rounded="none"
                                                         border="none"
-                                                        color="white"
                                                         textAlign="center"
                                                         fontWeight="bold"
                                                         onChange={handlePriceCard}
@@ -174,7 +176,6 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                                     fontSize="sm"
                                                     border="none"
                                                     children="IGNIS"
-                                                    color="white"
                                                     bgColor="transparent"
                                                     rounded="none"
                                                     borderLeftRadius="lg"

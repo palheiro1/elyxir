@@ -21,6 +21,7 @@ import {
     PinInput,
     PinInputField,
     Text,
+    useColorModeValue,
     useNumberInput,
     useToast,
     VStack,
@@ -123,6 +124,9 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
         }
     };
 
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+
     return (
         <>
             <AlertDialog
@@ -134,8 +138,8 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
-                    <AlertDialogHeader textAlign="center" color="white">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                    <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text>BID FOR {!isGem ? 'CARDs' : 'GEMs'} </Text>
                         </Center>
@@ -149,8 +153,8 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                 </Box>
                                 <VStack spacing={4}>
                                     <Box w="100%">
-                                        <Text color="white" fontWeight="bold" fontSize="xl">
-                                            {!isGem ? 'cards' : 'GEMs'}{' '}
+                                        <Text fontWeight="bold" fontSize="xl">
+                                            {!isGem ? card.name : 'GEMs'}{' '}
                                         </Text>
                                         {!isGem && (
                                             <Text color="gray">
@@ -159,32 +163,32 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                         )}
                                     </Box>
                                     <Box py={2}>
-                                        <Text color="white">Amount of {!isGem ? 'cards' : 'GEMs'} </Text>
-                                        <HStack spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
-                                            <Button {...dec} rounded="none" borderLeftRadius="lg">
-                                                -
-                                            </Button>
-                                            <Input
-                                                {...input}
-                                                rounded="none"
-                                                border="none"
-                                                color="white"
-                                                textAlign="center"
-                                                fontWeight="bold"
-                                            />
-                                            <Button {...inc} rounded="none" borderRightRadius="lg">
-                                                +
-                                            </Button>
-                                        </HStack>
+                                        <FormControl variant="floatingGray" id="PricePerCard">
+                                            <HStack spacing={0} border="1px" rounded="lg" borderColor={borderColor}>
+                                                <Button {...dec} rounded="none" borderLeftRadius="lg">
+                                                    -
+                                                </Button>
+                                                <Input
+                                                    {...input}
+                                                    rounded="none"
+                                                    border="none"
+                                                    textAlign="center"
+                                                    fontWeight="bold"
+                                                />
+                                                <Button {...inc} rounded="none" borderRightRadius="lg">
+                                                    +
+                                                </Button>
+                                            </HStack>
+                                            <FormLabel>Amount of {!isGem ? 'cards' : 'GEMs'}</FormLabel>
+                                        </FormControl>
                                     </Box>
                                     <Box py={2}>
                                         <FormControl variant="floatingGray" id="PricePerCard">
-                                            <InputGroup border="1px" borderColor="whiteAlpha.300" rounded="lg">
+                                            <InputGroup border="1px" borderColor={borderColor} rounded="lg">
                                                 <NumberInput value={priceCard}>
                                                     <NumberInputField
                                                         rounded="none"
                                                         border="none"
-                                                        color="white"
                                                         textAlign="center"
                                                         fontWeight="bold"
                                                         onChange={handlePriceCard}
@@ -194,7 +198,6 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                                     fontSize="sm"
                                                     border="none"
                                                     children="IGNIS"
-                                                    color="white"
                                                     bgColor="transparent"
                                                     rounded="none"
                                                     borderLeftRadius="lg"
@@ -228,7 +231,6 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                     <Box w="100%" mt={8}>
                                         <Button
                                             isDisabled={!isValidPin}
-                                            bgColor="blue.700"
                                             w="100%"
                                             py={6}
                                             onClick={handleSend}>
