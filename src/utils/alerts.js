@@ -35,7 +35,7 @@ export const handleConfirmateNotification = (tx, isIncoming, toast) => {
  * @description This function is used to display a success toast
  */
 export const okToast = (text, toast) => {
-    const id = text;
+    const id = "okToast"
     if (toast.isActive(id)) return;
 
     toast({
@@ -54,7 +54,7 @@ export const okToast = (text, toast) => {
  * @description This function is used to display an error toast
  */
 export const errorToast = (text, toast) => {
-    const id = text;
+    const id = "errorToast"
     if (toast.isActive(id)) return;
 
     toast({
@@ -73,7 +73,7 @@ export const errorToast = (text, toast) => {
  * @description This function is used to display a warning toast
  */
 export const warningToast = (text, toast) => {
-    const id = text;
+    const id = "warningToast"
     if (toast.isActive(id)) return;
 
     toast({
@@ -92,7 +92,7 @@ export const warningToast = (text, toast) => {
  * @description This function is used to display an info toast
  */
 export const infoToast = (text, toast) => {
-    const id = text;
+    const id = "infoToast"
     if (toast.isActive(id)) return;
 
     toast({
