@@ -277,7 +277,7 @@ export const handleGEM = (type, amount, date, account) => {
                         </Box>
                         <Box>
                             <Text fontSize="xl" fontWeight="bold">
-                                GEM1
+                                GEM
                             </Text>
                         </Box>
                     </Stack>
