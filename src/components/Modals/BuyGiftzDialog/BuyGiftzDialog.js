@@ -52,9 +52,6 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
             defaultValue: 0,
             min: 0,
             max: maxPacksWithIgnis,
-        },
-        {
-            isReadOnly: false,
         }
     );
 

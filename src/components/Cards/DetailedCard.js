@@ -56,7 +56,7 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                     <Stack direction="row">
                         <Box mt="6%">
                             <Hover perspective={300}>
-                                <Image src={image} alt={name} maxH="45rem" rounded="lg" />
+                                <Image src={image} alt={name} maxH="42rem" rounded="lg" />
                             </Hover>
                         </Box>
 
