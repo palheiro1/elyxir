@@ -22,14 +22,14 @@ import {
     Stack,
     Text,
     Tooltip,
+    useColorModeValue,
     useNumberInput,
     useToast,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { CRAFTINGCOMMON, CRAFTINGRARE } from '../../../data/CONSTANTS';
+import { CRAFTINGCOMMON, CRAFTINGRARE, RARITY_COLORS } from '../../../data/CONSTANTS';
 import { checkPin, sendToCraft } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
-
 
 /**
  * @name CraftDialog
@@ -44,7 +44,6 @@ import { errorToast, okToast } from '../../../utils/alerts';
  * @version 1.0
  */
 const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
-
     const toast = useToast();
     const maxCards = Number(card.quantityQNT);
     const maxCrafts = Math.floor(maxCards / 5);
@@ -82,7 +81,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
     useEffect(() => {
         const { rarity } = card;
         const nCrafts = Math.floor(input.value);
-        setNoCards(nCrafts*5);
+        setNoCards(nCrafts * 5);
         setNoCrafts(nCrafts);
         if (rarity === 'Common') {
             setCraftingCost(nCrafts * CRAFTINGCOMMON);
@@ -92,12 +91,12 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
     }, [input, card]);
 
     const handleCrafting = async () => {
-        if(!isValidPin) return errorToast('Invalid PIN', toast);
-        if(!passPhrase) return errorToast('Invalid PIN', toast);
-        if(noCrafts > maxCrafts) return errorToast('Invalid number of crafts', toast)
-        if(noCrafts === 0) return errorToast('Invalid number of crafts', toast);
-        if(craftingCost === 0) return errorToast('Invalid number of crafts', toast);
-        if(noCards % 5 !== 0) return errorToast('Invalid number of crafts', toast);
+        if (!isValidPin) return errorToast('Invalid PIN', toast);
+        if (!passPhrase) return errorToast('Invalid PIN', toast);
+        if (noCrafts > maxCrafts) return errorToast('Invalid number of crafts', toast);
+        if (noCrafts === 0) return errorToast('Invalid number of crafts', toast);
+        if (craftingCost === 0) return errorToast('Invalid number of crafts', toast);
+        if (noCards % 5 !== 0) return errorToast('Invalid number of crafts', toast);
 
         const ok = await sendToCraft({
             asset: card.asset,
@@ -106,12 +105,16 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
             cost: craftingCost,
         });
         if (ok) {
-            okToast('Crafting request sent', toast)
+            okToast('Crafting request sent', toast);
             onClose();
         } else {
-            errorToast('Error sending crafting request', toast)
+            errorToast('Error sending crafting request', toast);
         }
-    }
+    };
+
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
 
     return (
         <>
@@ -123,8 +126,8 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
-                    <AlertDialogHeader textAlign="center" color="white">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                    <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text mr={2}>CRAFTING</Text>
                             <Tooltip label={infoMsg} aria-label="Info about craft" hasArrow variant="black">
@@ -134,28 +137,41 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
-                        <Center rounded="lg" bgColor="whiteAlpha.100" p={4}>
+                        <Center rounded="lg" bgColor={borderColor} p={4}>
                             <Stack direction="row" align="center" spacing={4}>
                                 <Image src={card.cardImgUrl} maxH="5rem" />
                                 <Box>
-                                    <Text fontSize="2xl" fontWeight="bold" color="white">
+                                    <Text fontSize="2xl" fontWeight="bold">
                                         {card.name}
                                     </Text>
-                                    <Text fontSize="sm" color="gray.500">
-                                        {card.channel} / {card.rarity}
-                                    </Text>
-                                    <Text fontSize="sm" color="gray.500">
-                                        Quantity: {maxCards}
-                                    </Text>
+                                    <Stack direction={'row'} spacing={1}>
+                                        <Text
+                                            textAlign="center"
+                                            fontSize="sm"
+                                            bgGradient={RARITY_COLORS[card.rarity]}
+                                            rounded="lg"
+                                            color="black"
+                                            px={2}>
+                                            {card.rarity}
+                                        </Text>
+                                        <Text
+                                            fontSize="sm"
+                                            bgColor={badgeColor}
+                                            rounded="lg"
+                                            color="white"
+                                            px={2}
+                                            textAlign="center">
+                                            {card.channel}
+                                        </Text>
+                                    </Stack>
+                                    <Text fontSize="sm">Quantity: {maxCards}</Text>
                                 </Box>
                             </Stack>
                         </Center>
                         <Box my={4}>
-                            <Text textAlign="center" color="white">
-                                Crafts (max: {maxCrafts})
-                            </Text>
+                            <Text textAlign="center">Crafts (max: {maxCrafts})</Text>
                             <Center my={2}>
-                                <HStack maxW="50%" spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
+                                <HStack maxW="50%" spacing={0} border="1px" rounded="lg" borderColor={borderColor}>
                                     <Button {...dec} rounded="none" borderLeftRadius="lg">
                                         -
                                     </Button>
@@ -163,7 +179,6 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
                                         {...input}
                                         rounded="none"
                                         border="none"
-                                        color="white"
                                         textAlign="center"
                                         fontWeight="bold"
                                         disabled
@@ -177,7 +192,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
 
                         <FormControl variant="floatingGray" id="name" my={4} mt={8}>
                             <InputGroup size="lg">
-                                <Input placeholder=" " value={input.value*5} disabled />
+                                <Input placeholder=" " value={input.value * 5} disabled />
                                 <InputRightAddon bgColor="transparent" children={card.name} />
                             </InputGroup>
 
@@ -208,7 +223,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
                         </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button isDisabled={!isValidPin} bgColor="blue.700" w="100%" py={6} onClick={handleCrafting} >
+                        <Button isDisabled={!isValidPin} w="100%" py={6} onClick={handleCrafting}>
                             Submit
                         </Button>
                     </AlertDialogFooter>

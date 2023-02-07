@@ -14,10 +14,10 @@ import {
     PinInput,
     PinInputField,
     Text,
+    useColorModeValue,
     useNumberInput,
     useToast,
 } from '@chakra-ui/react';
-
 
 import { useEffect, useState } from 'react';
 import { EXCHANGERATE, PACKPRICE } from '../../../data/CONSTANTS';
@@ -46,14 +46,12 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
 
     const toast = useToast();
 
-    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput(
-        {
-            step: 1,
-            defaultValue: 0,
-            min: 0,
-            max: maxPacksWithIgnis,
-        }
-    );
+    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
+        step: 1,
+        defaultValue: 0,
+        min: 0,
+        max: maxPacksWithIgnis,
+    });
 
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
@@ -106,10 +104,10 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
 
         try {
             // Buy GIFTZ with IGNIS
-            await buyGiftz({ passphrase: passphrase, amountNQT: input.value});
+            await buyGiftz({ passphrase: passphrase, amountNQT: input.value });
             itsOk = true;
         } catch (error) {
-            console.log("🚀 ~ file: BuyGiftzDialog.js:115 ~ handleBuyPack ~ error", error)
+            console.log('🚀 ~ file: BuyGiftzDialog.js:115 ~ handleBuyPack ~ error', error);
             itsOk = false;
         }
 
@@ -121,6 +119,9 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
         }
     };
 
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+
     return (
         <>
             <AlertDialog
@@ -131,25 +132,23 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
                     <AlertDialogHeader textAlign="center">BUY GIFTZ</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>
                         <Center>
                             <GridItem>
+                                {maxPacksWithIgnis === 0 && (
+                                    <Text textAlign="center" color="red.500" fontWeight="bold">
+                                        You don't have enough IGNIS to buy GIFTZ
+                                    </Text>
+                                )}
                                 <Box>
-                                    {maxPacksWithIgnis === 0 && (
-                                        <Text textAlign="center" color="red.500" fontWeight="bold">
-                                            You don't have enough IGNIS to buy GIFTZ
-                                        </Text>
-                                    )}
-                                </Box>
-                                <Box mt={6}>
                                     <Text textAlign="center" my={2}>
                                         Number of GIFTZs
                                     </Text>
                                     <Center>
-                                        <HStack spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
+                                        <HStack spacing={0} border="1px" rounded="lg" borderColor={borderColor}>
                                             <Button {...dec} rounded="none" borderLeftRadius="lg">
                                                 -
                                             </Button>
@@ -157,7 +156,6 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
                                                 {...input}
                                                 rounded="none"
                                                 border="none"
-                                                color="white"
                                                 textAlign="center"
                                                 fontWeight="bold"
                                                 disabled
@@ -174,7 +172,7 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
                                         Total price
                                     </Text>
                                     <Center>
-                                        <Text color="white" fontWeight="bold" fontSize="2xl">
+                                        <Text fontWeight="bold" fontSize="2xl">
                                             {ignisPrice} IGNIS
                                         </Text>
                                     </Center>
@@ -202,7 +200,6 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
                                 <Box w="100%" mt={2}>
                                     <Button
                                         isDisabled={!isValidPin || passphrase === '' || input.value > maxPacksWithIgnis}
-                                        bgColor="blue.700"
                                         w="100%"
                                         py={6}
                                         onClick={handleBuyPack}>

@@ -22,14 +22,14 @@ import {
     Stack,
     Text,
     Tooltip,
+    useColorModeValue,
     useNumberInput,
     useToast,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { MORPHINGCOMMON, MORPHINGEPIC, MORPHINGRARE } from '../../../data/CONSTANTS';
+import { MORPHINGCOMMON, MORPHINGEPIC, MORPHINGRARE, RARITY_COLORS } from '../../../data/CONSTANTS';
 import { checkPin, sendToMorph } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
-
 
 /**
  * @name MorphDialog
@@ -44,7 +44,6 @@ import { errorToast, okToast } from '../../../utils/alerts';
  * @version 1.0
  */
 const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
-
     const toast = useToast();
 
     const maxCards = Number(card.quantityQNT);
@@ -60,7 +59,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
     const dec = getDecrementButtonProps();
     const input = getInputProps();
     const [morphingCost, setMorphingCost] = useState(0);
-    const [ passPhrase, setPassPhrase ] = useState('')
+    const [passPhrase, setPassPhrase] = useState('');
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -94,15 +93,19 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
             noCards: input.value,
             passPhrase: passPhrase,
             cost: morphingCost,
-        })
-        
-        if(ok){
-            okToast('Morphing successful', toast)
+        });
+
+        if (ok) {
+            okToast('Morphing successful', toast);
             onClose();
         } else {
-            errorToast('Morphing failed', toast)
+            errorToast('Morphing failed', toast);
         }
-    }
+    };
+
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
 
     return (
         <>
@@ -114,8 +117,8 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
-                    <AlertDialogHeader textAlign="center" color="white">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                    <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text mr={2}>MORPHING</Text>
                             <Tooltip label={infoMsg} aria-label="Info about craft" hasArrow variant="black">
@@ -125,28 +128,41 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
-                        <Center rounded="lg" bgColor="whiteAlpha.100" p={4}>
+                        <Center rounded="lg" bgColor={borderColor} p={4}>
                             <Stack direction="row" align="center" spacing={4}>
                                 <Image src={card.cardImgUrl} maxH="5rem" />
                                 <Box>
-                                    <Text fontSize="2xl" fontWeight="bold" color="white">
+                                    <Text fontSize="2xl" fontWeight="bold">
                                         {card.name}
                                     </Text>
-                                    <Text fontSize="sm" color="gray.500">
-                                        {card.channel} / {card.rarity}
-                                    </Text>
-                                    <Text fontSize="sm" color="gray.500">
-                                        Quantity: {card.quantityQNT}
-                                    </Text>
+                                    <Stack direction={'row'} spacing={1}>
+                                        <Text
+                                            textAlign="center"
+                                            fontSize="sm"
+                                            bgGradient={RARITY_COLORS[card.rarity]}
+                                            rounded="lg"
+                                            color="black"
+                                            px={2}>
+                                            {card.rarity}
+                                        </Text>
+                                        <Text
+                                            fontSize="sm"
+                                            bgColor={badgeColor}
+                                            rounded="lg"
+                                            color="white"
+                                            px={2}
+                                            textAlign="center">
+                                            {card.channel}
+                                        </Text>
+                                    </Stack>
+                                    <Text fontSize="sm">Quantity: {card.quantityQNT}</Text>
                                 </Box>
                             </Stack>
                         </Center>
                         <Box my={4}>
-                            <Text textAlign="center" color="white">
-                                Morph cards (max: {maxCards})
-                            </Text>
+                            <Text textAlign="center">Morph cards (max: {maxCards})</Text>
                             <Center my={2}>
-                                <HStack maxW="50%" spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
+                                <HStack maxW="50%" spacing={0} border="1px" rounded="lg" borderColor={borderColor}>
                                     <Button {...dec} rounded="none" borderLeftRadius="lg">
                                         -
                                     </Button>
@@ -154,7 +170,6 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
                                         {...input}
                                         rounded="none"
                                         border="none"
-                                        color="white"
                                         textAlign="center"
                                         fontWeight="bold"
                                         disabled
@@ -199,7 +214,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
                         </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button isDisabled={!isValidPin} bgColor="blue.700" w="100%" py={6} onClick={handleMorph}>
+                        <Button isDisabled={!isValidPin} w="100%" py={6} onClick={handleMorph}>
                             Submit
                         </Button>
                     </AlertDialogFooter>

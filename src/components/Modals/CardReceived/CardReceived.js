@@ -12,6 +12,7 @@ import {
     Image,
     SimpleGrid,
     Text,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
@@ -38,6 +39,9 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
         check();
     }, [cards, currentCards]);
 
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+
     if (currentCards.length === 0) return null;
 
     const RenderCard = ({ card }) => {
@@ -62,13 +66,7 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
                         <Heading textAlign="center">{asset.name}</Heading>
                         <Center mt={2}>
                             <Flex gap={2}>
-                                <Text
-                                    color="white"
-                                    fontSize="md"
-                                    rounded="lg"
-                                    fontWeight="bolder"
-                                    bgColor="whiteAlpha.300"
-                                    px={2}>
+                                <Text fontSize="md" rounded="lg" fontWeight="bolder" bgColor={borderColor} px={2}>
                                     {asset.channel}
                                 </Text>
                                 <Text
@@ -104,7 +102,7 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
                     <AlertDialogHeader textAlign="center">CARD RECEIVED</AlertDialogHeader>
                     <AlertDialogCloseButton onClick={onClose} />
                     <AlertDialogBody mb={2}>

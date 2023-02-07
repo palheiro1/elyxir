@@ -21,6 +21,7 @@ import {
     PinInputField,
     Stack,
     Text,
+    useColorModeValue,
     useNumberInput,
     useToast,
 } from '@chakra-ui/react';
@@ -30,7 +31,7 @@ import { transferAsset } from '../../../services/Ardor/ardorInterface';
 import { checkPin } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { isArdorAccount } from '../../../utils/validators';
-
+import { RARITY_COLORS } from '../../../data/CONSTANTS';
 
 /**
  * @name SendDialog
@@ -45,7 +46,6 @@ import { isArdorAccount } from '../../../utils/validators';
  * @version 1.0
  */
 const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
-
     const toast = useToast();
 
     const [ardorAccount, setArdorAccount] = useState('');
@@ -91,13 +91,17 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
             passPhrase: passphrase,
         });
 
-        if(response) {
-            okToast("Card sent successfully", toast); 
+        if (response) {
+            okToast('Card sent successfully', toast);
             onClose();
         } else {
-            errorToast("Error sending card", toast);
+            errorToast('Error sending card', toast);
         }
     };
+
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
 
     return (
         <>
@@ -109,37 +113,50 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
-                    <AlertDialogHeader textAlign="center" color="white">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                    <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text>SEND CARD</Text>
                         </Center>
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
-                        <Center rounded="lg" bgColor="whiteAlpha.100" p={4}>
+                        <Center rounded="lg" bgColor={borderColor} p={4}>
                             <Stack direction="row" align="center" spacing={4}>
                                 <Image src={card.cardImgUrl} maxH="5rem" />
                                 <Box>
-                                    <Text fontSize="2xl" fontWeight="bold" color="white">
+                                    <Text fontSize="2xl" fontWeight="bold">
                                         {card.name}
                                     </Text>
-                                    <Text fontSize="sm" color="gray.500">
-                                        {card.channel} / {card.rarity}
-                                    </Text>
-                                    <Text fontSize="sm" color="gray.500">
-                                        Quantity: {card.quantityQNT}
-                                    </Text>
+                                    <Stack direction={'row'} spacing={1}>
+                                        <Text
+                                            textAlign="center"
+                                            fontSize="sm"
+                                            bgGradient={RARITY_COLORS[card.rarity]}
+                                            rounded="lg"
+                                            color="black"
+                                            px={2}>
+                                            {card.rarity}
+                                        </Text>
+                                        <Text
+                                            fontSize="sm"
+                                            bgColor={badgeColor}
+                                            rounded="lg"
+                                            color="white"
+                                            px={2}
+                                            textAlign="center">
+                                            {card.channel}
+                                        </Text>
+                                    </Stack>
+                                    <Text fontSize="sm">Quantity: {card.quantityQNT}</Text>
                                 </Box>
                             </Stack>
                         </Center>
 
                         <Box my={4}>
-                            <Text textAlign="center" color="white">
-                                How much cards (max: {maxCards})
-                            </Text>
+                            <Text textAlign="center">How much cards (max: {maxCards})</Text>
                             <Center my={2}>
-                                <HStack maxW="50%" spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
+                                <HStack maxW="50%" spacing={0} border="1px" rounded="lg" borderColor={borderColor}>
                                     <Button {...dec} rounded="none" borderLeftRadius="lg">
                                         -
                                     </Button>
@@ -147,7 +164,6 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                                         {...input}
                                         rounded="none"
                                         border="none"
-                                        color="white"
                                         textAlign="center"
                                         fontWeight="bold"
                                         disabled
@@ -160,7 +176,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                         </Box>
 
                         <FormControl variant="floatingGray" id="Recipient" my={4} mt={8}>
-                            <InputGroup size="lg" border="1px" borderColor="whiteAlpha.300" rounded="lg">
+                            <InputGroup size="lg" border="1px" borderColor={borderColor} rounded="lg">
                                 <Input
                                     placeholder=" "
                                     value={ardorAccount}
