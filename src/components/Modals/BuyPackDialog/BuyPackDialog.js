@@ -154,6 +154,8 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         }
     };
 
+    const bgColor = useColorModeValue("", "#1D1D1D");
+
     return (
         <>
             <AlertDialog
@@ -165,7 +167,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg" color="white">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
                     <AlertDialogHeader textAlign="center">BUY A PACK OF CARDS</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>
@@ -236,7 +238,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     {...input}
                                                     rounded="none"
                                                     border="none"
-                                                    color="white"
                                                     textAlign="center"
                                                     fontWeight="bold"
                                                     disabled
@@ -253,7 +254,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                             Total price
                                         </Text>
                                         <Center>
-                                            <Text color="white" fontWeight="bold" fontSize="2xl">
+                                            <Text fontWeight="bold" fontSize="2xl">
                                                 {value === '1' ? `${ignisPrice} IGNIS` : `${giftzPrice} GIFTZ`}
                                             </Text>
                                         </Center>
@@ -281,7 +282,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     <Box w="100%" mt={2}>
                                         <Button
                                             isDisabled={!isValidPin || passphrase === '' || (value === "1" && input.value > maxPacksWithIgnis) || (value === "2" && input.value > maxPacksWithGiftz)}
-                                            bgColor="blue.700"
                                             w="100%"
                                             py={6}
                                             onClick={handleBuyPack}>
