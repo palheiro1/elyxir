@@ -123,7 +123,7 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
                         </Carousel>
                         <Center>
                             <Button w="60%" size="lg" ref={reference} onClick={onClose} mt={4}>
-                                SHOW INVENTORY
+                                CLOSE
                             </Button>
                         </Center>
                     </AlertDialogBody>
