@@ -1,18 +1,7 @@
-import {
-    Box,
-    Button,
-    Center,
-    HStack,
-    IconButton,
-    Image,
-    Input,
-    Stack,
-    Text,
-    useColorModeValue,
-    useNumberInput,
-} from '@chakra-ui/react';
+import { Box, Button, Center, HStack, IconButton, Image, Input, Stack, Text, useNumberInput } from '@chakra-ui/react';
+
 import { AiFillDelete } from 'react-icons/ai';
-import { RARITY_COLORS } from '../../data/CONSTANTS';
+import CardBadges from './CardBadges';
 
 /**
  * @name BridgeCard
@@ -40,8 +29,6 @@ const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdi
     const dec = getDecrementButtonProps();
     const input = getInputProps();
 
-    const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
-
     return (
         <Stack direction={'row'} minWidth="375px" spacing={4}>
             <Image maxW="75px" src={image} alt={title} shadow="lg" rounded="sm" />
@@ -52,20 +39,7 @@ const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdi
                         {title}
                     </Text>
 
-                    <Stack direction={'row'} spacing={1}>
-                        <Text
-                            textAlign="center"
-                            fontSize="md"
-                            bgGradient={RARITY_COLORS[rarity]}
-                            rounded="lg"
-                            color="black"
-                            px={2}>
-                            {rarity}
-                        </Text>
-                        <Text fontSize="md" bgColor={badgeColor} rounded="lg" color="white" px={2} textAlign="center">
-                            {continent}
-                        </Text>
-                    </Stack>
+                    <CardBadges continent={continent} rarity={rarity} />
 
                     <Text color="grey">Available: {quantity}</Text>
                 </Box>
