@@ -282,9 +282,11 @@ const sendIgnis = async ({
             txdata = { transactionBytes: signed };
         }
 
-        return await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
+        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
+        return respuesta.status === 200;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:262 ~ error', error);
+        return false;
     }
 };
 
@@ -324,9 +326,11 @@ const transferCurrency = async (currency, unitsQNT, recipient, passPhrase, messa
             txdata = { transactionBytes: signed };
         }
 
-        return await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
+        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
+        return respuesta.status === 200;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:305 ~ transferCurrency ~ error', error);
+        return false;
     }
 };
 
@@ -365,9 +369,11 @@ const transferCurrencyZeroFee = async (
             txdata = { transactionBytes: signed };
         }
 
-        return await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
+        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
+        return respuesta.status === 200;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:346 ~ error', error);
+        return false;
     }
 };
 
@@ -443,8 +449,8 @@ export const createAskOrder = async ({ asset, price, quantity, passPhrase }) => 
 
         let txdata = { transactionBytes: signed };
 
-        await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
-        return true;
+        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
+        return respuesta.status === 200;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
         return false;
@@ -469,8 +475,8 @@ export const cancelAskOrder = async (order, passPhrase) => {
 
         const { data: res2 } = await axios.post(URL_CANCEL_ASK_ORDER, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(res2.unsignedTransactionBytes, passPhrase);
-        await axios.post(URL_BROADCAST, qs.stringify({ transactionBytes: signed }), config);
-        return true;
+        const respuesta = await axios.post(URL_BROADCAST, qs.stringify({ transactionBytes: signed }), config);
+        return respuesta.status === 200;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:341 ~ error', error);
         return false;
@@ -510,8 +516,8 @@ export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => 
             passPhrase
         );
         let txdata = { transactionBytes: signed };
-        await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
-        return true;
+        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
+        return respuesta.status === 200;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
         return false;
@@ -538,8 +544,8 @@ export const cancelBidOrder = async (order, passPhrase) => {
         const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
         const txdata = { transactionBytes: signed };
 
-        await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
-        return true;
+        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
+        return respuesta.status === 200;
     } catch (error) {
         console.error(error);
         return false;
@@ -593,7 +599,7 @@ const transferAsset = async ({
         }
 
         const response_2 = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
-        return response_2;
+        return response_2.status === 200;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
         return false;
@@ -668,7 +674,7 @@ const transferGEM = async ({
         }
 
         const response_2 = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
-        return response_2;
+        return response_2.status === 200;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:670 ~ error', error);
         return false;
