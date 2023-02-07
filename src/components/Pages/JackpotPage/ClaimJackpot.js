@@ -18,7 +18,7 @@ const ClaimJackpot = ({ username, cards }) => {
 
     useEffect(() => {
         const checkCards = () => {
-            const lockedCards = cards.some(card => card.quantityQNT > card.unconfirmedQuantityQNT && card.unconfirmedQuantityQNT == 0);
+            const lockedCards = cards.some(card => card.quantityQNT > card.unconfirmedQuantityQNT && card.unconfirmedQuantityQNT === 0);
             setHaveLockedCards(lockedCards);
         };
 

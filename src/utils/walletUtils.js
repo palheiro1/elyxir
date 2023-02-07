@@ -415,9 +415,10 @@ export const sendToJackpot = async ({ cards, passPhrase }) => {
                 priority: 'HIGH',
             })
         );
-        console.log('🚀 ~ file: walletUtils.js:234 ~ sendToJackpot ~ promises', promises);
         const responses = await Promise.allSettled(promises);
-        return responses;
+        // Check all promises
+        const success = responses.every(response => response.status === 'fulfilled');
+        return success;
     }
 };
 
