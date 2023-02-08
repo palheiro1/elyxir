@@ -393,8 +393,9 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
 };
 
 export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reason = '') => {
+    console.log("🚀 ~ file: TableHandlers.js:396 ~ handleMoneyTransfer ~ reason", reason)
     type = type.toLowerCase();
-    // CONTROLAR SI ES JACKPOT!!
+    let fixedAmount = Number.isInteger(amount) ? amount : amount.toFixed(1)
 
     const component = () => {
         return (
@@ -414,7 +415,7 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
                         </Box>
                     </Stack>
                 </Td>
-                <Td>{amount}</Td>
+                <Td>{fixedAmount}</Td>
                 <Td>{date}</Td>
                 <Td>{account}</Td>
             </Tr>
