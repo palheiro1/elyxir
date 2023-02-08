@@ -94,8 +94,16 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     const refTrade = useRef();
 
     // ------------------------------
-    const lowedAskOrders = askOrders.length > 0 ? askOrders[0].priceNQTPerShare / NQTDIVIDER : '';
-    const highBidOrders = bidOrders.length > 0 ? bidOrders[0].priceNQTPerShare / NQTDIVIDER : '';
+    let lowedAskOrders = '';
+    let highBidOrders = '';
+    if (askOrders.length > 0) {
+        const auxAsks = askOrders[0].priceNQTPerShare / NQTDIVIDER;
+        lowedAskOrders = Number.isInteger(auxAsks) ? auxAsks : auxAsks.toFixed(2)
+    }
+    if (bidOrders.length > 0) {
+        const auxBids = bidOrders[0].priceNQTPerShare / NQTDIVIDER;
+        highBidOrders = Number.isInteger(auxBids) ? auxBids : auxBids.toFixed(2)
+    }
     // ------------------------------
 
     return (

@@ -157,8 +157,11 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
 
             askOrders = askResponse.askOrders;
             bidOrders = bidResponse.bidOrders;
-            lastPrice =
-                lastTradesResponse.trades.length > 0 && lastTradesResponse.trades[0].priceNQTPerShare / NQTDIVIDER;
+            lastPrice = 0;
+            if (lastTradesResponse.trades.length > 0) {
+                const auxLastPrice = lastTradesResponse.trades[0].priceNQTPerShare / NQTDIVIDER;
+                lastPrice = Number.isInteger(auxLastPrice) ? auxLastPrice : auxLastPrice.toFixed(2)
+            }
         }
 
         let totalQuantityQNT = 0;
