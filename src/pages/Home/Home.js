@@ -270,7 +270,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         const intervalId = setInterval(() => {
             newTransactionRef.current = null;
             confirmedTransactionRef.current = null;
-        }, REFRESH_DATA_TIME*8);
+        }, REFRESH_DATA_TIME*4);
 
         return () => clearInterval(intervalId);
     }, []);
