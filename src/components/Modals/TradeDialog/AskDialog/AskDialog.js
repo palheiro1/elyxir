@@ -218,8 +218,8 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                             </HStack>
                             <Box w="100%">
                                 <AskAndBidGrid
-                                    askOrders={card.askOrders.slice(0, 3)}
-                                    bidOrders={card.bidOrders.slice(0, 3)}
+                                    askOrders={card.askOrders}
+                                    bidOrders={card.bidOrders}
                                     onlyOneAsset={true}
                                 />
                             </Box>
