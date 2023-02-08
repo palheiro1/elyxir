@@ -70,10 +70,6 @@ const Account = ({ infoAccount }) => {
         setIsInvalidPinDelete(false);
     };
 
-    if (!accountRs || !name || !IGNISBalance || !GIFTZBalance || !GEMSBalance) {
-        return null;
-    }
-
     return (
         <>
             <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={4}>

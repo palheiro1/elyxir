@@ -52,10 +52,17 @@ const UserLogin = ({ setInfoAccount }) => {
     }, [needReload]);
 
     const handleLogin = pin => {
-        const account = checkPin(user, pin, false);
+        let account = checkPin(user, pin, false);
         if (!account) {
             setIsInvalidPin(true);
             return;
+        }
+
+        account = {
+            ...account,
+            GEMSBalance: 0,
+            IGNISBalance: 0,
+            GIFTZBalance: 0,
         }
 
         setInfoAccount(account);
