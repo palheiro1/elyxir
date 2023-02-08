@@ -70,14 +70,17 @@ export const handleNotifications = ({
     const auxUnconfirmed = [...unconfirmedTransactions];
 
     // Check for new transactions
+    let counter = 0;
     for (const tx of newsTransactions) {
         const index = auxUnconfirmed.findIndex(t => t.fullHash === tx.fullHash);
         if (index === -1) {
             const isIncoming = tx.recipientRS === accountRs;
-            handleNewNotification(tx, isIncoming, toast);
+            handleNewNotification(tx, isIncoming, toast, ++counter);
             auxUnconfirmed.push(tx);
         }
     }
+
+    counter = 0;
     // Check for confirmed transactions
     const cardsForNotify = [...cardsNotification];
     for (const tx of auxUnconfirmed) {
@@ -88,7 +91,7 @@ export const handleNotifications = ({
             const amount = Number(tx.attachment.quantityQNT);
 
             if (asset && asset !== 'GEM' && isIncoming) cardsForNotify.push({ asset, amount });
-            else handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived);
+            else handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived, ++counter);
 
             auxUnconfirmed.splice(auxUnconfirmed.indexOf(tx), 1);
         }
