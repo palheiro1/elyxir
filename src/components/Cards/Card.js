@@ -50,8 +50,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     } = card;
 
     let fixOnlyBuy = onlyBuy;
-    if(quantity === 0 && !isMarket)
-        fixOnlyBuy = true;
+    if (quantity === 0 && !isMarket) fixOnlyBuy = true;
 
     // ------------------------------
 
@@ -98,11 +97,11 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     let highBidOrders = '';
     if (askOrders.length > 0) {
         const auxAsks = askOrders[0].priceNQTPerShare / NQTDIVIDER;
-        lowedAskOrders = Number.isInteger(auxAsks) ? auxAsks : auxAsks.toFixed(2)
+        lowedAskOrders = Number.isInteger(auxAsks) ? auxAsks : auxAsks.toFixed(2);
     }
     if (bidOrders.length > 0) {
         const auxBids = bidOrders[0].priceNQTPerShare / NQTDIVIDER;
-        highBidOrders = Number.isInteger(auxBids) ? auxBids : auxBids.toFixed(2)
+        highBidOrders = Number.isInteger(auxBids) ? auxBids : auxBids.toFixed(2);
     }
     // ------------------------------
 
@@ -113,10 +112,10 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                     src={image}
                     alt={name}
                     rounded="lg"
-                    onClick={() => haveThisCard ? handleClick({ card: card }) : null}
+                    onClick={() => (haveThisCard ? handleClick({ card: card }) : null)}
                     style={hover ? hoverStyle : initialStyle}
-                    onMouseEnter={() => haveThisCard ? setHover(true) : null}
-                    onMouseLeave={() => haveThisCard ? setHover(false) : null}
+                    onMouseEnter={() => (haveThisCard ? setHover(true) : null)}
+                    onMouseLeave={() => (haveThisCard ? setHover(false) : null)}
                     opacity={cardOpacity}
                 />
 
@@ -138,7 +137,13 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                 </Grid>
                 {fixOnlyBuy ? (
                     <Box w="100%">
-                        <Button w="100%" color="black" variant="solid" bgColor="#F18800" _hover={{ fontWeight: 'bold', shadow: 'xl' }} onClick={onOpenTrade}>
+                        <Button
+                            w="100%"
+                            color="black"
+                            variant="solid"
+                            bgColor="#F18800"
+                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                            onClick={onOpenTrade}>
                             BUY
                         </Button>
                     </Box>
