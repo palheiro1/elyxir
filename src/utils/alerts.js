@@ -1,31 +1,54 @@
-export const handleNewNotification = (tx, isIncoming, toast) => {
-    const id = tx.fullHash;
-    if (toast.isActive(id)) return;
-
-    toast({
-        title: isIncoming ? 'New incoming transaction' : 'New outgoing transaction',
-        description: isIncoming
-            ? 'New incoming transaction waiting for confirmation'
-            : 'New outgoing transaction waiting for confirmation',
-        status: 'info',
-        duration: 25000,
-        isClosable: true,
-        position: 'bottom-right',
-    });
+export const handleNewNotification = (tx, isIncoming, toast, counter) => {
+    const id = "newNotification";
+    console.log(toast.isActive(id))
+    if (toast.isActive(id)) {
+        toast.update(id, {
+            title: isIncoming ? 'New incoming transactions' : 'New outgoing transactions',
+            description: isIncoming
+                ? `New incoming transactions waiting for confirmation (${counter})`
+                : `New outgoing transactions waiting for confirmation (${counter})`,
+            status: 'info',
+            duration: 25000,
+            isClosable: true,
+            position: 'bottom-right',
+        });
+    } else {
+        toast({
+            title: isIncoming ? 'New incoming transaction' : 'New outgoing transaction',
+            description: isIncoming
+                ? 'New incoming transaction waiting for confirmation'
+                : 'New outgoing transaction waiting for confirmation',
+            status: 'info',
+            duration: 25000,
+            isClosable: true,
+            position: 'bottom-right',
+        });
+    }
 };
 
-export const handleConfirmateNotification = (tx, isIncoming, toast) => {
-    const id = tx.fullHash;
-    if (toast.isActive(id)) return;
-
-    toast({
-        title: 'Transaction confirmed',
-        description: isIncoming ? 'New incoming transaction confirmed' : 'New outgoing transaction confirmed',
-        status: 'success',
-        duration: 25000,
-        isClosable: true,
-        position: 'bottom-right',
-    });
+export const handleConfirmateNotification = (tx, isIncoming, toast, counter) => {
+    const id = "confirmateTransaction";
+    if (toast.isActive(id)) {
+        toast.update(id, {
+            title: isIncoming ? 'New incoming transactions' : 'New outgoing transactions',
+            description: isIncoming
+                ? `New incoming transactions confirmed (${counter})`
+                : `New outgoing transactions confirmed (${counter})`,
+            status: 'success',
+            duration: 25000,
+            isClosable: true,
+            position: 'bottom-right',
+        });
+    } else {
+        toast({
+            title: 'Transaction confirmed',
+            description: isIncoming ? 'New incoming transaction confirmed' : 'New outgoing transaction confirmed',
+            status: 'success',
+            duration: 25000,
+            isClosable: true,
+            position: 'bottom-right',
+        });
+    }
 };
 
 /**
@@ -35,7 +58,7 @@ export const handleConfirmateNotification = (tx, isIncoming, toast) => {
  * @description This function is used to display a success toast
  */
 export const okToast = (text, toast) => {
-    const id = "okToast"
+    const id = 'okToast';
     if (toast.isActive(id)) return;
 
     toast({
@@ -54,7 +77,7 @@ export const okToast = (text, toast) => {
  * @description This function is used to display an error toast
  */
 export const errorToast = (text, toast) => {
-    const id = "errorToast"
+    const id = 'errorToast';
     if (toast.isActive(id)) return;
 
     toast({
@@ -73,7 +96,7 @@ export const errorToast = (text, toast) => {
  * @description This function is used to display a warning toast
  */
 export const warningToast = (text, toast) => {
-    const id = "warningToast"
+    const id = 'warningToast';
     if (toast.isActive(id)) return;
 
     toast({
@@ -92,7 +115,7 @@ export const warningToast = (text, toast) => {
  * @description This function is used to display an info toast
  */
 export const infoToast = (text, toast) => {
-    const id = "infoToast"
+    const id = 'infoToast';
     if (toast.isActive(id)) return;
 
     toast({
