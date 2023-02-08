@@ -18,6 +18,7 @@ import Welcome from './components/Pages/WelcomePage/Welcome';
 // Data
 import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
 
+import './App.css';
 
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
