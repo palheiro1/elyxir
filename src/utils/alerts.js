@@ -1,23 +1,17 @@
-export const handleNewNotification = (tx, isIncoming, toast, counter) => {
-    const id = "newNotification";
-    console.log(toast.isActive(id))
-    if (toast.isActive(id)) {
-        toast.update(id, {
-            title: isIncoming ? 'New incoming transactions' : 'New outgoing transactions',
-            description: isIncoming
-                ? `New incoming transactions waiting for confirmation (${counter})`
-                : `New outgoing transactions waiting for confirmation (${counter})`,
+export const handleNewIncomingNotification = (tx, isIncoming, toast, counter, ref) => {
+    if (ref.current) {
+        toast.update(ref.current, {
+            title: 'New incoming transactions',
+            description: `New incoming transactions waiting for confirmation (${counter})`,
             status: 'info',
             duration: 25000,
             isClosable: true,
             position: 'bottom-right',
         });
     } else {
-        toast({
-            title: isIncoming ? 'New incoming transaction' : 'New outgoing transaction',
-            description: isIncoming
-                ? 'New incoming transaction waiting for confirmation'
-                : 'New outgoing transaction waiting for confirmation',
+        ref.current = toast({
+            title: 'New incoming transaction',
+            description: 'New incoming transaction waiting for confirmation',
             status: 'info',
             duration: 25000,
             isClosable: true,
@@ -26,23 +20,35 @@ export const handleNewNotification = (tx, isIncoming, toast, counter) => {
     }
 };
 
-export const handleConfirmateNotification = (tx, isIncoming, toast, counter) => {
-    const id = "confirmateTransaction";
-    if (toast.isActive(id)) {
-        toast.update(id, {
-            title: isIncoming ? 'New incoming transactions' : 'New outgoing transactions',
-            description: isIncoming
-                ? `New incoming transactions confirmed (${counter})`
-                : `New outgoing transactions confirmed (${counter})`,
-            status: 'success',
+export const handleNewOutcomingNotification = (tx, isIncoming, toast, counter, ref) => {
+    if (ref.current) {
+        toast.update(ref.current, {
+            title: 'New outgoing transactions',
+            description: `New outgoing transactions waiting for confirmation (${counter})`,
+            status: 'info',
             duration: 25000,
             isClosable: true,
             position: 'bottom-right',
         });
     } else {
-        toast({
-            title: 'Transaction confirmed',
-            description: isIncoming ? 'New incoming transaction confirmed' : 'New outgoing transaction confirmed',
+        ref.current = toast({
+            title: isIncoming ? 'New incoming transaction' : 'New outgoing transaction',
+            description: 'New outgoing transaction waiting for confirmation',
+            status: 'info',
+            duration: 25000,
+            isClosable: true,
+            position: 'bottom-right',
+        });
+    }
+};
+
+export const handleConfirmateNotification = (tx, isIncoming, toast, ref) => {
+    if (toast.isActive(ref.current)) {
+        ref.current = toast({
+            title: 'Transactions confirmed',
+            description: isIncoming
+                ? 'All incoming transactions have been confirmed.'
+                : 'All outgoing transactions have been confirmed.',
             status: 'success',
             duration: 25000,
             isClosable: true,

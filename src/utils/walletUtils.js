@@ -19,7 +19,7 @@ import {
     transferGEM,
 } from '../services/Ardor/ardorInterface';
 import { getAsset } from './cardsUtils';
-import { handleConfirmateNotification, handleNewNotification } from './alerts';
+import { handleConfirmateNotification, handleNewIncomingNotification, handleNewOutcomingNotification } from './alerts';
 import { generateHash } from './hash';
 
 /**
@@ -64,23 +64,30 @@ export const handleNotifications = ({
     setCardsNotification,
     toast,
     cards,
-    onOpenCardReceived,
     setUnconfirmedTransactions,
+    newTransactionRef,
+    confirmedTransactionRef,
 }) => {
     const auxUnconfirmed = [...unconfirmedTransactions];
+    let counterIncomings = auxUnconfirmed.filter(tx => tx.recipientRS === accountRs).length;
+    let counterOutcomings = auxUnconfirmed.filter(tx => tx.senderRS === accountRs).length;
 
     // Check for new transactions
-    let counter = 0;
     for (const tx of newsTransactions) {
         const index = auxUnconfirmed.findIndex(t => t.fullHash === tx.fullHash);
         if (index === -1) {
             const isIncoming = tx.recipientRS === accountRs;
-            handleNewNotification(tx, isIncoming, toast, ++counter);
+            if (isIncoming) {
+                counterIncomings++;
+                handleNewIncomingNotification(tx, isIncoming, toast, counterIncomings, newTransactionRef);
+            } else {
+                counterOutcomings++;
+                handleNewOutcomingNotification(tx, isIncoming, toast, counterOutcomings, newTransactionRef);
+            }
             auxUnconfirmed.push(tx);
         }
     }
 
-    counter = 0;
     // Check for confirmed transactions
     const cardsForNotify = [...cardsNotification];
     for (const tx of auxUnconfirmed) {
@@ -90,8 +97,11 @@ export const handleNotifications = ({
             const asset = getAsset(tx.attachment.asset, cards);
             const amount = Number(tx.attachment.quantityQNT);
 
-            if (asset && asset !== 'GEM' && isIncoming) cardsForNotify.push({ asset, amount });
-            else handleConfirmateNotification(tx, isIncoming, toast, onOpenCardReceived, ++counter);
+            if (asset && asset !== 'GEM' && isIncoming) {
+                cardsForNotify.push({ asset, amount });
+            } else {
+                handleConfirmateNotification(tx, isIncoming, toast, confirmedTransactionRef);
+            }
 
             auxUnconfirmed.splice(auxUnconfirmed.indexOf(tx), 1);
         }
@@ -260,14 +270,14 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
         deadline: 1440,
         priority: 'HIGH',
     }).catch(error => {
-        console.log("🚀 ~ file: walletUtils.js:260 ~ sendToMorph ~ transferAsset", error)
+        console.log('🚀 ~ file: walletUtils.js:260 ~ sendToMorph ~ transferAsset', error);
         success = false;
     });
 
     if (!success || !response_1) return false;
 
     // ----------------------------------
-    console.log(cost)
+    console.log(cost);
     const response_2 = await transferGEM({
         quantityQNT: cost * NQTDIVIDER,
         recipient: BUYPACKACCOUNT,
@@ -277,14 +287,13 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
         deadline: 1440,
         priority: 'HIGH',
     }).catch(error => {
-        console.log("🚀 ~ file: walletUtils.js:277 ~ sendToMorph ~ transferGEM", error)
+        console.log('🚀 ~ file: walletUtils.js:277 ~ sendToMorph ~ transferGEM', error);
         success = false;
     });
 
-    if(!success || !response_2) return false;
+    if (!success || !response_2) return false;
     return success;
 };
-    
 
 /**
  * @name sendToCraft

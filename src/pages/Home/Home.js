@@ -68,6 +68,10 @@ import Exchange from '../Exchange/Exchange';
 const Home = ({ infoAccount, setInfoAccount }) => {
     const toast = useToast();
 
+    // Refs
+    const newTransactionRef = useRef();
+    const confirmedTransactionRef = useRef();
+
     // Buy pack dialog
     const { isOpen, onOpen, onClose } = useDisclosure();
     const buyRef = useRef();
@@ -194,8 +198,9 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 setCardsNotification,
                 toast,
                 cards,
-                onOpenCardReceived,
                 setUnconfirmedTransactions,
+                newTransactionRef,
+                confirmedTransactionRef,
             });
             // -----------------------------------------------------------------
 
@@ -261,6 +266,15 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         if (cardsNotification.length > 0) onOpenCardReceived();
     }, [cardsNotification, onOpenCardReceived]);
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            newTransactionRef.current = null;
+            confirmedTransactionRef.current = null;
+        }, REFRESH_DATA_TIME*8);
+
+        return () => clearInterval(intervalId);
+    }, []);
+
     // -----------------------------------------------------------------
     // Load component to render
     // -----------------------------------------------------------------
@@ -276,7 +290,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             <Bridge infoAccount={infoAccount} cards={cardsFiltered} />, // Option 4 - Bridge
             <Jackpot infoAccount={infoAccount} cards={cards} />, // Option 5 - Jackpot
             <Account infoAccount={infoAccount} />, // Option 6 - Account
-            "", // Option 7 - Buy packs
+            '', // Option 7 - Buy packs
             <Exchange infoAccount={infoAccount} />, // Option 8 - Exchange
         ];
 
