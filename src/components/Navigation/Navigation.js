@@ -110,9 +110,14 @@ const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
                 ))}
             </Stack>
             {needTarascaLogo && (
-                <Text textAlign="center" fontSize="small" textColor="gray.600" pb={2} w="100%">
-                    © 2022 Tarasca GmbH. All Rights Reserved.
-                </Text>
+                <>
+                    <Text textAlign="center" fontSize="small" textColor="gray.600" pb={2} w="100%">
+                        © 2022 Tarasca GmbH. All Rights Reserved.
+                    </Text>
+                    <Text textAlign="center" fontSize="small" textColor="gray.600" pb={2} w="100%">
+                        Build: {process.env.REACT_APP_GIT_SHA}
+                    </Text>
+                </>
             )}
         </Stack>
     );
