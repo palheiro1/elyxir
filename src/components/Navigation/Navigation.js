@@ -9,6 +9,7 @@ import {
     Link,
     useColorModeValue,
     useDisclosure,
+    Center,
 } from '@chakra-ui/react';
 
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
@@ -33,7 +34,7 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
     const needChangeColor = isHeader ? true : false;
 
     return (
-        <Box>
+        <Box mt={needTarascaLogo ? 24 : 4}>
             <Flex
                 display={{ base: 'none', md: 'flex' }}
                 color={useColorModeValue('gray.600', 'white')}
@@ -55,10 +56,10 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
                     </Flex>
                 )}
 
-                <Flex flex={{ base: 1 }} justify={'center'}>
-                    <Flex display={{ base: 'none', md: 'flex' }}>
+                <Flex flex={1} justify={'center'}>
+                    <Center display={{ base: 'none', md: 'flex' }}>
                         <DesktopNav needTarascaLogo={needTarascaLogo} isLogged={isLogged} />
-                    </Flex>
+                    </Center>
                 </Flex>
 
                 {needChangeColor && <ColorModeSwitcher position="absolute" right="2.5%" />}
@@ -87,37 +88,44 @@ const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
     const laMitad = Math.round(NAV_ITEMS.length / 2);
 
     return (
-        <Stack direction={'column'} w="100%" py={2}>
-            <Stack direction={'row'} spacing={24} align="center">
-                {NAV_ITEMS.map((navItem, index) => (
-                    <Fragment key={index}>
-                        {laMitad === index && <Logo key="logo" isLogoGame={!needTarascaLogo} />}
-                        <Box key={navItem.label}>
-                            <Link
-                                p={2}
-                                href={navItem.href ?? '#'}
-                                fontSize={'sm'}
-                                fontWeight={'bold'}
-                                color={linkColor}
-                                _hover={{
-                                    textDecoration: 'none',
-                                    color: linkHoverColor,
-                                }}>
-                                {navItem.label}
-                            </Link>
-                        </Box>
-                    </Fragment>
-                ))}
-            </Stack>
+        <Stack direction={'column'} w="100%" position={needTarascaLogo ? 'absolute' : null} bottom={0}>
+            <Center>
+                <Stack direction={'row'} spacing={24} align="center">
+                    {NAV_ITEMS.map((navItem, index) => (
+                        <Fragment key={index}>
+                            {laMitad === index && <Logo key="logo" isLogoGame={!needTarascaLogo} />}
+                            <Box key={navItem.label}>
+                                <Link
+                                    p={2}
+                                    href={navItem.href ?? '#'}
+                                    fontSize={'sm'}
+                                    fontWeight={'bold'}
+                                    color={linkColor}
+                                    _hover={{
+                                        textDecoration: 'none',
+                                        color: linkHoverColor,
+                                    }}>
+                                    {navItem.label}
+                                </Link>
+                            </Box>
+                        </Fragment>
+                    ))}
+                </Stack>
+            </Center>
             {needTarascaLogo && (
-                <>
-                    <Text textAlign="center" fontSize="small" textColor="gray.600" pb={2} w="100%">
-                        © 2022 Tarasca GmbH. All Rights Reserved.
-                    </Text>
-                    <Text textAlign="center" fontSize="small" textColor="gray.600" pb={2} w="100%">
-                        Build: {process.env.REACT_APP_GIT_SHA}
-                    </Text>
-                </>
+                <Stack direction={'column'} w="100%">
+                    <Center>
+                        <Stack direction={'row'} spacing={24} align="center">
+                            <Box px={8}></Box>
+                            <Text textAlign="center" fontSize="small" textColor="gray.600" pb={2} w="100%">
+                                © 2022 Tarasca GmbH. All Rights Reserved.
+                                <br />
+                                Build: {process.env.REACT_APP_GIT_SHA}
+                            </Text>
+                            <Box></Box>
+                        </Stack>
+                    </Center>
+                </Stack>
             )}
         </Stack>
     );

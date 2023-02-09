@@ -307,11 +307,20 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     }, [option, infoAccount, cards, cardsFiltered, gemCards, onOpen, lastOption]);
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
         <>
             {/* MAIN COMPONENT - LATERAL MENU & CHILDREN */}
-            <Box bg={bgColor} m={{ base: 2, md: 12 }} px={{ base: 2, md: 8 }} py={4} rounded="lg">
+            <Box
+                bg={bgColor}
+                m={{ base: 2, md: 12 }}
+                px={{ base: 2, md: 8 }}
+                py={4}
+                rounded="lg"
+                border="1px"
+                borderColor={borderColor}
+                shadow="dark-lg">
                 <LateralMenu
                     infoAccount={infoAccount}
                     handleLogout={handleLogout}
