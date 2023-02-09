@@ -64,8 +64,9 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: isGem ? 0.01 : 1,
         defaultValue: 0,
-        min: 0,
+        min: 1,
         max: maxCards,
+        precision: isGem ? 2 : 0,
     });
 
     const inc = getIncrementButtonProps();

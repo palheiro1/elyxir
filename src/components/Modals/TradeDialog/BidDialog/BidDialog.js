@@ -71,10 +71,11 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
     };
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
-        step: 1,
-        defaultValue: 1,
+        step: isGem ? 0.01 : 1,
+        defaultValue: 0,
         min: 1,
         max: isGem ? 999999 : 999,
+        precision: isGem ? 2 : 0,
     });
 
     const inc = getIncrementButtonProps();
