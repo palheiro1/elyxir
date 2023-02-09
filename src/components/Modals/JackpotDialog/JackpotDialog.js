@@ -134,7 +134,7 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                                             <strong>
                                                 <u>drawing of 7</u>
                                             </strong>{' '}
-                                            Special Cards per cucle.
+                                            Special Cards per cycle.
                                         </Text>
                                     </GridItem>
                                 </Grid>
