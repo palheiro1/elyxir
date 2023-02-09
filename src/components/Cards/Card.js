@@ -106,7 +106,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     // ------------------------------
 
     return (
-        <Box p={3} border="1px" rounded="lg" borderColor="gray" shadow="xl" bgColor={bgColor}>
+        <Box p={3} border="1px" rounded="lg" shadow="xl" bgColor={bgColor} borderColor="whiteAlpha.300">
             <Stack direction="column" spacing={4}>
                 <Image
                     src={image}

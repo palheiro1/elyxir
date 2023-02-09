@@ -4,29 +4,30 @@ import { getAsset } from '../../../../../utils/cardsUtils';
 import AskOrBidItem from './AskOrBidItem';
 
 const AskBidTable = ({ type, onlyOneAsset, orders, cards, onOpen, setSelectedOrder, canDelete, isLeft = false }) => {
-    const bgTitleColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+    const bgTitleColor = useColorModeValue('blackAlpha.50', 'whiteAlpha.50');
     const bgHeadColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
-    const borderColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
 
     const borderLeft = isLeft ? 'lg' : 'none';
     const borderRight = !isLeft ? 'lg' : 'none';
 
     return (
         <TableContainer
+            border="1px"
+            rounded="lg"
+            bg="blackAlpha"
+            shadow="dark-lg"
             height="20rem"
             overflowY={'auto'}
-            border="2px"
-            borderColor={borderColor}
+            borderColor={bgHeadColor}
             borderLeftRadius={borderLeft}
             borderRightRadius={borderRight}
-            shadow="inner"
-            boxShadow="md">
+            boxShadow="inner">
             <Text textAlign="center" p={4} fontSize="lg" borderBottom="1px" bgColor={bgTitleColor}>
                 {type}
             </Text>
 
             <Table variant="simple">
-                <Thead backgroundColor={bgHeadColor}>
+                <Thead>
                     <Tr>
                         {!onlyOneAsset && <Th textAlign="center">Asset</Th>}
                         <Th textAlign="center">Ignis</Th>

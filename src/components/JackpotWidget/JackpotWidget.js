@@ -120,7 +120,11 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
                             p={4}
                             direction={{ base: 'column', lg: 'row' }}
                             divider={<StackDivider borderColor="blue.800" />}>
-                            <VCountdown jackpotTimer={jackpotTimer} jackpotBalance={jackpotBalance} jackpotBalanceUSD={jackpotBalanceUSD} />
+                            <VCountdown
+                                jackpotTimer={jackpotTimer}
+                                jackpotBalance={jackpotBalance}
+                                jackpotBalanceUSD={jackpotBalanceUSD}
+                            />
 
                             <BlockInfo jackpotStatus={jackpotStatus} jackpotTimer={jackpotTimer} />
                         </Stack>
@@ -139,7 +143,12 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
                             shadow="dark-lg"
                             direction="row">
                             <GridItem colSpan={2} p={4} borderLeftRadius="lg">
-                                <HCountdown jackpotTimer={jackpotTimer} numParticipants={numParticipants} jackpotBalance={jackpotBalance} jackpotBalanceUSD={jackpotBalanceUSD}  />
+                                <HCountdown
+                                    jackpotTimer={jackpotTimer}
+                                    numParticipants={numParticipants}
+                                    jackpotBalance={jackpotBalance}
+                                    jackpotBalanceUSD={jackpotBalanceUSD}
+                                />
                             </GridItem>
 
                             <GridItem

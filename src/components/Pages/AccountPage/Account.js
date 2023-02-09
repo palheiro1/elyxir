@@ -70,6 +70,8 @@ const Account = ({ infoAccount }) => {
         setIsInvalidPinDelete(false);
     };
 
+    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+
     return (
         <>
             <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={4}>
@@ -82,15 +84,22 @@ const Account = ({ infoAccount }) => {
                     bgColor={bgColor}
                 />
                 <GridItem>
-                    <Box p={4} bgColor={bgColor} rounded="lg" mb={2}>
+                    <Box
+                        p={4}
+                        bgColor={bgColor}
+                        rounded="lg"
+                        mb={2}
+                        border="1px"
+                        borderColor={borderColor}
+                        shadow="dark-lg">
                         <Heading fontSize="lg" pb={2}>
                             Backup your passphrase
                         </Heading>
-                        <Text fontSize="sm" pb={2}>
+                        <Text fontSize="sm" pb={2} textAlign="justify">
                             Risk of loosing your funds and cards: You store your pass phrase on device. You should
                             export the passphrase and store it somewhere safe.
                         </Text>
-                        <Text fontSize="sm">
+                        <Text fontSize="sm" textAlign="justify">
                             The passphrase is stored encrypted, however you shouldnt use the game wallet for significant
                             funds. If you ever give this device to somebody else, you should delete your information
                             from it.
@@ -125,11 +134,18 @@ const Account = ({ infoAccount }) => {
                     </Box>
                 </GridItem>
                 <GridItem>
-                    <Box p={4} bgColor={bgColor} rounded="lg" mb={2}>
+                    <Box
+                        p={4}
+                        bgColor={bgColor}
+                        rounded="lg"
+                        mb={2}
+                        border="1px"
+                        borderColor={borderColor}
+                        shadow="dark-lg">
                         <Heading fontSize="lg" pb={2}>
                             Delete account from device
                         </Heading>
-                        <Text fontSize="sm">
+                        <Text fontSize="sm" textAlign="justify">
                             This deletes stored information from this device. Your account remains available on the
                             network, use Backup Passphrase to save your private key for later use.
                         </Text>

@@ -4,7 +4,6 @@ import { getAsset } from '../../../../utils/cardsUtils';
 import { getTxTimestamp } from '../../../../utils/txUtils';
 import TradesOrOrderItem from './TradesOrOrderItem';
 
-
 /**
  * @name TradesAndOrderTable
  * @description Component to show the trades and orders of a user - TABLE
@@ -16,7 +15,6 @@ import TradesOrOrderItem from './TradesOrOrderItem';
  * @version 1.0
  */
 const TradesAndOrderTable = ({ account, trades, cards }) => {
-
     const imSeller = trade => {
         return trade.sellerRS === account;
     };
@@ -24,12 +22,19 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
     const bgHeadColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
-        <TableContainer mt={4} border="1px" borderColor="whiteAlpha.100" rounded="lg" shadow="lg" boxShadow="md">
+        <TableContainer
+            mt={4}
+            border="1px"
+            rounded="lg"
+            boxShadow="inner"
+            borderColor={bgHeadColor}
+            bg="blackAlpha"
+            shadow="dark-lg">
             <Table>
-                <Thead bgColor={bgHeadColor}>
+                <Thead>
                     <Tr>
-                        <Th/>
-                        <Th textAlign="center">Title</Th>
+                        <Th />
+                        <Th>Title</Th>
                         <Th>Amount</Th>
                         <Th>Price</Th>
                         <Th>Date and Time</Th>

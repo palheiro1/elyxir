@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Center, Spinner, TableContainer, Text, Table, Thead, Tbody, Tr, Th } from '@chakra-ui/react';
+import { Box, Button, Center, Spinner, TableContainer, Text, Table, Thead, Tbody, Tr, Th, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getBlockchainStatus } from '../../../services/Ardor/ardorInterface';
 import { getTxTimestamp } from '../../../utils/txUtils';
@@ -154,6 +154,8 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
             processTransactions();
     }, [infoAccount, transactions, blockchainStatus.epoch_beginning, needReload, collectionCardsStatic]);
 
+    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+
     return (
         <Box>
             <SortAndFilterTxs
@@ -170,11 +172,12 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
             ) : (
                 <TableContainer
                     border="1px"
-                    borderColor="gray"
-                    rounded="2xl"
+                    borderColor={borderColor}
+                    rounded="lg"
+                    bg="blackAlpha"
+                    shadow="dark-lg"
                     p={2}
-                    shadow="inner"
-                    boxShadow="md"
+                    boxShadow="inner"
                     textAlign="center"
                     maxW={{ base: '100%', md: '80%', lg: '100%' }}>
                     {haveUnconfirmed && (
