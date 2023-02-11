@@ -106,11 +106,11 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                 return;
         }
 
-        if (!response) {
-            errorToast(`Error sending ${currency.name}: ${response.errorDescription}`, toast);
-        } else {
+        if (response) {
             okToast(`${currency.name} sent successfully`, toast);
             onClose();
+        } else {
+            errorToast(`Error sending ${currency.name}: ${response.errorDescription}`, toast);
         }
     };
 

@@ -13,7 +13,6 @@ const SigBroLogin = ({ setInfoAccount }) => {
     const DEFAULT_ROUTE = 'https://dl.sigbro.com/auth/';
     const DEEP_LINK = `${DEFAULT_ROUTE}${actualUUID}/`;
 
-    console.log('🚀 ~ file: SigBroLogin.js:16 ~ SigBroLogin ~ DEEP_LINK', DEEP_LINK);
     useEffect(() => {
         const getUUID = async () => {
             const auxUuid = uuid();
@@ -38,11 +37,10 @@ const SigBroLogin = ({ setInfoAccount }) => {
             const isValid = await checkIfIsValid(actualUUID, check.token);
             if (!isValid.valid) return;
 
-            console.log('Is valid, setting info account...', check);
-
             setInfoAccount({
                 accountRs: check.accountRS,
                 token: check.token,
+                isSigBro: true,
                 GEMSBalance: 0,
                 IGNISBalance: 0,
                 GIFTZBalance: 0,
