@@ -1,4 +1,14 @@
-import { HStack, IconButton, PinInput, PinInputField, Select, Stack, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+    Center,
+    HStack,
+    IconButton,
+    PinInput,
+    PinInputField,
+    Select,
+    Stack,
+    useDisclosure,
+    useToast,
+} from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { getAllUsers, setNotFirstTime } from '../../../../utils/storage';
 import ConfirmDialog from '../../../Modals/ConfirmDialog/ConfirmDialog';
@@ -63,7 +73,7 @@ const UserLogin = ({ setInfoAccount }) => {
             GEMSBalance: 0,
             IGNISBalance: 0,
             GIFTZBalance: 0,
-        }
+        };
 
         setInfoAccount(account);
 
@@ -81,18 +91,34 @@ const UserLogin = ({ setInfoAccount }) => {
     };
 
     return (
-        <Stack spacing={3} pt={4}>
-            <HStack>
-                <Select size="lg" w="66%" onChange={handleSelectUser} variant="filled">
-                    {accounts.map(account => (
-                        <option key={account} value={account}>
-                            {account}
-                        </option>
-                    ))}
-                </Select>
-                {accounts.length > 0 && <IconButton p={6} icon={<ImCross />} onClick={onOpen} />}
-            </HStack>
+        <>
+            <Stack spacing={3} pt={4} w="100%">
+                <HStack>
+                    <Select size="lg" w="100%" onChange={handleSelectUser} variant="filled">
+                        {accounts.map(account => (
+                            <option key={account} value={account}>
+                                {account}
+                            </option>
+                        ))}
+                    </Select>
+                    {accounts.length > 0 && <IconButton p={6} icon={<ImCross />} onClick={onOpen} />}
+                </HStack>
 
+                <Center gap={12} w="100%">
+                    <PinInput
+                        size="lg"
+                        placeholder="🔒"
+                        onChange={handleCompletePin}
+                        isInvalid={isInvalidPin}
+                        variant="filled"
+                        mask>
+                        <PinInputField />
+                        <PinInputField />
+                        <PinInputField />
+                        <PinInputField />
+                    </PinInput>
+                </Center>
+            </Stack>
             <ConfirmDialog
                 reference={reference}
                 isOpen={isOpen}
@@ -100,22 +126,7 @@ const UserLogin = ({ setInfoAccount }) => {
                 setNeedReload={setNeedReload}
                 user={user}
             />
-
-            <HStack spacing={7}>
-                <PinInput
-                    size="lg"
-                    placeholder="🔒"
-                    onChange={handleCompletePin}
-                    isInvalid={isInvalidPin}
-                    variant="filled"
-                    mask>
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                </PinInput>
-            </HStack>
-        </Stack>
+        </>
     );
 };
 
