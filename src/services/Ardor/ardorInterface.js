@@ -248,6 +248,7 @@ const sendIgnis = async ({
     deadline = 30,
     priority = 'NORMAL',
 }) => {
+    if(!passPhrase || !recipient || !amountNQT) return false;
     try {
         const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 
@@ -291,6 +292,7 @@ const sendIgnis = async ({
 };
 
 const transferCurrency = async (currency, unitsQNT, recipient, passPhrase, message = '', messagePrunable = true) => {
+    if(!passPhrase || !recipient || !currency || !unitsQNT) return false;
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 
     let query = {
@@ -342,6 +344,7 @@ const transferCurrencyZeroFee = async (
     message = '',
     messagePrunable = true
 ) => {
+    if(!passPhrase || !recipient || !currency || !unitsQNT) return false;
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
     let query = {
         chain: 2,
@@ -378,6 +381,7 @@ const transferCurrencyZeroFee = async (
 };
 
 export const buyGiftz = async ({ passphrase, amountNQT }) => {
+    if(!passphrase || !amountNQT) return false;
     const message = JSON.stringify({ contract: 'IgnisAssetLottery' });
     const publicKey = ardorjs.secretPhraseToPublicKey(passphrase);
     var query = {
@@ -419,6 +423,7 @@ export const buyGiftz = async ({ passphrase, amountNQT }) => {
 // ----------------------------------------------
 
 export const createAskOrder = async ({ asset, price, quantity, passPhrase }) => {
+    if(!passPhrase || !asset || !price || !quantity) return false;
     const ORDERTYPE = 'placeAskOrder';
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 
@@ -458,6 +463,7 @@ export const createAskOrder = async ({ asset, price, quantity, passPhrase }) => 
 };
 
 export const cancelAskOrder = async (order, passPhrase) => {
+    if (!order || !passPhrase) return false;
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
     const query = {
         chain: 2,
@@ -484,10 +490,7 @@ export const cancelAskOrder = async (order, passPhrase) => {
 };
 
 export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => {
-    if (!passPhrase) throw new Error('PassPhrase is required');
-    if (!asset) throw new Error('AssetID is required');
-    if (!price) throw new Error('Price is required');
-    if (!quantity) throw new Error('Quantity is required');
+    if(!passPhrase || !asset || !price || !quantity) return false;
 
     const ORDERTYPE = 'placeBidOrder';
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
@@ -525,6 +528,7 @@ export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => 
 };
 
 export const cancelBidOrder = async (order, passPhrase) => {
+    if(!order || !passPhrase) return false;
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
     const query = {
         chain: 2,
@@ -566,6 +570,7 @@ const transferAsset = async ({
     deadline = 30,
     priority = 'NORMAL',
 }) => {
+    if (!asset || !quantityQNT || !recipient || !passPhrase) return false;
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 
     let query = {
@@ -639,6 +644,7 @@ const transferGEM = async ({
     deadline = 30,
     priority = 'NORMAL',
 }) => {
+    if (!quantityQNT || !recipient || !passPhrase) return false;
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 
     let query = {

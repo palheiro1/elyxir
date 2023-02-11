@@ -83,7 +83,6 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                     amountNQT: input.value * NQTDIVIDER,
                     recipient: ardorAccount,
                     passPhrase: passphrase,
-                    message: '',
                 });
                 break;
             case 'GIFTZ':
