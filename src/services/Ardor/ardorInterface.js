@@ -601,7 +601,7 @@ const transferAsset = async ({
         const response_2 = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
         return response_2.status === 200;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
+        console.log("🚀 ~ file: ardorInterface.js:604 ~ error", error)
         return false;
     }
 };
