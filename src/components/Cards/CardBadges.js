@@ -6,7 +6,7 @@ const CardBadges = ({ rarity, continent, size = "md" }) => {
     const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
 
     return (
-        <Stack direction={'row'} spacing={1}>
+        <Stack direction={{ base: 'column', md: 'row' }} spacing={1} align="center">
             <Text
                 textAlign="center"
                 fontSize={size}
