@@ -20,11 +20,6 @@ import TableCard from '../../../../Cards/TableCard';
 const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setSelectedOrder, onlyOneAsset, canDelete = false }) => {
     // ------------------------------------------------------------
     const [hover, setHover] = useState(false);
-    const handleHover = (value) => {
-        if(canDelete) {
-            setHover(value);
-        }
-    };
     // ------------------------------------------------------------
 
     ignis = Number(ignis);
@@ -62,6 +57,7 @@ const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setS
     const hoverStyle = {
         opacity: 0.6,
         cursor: 'pointer',
+        fontWeight: 'bold',
     };
 
     const normalStyle = {
@@ -88,8 +84,8 @@ const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setS
     return (
         <Tr
             style={hover ? hoverStyle : normalStyle}
-            onMouseEnter={() => handleHover(true)}
-            onMouseLeave={() => handleHover(false)}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
             onClick={canDelete ? handleDeleteOrder : handleSelectOrder}>
             {!onlyOneAsset && <Td textAlign="center">{nameHover}</Td> }
             <Td textAlign="center">{fixedIgnis}</Td>
