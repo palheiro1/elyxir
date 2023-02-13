@@ -20,7 +20,9 @@ import {
     NumberInputField,
     PinInput,
     PinInputField,
+    Stack,
     Text,
+    useBreakpointValue,
     useColorModeValue,
     useNumberInput,
     useToast,
@@ -127,6 +129,15 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
 
     const bgColor = useColorModeValue('', '#1D1D1D');
     const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const isCentered = useBreakpointValue(
+        {
+            base: false,
+            md: true,
+        },
+        {
+            fallback: false,
+        }
+    );
 
     return (
         <>
@@ -136,7 +147,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                 leastDestructiveRef={reference}
                 onClose={onClose}
                 isOpen={isOpen}
-                isCentered>
+                isCentered={isCentered}>
                 <AlertDialogOverlay />
 
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
@@ -148,7 +159,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
                         <VStack>
-                            <HStack spacing={4}>
+                            <Stack direction={{ base: "column", md: "row"}} spacing={4}>
                                 <Box minW="50%">
                                     <Image src={!isGem ? card.cardImgUrl : gemImg} maxH="25rem" />
                                 </Box>
@@ -240,7 +251,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                         </Button>
                                     </Box>
                                 </VStack>
-                            </HStack>
+                            </Stack>
                             <Box w="100%">
                                 <AskAndBidGrid
                                     askOrders={card.askOrders.slice(0, 3)}
