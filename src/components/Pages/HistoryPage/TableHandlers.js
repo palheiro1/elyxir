@@ -1,4 +1,6 @@
-import { Box, Stack, Text, Tr, Td } from '@chakra-ui/react';
+import { Box, Stack, Text } from '@chakra-ui/react';
+import { Tr } from '../../ResponsiveTable/tr';
+import { Td } from '../../ResponsiveTable/td';
 import { FaFilter, FaGem, FaCoins } from 'react-icons/fa';
 
 // Components
@@ -162,7 +164,7 @@ export const handleIncomingGIFTZ = (amount, date) => {
     const realAmount = amount.attachment.unitsQNT;
     const component = () => {
         return (
-            <Tr>
+            <Tr border={{ base: "2px", md: "0px"}} rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
                 <Td>
                     <InOutTransaction type={'in'} />
                 </Td>
@@ -195,7 +197,7 @@ export const handleIncomingGIFTZ = (amount, date) => {
 export const handleMessage = (type, msg, date) => {
     const component = () => {
         return (
-            <Tr>
+            <Tr border={{ base: "2px", md: "0px"}} rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
                 <Td>{msg}</Td>
                 <Td>
                     <Stack direction="row" align="center" spacing={24}>
@@ -228,7 +230,7 @@ export const cancelledOrder = (type, date, account) => {
 
     const component = () => {
         return (
-            <Tr>
+            <Tr border={{ base: "2px", md: "0px"}} rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
                 <Td>
                     <InOutTransaction type={type} />
                 </Td>
@@ -266,7 +268,7 @@ export const handleGEM = (type, amount, date, account) => {
     const fixedAmount = Number.isInteger(amount) ? amount.toFixed(0) : amount.toFixed(2);
     const component = () => {
         return (
-            <Tr>
+            <Tr border={{ base: "2px", md: "0px"}} rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
                 <Td>
                     <InOutTransaction type={type} />
                 </Td>
@@ -301,7 +303,7 @@ export const handleCardTransfer = (type, amount, date, account, card) => {
 
     const component = () => {
         return (
-            <Tr>
+            <Tr border={{ base: "2px", md: "0px"}} rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
                 <Td>
                     <InOutTransaction type={type} />
                 </Td>
@@ -330,7 +332,7 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
 
     const component = () => {
         return (
-            <Tr>
+            <Tr border={{ base: "2px", md: "0px"}} rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
                 <Td>
                     <InOutTransaction type={'placed'} />
                 </Td>
@@ -363,7 +365,7 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
     type = type.toLowerCase();
     const component = () => {
         return (
-            <Tr>
+            <Tr border={{ base: "2px", md: "0px"}} rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
                 <Td>
                     <InOutTransaction type={type} />
                 </Td>
@@ -393,13 +395,13 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
 };
 
 export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reason = '') => {
-    console.log("🚀 ~ file: TableHandlers.js:396 ~ handleMoneyTransfer ~ reason", reason)
+    console.log('🚀 ~ file: TableHandlers.js:396 ~ handleMoneyTransfer ~ reason', reason);
     type = type.toLowerCase();
-    let fixedAmount = Number.isInteger(amount) ? amount : amount.toFixed(1)
+    let fixedAmount = Number.isInteger(amount) ? amount : amount.toFixed(1);
 
     const component = () => {
         return (
-            <Tr>
+            <Tr border={{ base: "2px", md: "0px"}} rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
                 <Td>
                     <InOutTransaction type={type} />
                 </Td>

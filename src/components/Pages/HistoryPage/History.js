@@ -1,6 +1,21 @@
-import React from 'react';
-import { Box, Button, Center, Spinner, TableContainer, Text, Table, Thead, Tbody, Tr, Th, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+
+import {
+    Box,
+    Button,
+    Center,
+    Spinner,
+    TableContainer,
+    Text,
+    useColorModeValue,
+} from '@chakra-ui/react';
+
+import { Table } from '../../ResponsiveTable/table';
+import { Tbody } from '../../ResponsiveTable/tbody';
+import { Thead } from '../../ResponsiveTable/thead';
+import { Tr } from '../../ResponsiveTable/tr';
+import { Th } from '../../ResponsiveTable/th';
+
 import { getBlockchainStatus } from '../../../services/Ardor/ardorInterface';
 import { getTxTimestamp } from '../../../utils/txUtils';
 import SortAndFilterTxs from '../../SortAndFilters/SortAndFilterTxs';
@@ -171,6 +186,8 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                 </Center>
             ) : (
                 <TableContainer
+                    display="flex"
+                    flexDirection="column"
                     border="1px"
                     borderColor={borderColor}
                     rounded="lg"
@@ -190,7 +207,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                     )}
                     <Table variant="simple" size={{ base: 'sm', lg: 'md' }}>
                         <Thead>
-                            <Tr>
+                            <Tr w="1rem">
                                 <Th />
                                 <Th>Title</Th>
                                 <Th>Amount</Th>
