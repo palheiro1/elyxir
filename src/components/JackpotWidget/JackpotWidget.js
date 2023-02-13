@@ -104,6 +104,7 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
     }, [jackpotStatus]);
 
     const bgColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
+    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
         <>
@@ -137,7 +138,7 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
                         <Grid
                             templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
                             border="1px"
-                            borderColor="whiteAlpha.300"
+                            borderColor={borderColor}
                             rounded="lg"
                             bg="blackAlpha"
                             shadow="dark-lg"

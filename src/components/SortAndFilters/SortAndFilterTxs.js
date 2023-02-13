@@ -1,4 +1,4 @@
-import { Box, Select, Stack, Text } from '@chakra-ui/react';
+import { Box, Select, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaRegPaperPlane, FaFilter } from 'react-icons/fa';
 
@@ -45,9 +45,19 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
         }
     }, [transactions, filter, sort, setFilteredTransactions, setVisibleTransactions]);
 
+    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+
     return (
         <Stack direction={{ base: 'column', md: 'row' }} pb={2}>
-            <Stack direction="row" border="1px" borderColor="gray.600" rounded="lg" px={2} align="center">
+            <Stack
+                direction="row"
+                border="1px"
+                borderColor={borderColor}
+                rounded="lg"
+                bg="blackAlpha"
+                shadow="md"
+                px={2}
+                align="center">
                 <Box pl={1} py={2}>
                     <FaRegPaperPlane />
                 </Box>
@@ -65,7 +75,16 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                 right="4.8%"
                 direction="row"
                 w={{ base: '100%', md: 'unset' }}>
-                <Stack direction="row" border="1px" borderColor="gray.600" rounded="lg" px={2} align="center" w={{ base: '100%', md: 'unset' }}>
+                <Stack
+                    direction="row"
+                    border="1px"
+                    borderColor={borderColor}
+                    rounded="lg"
+                    bg="blackAlpha"
+                    shadow="md"
+                    px={2}
+                    align="center"
+                    w={{ base: '100%', md: 'unset' }}>
                     <Box pl={1} py={2}>
                         <FaFilter />
                     </Box>

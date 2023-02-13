@@ -72,14 +72,18 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
         }
     };
 
+    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+
     return (
         <Stack direction={['column', 'row']} align="center" justify="space-between" position="relative" mb={4}>
             {needSorting && (
                 <Stack
                     direction="row"
                     border="1px"
-                    borderColor="gray.600"
+                    borderColor={borderColor}
                     rounded="lg"
+                    bg="blackAlpha"
+                    shadow="md"
                     px={2}
                     align="center"
                     w={{ base: '100%', md: 'unset' }}>
