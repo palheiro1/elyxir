@@ -268,7 +268,7 @@ export const handleGEM = (type, amount, date, account) => {
     const fixedAmount = Number.isInteger(amount) ? amount.toFixed(0) : amount.toFixed(2);
     const component = () => {
         return (
-            <Tr border={{ base: "2px", md: "0px"}} rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
+            <Tr border={{ base: "2px", md: "0px"}} borderColor="whiteAlpha.300" rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
                 <Td>
                     <InOutTransaction type={type} />
                 </Td>
@@ -303,7 +303,7 @@ export const handleCardTransfer = (type, amount, date, account, card) => {
 
     const component = () => {
         return (
-            <Tr border={{ base: "2px", md: "0px"}} rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
+            <Tr border={{ base: "2px", md: "0px"}} borderColor="whiteAlpha.300" rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
                 <Td>
                     <InOutTransaction type={type} />
                 </Td>
@@ -332,7 +332,7 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
 
     const component = () => {
         return (
-            <Tr border={{ base: "2px", md: "0px"}} rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
+            <Tr border={{ base: "2px", md: "0px"}} borderColor="whiteAlpha.300" rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
                 <Td>
                     <InOutTransaction type={'placed'} />
                 </Td>
@@ -365,7 +365,7 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
     type = type.toLowerCase();
     const component = () => {
         return (
-            <Tr border={{ base: "2px", md: "0px"}} rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
+            <Tr border={{ base: "2px", md: "0px"}} borderColor="whiteAlpha.300" rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
                 <Td>
                     <InOutTransaction type={type} />
                 </Td>
@@ -401,7 +401,7 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
 
     const component = () => {
         return (
-            <Tr border={{ base: "2px", md: "0px"}} rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
+            <Tr border={{ base: "2px", md: "0px"}} borderColor="whiteAlpha.300" rounded={{ base: "md", md: "unset"}} m={{ base: 2, md: 0}}>
                 <Td>
                     <InOutTransaction type={type} />
                 </Td>

@@ -186,8 +186,6 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                 </Center>
             ) : (
                 <TableContainer
-                    display="flex"
-                    flexDirection="column"
                     border="1px"
                     borderColor={borderColor}
                     rounded="lg"
@@ -196,7 +194,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                     p={2}
                     boxShadow="inner"
                     textAlign="center"
-                    maxW={{ base: '100%', md: '80%', lg: '100%' }}>
+                    maxW={{ base: '100%', md: '80%', lg: '70vw', xl: "100%" }}>
                     {haveUnconfirmed && (
                         <Center w="100%" textAlign="center" py={4} gap={4}>
                             <Spinner size="md" />{' '}
