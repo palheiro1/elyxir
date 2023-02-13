@@ -54,6 +54,8 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
 
+    const [selectedItem, setSelectedItem] = useState(''); // selected item in the grid
+
     const [priceCard, setPriceCard] = useState(0);
     const [maxPrice, setMaxPrice] = useState(0);
 
@@ -72,12 +74,15 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
         }
     };
 
+    const [value, setValue] = useState(0);
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: isGem ? 0.01 : 1,
         defaultValue: 0,
         min: 1,
         max: isGem ? 999999 : 999,
         precision: isGem ? 2 : 0,
+        value,
+        onChange: setValue,
     });
 
     const inc = getIncrementButtonProps();
@@ -139,13 +144,32 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
         }
     );
 
+    useEffect(() => {
+        const checkChange = () => {
+            if (selectedItem && selectedItem.price < maxPrice) {
+                setPriceCard(selectedItem.price);
+                setValue(selectedItem.quantity);
+                setSelectedItem('');
+            }
+        };
+
+        checkChange();
+    }, [selectedItem, maxPrice]);
+
+    const handleClose = () => {
+        setSelectedItem('');
+        setValue(0);
+        setPriceCard(0);
+        onClose();
+    };
+
     return (
         <>
             <AlertDialog
                 size="6xl"
                 motionPreset="slideInBottom"
                 leastDestructiveRef={reference}
-                onClose={onClose}
+                onClose={handleClose}
                 isOpen={isOpen}
                 isCentered={isCentered}>
                 <AlertDialogOverlay />
@@ -159,7 +183,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
                         <VStack>
-                            <Stack direction={{ base: "column", md: "row"}} spacing={4}>
+                            <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
                                 <Box minW="50%">
                                     <Image src={!isGem ? card.cardImgUrl : gemImg} maxH="25rem" />
                                 </Box>
@@ -257,6 +281,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                     askOrders={card.askOrders.slice(0, 3)}
                                     bidOrders={card.bidOrders.slice(0, 3)}
                                     onlyOneAsset={true}
+                                    setSelectedItem={setSelectedItem}
                                 />
                             </Box>
                         </VStack>

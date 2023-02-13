@@ -28,7 +28,7 @@ import {
     useToast,
     VStack,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NQTDIVIDER } from '../../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../../utils/alerts';
 import { checkPin, sendAskOrder } from '../../../../utils/walletUtils';
@@ -57,18 +57,23 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
     const gemImg = './images/gems.svg';
     const maxCards = isGem ? card.quantityQNT / NQTDIVIDER : card.quantityQNT;
 
+    const [selectedItem, setSelectedItem] = useState(''); // selected item in the grid
+
     const [priceCard, setPriceCard] = useState(0);
     const handlePriceCard = e => {
         e.preventDefault();
         setPriceCard(e.target.value);
     };
 
+    const [value, setValue] = useState(0);
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: isGem ? 0.01 : 1,
         defaultValue: 0,
         min: 1,
         max: maxCards,
         precision: isGem ? 2 : 0,
+        value: value,
+        onChange: setValue,
     });
 
     const inc = getIncrementButtonProps();
@@ -115,13 +120,30 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
         }
     );
 
+    useEffect(() => {
+        const checkChange = () => {
+            if (selectedItem) {
+                setPriceCard(selectedItem.price);
+                setValue(selectedItem.quantity);
+            }
+        };
+
+        checkChange();
+    }, [selectedItem]);
+
+    const handleClose = () => {
+        setSelectedItem('');
+        setValue(0);
+        onClose();
+    };
+
     return (
         <>
             <AlertDialog
                 size="6xl"
                 motionPreset="slideInBottom"
                 leastDestructiveRef={reference}
-                onClose={onClose}
+                onClose={handleClose}
                 isOpen={isOpen}
                 isCentered={isCentered}>
                 <AlertDialogOverlay />
@@ -233,6 +255,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                     askOrders={card.askOrders}
                                     bidOrders={card.bidOrders}
                                     onlyOneAsset={true}
+                                    setSelectedItem={setSelectedItem}
                                 />
                             </Box>
                         </VStack>

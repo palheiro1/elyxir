@@ -55,6 +55,10 @@ const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setS
         onOpen();
     };
 
+    const handleSelectOrder = () => {
+        setSelectedOrder({ order, isAsk, price: fixedIgnis, quantity: fixedAmount });
+    };
+
     const hoverStyle = {
         opacity: 0.6,
         cursor: 'pointer',
@@ -86,7 +90,7 @@ const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setS
             style={hover ? hoverStyle : normalStyle}
             onMouseEnter={() => handleHover(true)}
             onMouseLeave={() => handleHover(false)}
-            onClick={canDelete ? handleDeleteOrder : null}>
+            onClick={canDelete ? handleDeleteOrder : handleSelectOrder}>
             {!onlyOneAsset && <Td textAlign="center">{nameHover}</Td> }
             <Td textAlign="center">{fixedIgnis}</Td>
             <Td textAlign="center">{showAmount}</Td>

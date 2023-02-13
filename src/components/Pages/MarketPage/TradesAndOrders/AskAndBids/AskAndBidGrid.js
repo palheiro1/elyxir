@@ -1,5 +1,5 @@
 import { SimpleGrid, useDisclosure } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CancelDialog from '../../../../Modals/TradeDialog/CancelDialog/CancelDialog';
 import AskBidTable from './AskAndBidTable';
 
@@ -15,10 +15,19 @@ import AskBidTable from './AskAndBidTable';
  * @author Jesús Sánchez Fernández
  * @version 1.0.0
  */
-const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, username, canDelete }) => {
+const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, username, canDelete, setSelectedItem }) => {
     const [selectedOrder, setSelectedOrder] = useState();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const refCancel = useRef();
+
+    useEffect(() => {
+        const checkSelectedOrder = () => {
+            if (selectedOrder) {
+                setSelectedItem(selectedOrder);
+            }
+        };
+        checkSelectedOrder();
+    }, [selectedOrder, setSelectedItem]);
 
     return (
         <>
