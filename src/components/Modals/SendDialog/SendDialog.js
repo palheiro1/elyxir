@@ -101,6 +101,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
 
     const bgColor = useColorModeValue('', '#1D1D1D');
     const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const isDisabled = !isValidPin || !isValidArdorAccount || input.value === 0;
 
     return (
         <>
@@ -200,8 +201,8 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button
-                            isDisabled={!isValidPin || !isValidArdorAccount}
-                            bgColor="blue.700"
+                            isDisabled={isDisabled}
+                            bgColor={!isDisabled ? '#F18800' : null}
                             w="100%"
                             py={6}
                             onClick={handleSend}>

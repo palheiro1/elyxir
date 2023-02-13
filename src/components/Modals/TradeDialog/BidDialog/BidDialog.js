@@ -232,6 +232,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                     <Box w="100%" mt={8}>
                                         <Button
                                             isDisabled={!isValidPin}
+                                            bgColor={isValidPin ? '#F18800' : null}
                                             w="100%"
                                             py={6}
                                             onClick={handleSend}>

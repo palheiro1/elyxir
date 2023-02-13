@@ -56,18 +56,19 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
     const toast = useToast();
 
-    const colorText = useColorModeValue("black", "white");
+    const colorText = useColorModeValue('black', 'white');
 
-    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps} = useNumberInput({
-        step: 1,
-        defaultValue: 0,
-        min: 0,
-        max: value === '1' ? maxPacksWithIgnis : maxPacksWithGiftz,
-    }, { 
-        isReadOnly: false,
-    }
+    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput(
+        {
+            step: 1,
+            defaultValue: 0,
+            min: 0,
+            max: value === '1' ? maxPacksWithIgnis : maxPacksWithGiftz,
+        },
+        {
+            isReadOnly: false,
+        }
     );
-
 
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
@@ -76,7 +77,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const handleCurrencyChange = () => {
         setValue(value === '1' ? '2' : '1');
         input.onChange({ target: { value: 0 } }); // reset input value
-    }
+    };
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -97,7 +98,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         calculatePrices();
     }, [input.value]);
 
-    const checker = (option) => {
+    const checker = option => {
         if (!isValidPin || !passphrase) {
             errorToast('You must enter a valid pin', toast);
             return false;
@@ -154,7 +155,12 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         }
     };
 
-    const bgColor = useColorModeValue("", "#1D1D1D");
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const isDisabled =
+        !isValidPin ||
+        (value === '1' && input.value > maxPacksWithIgnis) ||
+        (value === '2' && input.value > maxPacksWithGiftz) ||
+        input.value === '0';
 
     return (
         <>
@@ -242,7 +248,11 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     fontWeight="bold"
                                                     disabled
                                                 />
-                                                <Button {...inc} rounded="none" borderRightRadius="lg" color={colorText}>
+                                                <Button
+                                                    {...inc}
+                                                    rounded="none"
+                                                    borderRightRadius="lg"
+                                                    color={colorText}>
                                                     +
                                                 </Button>
                                             </HStack>
@@ -281,7 +291,8 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     </Center>
                                     <Box w="100%" mt={2}>
                                         <Button
-                                            isDisabled={!isValidPin || passphrase === '' || (value === "1" && input.value > maxPacksWithIgnis) || (value === "2" && input.value > maxPacksWithGiftz)}
+                                            isDisabled={isDisabled}
+                                            bgColor={!isDisabled ? '#F18800' : null}
                                             w="100%"
                                             py={6}
                                             onClick={handleBuyPack}>

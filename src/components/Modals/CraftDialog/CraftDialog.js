@@ -204,7 +204,12 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
                         </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button isDisabled={!isValidPin} w="100%" py={6} onClick={handleCrafting}>
+                        <Button
+                            isDisabled={!isValidPin}
+                            bgColor={isValidPin ? '#F18800' : null}
+                            w="100%"
+                            py={6}
+                            onClick={handleCrafting}>
                             Submit
                         </Button>
                     </AlertDialogFooter>

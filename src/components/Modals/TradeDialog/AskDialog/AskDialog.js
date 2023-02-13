@@ -208,7 +208,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                     <Box w="100%" mt={8}>
                                         <Button
                                             isDisabled={!isValidPin}
-                                            bgColor="blue.700"
+                                            bgColor={isValidPin ? '#F18800' : null}
                                             w="100%"
                                             py={6}
                                             onClick={handleSend}>

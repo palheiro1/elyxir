@@ -195,7 +195,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
                         </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button isDisabled={!isValidPin} w="100%" py={6} onClick={handleMorph}>
+                        <Button isDisabled={!isValidPin} bgColor={isValidPin ? '#F18800' : null} w="100%" py={6} onClick={handleMorph}>
                             Submit
                         </Button>
                     </AlertDialogFooter>

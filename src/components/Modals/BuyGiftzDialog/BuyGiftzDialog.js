@@ -121,6 +121,7 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
 
     const bgColor = useColorModeValue('', '#1D1D1D');
     const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const isDisabled = !isValidPin || passphrase === '' || input.value > maxPacksWithIgnis;
 
     return (
         <>
@@ -199,7 +200,8 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
                                 </Center>
                                 <Box w="100%" mt={2}>
                                     <Button
-                                        isDisabled={!isValidPin || passphrase === '' || input.value > maxPacksWithIgnis}
+                                        isDisabled={isDisabled}
+                                        bgColor={!isDisabled ? '#F18800' : null}
                                         w="100%"
                                         py={6}
                                         onClick={handleBuyPack}>

@@ -160,7 +160,12 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                         </Center>
 
                         <Center my={2}>
-                            <Button colorScheme="blue" onClick={handleSend} minW="90%" size="lg">
+                            <Button
+                                isDisabled={!isValidPin}
+                                bgColor={isValidPin ? '#F18800' : null}
+                                onClick={handleSend}
+                                minW="90%"
+                                size="lg">
                                 Submit
                             </Button>
                         </Center>

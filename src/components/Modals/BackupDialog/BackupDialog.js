@@ -13,7 +13,6 @@ import {
 
 import { setBackupDone } from '../../../utils/storage';
 
-
 /**
  * @name BackupDialog
  * @description Modal to confirm passphrase backup
@@ -25,8 +24,7 @@ import { setBackupDone } from '../../../utils/storage';
  * @param {string} username - account username
  */
 const BackupDialog = ({ reference, isOpen, onClose, account, passphrase, username }) => {
-
-    const handleOk = (e) => {
+    const handleOk = e => {
         e.preventDefault();
         setBackupDone(username);
         onClose();
@@ -46,9 +44,7 @@ const BackupDialog = ({ reference, isOpen, onClose, account, passphrase, usernam
                     <AlertDialogHeader>Confirm passphrase backup</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
-                        <Text>
-                            Write down your passphrase (in the box) and store it somewhere safe.
-                        </Text>
+                        <Text>Write down your passphrase (in the box) and store it somewhere safe.</Text>
 
                         <Text textAlign="center" pt={2}>
                             Account
@@ -58,8 +54,8 @@ const BackupDialog = ({ reference, isOpen, onClose, account, passphrase, usernam
                         </Text>
                         <Textarea textAlign="center">{passphrase}</Textarea>
                         <Text pt={4}>
-                            By selecting Ok you disable the backup reminder after login. Select
-                            Cancel to keep the reminder.
+                            By selecting OK you disable the backup reminder after login. <br />
+                            Select CANCEL to keep the reminder.
                         </Text>
                     </AlertDialogBody>
                     <AlertDialogFooter>
