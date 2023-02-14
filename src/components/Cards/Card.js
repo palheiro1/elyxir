@@ -104,123 +104,139 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
         highBidOrders = Number.isInteger(auxBids) ? auxBids : auxBids.toFixed(2);
     }
     // ------------------------------
+    const isBlocked = card.quantityQNT > card.unconfirmedQuantityQNT && card.unconfirmedQuantityQNT === '0';
+    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
-        <Box p={3} border="1px" rounded="lg" shadow="xl" bgColor={bgColor} borderColor="whiteAlpha.300">
-            <Stack direction="column" spacing={4}>
-                <Image
-                    src={image}
-                    alt={name}
-                    rounded="lg"
-                    onClick={() => (haveThisCard ? handleClick({ card: card }) : null)}
-                    style={hover ? hoverStyle : initialStyle}
-                    onMouseEnter={() => (haveThisCard ? setHover(true) : null)}
-                    onMouseLeave={() => (haveThisCard ? setHover(false) : null)}
-                    opacity={cardOpacity}
-                />
+        <Box p={3} border="1px" rounded="lg" shadow="lg" bgColor={bgColor} borderColor={borderColor}>
+            <Center>
+                <Stack direction="column" spacing={4}>
+                    <Image
+                        src={image}
+                        alt={name}
+                        rounded="lg"
+                        onClick={() => (haveThisCard ? handleClick({ card: card }) : null)}
+                        style={hover ? hoverStyle : initialStyle}
+                        onMouseEnter={() => (haveThisCard ? setHover(true) : null)}
+                        onMouseLeave={() => (haveThisCard ? setHover(false) : null)}
+                        opacity={cardOpacity}
+                    />
 
-                <Grid templateColumns="repeat(4, 1fr)" alignContent="center">
-                    <GridItem colSpan="3">
-                        <Text fontSize="xl" fontWeight="bolder" minW="100%">
-                            {name}
-                        </Text>
-
-                        <CardBadges rarity={rarity} continent={continent} size="sm" />
-                    </GridItem>
-                    <GridItem alignContent="center" minH="100%">
-                        <Center minHeight="100%">
-                            <Text textAlign="end" minH="100%">
-                                <small>Quantity:</small> {quantity}
+                    <Grid templateColumns="repeat(4, 1fr)" alignContent="center">
+                        <GridItem colSpan="3">
+                            <Text fontSize="xl" fontWeight="bolder" minW="100%">
+                                {name}
                             </Text>
+
+                            <CardBadges rarity={rarity} continent={continent} size="sm" />
+                        </GridItem>
+                        <GridItem alignContent="center" minH="100%">
+                            <Center minHeight="100%">
+                                <Text textAlign="end" minH="100%">
+                                    <small>Quantity:</small> {quantity}
+                                </Text>
+                            </Center>
+                        </GridItem>
+                    </Grid>
+                    {isBlocked && (
+                        <Box w="100%">
+                            <Box w="100%" bgColor={borderColor} rounded="lg">
+                                <Text textAlign="center" fontSize="xs">
+                                    1 card(s) locked for all actions.
+                                    <br /> Check for open Ask orders to unlock.
+                                </Text>
+                            </Box>
+                        </Box>
+                    )}
+                    {!isMarket && !isBlocked && !fixOnlyBuy && (
+                        <SimpleGrid columns={3} gap={1}>
+                            <Button
+                                fontWeight="medium"
+                                leftIcon={<FaRegPaperPlane />}
+                                _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                                onClick={onOpenSend}
+                                isDisabled={quantity === 0}>
+                                Send
+                            </Button>
+
+                            <Button
+                                fontWeight="medium"
+                                leftIcon={<BsTools />}
+                                _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                                onClick={onOpenCraft}
+                                isDisabled={quantity <= 4}>
+                                Craft
+                            </Button>
+
+                            <Button
+                                fontWeight="medium"
+                                leftIcon={<BsArrowLeftRight />}
+                                _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                                onClick={onOpenMorph}
+                                isDisabled={quantity === 0}>
+                                Morph
+                            </Button>
+                        </SimpleGrid>
+                    )}
+                    {isMarket && (
+                        <Center>
+                            <Stack direction="column" w="100%">
+                                <Box w="100%">
+                                    <Button
+                                        onClick={onOpenTrade}
+                                        size="lg"
+                                        w="100%"
+                                        leftIcon={<BsArrowLeftRight />}
+                                        _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
+                                        Trade
+                                    </Button>
+                                </Box>
+                                <Box borderTop="1px" borderTopColor="gray.600" pt={4}>
+                                    <SimpleGrid columns={3} spacing={4}>
+                                        <Box>
+                                            <Text fontSize="sm" color="gray" textAlign="center">
+                                                Lowest ask
+                                            </Text>
+                                            <Text fontWeight="bold" fontSize="lg" textAlign="center">
+                                                {lowedAskOrders === '' ? <Spinner size="md" /> : lowedAskOrders}
+                                            </Text>
+                                        </Box>
+                                        <Box>
+                                            <Text fontSize="sm" color="gray" textAlign="center">
+                                                Highest bid
+                                            </Text>
+                                            <Text fontWeight="bold" fontSize="lg" textAlign="center">
+                                                {highBidOrders === '' ? <Spinner size="md" /> : highBidOrders}
+                                            </Text>
+                                        </Box>
+                                        <Box>
+                                            <Text fontSize="sm" color="gray" textAlign="center">
+                                                Latest price
+                                            </Text>
+                                            <Text fontWeight="bold" fontSize="lg" textAlign="center">
+                                                {lastPrice === '' ? <Spinner size="md" /> : lastPrice}
+                                            </Text>
+                                        </Box>
+                                    </SimpleGrid>
+                                </Box>
+                            </Stack>
                         </Center>
-                    </GridItem>
-                </Grid>
-                {fixOnlyBuy ? (
-                    <Box w="100%">
-                        <Button
-                            w="100%"
-                            color="black"
-                            variant="solid"
-                            bgColor="#F18800"
-                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}
-                            onClick={onOpenTrade}>
-                            BUY
-                        </Button>
-                    </Box>
-                ) : !isMarket ? (
-                    <SimpleGrid columns={3} gap={1}>
-                        <Button
-                            fontWeight="medium"
-                            leftIcon={<FaRegPaperPlane />}
-                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}
-                            onClick={onOpenSend}
-                            isDisabled={quantity === 0}>
-                            Send
-                        </Button>
-
-                        <Button
-                            fontWeight="medium"
-                            leftIcon={<BsTools />}
-                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}
-                            onClick={onOpenCraft}
-                            isDisabled={quantity <= 4}>
-                            Craft
-                        </Button>
-
-                        <Button
-                            fontWeight="medium"
-                            leftIcon={<BsArrowLeftRight />}
-                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}
-                            onClick={onOpenMorph}
-                            isDisabled={quantity === 0}>
-                            Morph
-                        </Button>
-                    </SimpleGrid>
-                ) : (
-                    <Center>
-                        <Stack direction="column" w="100%">
-                            <Box w="100%">
-                                <Button
-                                    onClick={onOpenTrade}
-                                    size="lg"
-                                    w="100%"
-                                    leftIcon={<BsArrowLeftRight />}
-                                    _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
-                                    Trade
-                                </Button>
-                            </Box>
-                            <Box borderTop="1px" borderTopColor="gray.600" pt={4}>
-                                <SimpleGrid columns={3} spacing={4}>
-                                    <Box>
-                                        <Text fontSize="sm" color="gray" textAlign="center">
-                                            Lowest ask
-                                        </Text>
-                                        <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                            {lowedAskOrders === '' ? <Spinner size="md" /> : lowedAskOrders}
-                                        </Text>
-                                    </Box>
-                                    <Box>
-                                        <Text fontSize="sm" color="gray" textAlign="center">
-                                            Highest bid
-                                        </Text>
-                                        <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                            {highBidOrders === '' ? <Spinner size="md" /> : highBidOrders}
-                                        </Text>
-                                    </Box>
-                                    <Box>
-                                        <Text fontSize="sm" color="gray" textAlign="center">
-                                            Latest price
-                                        </Text>
-                                        <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                            {lastPrice === '' ? <Spinner size="md" /> : lastPrice}
-                                        </Text>
-                                    </Box>
-                                </SimpleGrid>
-                            </Box>
-                        </Stack>
-                    </Center>
-                )}
-            </Stack>
+                    )}
+                    {fixOnlyBuy && (
+                        <Box w="100%">
+                            <Button
+                                w="100%"
+                                color="black"
+                                variant="solid"
+                                bgColor="#F18800"
+                                _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                                onClick={onOpenTrade}>
+                                BUY
+                            </Button>
+                        </Box>
+                    )}
+                </Stack>
+            </Center>
 
             {/* ------------------------------------ HIDE DIALOGs ------------------------------------ */}
             <SendDialog isOpen={isOpenSend} onClose={onCloseSend} reference={refSend} card={card} username={username} />
