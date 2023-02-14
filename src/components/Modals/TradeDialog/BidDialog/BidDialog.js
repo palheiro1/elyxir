@@ -177,7 +177,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
                     <AlertDialogHeader textAlign="center">
                         <Center>
-                            <Text>BID FOR {!isGem ? 'CARDs' : 'GEMs'} </Text>
+                            <Text>BID FOR {!isGem ? 'CARDS' : 'GEMS'} </Text>
                         </Center>
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />

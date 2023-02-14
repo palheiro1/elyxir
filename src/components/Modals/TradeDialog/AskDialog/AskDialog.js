@@ -153,7 +153,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
                     <AlertDialogHeader textAlign="center">
                         <Center>
-                            <Text>ASK FOR {!isGem ? 'CARD' : 'GEM'}</Text>
+                            <Text>ASK FOR {!isGem ? 'CARDS' : 'GEMS'}</Text>
                         </Center>
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
