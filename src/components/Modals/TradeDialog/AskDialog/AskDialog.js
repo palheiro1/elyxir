@@ -122,18 +122,20 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
 
     useEffect(() => {
         const checkChange = () => {
-            if (selectedItem) {
+            if (selectedItem && selectedItem.quantity <= maxCards) {
                 setPriceCard(selectedItem.price);
                 setValue(selectedItem.quantity);
             }
+            if(selectedItem) setSelectedItem('');
         };
 
         checkChange();
-    }, [selectedItem]);
+    }, [selectedItem, maxCards]);
 
     const handleClose = () => {
         setSelectedItem('');
         setValue(0);
+        setPriceCard(0);
         onClose();
     };
 
