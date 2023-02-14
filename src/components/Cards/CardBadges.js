@@ -7,24 +7,22 @@ const CardBadges = ({ rarity, continent, size = 'md' }) => {
     return (
         <Stack direction={{ base: 'column', md: 'row' }} spacing={1}>
             <Text
-                w={{ base: '7.5rem', md: 'auto' }}
+                w={{ base: '6rem', md: 'auto' }}
                 h={{ base: '1rem', md: 'auto' }}
                 textAlign="center"
                 fontSize={size}
                 bgGradient={RARITY_COLORS[rarity]}
                 rounded="lg"
-                color="black"
-                px={2}>
+                color="black">
                 {rarity}
             </Text>
             <Text
                 fontSize={size}
-                w={{ base: '7.5rem', md: 'auto' }}
+                w={{ base: '6rem', md: 'auto' }}
                 h={{ base: '1rem', md: 'auto' }}
                 bgColor={badgeColor}
                 rounded="lg"
                 color="white"
-                px={2}
                 textAlign="center">
                 {continent}
             </Text>
