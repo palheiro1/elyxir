@@ -54,6 +54,7 @@ import {
     getUnconfirmedTransactions,
 } from '../../services/Ardor/ardorInterface';
 import Exchange from '../Exchange/Exchange';
+import ArdorChat from '../../components/Pages/ChatPage/ArdorChat';
 
 /**
  * @name Home
@@ -292,6 +293,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             <Account infoAccount={infoAccount} />, // Option 6 - Account
             '', // Option 7 - Buy packs
             <Exchange infoAccount={infoAccount} />, // Option 8 - Exchange
+            <ArdorChat infoAccount={infoAccount} />, // Option 9 - Ardor Chat
         ];
 
         const loadComponent = () => {

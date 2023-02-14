@@ -784,6 +784,41 @@ export const processUnwrapsForAccount = async accountRs => {
     }
 };
 
+// ----------------------------------------------
+// |            C H A T   M E S S A G E S       |
+// ----------------------------------------------
+
+export const sendDirectMessage = async ({ recipient, passPhrase, message }) => {
+
+    if (!recipient || !passPhrase || !message) return false;
+
+    const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
+
+    let query = {
+        requestType: 'sendMessage',
+        chain: 2,
+        recipient: recipient,
+        publicKey: publicKey,
+        messageToEncrypt: message,
+        messageToEncryptIsText: true,
+        encryptedMessageIsPrunable: true,
+        deadline: 30,
+        feeNQT: 0,
+    };
+
+    try {
+        const response = await axios.post(NODEURL, qs.stringify(query), config);
+        console.log("🚀 ~ file: ardorInterface.js:811 ~ sendDirectMessage ~ response", response)
+        const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
+        const response_2 = await axios.post(URL_BROADCAST, qs.stringify({ transactionBytes: signed }), config);
+        console.log("🚀 ~ file: ardorInterface.js:813 ~ sendDirectMessage ~ response_2", response_2)
+        return response_2.status === 200;
+    } catch (error) {
+        console.log("🚀 ~ file: ardorInterface.js:820 ~ sendDirectMessage ~ error", error)
+        return false;
+    }
+};
+
 export {
     sendIgnis,
     transferCurrency,
