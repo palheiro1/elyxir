@@ -8,6 +8,7 @@ import { Th } from '../../ResponsiveTable/th';
 import { Td } from '../../ResponsiveTable/td';
 import { getTxTimestamp } from '../../../utils/txUtils';
 import { NQTDIVIDER } from '../../../data/CONSTANTS';
+import TableCard from '../../Cards/TableCard';
 
 const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividends, epoch_beginning }) => {
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
@@ -40,14 +41,24 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
                 <Tbody>
                     {filteredDividends.length > 0 &&
                         filteredDividends.slice(0, visibleDividends).map((transaction, index) => {
+                            const { card } = transaction;
+                            const {
+                                cardImgUrl: image,
+                                name: title,
+                                channel: continent,
+                                rarity,
+                                unconfirmedQuantityQNT,
+                            } = card;
                             const timestamp = getTxTimestamp(transaction, epoch_beginning);
                             const currency = transaction.holdingInfo?.name ? transaction.holdingInfo.name : 'IGNIS';
                             let balance = transaction.change / NQTDIVIDER;
                             balance = balance.toLocaleString('en-US', { maximumFractionDigits: 2 });
                             return (
                                 <Tr key={index}>
-                                    <Td>Card</Td>
-                                    <Td>{transaction.cardsOwned}</Td>
+                                    <Td>
+                                        <TableCard image={image} title={title} continent={continent} rarity={rarity} />
+                                    </Td>
+                                    <Td>{unconfirmedQuantityQNT}</Td>
                                     <Td>{timestamp}</Td>
                                     <Td>{balance}</Td>
                                     <Td>{currency}</Td>

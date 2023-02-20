@@ -171,7 +171,10 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                 setFilteredTransactions={setFilteredTransactions}
                 setFilteredDividends={setFilteredDividends}
                 setVisibleTransactions={setVisibleTransactions}
+                setVisibleDividends={setVisibleDividends}
                 transactions={transactions}
+                dividends={dividends}
+                section={section}
                 setSection={setSection}
             />
 
@@ -187,7 +190,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
             )}
             {!needReload && section === 'dividends' && (
                 <ShowDividends
-                    filteredDividends={dividends}
+                    filteredDividends={filteredDividends}
                     setVisibleDividends={setVisibleDividends}
                     visibleDividends={visibleDividends}
                     epoch_beginning={blockchainStatus.epoch_beginning}
