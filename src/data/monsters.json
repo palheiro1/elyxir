@@ -50,7 +50,7 @@
         "country": "Mandinga",
         "continent": "Africa",
         "picture": "ninkiNanka.jpg",
-        "rarity": "Very Rare",
+        "rarity": "Epic",
         "creature": [
             "The swamps of West Africa are home to an elusive reptile, which few people have been able to see. The Mandinga call it Ninki-Nanka, and describe it as a huge reptile, with the body of a crocodile, the head of a three-horned horse, and the long neck like a giraffe. Although it has no wings, it is very fast both on land and in the water.",
             "While it does not seek contact with humans, and in fact has managed to elude even expeditions in its quest, the Ninki-Nanka is very dangerous for people, whom it devours without leaving a trace. The preferred victims are children who dare to go into the swamps alone, disobeying their parents. But adults who approach their territory alone or in small groups can also become prey to this creature."
@@ -93,7 +93,7 @@
     {
         "name": "Lisovik",
         "country": "Ukraine",
-        "continent": "Europa",
+        "continent": "Europe",
         "picture": "lisovik.jpg",
         "rarity": "Rare",
         "creature": [
@@ -117,7 +117,7 @@
     {
         "name": "Tarasca",
         "country": "Occitania",
-        "continent": "Europa",
+        "continent": "Europe",
         "picture": "tarasca.jpg",
         "rarity": "special",
         "creature": [
@@ -140,7 +140,7 @@
         "country": "Navajo",
         "continent": "America",
         "picture": "tsenahale.jpg",
-        "rarity": "Very Rare",
+        "rarity": "Epic",
         "creature": [
             "The Tsenahale were two of the Anaye, the Alien Gods who inhabited the land of the Navajo in time immemorial. At that time men and women had separated, and women resorted to unnatural practices to reproduce. From the union of a woman with a lot of feathers the two Tsenahale came out, but they were so monstrous that their mother abandoned them. However they managed to survive, and became monstrous creatures, giant birds similar to harpies.",
             "The male Tsenahale hunts and eats men, while the female Tsenahale is dedicated only to women.",
@@ -480,7 +480,7 @@
         "country": "Selkup",
         "continent": "Asia",
         "picture": "kyzy.jpg",
-        "rarity": "Very Rare",
+        "rarity": "Epic",
         "creature": [
             "Kyzy is a divine and evil being among the Selkup of the North.",
             "One of the legends relates that he was Icha's brother, born from the union of his mother with an foreing hero. The brothers faced each other, like good and evil, and on one occasion there was a great fight between them. They rose from the earth to the seventh heaven, where it was so hot that their weapons melted and none won the battle. Then the Old Mother came down from the high sky and ordered Kyzy to live in the union between heaven and earth.",
@@ -500,7 +500,7 @@
         "country": "Hawaii",
         "continent": "Oceania",
         "picture": "pele.jpg",
-        "rarity": "Very Rare",
+        "rarity": "Epic",
         "creature": [
             "Divine creature capricious, passionate and powerful, Pele is one of the daughters of the Haumea female principle, and all the sisters are associated with winds, rain, fire, sea waves or clouds. Pele is the spirit that animates the Kilauea volcano, the most active in the world today.",
             "The young Pele traveled in her canoe from the island of Tahiti to Hawaii, trying to create fires in different islands. However his sister, Namaka, persecuted her to kill her, which she got after a hard fight. The spirit of Pele was then transfigured into the Halemaumau crater, so that her body became lava and vapor of this fearsome volcano."
@@ -522,9 +522,9 @@
     {
         "name": "Iku Turso",
         "country": "Finland",
-        "continent": "Europa",
+        "continent": "Europe",
         "picture": "ikuTurso.jpg",
-        "rarity": "Very Rare",
+        "rarity": "Epic",
         "creature": [
             "The North Sea lord is the Iku-Turso, a giant octopus that inhabits the depths. Originally from Pohjola, the legendary territory from which, according to Finnish folklore, all evils come, the Iku-Turso likes to travel the Baltic Sea on the lookout for victims. It is even said to have colonized inland lakes, although the latter is unverified.",
             "Of uncertain origin, this evil animal already appears in the Finnish national epic, the Kalevala, and its power is such that it has sometimes been considered the true god of war. What is certain is that his taste for combat is unquestionable. When a naval battle takes place in the Baltic, it usually arises from the depths and gets into the fight, sinking as many ships as it can."
@@ -583,7 +583,7 @@
     {
         "name": "Nykur",
         "country": "Iceland",
-        "continent": "Europa",
+        "continent": "Europe",
         "picture": "nykur.jpg",
         "rarity": "Common",
         "creature": [
@@ -676,7 +676,7 @@
     {
         "name": "Zhar-Ptitsa",
         "country": "Russia",
-        "continent": "Europa",
+        "continent": "Europe",
         "picture": "zharPtitsa.jpg",
         "rarity": "Common",
         "creature": [
@@ -700,7 +700,7 @@
     {
         "name": "Dhampir",
         "country": "Albania",
-        "continent": "Europa",
+        "continent": "Europe",
         "picture": "dhampir.jpg",
         "rarity": "Common",
         "creature": [
@@ -960,7 +960,7 @@
         "country": "British Columbia",
         "continent": "America",
         "picture": "sasquatch.jpg",
-        "rarity": "Very Rare",
+        "rarity": "Epic",
         "creature": [
             "The Sasquatch (also known as Bigfoot) is a creature that lives in the forests on the northwest coast of America. Of very large stature, muscular and hairy, the few people who have seen it have compared it to a large ape or a bear that walks upright. Its head is small and pointed, with a short neck. Its eyes are small and hide under a prominent forehead. Dark brown hair covers its entire body, except for the face, hands and feet. It emits high-pitched sounds that resemble a squeak or scissor call.",
             " Its lifestyle is unknown and only one or more specimens exist, as the Sasquatch is extremely elusive and avoids contact with humans. It resides in mountainous areas, very far from civilization, and has been seen by humans only briefly and inaccurately. It could be a nocturnal animal, as most sightings have occurred at night. ",
