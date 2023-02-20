@@ -104,7 +104,9 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
         highBidOrders = Number.isInteger(auxBids) ? auxBids : auxBids.toFixed(2);
     }
     // ------------------------------
-    const isBlocked = card.quantityQNT > card.unconfirmedQuantityQNT && card.unconfirmedQuantityQNT === '0';
+    const unconfirmedQuantityQNT = Number(card.unconfirmedQuantityQNT);
+    const isBlocked = quantity > unconfirmedQuantityQNT && unconfirmedQuantityQNT === 0;
+    const isBlockedCraft = unconfirmedQuantityQNT < 5;
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
@@ -135,35 +137,49 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                             </Text>
                         </Center>
                     </Stack>
-                    {!isMarket && !isBlocked && !fixOnlyBuy && (
-                        <SimpleGrid columns={3} gap={1}>
-                            <Button
-                                fontWeight="medium"
-                                leftIcon={<FaRegPaperPlane />}
-                                _hover={{ fontWeight: 'bold', shadow: 'xl' }}
-                                onClick={onOpenSend}
-                                isDisabled={quantity === 0}>
-                                Send
-                            </Button>
+                    {!isMarket && !fixOnlyBuy && (
+                        <Box
+                            onMouseEnter={() => isBlocked && setHoverButton(true)}
+                            onMouseLeave={() => isBlocked && setHoverButton(false)}>
+                            {!hoverButton && (
+                                <SimpleGrid columns={3} gap={1}>
+                                    <Button
+                                        fontWeight="medium"
+                                        leftIcon={<FaRegPaperPlane />}
+                                        _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                                        onClick={onOpenSend}
+                                        isDisabled={isBlocked}>
+                                        Send
+                                    </Button>
 
-                            <Button
-                                fontWeight="medium"
-                                leftIcon={<BsTools />}
-                                _hover={{ fontWeight: 'bold', shadow: 'xl' }}
-                                onClick={onOpenCraft}
-                                isDisabled={quantity <= 4}>
-                                Craft
-                            </Button>
+                                    <Button
+                                        fontWeight="medium"
+                                        leftIcon={<BsTools />}
+                                        _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                                        onClick={onOpenCraft}
+                                        isDisabled={isBlockedCraft}>
+                                        Craft
+                                    </Button>
 
-                            <Button
-                                fontWeight="medium"
-                                leftIcon={<BsArrowLeftRight />}
-                                _hover={{ fontWeight: 'bold', shadow: 'xl' }}
-                                onClick={onOpenMorph}
-                                isDisabled={quantity === 0}>
-                                Morph
-                            </Button>
-                        </SimpleGrid>
+                                    <Button
+                                        fontWeight="medium"
+                                        leftIcon={<BsArrowLeftRight />}
+                                        _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                                        onClick={onOpenMorph}
+                                        isDisabled={isBlocked}>
+                                        Morph
+                                    </Button>
+                                </SimpleGrid>
+                            )}
+                            {hoverButton && (
+                                <Center w="100%" bgColor={borderColor} rounded="lg" h="100%">
+                                    <Text textAlign="center" fontSize="xs">
+                                        <strong>1 card(s) locked for all actions.</strong>
+                                        <br /> Check for open Ask orders to unlock.
+                                    </Text>
+                                </Center>
+                            )}
+                        </Box>
                     )}
                     {isMarket && (
                         <Center>
