@@ -38,10 +38,7 @@ function App() {
                 <Route path="/restore" element={<Restore />} />
 
                 {/* HOME PAGE */}
-                <Route
-                    path="/home"
-                    element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />}
-                />
+                <Route path="/home" element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />} />
 
                 <Route path="/welcome" element={<Welcome />} />
 

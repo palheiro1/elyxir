@@ -18,6 +18,7 @@ import {
 import ShowTransactions from './ShowTransactions';
 import Loader from './Loader';
 import TopBar from './TopBar';
+import ShowDividends from './ShowDividens';
 
 /**
  * @name History
@@ -56,6 +57,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
      */
 
     const [transactions, setTransactions] = useState([]);
+    const [dividends, setDividends] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState(transactions);
     const [blockchainStatus, setBlockchainStatus] = useState({});
     const [needReload, setNeedReload] = useState(true);
@@ -64,9 +66,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
 
     // -------------------------------------------------
     const [visibleTransactions, setVisibleTransactions] = useState(10);
-    const loadMoreTransactions = () => {
-        setVisibleTransactions(prevVisibleTransactions => prevVisibleTransactions + 10);
-    };
+    const [visibleDividends, setVisibleDividends] = useState(10);
     // -------------------------------------------------
 
     useEffect(() => {
@@ -149,6 +149,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                 if (handler) newTransactions.push(handler);
             });
 
+            setDividends(infoAccount.dividends);
             setTransactions(newTransactions);
             setNeedReload(false);
         };
@@ -176,9 +177,9 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                     haveUnconfirmed={haveUnconfirmed}
                     filteredTransactions={filteredTransactions}
                     visibleTransactions={visibleTransactions}
-                    loadMoreTransactions={loadMoreTransactions}
                 />
             )}
+            {!needReload && section === 'dividends' && <ShowDividends filteredDividends={dividends} visibleDividends />}
         </Box>
     );
 };
