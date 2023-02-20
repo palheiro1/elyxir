@@ -51,6 +51,7 @@ import {
     getAccountLedger,
     getBlockchainTransactions,
     getTrades,
+    getTransaction,
     getUnconfirmedTransactions,
 } from '../../services/Ardor/ardorInterface';
 import Exchange from '../Exchange/Exchange';
@@ -205,6 +206,20 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             });
             // -----------------------------------------------------------------
 
+            const auxDividends = dividends.entries;
+
+            const auxDividendsPromises = auxDividends.map(dividend => getTransaction(2, dividend.eventHash));
+            const dividendsTxs = await Promise.all(auxDividendsPromises);
+
+            // Search in cards attachment.asset and add to dividends
+            dividendsTxs.forEach((dividendTx, index) => {
+                const { attachment } = dividendTx;
+                const card = cards.find(card => card.asset === attachment.asset);
+                if (card) {
+                    auxDividends[index].card = card;
+                }
+            });
+
             // -----------------------------------------------------------------
             // Rebuild infoAccount
             // -----------------------------------------------------------------
@@ -215,7 +230,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 GIFTZBalance: giftz.unitsQNT || 0,
                 GEMSBalance: gems[0].quantityQNT / NQTDIVIDER,
                 transactions: txs.transactions,
-                dividends: dividends.entries,
+                dividends: auxDividends,
                 unconfirmedTxs: unconfirmedTxs,
                 currentAsks: currentAskOrBids.askOrders,
                 currentBids: currentAskOrBids.bidOrders,

@@ -176,6 +176,21 @@ export const getTrades = async (chain, account, timestamp) => {
     }
 };
 
+export const getTransaction = async (chain, fullHash) => {
+    try {
+        const response = await axios.get(NODEURL, {
+            params: {
+                requestType: 'getTransaction',
+                chain,
+                fullHash,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:190 ~ getTransaction ~ error', error);
+    }
+};
+
 export const getLastTrades = async assets => {
     try {
         const response = await axios.get(NODEURL, {
@@ -195,9 +210,7 @@ const calculateFeeByRecipient = async (recipient, query, URL_TO_CALL) => {
     const account = await getAccount(recipient);
     const isRecipientNew = account.errorCode === 5;
     const data = (await axios.post(URL_TO_CALL, qs.stringify(query), config)).data;
-    const fee = isRecipientNew
-        ? 14 * NQTDIVIDER
-        : data.minimumFeeFQT * data.bundlerRateNQTPerFXT * 0.00000001;
+    const fee = isRecipientNew ? 14 * NQTDIVIDER : data.minimumFeeFQT * data.bundlerRateNQTPerFXT * 0.00000001;
     return Math.ceil(fee);
 };
 
@@ -248,7 +261,7 @@ const sendIgnis = async ({
     deadline = 30,
     priority = 'NORMAL',
 }) => {
-    if(!passPhrase || !recipient || !amountNQT) return false;
+    if (!passPhrase || !recipient || !amountNQT) return false;
     try {
         const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 
@@ -292,7 +305,7 @@ const sendIgnis = async ({
 };
 
 const transferCurrency = async (currency, unitsQNT, recipient, passPhrase, message = '', messagePrunable = true) => {
-    if(!passPhrase || !recipient || !currency || !unitsQNT) return false;
+    if (!passPhrase || !recipient || !currency || !unitsQNT) return false;
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 
     let query = {
@@ -344,7 +357,7 @@ const transferCurrencyZeroFee = async (
     message = '',
     messagePrunable = true
 ) => {
-    if(!passPhrase || !recipient || !currency || !unitsQNT) return false;
+    if (!passPhrase || !recipient || !currency || !unitsQNT) return false;
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
     let query = {
         chain: 2,
@@ -381,7 +394,7 @@ const transferCurrencyZeroFee = async (
 };
 
 export const buyGiftz = async ({ passphrase, amountNQT }) => {
-    if(!passphrase || !amountNQT) return false;
+    if (!passphrase || !amountNQT) return false;
     const message = JSON.stringify({ contract: 'IgnisAssetLottery' });
     const publicKey = ardorjs.secretPhraseToPublicKey(passphrase);
     var query = {
@@ -423,7 +436,7 @@ export const buyGiftz = async ({ passphrase, amountNQT }) => {
 // ----------------------------------------------
 
 export const createAskOrder = async ({ asset, price, quantity, passPhrase }) => {
-    if(!passPhrase || !asset || !price || !quantity) return false;
+    if (!passPhrase || !asset || !price || !quantity) return false;
     const ORDERTYPE = 'placeAskOrder';
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 
@@ -490,7 +503,7 @@ export const cancelAskOrder = async (order, passPhrase) => {
 };
 
 export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => {
-    if(!passPhrase || !asset || !price || !quantity) return false;
+    if (!passPhrase || !asset || !price || !quantity) return false;
 
     const ORDERTYPE = 'placeBidOrder';
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
@@ -528,7 +541,7 @@ export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => 
 };
 
 export const cancelBidOrder = async (order, passPhrase) => {
-    if(!order || !passPhrase) return false;
+    if (!order || !passPhrase) return false;
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
     const query = {
         chain: 2,
@@ -606,7 +619,7 @@ const transferAsset = async ({
         const response_2 = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
         return response_2.status === 200;
     } catch (error) {
-        console.log("🚀 ~ file: ardorInterface.js:604 ~ error", error)
+        console.log('🚀 ~ file: ardorInterface.js:604 ~ error', error);
         return false;
     }
 };
@@ -789,7 +802,6 @@ export const processUnwrapsForAccount = async accountRs => {
 // ----------------------------------------------
 
 export const sendDirectMessage = async ({ recipient, passPhrase, message }) => {
-
     if (!recipient || !passPhrase || !message) return false;
 
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
@@ -808,13 +820,13 @@ export const sendDirectMessage = async ({ recipient, passPhrase, message }) => {
 
     try {
         const response = await axios.post(NODEURL, qs.stringify(query), config);
-        console.log("🚀 ~ file: ardorInterface.js:811 ~ sendDirectMessage ~ response", response)
+        console.log('🚀 ~ file: ardorInterface.js:811 ~ sendDirectMessage ~ response', response);
         const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
         const response_2 = await axios.post(URL_BROADCAST, qs.stringify({ transactionBytes: signed }), config);
-        console.log("🚀 ~ file: ardorInterface.js:813 ~ sendDirectMessage ~ response_2", response_2)
+        console.log('🚀 ~ file: ardorInterface.js:813 ~ sendDirectMessage ~ response_2', response_2);
         return response_2.status === 200;
     } catch (error) {
-        console.log("🚀 ~ file: ardorInterface.js:820 ~ sendDirectMessage ~ error", error)
+        console.log('🚀 ~ file: ardorInterface.js:820 ~ sendDirectMessage ~ error', error);
         return false;
     }
 };
