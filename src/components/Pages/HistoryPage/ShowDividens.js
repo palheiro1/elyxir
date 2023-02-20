@@ -40,7 +40,6 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
                 <Tbody>
                     {filteredDividends.length > 0 &&
                         filteredDividends.slice(0, visibleDividends).map((transaction, index) => {
-                            console.log("🚀 ~ file: ShowDividens.js:42 ~ filteredDividends.slice ~ transaction", transaction)
                             const timestamp = getTxTimestamp(transaction, epoch_beginning);
                             const currency = transaction.holdingInfo?.name ? transaction.holdingInfo.name : 'IGNIS';
                             let balance = transaction.change / NQTDIVIDER;

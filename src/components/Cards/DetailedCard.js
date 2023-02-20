@@ -22,8 +22,6 @@ import CreatureTabs from './DetailedCardViewTabs/CreatureTabs';
 import CultureTabs from './DetailedCardViewTabs/CultureTabs';
 import LocationTabs from './DetailedCardViewTabs/LocationTabs';
 
-
-
 /**
  * @name DetailedCard
  * @description Modal to show the details of a card
@@ -42,6 +40,8 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
     const textColor = useColorModeValue('gray.200', 'gray.200');
     const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
 
+    const rarityImage = `images/cards/rarity/${monster.rarity}.svg`;
+    const continentImage = `images/cards/continent/${monster.continent}.svg`;
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="6xl" isCentered="true">
@@ -68,7 +68,13 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
 
                                 <Stack direction="row" mb={2}>
                                     <Center>
-                                        <Image src="images/cards/rarity.png" alt="rarity" maxH="3rem" align="center" />
+                                        <Image
+                                            src={rarityImage}
+                                            alt="rarity"
+                                            maxH="2.5rem"
+                                            align="center"
+                                            filter="invert(1)"
+                                        />
                                     </Center>
                                     <Stack direction="column" spacing={0}>
                                         <Text fontSize="md" color="gray">
@@ -85,18 +91,19 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                                     </Stack>
 
                                     <Center>
-                                        <Image
-                                            src="images/cards/continent.png"
-                                            alt="continent"
-                                            maxH="3rem"
-                                            align="center"
-                                        />
+                                        <Image src={continentImage} alt="continent" maxH="3rem" align="center" />
                                     </Center>
                                     <Stack direction="column" spacing={0}>
                                         <Text fontSize="md" color="gray">
                                             Continent
                                         </Text>
-                                        <Text fontSize="md" bgColor={badgeColor} rounded="lg" color="white" px={2} textAlign="center">
+                                        <Text
+                                            fontSize="md"
+                                            bgColor={badgeColor}
+                                            rounded="lg"
+                                            color="white"
+                                            px={2}
+                                            textAlign="center">
                                             {monster.continent}
                                         </Text>
                                     </Stack>
