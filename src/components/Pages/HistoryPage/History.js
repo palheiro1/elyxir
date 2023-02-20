@@ -59,6 +59,8 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
     const [transactions, setTransactions] = useState([]);
     const [dividends, setDividends] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState(transactions);
+    const [filteredDividends, setFilteredDividends] = useState(dividends);
+
     const [blockchainStatus, setBlockchainStatus] = useState({});
     const [needReload, setNeedReload] = useState(true);
     const [lastConfirmation, setLastConfirmation] = useState(false);
@@ -150,9 +152,11 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
             });
 
             setDividends(infoAccount.dividends);
+            console.log("🚀 ~ file: History.js:158 ~ processTransactions ~ infoAccount.dividends", infoAccount.dividends)
             setTransactions(newTransactions);
             setNeedReload(false);
         };
+            
 
         infoAccount.transactions !== undefined &&
             blockchainStatus.epoch_beginning !== undefined &&
@@ -165,6 +169,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
         <Box>
             <TopBar
                 setFilteredTransactions={setFilteredTransactions}
+                setFilteredDividends={setFilteredDividends}
                 setVisibleTransactions={setVisibleTransactions}
                 transactions={transactions}
                 setSection={setSection}
@@ -176,10 +181,18 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                 <ShowTransactions
                     haveUnconfirmed={haveUnconfirmed}
                     filteredTransactions={filteredTransactions}
+                    setVisibleTransactions={setVisibleTransactions}
                     visibleTransactions={visibleTransactions}
                 />
             )}
-            {!needReload && section === 'dividends' && <ShowDividends filteredDividends={dividends} visibleDividends />}
+            {!needReload && section === 'dividends' && (
+                <ShowDividends
+                    filteredDividends={dividends}
+                    setVisibleDividends={setVisibleDividends}
+                    visibleDividends={visibleDividends}
+                    epoch_beginning={blockchainStatus.epoch_beginning}
+                />
+            )}
         </Box>
     );
 };

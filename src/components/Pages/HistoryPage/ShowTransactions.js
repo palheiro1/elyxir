@@ -8,11 +8,11 @@ import { Th } from '../../ResponsiveTable/th';
 
 const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTransactions, visibleTransactions }) => {
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
-        // -------------------------------------------------
-        const loadMoreTransactions = () => {
-            setVisibleTransactions(prevVisibleTransactions => prevVisibleTransactions + 10);
-        };
-        // -------------------------------------------------
+    // -------------------------------------------------
+    const loadMoreTransactions = () => {
+        setVisibleTransactions(prevVisibleTransactions => prevVisibleTransactions + 10);
+    };
+    // -------------------------------------------------
     return (
         <TableContainer
             border="1px"
