@@ -54,6 +54,8 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const maxPacksWithIgnis = Math.floor(IGNISBalance / PACKPRICE);
     const maxPacksWithGiftz = Math.floor(GIFTZBalance / PACKPRICEGIFTZ);
 
+    const [sendingTx, setSendingTx] = useState(false);
+
     const toast = useToast();
 
     const colorText = useColorModeValue('black', 'white');
@@ -131,6 +133,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         let itsOk = false;
 
         try {
+            setSendingTx(true);
             if (value === '1') {
                 // buy pack with ignis
                 const response = await buyPackWithIgnis(passphrase, input.value, IGNISBalance);
@@ -153,6 +156,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         } else {
             errorToast('Error buying pack', toast);
         }
+        setSendingTx(false);
     };
 
     const bgColor = useColorModeValue('', '#1D1D1D');
@@ -291,7 +295,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     </Center>
                                     <Box w="100%" mt={2}>
                                         <Button
-                                            isDisabled={isDisabled}
+                                            isDisabled={isDisabled || sendingTx}
                                             bgColor={!isDisabled ? '#F18800' : null}
                                             w="100%"
                                             py={6}

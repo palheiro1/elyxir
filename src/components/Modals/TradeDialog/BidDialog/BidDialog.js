@@ -53,6 +53,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
 
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
+    const [sendingTx, setSendingTx] = useState(false);
 
     const [selectedItem, setSelectedItem] = useState(''); // selected item in the grid
 
@@ -115,20 +116,27 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
     };
 
     const handleSend = async () => {
-        const value = Number(input.value);
-        const quantity = !isGem ? value : value * NQTDIVIDER;
-        const response = await sendBidOrder({
-            asset: card.asset,
-            quantity: quantity,
-            price: priceCard * NQTDIVIDER,
-            passPhrase: passphrase,
-        });
+        try {
+            setSendingTx(true);
+            const value = Number(input.value);
+            const quantity = !isGem ? value : value * NQTDIVIDER;
+            const response = await sendBidOrder({
+                asset: card.asset,
+                quantity: quantity,
+                price: priceCard * NQTDIVIDER,
+                passPhrase: passphrase,
+            });
 
-        if (response) {
-            okToast('Bid order sent successfully', toast);
-            onClose();
-        } else {
+            if (response) {
+                okToast('Bid order sent successfully', toast);
+                onClose();
+            } else {
+                errorToast('Error sending bid order', toast);
+            }
+        } catch (error) {
             errorToast('Error sending bid order', toast);
+        } finally {
+            setSendingTx(false);
         }
     };
 
@@ -266,7 +274,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                     </Box>
                                     <Box w="100%" mt={8}>
                                         <Button
-                                            isDisabled={!isValidPin}
+                                            isDisabled={!isValidPin || sendingTx}
                                             bgColor={isValidPin ? '#F18800' : null}
                                             w="100%"
                                             py={6}

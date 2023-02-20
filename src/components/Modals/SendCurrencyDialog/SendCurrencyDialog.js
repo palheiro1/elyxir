@@ -37,6 +37,7 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
     const [ardorAccount, setArdorAccount] = useState('');
     const [isValidArdorAccount, setIsValidArdorAccount] = useState(false);
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
+    const [sendingTx, setSendingTx] = useState(false);
 
     const [passphrase, setPassphrase] = useState('');
     const maxCurrency =
@@ -71,45 +72,52 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
     };
 
     const handleSend = async () => {
-        if (!isValidPin || !isValidArdorAccount || !passphrase || !input.value || input.value > maxCurrency) {
-            errorToast('Invalid data', toast);
-            return;
-        }
-
-        let response;
-        switch (currency.name) {
-            case 'IGNIS':
-                response = await sendIgnis({
-                    amountNQT: input.value * NQTDIVIDER,
-                    recipient: ardorAccount,
-                    passPhrase: passphrase,
-                });
-                break;
-            case 'GIFTZ':
-                response = await sendGiftz({
-                    amountNQT: input.value,
-                    recipient: ardorAccount,
-                    passphrase: passphrase,
-                    ignisBalance: IGNISBalance,
-                });
-                break;
-            case 'GEMS':
-                response = await sendGem({
-                    amountNQT: input.value,
-                    recipient: ardorAccount,
-                    passphrase: passphrase,
-                });
-                break;
-            default:
-                errorToast(toast, 'Currency not supported');
+        try {
+            if (!isValidPin || !isValidArdorAccount || !passphrase || !input.value || input.value > maxCurrency) {
+                errorToast('Invalid data', toast);
                 return;
-        }
+            }
 
-        if (response) {
-            okToast(`${currency.name} sent successfully`, toast);
-            onClose();
-        } else {
-            errorToast(`Error sending ${currency.name}: ${response.errorDescription}`, toast);
+            setSendingTx(true);
+            let response;
+            switch (currency.name) {
+                case 'IGNIS':
+                    response = await sendIgnis({
+                        amountNQT: input.value * NQTDIVIDER,
+                        recipient: ardorAccount,
+                        passPhrase: passphrase,
+                    });
+                    break;
+                case 'GIFTZ':
+                    response = await sendGiftz({
+                        amountNQT: input.value,
+                        recipient: ardorAccount,
+                        passphrase: passphrase,
+                        ignisBalance: IGNISBalance,
+                    });
+                    break;
+                case 'GEMS':
+                    response = await sendGem({
+                        amountNQT: input.value,
+                        recipient: ardorAccount,
+                        passphrase: passphrase,
+                    });
+                    break;
+                default:
+                    errorToast(toast, 'Currency not supported');
+                    return;
+            }
+
+            if (response) {
+                okToast(`${currency.name} sent successfully`, toast);
+                onClose();
+            } else {
+                errorToast(`Error sending ${currency.name}: ${response.errorDescription}`, toast);
+            }
+        } catch (error) {
+            errorToast(`Error sending ${currency.name}: ${error}`, toast);
+        } finally {
+            setSendingTx(false);
         }
     };
 
@@ -204,7 +212,7 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button
-                            isDisabled={isDisabled}
+                            isDisabled={isDisabled || sendingTx}
                             bgColor={!isDisabled ? '#F18800' : null}
                             w="100%"
                             py={6}

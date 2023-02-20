@@ -41,6 +41,7 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
     const [ignisPrice, setIgnisPrice] = useState(0);
+    const [sendingTx, setSendingTx] = useState(false);
 
     const maxPacksWithIgnis = Math.floor(IGNISBalance / EXCHANGERATE);
 
@@ -103,6 +104,7 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
         let itsOk = false;
 
         try {
+            setSendingTx(true);
             // Buy GIFTZ with IGNIS
             await buyGiftz({ passphrase: passphrase, amountNQT: input.value });
             itsOk = true;
@@ -117,6 +119,7 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
         } else {
             errorToast('Error buying GIFTZs', toast);
         }
+        setSendingTx(false);
     };
 
     const bgColor = useColorModeValue('', '#1D1D1D');
@@ -200,7 +203,7 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
                                 </Center>
                                 <Box w="100%" mt={2}>
                                     <Button
-                                        isDisabled={isDisabled}
+                                        isDisabled={isDisabled || sendingTx}
                                         bgColor={!isDisabled ? '#F18800' : null}
                                         w="100%"
                                         py={6}

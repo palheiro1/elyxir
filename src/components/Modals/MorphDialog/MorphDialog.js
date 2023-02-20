@@ -46,8 +46,8 @@ import CardBadges from '../../Cards/CardBadges';
  */
 const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
     const toast = useToast();
-
     const maxCards = Number(card.quantityQNT);
+    const [sendingTx, setSendingTx] = useState(false);
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: 1,
@@ -89,18 +89,25 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
     }, [input, card]);
 
     const handleMorph = async () => {
-        const ok = await sendToMorph({
-            asset: card.asset,
-            noCards: input.value,
-            passPhrase: passPhrase,
-            cost: morphingCost,
-        });
+        try {
+            setSendingTx(true);
+            const ok = await sendToMorph({
+                asset: card.asset,
+                noCards: input.value,
+                passPhrase: passPhrase,
+                cost: morphingCost,
+            });
 
-        if (ok) {
-            okToast('Morphing successful', toast);
-            onClose();
-        } else {
+            if (ok) {
+                okToast('Morphing successful', toast);
+                onClose();
+            } else {
+                errorToast('Morphing failed', toast);
+            }
+        } catch (error) {
             errorToast('Morphing failed', toast);
+        } finally {
+            setSendingTx(false);
         }
     };
 
@@ -195,7 +202,12 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
                         </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button isDisabled={!isValidPin} bgColor={isValidPin ? '#F18800' : null} w="100%" py={6} onClick={handleMorph}>
+                        <Button
+                            isDisabled={!isValidPin || sendingTx}
+                            bgColor={isValidPin ? '#F18800' : null}
+                            w="100%"
+                            py={6}
+                            onClick={handleMorph}>
                             Submit
                         </Button>
                     </AlertDialogFooter>

@@ -50,8 +50,8 @@ import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/
 const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
     const toast = useToast();
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
-
     const [passphrase, setPassphrase] = useState('');
+    const [sendingTx, setSendingTx] = useState(false);
 
     const isGem = card.assetname === 'GEM';
     const gemImg = './images/gems.svg';
@@ -91,20 +91,27 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
     };
 
     const handleSend = async () => {
-        const value = Number(input.value);
-        const quantity = !isGem ? value : value * NQTDIVIDER;
-        const response = await sendAskOrder({
-            asset: card.asset,
-            quantity: quantity,
-            price: priceCard * NQTDIVIDER,
-            passPhrase: passphrase,
-        });
+        try {
+            setSendingTx(true);
+            const value = Number(input.value);
+            const quantity = !isGem ? value : value * NQTDIVIDER;
+            const response = await sendAskOrder({
+                asset: card.asset,
+                quantity: quantity,
+                price: priceCard * NQTDIVIDER,
+                passPhrase: passphrase,
+            });
 
-        if (response) {
-            okToast('Ask order sent successfully', toast);
-            onClose();
-        } else {
+            if (response) {
+                okToast('Ask order sent successfully', toast);
+                onClose();
+            } else {
+                errorToast('Error sending ask order', toast);
+            }
+        } catch (error) {
             errorToast('Error sending ask order', toast);
+        } finally {
+            setSendingTx(false);
         }
     };
 
@@ -126,7 +133,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                 setPriceCard(selectedItem.price);
                 setValue(selectedItem.quantity);
             }
-            if(selectedItem) setSelectedItem('');
+            if (selectedItem) setSelectedItem('');
         };
 
         checkChange();
@@ -242,7 +249,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                     </Box>
                                     <Box w="100%" mt={8}>
                                         <Button
-                                            isDisabled={!isValidPin}
+                                            isDisabled={!isValidPin || sendingTx}
                                             bgColor={isValidPin ? '#F18800' : null}
                                             w="100%"
                                             py={6}

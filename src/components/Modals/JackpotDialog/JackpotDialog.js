@@ -27,6 +27,7 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
     const toast = useToast();
     const [passPhrase, setPassPhrase] = useState('');
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
+    const [sendingTx, setSendingTx] = useState(false);
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -40,11 +41,13 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
 
     const handleSend = async () => {
         if (isValidPin) {
+            setSendingTx(true);
             const response = await sendToJackpot({ cards: totalCards, passPhrase: passPhrase });
             if (response) okToast('Jackpot participation registered', toast);
             else errorToast('Error registering participation', toast);
 
             onClose();
+            setSendingTx(false);
         }
     };
 
@@ -161,7 +164,7 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
 
                         <Center my={2}>
                             <Button
-                                isDisabled={!isValidPin}
+                                isDisabled={!isValidPin || sendingTx}
                                 bgColor={isValidPin ? '#F18800' : null}
                                 onClick={handleSend}
                                 minW="90%"

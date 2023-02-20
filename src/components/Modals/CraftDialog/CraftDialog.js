@@ -48,6 +48,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
     const toast = useToast();
     const maxCards = Number(card.quantityQNT);
     const maxCrafts = Math.floor(maxCards / 5);
+    const [sendingTx, setSendingTx] = useState(false);
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: 1,
@@ -99,17 +100,24 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
         if (craftingCost === 0) return errorToast('Invalid number of crafts', toast);
         if (noCards % 5 !== 0) return errorToast('Invalid number of crafts', toast);
 
-        const ok = await sendToCraft({
-            asset: card.asset,
-            noCards: noCards,
-            passPhrase: passPhrase,
-            cost: craftingCost,
-        });
-        if (ok) {
-            okToast('Crafting request sent', toast);
-            onClose();
-        } else {
+        try {
+            setSendingTx(true);
+            const ok = await sendToCraft({
+                asset: card.asset,
+                noCards: noCards,
+                passPhrase: passPhrase,
+                cost: craftingCost,
+            });
+            if (ok) {
+                okToast('Crafting request sent', toast);
+                onClose();
+            } else {
+                errorToast('Error sending crafting request', toast);
+            }
+        } catch (error) {
             errorToast('Error sending crafting request', toast);
+        } finally {
+            setSendingTx(false);
         }
     };
 
@@ -205,7 +213,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button
-                            isDisabled={!isValidPin}
+                            isDisabled={!isValidPin || sendingTx}
                             bgColor={isValidPin ? '#F18800' : null}
                             w="100%"
                             py={6}

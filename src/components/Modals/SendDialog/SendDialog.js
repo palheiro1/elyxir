@@ -51,6 +51,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
     const [ardorAccount, setArdorAccount] = useState('');
     const [isValidArdorAccount, setIsValidArdorAccount] = useState(false);
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
+    const [sendingTx, setSendingTx] = useState(false);
 
     const [passphrase, setPassphrase] = useState('');
     const maxCards = Number(card.quantityQNT);
@@ -84,18 +85,26 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
     };
 
     const handleSend = async () => {
-        const response = await transferAsset({
-            asset: card.asset,
-            quantityQNT: input.value,
-            recipient: ardorAccount,
-            passPhrase: passphrase,
-        });
+        try {
+            setSendingTx(true);
+            const response = await transferAsset({
+                asset: card.asset,
+                quantityQNT: input.value,
+                recipient: ardorAccount,
+                passPhrase: passphrase,
+            });
 
-        if (response) {
-            okToast('Card sent successfully', toast);
-            onClose();
-        } else {
+            if (response) {
+                okToast('Card sent successfully', toast);
+                onClose();
+            } else {
+                errorToast('Error sending card', toast);
+            }
+        } catch (error) {
+            console.log(error);
             errorToast('Error sending card', toast);
+        } finally {
+            setSendingTx(false);
         }
     };
 
@@ -201,7 +210,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button
-                            isDisabled={isDisabled}
+                            isDisabled={isDisabled || sendingTx}
                             bgColor={!isDisabled ? '#F18800' : null}
                             w="100%"
                             py={6}
