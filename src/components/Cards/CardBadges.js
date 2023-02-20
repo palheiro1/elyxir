@@ -7,6 +7,7 @@ const CardBadges = ({ rarity, continent, size = 'md' }) => {
     return (
         <Stack direction={{ base: 'column', md: 'row' }} spacing={1}>
             <Text
+                px={2}
                 w={{ base: '6rem', md: 'auto' }}
                 h={{ base: '1rem', md: 'auto' }}
                 textAlign="center"
@@ -17,6 +18,7 @@ const CardBadges = ({ rarity, continent, size = 'md' }) => {
                 {rarity}
             </Text>
             <Text
+                px={2}
                 fontSize={size}
                 w={{ base: '6rem', md: 'auto' }}
                 h={{ base: '1rem', md: 'auto' }}
