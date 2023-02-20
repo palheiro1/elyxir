@@ -1,24 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import {
-    Box,
-    Button,
-    Center,
-    Spinner,
-    TableContainer,
-    Text,
-    useColorModeValue,
-} from '@chakra-ui/react';
-
-import { Table } from '../../ResponsiveTable/table';
-import { Tbody } from '../../ResponsiveTable/tbody';
-import { Thead } from '../../ResponsiveTable/thead';
-import { Tr } from '../../ResponsiveTable/tr';
-import { Th } from '../../ResponsiveTable/th';
+import { Box } from '@chakra-ui/react';
 
 import { getBlockchainStatus } from '../../../services/Ardor/ardorInterface';
 import { getTxTimestamp } from '../../../utils/txUtils';
-import SortAndFilterTxs from '../../SortAndFilters/SortAndFilterTxs';
+
 import {
     handleIncomingGIFTZ,
     handleType0AndSubtype0,
@@ -28,6 +14,10 @@ import {
     handleType2AndSubtype4And5,
     handleType5AndSubtype3,
 } from './TableHandlers';
+
+import ShowTransactions from './ShowTransactions';
+import Loader from './Loader';
+import TopBar from './TopBar';
 
 /**
  * @name History
@@ -70,6 +60,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
     const [blockchainStatus, setBlockchainStatus] = useState({});
     const [needReload, setNeedReload] = useState(true);
     const [lastConfirmation, setLastConfirmation] = useState(false);
+    const [section, setSection] = useState('transactions'); // transactions/dividends
 
     // -------------------------------------------------
     const [visibleTransactions, setVisibleTransactions] = useState(10);
@@ -169,64 +160,24 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
             processTransactions();
     }, [infoAccount, transactions, blockchainStatus.epoch_beginning, needReload, collectionCardsStatic]);
 
-    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
-
     return (
         <Box>
-            <SortAndFilterTxs
+            <TopBar
                 setFilteredTransactions={setFilteredTransactions}
                 setVisibleTransactions={setVisibleTransactions}
                 transactions={transactions}
+                setSection={setSection}
             />
 
-            {needReload ? (
-                <Center w="100%" textAlign="center" py={4} gap={4}>
-                    <Spinner size="md" />
-                    <Text>Loading</Text>
-                </Center>
-            ) : (
-                <TableContainer
-                    border="1px"
-                    borderColor={borderColor}
-                    rounded="lg"
-                    bg="blackAlpha"
-                    shadow="dark-lg"
-                    p={2}
-                    boxShadow="inner"
-                    textAlign="center"
-                    maxW={{ base: '100%', md: '80%', lg: '70vw', xl: "100%" }}>
-                    {haveUnconfirmed && (
-                        <Center w="100%" textAlign="center" py={4} gap={4}>
-                            <Spinner size="md" />{' '}
-                            <Text fontWeight="bolder" bgGradient="linear(to-l, #478299, #957bd2)" bgClip="text">
-                                New transactions are being processed.
-                            </Text>
-                        </Center>
-                    )}
-                    <Table variant="simple" size={{ base: 'sm', lg: 'md' }}>
-                        <Thead>
-                            <Tr w="1rem">
-                                <Th />
-                                <Th>Title</Th>
-                                <Th>Amount</Th>
-                                <Th>Date and Time</Th>
-                                <Th>To/From</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {!needReload &&
-                                filteredTransactions.slice(0, visibleTransactions).map((transaction, index) => {
-                                    return <transaction.component key={index} />;
-                                })}
-                        </Tbody>
-                    </Table>
+            {needReload && <Loader />}
 
-                    {filteredTransactions.length > visibleTransactions && (
-                        <Button size="lg" w="100%" p={6} onClick={loadMoreTransactions}>
-                            Load More
-                        </Button>
-                    )}
-                </TableContainer>
+            {!needReload && section === 'transactions' && (
+                <ShowTransactions
+                    haveUnconfirmed={haveUnconfirmed}
+                    filteredTransactions={filteredTransactions}
+                    visibleTransactions={visibleTransactions}
+                    loadMoreTransactions={loadMoreTransactions}
+                />
             )}
         </Box>
     );

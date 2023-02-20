@@ -71,8 +71,6 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
             </Stack>
 
             <Stack
-                position={{ base: 'unset', md: 'absolute' }}
-                right="4.8%"
                 direction="row"
                 w={{ base: '100%', md: 'unset' }}>
                 <Stack
