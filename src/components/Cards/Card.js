@@ -2,10 +2,9 @@ import {
     Box,
     Button,
     Center,
-    Grid,
-    GridItem,
     Image,
     SimpleGrid,
+    Spacer,
     Spinner,
     Stack,
     Text,
@@ -107,8 +106,10 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     const isBlocked = card.quantityQNT > card.unconfirmedQuantityQNT && card.unconfirmedQuantityQNT === '0';
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
+    const [hoverButton, setHoverButton] = useState(false);
+
     return (
-        <Box p={3} border="1px" rounded="lg" shadow="lg" bgColor={bgColor} borderColor={borderColor}>
+        <Box p={3} border="1px" rounded="lg" shadow="lg" bgColor={bgColor} borderColor={borderColor} minH="29rem">
             <Center>
                 <Stack direction="column" spacing={4}>
                     <Image
@@ -121,33 +122,20 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                         onMouseLeave={() => (haveThisCard ? setHover(false) : null)}
                         opacity={cardOpacity}
                     />
-
-                    <Grid templateColumns="repeat(4, 1fr)" alignContent="center">
-                        <GridItem colSpan="3">
-                            <Text fontSize="xl" fontWeight="bolder" minW="100%">
+                    <Stack direction={['column', 'row']} spacing={4}>
+                        <Stack direction="column" spacing={0}>
+                            <Text fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }} noOfLines={1} fontWeight="bold">
                                 {name}
                             </Text>
-
                             <CardBadges rarity={rarity} continent={continent} size="sm" />
-                        </GridItem>
-                        <GridItem alignContent="center" minH="100%">
-                            <Center minHeight="100%">
-                                <Text textAlign="end" minH="100%">
-                                    <small>Quantity:</small> {quantity}
-                                </Text>
-                            </Center>
-                        </GridItem>
-                    </Grid>
-                    {isBlocked && (
-                        <Box w="100%">
-                            <Box w="100%" bgColor={borderColor} rounded="lg">
-                                <Text textAlign="center" fontSize="xs">
-                                    1 card(s) locked for all actions.
-                                    <br /> Check for open Ask orders to unlock.
-                                </Text>
-                            </Box>
-                        </Box>
-                    )}
+                        </Stack>
+                        <Spacer />
+                        <Center minHeight="100%">
+                            <Text textAlign="end" minH="100%">
+                                <small>Quantity:</small> {quantity}
+                            </Text>
+                        </Center>
+                    </Stack>
                     {!isMarket && !isBlocked && !fixOnlyBuy && (
                         <SimpleGrid columns={3} gap={1}>
                             <Button
@@ -181,15 +169,29 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                     {isMarket && (
                         <Center>
                             <Stack direction="column" w="100%">
-                                <Box w="100%">
-                                    <Button
-                                        onClick={onOpenTrade}
-                                        size="lg"
-                                        w="100%"
-                                        leftIcon={<BsArrowLeftRight />}
-                                        _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
-                                        Trade
-                                    </Button>
+                                <Box
+                                    w="100%"
+                                    onMouseEnter={() => isBlocked && setHoverButton(true)}
+                                    onMouseLeave={() => isBlocked && setHoverButton(false)}>
+                                    {!hoverButton && (
+                                        <Button
+                                            isDisabled={isBlocked}
+                                            onClick={onOpenTrade}
+                                            size="lg"
+                                            w="100%"
+                                            leftIcon={<BsArrowLeftRight />}
+                                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
+                                            Trade
+                                        </Button>
+                                    )}
+                                    {hoverButton && (
+                                        <Center w="100%" minH="3rem" bgColor={borderColor} rounded="lg" h="100%">
+                                            <Text textAlign="center" fontSize="xs">
+                                                <strong>1 card(s) locked for all actions.</strong>
+                                                <br /> Check for open Ask orders to unlock.
+                                            </Text>
+                                        </Center>
+                                    )}
                                 </Box>
                                 <Box borderTop="1px" borderTopColor="gray.600" pt={4}>
                                     <SimpleGrid columns={3} spacing={4}>

@@ -98,13 +98,13 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, username, ignis }
     return (
         <>
             <Grid
-                templateColumns={[
-                    'repeat(1, 1fr)',
-                    'repeat(1, 1fr)',
-                    'repeat(2, 1fr)',
-                    'repeat(3, 3fr)',
-                    'repeat(5, 1fr)',
-                ]}
+                templateColumns={{
+                    base: 'repeat(1, 1fr)',
+                    md: 'repeat(2, 1fr)',
+                    lg: 'repeat(3, 1fr)',
+                    xl: 'repeat(4, 1fr)',
+                    '2xl': 'repeat(5, 1fr)',
+                }}
                 gap={4}
                 my={4}>
                 {loadedCards.map((card, index) => {
