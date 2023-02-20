@@ -62,6 +62,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
 
     const bgColor = useColorModeValue('white', 'transparent');
     const [hover, setHover] = useState(false);
+    const [hoverButton, setHoverButton] = useState(false);
 
     const initialStyle = {
         transform: 'scale(1)',
@@ -105,8 +106,6 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     // ------------------------------
     const isBlocked = card.quantityQNT > card.unconfirmedQuantityQNT && card.unconfirmedQuantityQNT === '0';
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
-
-    const [hoverButton, setHoverButton] = useState(false);
 
     return (
         <Box p={3} border="1px" rounded="lg" shadow="lg" bgColor={bgColor} borderColor={borderColor} minH="29rem">
