@@ -72,7 +72,7 @@ const Jackpot = ({ infoAccount, cards = [] }) => {
                 </Text>
             )}
 
-            {remainingCards.length > 0 ? (
+            {remainingCards.length > 0 && (
                 <>
                     <SortAndFilterCards
                         cards={remainingCards}
@@ -87,7 +87,8 @@ const Jackpot = ({ infoAccount, cards = [] }) => {
                         cards={cardsFiltered}
                     />
                 </>
-            ) : (
+            )}
+            {cards.length > 0 && remainingCards.length === 0 && (
                 <ClaimJackpot username={infoAccount.name} cards={totalNoSpecialCards} />
             )}
         </Box>
