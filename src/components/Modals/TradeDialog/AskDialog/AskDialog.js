@@ -55,7 +55,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
 
     const isGem = card.assetname === 'GEM';
     const gemImg = './images/gems.svg';
-    const maxCards = isGem ? card.quantityQNT / NQTDIVIDER : card.quantityQNT;
+    const maxCards = isGem ? Number(card.unconfirmedQuantityQNT) / NQTDIVIDER : Number(card.unconfirmedQuantityQNT);
 
     const [selectedItem, setSelectedItem] = useState(''); // selected item in the grid
 

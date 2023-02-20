@@ -46,7 +46,7 @@ import CardBadges from '../../Cards/CardBadges';
  */
 const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
     const toast = useToast();
-    const maxCards = Number(card.quantityQNT);
+    const maxCards = Number(card.unconfirmedQuantityQNT);
     const [sendingTx, setSendingTx] = useState(false);
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({

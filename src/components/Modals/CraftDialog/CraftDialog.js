@@ -46,7 +46,7 @@ import CardBadges from '../../Cards/CardBadges';
  */
 const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
     const toast = useToast();
-    const maxCards = Number(card.quantityQNT);
+    const maxCards = Number(card.unconfirmedQuantityQNT);
     const maxCrafts = Math.floor(maxCards / 5);
     const [sendingTx, setSendingTx] = useState(false);
 
