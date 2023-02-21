@@ -819,9 +819,8 @@ export const sendDirectMessage = async ({ recipient, passPhrase, message }) => {
             publicKey: publicKey,
             recipient: recipient,
             feeNQT: -1,
-            messageToEncrypt: message,
-            messageToEncryptIsText: true,
-            encryptedMessageIsPrunable: true,
+            message: message,
+            messageIsPrunable: true,
             deadline: 60,
             broadcast: false,
         };
@@ -841,6 +840,23 @@ export const sendDirectMessage = async ({ recipient, passPhrase, message }) => {
         return false;
     }
 };
+
+export const getAllMessages = async accountRs => {
+    try {
+        const response = await axios.get(NODEURL, {
+            params: {
+                requestType: 'getPrunableMessages',
+                account: accountRs,
+                chain: 2,
+                lastIndex: 0,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log("🚀 ~ file: ardorInterface.js:858 ~ getAllMessages ~ error:", error)
+    }
+};
+        
 
 /*
 messageToEncrypt: message,
