@@ -31,6 +31,7 @@ const URL_CANCEL_ASK_ORDER = `${NODEURL}?requestType=cancelAskOrder`;
 const URL_CANCEL_BID_ORDER = `${NODEURL}?requestType=cancelBidOrder`;
 
 const URL_BROADCAST = `${NODEURL}?requestType=broadcastTransaction`;
+const URL_SEND_MESSAGE = `${NODEURL}?requestType=sendMessage`;
 
 // -------------------------------------------------
 //                   BASIC UTILS
@@ -210,7 +211,12 @@ const calculateFeeByRecipient = async (recipient, query, URL_TO_CALL) => {
     const account = await getAccount(recipient);
     const isRecipientNew = account.errorCode === 5;
     const data = (await axios.post(URL_TO_CALL, qs.stringify(query), config)).data;
-    const fee = isRecipientNew ? 14 * NQTDIVIDER : data.minimumFeeFQT * data.bundlerRateNQTPerFXT * 0.00000001;
+    let fee;
+    if (data.bundlerRateNQTPerFXT) {
+        fee = isRecipientNew ? 14 * NQTDIVIDER : data.minimumFeeFQT * data.bundlerRateNQTPerFXT * 0.00000001;
+    } else {
+        fee = isRecipientNew ? 14 * NQTDIVIDER : data.minimumFeeFQT * 0.00000001;
+    }
     return Math.ceil(fee);
 };
 
@@ -283,6 +289,7 @@ const sendIgnis = async ({
         query.broadcast = false;
 
         const res2 = await axios.post(URL_SEND_MONEY, qs.stringify(query, config));
+        console.log('🚀 ~ file: ardorInterface.js:286 ~ res2:', res2);
         const signed = ardorjs.signTransactionBytes(res2.data.unsignedTransactionBytes, passPhrase);
 
         let txdata;
@@ -804,32 +811,45 @@ export const processUnwrapsForAccount = async accountRs => {
 export const sendDirectMessage = async ({ recipient, passPhrase, message }) => {
     if (!recipient || !passPhrase || !message) return false;
 
-    const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
-
-    let query = {
-        requestType: 'sendMessage',
-        chain: 2,
-        recipient: recipient,
-        publicKey: publicKey,
-        messageToEncrypt: message,
-        messageToEncryptIsText: true,
-        encryptedMessageIsPrunable: true,
-        deadline: 30,
-        feeNQT: 0,
-    };
-
     try {
-        const response = await axios.post(NODEURL, qs.stringify(query), config);
-        console.log('🚀 ~ file: ardorInterface.js:811 ~ sendDirectMessage ~ response', response);
+        const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
+
+        let query = {
+            chain: 2,
+            publicKey: publicKey,
+            recipient: recipient,
+            feeNQT: -1,
+            messageToEncrypt: message,
+            messageToEncryptIsText: true,
+            encryptedMessageIsPrunable: true,
+            deadline: 60,
+            broadcast: false,
+        };
+
+        const fee = await calculateFeeByRecipient(recipient, query, URL_SEND_MESSAGE);
+        console.log('🚀 ~ file: ardorInterface.js:824 ~ sendDirectMessage ~ fee:', fee);
+        query.feeNQT = fee;
+        const response = await axios.post(URL_SEND_MESSAGE, qs.stringify(query), config);
+        console.log('🚀 ~ file: ardorInterface.js:823 ~ sendDirectMessage ~ response:', response);
         const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
-        const response_2 = await axios.post(URL_BROADCAST, qs.stringify({ transactionBytes: signed }), config);
-        console.log('🚀 ~ file: ardorInterface.js:813 ~ sendDirectMessage ~ response_2', response_2);
-        return response_2.status === 200;
+        const txdata = { transactionBytes: signed };
+        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
+        console.log('🚀 ~ file: ardorInterface.js:826 ~ sendDirectMessage ~ respuesta:', respuesta);
+        return respuesta.status === 200;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:820 ~ sendDirectMessage ~ error', error);
         return false;
     }
 };
+
+/*
+messageToEncrypt: message,
+            messageToEncryptIsText: true,
+            encryptedMessageIsPrunable: true,
+            deadline: 30,
+            feeNQT: 0,
+            broadcast: false,
+            */
 
 export {
     sendIgnis,
