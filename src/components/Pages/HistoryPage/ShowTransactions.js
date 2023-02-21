@@ -13,7 +13,7 @@ const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTra
         setVisibleTransactions(prevVisibleTransactions => prevVisibleTransactions + 10);
     };
     // -------------------------------------------------
-    return (
+    return filteredTransactions.length > 0 ? (
         <TableContainer
             border="1px"
             borderColor={borderColor}
@@ -56,6 +56,13 @@ const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTra
                 </Button>
             )}
         </TableContainer>
+    ) : (
+        <Center w="100%" textAlign="center" py={4} gap={4}>
+            <Spinner size="md" />{' '}
+            <Text fontWeight="bolder" bgGradient="linear(to-l, #478299, #957bd2)" bgClip="text">
+                No transactions found, waiting for transactions...
+            </Text>
+        </Center>
     );
 };
 

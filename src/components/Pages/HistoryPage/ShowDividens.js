@@ -1,4 +1,4 @@
-import { Button, TableContainer, useColorModeValue } from '@chakra-ui/react';
+import { Button, Center, Spinner, TableContainer, Text, useColorModeValue } from '@chakra-ui/react';
 
 import { Table } from '../../ResponsiveTable/table';
 import { Tbody } from '../../ResponsiveTable/tbody';
@@ -17,7 +17,7 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
         setVisibleDividends(prevVisibleTransactions => prevVisibleTransactions + 10);
     };
     // -------------------------------------------------
-    return (
+    return filteredDividends.length > 0 ? (
         <TableContainer
             border="1px"
             borderColor={borderColor}
@@ -74,6 +74,13 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
                 </Button>
             )}
         </TableContainer>
+    ) : (
+        <Center w="100%" textAlign="center" py={4} gap={4}>
+            <Spinner size="md" />{' '}
+            <Text fontWeight="bolder" bgGradient="linear(to-l, #478299, #957bd2)" bgClip="text">
+                No dividends found, waiting for dividends...
+            </Text>
+        </Center>
     );
 };
 
