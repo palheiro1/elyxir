@@ -9,30 +9,32 @@ import ClaimJackpot from './ClaimJackpot';
 /**
  * @name Jackpot
  * @description Jackpot page
- * @param {object} infoAccount - account info
+ * @param {object} infoAccount - Account info
  * @param {array} cards - All cards
  * @returns {JSX.Element} - JSX to display
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
 const Jackpot = ({ infoAccount, cards = [] }) => {
-    const totalNoSpecialCards = cards.filter(card => card.rarity !== 'Special');
-
-    const [remainingCards, setRemainingCards] = useState([]);
-    const [cardsFiltered, setCardsFiltered] = useState([]);
-    const [needReload, setNeedReload] = useState(true);
+    const [totalNoSpecialCards, setTotalNoSpecialCards] = useState([]); // Cards without specials
+    const [remainingCards, setRemainingCards] = useState([]); // Cards without specials and with 0 quantity
+    const [cardsFiltered, setCardsFiltered] = useState([]); // Cards filtered by search and rarity
     const [participants, setParticipants] = useState({ numParticipants: 0, participants: [], imParticipant: false });
-    const account = infoAccount.accountRs;
+    const { accountRs: account } = infoAccount;
 
     useEffect(() => {
+        // Get remaining cards
         const getRemainingCards = () => {
-            const cardWithZero = totalNoSpecialCards.filter(card => Number(card.quantityQNT) === 0);
+            const auxNoSpecialCards = cards.filter(card => card.rarity !== 'Special');
+            setTotalNoSpecialCards(auxNoSpecialCards);
+
+            const cardWithZero = auxNoSpecialCards.filter(card => Number(card.quantityQNT) === 0);
+            console.log('🚀 ~ file: Jackpot.js:33 ~ getRemainingCards ~ cardWithZero:', cardWithZero);
             setRemainingCards(cardWithZero);
-            setNeedReload(false);
         };
 
-        needReload && getRemainingCards();
-    }, [needReload, totalNoSpecialCards]);
+        getRemainingCards();
+    }, [cards]);
 
     useEffect(() => {
         const getParticipants = async () => {
@@ -96,5 +98,3 @@ const Jackpot = ({ infoAccount, cards = [] }) => {
 };
 
 export default Jackpot;
-
-//
