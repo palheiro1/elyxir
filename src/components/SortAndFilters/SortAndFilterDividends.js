@@ -16,8 +16,6 @@ const SortAndFilterDividends = ({ dividends, setFilteredDividends, setVisibleDiv
 
     useEffect(() => {
         const filterTransactions = dividends => {
-            console.log("🚀 ~ file: SortAndFilterDividends.js:19 ~ filterTransactions ~ dividends", dividends)
-            console.log('filterTransactions', filter)
             switch (filter) {
                 case 'all':
                     return dividends;

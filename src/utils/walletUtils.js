@@ -277,7 +277,6 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
     if (!success || !response_1) return false;
 
     // ----------------------------------
-    console.log(cost);
     const response_2 = await transferGEM({
         quantityQNT: cost * NQTDIVIDER,
         recipient: BUYPACKACCOUNT,

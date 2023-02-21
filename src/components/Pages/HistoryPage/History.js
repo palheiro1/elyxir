@@ -152,7 +152,6 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
             });
 
             setDividends(infoAccount.dividends);
-            console.log("🚀 ~ file: History.js:158 ~ processTransactions ~ infoAccount.dividends", infoAccount.dividends)
             setTransactions(newTransactions);
             setNeedReload(false);
         };

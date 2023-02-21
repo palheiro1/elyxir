@@ -35,7 +35,6 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
 
     const swap = async () => {
         const response = await processUnwrapsForAccount(infoAccount.accountRs);
-        console.log("🚀 ~ file: SwapToArdor.js:27 ~ swap ~ response", response)
         if (response && response.starts) {
             okToast(response.starts + ' transfers started.', toast);
         } else if (response && response.requestProcessingTime) {

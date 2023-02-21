@@ -29,7 +29,6 @@ const Jackpot = ({ infoAccount, cards = [] }) => {
             setTotalNoSpecialCards(auxNoSpecialCards);
 
             const cardWithZero = auxNoSpecialCards.filter(card => Number(card.quantityQNT) === 0);
-            console.log('🚀 ~ file: Jackpot.js:33 ~ getRemainingCards ~ cardWithZero:', cardWithZero);
             setRemainingCards(cardWithZero);
         };
 
