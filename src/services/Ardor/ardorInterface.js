@@ -665,35 +665,31 @@ const transferGEM = async ({
     priority = 'NORMAL',
 }) => {
     if (!quantityQNT || !recipient || !passPhrase) return false;
-    const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
-
-    let query = {
-        chain: 2,
-        recipient: recipient,
-        quantityQNT: quantityQNT,
-        asset: GEMASSET,
-        feeNQT: -1,
-        feeRateNQTPerFXT: -1,
-        deadline: deadline,
-        broadcast: false,
-        publicKey: publicKey,
-        message: message,
-        messageIsPrunable: messagePrunable,
-        transactionPriority: priority,
-    };
-
-    const url_tx = NODEURL + '?requestType=transferAsset';
 
     try {
-        query.feeNQT = await calculateFee(query, url_tx);
+        const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
+
+        let query = {
+            chain: 2,
+            recipient: recipient,
+            quantityQNT: quantityQNT,
+            asset: GEMASSET,
+            feeNQT: -1,
+            feeRateNQTPerFXT: -1,
+            deadline: deadline,
+            broadcast: false,
+            publicKey: publicKey,
+            message: message,
+            messageIsPrunable: messagePrunable,
+            transactionPriority: priority,
+        };
+
+        query.feeNQT = await calculateFee(query, URL_TRANSFER_ASSET);
         query.broadcast = false;
 
-        const response = await axios.post(url_tx, qs.stringify(query), config);
+        const response = await axios.post(URL_TRANSFER_ASSET, qs.stringify(query), config);
         const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
-
-        const txData = {
-            transactionBytes: signed,
-        };
+        const txData = { transactionBytes: signed };
 
         if (message !== '') {
             txData.prunableAttachmentJSON = JSON.stringify(response.data.transactionJSON.attachment);
@@ -813,27 +809,34 @@ export const sendDirectMessage = async ({ recipient, passPhrase, message }) => {
 
     try {
         const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
+        const recipientPublicKey = (await getAccountPublicKey(recipient)).publicKey;
+        const encryptedMessage = ardorjs.encryptMessage(message, passPhrase, recipientPublicKey, false);
+        if (!recipientPublicKey || !encryptedMessage) return false;
 
         let query = {
             chain: 2,
             publicKey: publicKey,
             recipient: recipient,
             feeNQT: -1,
-            message: message,
-            messageIsPrunable: true,
-            deadline: 60,
+            deadline: 15,
             broadcast: false,
+            encryptedMessageData: encryptedMessage.encryptedMessageData,
+            encryptedMessageNonce: encryptedMessage.encryptedMessageNonce,
+            encryptedMessageIsPrunable: true,
         };
 
         const fee = await calculateFeeByRecipient(recipient, query, URL_SEND_MESSAGE);
-        console.log('🚀 ~ file: ardorInterface.js:824 ~ sendDirectMessage ~ fee:', fee);
         query.feeNQT = fee;
+        query.broadcast = false;
+
         const response = await axios.post(URL_SEND_MESSAGE, qs.stringify(query), config);
-        console.log('🚀 ~ file: ardorInterface.js:823 ~ sendDirectMessage ~ response:', response);
         const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
-        const txdata = { transactionBytes: signed };
-        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
-        console.log('🚀 ~ file: ardorInterface.js:826 ~ sendDirectMessage ~ respuesta:', respuesta);
+        const txData = { transactionBytes: signed };
+
+        txData.prunableAttachmentJSON = JSON.stringify(response.data.transactionJSON.attachment);
+
+        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
+        if (respuesta.errorCode) return false;
         return respuesta.status === 200;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:820 ~ sendDirectMessage ~ error', error);
@@ -848,20 +851,57 @@ export const getAllMessages = async accountRs => {
                 requestType: 'getPrunableMessages',
                 account: accountRs,
                 chain: 2,
-                lastIndex: 0,
+                lastIndex: 50,
             },
         });
         return response.data;
     } catch (error) {
-        console.log("🚀 ~ file: ardorInterface.js:858 ~ getAllMessages ~ error:", error)
+        console.log('🚀 ~ file: ardorInterface.js:858 ~ getAllMessages ~ error:', error);
     }
 };
-        
+
+export const decryptMessage = async ({ passPhrase, account, data, nonce }) => {
+    try {
+        /*
+        const options = {
+            nonce: nonce,
+            isText: true,
+        };
+        const message = ardorjs.decryptNote(data, options, passPhrase);
+        console.log('🚀 ~ file: ardorInterface.js:865 ~ decryptMessage ~ message:', message);
+        */
+
+        const response = await axios.get(NODEURL, {
+            params: {
+                requestType: 'decryptFrom',
+                secretPhrase: passPhrase,
+                account,
+                data,
+                nonce,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:872 ~ decryptMessage ~ error:', error);
+    }
+};
+
+export const getAccountPublicKey = async accountRs => {
+    try {
+        const response = await axios.get(NODEURL, {
+            params: {
+                requestType: 'getAccountPublicKey',
+                account: accountRs,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:887 ~ getAccountPublicKey ~ error:', error);
+    }
+};
 
 /*
-messageToEncrypt: message,
-            messageToEncryptIsText: true,
-            encryptedMessageIsPrunable: true,
+
             deadline: 30,
             feeNQT: 0,
             broadcast: false,

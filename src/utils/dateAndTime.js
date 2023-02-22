@@ -17,3 +17,11 @@ export function formatTime(date, format) {
         .replace('mm', minutes < 10 ? '0' + minutes : minutes)
         .replace('ss', seconds < 10 ? '0' + seconds : seconds);
 }
+
+export function formatMessageTimestamp(timestamp) {
+    return new Date(timestamp).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+    });
+}

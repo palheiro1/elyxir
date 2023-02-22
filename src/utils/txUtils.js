@@ -121,7 +121,7 @@ export function parseRecipient(tx) {
     }
 }
 
-export function getTxTimestamp(tx, eb, showStatus = true) {
+export const getTxTimestamp = (tx, eb, showStatus = true) => {
     const txstamp = new Date(eb.getTime() + tx.timestamp * 1000);
 
     const datestring = formatDate(txstamp, 'yyyy-MM-dd');
@@ -134,4 +134,14 @@ export function getTxTimestamp(tx, eb, showStatus = true) {
     }
     
     return `${datestring} ${timestring} ${confirmationStatus}`;
+}
+
+export const getMessageTimestamp = (msg) => {
+    const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
+    const msgstamp = new Date(eb.getTime() + msg.blockTimestamp * 1000);
+
+    const datestring = formatDate(msgstamp, 'yyyy-MM-dd');
+    const timestring = formatTime(msgstamp, 'HH:mm:ss');
+
+    return `${datestring} ${timestring}`;
 }

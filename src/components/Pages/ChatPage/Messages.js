@@ -1,15 +1,12 @@
-import { Box, Stack, Text } from '@chakra-ui/react';
+import { Box, Stack } from '@chakra-ui/react';
 import OneMessage from './OneMessage';
 
-const Messages = ({ messages = [] }) => {
+const Messages = ({ messages = [], username, account }) => {
     return (
         <Box>
-            <Text fontSize="xs">
-                Total unread: <b>{messages.length}</b>
-            </Text>
             <Stack w="100%" rounded="md" p={4} my={4} shadow="md" bgColor="whiteAlpha.50">
                 {messages.map((message, index) => (
-                    <OneMessage key={index} message={message} />
+                    <OneMessage key={index} message={message} username={username} account={account} />
                 ))}
             </Stack>
         </Box>

@@ -36,6 +36,7 @@ import { checkPin } from '../../../utils/walletUtils';
  * @param {ref} reference - reference to the button that opens the modal
  * @param {boolean} isOpen - if the modal is open or not
  * @param {function} onClose - function to close the modal
+ * @param {string} username - username of the logged user
  */
 const NewMessage = ({ reference, isOpen, onClose, username }) => {
     const [ardorAccount, setArdorAccount] = useState('');
@@ -67,6 +68,14 @@ const NewMessage = ({ reference, isOpen, onClose, username }) => {
         }
     };
 
+    const cleanAndClose = () => {
+        setArdorAccount('');
+        setMessage('');
+        setPassphrase('');
+        setIsValidPin(false);
+        onClose();
+    };
+
     const handleOk = async () => {
         try {
             const response = await sendDirectMessage({
@@ -75,14 +84,11 @@ const NewMessage = ({ reference, isOpen, onClose, username }) => {
                 message,
             });
 
-            if (response) {
-                okToast('Message sent', toast);
-                onClose();
-            } else {
-                errorToast('Error sending message', toast);
-            }
+            if (response) okToast('Message sent', toast);
+            else errorToast('Error sending message', toast);
+            cleanAndClose();
         } catch (error) {
-            console.log("🚀 ~ file: NewMessage.js:85 ~ handleOk ~ error:", error)
+            console.log('🚀 ~ file: NewMessage.js:85 ~ handleOk ~ error:', error);
             errorToast('Error sending message', toast);
         }
     };
@@ -131,7 +137,7 @@ const NewMessage = ({ reference, isOpen, onClose, username }) => {
 
                         <FormControl variant="floatingGray" id="Message" my={4} mt={8}>
                             <Textarea placeholder=" " value={message} onChange={handleInputMessage} />
-                            <FormLabel>Recipient</FormLabel>
+                            <FormLabel>Message</FormLabel>
                         </FormControl>
 
                         <Center>
