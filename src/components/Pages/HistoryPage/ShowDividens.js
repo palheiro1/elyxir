@@ -17,7 +17,7 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
         setVisibleDividends(prevVisibleTransactions => prevVisibleTransactions + 10);
     };
     // -------------------------------------------------
-    return filteredDividends.length > 0 ? (
+    return filteredDividends && filteredDividends.length > 0 ? (
         <TableContainer
             border="1px"
             borderColor={borderColor}

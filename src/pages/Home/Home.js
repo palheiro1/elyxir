@@ -214,7 +214,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             // Search in cards attachment.asset and add to dividends
             dividendsTxs.forEach((dividendTx, index) => {
                 const { attachment } = dividendTx;
-                const card = cards.find(card => card.asset === attachment.asset);
+                const card = loadCards.find(card => card.asset === attachment.asset);
                 if (card) {
                     auxDividends[index].card = card;
                 }
