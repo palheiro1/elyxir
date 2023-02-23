@@ -57,7 +57,7 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, message, account
 
             if (response) {
                 okToast('Message decrypted', toast);
-                setText(response.decryptedMessage);
+                setText(response);
             } else {
                 errorToast('Error decrypting message', toast);
             }
