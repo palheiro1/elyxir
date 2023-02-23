@@ -1,4 +1,4 @@
-import { Box, Button, Center, Heading, Spacer, Stack, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Spacer, Stack, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { getAllMessages } from '../../../services/Ardor/ardorInterface';
 import NewMessage from '../../Modals/NewMessage/NewMessage';
