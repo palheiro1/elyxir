@@ -1,7 +1,7 @@
 import { Box, Stack, useColorModeValue } from '@chakra-ui/react';
-import OneMessage from './OneMessage';
+import OneSenderMessages from './OneSenderMessages';
 
-const Messages = ({ messages = [], username, account }) => {
+const Messages = ({ messages = {}, username, account }) => {
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
     return (
@@ -16,8 +16,8 @@ const Messages = ({ messages = [], username, account }) => {
                 border="1px"
                 bgColor={bgColor}
                 borderColor={borderColor}>
-                {messages.map((message, index) => (
-                    <OneMessage key={index} message={message} username={username} account={account} />
+                {Object.keys(messages).map((key, index) => (
+                    <OneSenderMessages key={index} sender={key} messages={messages[key]} username={username} account={account} />
                 ))}
             </Stack>
         </Box>

@@ -136,7 +136,7 @@ export const getTxTimestamp = (tx, eb, showStatus = true) => {
     return `${datestring} ${timestring} ${confirmationStatus}`;
 }
 
-export const getMessageTimestamp = (msg) => {
+export const getTimestampForMessages = (msg) => {
     const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
     const msgstamp = new Date(eb.getTime() + msg.blockTimestamp * 1000);
 

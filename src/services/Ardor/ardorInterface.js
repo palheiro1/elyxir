@@ -860,11 +860,10 @@ export const getAllMessages = async accountRs => {
     }
 };
 
-export const decryptMessage = async ({ passPhrase, account, message }) => {
+export const decryptMessage = async ({ passPhrase, message, publicKey }) => {
     try {
         const encryptedMessage = message.encryptedMessage;
         const { data } = encryptedMessage;
-        const publicKey = (await getAccountPublicKey(account)).publicKey;
         // Construir el objeto message exactamente igual, pero modificando la publicKey
         const publicKeyMessage = {
             ...encryptedMessage,
@@ -875,6 +874,7 @@ export const decryptMessage = async ({ passPhrase, account, message }) => {
         };
 
         const mensaje = ardorjs.decryptNote(data, publicKeyMessage, passPhrase);
+        console.log("🚀 ~ file: ardorInterface.js:877 ~ decryptMessage ~ mensaje:", mensaje)
         return mensaje.message;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:872 ~ decryptMessage ~ error:', error);

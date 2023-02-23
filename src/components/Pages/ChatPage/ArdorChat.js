@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Spacer, Stack, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Spacer, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { getAllMessages } from '../../../services/Ardor/ardorInterface';
 import NewMessage from '../../Modals/NewMessage/NewMessage';
@@ -14,13 +14,26 @@ const ArdorChat = ({ infoAccount }) => {
     useEffect(() => {
         const getMessages = async () => {
             const response = await getAllMessages(infoAccount.accountRs);
+            let auxMessages = response.prunableMessages;
             // Delete messages have JSON format
-            response.prunableMessages = response.prunableMessages.filter(message => {
-                //if (message.message) return message.message.indexOf('{') === -1;
+            auxMessages = auxMessages.filter(message => {
                 if (message.encryptedMessage) return true;
                 return false;
             });
-            setMessages(response.prunableMessages);
+            // Sort by timestamp
+            auxMessages.sort((a, b) => {
+                return a.timestamp - b.timestamp;
+            });
+            // Group by senderRS
+            auxMessages = auxMessages.reduce((acc, message) => {
+                const sender = message.senderRS;
+                if (!acc[sender]) {
+                    acc[sender] = [];
+                }
+                acc[sender].push(message);
+                return acc;
+            }, {});
+            setMessages(auxMessages);
         };
         getMessages();
     }, [infoAccount.accountRs]);
@@ -34,12 +47,9 @@ const ArdorChat = ({ infoAccount }) => {
             <Box>
                 <Warning />
                 <Stack direction={['column', 'row']} spacing={4} mt={4}>
-                    <Stack direction="column" spacing={0}>
+                    <Center>
                         <Heading fontSize="md">Messages</Heading>
-                        <Text fontSize="xs">
-                            Total messages: <b>{messages.length}</b>
-                        </Text>
-                    </Stack>
+                    </Center>
                     <Spacer />
                     <Button size="sm" onClick={handleNewMessage}>
                         New message
