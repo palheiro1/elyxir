@@ -1,4 +1,4 @@
-import { Box, Button, Center, SimpleGrid, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Center, Spacer, Stack, Text, useColorModeValue, useDisclosure } from '@chakra-ui/react';
 import { useRef } from 'react';
 import { formatMessageTimestamp } from '../../../utils/dateAndTime';
 import { getMessageTimestamp } from '../../../utils/txUtils';
@@ -37,26 +37,34 @@ const OneMessage = ({ message, username, account }) => {
         onOpen();
     };
 
+    const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+    const borderColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
+    const hoverColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+
     return (
         <>
-            <Box bgColor="whiteAlpha.200" rounded="lg" py={2}>
-                <SimpleGrid columns={3} spacing={4}>
+            <Box rounded="lg" py={4} shadow="md" border="1px" bgColor={bgColor} borderColor={borderColor} _hover={{ bgColor: hoverColor, shadow: "lg" }}>
+                <Stack direction={['column', 'row']} mx={4}>
                     <Center>
                         <Text align="center">{senderRS}</Text>
                     </Center>
-
-                    <Text>
-                        Received <strong>{timeElapsedText}</strong> {!isDate && 'ago'}
-                    </Text>
-
-                    {encryptedMessage ? (
-                        <Button variant="outline" size="sm" mx={12} onClick={handleDecrypt}>
-                            Click to decrypt conversation
-                        </Button>
-                    ) : (
-                        <Text align="center">{textMsg}</Text>
-                    )}
-                </SimpleGrid>
+                    <Spacer />
+                    <Box>
+                        <Text align="left">
+                            Received <strong>{timeElapsedText}</strong> {!isDate && 'ago'}
+                        </Text>
+                    </Box>
+                    <Spacer />
+                    <Center>
+                        {encryptedMessage ? (
+                            <Button variant="outline" size="sm" onClick={handleDecrypt}>
+                                Click to decrypt conversation
+                            </Button>
+                        ) : (
+                            <Text align="center">{textMsg}</Text>
+                        )}
+                    </Center>
+                </Stack>
             </Box>
             <DecryptMessage
                 reference={ref}

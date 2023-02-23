@@ -811,6 +811,8 @@ export const sendDirectMessage = async ({ recipient, passPhrase, message }) => {
         const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
         const recipientPublicKey = (await getAccountPublicKey(recipient)).publicKey;
         const encryptedMessage = ardorjs.encryptMessage(message, passPhrase, recipientPublicKey, false);
+        console.log("🚀 ~ file: ardorInterface.js:814 ~ sendDirectMessage ~ encryptedMessage:", encryptedMessage)
+        console.log("🚀 ~ file: ardorInterface.js:814 ~ sendDirectMessage ~ message:", message)
         if (!recipientPublicKey || !encryptedMessage) return false;
 
         let query = {
@@ -828,8 +830,10 @@ export const sendDirectMessage = async ({ recipient, passPhrase, message }) => {
         const fee = await calculateFeeByRecipient(recipient, query, URL_SEND_MESSAGE);
         query.feeNQT = fee;
         query.broadcast = false;
+        console.log("🚀 ~ file: ardorInterface.js:831 ~ sendDirectMessage ~ query:", query)
 
         const response = await axios.post(URL_SEND_MESSAGE, qs.stringify(query), config);
+        console.log("🚀 ~ file: ardorInterface.js:834 ~ sendDirectMessage ~ response:", response)
         const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
         const txData = { transactionBytes: signed };
 
@@ -860,17 +864,20 @@ export const getAllMessages = async accountRs => {
     }
 };
 
-export const decryptMessage = async ({ passPhrase, account, data, nonce }) => {
+export const decryptMessage = async ({ passPhrase, account, message }) => {
     try {
+        const { data, nonce } = message.encryptedMessage;
+        console.log("🚀 ~ file: ardorInterface.js:870 ~ decryptMessage ~ message:", message)
         /*
-        const options = {
-            nonce: nonce,
-            isText: true,
-        };
-        const message = ardorjs.decryptNote(data, options, passPhrase);
-        console.log('🚀 ~ file: ardorInterface.js:865 ~ decryptMessage ~ message:', message);
+        const { data } = message;
+        //const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
+        const publicKey = (await getAccountPublicKey(account)).publicKey;
+        message.publicKey = publicKey;
+        console.log("🚀 ~ file: ardorInterface.js:868 ~ decryptMessage ~ message:", message)
+        const mensaje = ardorjs.decryptNote(data, message, passPhrase);
+        console.log("🚀 ~ file: ardorInterface.js:867 ~ decryptMessage ~ mensaje:", mensaje)
         */
-
+        
         const response = await axios.get(NODEURL, {
             params: {
                 requestType: 'decryptFrom',
@@ -880,7 +887,9 @@ export const decryptMessage = async ({ passPhrase, account, data, nonce }) => {
                 nonce,
             },
         });
+        console.log("🚀 ~ file: ardorInterface.js:885 ~ decryptMessage ~ response:", response)
         return response.data;
+        
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:872 ~ decryptMessage ~ error:', error);
     }

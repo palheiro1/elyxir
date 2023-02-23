@@ -51,9 +51,8 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, message, account
         try {
             const response = await decryptMessage({
                 passPhrase: passphrase,
-                data: message.encryptedMessage.data,
-                nonce: message.encryptedMessage.nonce,
-                account: account,
+                message: message,
+                account: message.senderRS,
             });
 
             if (response) {

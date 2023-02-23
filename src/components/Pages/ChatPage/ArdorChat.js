@@ -16,8 +16,7 @@ const ArdorChat = ({ infoAccount }) => {
             const response = await getAllMessages(infoAccount.accountRs);
             // Delete messages have JSON format
             response.prunableMessages = response.prunableMessages.filter(message => {
-                console.log("🚀 ~ file: ArdorChat.js:19 ~ getMessages ~ message:", message)
-                if (message.message) return message.message.indexOf('{') === -1;
+                //if (message.message) return message.message.indexOf('{') === -1;
                 if (message.encryptedMessage) return true;
                 return false;
             });
@@ -36,9 +35,7 @@ const ArdorChat = ({ infoAccount }) => {
                 <Warning />
                 <Stack direction={['column', 'row']} spacing={4} mt={4}>
                     <Stack direction="column" spacing={0}>
-                        <Heading fontSize="md">
-                            Messages
-                        </Heading>
+                        <Heading fontSize="md">Messages</Heading>
                         <Text fontSize="xs">
                             Total messages: <b>{messages.length}</b>
                         </Text>
