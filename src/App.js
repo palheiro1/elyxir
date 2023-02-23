@@ -18,6 +18,7 @@ import Welcome from './components/Pages/WelcomePage/Welcome';
 // Data
 import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
 
+// Styles
 import './App.css';
 
 /* ------------------------------------------------------------
