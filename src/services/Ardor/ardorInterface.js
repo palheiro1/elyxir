@@ -878,6 +878,7 @@ export const decryptMessage = async ({ passPhrase, message, publicKey }) => {
         return mensaje.message;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:872 ~ decryptMessage ~ error:', error);
+        return false;
     }
 };
 
@@ -892,6 +893,7 @@ export const getAccountPublicKey = async accountRs => {
         return response.data;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:887 ~ getAccountPublicKey ~ error:', error);
+        return false;
     }
 };
 
