@@ -40,8 +40,8 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
     const textColor = useColorModeValue('gray.200', 'gray.200');
     const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
 
-    const rarityImage = `images/cards/rarity/${monster.rarity}.svg`;
-    const continentImage = `images/cards/continent/${monster.continent}.svg`;
+    const rarityImage = `images/cards/rarity/${monster.rarity}.png`;
+    const continentImage = `images/cards/continent/${monster.continent}.png`;
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="6xl" isCentered="true">

@@ -1,23 +1,21 @@
-import { JACKPOTACCOUNT, JACKPOTHALF, NQTDIVIDER } from "../../data/CONSTANTS";
-import { getIgnisBalance } from "../Ardor/ardorInterface";
-import { getIgnisPrice } from "../coingecko/utils";
+import { JACKPOTACCOUNT, JACKPOTHALF, NQTDIVIDER } from '../../data/CONSTANTS';
+import { getIgnisBalance } from '../Ardor/ardorInterface';
+import { getIgnisPrice } from '../coingecko/utils';
 
 export const getJackpotBalance = async () => {
     // Recover Jackpot balance - IGNIS
     const response = await getIgnisBalance(JACKPOTACCOUNT);
     const balance = response.balanceNQT / NQTDIVIDER;
     return (JACKPOTHALF ? balance / 2 : balance).toFixed(2);
-}
+};
 
-export const getJackpotBalanceUSD = async (jackpotBalance) => {
+export const getJackpotBalanceUSD = async jackpotBalance => {
     const ignisPrice = await getIgnisPrice();
-    return (
-        (JACKPOTHALF ? jackpotBalance / 2 : jackpotBalance) * ignisPrice
-    ).toFixed(2);
-}
+    return (jackpotBalance * ignisPrice).toFixed(2);
+};
 
 export const getJackpotParticipants = async () => {
     // Get participants
-    const response = await fetch("https://api.mythicalbeings.io/index.php?action=winners");
+    const response = await fetch('https://api.mythicalbeings.io/index.php?action=winners');
     return await response.json();
-}
+};

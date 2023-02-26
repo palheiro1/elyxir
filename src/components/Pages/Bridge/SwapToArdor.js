@@ -14,7 +14,7 @@ import {
 
 // Utils
 import { processUnwrapsForAccount } from '../../../services/Ardor/ardorInterface';
-import { errorToast, okToast } from '../../../utils/alerts';
+import { copyToast, errorToast, okToast } from '../../../utils/alerts';
 
 /**
  * @name SwapToArdor
@@ -30,7 +30,7 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(ethAddress);
-        okToast('Copied to clipboard', toast);
+        copyToast('Deposit address', toast);
     };
 
     const swap = async () => {
