@@ -10,7 +10,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
-    "ardorjs": "https://github.com/mrv777/ardorjs.git#1c7088a39b0358c7d13eeaeda153541f75bc0d52",
+    "ardorjs": "^0.2.1",
     "axios": "^1.2.2",
     "crypto": "^1.0.1",
     "crypto-browserify": "^3.12.0",
