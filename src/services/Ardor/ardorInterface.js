@@ -484,18 +484,18 @@ export const createAskOrder = async ({ asset, price, quantity, passPhrase }) => 
 
 export const cancelAskOrder = async (order, passPhrase) => {
     if (!order || !passPhrase) return false;
-    const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
-    const query = {
-        chain: 2,
-        order,
-        feeNQT: -1,
-        feeRateNQTPerFXT: -1,
-        deadline: 15,
-        broadcast: false,
-        publicKey,
-    };
 
     try {
+        const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
+        const query = {
+            chain: 2,
+            order,
+            feeNQT: -1,
+            feeRateNQTPerFXT: -1,
+            deadline: 15,
+            broadcast: false,
+            publicKey,
+        };
         query.feeNQT = await calculateFee(query, URL_CANCEL_ASK_ORDER);
         query.broadcast = false;
 
@@ -512,25 +512,25 @@ export const cancelAskOrder = async (order, passPhrase) => {
 export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => {
     if (!passPhrase || !asset || !price || !quantity) return false;
 
-    const ORDERTYPE = 'placeBidOrder';
-    const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
-
-    const query = {
-        requestType: ORDERTYPE,
-        asset: asset,
-        priceNQTPerShare: price,
-        publicKey: publicKey,
-        chain: 2,
-        quantityQNT: quantity,
-        feeNQT: -1,
-        feeRateNQTPerFXT: -1,
-        deadline: 15,
-        broadcast: false,
-    };
-
-    const url_postOrder = NODEURL + '?requestType=' + ORDERTYPE;
-
     try {
+        const ORDERTYPE = 'placeBidOrder';
+        const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
+
+        const query = {
+            requestType: ORDERTYPE,
+            asset: asset,
+            priceNQTPerShare: price,
+            publicKey: publicKey,
+            chain: 2,
+            quantityQNT: quantity,
+            feeNQT: -1,
+            feeRateNQTPerFXT: -1,
+            deadline: 15,
+            broadcast: false,
+        };
+
+        const url_postOrder = NODEURL + '?requestType=' + ORDERTYPE;
+        
         query.feeNQT = await calculateFee(query, url_postOrder);
         query.broadcast = false;
         const postOrderTransactionBytesResponse = await axios.post(url_postOrder, qs.stringify(query), config);
@@ -549,18 +549,18 @@ export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => 
 
 export const cancelBidOrder = async (order, passPhrase) => {
     if (!order || !passPhrase) return false;
-    const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
-    const query = {
-        chain: 2,
-        order,
-        feeNQT: -1,
-        feeRateNQTPerFXT: -1,
-        deadline: 15,
-        broadcast: false,
-        publicKey,
-    };
 
     try {
+        const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
+        const query = {
+            chain: 2,
+            order,
+            feeNQT: -1,
+            feeRateNQTPerFXT: -1,
+            deadline: 15,
+            broadcast: false,
+            publicKey,
+        };
         query.feeNQT = await calculateFee(query, URL_CANCEL_BID_ORDER);
         query.broadcast = false;
 

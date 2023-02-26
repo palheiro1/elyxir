@@ -22,7 +22,7 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
 
     useEffect(() => {
         const checkSelectedOrder = () => {
-            if (selectedOrder) {
+            if (setSelectedItem && selectedOrder) {
                 setSelectedItem(selectedOrder);
             }
         };

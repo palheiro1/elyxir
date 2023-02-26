@@ -9,6 +9,7 @@ const AskBidTable = ({ type, onlyOneAsset, orders, cards, onOpen, setSelectedOrd
 
     const borderLeft = isLeft ? 'lg' : 'none';
     const borderRight = !isLeft ? 'lg' : 'none';
+    const isAsk = type === 'Asks';
 
     return (
         <TableContainer
@@ -44,7 +45,7 @@ const AskBidTable = ({ type, onlyOneAsset, orders, cards, onOpen, setSelectedOrd
                                 asset={_asset}
                                 ignis={order.priceNQTPerShare / NQTDIVIDER}
                                 amount={order.quantityQNT}
-                                isAsk={true}
+                                isAsk={isAsk}
                                 onOpen={onOpen}
                                 setSelectedOrder={setSelectedOrder}
                                 onlyOneAsset={onlyOneAsset}

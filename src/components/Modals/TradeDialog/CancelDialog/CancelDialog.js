@@ -12,13 +12,13 @@ import {
     HStack,
     PinInput,
     PinInputField,
+    useColorModeValue,
     useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { cancelAskOrder, cancelBidOrder } from '../../../../services/Ardor/ardorInterface';
 import { errorToast, okToast } from '../../../../utils/alerts';
 import { checkPin } from '../../../../utils/walletUtils';
-
 
 /**
  * @name CancelDialog
@@ -36,10 +36,15 @@ const CancelDialog = ({ reference, isOpen, onClose, username, selectedOrder }) =
     const toast = useToast();
     const [passphrase, setPassphrase] = useState('');
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
 
     if (!selectedOrder) return;
     const { order, isAsk } = selectedOrder;
+    console.log("🚀 ~ file: CancelDialog.js:44 ~ CancelDialog ~ isAsk:", isAsk)
+    console.log("🚀 ~ file: CancelDialog.js:44 ~ CancelDialog ~ selectedOrder:", selectedOrder)
     const typeTrade = isAsk ? 'ask' : 'bid';
+    console.log("🚀 ~ file: CancelDialog.js:47 ~ CancelDialog ~ typeTrade:", typeTrade)
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -57,6 +62,7 @@ const CancelDialog = ({ reference, isOpen, onClose, username, selectedOrder }) =
 
             if (isAsk) result = await cancelAskOrder(order, passphrase);
             else result = await cancelBidOrder(order, passphrase);
+            console.log("🚀 ~ file: CancelDialog.js:62 ~ handleDelete ~ result:", result)
 
             if (result) okToast('Order deleted', toast);
             else errorToast('Error deleting order', toast);
@@ -75,7 +81,7 @@ const CancelDialog = ({ reference, isOpen, onClose, username, selectedOrder }) =
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent>
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
                     <AlertDialogHeader>Delete {typeTrade} order?</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
@@ -104,11 +110,7 @@ const CancelDialog = ({ reference, isOpen, onClose, username, selectedOrder }) =
                         <Button ref={reference} onClick={onClose}>
                             Cancel
                         </Button>
-                        <Button
-                            colorScheme="red"
-                            ml={3}
-                            disabled={!isValidPin}
-                            onClick={handleDelete}>
+                        <Button colorScheme="red" ml={3} disabled={!isValidPin} onClick={handleDelete}>
                             Delete now
                         </Button>
                     </AlertDialogFooter>
