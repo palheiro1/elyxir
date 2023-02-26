@@ -874,7 +874,6 @@ export const decryptMessage = async ({ passPhrase, message, publicKey }) => {
         };
 
         const mensaje = ardorjs.decryptNote(data, publicKeyMessage, passPhrase);
-        console.log("🚀 ~ file: ardorInterface.js:877 ~ decryptMessage ~ mensaje:", mensaje)
         return mensaje.message;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:872 ~ decryptMessage ~ error:', error);
