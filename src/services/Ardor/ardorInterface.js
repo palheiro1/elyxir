@@ -864,7 +864,8 @@ export const decryptMessage = async ({ passPhrase, message, publicKey }) => {
     try {
         const encryptedMessage = message.encryptedMessage;
         const { data } = encryptedMessage;
-        // Construir el objeto message exactamente igual, pero modificando la publicKey
+
+        // Build publicKeyMessage
         const publicKeyMessage = {
             ...encryptedMessage,
             publicKey: publicKey,
