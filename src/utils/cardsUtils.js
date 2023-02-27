@@ -171,14 +171,15 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
             cardDetails.rarity = rarity.name;
         }
 
-        let cardname = getTruncatedName(cardDetails.name);
+        const cardname = getTruncatedName(cardDetails.name);
+        const fixContinent = cardDetails.channel === 'Europa' ? 'Europe' : cardDetails.channel;
 
         return {
             asset: asset.asset,
             assetname: asset.name,
             name: cardname,
             description: cardDetails.description,
-            channel: cardDetails.channel,
+            channel: fixContinent,
             rarity: cardDetails.rarity,
             quantityQNT: quantityQNT,
             totalQuantityQNT: totalQuantityQNT,
