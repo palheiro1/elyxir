@@ -42,13 +42,12 @@ const Book = () => {
         <Box>
             <Heading>Book</Heading>
             {isLargerThan800 && (
-                <Document file={pdf}>
+                <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
                     <Center>
                         <HTMLFlipBook width={width} height={height}>
-                            <Page pageNumber={1} width={width} />
-                            <Page pageNumber={2} width={width} />
-                            <Page pageNumber={3} width={width} />
-                            <Page pageNumber={4} width={width} />
+                            {Array.from(new Array(numPages), (el, index) => {
+                                return <Page key={`page_${index + 1}`} pageNumber={index + 1} width={width} />;
+                            })}
                         </HTMLFlipBook>
                     </Center>
                 </Document>
@@ -59,8 +58,12 @@ const Book = () => {
                     <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
                         <ReactPdfPage pageNumber={pageNumber} width={340} />
                     </Document>
-                    <Button w="50%" onClick={handlePrevPage}>Prev</Button>
-                    <Button w="50%" onClick={handleNextPage}>Next</Button>
+                    <Button w="50%" onClick={handlePrevPage}>
+                        Prev
+                    </Button>
+                    <Button w="50%" onClick={handleNextPage}>
+                        Next
+                    </Button>
                 </Box>
             )}
         </Box>
