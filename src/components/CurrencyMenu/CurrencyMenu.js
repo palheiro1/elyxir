@@ -9,6 +9,10 @@ import {
     Flex,
     Box,
     useColorModeValue,
+    Image,
+    Stack,
+    Text,
+    Button,
 } from '@chakra-ui/react';
 
 import { useRef, useState } from 'react';
@@ -27,9 +31,24 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     const reference = useRef();
 
     const currencies = {
-        IGNIS: { name: 'IGNIS', balance: IGNISBalance, handler: () => goToSection(8) },
-        GIFTZ: { name: 'GIFTZ', balance: GIFTZBalance, handler: onOpenBuyGiftz },
-        GEMS: { name: 'GEMS', balance: GEMSBalance, handler: () => goToSection(3) },
+        IGNIS: {
+            name: 'IGNIS',
+            balance: IGNISBalance,
+            handler: () => goToSection(8),
+            image: 'images/currency/IGNISicon.png',
+        },
+        GIFTZ: {
+            name: 'GIFTZ',
+            balance: GIFTZBalance,
+            handler: onOpenBuyGiftz,
+            image: 'images/currency/GIFTZicon.png',
+        },
+        GEMS: {
+            name: 'GEMS',
+            balance: GEMSBalance,
+            handler: () => goToSection(3),
+            image: 'images/currency/GEMSicon.png',
+        },
     };
 
     const [currency, setCurrency] = useState(currencies.IGNIS);
@@ -46,13 +65,35 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
         }
     };
 
+    const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+    const bgColor = useColorModeValue('blackAlpha.300', 'blackAlpha.300');
+
     return (
         <>
             <Flex align="flex-end" pr={'0.55%'}>
                 <ButtonGroup rounded="lg" shadow="md" size="sm" fontSize={'sm'} isAttached variant="outline">
-                    <Box p={1} border="1px" borderColor={borderColor} borderLeftRadius="lg" px={2}>
+                    <Box
+                        py={1}
+                        border="1px"
+                        borderColor={borderColor}
+                        borderLeftRadius="lg"
+                        px={2}
+                        _hover={{ bg: hoverColor }}>
                         <Menu>
-                            <MenuButton>IGNIS: {IGNISBalance}</MenuButton>
+                            <MenuButton>
+                                <Stack direction="row" align="center">
+                                    <Image
+                                        bgColor={bgColor}
+                                        mt={1}
+                                        src="images/currency/IGNISicon.png"
+                                        alt={currency.name}
+                                        w="23px"
+                                        h="23px"
+                                    />
+                                    <Text>IGNIS: {IGNISBalance}</Text>
+                                </Stack>
+                            </MenuButton>
+
                             <Portal>
                                 <MenuList>
                                     <MenuItem onClick={() => handleOpenSendCurrency('IGNIS')}>Send IGNIS</MenuItem>
@@ -61,9 +102,21 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             </Portal>
                         </Menu>
                     </Box>
-                    <Box p={1} border="1px" borderColor={borderColor} px={2}>
+                    <Box py={1} border="1px" borderColor={borderColor} px={2} _hover={{ bg: hoverColor }}>
                         <Menu>
-                            <MenuButton>GIFTZ: {GIFTZBalance}</MenuButton>
+                            <MenuButton>
+                                <Stack direction="row" align="center">
+                                    <Image
+                                        mt={1}
+                                        src="images/currency/GIFTZicon.png"
+                                        alt={currency.name}
+                                        w="23px"
+                                        h="23px"
+                                    />
+                                    <Text>GIFTZ: {GIFTZBalance}</Text>
+                                </Stack>
+                            </MenuButton>
+
                             <Portal>
                                 <MenuList>
                                     <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
@@ -72,9 +125,27 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             </Portal>
                         </Menu>
                     </Box>
-                    <Box p={1} border="1px" borderColor={borderColor} borderRightRadius="lg" px={2}>
+                    <Box
+                        py={1}
+                        border="1px"
+                        borderColor={borderColor}
+                        borderRightRadius="lg"
+                        px={2}
+                        _hover={{ bg: hoverColor }}>
                         <Menu>
-                            <MenuButton>GEM: {GEMSBalance.toFixed(2)}</MenuButton>
+                            <MenuButton>
+                                <Stack direction="row" align="center">
+                                    <Image
+                                        mt={1}
+                                        src="images/currency/GEMicon.png"
+                                        alt={currency.name}
+                                        w="23px"
+                                        h="23px"
+                                    />
+                                    <Text>GEM: {GEMSBalance.toFixed(2)}</Text>
+                                </Stack>
+                            </MenuButton>
+
                             <Portal>
                                 <MenuList>
                                     <MenuItem onClick={() => handleOpenSendCurrency('GEMS')}>Send GEM</MenuItem>
