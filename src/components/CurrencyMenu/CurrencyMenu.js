@@ -12,7 +12,6 @@ import {
     Image,
     Stack,
     Text,
-    Button,
 } from '@chakra-ui/react';
 
 import { useRef, useState } from 'react';
@@ -137,7 +136,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                 <Stack direction="row" align="center">
                                     <Image
                                         mt={1}
-                                        src="images/currency/GEMIcon.png.png"
+                                        src="images/currency/GEMIcon.png"
                                         alt="GEM Icon"
                                         w="23px"
                                         h="23px"
