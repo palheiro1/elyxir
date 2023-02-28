@@ -39,7 +39,7 @@ const Book = () => {
     const width = useBreakpointValue({ base: 324, xl: 540 });
     const height = useBreakpointValue({ base: 763, xl: 763 });
     return (
-        <Box>
+        <Box overflow="hidden">
             <Heading>Book</Heading>
             {isLargerThan800 && (
                 <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
