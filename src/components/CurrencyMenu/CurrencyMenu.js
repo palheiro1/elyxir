@@ -89,7 +89,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                         w="23px"
                                         h="23px"
                                     />
-                                    <Text>IGNIS: {IGNISBalance}</Text>
+                                    <Text align="center">{IGNISBalance}</Text>
                                 </Stack>
                             </MenuButton>
 
@@ -112,7 +112,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                         w="23px"
                                         h="23px"
                                     />
-                                    <Text>GIFTZ: {GIFTZBalance}</Text>
+                                    <Text align="center">{GIFTZBalance}</Text>
                                 </Stack>
                             </MenuButton>
 
@@ -141,7 +141,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                         w="23px"
                                         h="23px"
                                     />
-                                    <Text>GEM: {GEMSBalance.toFixed(2)}</Text>
+                                    <Text align="center">{GEMSBalance.toFixed(2)}</Text>
                                 </Stack>
                             </MenuButton>
 
