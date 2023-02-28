@@ -19,7 +19,7 @@ const Jackpot = ({ infoAccount, cards = [] }) => {
     const [totalNoSpecialCards, setTotalNoSpecialCards] = useState([]); // Cards without specials
     const [remainingCards, setRemainingCards] = useState([]); // Cards without specials and with 0 quantity
     const [cardsFiltered, setCardsFiltered] = useState([]); // Cards filtered by search and rarity
-    const [participants, setParticipants] = useState({ numParticipants: 0, participants: [], imParticipant: false });
+    const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
     const { accountRs: account } = infoAccount;
 
     useEffect(() => {
@@ -41,18 +41,14 @@ const Jackpot = ({ infoAccount, cards = [] }) => {
             const response = await getJackpotParticipants();
             let auxParticipants = [];
             let numParticipants = 0;
-            let imParticipant = false;
             Object.entries(response).forEach(entry => {
                 const [key, value] = entry;
                 if (value > 0) {
-                    auxParticipants.push(key);
+                    auxParticipants.push({ account: key, quantity: value });
                     numParticipants += value;
-                    if (key === account) {
-                        imParticipant = true;
-                    }
                 }
             });
-            setParticipants({ numParticipants, participants: auxParticipants, imParticipant });
+            setParticipants({ numParticipants, participants: auxParticipants });
         };
 
         getParticipants();
@@ -63,13 +59,19 @@ const Jackpot = ({ infoAccount, cards = [] }) => {
         return () => clearInterval(interval);
     }, [account]);
 
+    const findParticipation = participants.participants.find(participant => participant.account === account);
+    const imParticipant = findParticipation !== undefined;
+    const myParticipation = findParticipation && (findParticipation ? findParticipation.quantity : 0);
+    const textParticipations =
+        findParticipation && (myParticipation === 1 ? 'once' : findParticipation.quantity + ' times');
+
     return (
         <Box>
             <JackpotWidget cStyle={2} numParticipants={participants.numParticipants} />
 
-            {participants.imParticipant && (
+            {imParticipant && (
                 <Text mt={4} fontSize="2xl" textAlign="center" fontWeight="bolder">
-                    ✅ You've participated once for this round!
+                    ✅ You've participated {textParticipations} for this round!
                 </Text>
             )}
 

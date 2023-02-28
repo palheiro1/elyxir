@@ -7,7 +7,7 @@ import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/reac
 // -----------------------------------------------------------------
 
 // Menu
-import LateralMenu from '../../components/LateralMenu/LateralMenu';
+import LateralMenu from '../../components/Navigation/LateralMenu/LateralMenu';
 
 // Pages
 import History from '../../components/Pages/HistoryPage/History';
@@ -56,6 +56,7 @@ import {
 } from '../../services/Ardor/ardorInterface';
 import Exchange from '../Exchange/Exchange';
 import ArdorChat from '../../components/Pages/ChatPage/ArdorChat';
+import Book from '../../components/Pages/BookPage/Book';
 
 /**
  * @name Home
@@ -309,6 +310,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             '', // Option 7 - Buy packs
             <Exchange infoAccount={infoAccount} />, // Option 8 - Exchange
             <ArdorChat infoAccount={infoAccount} />, // Option 9 - Ardor Chat
+            <Book />, // Option 10 - Book
         ];
 
         const loadComponent = () => {

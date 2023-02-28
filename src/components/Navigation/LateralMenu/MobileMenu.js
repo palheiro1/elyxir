@@ -1,5 +1,5 @@
 import { Box, Center, Stack, Switch, Text } from '@chakra-ui/react';
-import CurrencyMenu from '../CurrencyMenu/CurrencyMenu';
+import CurrencyMenu from '../../CurrencyMenu/CurrencyMenu';
 import VerticalMenuButtons from './VerticalMenuButtons';
 
 const MobileMenu = ({

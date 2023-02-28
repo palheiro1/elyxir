@@ -1,11 +1,11 @@
 import { Box, Collapse, Flex, IconButton, Spacer, useDisclosure } from '@chakra-ui/react';
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
-import { ColorModeSwitcher } from '../ColorModeSwitch/ColorModeSwitcher';
+import { ColorModeSwitcher } from '../../ColorModeSwitch/ColorModeSwitcher';
 
 // Menu types
 import NormalMenu from './NormalMenu';
 import MobileMenu from './MobileMenu';
-import TopMenu from '../../pages/Home/TopMenu';
+import TopMenu from '../../../pages/Home/TopMenu';
 
 /**
  * @name LateralMenu

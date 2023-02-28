@@ -101,6 +101,14 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             textColor: textColor(9),
         },
         {
+            icon: <BsReverseLayoutTextWindowReverse style={{ stroke: iconColor(10), strokeWidth: '1' }} color={iconColor(9)} />,
+            text: 'Book',
+            onClick: () => setOption(10),
+            bgColor: bgColor(10),
+            hoverBg: hoverColor(10),
+            textColor: textColor(10),
+        },
+        {
             icon: <AiOutlineSetting style={{ stroke: iconColor(6), strokeWidth: '1' }} color={iconColor(6)} />,
             text: 'Account',
             onClick: () => setOption(6),
