@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { forwardRef, createRef, useEffect, useState } from 'react';
+import ResizeTextarea from 'react-textarea-autosize';
 
 import {
     AlertDialog,
@@ -11,11 +12,13 @@ import {
     Box,
     Button,
     Center,
+    Flex,
     FormControl,
     FormLabel,
     HStack,
     PinInput,
     PinInputField,
+    Spacer,
     Textarea,
     useColorModeValue,
     useToast,
@@ -23,7 +26,8 @@ import {
 
 import { errorToast, okToast } from '../../../utils/alerts';
 import { checkPin } from '../../../utils/walletUtils';
-import { decryptMessage, getAccountPublicKey } from '../../../services/Ardor/ardorInterface';
+import { decryptMessage, getAccountPublicKey, getAllMessages } from '../../../services/Ardor/ardorInterface';
+import { getMessageTimestamp } from '../../../utils/dateAndTime';
 
 /**
  * @name DecryptMessage
@@ -32,11 +36,13 @@ import { decryptMessage, getAccountPublicKey } from '../../../services/Ardor/ard
  * @param {boolean} isOpen - if the modal is open or not
  * @param {function} onClose - function to close the modal
  */
-const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], sender }) => {
+const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], sender, account }) => {
     const [decryptedMessages, setDecryptedMessages] = useState([]); // array of decrypted messages
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
     const [sizeModal, setSizeModal] = useState('md'); // modal size
+    const [loadedMessages, setLoadedMessages] = useState(false); // flag to know if messages are loaded
+    const [totalMessages, setTotalMessages] = useState([]);
     const toast = useToast();
 
     const handleCompletePin = pin => {
@@ -52,20 +58,29 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
     const handleOk = async () => {
         try {
             const publicKey = (await getAccountPublicKey(sender)).publicKey;
-            const promises = messages.map(async message => {
-                return decryptMessage({
+            const promises = totalMessages.map(async message => {
+                const msg = await decryptMessage({
                     passPhrase: passphrase,
                     message: message,
                     publicKey: publicKey,
                 });
+                const { timeElapsedText, isDate } = getMessageTimestamp(message);
+                const isMyMessage = message.senderRS === account;
+                return {
+                    message: msg,
+                    timeElapsedText,
+                    isDate,
+                    isMyMessage,
+                };
             });
+
             const response = await Promise.all(promises);
-            console.log('🚀 ~ file: DecryptMessage.js:62 ~ handleOk ~ response:', response);
 
             if (response) {
                 okToast('Message decrypted', toast);
                 setDecryptedMessages(response);
                 setSizeModal('6xl');
+                setLoadedMessages(true);
             } else {
                 errorToast('Error decrypting message', toast);
             }
@@ -75,6 +90,52 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
         }
     };
 
+    // ------------------ Get all messages from sender ------------------
+
+    useEffect(() => {
+        const getMyMessages = async () => {
+            const response = await getAllMessages(sender);
+            let auxMessages = response.prunableMessages;
+            // Delete messages have JSON format
+            auxMessages = auxMessages.filter(message => {
+                if (message.encryptedMessage) return true;
+                return false;
+            });
+            // Filter messages by account
+            auxMessages = auxMessages.filter(message => {
+                if (message.senderRS === account) return true;
+                return false;
+            });
+            // Mix messages with auxMessages
+            const auxTotalMsg = [...messages, ...auxMessages];
+            // Sort messages by timestamp
+            auxTotalMsg.sort((a, b) => {
+                return a.timestamp - b.timestamp;
+            });
+            console.log('🚀 ~ file: DecryptMessage.js:109 ~ auxTotalMsg.sort ~ auxTotalMsg:', auxTotalMsg);
+            setTotalMessages(auxTotalMsg);
+        };
+
+        getMyMessages();
+    }, [sender, account, messages]);
+
+    const AutoResizeTextarea = forwardRef((props, ref) => {
+        return (
+            <Textarea
+                minH="unset"
+                overflow="hidden"
+                w="100%"
+                resize="none"
+                ref={ref}
+                minRows={1}
+                as={ResizeTextarea}
+                {...props}
+            />
+        );
+    });
+
+    // ------------------------------------------------------------------
+
     const bgColor = useColorModeValue('', '#1D1D1D');
     const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
 
@@ -83,8 +144,19 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
         setPassphrase('');
         setDecryptedMessages([]);
         setSizeModal('md');
+        setLoadedMessages(false);
         onClose();
     };
+
+    const messagesEndRef = createRef();
+
+    useEffect(() => {
+        const scrollToBottom = () => {
+            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        loadedMessages && scrollToBottom();
+    }, [decryptedMessages, loadedMessages, messagesEndRef]);
 
     return (
         <>
@@ -103,14 +175,33 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
                     <AlertDialogBody>
                         {decryptedMessages.length > 0 ? (
                             <Box maxH="70vh" overflowY="auto">
-                                <FormControl variant="floatingGray" id="Message" my={4} mt={8}>
-                                    {decryptedMessages.map((message, index) => {
-                                        return (
-                                            <Textarea my={2} key={index} placeholder=" " value={message} isDisabled />
-                                        );
-                                    })}
-                                    <FormLabel>Message</FormLabel>
-                                </FormControl>
+                                {decryptedMessages.map((message, index) => {
+                                    return (
+                                        <FormControl
+                                            variant={message.isMyMessage ? 'whatsAppStyleRight' : 'whatsAppStyleLeft'}
+                                            key={index}
+                                            id="Message">
+                                            <Flex>
+                                                {message.isMyMessage && <Spacer />}
+                                                <AutoResizeTextarea
+                                                    bg={message.isMyMessage ? 'blackAlpha.100' : 'whiteAlpha.100'}
+                                                    my={2}
+                                                    key={index}
+                                                    placeholder=" "
+                                                    value={message.message}
+                                                    maxW="70%"
+                                                    isReadOnly
+                                                />
+
+                                                <FormLabel fontSize="2xs">
+                                                    <strong>{message.timeElapsedText}</strong>{' '}
+                                                    {!message.isDate && 'ago'}
+                                                </FormLabel>
+                                            </Flex>
+                                            <div ref={messagesEndRef} />
+                                        </FormControl>
+                                    );
+                                })}
                             </Box>
                         ) : (
                             <Center>

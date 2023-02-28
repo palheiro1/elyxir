@@ -70,6 +70,42 @@ const components = {
                     },
                 },
             }),
+            whatsAppStyleLeft: props => ({
+                container: {
+                    label: {
+                        bg: 'transparent',
+                        color: props.colorMode === 'dark' ? 'white' : 'black',
+                        bottom: -4,
+                        left: 1,
+                        zIndex: 2,
+                        position: 'absolute',
+                        fontSize: '2xs',
+                        fontWeight: 'bold',
+                        pointerEvents: 'none',
+                        px: 1,
+                        my: 2,
+                        transformOrigin: 'left top',
+                    },
+                },
+            }),
+            whatsAppStyleRight: props => ({
+                container: {
+                    label: {
+                        bg: 'transparent',
+                        color: props.colorMode === 'dark' ? 'white' : 'black',
+                        bottom: -4,
+                        right: 1,
+                        zIndex: 2,
+                        position: 'absolute',
+                        fontSize: '2xs',
+                        fontWeight: 'bold',
+                        pointerEvents: 'none',
+                        px: 1,
+                        my: 2,
+                        transformOrigin: 'left top',
+                    },
+                },
+            }),
             floatingTransparent: props => ({
                 container: {
                     label: {

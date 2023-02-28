@@ -1,23 +1,13 @@
-import {
-    Box,
-    Button,
-    Center,
-    SimpleGrid,
-    Text,
-    useColorModeValue,
-    useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Button, Center, SimpleGrid, Text, useColorModeValue, useDisclosure } from '@chakra-ui/react';
 import { useRef } from 'react';
 import DecryptMessage from '../../Modals/DecryptMessage/DecryptMessage';
 import { getMessageTimestamp } from '../../../utils/dateAndTime';
 
-const OneSenderMessages = ({ sender, messages, username }) => {
+const OneSenderMessages = ({ sender, messages, username, account }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const ref = useRef();
 
-    const lastMessage = messages[0];
-    const { timeElapsedText, isDate } = getMessageTimestamp(lastMessage);
-    console.log("🚀 ~ file: OneSenderMessages.js:19 ~ OneSenderMessages ~ timestamp:", lastMessage, timeElapsedText, isDate)
+    const { timeElapsedText, isDate } = getMessageTimestamp(messages[0]);
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
     const borderColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
@@ -51,14 +41,17 @@ const OneSenderMessages = ({ sender, messages, username }) => {
                     </Center>
                 </SimpleGrid>
             </Box>
-            <DecryptMessage
-                reference={ref}
-                isOpen={isOpen}
-                onClose={onClose}
-                username={username}
-                messages={messages}
-                sender={sender}
-            />
+            {isOpen && (
+                <DecryptMessage
+                    reference={ref}
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    username={username}
+                    messages={messages}
+                    sender={sender}
+                    account={account}
+                />
+            )}
         </>
     );
 };
