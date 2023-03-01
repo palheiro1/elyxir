@@ -10,6 +10,7 @@ import {
     Spinner,
     Stack,
     Text,
+    Tooltip,
     useColorModeValue,
     useDisclosure,
 } from '@chakra-ui/react';
@@ -25,6 +26,8 @@ import TradeDialog from '../Modals/TradeDialog/TradeDialog';
 // Icons
 import { BsArrowLeftRight, BsTools } from 'react-icons/bs';
 import { FaRegPaperPlane } from 'react-icons/fa';
+
+import { BiLockAlt } from 'react-icons/bi';
 
 /**
  * @name Card
@@ -113,6 +116,11 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     const isBlockedCraft = unconfirmedQuantityQNT < 5;
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
+    const lockedCards = quantity - unconfirmedQuantityQNT;
+    console.log('🚀 ~ file: Card.js:117 ~ Card ~ lockedCards:', lockedCards);
+    const haveCardsInMarket = lockedCards > 0;
+    console.log('🚀 ~ file: Card.js:119 ~ Card ~ haveCardsInMarket:', haveCardsInMarket);
+
     return (
         <Box
             p={3}
@@ -145,6 +153,16 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                         </Stack>
                         <Spacer display={{ base: 'none', lg: 'block' }} />
                         <Center minHeight="100%">
+                            {haveCardsInMarket && (
+                                <Tooltip
+                                    label={`You have ${lockedCards} blocked cards in the market`}
+                                    minH={{ base: '100%', lg: 'auto' }}
+                                    placement="bottom">
+                                    <Box w="25%" mr={1}>
+                                        <BiLockAlt size="1.5rem" color="orange" />
+                                    </Box>
+                                </Tooltip>
+                            )}
                             <Text textAlign="end" minH={{ base: '100%', lg: 'auto' }}>
                                 <small>Quantity:</small> {quantity}
                             </Text>

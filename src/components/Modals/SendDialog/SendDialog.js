@@ -54,7 +54,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
     const [sendingTx, setSendingTx] = useState(false);
 
     const [passphrase, setPassphrase] = useState('');
-    const maxCards = Number(card.quantityQNT);
+    const maxCards = Number(card.unconfirmedQuantityQNT);
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: 1,
