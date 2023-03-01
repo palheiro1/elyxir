@@ -86,7 +86,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                         <Image
                                             ml={-8}
                                             bgColor={bgColor}
-                                            src="images/currency/IGNISIcon.png"
+                                            src="images/currency/ignis.png"
                                             alt="IGNIS Icon"
                                             w="45px"
                                             h="45px"
@@ -120,7 +120,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                         <Image
                                             ml={-8}
                                             mr={2}
-                                            src="images/currency/GIFTZIcon.png"
+                                            src="images/currency/giftz.png"
                                             alt="GIFTZ Icon"
                                             minW="45px"
                                             h="45px"
@@ -153,7 +153,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                     <Stack direction="row" align="center" mt={-2}>
                                         <Image
                                             ml={-5}
-                                            src="images/currency/GEMIcon.png"
+                                            src="images/currency/gem.png"
                                             alt="GEM Icon"
                                             w="43px"
                                             h="43px"
