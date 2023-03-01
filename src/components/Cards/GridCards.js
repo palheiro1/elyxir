@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Grid, GridItem, useDisclosure } from '@chakra-ui/react';
+import { SimpleGrid, useDisclosure } from '@chakra-ui/react';
 import { Animated } from 'react-animated-css';
 
 import Card from './Card';
@@ -97,16 +97,7 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, username, ignis }
 
     return (
         <>
-            <Grid
-                templateColumns={{
-                    base: 'repeat(1, 1fr)',
-                    md: 'repeat(2, 1fr)',
-                    lg: 'repeat(3, 1fr)',
-                    xl: 'repeat(4, 1fr)',
-                    '2xl': 'repeat(5, 1fr)',
-                }}
-                gap={4}
-                my={4}>
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4, '2xl': 5 }} my={4} gap={{ base: 1, md: 4 }}>
                 {loadedCards.map((card, index) => {
                     const delay = cardsDelay[index % 10];
                     return (
@@ -116,21 +107,19 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, username, ignis }
                             animationOut="fadeOut"
                             isVisible={true}
                             animationInDelay={delay}>
-                            <GridItem key={index}>
-                                <Card
-                                    username={username}
-                                    card={card}
-                                    setCardClicked={setCardClicked}
-                                    onOpen={onOpen}
-                                    isMarket={isMarket}
-                                    onlyBuy={onlyBuy}
-                                    ignis={ignis}
-                                />
-                            </GridItem>
+                            <Card
+                                username={username}
+                                card={card}
+                                setCardClicked={setCardClicked}
+                                onOpen={onOpen}
+                                isMarket={isMarket}
+                                onlyBuy={onlyBuy}
+                                ignis={ignis}
+                            />
                         </Animated>
                     );
                 })}
-            </Grid>
+            </SimpleGrid>
             {isLoading && <p>Loading...</p>}
             {isOpen && <DetailedCard isOpen={isOpen} onClose={onClose} data={cardClicked} />}
         </>

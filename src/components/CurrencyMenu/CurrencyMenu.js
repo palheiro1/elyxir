@@ -71,7 +71,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     return (
         <>
             <Flex align="flex-end" pr={'0.55%'}>
-                <ButtonGroup shadow="md" size="sm" fontSize={'sm'} variant="outline" gap={3}>
+                <ButtonGroup shadow="md" size="sm" fontSize={'sm'} variant="outline" gap={4}>
                     <Box
                         border="4px"
                         borderColor={borderColor}
@@ -84,15 +84,14 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                 <MenuButton>
                                     <Stack direction="row" align="center" mt={-2}>
                                         <Image
-                                            ml={-7}
+                                            ml={-8}
                                             bgColor={bgColor}
-                                            mt={1}
                                             src="images/currency/IGNISIcon.png"
                                             alt="IGNIS Icon"
-                                            w="40px"
-                                            h="40px"
+                                            w="45px"
+                                            h="45px"
                                         />
-                                        <Text pr={2} align="center">{IGNISBalance}</Text>
+                                        <Text pr={2} align="center">{Number(IGNISBalance).toFixed(0)}</Text>
                                     </Stack>
                                 </MenuButton>
 
@@ -119,15 +118,14 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                 <MenuButton>
                                     <Stack direction="row" align="center" mt={-2}>
                                         <Image
-                                            ml={-10}
-                                            mr={4}
-                                            mt={1}
+                                            ml={-8}
+                                            mr={2}
                                             src="images/currency/GIFTZIcon.png"
                                             alt="GIFTZ Icon"
-                                            minW="40px"
-                                            h="40px"
+                                            minW="45px"
+                                            h="45px"
                                         />
-                                        <Text pr={2} align="center">{GIFTZBalance}</Text>
+                                        <Text pr={2} align="center">{Number(GIFTZBalance).toFixed(0)}</Text>
                                     </Stack>
                                 </MenuButton>
 
@@ -155,13 +153,12 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                     <Stack direction="row" align="center" mt={-2}>
                                         <Image
                                             ml={-5}
-                                            mt={1}
                                             src="images/currency/GEMIcon.png"
                                             alt="GEM Icon"
-                                            w="40px"
-                                            h="40px"
+                                            w="43px"
+                                            h="43px"
                                         />
-                                        <Text pr={2}>{GEMSBalance.toFixed(2)}</Text>
+                                        <Text pr={3}>{GEMSBalance.toFixed(0)}</Text>
                                     </Stack>
                                 </MenuButton>
 

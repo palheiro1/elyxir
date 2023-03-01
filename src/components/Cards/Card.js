@@ -1,3 +1,5 @@
+import { useRef, useState } from 'react';
+
 import {
     Box,
     Button,
@@ -11,16 +13,18 @@ import {
     useColorModeValue,
     useDisclosure,
 } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
 
-import { BsArrowLeftRight, BsTools } from 'react-icons/bs';
-import { FaRegPaperPlane } from 'react-icons/fa';
 import { NQTDIVIDER } from '../../data/CONSTANTS';
+import CardBadges from './CardBadges';
+// Modals
 import CraftDialog from '../Modals/CraftDialog/CraftDialog';
 import MorphDialog from '../Modals/MorphDialog/MorphDialog';
 import SendDialog from '../Modals/SendDialog/SendDialog';
 import TradeDialog from '../Modals/TradeDialog/TradeDialog';
-import CardBadges from './CardBadges';
+
+// Icons
+import { BsArrowLeftRight, BsTools } from 'react-icons/bs';
+import { FaRegPaperPlane } from 'react-icons/fa';
 
 /**
  * @name Card
@@ -110,10 +114,19 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
-        <Box p={3} border="1px" rounded="lg" shadow="lg" bgColor={bgColor} borderColor={borderColor} minH="29rem">
+        <Box
+            p={3}
+            border="1px"
+            rounded="lg"
+            shadow="lg"
+            bgColor={bgColor}
+            borderColor={borderColor}
+            minH={{ base: '25rem', md: '29rem' }}
+            minW={{ base: '15rem', md: '12rem' }}>
             <Center>
-                <Stack direction="column" spacing={4}>
+                <SimpleGrid columns={1} spacing={{ base: 2, lg: 4 }}>
                     <Image
+                        minH="20rem"
                         src={image}
                         alt={name}
                         rounded="lg"
@@ -123,16 +136,16 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                         onMouseLeave={() => (haveThisCard ? setHover(false) : null)}
                         opacity={cardOpacity}
                     />
-                    <Stack direction={['column', 'row']} spacing={4}>
-                        <Stack direction="column" spacing={0}>
+                    <Stack direction={{ base: 'column', lg: 'row' }} spacing={0}>
+                        <Stack direction="column" spacing={0} align={{ base: 'center', lg: 'start' }}>
                             <Text fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }} noOfLines={1} fontWeight="bold">
                                 {name}
                             </Text>
                             <CardBadges rarity={rarity} continent={continent} size="sm" />
                         </Stack>
-                        <Spacer />
+                        <Spacer display={{ base: 'none', lg: 'block' }} />
                         <Center minHeight="100%">
-                            <Text textAlign="end" minH="100%">
+                            <Text textAlign="end" minH={{ base: '100%', lg: 'auto' }}>
                                 <small>Quantity:</small> {quantity}
                             </Text>
                         </Center>
@@ -145,6 +158,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                 <SimpleGrid columns={3} gap={1}>
                                     <Button
                                         fontWeight="medium"
+                                        fontSize={{ base: 'xs', md: 'sm', '2xl': 'md' }}
                                         leftIcon={<FaRegPaperPlane />}
                                         _hover={{ fontWeight: 'bold', shadow: 'xl' }}
                                         onClick={onOpenSend}
@@ -154,6 +168,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
 
                                     <Button
                                         fontWeight="medium"
+                                        fontSize={{ base: 'xs', md: 'sm', '2xl': 'md' }}
                                         leftIcon={<BsTools />}
                                         _hover={{ fontWeight: 'bold', shadow: 'xl' }}
                                         onClick={onOpenCraft}
@@ -163,6 +178,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
 
                                     <Button
                                         fontWeight="medium"
+                                        fontSize={{ base: 'xs', md: 'sm', '2xl': 'md' }}
                                         leftIcon={<BsArrowLeftRight />}
                                         _hover={{ fontWeight: 'bold', shadow: 'xl' }}
                                         onClick={onOpenMorph}
@@ -240,7 +256,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                         </Center>
                     )}
                     {fixOnlyBuy && (
-                        <Box w="100%">
+                        <Box>
                             <Button
                                 w="100%"
                                 color="black"
@@ -252,7 +268,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                             </Button>
                         </Box>
                     )}
-                </Stack>
+                </SimpleGrid>
             </Center>
 
             {/* ------------------------------------ HIDE DIALOGs ------------------------------------ */}

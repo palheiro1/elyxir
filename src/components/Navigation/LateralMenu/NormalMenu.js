@@ -16,7 +16,7 @@ const NormalMenu = ({ option, setOption, handleLogout, showAllCards, handleShowA
             </Box>
 
             {/* This is the main section */}
-            <Box width="100%" p={2}>
+            <Box p={2}>
                 {children}
             </Box>
         </Stack>
