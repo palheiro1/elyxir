@@ -12,6 +12,7 @@ import {
     Image,
     Stack,
     Text,
+    Center,
 } from '@chakra-ui/react';
 
 import { useRef, useState } from 'react';
@@ -70,88 +71,108 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     return (
         <>
             <Flex align="flex-end" pr={'0.55%'}>
-                <ButtonGroup rounded="lg" shadow="md" size="sm" fontSize={'sm'} isAttached variant="outline">
+                <ButtonGroup shadow="md" size="sm" fontSize={'sm'} variant="outline" gap={3}>
                     <Box
-                        py={1}
-                        border="1px"
+                        border="4px"
                         borderColor={borderColor}
-                        borderLeftRadius="lg"
-                        px={2}
+                        rounded="lg"
+                        minW="5rem"
+                        maxH={'2.2rem'}
                         _hover={{ bg: hoverColor }}>
-                        <Menu>
-                            <MenuButton>
-                                <Stack direction="row" align="center">
-                                    <Image
-                                        bgColor={bgColor}
-                                        mt={1}
-                                        src="images/currency/IGNISIcon.png"
-                                        alt="IGNIS Icon"
-                                        w="23px"
-                                        h="23px"
-                                    />
-                                    <Text align="center">{IGNISBalance}</Text>
-                                </Stack>
-                            </MenuButton>
+                        <Center>
+                            <Menu>
+                                <MenuButton>
+                                    <Stack direction="row" align="center" mt={-2}>
+                                        <Image
+                                            ml={-7}
+                                            bgColor={bgColor}
+                                            mt={1}
+                                            src="images/currency/IGNISIcon.png"
+                                            alt="IGNIS Icon"
+                                            w="40px"
+                                            h="40px"
+                                        />
+                                        <Text pr={2} align="center">{IGNISBalance}</Text>
+                                    </Stack>
+                                </MenuButton>
 
-                            <Portal>
-                                <MenuList>
-                                    <MenuItem onClick={() => handleOpenSendCurrency('IGNIS')}>Send IGNIS</MenuItem>
-                                    <MenuItem onClick={() => handleOpenGetMoreCurrency('IGNIS')}>Get IGNIS</MenuItem>
-                                </MenuList>
-                            </Portal>
-                        </Menu>
-                    </Box>
-                    <Box py={1} border="1px" borderColor={borderColor} px={2} _hover={{ bg: hoverColor }}>
-                        <Menu>
-                            <MenuButton>
-                                <Stack direction="row" align="center">
-                                    <Image
-                                        mt={1}
-                                        src="images/currency/GIFTZIcon.png"
-                                        alt="GIFTZ Icon"
-                                        w="23px"
-                                        h="23px"
-                                    />
-                                    <Text align="center">{GIFTZBalance}</Text>
-                                </Stack>
-                            </MenuButton>
-
-                            <Portal>
-                                <MenuList>
-                                    <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
-                                    <MenuItem onClick={() => handleOpenGetMoreCurrency('GIFTZ')}>Get GIFTZ</MenuItem>
-                                </MenuList>
-                            </Portal>
-                        </Menu>
+                                <Portal>
+                                    <MenuList>
+                                        <MenuItem onClick={() => handleOpenSendCurrency('IGNIS')}>Send IGNIS</MenuItem>
+                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('IGNIS')}>
+                                            Get IGNIS
+                                        </MenuItem>
+                                    </MenuList>
+                                </Portal>
+                            </Menu>
+                        </Center>
                     </Box>
                     <Box
-                        py={1}
-                        border="1px"
+                        border="4px"
+                        rounded="lg"
+                        minW="5rem"
+                        maxH={'2.2rem'}
                         borderColor={borderColor}
-                        borderRightRadius="lg"
-                        px={2}
                         _hover={{ bg: hoverColor }}>
-                        <Menu>
-                            <MenuButton>
-                                <Stack direction="row" align="center">
-                                    <Image
-                                        mt={1}
-                                        src="images/currency/GEMIcon.png"
-                                        alt="GEM Icon"
-                                        w="23px"
-                                        h="23px"
-                                    />
-                                    <Text align="center">{GEMSBalance.toFixed(2)}</Text>
-                                </Stack>
-                            </MenuButton>
+                        <Center>
+                            <Menu>
+                                <MenuButton>
+                                    <Stack direction="row" align="center" mt={-2}>
+                                        <Image
+                                            ml={-10}
+                                            mr={4}
+                                            mt={1}
+                                            src="images/currency/GIFTZIcon.png"
+                                            alt="GIFTZ Icon"
+                                            minW="40px"
+                                            h="40px"
+                                        />
+                                        <Text pr={2} align="center">{GIFTZBalance}</Text>
+                                    </Stack>
+                                </MenuButton>
 
-                            <Portal>
-                                <MenuList>
-                                    <MenuItem onClick={() => handleOpenSendCurrency('GEMS')}>Send GEM</MenuItem>
-                                    <MenuItem onClick={() => handleOpenGetMoreCurrency('GEMS')}>Get GEM</MenuItem>
-                                </MenuList>
-                            </Portal>
-                        </Menu>
+                                <Portal>
+                                    <MenuList>
+                                        <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
+                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('GIFTZ')}>
+                                            Get GIFTZ
+                                        </MenuItem>
+                                    </MenuList>
+                                </Portal>
+                            </Menu>
+                        </Center>
+                    </Box>
+                    <Box
+                        border="4px"
+                        borderColor={borderColor}
+                        rounded="lg"
+                        minW="5rem"
+                        maxH={'2.2rem'}
+                        _hover={{ bg: hoverColor }}>
+                        <Center>
+                            <Menu>
+                                <MenuButton>
+                                    <Stack direction="row" align="center" mt={-2}>
+                                        <Image
+                                            ml={-5}
+                                            mt={1}
+                                            src="images/currency/GEMIcon.png"
+                                            alt="GEM Icon"
+                                            w="40px"
+                                            h="40px"
+                                        />
+                                        <Text pr={2}>{GEMSBalance.toFixed(2)}</Text>
+                                    </Stack>
+                                </MenuButton>
+
+                                <Portal>
+                                    <MenuList>
+                                        <MenuItem onClick={() => handleOpenSendCurrency('GEMS')}>Send GEM</MenuItem>
+                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('GEMS')}>Get GEM</MenuItem>
+                                    </MenuList>
+                                </Portal>
+                            </Menu>
+                        </Center>
                     </Box>
                 </ButtonGroup>
             </Flex>
