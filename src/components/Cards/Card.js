@@ -117,9 +117,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     const lockedCards = quantity - unconfirmedQuantityQNT;
-    console.log('🚀 ~ file: Card.js:117 ~ Card ~ lockedCards:', lockedCards);
     const haveCardsInMarket = lockedCards > 0;
-    console.log('🚀 ~ file: Card.js:119 ~ Card ~ haveCardsInMarket:', haveCardsInMarket);
 
     return (
         <Box
