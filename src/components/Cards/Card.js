@@ -4,6 +4,7 @@ import {
     Box,
     Button,
     Center,
+    Flex,
     Image,
     SimpleGrid,
     Spacer,
@@ -118,6 +119,8 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
 
     const lockedCards = quantity - unconfirmedQuantityQNT;
     const haveCardsInMarket = lockedCards > 0;
+    const isSingular = Number(lockedCards) === 1;
+    console.log('🚀 ~ file: Card.js:122 ~ Card ~ isSingular:', lockedCards, isSingular);
 
     return (
         <Box
@@ -151,19 +154,17 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                         </Stack>
                         <Spacer display={{ base: 'none', lg: 'block' }} />
                         <Center minHeight="100%">
-                            {haveCardsInMarket && (
-                                <Tooltip
-                                    label={`You have ${lockedCards} blocked cards in the market`}
-                                    minH={{ base: '100%', lg: 'auto' }}
-                                    placement="bottom">
-                                    <Box w="25%" mr={1}>
-                                        <BiLockAlt size="1.5rem" color="orange" />
-                                    </Box>
-                                </Tooltip>
-                            )}
-                            <Text textAlign="end" minH={{ base: '100%', lg: 'auto' }}>
-                                <small>Quantity:</small> {quantity}
-                            </Text>
+                            <Tooltip
+                                label={`You have ${lockedCards} blocked ${isSingular ? 'card' : 'cards'} in the market`}
+                                display={haveCardsInMarket ? 'flex' : 'none'}
+                                placement="bottom">
+                                <Flex w="100%">
+                                    <Text textAlign="end" minH={{ base: '100%', lg: 'auto' }}>
+                                        <small>Quantity:</small> {quantity}
+                                    </Text>
+                                    <Center>{haveCardsInMarket && <BiLockAlt size="1rem" color="orange" />}</Center>
+                                </Flex>
+                            </Tooltip>
                         </Center>
                     </Stack>
                     {!isMarket && !fixOnlyBuy && (
