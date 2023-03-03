@@ -66,7 +66,6 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     };
 
     const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
-    const bgColor = useColorModeValue('blackAlpha.300', 'blackAlpha.300');
 
     return (
         <>
@@ -85,7 +84,6 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                     <Stack direction="row" align="center" mt={-2}>
                                         <Image
                                             ml={-8}
-                                            bgColor={bgColor}
                                             src="images/currency/ignis.png"
                                             alt="IGNIS Icon"
                                             w="45px"
