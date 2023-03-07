@@ -70,8 +70,9 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     return (
         <>
             <Flex align="flex-end" pr={'0.55%'}>
-                <ButtonGroup shadow="md" size="sm" fontSize={'sm'} variant="outline" gap={4}>
+                <ButtonGroup size="sm" fontSize={'sm'} variant="outline" gap={4}>
                     <Box
+                        shadow="lg"
                         border="4px"
                         borderColor={borderColor}
                         rounded="lg"
@@ -105,6 +106,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                         </Center>
                     </Box>
                     <Box
+                        shadow="lg"
                         border="4px"
                         rounded="lg"
                         minW="5rem"
@@ -139,6 +141,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                         </Center>
                     </Box>
                     <Box
+                        shadow="lg"
                         border="4px"
                         borderColor={borderColor}
                         rounded="lg"
