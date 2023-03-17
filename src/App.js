@@ -41,7 +41,7 @@ function App() {
     useEffect(() => {
         const checkVersion = async () => {
             if (!isLatestVersion) {
-                console.log('New version available! Cleaning cache and hard reloading...')
+                console.log('New version available! Cleaning cache and hard reloading...');
                 await emptyCacheStorage();
                 window.location.reload();
             }
