@@ -92,10 +92,10 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                     <Select border="0px" borderColor="gray.800" size="xs" onChange={handleFilter}>
                         <option value="all">All transactions</option>
                         <option value="in">Received</option>
-                        <option value="out">Send</option>
-                        <option value="cards">Cards</option>
-                        <option value="currency">Currency</option>
-                        <option value="placed">From the Market</option>
+                        <option value="out">Sent</option>
+                        <option value="cards">Shop</option>
+                        <option value="currency">Currencies</option>
+                        <option value="placed">Trades</option>
                     </Select>
                 </Stack>
             </Stack>
