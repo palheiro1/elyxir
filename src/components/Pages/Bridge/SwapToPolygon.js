@@ -26,7 +26,7 @@ import BridgeCard from '../../Cards/BridgeCard';
 
 // Utils
 import { checkPin, sendToPolygonBridge } from '../../../utils/walletUtils';
-import { errorToast, okToast } from '../../../utils/alerts';
+import { errorToast, infoToast, okToast } from '../../../utils/alerts';
 
 /**
  * @name SwapToPolygon
@@ -44,6 +44,8 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
     const [polygonAccount, setPolygonAccount] = useState('');
     const [isValidAccount, setIsValidAccount] = useState(false);
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
+
+    const [isSwapping, setIsSwapping] = useState(false);
 
     const [passphrase, setPassphrase] = useState('');
     const [selectedCards, setSelectedCards] = useState([]);
@@ -86,6 +88,8 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
 
     const handleSwap = async () => {
         if (!isValidPin || !isValidAccount || selectedCards.length === 0) return;
+        infoToast('Swapping cards...', toast);
+        setIsSwapping(true);
 
         const cardsToSwap = selectedCards.map(card => ({
             asset: card.asset,
@@ -103,6 +107,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
             okToast('Swap completed successfully', toast);
             setSelectedCards([]);
             setPolygonAccount('');
+            setIsSwapping(false);
         } else {
             errorToast('Swap failed', toast);
         }
@@ -211,7 +216,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
                     w="100%"
                     colorScheme="blue"
                     variant="outline"
-                    disabled={!isValidAccount || !isValidPin || selectedCards.length === 0}
+                    disabled={!isValidAccount || !isValidPin || selectedCards.length === 0 || isSwapping}
                     onClick={handleSwap}
                     letterSpacing="widest">
                     SWAP
