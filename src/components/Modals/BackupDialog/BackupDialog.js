@@ -9,6 +9,7 @@ import {
     Button,
     Text,
     Textarea,
+    useColorModeValue,
 } from '@chakra-ui/react';
 
 import { setBackupDone } from '../../../utils/storage';
@@ -30,6 +31,9 @@ const BackupDialog = ({ reference, isOpen, onClose, account, passphrase, usernam
         onClose();
     };
 
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+
     return (
         <>
             <AlertDialog
@@ -40,7 +44,7 @@ const BackupDialog = ({ reference, isOpen, onClose, account, passphrase, usernam
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent>
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
                     <AlertDialogHeader>Confirm passphrase backup</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>

@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button } from "@chakra-ui/react"
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useColorModeValue } from "@chakra-ui/react"
 import { dropUser, removeFromAllUsers } from "../../../utils/storage"
 
 
@@ -22,6 +22,9 @@ const ConfirmDialog = ({ reference, isOpen, onClose, setNeedReload, user }) => {
         setNeedReload(true);
         onClose();
     }
+
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
         
 
     return (
@@ -35,7 +38,7 @@ const ConfirmDialog = ({ reference, isOpen, onClose, setNeedReload, user }) => {
             >
                 <AlertDialogOverlay />
 
-                <AlertDialogContent>
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
                     <AlertDialogHeader>Delete wallet from this device?</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
