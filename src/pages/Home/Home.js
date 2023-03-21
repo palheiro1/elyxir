@@ -32,6 +32,7 @@ import {
     GEMASSETACCOUNT,
     NQTDIVIDER,
     REFRESH_DATA_TIME,
+    REFRESH_UNWRAP_TIME,
     TARASCACARDACCOUNT,
 } from '../../data/CONSTANTS';
 import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
@@ -53,6 +54,7 @@ import {
     getTrades,
     getTransaction,
     getUnconfirmedTransactions,
+    processUnwrapsForAccount,
 } from '../../services/Ardor/ardorInterface';
 import Exchange from '../Exchange/Exchange';
 import ArdorChat from '../../components/Pages/ChatPage/ArdorChat';
@@ -295,6 +297,18 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         return () => clearInterval(intervalId);
     }, []);
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            const checkUnwraps = async () => {
+                const { accountRs } = infoAccount;
+                await processUnwrapsForAccount(accountRs);
+            };
+            checkUnwraps();
+        }, REFRESH_UNWRAP_TIME);
+
+        return () => clearInterval(intervalId);
+    }, [infoAccount]);
+
     // -----------------------------------------------------------------
     // Load component to render
     // -----------------------------------------------------------------
@@ -332,12 +346,12 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         const checkAndGo = () => {
             setLastOption(directSectionToRender);
             setOption(directSectionToRender);
-            setDirectSectionToRender(null);
+            setDirectSectionToRender(false);
             searchParams.delete('goToSection');
             setSearchParams(searchParams);
         };
         directSectionToRender && checkAndGo();
-    }, [directSectionToRender]);
+    }, [directSectionToRender, searchParams, setSearchParams]);
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
