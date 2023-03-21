@@ -31,7 +31,7 @@ const Welcome = () => {
                             borderColor="whiteAlpha.300"
                             bgColor={bgColor}
                             _hover={{ cursor: 'pointer', bgColor: bgHoverColor }}
-                            onClick={() => navigate("/exchange")}>
+                            onClick={() => navigate("/home?goToSection=8")}>
                             <Text>Simplex</Text>
                             <Text>(Fiat to IGNIS)</Text>
                         </Box>
@@ -42,7 +42,7 @@ const Welcome = () => {
                             rounded="lg"
                             borderColor="whiteAlpha.300"
                             _hover={{ cursor: 'pointer', bgColor: bgHoverColor }}
-                            onClick={() => navigate("/exchange")}>
+                            onClick={() => navigate("/home?goToSection=8")}>
                             <Text>Changelly</Text>
                             <Text>(Crypto to IGNIS)</Text>
                         </Box>

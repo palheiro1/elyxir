@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 
 // -----------------------------------------------------------------
@@ -32,6 +32,7 @@ import {
     GEMASSETACCOUNT,
     NQTDIVIDER,
     REFRESH_DATA_TIME,
+    REFRESH_UNWRAP_TIME,
     TARASCACARDACCOUNT,
 } from '../../data/CONSTANTS';
 import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
@@ -53,10 +54,12 @@ import {
     getTrades,
     getTransaction,
     getUnconfirmedTransactions,
+    processUnwrapsForAccount,
 } from '../../services/Ardor/ardorInterface';
 import Exchange from '../Exchange/Exchange';
 import ArdorChat from '../../components/Pages/ChatPage/ArdorChat';
 import Book from '../../components/Pages/BookPage/Book';
+import { okToast } from '../../utils/alerts';
 
 /**
  * @name Home
@@ -115,6 +118,13 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     const [renderComponent, setRenderComponent] = useState(<Overview />);
 
     // -----------------------------------------------------------------
+    const [searchParams, setSearchParams] = useSearchParams();
+    const directSection = searchParams.get('goToSection') || false;
+    const [directSectionToRender, setDirectSectionToRender] = useState(directSection);
+
+    // -----------------------------------------------------------------
+    // ------------------------- Functions -----------------------------
+    // -----------------------------------------------------------------
     // Stack of cards to notify
     const [cardsNotification, setCardsNotification] = useState(cards);
 
@@ -155,10 +165,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     const handleChangeOption = newOption => {
         setLastOption(option);
         setOption(newOption);
-    };
-
-    const goToSection = option => {
-        handleChangeOption(option);
     };
 
     // -----------------------------------------------------------------
@@ -292,6 +298,21 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         return () => clearInterval(intervalId);
     }, []);
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            const checkUnwraps = async () => {
+                const { accountRs } = infoAccount;
+                const response = await processUnwrapsForAccount(accountRs);
+                if (response && response.starts) {
+                    okToast("DETECTED UNWRAP: " + response.starts + ' transfers started.', toast);
+                }
+            };
+            checkUnwraps();
+        }, REFRESH_UNWRAP_TIME);
+
+        return () => clearInterval(intervalId);
+    }, [infoAccount, toast]);
+
     // -----------------------------------------------------------------
     // Load component to render
     // -----------------------------------------------------------------
@@ -325,6 +346,17 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         loadComponent();
     }, [option, infoAccount, cards, cardsFiltered, gemCards, onOpen, lastOption]);
 
+    useEffect(() => {
+        const checkAndGo = () => {
+            setLastOption(directSectionToRender);
+            setOption(directSectionToRender);
+            setDirectSectionToRender(false);
+            searchParams.delete('goToSection');
+            setSearchParams(searchParams);
+        };
+        directSectionToRender && checkAndGo();
+    }, [directSectionToRender, searchParams, setSearchParams]);
+
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
@@ -348,7 +380,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                     children={renderComponent}
                     showAllCards={showAllCards}
                     handleShowAllCards={handleShowAllCards}
-                    goToSection={goToSection}
+                    goToSection={handleChangeOption}
                 />
             </Box>
 

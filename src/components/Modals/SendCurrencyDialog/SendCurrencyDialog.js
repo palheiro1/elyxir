@@ -30,6 +30,7 @@ import { checkPin, sendGem, sendGiftz } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { isArdorAccount } from '../../../utils/validators';
 import { NQTDIVIDER } from '../../../data/CONSTANTS';
+import QRReader from '../../QRReader/QRReader';
 
 const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IGNISBalance }) => {
     const toast = useToast();
@@ -38,6 +39,8 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
     const [isValidArdorAccount, setIsValidArdorAccount] = useState(false);
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [sendingTx, setSendingTx] = useState(false);
+
+    const [readerEnabled, setReaderEnabled] = useState(false);
 
     const [passphrase, setPassphrase] = useState('');
     const maxCurrency =
@@ -54,10 +57,10 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
     const dec = getDecrementButtonProps();
     const input = getInputProps();
 
-    const handleInput = e => {
-        e.preventDefault();
-        setArdorAccount(e.target.value);
-        const isValid = isArdorAccount(e.target.value);
+    const handleInput = address => {
+        if (readerEnabled) setReaderEnabled(false);
+        setArdorAccount(address);
+        const isValid = isArdorAccount(address);
         setIsValidArdorAccount(isValid);
     };
 
@@ -172,7 +175,7 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                                 <Input
                                     placeholder=" "
                                     value={ardorAccount}
-                                    onChange={handleInput}
+                                    onChange={e => handleInput(e.target.value)}
                                     border="0px"
                                     isInvalid={!isValidArdorAccount}
                                 />
@@ -184,11 +187,14 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                                             bgColor="transparent"
                                             aria-label="Scan QR CODE"
                                             icon={<FaQrcode />}
+                                            onClick={() => {
+                                                setReaderEnabled(!readerEnabled);
+                                            }}
                                         />
                                     }
                                 />
                             </InputGroup>
-
+                            {readerEnabled && <QRReader handleInput={handleInput} />}
                             <FormLabel>Recipient</FormLabel>
                         </FormControl>
 
