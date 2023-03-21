@@ -59,6 +59,7 @@ import {
 import Exchange from '../Exchange/Exchange';
 import ArdorChat from '../../components/Pages/ChatPage/ArdorChat';
 import Book from '../../components/Pages/BookPage/Book';
+import { okToast } from '../../utils/alerts';
 
 /**
  * @name Home
@@ -301,13 +302,16 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         const intervalId = setInterval(() => {
             const checkUnwraps = async () => {
                 const { accountRs } = infoAccount;
-                await processUnwrapsForAccount(accountRs);
+                const response = await processUnwrapsForAccount(accountRs);
+                if (response && response.starts) {
+                    okToast("DETECTED UNWRAP: " + response.starts + ' transfers started.', toast);
+                }
             };
             checkUnwraps();
         }, REFRESH_UNWRAP_TIME);
 
         return () => clearInterval(intervalId);
-    }, [infoAccount]);
+    }, [infoAccount, toast]);
 
     // -----------------------------------------------------------------
     // Load component to render
