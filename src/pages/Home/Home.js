@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 
 // -----------------------------------------------------------------
@@ -115,6 +115,13 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     const [renderComponent, setRenderComponent] = useState(<Overview />);
 
     // -----------------------------------------------------------------
+    const [searchParams, setSearchParams] = useSearchParams();
+    const directSection = searchParams.get('goToSection') || false;
+    const [directSectionToRender, setDirectSectionToRender] = useState(directSection);
+
+    // -----------------------------------------------------------------
+    // ------------------------- Functions -----------------------------
+    // -----------------------------------------------------------------
     // Stack of cards to notify
     const [cardsNotification, setCardsNotification] = useState(cards);
 
@@ -155,10 +162,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     const handleChangeOption = newOption => {
         setLastOption(option);
         setOption(newOption);
-    };
-
-    const goToSection = option => {
-        handleChangeOption(option);
     };
 
     // -----------------------------------------------------------------
@@ -325,6 +328,17 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         loadComponent();
     }, [option, infoAccount, cards, cardsFiltered, gemCards, onOpen, lastOption]);
 
+    useEffect(() => {
+        const checkAndGo = () => {
+            setLastOption(directSectionToRender);
+            setOption(directSectionToRender);
+            setDirectSectionToRender(null);
+            searchParams.delete('goToSection');
+            setSearchParams(searchParams);
+        };
+        directSectionToRender && checkAndGo();
+    }, [directSectionToRender]);
+
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
@@ -348,7 +362,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                     children={renderComponent}
                     showAllCards={showAllCards}
                     handleShowAllCards={handleShowAllCards}
-                    goToSection={goToSection}
+                    goToSection={handleChangeOption}
                 />
             </Box>
 
