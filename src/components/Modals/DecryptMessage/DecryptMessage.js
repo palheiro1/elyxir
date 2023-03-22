@@ -109,10 +109,9 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
             // Mix messages with auxMessages
             const auxTotalMsg = [...messages, ...auxMessages];
             // Sort messages by timestamp
-            auxTotalMsg.sort((a, b) => {
-                return a.timestamp - b.timestamp;
-            });
-            console.log('🚀 ~ file: DecryptMessage.js:109 ~ auxTotalMsg.sort ~ auxTotalMsg:', auxTotalMsg);
+            // auxTotalMsg.sort((a, b) => {
+            //     return a.timestamp - b.timestamp;
+            // });
             setTotalMessages(auxTotalMsg);
         };
 

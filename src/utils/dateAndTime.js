@@ -51,6 +51,5 @@ export function getMessageTimestamp(message) {
     } else {
         timeElapsedText = `${hours}h ${minutes}m ${seconds}s`;
     }
-    console.log(timeElapsedText)
     return { timeElapsedText, isDate };
 }

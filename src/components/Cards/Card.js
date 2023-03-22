@@ -120,7 +120,6 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     const lockedCards = quantity - unconfirmedQuantityQNT;
     const haveCardsInMarket = lockedCards > 0;
     const isSingular = Number(lockedCards) === 1;
-    console.log('🚀 ~ file: Card.js:122 ~ Card ~ isSingular:', lockedCards, isSingular);
 
     return (
         <Box
