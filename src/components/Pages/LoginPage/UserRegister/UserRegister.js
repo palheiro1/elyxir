@@ -49,7 +49,7 @@ const UserRegister = () => {
     const handleSaveWallet = () => {
 
         // Check if all fields are filled
-        if(!name || !account || !passphrase || !pin) {
+        if(!name || !account || !passphrase || !pin || pin.length !== 4) {
             errorToast("Please generate wallet and fill name and PIN", toast);
             return;
         }
