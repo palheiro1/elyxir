@@ -31,7 +31,7 @@ const OneSenderMessages = ({ sender, messages, username, account }) => {
                     </Center>
                     <Center>
                         <Text align="left">
-                            Last message received: <strong>{timeElapsedText}</strong> {!isDate && 'ago'}
+                            Last message: <strong>{timeElapsedText}</strong> {!isDate && 'ago'}
                         </Text>
                     </Center>
                     <Center>

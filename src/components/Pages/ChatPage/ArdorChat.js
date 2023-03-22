@@ -15,15 +15,15 @@ const ArdorChat = ({ infoAccount }) => {
         const getMessages = async () => {
             const response = await getAllMessages(infoAccount.accountRs);
             let auxMessages = response.prunableMessages;
+
             // Delete messages have JSON format
             auxMessages = auxMessages.filter(message => {
+                if (message.senderRS === infoAccount.accountRs) return false;
                 if (message.encryptedMessage) return true;
+                // Delete my own messages
                 return false;
             });
-            // Sort by timestamp
-            auxMessages.sort((a, b) => {
-                return a.timestamp - b.timestamp;
-            });
+
             // Group by senderRS
             auxMessages = auxMessages.reduce((acc, message) => {
                 const sender = message.senderRS;
@@ -33,6 +33,7 @@ const ArdorChat = ({ infoAccount }) => {
                 acc[sender].push(message);
                 return acc;
             }, {});
+
             setMessages(auxMessages);
         };
         getMessages();
