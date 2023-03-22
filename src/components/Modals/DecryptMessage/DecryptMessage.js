@@ -1,4 +1,4 @@
-import { forwardRef, createRef, useEffect, useState } from 'react';
+import { forwardRef, createRef, useEffect, useState, useRef } from 'react';
 import ResizeTextarea from 'react-textarea-autosize';
 
 import {
@@ -21,6 +21,7 @@ import {
     Spacer,
     Textarea,
     useColorModeValue,
+    useDisclosure,
     useToast,
 } from '@chakra-ui/react';
 
@@ -28,6 +29,7 @@ import { errorToast, okToast } from '../../../utils/alerts';
 import { checkPin } from '../../../utils/walletUtils';
 import { decryptMessage, getAccountPublicKey, getAllMessages } from '../../../services/Ardor/ardorInterface';
 import { getMessageTimestamp } from '../../../utils/dateAndTime';
+import NewMessage from '../NewMessage/NewMessage';
 
 /**
  * @name DecryptMessage
@@ -35,6 +37,10 @@ import { getMessageTimestamp } from '../../../utils/dateAndTime';
  * @param {ref} reference - reference to the button that opens the modal
  * @param {boolean} isOpen - if the modal is open or not
  * @param {function} onClose - function to close the modal
+ * @param {string} username - username of the logged user
+ * @param {array} messages - array of messages to decrypt
+ * @param {string} sender - sender of the messages
+ * @param {string} account - account of the logged user
  */
 const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], sender, account }) => {
     const [decryptedMessages, setDecryptedMessages] = useState([]); // array of decrypted messages
@@ -44,6 +50,11 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
     const [loadedMessages, setLoadedMessages] = useState(false); // flag to know if messages are loaded
     const [totalMessages, setTotalMessages] = useState([]);
     const toast = useToast();
+
+    const { isOpen:isOpenResponse, onOpen:onOpenResponse, onClose:onCloseResponse } = useDisclosure();
+    const ref = useRef();
+
+    // ------------------ Decrypt messages ------------------
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -96,23 +107,27 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
         const getMyMessages = async () => {
             const response = await getAllMessages(sender);
             let auxMessages = response.prunableMessages;
+
             // Delete messages have JSON format
             auxMessages = auxMessages.filter(message => {
                 if (message.encryptedMessage) return true;
                 return false;
             });
+
             // Filter messages by account
             auxMessages = auxMessages.filter(message => {
                 if (message.senderRS === account) return true;
                 return false;
             });
+
             // Mix messages with auxMessages
             const auxTotalMsg = [...messages, ...auxMessages];
-            // Sort messages by timestamp
+
+            //Sort messages by timestamp
             auxTotalMsg.sort((a, b) => {
-                return a.timestamp - b.timestamp;
+                return a.transactionTimestamp - b.transactionTimestamp;
             });
-            console.log('🚀 ~ file: DecryptMessage.js:109 ~ auxTotalMsg.sort ~ auxTotalMsg:', auxTotalMsg);
+            
             setTotalMessages(auxTotalMsg);
         };
 
@@ -227,6 +242,11 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
                         <Button mx={2} ref={reference} onClick={handleClose}>
                             CLOSE
                         </Button>
+                        {decryptedMessages.length !== 0 && (
+                            <Button ref={reference} onClick={onOpenResponse} isDisabled={!isValidPin} bgColor="orange.600" fontWeight="bold">
+                                REPLY
+                            </Button>
+                        )}
                         {decryptedMessages.length === 0 && (
                             <Button ref={reference} onClick={handleOk} isDisabled={!isValidPin}>
                                 SHOW MESSAGE
@@ -235,6 +255,7 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+            <NewMessage reference={ref} isOpen={isOpenResponse} onClose={onCloseResponse} username={username} defaultRecipient={sender} />
         </>
     );
 };

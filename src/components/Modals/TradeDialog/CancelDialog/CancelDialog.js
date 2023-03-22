@@ -41,10 +41,7 @@ const CancelDialog = ({ reference, isOpen, onClose, username, selectedOrder }) =
 
     if (!selectedOrder) return;
     const { order, isAsk } = selectedOrder;
-    console.log("🚀 ~ file: CancelDialog.js:44 ~ CancelDialog ~ isAsk:", isAsk)
-    console.log("🚀 ~ file: CancelDialog.js:44 ~ CancelDialog ~ selectedOrder:", selectedOrder)
     const typeTrade = isAsk ? 'ask' : 'bid';
-    console.log("🚀 ~ file: CancelDialog.js:47 ~ CancelDialog ~ typeTrade:", typeTrade)
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -62,7 +59,6 @@ const CancelDialog = ({ reference, isOpen, onClose, username, selectedOrder }) =
 
             if (isAsk) result = await cancelAskOrder(order, passphrase);
             else result = await cancelBidOrder(order, passphrase);
-            console.log("🚀 ~ file: CancelDialog.js:62 ~ handleDelete ~ result:", result)
 
             if (result) okToast('Order deleted', toast);
             else errorToast('Error deleting order', toast);

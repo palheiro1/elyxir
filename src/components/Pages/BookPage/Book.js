@@ -9,7 +9,6 @@ import pdf from './Capitulo.pdf';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const Page = forwardRef(({ pageNumber, width }, ref) => {
-    console.log('🚀 ~ file: Book.js:10 ~ Page ~ width:', width);
 
     return (
         <div ref={ref}>

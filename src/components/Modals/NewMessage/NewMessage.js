@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
     AlertDialog,
@@ -38,8 +38,8 @@ import { checkPin } from '../../../utils/walletUtils';
  * @param {function} onClose - function to close the modal
  * @param {string} username - username of the logged user
  */
-const NewMessage = ({ reference, isOpen, onClose, username }) => {
-    const [ardorAccount, setArdorAccount] = useState('');
+const NewMessage = ({ reference, isOpen, onClose, username, defaultRecipient = '' }) => {
+    const [ardorAccount, setArdorAccount] = useState(defaultRecipient);
     const [message, setMessage] = useState('');
     const [isValidArdorAccount, setIsValidArdorAccount] = useState(false);
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
@@ -49,9 +49,15 @@ const NewMessage = ({ reference, isOpen, onClose, username }) => {
     const handleInputArdorAccount = e => {
         e.preventDefault();
         setArdorAccount(e.target.value);
-        const isValid = isArdorAccount(e.target.value);
-        setIsValidArdorAccount(isValid);
     };
+
+    useEffect(() => {
+        const checkValidity = () => {
+            const isValid = isArdorAccount(ardorAccount);
+            setIsValidArdorAccount(isValid);
+        }
+        ardorAccount && checkValidity();
+    }, [ardorAccount]);
 
     const handleInputMessage = e => {
         e.preventDefault();

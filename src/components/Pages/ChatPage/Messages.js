@@ -17,7 +17,13 @@ const Messages = ({ messages = {}, username, account }) => {
                 bgColor={bgColor}
                 borderColor={borderColor}>
                 {Object.keys(messages).map((key, index) => (
-                    <OneSenderMessages key={index} sender={key} messages={messages[key]} username={username} account={account} />
+                    <OneSenderMessages
+                        key={index}
+                        sender={messages[key][0].senderRS}
+                        messages={messages[key]}
+                        username={username}
+                        account={account}
+                    />
                 ))}
             </Stack>
         </Box>
