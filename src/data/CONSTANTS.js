@@ -19,6 +19,8 @@ export const RARITY_COLORS = {
     Special: 'linear-gradient(60deg, #53AF53, #2D5B53) 1',
 };
 
+export const MEDIUM_URL = "https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@tarasca-dao";
+
 // -------------------------------------------------
 // ------------------ CURRENCIES -------------------
 // -------------------------------------------------

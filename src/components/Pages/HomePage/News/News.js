@@ -1,34 +1,30 @@
-import { Box, Stack, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Stack, Text } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import SinglePost from './SinglePost';
 
 const News = () => {
-    const NewArticle = ({ date, title, text, url }) => {
-        const bgColor = useColorModeValue('blackAlpha.50', 'whiteAlpha.50');
-        const bgHoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
-        const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
-        const textColor = useColorModeValue('black', 'white');
-        return (
-            <a href={url} target="_blank" rel="noreferrer">
-                <Box
-                    bg={bgColor}
-                    _hover={{ bg: bgHoverColor }}
-                    p={8}
-                    w="100%"
-                    shadow="xl"
-                    border="1px"
-                    borderColor={borderColor}
-                    rounded="lg">
-                    <Stack direction="column">
-                        <Text color={textColor} fontSize="xs" textTransform="full-width">
-                            {date}
-                        </Text>
-                        <Text color={textColor} fontSize="2xl">
-                            {title}
-                        </Text>
-                        <Text color="grey">{text}</Text>
-                    </Stack>
-                </Box>
-            </a>
-        );
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [news, setNews] = useState([]);
+
+    useEffect(() => {
+        const fetchNews = async () => {
+            const response = await fetch(
+                'https://api.rss2json.com/v1/api.json?rss_url=https://tarasca-dao.medium.com/feed'
+            );
+            const data = await response.json();
+            // Only show the first 3 articles
+            const items = data.items.slice(0, 3);
+            setNews(items);
+            setIsLoaded(true);
+        };
+        !isLoaded && fetchNews();
+    }, [isLoaded]);
+
+    const ToText = (node) => {
+        let tag = document.createElement('div');
+        tag.innerHTML = node;
+        node = tag.innerText;
+        return node;
     };
 
     return (
@@ -37,21 +33,28 @@ const News = () => {
                 News
             </Text>
             <Stack direction="column">
-                <NewArticle
-                    date="NOV 28, 2022"
-                    title="Morphing creatures: updating Mythical Beings"
-                    text="Step by step, our vision is making solid progress. In this update we are adding a new feature, Morphing, which also paves the way for the in-game economy, creating a first use and marketplace for ingame..."
-                    url="https://tarasca-dao.medium.com/morphing-creatures-updating-mythical-beings-579c527840d"
-                />
-                <NewArticle
-                    date="OCT 12, 2022"
-                    title="Season 05: The first round is over, the adventure begins!"
-                    text="In this fifth season of Mythical Beings, the 50 creatures are finally deployed across the land, ten for each continent. Is that all? No more..."
-                    url="https://tarasca-dao.medium.com/season-05-the-first-round-is-over-the-adventure-begins-691ee7c86803"
-                />
+                {isLoaded &&
+                    news.map((item, index) => (
+                        <SinglePost
+                            key={index}
+                            date={item.pubDate}
+                            title={item.title}
+                            text={ToText((item.description).substring(0, 1000) + '...')}
+                            url={item.link}
+                        />
+                    ))}
             </Stack>
         </Box>
     );
 };
 
 export default News;
+
+/*
+<NewArticle
+                    date="NOV 28, 2022"
+                    title="Morphing creatures: updating Mythical Beings"
+                    text="Step by step, our vision is making solid progress. In this update we are adding a new feature, Morphing, which also paves the way for the in-game economy, creating a first use and marketplace for ingame..."
+                    url="https://tarasca-dao.medium.com/morphing-creatures-updating-mythical-beings-579c527840d"
+                />
+                */
