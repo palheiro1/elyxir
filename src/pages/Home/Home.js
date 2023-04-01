@@ -28,9 +28,11 @@ import { isNotLogged } from '../../utils/validators';
 // -----------------------------------------------------------------
 // Data
 import {
+    BLOCKTIME,
     COLLECTIONACCOUNT,
     GEMASSETACCOUNT,
     NQTDIVIDER,
+    REFRESH_BLOCK_TIME,
     REFRESH_DATA_TIME,
     REFRESH_UNWRAP_TIME,
     TARASCACARDACCOUNT,
@@ -50,6 +52,7 @@ import {
 
 import {
     getAccountLedger,
+    getBlockchainStatus,
     getBlockchainTransactions,
     getTrades,
     getTransaction,
@@ -117,6 +120,13 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // Component to render
     const [renderComponent, setRenderComponent] = useState(<Overview />);
 
+    // Blockchain status
+    const [blockchainStatus, setBlockchainStatus] = useState({
+        prev_height: 0,
+        timer: BLOCKTIME,
+        epoch_beginning: Date.UTC(2018, 0, 1, 0, 0, 0),
+    });
+
     // -----------------------------------------------------------------
     const [searchParams, setSearchParams] = useSearchParams();
     const directSection = searchParams.get('goToSection') || false;
@@ -178,23 +188,32 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             setNeedReload(false);
 
             // Fetch all info
-            const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades, dividends] =
-                await Promise.all([
-                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
-                    fetchGemCards(accountRs, GEMASSETACCOUNT, true),
-                    getIGNISBalance(accountRs),
-                    getGIFTZBalance(accountRs),
-                    getBlockchainTransactions(2, accountRs, true),
-                    getUnconfirmedTransactions(2, accountRs),
-                    getCurrentAskAndBids(accountRs),
-                    getTrades(2, accountRs),
-                    getAccountLedger({
-                        accountRs: accountRs,
-                        firstIndex: 0,
-                        lastIndex: 99,
-                        eventType: 'ASSET_DIVIDEND_PAYMENT',
-                    }),
-                ]);
+            const [
+                loadCards,
+                gems,
+                ignis,
+                giftz,
+                txs,
+                unconfirmed,
+                currentAskOrBids,
+                trades,
+                dividends,
+            ] = await Promise.all([
+                fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
+                fetchGemCards(accountRs, GEMASSETACCOUNT, true),
+                getIGNISBalance(accountRs),
+                getGIFTZBalance(accountRs),
+                getBlockchainTransactions(2, accountRs, true),
+                getUnconfirmedTransactions(2, accountRs),
+                getCurrentAskAndBids(accountRs),
+                getTrades(2, accountRs),
+                getAccountLedger({
+                    accountRs: accountRs,
+                    firstIndex: 0,
+                    lastIndex: 99,
+                    eventType: 'ASSET_DIVIDEND_PAYMENT',
+                }),
+            ]);
 
             // -----------------------------------------------------------------
             // Check notifications - Unconfirmed transactions
@@ -257,14 +276,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         if (infoAccount.accountRs && needReload && !isLoading) {
             loadAll();
         }
-
-        const intervalId = setInterval(() => {
-            if (!isLoading) {
-                setNeedReload(true);
-            }
-        }, REFRESH_DATA_TIME);
-
-        return () => clearInterval(intervalId);
     }, [
         infoAccount,
         needReload,
@@ -279,7 +290,49 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         unconfirmedTransactions,
         onOpenCardReceived,
         cardsNotification,
+        blockchainStatus,
     ]);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            if (!isLoading) {
+                setNeedReload(true);
+            }
+        }, REFRESH_DATA_TIME);
+
+        return () => clearInterval(intervalId);
+    }, [isLoading]);
+
+    // -----------------------------------------------------------------
+    // Check for new blocks
+    // -----------------------------------------------------------------
+
+    useEffect(() => {
+        const intervalId = setInterval(async () => {
+            const auxBlockchainStatus = await getBlockchainStatus();
+            const nBlocks = auxBlockchainStatus.data.numberOfBlocks;
+            if (blockchainStatus.prev_height !== nBlocks) {
+                console.log("Mythical Beings: New block detected!");
+                setBlockchainStatus({
+                    prev_height: nBlocks,
+                    timer: BLOCKTIME,
+                });
+            }
+        }, REFRESH_BLOCK_TIME);
+
+        return () => clearInterval(intervalId);
+    }, [blockchainStatus]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if(blockchainStatus.timer <= 0) return;
+            setBlockchainStatus({
+                ...blockchainStatus,
+                timer: blockchainStatus.timer - 1,
+            });
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [blockchainStatus]);
 
     // -----------------------------------------------------------------
     // Check for new cards notifications
@@ -304,7 +357,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 const { accountRs } = infoAccount;
                 const response = await processUnwrapsForAccount(accountRs);
                 if (response && response.starts) {
-                    okToast("DETECTED UNWRAP: " + response.starts + ' transfers started.', toast);
+                    okToast('DETECTED UNWRAP: ' + response.starts + ' transfers started.', toast);
                 }
             };
             checkUnwraps();
@@ -321,12 +374,12 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         const haveUnconfirmed = infoAccount.unconfirmedTxs && infoAccount.unconfirmedTxs.length > 0;
 
         const components = [
-            <Overview />, // Option 0 - Overview
+            <Overview blockchainStatus={blockchainStatus} />, // Option 0 - Overview
             <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // Option 1 - Inventory
             <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />, // Option 2 - History
             <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />, // Option 3 - Market
             <Bridge infoAccount={infoAccount} cards={cardsFiltered} />, // Option 4 - Bridge
-            <Jackpot infoAccount={infoAccount} cards={cards} />, // Option 5 - Jackpot
+            <Jackpot infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />, // Option 5 - Jackpot
             <Account infoAccount={infoAccount} />, // Option 6 - Account
             '', // Option 7 - Buy packs
             <Exchange infoAccount={infoAccount} />, // Option 8 - Exchange
@@ -344,7 +397,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
         };
 
         loadComponent();
-    }, [option, infoAccount, cards, cardsFiltered, gemCards, onOpen, lastOption]);
+    }, [option, infoAccount, cards, cardsFiltered, gemCards, onOpen, lastOption, blockchainStatus]);
 
     useEffect(() => {
         const checkAndGo = () => {
@@ -381,6 +434,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                     showAllCards={showAllCards}
                     handleShowAllCards={handleShowAllCards}
                     goToSection={handleChangeOption}
+                    nextBlock={blockchainStatus.timer}
                 />
             </Box>
 

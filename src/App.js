@@ -40,14 +40,16 @@ function App() {
 
     useEffect(() => {
         const checkVersion = async () => {
-            if (!isLatestVersion) {
+            try {
                 console.log('New version available! Cleaning cache and hard reloading...');
                 await emptyCacheStorage();
                 window.location.reload();
+            } catch (error) {
+                console.log('🚀 ~ file: App.js:50 ~ checkVersion ~ error:', error);
             }
         };
 
-        checkVersion();
+        !isLatestVersion && checkVersion();
     }, [emptyCacheStorage, isLatestVersion]);
 
     return (

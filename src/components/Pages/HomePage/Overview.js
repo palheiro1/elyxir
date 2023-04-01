@@ -3,10 +3,10 @@ import Jackpot from '../../JackpotWidget/JackpotWidget';
 //import LatestTransaction from './LatestTransactions/LatestTransaction';
 import News from './News/News';
 
-const Overview = () => {
+const Overview = ({ blockchainStatus }) => {
     return (
         <Box>
-            <Jackpot />
+            <Jackpot blockchainStatus={blockchainStatus} />
             <Stack direction={{ base: 'column', xl: 'row' }} spacing={4}>
                 {/* 
                 <Box>

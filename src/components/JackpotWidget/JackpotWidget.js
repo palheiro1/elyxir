@@ -10,7 +10,7 @@ import HCountdown from './HCountdown';
 import { BLOCKTIME, FREQUENCY } from '../../data/CONSTANTS';
 
 // Services
-import { getBlockchainStatus } from '../../services/Ardor/ardorInterface';
+//import { getBlockchainStatus } from '../../services/Ardor/ardorInterface';
 import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/utils';
 
 /**
@@ -19,17 +19,14 @@ import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/
  * @author Jesús Sánchez Fernández
  * @version 0.1
  * @param {Number} cStyle - Style of the component
+ * @param {Number} numParticipants - Number of participants in the jackpot
+ * @param {Object} blockchainStatus - Blockchain status
  * @returns {JSX.Element} - JSX element
  * @example
  * <JackpotWidget cStyle = 1 /> // Default style - Same as the home page
  * <JackpotWidget cStyle = 2 /> // Style for the jackpot page
  */
-const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
-    const [jackpotStatus, setJackpotStatus] = useState({
-        prev_height: 0,
-        status: false,
-        timer: 0,
-    });
+const JackpotWidget = ({ cStyle = 1, numParticipants = 0, blockchainStatus = {} }) => {
 
     const [jackpotTimer, setJackpotTimer] = useState({
         days: 0,
@@ -55,6 +52,7 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
         fetchJackpotBalance();
     }, []);
 
+    /*
     useEffect(() => {
         const getJackpotStatus = async () => {
             const response = await getBlockchainStatus();
@@ -75,7 +73,8 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
         }, 12500);
         return () => clearInterval(interval);
     }, [jackpotStatus.prev_height]);
-
+    
+    
     useEffect(() => {
         const interval = setInterval(() => {
             setJackpotStatus({
@@ -85,13 +84,14 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
         }, 1000);
         return () => clearInterval(interval);
     }, [jackpotStatus]);
+    */
 
     useEffect(() => {
         const getJackpotTimer = () => {
-            const modulo = jackpotStatus.status.numberOfBlocks % FREQUENCY;
+            const modulo = blockchainStatus.prev_height % FREQUENCY;
             const remainingBlocks = FREQUENCY - modulo;
             const remainingSecs = remainingBlocks * BLOCKTIME;
-            const delta = Number(remainingSecs - (BLOCKTIME - jackpotStatus.timer));
+            const delta = Number(remainingSecs - (BLOCKTIME - blockchainStatus.timer));
 
             const days = Math.floor(delta / (24 * 60 * 60));
             const hours = Math.floor((delta % (24 * 60 * 60)) / (60 * 60));
@@ -100,8 +100,8 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
             setJackpotTimer({ days, hours, minutes, remainingBlocks });
         };
 
-        jackpotStatus.status && getJackpotTimer();
-    }, [jackpotStatus]);
+        blockchainStatus && getJackpotTimer();
+    }, [blockchainStatus]);
 
     const bgColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
@@ -127,7 +127,7 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
                                 jackpotBalanceUSD={jackpotBalanceUSD}
                             />
 
-                            <BlockInfo jackpotStatus={jackpotStatus} jackpotTimer={jackpotTimer} />
+                            <BlockInfo jackpotStatus={blockchainStatus} jackpotTimer={jackpotTimer} />
                         </Stack>
                     </Center>
                 </Box>
@@ -157,7 +157,7 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0 }) => {
                                 p={4}
                                 borderRightRadius={{ base: 'none', md: 'none', lg: 'lg' }}
                                 bgColor={bgColor}>
-                                <BlockInfo jackpotStatus={jackpotStatus} jackpotTimer={jackpotTimer} cStyle={cStyle} />
+                                <BlockInfo jackpotStatus={blockchainStatus} jackpotTimer={jackpotTimer} cStyle={cStyle} />
                             </GridItem>
                         </Grid>
                     </Center>

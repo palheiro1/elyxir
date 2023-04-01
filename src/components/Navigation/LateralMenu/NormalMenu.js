@@ -1,13 +1,23 @@
 import { Box, Stack, Switch, Text } from '@chakra-ui/react';
 import VerticalMenuButtons from './VerticalMenuButtons';
 
-const NormalMenu = ({ option, setOption, handleLogout, showAllCards, handleShowAllCards, children }) => {
+const NormalMenu = ({ option, setOption, handleLogout, showAllCards, handleShowAllCards, nextBlock, children }) => {
+    const blockTime = nextBlock === 0 ? 'SOON' : nextBlock;
     return (
         <Stack direction="row">
             <Box>
-                <VerticalMenuButtons setOption={setOption} option={option} handleLogout={handleLogout} widthBotones="140px" />
+                <VerticalMenuButtons
+                    setOption={setOption}
+                    option={option}
+                    handleLogout={handleLogout}
+                    widthBotones="140px"
+                />
 
-                <Stack p={2} align="center" pt={8}>
+                <Text fontWeight="bold" textAlign="center" fontSize="2xs" mt={2}>
+                    Block in... {blockTime}
+                </Text>
+
+                <Stack p={2} align="center">
                     <Text fontWeight="bold" textAlign="center" fontSize="sm">
                         Show all cards
                     </Text>
