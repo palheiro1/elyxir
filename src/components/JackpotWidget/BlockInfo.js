@@ -35,7 +35,7 @@ const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
                             Jackpot block
                         </Td>
                         <Td py={pyStyle} borderBottom="0px" color="gray">
-                            {jackpotStatus.status.numberOfBlocks + jackpotTimer.remainingBlocks}
+                            {jackpotStatus.prev_height + jackpotTimer.remainingBlocks}
                         </Td>
                     </Tr>
 
@@ -44,7 +44,7 @@ const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
                             Current block
                         </Td>
                         <Td py={pyStyle} borderBottom="0px" color="gray">
-                            {jackpotStatus.status.numberOfBlocks}
+                            {jackpotStatus.prev_height}
                         </Td>
                     </Tr>
                 </Tbody>

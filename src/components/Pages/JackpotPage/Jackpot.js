@@ -11,11 +11,12 @@ import ClaimJackpot from './ClaimJackpot';
  * @description Jackpot page
  * @param {object} infoAccount - Account info
  * @param {array} cards - All cards
+ * @param {object} blockchainStatus - Blockchain status
  * @returns {JSX.Element} - JSX to display
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const Jackpot = ({ infoAccount, cards = [] }) => {
+const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
     const [totalNoSpecialCards, setTotalNoSpecialCards] = useState([]); // Cards without specials
     const [remainingCards, setRemainingCards] = useState([]); // Cards without specials and with 0 quantity
     const [cardsFiltered, setCardsFiltered] = useState([]); // Cards filtered by search and rarity
@@ -67,7 +68,7 @@ const Jackpot = ({ infoAccount, cards = [] }) => {
 
     return (
         <Box>
-            <JackpotWidget cStyle={2} numParticipants={participants.numParticipants} />
+            <JackpotWidget cStyle={2} numParticipants={participants.numParticipants} blockchainStatus={blockchainStatus} />
 
             {imParticipant && (
                 <Text mt={4} fontSize="2xl" textAlign="center" fontWeight="bolder">

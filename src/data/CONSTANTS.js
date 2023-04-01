@@ -9,6 +9,7 @@
 // ------------------ APP CONFIGURATION --------------------
 // ---------------------------------------------------------
 export const REFRESH_DATA_TIME = 5 * 1000; // 5 seconds
+export const REFRESH_BLOCK_TIME = 10 * 1000; // 10 seconds
 export const REFRESH_MARKET_TIME = 3 * 1000; // 3 seconds
 export const REFRESH_UNWRAP_TIME = 30 * 1000; // 30 seconds
 
@@ -18,6 +19,8 @@ export const RARITY_COLORS = {
     Epic: 'linear-gradient(45deg, #F09819, #EDDE5D) 1',
     Special: 'linear-gradient(60deg, #53AF53, #2D5B53) 1',
 };
+
+export const MEDIUM_URL = "https://api.rss2json.com/v1/api.json?rss_url=https://tarasca-dao.medium.com/feed";
 
 // -------------------------------------------------
 // ------------------ CURRENCIES -------------------
