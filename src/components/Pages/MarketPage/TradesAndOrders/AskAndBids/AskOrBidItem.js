@@ -17,7 +17,17 @@ import TableCard from '../../../../Cards/TableCard';
  * @author Jesús Sánchez Fernández
  * @version 1.0.0
  */
-const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setSelectedOrder, onlyOneAsset, canDelete = false }) => {
+const AskOrBidItem = ({
+    order,
+    asset,
+    ignis,
+    amount,
+    isAsk = false,
+    onOpen,
+    setSelectedOrder,
+    onlyOneAsset,
+    canDelete = false,
+}) => {
     // ------------------------------------------------------------
     const [hover, setHover] = useState(false);
     // ------------------------------------------------------------
@@ -25,34 +35,23 @@ const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setS
     ignis = Number(ignis);
     const fixedIgnis = Number.isInteger(ignis) ? ignis.toFixed(0) : ignis.toFixed(2);
 
-    amount = asset === GEMASSET ? Number(amount / NQTDIVIDER) : Number(amount);
+    const isGem = asset === 'GEM' || asset === GEMASSET;
+    const card = !isGem && (
+        <TableCard
+            key={asset.asset}
+            image={asset.cardImgUrl}
+            title={asset.name}
+            rarity={asset.rarity}
+            continent={asset.channel}
+            needDelete={hover ? true : false}
+        />
+    );
+    const name = isGem ? 'GEM' : card;
+    const nameHover = hover && isGem ? 'Delete order' : name;
+    const showAmount = isGem ? amount / NQTDIVIDER : amount;
+
+    amount = isGem ? Number(amount / NQTDIVIDER) : Number(amount);
     const fixedAmount = Number.isInteger(amount) ? amount.toFixed(0) : amount.toFixed(2);
-
-    // ------------------------------------------------------------
-    // Specific asset is a number
-    // ------------------------------------------------------------
-    if (asset === GEMASSET) {
-        return (
-            <Tr>
-                <Td textAlign="center">{fixedIgnis}</Td>
-                <Td textAlign="center">{fixedAmount}</Td>
-            </Tr>
-        );
-    }
-
-    let card;
-    // ------------------------------------------------------------
-    // Normal use case
-    // ------------------------------------------------------------
-
-    const handleDeleteOrder = () => {
-        setSelectedOrder({ order, isAsk });
-        onOpen();
-    };
-
-    const handleSelectOrder = () => {
-        setSelectedOrder({ order, isAsk, price: fixedIgnis, quantity: fixedAmount });
-    };
 
     const hoverStyle = {
         opacity: 0.6,
@@ -64,22 +63,32 @@ const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setS
         opacity: 1,
     };
 
+    const handleDeleteOrder = () => {
+        setSelectedOrder({ order, isAsk });
+        onOpen();
+    };
+
+    const handleSelectOrder = () => {
+        setSelectedOrder({ order, isAsk, price: fixedIgnis, quantity: fixedAmount });
+    };
+
     // ------------------------------------------------------------
+    // Specific asset is a number
+    // ------------------------------------------------------------
+    /*
+    if (asset === GEMASSET) {
+        return (
+            <Tr>
+                <Td textAlign="center">{fixedIgnis}</Td>
+                <Td textAlign="center">{fixedAmount}</Td>
+            </Tr>
+        );
+    }
+    */
 
-    card = asset !== 'GEM' && (
-        <TableCard
-            key={asset.asset}
-            image={asset.cardImgUrl}
-            title={asset.name}
-            rarity={asset.rarity}
-            continent={asset.channel}
-            needDelete={hover ? true : false}
-        />
-    );
-
-    const name = asset === 'GEM' ? 'GEM' : card;
-    const nameHover = hover && asset === 'GEM' ? 'Delete order' : name;
-    const showAmount = asset === 'GEM' ? amount / NQTDIVIDER : amount;
+    // ------------------------------------------------------------
+    // Normal use case
+    // ------------------------------------------------------------
 
     return (
         <Tr
@@ -87,7 +96,7 @@ const AskOrBidItem = ({ order, asset, ignis, amount, isAsk = false, onOpen, setS
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             onClick={canDelete ? handleDeleteOrder : handleSelectOrder}>
-            {!onlyOneAsset && <Td textAlign="center">{nameHover}</Td> }
+            {!onlyOneAsset && <Td textAlign="center">{nameHover}</Td>}
             <Td textAlign="center">{fixedIgnis}</Td>
             <Td textAlign="center">{showAmount}</Td>
         </Tr>
