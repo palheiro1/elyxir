@@ -188,32 +188,23 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             setNeedReload(false);
 
             // Fetch all info
-            const [
-                loadCards,
-                gems,
-                ignis,
-                giftz,
-                txs,
-                unconfirmed,
-                currentAskOrBids,
-                trades,
-                dividends,
-            ] = await Promise.all([
-                fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
-                fetchGemCards(accountRs, GEMASSETACCOUNT, true),
-                getIGNISBalance(accountRs),
-                getGIFTZBalance(accountRs),
-                getBlockchainTransactions(2, accountRs, true),
-                getUnconfirmedTransactions(2, accountRs),
-                getCurrentAskAndBids(accountRs),
-                getTrades(2, accountRs),
-                getAccountLedger({
-                    accountRs: accountRs,
-                    firstIndex: 0,
-                    lastIndex: 99,
-                    eventType: 'ASSET_DIVIDEND_PAYMENT',
-                }),
-            ]);
+            const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades, dividends] =
+                await Promise.all([
+                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
+                    fetchGemCards(accountRs, GEMASSETACCOUNT, true),
+                    getIGNISBalance(accountRs),
+                    getGIFTZBalance(accountRs),
+                    getBlockchainTransactions(2, accountRs, true),
+                    getUnconfirmedTransactions(2, accountRs),
+                    getCurrentAskAndBids(accountRs),
+                    getTrades(2, accountRs),
+                    getAccountLedger({
+                        accountRs: accountRs,
+                        firstIndex: 0,
+                        lastIndex: 99,
+                        eventType: 'ASSET_DIVIDEND_PAYMENT',
+                    }),
+                ]);
 
             // -----------------------------------------------------------------
             // Check notifications - Unconfirmed transactions
@@ -263,6 +254,10 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 trades: trades.trades,
             };
 
+            // Print loadCards order by name
+            console.log(loadCards.sort((a, b) => a.name.localeCompare(b.name)));
+            
+
             // -----------------------------------------------------------------
             // Get all hashes and compare
             // -----------------------------------------------------------------
@@ -308,16 +303,26 @@ const Home = ({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
 
     useEffect(() => {
-        const intervalId = setInterval(async () => {
-            const auxBlockchainStatus = await getBlockchainStatus();
-            const nBlocks = auxBlockchainStatus.data.numberOfBlocks;
-            if (blockchainStatus.prev_height !== nBlocks) {
-                console.log("Mythical Beings: New block detected!");
-                setBlockchainStatus({
-                    prev_height: nBlocks,
-                    timer: BLOCKTIME,
-                });
+        const getStatus = async () => {
+            try {
+                const auxBlockchainStatus = await getBlockchainStatus();
+                const nBlocks = auxBlockchainStatus.data.numberOfBlocks;
+                if (blockchainStatus.prev_height !== nBlocks) {
+                    console.log('Mythical Beings: New block detected!');
+                    setBlockchainStatus({
+                        prev_height: nBlocks,
+                        timer: BLOCKTIME,
+                    });
+                }
+            } catch (error) {
+                console.log('Mythical Beings: Error fetching blockchain status', error);
             }
+        };
+
+        getStatus();
+
+        const intervalId = setInterval(async () => {
+            getStatus();
         }, REFRESH_BLOCK_TIME);
 
         return () => clearInterval(intervalId);
@@ -325,7 +330,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if(blockchainStatus.timer <= 0) return;
+            if (blockchainStatus.timer <= 0) return;
             setBlockchainStatus({
                 ...blockchainStatus,
                 timer: blockchainStatus.timer - 1,
@@ -384,7 +389,7 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             '', // Option 7 - Buy packs
             <Exchange infoAccount={infoAccount} />, // Option 8 - Exchange
             <ArdorChat infoAccount={infoAccount} />, // Option 9 - Ardor Chat
-            <Book />, // Option 10 - Book
+            <Book cards={cards} />, // Option 10 - Book
         ];
 
         const loadComponent = () => {
