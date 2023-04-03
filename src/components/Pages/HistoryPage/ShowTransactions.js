@@ -20,7 +20,6 @@ const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTra
             rounded="lg"
             bg="blackAlpha"
             shadow="dark-lg"
-            p={2}
             boxShadow="inner"
             textAlign="center"
             maxW={{ base: '100%', md: '80%', lg: '70vw', xl: '100%' }}>
@@ -45,7 +44,7 @@ const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTra
                 <Tbody>
                     {filteredTransactions &&
                         filteredTransactions.slice(0, visibleTransactions).map((transaction, index) => {
-                            return <transaction.component key={index} />;
+                            return <transaction.Component key={index} />;
                         })}
                 </Tbody>
             </Table>

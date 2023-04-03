@@ -17,6 +17,7 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
         setVisibleDividends(prevVisibleTransactions => prevVisibleTransactions + 10);
     };
     // -------------------------------------------------
+    const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
     return filteredDividends && filteredDividends.length > 0 ? (
         <TableContainer
             border="1px"
@@ -24,7 +25,6 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
             rounded="lg"
             bg="blackAlpha"
             shadow="dark-lg"
-            p={2}
             boxShadow="inner"
             textAlign="center"
             maxW={{ base: '100%', md: '80%', lg: '70vw', xl: '100%' }}>
@@ -54,7 +54,9 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
                             let balance = transaction.change / NQTDIVIDER;
                             balance = balance.toLocaleString('en-US', { maximumFractionDigits: 2 });
                             return (
-                                <Tr key={index}>
+                                <Tr
+                                    key={index}
+                                    _hover={{ bgColor: hoverColor }}>
                                     <Td>
                                         <TableCard image={image} title={title} continent={continent} rarity={rarity} />
                                     </Td>

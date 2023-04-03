@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@chakra-ui/react';
 
-import { getBlockchainStatus } from '../../../services/Ardor/ardorInterface';
+// import { getBlockchainStatus } from '../../../services/Ardor/ardorInterface';
 import { getTxTimestamp } from '../../../utils/txUtils';
 
 import {
@@ -61,7 +61,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
     const [filteredTransactions, setFilteredTransactions] = useState(transactions);
     const [filteredDividends, setFilteredDividends] = useState(dividends);
 
-    const [blockchainStatus, setBlockchainStatus] = useState({});
+    //const [blockchainStatus, setBlockchainStatus] = useState({});
     const [needReload, setNeedReload] = useState(true);
     const [lastConfirmation, setLastConfirmation] = useState(false);
     const [section, setSection] = useState('transactions'); // transactions/dividends
@@ -70,7 +70,9 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
     const [visibleTransactions, setVisibleTransactions] = useState(10);
     const [visibleDividends, setVisibleDividends] = useState(10);
     // -------------------------------------------------
+    const epoch_beginning = useMemo(() => new Date(Date.UTC(2018, 0, 1, 0, 0, 0)), []);
 
+    /*
     useEffect(() => {
         const fetchBlockchainStatus = async () => {
             const response = await getBlockchainStatus();
@@ -85,7 +87,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
 
         fetchBlockchainStatus();
     }, []);
-
+    */
     useEffect(() => {
         const checkConfirmation = () => {
             if (haveUnconfirmed) {
@@ -109,7 +111,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
             const dirtyTransactions = infoAccount.transactions;
 
             dirtyTransactions.forEach(tx => {
-                const timestamp = getTxTimestamp(tx, blockchainStatus.epoch_beginning);
+                const timestamp = getTxTimestamp(tx, epoch_beginning);
                 const type = tx.type;
                 const subtype = tx.subtype;
                 let handler = null;
@@ -155,14 +157,13 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
             setTransactions(newTransactions);
             setNeedReload(false);
         };
-            
 
         infoAccount.transactions !== undefined &&
-            blockchainStatus.epoch_beginning !== undefined &&
+            epoch_beginning !== undefined &&
             collectionCardsStatic !== undefined &&
             needReload &&
             processTransactions();
-    }, [infoAccount, transactions, blockchainStatus.epoch_beginning, needReload, collectionCardsStatic]);
+    }, [infoAccount, transactions, epoch_beginning, needReload, collectionCardsStatic]);
 
     return (
         <Box>
@@ -192,7 +193,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                     filteredDividends={filteredDividends}
                     setVisibleDividends={setVisibleDividends}
                     visibleDividends={visibleDividends}
-                    epoch_beginning={blockchainStatus.epoch_beginning}
+                    epoch_beginning={epoch_beginning}
                 />
             )}
         </Box>

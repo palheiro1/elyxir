@@ -1,4 +1,4 @@
-import { Box, Image, Stack, Text } from '@chakra-ui/react';
+import { Box, Image, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import { Tr } from '../../ResponsiveTable/tr';
 import { Td } from '../../ResponsiveTable/td';
 import { FaFilter, FaInbox } from 'react-icons/fa';
@@ -109,7 +109,6 @@ export const handleType2AndSubtype2And3 = (tx, timestamp, infoAccount, collectio
  * @param {object} infoAccount - account info
  */
 export const handleType2AndSubtype4And5 = (tx, timestamp, infoAccount) => {
-    console.log("🚀 ~ file: TableHandlers.js:112 ~ handleType2AndSubtype4And5 ~ tx:", tx)
     const orderType = tx.subtype === 4 ? 'ask' : 'bid';
     let sender = parseSender(tx);
     sender = sender === infoAccount.accountRs ? 'You' : sender;
@@ -163,9 +162,13 @@ const getJackpotAndReason = tx => {
 // NOT WORKING - FLOW IS NOT CORRECT
 export const handleIncomingGIFTZ = (amount, date) => {
     const realAmount = amount.attachment.unitsQNT;
-    const component = () => {
+    const Component = () => {
         return (
-            <Tr border={{ base: '2px', md: '0px' }} rounded={{ base: 'md', md: 'unset' }} m={{ base: 2, md: 0 }}>
+            <Tr
+                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                border={{ base: '2px', md: '0px' }}
+                rounded={{ base: 'md', md: 'unset' }}
+                m={{ base: 2, md: 0 }}>
                 <Td>
                     <InOutTransaction type={'in'} />
                 </Td>
@@ -189,16 +192,20 @@ export const handleIncomingGIFTZ = (amount, date) => {
     };
 
     return {
-        component,
+        Component,
         type: 'in',
         isCurrency: true,
     };
 };
 
 export const handleMessage = (type, msg, date) => {
-    const component = () => {
+    const Component = () => {
         return (
-            <Tr border={{ base: '2px', md: '0px' }} rounded={{ base: 'md', md: 'unset' }} m={{ base: 2, md: 0 }}>
+            <Tr
+                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                border={{ base: '2px', md: '0px' }}
+                rounded={{ base: 'md', md: 'unset' }}
+                m={{ base: 2, md: 0 }}>
                 <Td>{msg}</Td>
                 <Td>
                     <Stack direction="row" align="center" spacing={24}>
@@ -219,7 +226,7 @@ export const handleMessage = (type, msg, date) => {
         );
     };
     return {
-        component,
+        Component,
         type,
     };
 };
@@ -229,9 +236,13 @@ export const cancelledOrder = (type, date, account) => {
     // Type - bid/ask
     // Calcular TIMESTAMP!!!
 
-    const component = () => {
+    const Component = () => {
         return (
-            <Tr border={{ base: '2px', md: '0px' }} rounded={{ base: 'md', md: 'unset' }} m={{ base: 2, md: 0 }}>
+            <Tr
+                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                border={{ base: '2px', md: '0px' }}
+                rounded={{ base: 'md', md: 'unset' }}
+                m={{ base: 2, md: 0 }}>
                 <Td>
                     <InOutTransaction type={type} />
                 </Td>
@@ -255,7 +266,7 @@ export const cancelledOrder = (type, date, account) => {
     };
 
     return {
-        component,
+        Component,
         type,
     };
 };
@@ -267,9 +278,10 @@ export const handleGEM = (type, amount, date, account) => {
     }
     amount = Number(amount);
     const fixedAmount = Number.isInteger(amount) ? amount.toFixed(0) : amount.toFixed(2);
-    const component = () => {
+    const Component = () => {
         return (
             <Tr
+                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
                 border={{ base: '2px', md: '0px' }}
                 borderColor="whiteAlpha.300"
                 rounded={{ base: 'md', md: 'unset' }}
@@ -296,7 +308,7 @@ export const handleGEM = (type, amount, date, account) => {
         );
     };
     return {
-        component,
+        Component,
         type,
         isCurrency: true,
     };
@@ -306,9 +318,10 @@ export const handleCardTransfer = (type, amount, date, account, card) => {
     type = type.toLowerCase();
     const { cardImgUrl: image, name: title, channel: continent, rarity } = card;
 
-    const component = () => {
+    const Component = () => {
         return (
             <Tr
+                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
                 border={{ base: '2px', md: '0px' }}
                 borderColor="whiteAlpha.300"
                 rounded={{ base: 'md', md: 'unset' }}
@@ -326,7 +339,7 @@ export const handleCardTransfer = (type, amount, date, account, card) => {
         );
     };
     return {
-        component,
+        Component,
         type,
         isCard: true,
     };
@@ -339,9 +352,10 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
     const isGem = asset === 'GEM';
     const fixedType = type === 'ask' ? 'Market ASK' : 'Market BID';
 
-    const component = () => {
+    const Component = () => {
         return (
             <Tr
+                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
                 border={{ base: '2px', md: '0px' }}
                 borderColor="whiteAlpha.300"
                 rounded={{ base: 'md', md: 'unset' }}
@@ -369,16 +383,17 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
     };
 
     return {
-        component,
+        Component,
         type,
     };
 };
 
 export const handleCurrencyTransfer = (type, amount, date, account) => {
     type = type.toLowerCase();
-    const component = () => {
+    const Component = () => {
         return (
             <Tr
+                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
                 border={{ base: '2px', md: '0px' }}
                 borderColor="whiteAlpha.300"
                 rounded={{ base: 'md', md: 'unset' }}
@@ -405,7 +420,7 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
         );
     };
     return {
-        component,
+        Component,
         type,
         isCurrency: true,
     };
@@ -419,9 +434,10 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
     type = type.toLowerCase();
     let fixedAmount = Number.isInteger(amount) ? amount : amount.toFixed(1);
 
-    const component = () => {
+    const Component = () => {
         return (
             <Tr
+                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
                 border={{ base: '2px', md: '0px' }}
                 borderColor="whiteAlpha.300"
                 rounded={{ base: 'md', md: 'unset' }}
@@ -449,7 +465,7 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
     };
 
     return {
-        component,
+        Component,
         type,
         isCurrency: true,
     };
