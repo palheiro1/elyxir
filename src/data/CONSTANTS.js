@@ -84,6 +84,7 @@ export const FREQUENCY = 5040;
 export const JACKPOTHALF = true;
 export const BLOCKTIME = 60;
 export const LOWIGNIS = 65;
+export const IGNIS_REQUIRED = 100;
 
 // ---------------------------------------------
 // --------------- ASSET QUANTITY --------------

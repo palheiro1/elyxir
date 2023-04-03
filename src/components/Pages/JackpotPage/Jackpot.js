@@ -5,6 +5,7 @@ import RemainingCards from '../../Cards/RemainingCards';
 import JackpotWidget from '../../JackpotWidget/JackpotWidget';
 import SortAndFilterCards from '../../SortAndFilters/SortAndFilterCards';
 import ClaimJackpot from './ClaimJackpot';
+import { IGNIS_REQUIRED } from '../../../data/CONSTANTS';
 
 /**
  * @name Jackpot
@@ -21,7 +22,10 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
     const [remainingCards, setRemainingCards] = useState([]); // Cards without specials and with 0 quantity
     const [cardsFiltered, setCardsFiltered] = useState([]); // Cards filtered by search and rarity
     const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
-    const { accountRs: account } = infoAccount;
+    const { accountRs: account, IGNISBalance } = infoAccount;
+    console.log("🚀 ~ file: Jackpot.js:26 ~ Jackpot ~ IGNISBalance:", IGNISBalance)
+    console.log("🚀 ~ file: Jackpot.js:105 ~ Jackpot ~ IGNISBalance >= IGNIS_REQUIRED:", IGNISBalance >= IGNIS_REQUIRED)
+
 
     useEffect(() => {
         // Get remaining cards
@@ -68,7 +72,11 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
 
     return (
         <Box>
-            <JackpotWidget cStyle={2} numParticipants={participants.numParticipants} blockchainStatus={blockchainStatus} />
+            <JackpotWidget
+                cStyle={2}
+                numParticipants={participants.numParticipants}
+                blockchainStatus={blockchainStatus}
+            />
 
             {imParticipant && (
                 <Text mt={4} fontSize="2xl" textAlign="center" fontWeight="bolder">
@@ -93,7 +101,11 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
                 </>
             )}
             {cards.length > 0 && remainingCards.length === 0 && (
-                <ClaimJackpot username={infoAccount.name} cards={totalNoSpecialCards} />
+                <ClaimJackpot
+                    username={infoAccount.name}
+                    cards={totalNoSpecialCards}
+                    haveIgnis={IGNISBalance >= IGNIS_REQUIRED}
+                />
             )}
         </Box>
     );

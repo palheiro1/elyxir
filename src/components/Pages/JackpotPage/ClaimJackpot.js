@@ -1,6 +1,7 @@
 import { Box, Button, Center, Heading, Text, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import JackpotDialog from '../../Modals/JackpotDialog/JackpotDialog';
+import { IGNIS_REQUIRED } from '../../../data/CONSTANTS';
 
 /**
  * @name ClaimJackpot
@@ -11,14 +12,17 @@ import JackpotDialog from '../../Modals/JackpotDialog/JackpotDialog';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const ClaimJackpot = ({ username, cards }) => {
+const ClaimJackpot = ({ username, cards, haveIgnis }) => {
+    console.log('🚀 ~ file: ClaimJackpot.js:15 ~ ClaimJackpot ~ haveIgnis:', haveIgnis);
     const [haveLockedCards, setHaveLockedCards] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const reference = useRef();
 
     useEffect(() => {
         const checkCards = () => {
-            const lockedCards = cards.some(card => card.quantityQNT > card.unconfirmedQuantityQNT && card.unconfirmedQuantityQNT === 0);
+            const lockedCards = cards.some(
+                card => card.quantityQNT > card.unconfirmedQuantityQNT && card.unconfirmedQuantityQNT === 0
+            );
             setHaveLockedCards(lockedCards);
         };
 
@@ -35,7 +39,7 @@ const ClaimJackpot = ({ username, cards }) => {
                     </Box>
                 </Center>
 
-                {haveLockedCards ? (
+                {haveLockedCards && (
                     <Center>
                         <Box my={8} p={4} border="1px" borderColor="red" rounded="md">
                             <Text fontWeight="bolder" color="yellow.500">
@@ -49,7 +53,22 @@ const ClaimJackpot = ({ username, cards }) => {
                             </Text>
                         </Box>
                     </Center>
-                ) : (
+                )}
+
+                {!haveIgnis && (
+                    <Center>
+                        <Box my={8} p={4} border="1px" borderColor="red" rounded="md">
+                            <Text fontWeight="bolder" color="yellow.500">
+                                YOU DON'T HAVE THE REQUIRED IGNIS.
+                            </Text>
+                            <Text fontSize="xs" fontWeight="bold">
+                                You need to have IGNIS ({IGNIS_REQUIRED}) in your account to participate in the Jackpot.
+                            </Text>
+                        </Box>
+                    </Center>
+                )}
+
+                {haveIgnis && !haveLockedCards && (
                     <Button p={8} px={16} m={2} my={8} size="lg" onClick={onOpen}>
                         CLAIM JACKPOT
                     </Button>
