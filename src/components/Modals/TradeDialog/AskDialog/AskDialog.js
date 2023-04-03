@@ -54,7 +54,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
     const [sendingTx, setSendingTx] = useState(false);
 
     const isGem = card.assetname === 'GEM';
-    const gemImg = './images/gems.svg';
+    const gemImg = './images/currency/gem.png';
     const maxCards = isGem ? Number(card.unconfirmedQuantityQNT) / NQTDIVIDER : Number(card.unconfirmedQuantityQNT);
 
     const [selectedItem, setSelectedItem] = useState(''); // selected item in the grid
@@ -166,9 +166,11 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
                         <VStack>
-                            <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
+                            <Stack direction={{ base: 'column', md: 'row' }} spacing={4} w="100%">
                                 <Box minW="50%">
-                                    <Image src={!isGem ? card.cardImgUrl : gemImg} maxH="25rem" />
+                                    <Center>
+                                        <Image shadow="md" src={!isGem ? card.cardImgUrl : gemImg} maxH="25rem" />
+                                    </Center>
                                 </Box>
                                 <VStack spacing={4}>
                                     <Box w="100%">
