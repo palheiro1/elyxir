@@ -1,4 +1,4 @@
-import { Td, Tr } from '@chakra-ui/react';
+import { Image, Stack, Td, Text, Tr } from '@chakra-ui/react';
 import { useState } from 'react';
 import { GEMASSET, NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import TableCard from '../../../../Cards/TableCard';
@@ -46,8 +46,16 @@ const AskOrBidItem = ({
             needDelete={hover ? true : false}
         />
     );
-    const name = isGem ? 'GEM' : card;
-    const nameHover = hover && isGem ? 'Delete order' : name;
+    const gemImage = (
+        <Stack direction={'row'} spacing={4} align="center">
+            <Image maxW="75px" src="/images/currency/gem.png" alt="Gem" />
+            <Text fontWeight="bold" fontSize="2xl">
+                {hover ? 'Delete order' : 'GEM'}
+            </Text>
+        </Stack>
+    );
+    const name = isGem ? gemImage : card;
+    const nameHover = name;
     const showAmount = isGem ? amount / NQTDIVIDER : amount;
 
     amount = isGem ? Number(amount / NQTDIVIDER) : Number(amount);
