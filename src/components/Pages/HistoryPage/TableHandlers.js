@@ -1,7 +1,7 @@
-import { Box, Stack, Text } from '@chakra-ui/react';
+import { Box, Image, Stack, Text } from '@chakra-ui/react';
 import { Tr } from '../../ResponsiveTable/tr';
 import { Td } from '../../ResponsiveTable/td';
-import { FaFilter, FaGem, FaCoins } from 'react-icons/fa';
+import { FaFilter, FaInbox } from 'react-icons/fa';
 
 // Components
 import InOutTransaction from '../../Tables/InOutTransaction';
@@ -109,6 +109,7 @@ export const handleType2AndSubtype2And3 = (tx, timestamp, infoAccount, collectio
  * @param {object} infoAccount - account info
  */
 export const handleType2AndSubtype4And5 = (tx, timestamp, infoAccount) => {
+    console.log("🚀 ~ file: TableHandlers.js:112 ~ handleType2AndSubtype4And5 ~ tx:", tx)
     const orderType = tx.subtype === 4 ? 'ask' : 'bid';
     let sender = parseSender(tx);
     sender = sender === infoAccount.accountRs ? 'You' : sender;
@@ -171,7 +172,7 @@ export const handleIncomingGIFTZ = (amount, date) => {
                 <Td>
                     <Stack direction="row" align="center" spacing={24}>
                         <Box>
-                            <FaFilter />
+                            <Image maxW="2rem" src="/images/currency/giftz.png" alt="GIFTZ" />
                         </Box>
                         <Box>
                             <Text fontSize="xl" fontWeight="bold">
@@ -202,7 +203,7 @@ export const handleMessage = (type, msg, date) => {
                 <Td>
                     <Stack direction="row" align="center" spacing={24}>
                         <Box>
-                            <FaFilter />
+                            <FaInbox />
                         </Box>
                         <Box>
                             <Text fontSize="xl" fontWeight="bold">
@@ -279,7 +280,7 @@ export const handleGEM = (type, amount, date, account) => {
                 <Td>
                     <Stack direction="row" align="center" spacing={24}>
                         <Box>
-                            <FaGem />
+                            <Image maxW="2rem" src="/images/currency/gem.png" alt="GEM" />
                         </Box>
                         <Box>
                             <Text fontSize="xl" fontWeight="bold">
@@ -350,7 +351,7 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
                 </Td>
                 <Td>
                     {isGem ? (
-                        <FaGem />
+                        <Image maxW="2rem" src="/images/currency/gem.png" alt="GEM" />
                     ) : (
                         <TableCard
                             title={asset.name}
@@ -388,7 +389,7 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
                 <Td>
                     <Stack direction="row" align="center" spacing={24}>
                         <Box>
-                            <FaGem />
+                            <Image maxW="2rem" src="/images/currency/giftz.png" alt="GIFTZ" />
                         </Box>
                         <Box>
                             <Text fontSize="xl" fontWeight="bold">
@@ -431,7 +432,7 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
                 <Td>
                     <Stack direction="row" align="center" spacing={24}>
                         <Box>
-                            <FaCoins />
+                            <Image maxW="2rem" src="/images/currency/ignis.png" alt="IGNIS" />
                         </Box>
                         <Box>
                             <Text fontSize="xl" fontWeight="bold">
