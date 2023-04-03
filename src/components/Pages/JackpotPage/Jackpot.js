@@ -5,7 +5,7 @@ import RemainingCards from '../../Cards/RemainingCards';
 import JackpotWidget from '../../JackpotWidget/JackpotWidget';
 import SortAndFilterCards from '../../SortAndFilters/SortAndFilterCards';
 import ClaimJackpot from './ClaimJackpot';
-import { IGNIS_REQUIRED } from '../../../data/CONSTANTS';
+import { IGNIS_REQUIRED, REFRESH_JACKPOT_PARTICIPANTS } from '../../../data/CONSTANTS';
 
 /**
  * @name Jackpot
@@ -23,9 +23,6 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
     const [cardsFiltered, setCardsFiltered] = useState([]); // Cards filtered by search and rarity
     const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
     const { accountRs: account, IGNISBalance } = infoAccount;
-    console.log("🚀 ~ file: Jackpot.js:26 ~ Jackpot ~ IGNISBalance:", IGNISBalance)
-    console.log("🚀 ~ file: Jackpot.js:105 ~ Jackpot ~ IGNISBalance >= IGNIS_REQUIRED:", IGNISBalance >= IGNIS_REQUIRED)
-
 
     useEffect(() => {
         // Get remaining cards
@@ -60,7 +57,7 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
 
         const interval = setInterval(() => {
             getParticipants();
-        }, 12500);
+        }, REFRESH_JACKPOT_PARTICIPANTS);
         return () => clearInterval(interval);
     }, [account]);
 
