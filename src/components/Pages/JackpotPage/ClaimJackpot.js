@@ -13,7 +13,6 @@ import { IGNIS_REQUIRED } from '../../../data/CONSTANTS';
  * @version 1.0
  */
 const ClaimJackpot = ({ username, cards, haveIgnis }) => {
-    console.log('🚀 ~ file: ClaimJackpot.js:15 ~ ClaimJackpot ~ haveIgnis:', haveIgnis);
     const [haveLockedCards, setHaveLockedCards] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const reference = useRef();
