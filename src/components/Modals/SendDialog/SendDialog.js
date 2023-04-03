@@ -144,7 +144,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                         </Center>
 
                         <Box my={4}>
-                            <Text textAlign="center">How much cards (max: {maxCards})</Text>
+                            <Text textAlign="center">Amount (max: {maxCards})</Text>
                             <Center my={2}>
                                 <HStack maxW="50%" spacing={0} border="1px" rounded="lg" borderColor={borderColor}>
                                     <Button {...dec} rounded="none" borderLeftRadius="lg">

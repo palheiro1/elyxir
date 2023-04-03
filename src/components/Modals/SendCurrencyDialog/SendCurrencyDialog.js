@@ -23,7 +23,7 @@ import {
     useNumberInput,
     useToast,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
 import { sendIgnis } from '../../../services/Ardor/ardorInterface';
 import { checkPin, sendGem, sendGiftz } from '../../../utils/walletUtils';
@@ -35,12 +35,13 @@ import QRReader from '../../QRReader/QRReader';
 const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IGNISBalance }) => {
     const toast = useToast();
 
-    const [ardorAccount, setArdorAccount] = useState('');
+    const [ardorAccount, setArdorAccount] = useState('ARDOR-');
     const [isValidArdorAccount, setIsValidArdorAccount] = useState(false);
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [sendingTx, setSendingTx] = useState(false);
 
     const [readerEnabled, setReaderEnabled] = useState(false);
+    const prefix = 'ARDOR-';
 
     const [passphrase, setPassphrase] = useState('');
     const maxCurrency =
@@ -58,9 +59,13 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
     const input = getInputProps();
 
     const handleInput = address => {
+        if(address === 'ARDOR') return;
         if (readerEnabled) setReaderEnabled(false);
-        setArdorAccount(address);
-        const isValid = isArdorAccount(address);
+        //Clean if ARDOR-ARDOR- prefix all phrased
+        let auxAddress = address.replaceAll(prefix, '');
+        auxAddress = prefix + auxAddress;
+        setArdorAccount(auxAddress);
+        const isValid = isArdorAccount(auxAddress);
         setIsValidArdorAccount(isValid);
     };
 
@@ -126,7 +131,18 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
 
     const bgColor = useColorModeValue('', '#1D1D1D');
     const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
-    const isDisabled = !isValidPin || !isValidArdorAccount || !passphrase || !input.value || input.value > maxCurrency;
+    const [isDisabled, setIsDisabled] = useState(true);
+
+    useEffect(() => {
+        const checkDisabled = () => {
+            const auxIsDisabled =
+                !isValidPin || !isValidArdorAccount || !passphrase || !input.value || input.value > maxCurrency;
+            console.log('🚀 ~ file: SendCurrencyDialog.js:140 ~ checkDisabled ~ auxIsDisabled:', auxIsDisabled);
+
+            setIsDisabled(auxIsDisabled);
+        };
+        checkDisabled();
+    }, [isValidPin, isValidArdorAccount, passphrase, input.value, maxCurrency]);
 
     return (
         <>

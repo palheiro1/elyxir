@@ -9,7 +9,7 @@ const CardBadges = ({ rarity, continent, size = 'md' }) => {
             <Text
                 px={2}
                 w={{ base: '6rem', md: 'auto' }}
-                h={{ base: '1rem', md: 'auto' }}
+                h={{ base: '1.5rem', md: 'auto' }}
                 textAlign="center"
                 fontSize={size}
                 bgGradient={RARITY_COLORS[rarity]}
@@ -21,7 +21,7 @@ const CardBadges = ({ rarity, continent, size = 'md' }) => {
                 px={2}
                 fontSize={size}
                 w={{ base: '6rem', md: 'auto' }}
-                h={{ base: '1rem', md: 'auto' }}
+                h={{ base: '1.5rem', md: 'auto' }}
                 bgColor={badgeColor}
                 rounded="lg"
                 color="white"

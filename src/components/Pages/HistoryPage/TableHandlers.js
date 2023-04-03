@@ -1,4 +1,4 @@
-import { Box, Image, Stack, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import { Tr } from '../../ResponsiveTable/tr';
 import { Td } from '../../ResponsiveTable/td';
 import { FaFilter, FaInbox } from 'react-icons/fa';
@@ -11,6 +11,9 @@ import TableCard from '../../Cards/TableCard';
 import { calculateFixedAmount, getReason, parseJson, parseRecipient, parseSender } from '../../../utils/txUtils';
 import { JACKPOTACCOUNT, NQTDIVIDER } from '../../../data/CONSTANTS';
 import { getAsset } from '../../../utils/cardsUtils';
+import GemCard from '../../Cards/GemCard';
+import IgnisCard from '../../Cards/IgnisCard';
+import GIFTZCard from '../../Cards/GIFTZCard';
 
 // -------------------------------------------- //
 // ------------------ HANDLERS ---------------- //
@@ -175,7 +178,7 @@ export const handleIncomingGIFTZ = (amount, date) => {
                 <Td>
                     <Stack direction="row" align="center" spacing={24}>
                         <Box>
-                            <Image maxW="2rem" src="/images/currency/giftz.png" alt="GIFTZ" />
+                            <GIFTZCard />
                         </Box>
                         <Box>
                             <Text fontSize="xl" fontWeight="bold">
@@ -292,7 +295,7 @@ export const handleGEM = (type, amount, date, account) => {
                 <Td>
                     <Stack direction="row" align="center" spacing={24}>
                         <Box>
-                            <Image maxW="2rem" src="/images/currency/gem.png" alt="GEM" />
+                            <GemCard />
                         </Box>
                         <Box>
                             <Text fontSize="xl" fontWeight="bold">
@@ -365,7 +368,7 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
                 </Td>
                 <Td>
                     {isGem ? (
-                        <Image maxW="2rem" src="/images/currency/gem.png" alt="GEM" />
+                        <GemCard />
                     ) : (
                         <TableCard
                             title={asset.name}
@@ -404,7 +407,7 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
                 <Td>
                     <Stack direction="row" align="center" spacing={24}>
                         <Box>
-                            <Image maxW="2rem" src="/images/currency/giftz.png" alt="GIFTZ" />
+                            <GIFTZCard />
                         </Box>
                         <Box>
                             <Text fontSize="xl" fontWeight="bold">
@@ -448,11 +451,11 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
                 <Td>
                     <Stack direction="row" align="center" spacing={24}>
                         <Box>
-                            <Image maxW="2rem" src="/images/currency/ignis.png" alt="IGNIS" />
+                            <IgnisCard />
                         </Box>
                         <Box>
                             <Text fontSize="xl" fontWeight="bold">
-                                IGNIS {isJackpot ? 'Jackpot' : ''}
+                                {isJackpot ? 'Jackpot' : ''}
                             </Text>
                         </Box>
                     </Stack>
