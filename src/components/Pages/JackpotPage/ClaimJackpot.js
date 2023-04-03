@@ -20,7 +20,9 @@ const ClaimJackpot = ({ username, cards, haveIgnis }) => {
     useEffect(() => {
         const checkCards = () => {
             const lockedCards = cards.some(
-                card => Number(card.quantityQNT) > Number(card.unconfirmedQuantityQNT) && Number(card.unconfirmedQuantityQNT) === 0
+                card =>
+                    Number(card.quantityQNT) > Number(card.unconfirmedQuantityQNT) &&
+                    Number(card.unconfirmedQuantityQNT) === 0
             );
             setHaveLockedCards(lockedCards);
         };
@@ -48,7 +50,7 @@ const ClaimJackpot = ({ username, cards, haveIgnis }) => {
                                 Ask orders or slow transactions may cause the issue.
                             </Text>
                             <Text fontSize="xs" fontWeight="bold">
-                                Please, close ask orders and wait for transactions to complete.
+                                Please, <strong>close ask orders and wait for transactions to complete.</strong>
                             </Text>
                         </Box>
                     </Center>
@@ -58,17 +60,25 @@ const ClaimJackpot = ({ username, cards, haveIgnis }) => {
                     <Center>
                         <Box my={8} p={4} border="1px" borderColor="red" rounded="md">
                             <Text fontWeight="bolder" color="yellow.500">
-                                YOU DON'T HAVE THE REQUIRED IGNIS.
+                                YOU DO NOT HAVE ENOUGH IGNIS
                             </Text>
                             <Text fontSize="xs" fontWeight="bold">
-                                You need to have IGNIS ({IGNIS_REQUIRED}) in your account to participate in the Jackpot.
+                                At least <strong>{IGNIS_REQUIRED} IGNIS</strong> are required to participate in the
+                                Jackpot.
                             </Text>
                         </Box>
                     </Center>
                 )}
 
                 {haveIgnis && !haveLockedCards && (
-                    <Button p={8} px={16} m={2} my={8} size="lg" onClick={onOpen} isDisabled={!haveIgnis || haveLockedCards}>
+                    <Button
+                        p={8}
+                        px={16}
+                        m={2}
+                        my={8}
+                        size="lg"
+                        onClick={onOpen}
+                        isDisabled={!haveIgnis || haveLockedCards}>
                         CLAIM JACKPOT
                     </Button>
                 )}
