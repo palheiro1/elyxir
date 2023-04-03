@@ -1,5 +1,5 @@
-import { Box, Button, Center, Heading, Text, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
+import { Box, Button, Center, Heading, Text, useDisclosure } from '@chakra-ui/react';
 import JackpotDialog from '../../Modals/JackpotDialog/JackpotDialog';
 import { IGNIS_REQUIRED } from '../../../data/CONSTANTS';
 
@@ -20,7 +20,7 @@ const ClaimJackpot = ({ username, cards, haveIgnis }) => {
     useEffect(() => {
         const checkCards = () => {
             const lockedCards = cards.some(
-                card => card.quantityQNT > card.unconfirmedQuantityQNT && card.unconfirmedQuantityQNT === 0
+                card => Number(card.quantityQNT) > Number(card.unconfirmedQuantityQNT) && Number(card.unconfirmedQuantityQNT) === 0
             );
             setHaveLockedCards(lockedCards);
         };
@@ -68,7 +68,7 @@ const ClaimJackpot = ({ username, cards, haveIgnis }) => {
                 )}
 
                 {haveIgnis && !haveLockedCards && (
-                    <Button p={8} px={16} m={2} my={8} size="lg" onClick={onOpen}>
+                    <Button p={8} px={16} m={2} my={8} size="lg" onClick={onOpen} isDisabled={!haveIgnis || haveLockedCards}>
                         CLAIM JACKPOT
                     </Button>
                 )}
