@@ -2,6 +2,7 @@ import { Image, Stack, Td, Text, Tr } from '@chakra-ui/react';
 import { useState } from 'react';
 import { GEMASSET, NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import TableCard from '../../../../Cards/TableCard';
+import GemCard from '../../../../Cards/GemCard';
 
 /**
  * @name AskOrBidItem
@@ -36,7 +37,10 @@ const AskOrBidItem = ({
     const fixedIgnis = Number.isInteger(ignis) ? ignis.toFixed(0) : ignis.toFixed(2);
 
     const isGem = asset === 'GEM' || asset === GEMASSET;
-    const card = !isGem && (
+
+    const name = isGem ? (
+        <GemCard hover={hover} />
+    ) : (
         <TableCard
             key={asset.asset}
             image={asset.cardImgUrl}
@@ -46,16 +50,7 @@ const AskOrBidItem = ({
             needDelete={hover ? true : false}
         />
     );
-    const gemImage = (
-        <Stack direction={'row'} spacing={4} align="center">
-            <Image maxW="75px" src="/images/currency/gem.png" alt="Gem" />
-            <Text fontWeight="bold" fontSize="2xl">
-                {hover ? 'Delete order' : 'GEM'}
-            </Text>
-        </Stack>
-    );
-    const name = isGem ? gemImage : card;
-    const nameHover = name;
+
     const showAmount = isGem ? amount / NQTDIVIDER : amount;
 
     amount = isGem ? Number(amount / NQTDIVIDER) : Number(amount);
@@ -104,7 +99,7 @@ const AskOrBidItem = ({
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             onClick={canDelete ? handleDeleteOrder : handleSelectOrder}>
-            {!onlyOneAsset && <Td textAlign="center">{nameHover}</Td>}
+            {!onlyOneAsset && <Td textAlign="center">{name}</Td>}
             <Td textAlign="center">{fixedIgnis}</Td>
             <Td textAlign="center">{showAmount}</Td>
         </Tr>

@@ -3,6 +3,7 @@ import InOutTransaction from '../../../Tables/InOutTransaction';
 
 import { FaCoins } from 'react-icons/fa';
 import TableCard from '../../../Cards/TableCard';
+import GemCard from '../../../Cards/GemCard';
 
 /**
  * @name TradesOrOrderItem
@@ -20,7 +21,9 @@ import TableCard from '../../../Cards/TableCard';
  */
 const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, card }) => {
     const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
-    const iconColor = useColorModeValue('blackAlpha.500', "yellow");
+    const iconColor = useColorModeValue('blackAlpha.500', 'yellow');
+
+
     if (card === 'GEM' || card === undefined) {
         return (
             <Tr _hover={{ bgColor: hoverColor }}>
@@ -28,7 +31,7 @@ const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, car
                     <InOutTransaction type={type} />
                 </Td>
                 <Td fontWeight="bold" fontSize="xl">
-                    {name === 'GEM' ? <Image maxW="3rem" src="/images/currency/gem.png" alt="Gem" /> : name}
+                    {name === 'GEM' ? <GemCard hover={false}/> : name}
                 </Td>
                 <Td>{amount}</Td>
                 <Td>
@@ -42,6 +45,8 @@ const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, car
             </Tr>
         );
     }
+    
+
     return (
         <Tr _hover={{ bgColor: hoverColor }}>
             <Td>
