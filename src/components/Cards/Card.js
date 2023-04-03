@@ -152,12 +152,12 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                             <CardBadges rarity={rarity} continent={continent} size="sm" />
                         </Stack>
                         <Spacer display={{ base: 'none', lg: 'block' }} />
-                        <Center minHeight="100%">
+                        <Center minHeight={{ base: "auto", lg: "100%"}}>
                             <Tooltip
                                 label={`You have ${lockedCards} blocked ${isSingular ? 'card' : 'cards'} in the market`}
                                 display={haveCardsInMarket ? 'flex' : 'none'}
                                 placement="bottom">
-                                <Flex w="100%">
+                                <Flex w={{ base: "auto", lg: "100%"}}>
                                     <Text textAlign="end" minH={{ base: '100%', lg: 'auto' }}>
                                         <small>Quantity:</small> {quantity}
                                     </Text>
