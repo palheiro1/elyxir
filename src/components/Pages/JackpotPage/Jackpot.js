@@ -30,7 +30,12 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
             const auxNoSpecialCards = cards.filter(card => card.rarity !== 'Special');
             setTotalNoSpecialCards(auxNoSpecialCards);
 
-            const cardWithZero = auxNoSpecialCards.filter(card => Number(card.quantityQNT) === 0);
+            const cardWithZero = auxNoSpecialCards.filter(
+                card =>
+                    Number(card.quantityQNT) === 0 ||
+                    (Number(card.quantityQNT) > Number(card.unconfirmedQuantityQNT) &&
+                        Number(card.unconfirmedQuantityQNT) === 0)
+            );
             setRemainingCards(cardWithZero);
         };
 
