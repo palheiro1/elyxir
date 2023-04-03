@@ -66,7 +66,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                 </Text>
                 <Select border="0px" borderColor="gray.800" size="xs" onChange={handleSort}>
                     <option value="recent">Newest</option>
-                    <option value="older">Older</option>
+                    <option value="older">Oldest</option>
                 </Select>
             </Stack>
 
@@ -87,13 +87,13 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                         <FaFilter />
                     </Box>
                     <Text fontSize="sm" color="gray.400">
-                        Show:{' '}
+                        Filter:{' '}
                     </Text>
                     <Select border="0px" borderColor="gray.800" size="xs" onChange={handleFilter}>
                         <option value="all">All transactions</option>
                         <option value="in">Received</option>
                         <option value="out">Sent</option>
-                        <option value="cards">Shop</option>
+                        <option value="cards">Cards</option>
                         <option value="currency">Currencies</option>
                         <option value="placed">Trades</option>
                     </Select>
