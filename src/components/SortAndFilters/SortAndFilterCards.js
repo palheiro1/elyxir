@@ -95,8 +95,8 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
                     </Text>
                     <Select border="0px" borderColor="gray.800" size="xs" onChange={handleChange}>
                         <option value="none">None</option>
-                        <option value="moreQuantity">More quantity</option>
-                        <option value="lessQuantity">Less quantity</option>
+                        <option value="moreQuantity">Descending</option>
+                        <option value="lessQuantity">Acending</option>
                     </Select>
                 </Stack>
             )}
