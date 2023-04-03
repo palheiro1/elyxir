@@ -17,6 +17,7 @@ import {
     PinInputField,
     Stack,
     Text,
+    useColorModeValue,
     useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -51,6 +52,9 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
         }
     };
 
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+
     return (
         <>
             <AlertDialog
@@ -62,7 +66,7 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor="#1D1D1D" border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
                     <AlertDialogHeader textAlign="center" fontWeight="bolder">
                         <Heading>Claim the Jackpot</Heading>
                     </AlertDialogHeader>
@@ -76,12 +80,14 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                                 pt={4}
                                 p={4}
                                 border="1px"
-                                borderColor="whiteAlpha.400"
+                                borderColor={borderColor}
                                 rounded="md"
                                 shadow="lg"
                                 my={4}
-                                bgColor="blackAlpha.600">
-                                <Text textAlign="center" color="gray">
+                                bgColor="blackAlpha.600"
+                                color="white"
+                                >
+                                <Text textAlign="center" color="whiteAlpha.800">
                                     Please read before claiming
                                 </Text>
 
