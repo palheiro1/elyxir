@@ -138,6 +138,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                         src={image}
                         alt={name}
                         rounded="lg"
+                        shadow="md"
                         onClick={() => (haveThisCard ? handleClick({ card: card }) : null)}
                         style={hover ? hoverStyle : initialStyle}
                         onMouseEnter={() => (haveThisCard ? setHover(true) : null)}
