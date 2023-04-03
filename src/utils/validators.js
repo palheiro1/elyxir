@@ -35,5 +35,6 @@ export function checkIsValidPassphrase(passphrase, expectedAccount) {
  * @description - checks if the pass phrase belongs to the account
  */
 export const isArdorAccount = account => {
+    if(account.length !== 26) return false;
     return /^ARDOR-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{5}/.test(account);
 };
