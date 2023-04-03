@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, memo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 
@@ -74,7 +74,7 @@ import { okToast } from '../../utils/alerts';
  * @param {Function} setInfoAccount - Set info account
  * @returns {JSX.Element} Home component
  */
-const Home = ({ infoAccount, setInfoAccount }) => {
+const Home = memo(({ infoAccount, setInfoAccount }) => {
     const toast = useToast();
 
     // Refs
@@ -253,10 +253,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
                 currentBids: currentAskOrBids.bidOrders,
                 trades: trades.trades,
             };
-
-            // Print loadCards order by name
-            console.log(loadCards.sort((a, b) => a.name.localeCompare(b.name)));
-            
 
             // -----------------------------------------------------------------
             // Get all hashes and compare
@@ -453,6 +449,6 @@ const Home = ({ infoAccount, setInfoAccount }) => {
             />
         </>
     );
-};
+});
 
 export default Home;

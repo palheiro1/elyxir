@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Box, Collapse, Flex, IconButton, Spacer, useDisclosure } from '@chakra-ui/react';
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 import { ColorModeSwitcher } from '../../ColorModeSwitch/ColorModeSwitcher';
@@ -19,66 +20,68 @@ import TopMenu from '../../../pages/Home/TopMenu';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const LateralMenu = ({
-    option = 0,
-    setOption,
-    children,
-    showAllCards,
-    handleShowAllCards,
-    infoAccount,
-    handleLogout,
-    goToSection,
-    nextBlock
-}) => {
-    const { isOpen, onToggle, onClose } = useDisclosure();
+const LateralMenu = memo(
+    ({
+        option = 0,
+        setOption,
+        children,
+        showAllCards,
+        handleShowAllCards,
+        infoAccount,
+        handleLogout,
+        goToSection,
+        nextBlock,
+    }) => {
+        const { isOpen, onToggle, onClose } = useDisclosure();
 
-    const handleSetOption = option => {
-        setOption(option);
-        onClose();
-    };
+        const handleSetOption = option => {
+            setOption(option);
+            onClose();
+        };
 
-    return (
-        <Box>
-            <Flex flex={{ base: 1, md: 'auto' }} ml={{ base: -2 }} display={{ base: 'flex', md: 'none' }}>
-                <IconButton
-                    onClick={onToggle}
-                    icon={isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />}
-                    variant={'ghost'}
-                    aria-label={'Toggle Navigation'}
-                />
-                <Spacer />
-                <ColorModeSwitcher justifySelf="flex-end" />
-            </Flex>
-            <Flex display={{ base: 'none', md: 'unset' }}>
-                <TopMenu infoAccount={infoAccount} goToSection={goToSection} />
-            </Flex>
-            <Flex display={{ base: 'none', md: 'unset' }}>
-                <NormalMenu
-                    option={option}
-                    setOption={setOption}
-                    handleLogout={handleLogout}
-                    showAllCards={showAllCards}
-                    handleShowAllCards={handleShowAllCards}
-                    children={children}
-                    nextBlock={nextBlock}
-                />
-            </Flex>
-            <Collapse in={isOpen} animateOpacity>
-                {infoAccount && (
-                    <MobileMenu
+        return (
+            <Box>
+                <Flex flex={{ base: 1, md: 'auto' }} ml={{ base: -2 }} display={{ base: 'flex', md: 'none' }}>
+                    <IconButton
+                        onClick={onToggle}
+                        icon={isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />}
+                        variant={'ghost'}
+                        aria-label={'Toggle Navigation'}
+                    />
+                    <Spacer />
+                    <ColorModeSwitcher justifySelf="flex-end" />
+                </Flex>
+                <Flex display={{ base: 'none', md: 'unset' }}>
+                    <TopMenu infoAccount={infoAccount} goToSection={goToSection} />
+                </Flex>
+                <Flex display={{ base: 'none', md: 'unset' }}>
+                    <NormalMenu
                         option={option}
-                        setOption={handleSetOption}
+                        setOption={setOption}
                         handleLogout={handleLogout}
-                        infoAccount={infoAccount}
                         showAllCards={showAllCards}
                         handleShowAllCards={handleShowAllCards}
-                        goToSection={goToSection}
+                        children={children}
+                        nextBlock={nextBlock}
                     />
-                )}
-            </Collapse>
-            <Flex display={{ base: 'block', md: 'none' }}>{!isOpen ? children : null}</Flex>
-        </Box>
-    );
-};
+                </Flex>
+                <Collapse in={isOpen} animateOpacity>
+                    {infoAccount && (
+                        <MobileMenu
+                            option={option}
+                            setOption={handleSetOption}
+                            handleLogout={handleLogout}
+                            infoAccount={infoAccount}
+                            showAllCards={showAllCards}
+                            handleShowAllCards={handleShowAllCards}
+                            goToSection={goToSection}
+                        />
+                    )}
+                </Collapse>
+                <Flex display={{ base: 'block', md: 'none' }}>{!isOpen ? children : null}</Flex>
+            </Box>
+        );
+    }
+);
 
 export default LateralMenu;
