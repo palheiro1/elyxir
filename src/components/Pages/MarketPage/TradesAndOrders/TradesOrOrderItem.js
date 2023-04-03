@@ -1,4 +1,4 @@
-import { Image, Stack, Td, Text, Tr, useColorModeValue } from '@chakra-ui/react';
+import { Stack, Td, Text, Tr, useColorModeValue } from '@chakra-ui/react';
 import InOutTransaction from '../../../Tables/InOutTransaction';
 
 import { FaCoins } from 'react-icons/fa';
@@ -23,7 +23,6 @@ const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, car
     const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
     const iconColor = useColorModeValue('blackAlpha.500', 'yellow');
 
-
     if (card === 'GEM' || card === undefined) {
         return (
             <Tr _hover={{ bgColor: hoverColor }}>
@@ -31,7 +30,7 @@ const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, car
                     <InOutTransaction type={type} />
                 </Td>
                 <Td fontWeight="bold" fontSize="xl">
-                    {name === 'GEM' ? <GemCard hover={false}/> : name}
+                    {name === 'GEM' ? <GemCard /> : name}
                 </Td>
                 <Td>{amount}</Td>
                 <Td>
@@ -45,7 +44,6 @@ const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, car
             </Tr>
         );
     }
-    
 
     return (
         <Tr _hover={{ bgColor: hoverColor }}>

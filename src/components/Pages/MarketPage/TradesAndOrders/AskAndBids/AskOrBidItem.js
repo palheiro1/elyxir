@@ -1,4 +1,4 @@
-import { Image, Stack, Td, Text, Tr } from '@chakra-ui/react';
+import { Td, Tr } from '@chakra-ui/react';
 import { useState } from 'react';
 import { GEMASSET, NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import TableCard from '../../../../Cards/TableCard';
