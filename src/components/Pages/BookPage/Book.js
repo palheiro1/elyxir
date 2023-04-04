@@ -27,7 +27,8 @@ const Book = ({ cards }) => {
     const colorNotHaveCard = useColorModeValue('blackAlpha.200', 'whiteAlpha.300');
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
-    const haveAllCards = cards.every(card => {
+    let haveAllCards = false;
+    haveAllCards = cards.every(card => {
         return (
             Number(card.quantityQNT) !== 0 &&
             (Number(card.quantityQNT) <= Number(card.unconfirmedQuantityQNT) ||
