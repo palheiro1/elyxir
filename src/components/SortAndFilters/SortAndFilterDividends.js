@@ -60,7 +60,7 @@ const SortAndFilterDividends = ({ dividends, setFilteredDividends, setVisibleDiv
                 </Text>
                 <Select border="0px" borderColor="gray.800" size="xs" onChange={handleSort}>
                     <option value="recent">Newest</option>
-                    <option value="older">Older</option>
+                    <option value="older">Oldest</option>
                 </Select>
             </Stack>
 
