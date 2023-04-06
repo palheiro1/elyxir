@@ -78,7 +78,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
     const handleCurrencyChange = () => {
         setValue(value === '1' ? '2' : '1');
-        input.onChange({ target: { value: 0 } }); // reset input value
+        //input.onChange({ target: { value: 0 } }); // reset input value
     };
 
     const handleCompletePin = pin => {
@@ -152,11 +152,19 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
         if (itsOk) {
             okToast('Pack bought successfully', toast);
-            onClose();
+            cleanOnClose();
         } else {
             errorToast('Error buying pack', toast);
         }
         setSendingTx(false);
+    };
+
+    const cleanOnClose = () => {
+        setValue('1');
+        setPassphrase('');
+        setIsValidPin(false);
+        setSendingTx(false);
+        onClose();
     };
 
     const bgColor = useColorModeValue('', '#1D1D1D');
@@ -172,7 +180,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 size="3xl"
                 motionPreset="slideInBottom"
                 leastDestructiveRef={reference}
-                onClose={onClose}
+                onClose={cleanOnClose}
                 isOpen={isOpen}
                 isCentered>
                 <AlertDialogOverlay />

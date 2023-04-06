@@ -48,7 +48,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
-        <Stack direction={{ base: 'column', md: 'row' }} pb={2}>
+        <Stack direction={{ base: 'column', md: 'row' }} pb={2} w="100%">
             <Stack
                 direction="row"
                 border="1px"

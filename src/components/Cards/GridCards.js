@@ -17,7 +17,7 @@ import DetailedCard from './DetailedCard';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const GridCards = ({ cards, isMarket = false, onlyBuy = false, username, ignis }) => {
+const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount }) => {
     const [actualCards, setActualCards] = useState(cards);
 
     // Card clicked
@@ -108,13 +108,12 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, username, ignis }
                             isVisible={true}
                             animationInDelay={delay}>
                             <Card
-                                username={username}
                                 card={card}
                                 setCardClicked={setCardClicked}
                                 onOpen={onOpen}
                                 isMarket={isMarket}
                                 onlyBuy={onlyBuy}
-                                ignis={ignis}
+                                infoAccount={infoAccount}
                             />
                         </Animated>
                     );

@@ -213,9 +213,9 @@ const calculateFeeByRecipient = async (recipient, query, URL_TO_CALL) => {
     const data = (await axios.post(URL_TO_CALL, qs.stringify(query), config)).data;
     let fee;
     if (data.bundlerRateNQTPerFXT) {
-        fee = isRecipientNew ? 14 * NQTDIVIDER : data.minimumFeeFQT * data.bundlerRateNQTPerFXT * 0.00000001;
+        fee = isRecipientNew ? 20 * NQTDIVIDER : data.minimumFeeFQT * data.bundlerRateNQTPerFXT * 0.00000001;
     } else {
-        fee = isRecipientNew ? 14 * NQTDIVIDER : data.minimumFeeFQT * 0.00000001;
+        fee = isRecipientNew ? 20 * NQTDIVIDER : data.minimumFeeFQT * 0.00000001;
     }
     return Math.ceil(fee);
 };

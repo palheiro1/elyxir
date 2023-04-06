@@ -15,7 +15,13 @@ const TopBar = ({
     const isTransactions = section === 'transactions';
     const isDividends = section === 'dividends';
     return (
-        <Stack direction={{ base: 'column', md: 'row' }} spacing={4} align="center" justify="center" py={4}>
+        <Stack
+            direction={{ base: 'column', lg: 'row' }}
+            spacing={{ base: 0, lg: 4 }}
+            align={{ base: 'start', lg: 'center' }}
+            justify={{ base: 'center', lg: 'space-between' }}
+            minW={{ base: '100%', lg: 'auto' }}
+            py={4}>
             {isTransactions && (
                 <SortAndFilterTxs
                     setFilteredTransactions={setFilteredTransactions}
@@ -31,9 +37,10 @@ const TopBar = ({
                 />
             )}
             <Spacer />
-            <Stack direction="row" align="center" justify="center">
-                <ButtonGroup variant="outline" isAttached size="sm">
+            <Stack direction="row" align="center" justify="center" minW={{ base: '100%', md: 'auto' }}>
+                <ButtonGroup variant="outline" isAttached size="sm" w="100%">
                     <Button
+                        w="100%"
                         bgColor={isTransactions && '#F18800'}
                         color={isTransactions && 'white'}
                         _hover={{ bg: '#F18800', color: 'white' }}
@@ -41,6 +48,7 @@ const TopBar = ({
                         Transactions
                     </Button>
                     <Button
+                        w="100%"
                         bgColor={isDividends && '#F18800'}
                         color={isDividends && 'white'}
                         _hover={{ bg: '#F18800', color: 'white' }}

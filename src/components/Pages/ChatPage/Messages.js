@@ -1,4 +1,4 @@
-import { Box, Stack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import OneSenderMessages from './OneSenderMessages';
 
 const Messages = ({ messages = {}, username, account }) => {
@@ -16,6 +16,11 @@ const Messages = ({ messages = {}, username, account }) => {
                 border="1px"
                 bgColor={bgColor}
                 borderColor={borderColor}>
+                {Object.keys(messages).length === 0 && (
+                    <Box>
+                        <Text align="center">You don't have any messages yet</Text>
+                    </Box>
+                )}
                 {Object.keys(messages).map((key, index) => (
                     <OneSenderMessages
                         key={index}

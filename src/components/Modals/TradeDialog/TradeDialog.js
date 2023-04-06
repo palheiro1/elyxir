@@ -22,6 +22,7 @@ import AskDialog from './AskDialog/AskDialog';
 import BidDialog from './BidDialog/BidDialog';
 import { errorToast } from '../../../utils/alerts';
 import { NQTDIVIDER } from '../../../data/CONSTANTS';
+import AskAndBidGrid from '../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
 
 /**
  * @name TradeDialog
@@ -35,7 +36,18 @@ import { NQTDIVIDER } from '../../../data/CONSTANTS';
  * @param {Object} gemCards - Gem cards data - Optional
  * @param {Object} onlyBid - Boolean to know if the dialog only has the bid option - Optional
  */
-const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCards = false, onlyBid = false }) => {
+const TradeDialog = ({
+    reference,
+    isOpen,
+    onClose,
+    card,
+    username,
+    ignis,
+    gemCards = false,
+    onlyBid = false,
+    isBlocked = false,
+    lockedCards = false,
+}) => {
     const toast = useToast();
 
     const { isOpen: isOpenAsk, onOpen: onOpenAsk, onClose: onCloseAsk } = useDisclosure();
@@ -45,6 +57,10 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCar
     const refBid = useRef();
 
     const handleAsk = () => {
+        if (isBlocked) {
+            errorToast(`${lockedCards} card(s) locked for all actions. Check for open Ask orders to unlock.`, toast);
+            return;
+        }
         if (!gemCards && card.quantityQNT === 0) {
             errorToast("You can't ask for a card you don't have", toast);
             return;
@@ -58,15 +74,16 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCar
         onOpenBid();
     };
 
-    const bgColor = useColorModeValue("", "#1D1D1D");
-    const bgMarkedColor = useColorModeValue("blackAlpha.100", "whiteAlpha.100");
-    const borderColor = useColorModeValue("blackAlpha.300", "whiteAlpha.300");
+    const bgColor = useColorModeValue('', '#1D1D1D');
+    const bgMarkedColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
         <>
             <AlertDialog
                 motionPreset="slideInBottom"
                 leastDestructiveRef={reference}
+                size={'2xl'}
                 onClose={onClose}
                 isOpen={isOpen}
                 isCentered>
@@ -114,14 +131,16 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCar
                         <SimpleGrid columns={onlyBid ? 1 : 2} my={4} shadow="lg">
                             {!onlyBid && (
                                 <Box
+                                    _hover={{
+                                        bgColor: 'whiteAlpha.300',
+                                        cursor: isBlocked ? 'not-allowed' : 'pointer',
+                                    }}
                                     onClick={handleAsk}
-                                   
                                     bgColor={bgMarkedColor}
                                     p={4}
                                     borderLeftRadius="lg"
                                     textAlign="center"
                                     fontSize="xl"
-                                    _hover={{ bgColor: 'whiteAlpha.300', cursor: 'pointer' }}
                                     borderRight="0px"
                                     borderBottom="1px"
                                     borderLeft="1px"
@@ -132,7 +151,6 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCar
                             )}
                             <Box
                                 onClick={handleBid}
-                               
                                 bgColor="whiteAlpha.100"
                                 p={4}
                                 borderRightRadius="lg"
@@ -148,6 +166,16 @@ const TradeDialog = ({ reference, isOpen, onClose, card, username, ignis, gemCar
                                 BID
                             </Box>
                         </SimpleGrid>
+                        <Box>
+                            <AskAndBidGrid
+                                cards={card || gemCards}
+                                askOrders={card?.askOrders || gemCards?.askOrders}
+                                bidOrders={card?.bidOrders || gemCards?.bidOrders}
+                                onlyOneAsset={true}
+                                username={username}
+                                canDelete={false}
+                            />
+                        </Box>
                     </AlertDialogBody>
                 </AlertDialogContent>
             </AlertDialog>

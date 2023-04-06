@@ -4,7 +4,7 @@ import { getAllMessages } from '../../../services/Ardor/ardorInterface';
 import NewMessage from '../../Modals/NewMessage/NewMessage';
 import Messages from './Messages';
 import Warning from './Warning';
-import { MORPHING_ACCOUNT } from '../../../data/CONSTANTS';
+import { ALL_ACCOUNTS } from '../../../data/CONSTANTS';
 
 const ArdorChat = ({ infoAccount }) => {
     const [messages, setMessages] = useState([]);
@@ -20,7 +20,7 @@ const ArdorChat = ({ infoAccount }) => {
             // Delete messages have JSON format
             auxMessages = auxMessages.filter(message => {
                 if (message.senderRS === infoAccount.accountRs) return false;
-                if (message.senderRS === MORPHING_ACCOUNT) return false;
+                if (ALL_ACCOUNTS.includes(message.senderRS)) return false;
                 if (message.encryptedMessage) return true;
                 // Delete my own messages
                 return false;
