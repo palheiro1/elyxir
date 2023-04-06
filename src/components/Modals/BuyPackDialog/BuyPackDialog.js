@@ -164,7 +164,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         setPassphrase('');
         setIsValidPin(false);
         setSendingTx(false);
-        cleanOnClose();
+        onClose();
     };
 
     const bgColor = useColorModeValue('', '#1D1D1D');
