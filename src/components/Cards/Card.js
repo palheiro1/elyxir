@@ -207,7 +207,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                             {hoverButton && (
                                 <Center w="100%" bgColor={borderColor} rounded="lg" h="100%">
                                     <Text textAlign="center" fontSize="xs">
-                                        <strong>1 card(s) locked for all actions.</strong>
+                                        <strong>{lockedCards} card(s) locked for all actions.</strong>
                                         <br /> Check for open Ask orders to unlock.
                                     </Text>
                                 </Center>
@@ -217,25 +217,19 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                     {isMarket && (
                         <Center>
                             <Stack direction="column" w="100%">
-                                <Box
-                                    w="100%"
-                                    onMouseEnter={() => isBlocked && setHoverButton(true)}
-                                    onMouseLeave={() => isBlocked && setHoverButton(false)}>
-                                    {!hoverButton && (
-                                        <Button
-                                            isDisabled={isBlocked}
-                                            onClick={onOpenTrade}
-                                            size="lg"
-                                            w="100%"
-                                            leftIcon={<BsArrowLeftRight />}
-                                            _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
-                                            Trade
-                                        </Button>
-                                    )}
+                                <Box w="100%">
+                                    <Button
+                                        onClick={onOpenTrade}
+                                        size="lg"
+                                        w="100%"
+                                        leftIcon={<BsArrowLeftRight />}
+                                        _hover={{ fontWeight: 'bold', shadow: 'xl' }}>
+                                        Trade
+                                    </Button>
                                     {hoverButton && (
                                         <Center w="100%" minH="3rem" bgColor={borderColor} rounded="lg" h="100%">
                                             <Text textAlign="center" fontSize="xs">
-                                                <strong>1 card(s) locked for all actions.</strong>
+                                                <strong>{lockedCards} card(s) locked for all actions.</strong>
                                                 <br /> Check for open Ask orders to unlock.
                                             </Text>
                                         </Center>
@@ -312,6 +306,8 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                 username={username}
                 ignis={ignis}
                 onlyBid={fixOnlyBuy}
+                isBlocked={isBlocked}
+                lockedCards={lockedCards}
             />
             {/* -------------------------------------------------------------------------------------- */}
         </Box>
