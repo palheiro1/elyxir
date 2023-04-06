@@ -168,9 +168,9 @@ const TradeDialog = ({
                         </SimpleGrid>
                         <Box>
                             <AskAndBidGrid
-                                cards={card}
-                                askOrders={card?.askOrders}
-                                bidOrders={card?.bidOrders}
+                                cards={card || gemCards}
+                                askOrders={card?.askOrders || gemCards?.askOrders}
+                                bidOrders={card?.bidOrders || gemCards?.bidOrders}
                                 onlyOneAsset={true}
                                 username={username}
                                 canDelete={false}
