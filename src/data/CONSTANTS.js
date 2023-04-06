@@ -20,7 +20,7 @@ export const RARITY_COLORS = {
     Special: 'linear-gradient(60deg, #53AF53, #2D5B53) 1',
 };
 
-export const MEDIUM_URL = "https://api.rss2json.com/v1/api.json?rss_url=https://tarasca-dao.medium.com/feed";
+export const MEDIUM_URL = 'https://api.rss2json.com/v1/api.json?rss_url=https://tarasca-dao.medium.com/feed';
 
 // -------------------------------------------------
 // ------------------ CURRENCIES -------------------
@@ -136,8 +136,25 @@ export const BRIDGEAPIURL = 'https://api.mythicalbeings.io/';
 export const NODEURL = 'https://node1.mythicalbeings.io:27876/nxt';
 export const APILIMIT = 125;
 
+// -------------------------------------------------
+// ----------------- ALL ACCOUNTS ------------------
+// -------------------------------------------------
+
+export const ALL_ACCOUNTS = [
+    COLLECTIONACCOUNT,
+    BRIDGEACCOUNT,
+    BUYPACKACCOUNT,
+    TARASCACARDACCOUNT,
+    GEMASSETACCOUNT,
+    JACKPOTACCOUNT,
+    MORPHING_ACCOUNT,
+    CURRENCYSELLER,
+    BURNACCOUNT,
+    REFERRALCONTRACTACCOUNT,
+];
+
 // ---------------------------------------------
-// ----------------- EXTERNAL -----------------
+// ----------------- EXTERNAL ------------------
 // ---------------------------------------------
 export const EXCHANGES = [
     {
