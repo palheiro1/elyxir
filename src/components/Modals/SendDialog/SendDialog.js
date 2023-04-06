@@ -32,6 +32,7 @@ import { checkPin } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { isArdorAccount } from '../../../utils/validators';
 import CardBadges from '../../Cards/CardBadges';
+import QRReader from '../../QRReader/QRReader';
 
 /**
  * @name SendDialog
@@ -48,10 +49,13 @@ import CardBadges from '../../Cards/CardBadges';
 const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
     const toast = useToast();
 
-    const [ardorAccount, setArdorAccount] = useState('');
+    const [ardorAccount, setArdorAccount] = useState('ARDOR-');
     const [isValidArdorAccount, setIsValidArdorAccount] = useState(false);
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [sendingTx, setSendingTx] = useState(false);
+
+    const [readerEnabled, setReaderEnabled] = useState(false);
+    const prefix = 'ARDOR-';
 
     const [passphrase, setPassphrase] = useState('');
     const maxCards = Number(card.unconfirmedQuantityQNT);
@@ -67,10 +71,14 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
     const dec = getDecrementButtonProps();
     const input = getInputProps();
 
-    const handleInput = e => {
-        e.preventDefault();
-        setArdorAccount(e.target.value);
-        const isValid = isArdorAccount(e.target.value);
+    const handleInput = address => {
+        if (address === 'ARDOR') return;
+        if (readerEnabled) setReaderEnabled(false);
+        //Clean if ARDOR-ARDOR- prefix all phrased
+        let auxAddress = address.replaceAll(prefix, '');
+        auxAddress = prefix + auxAddress;
+        setArdorAccount(auxAddress);
+        const isValid = isArdorAccount(auxAddress);
         setIsValidArdorAccount(isValid);
     };
 
@@ -96,12 +104,12 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
 
             if (response) {
                 okToast('Card sent successfully', toast);
-                onClose();
+                cleanOnClose();
             } else {
                 errorToast('Error sending card', toast);
             }
         } catch (error) {
-            console.log("🚀 ~ file: SendDialog.js:104 ~ handleSend ~ error:", error)
+            console.log('🚀 ~ file: SendDialog.js:104 ~ handleSend ~ error:', error);
             errorToast('Error sending card', toast);
         } finally {
             setSendingTx(false);
@@ -112,12 +120,21 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
     const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
     const isDisabled = !isValidPin || !isValidArdorAccount || input.value === 0;
 
+    const cleanOnClose = () => {
+        setArdorAccount('ARDOR-');
+        setIsValidArdorAccount(false);
+        setIsValidPin(false);
+        setPassphrase('');
+        setSendingTx(false);
+        onClose();
+    };
+
     return (
         <>
             <AlertDialog
                 motionPreset="slideInBottom"
                 leastDestructiveRef={reference}
-                onClose={onClose}
+                onClose={cleanOnClose}
                 isOpen={isOpen}
                 isCentered>
                 <AlertDialogOverlay />
@@ -165,12 +182,12 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                             </Center>
                         </Box>
 
-                        <FormControl variant="floatingGray" id="Recipient" my={4} mt={8}>
+                        <FormControl variant="floatingGray" id="Recipient" my={4}>
                             <InputGroup size="lg" border="1px" borderColor={borderColor} rounded="lg">
                                 <Input
                                     placeholder=" "
                                     value={ardorAccount}
-                                    onChange={handleInput}
+                                    onChange={e => handleInput(e.target.value)}
                                     border="0px"
                                     isInvalid={!isValidArdorAccount}
                                 />
@@ -182,11 +199,14 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                                             bgColor="transparent"
                                             aria-label="Scan QR CODE"
                                             icon={<FaQrcode />}
+                                            onClick={() => {
+                                                setReaderEnabled(!readerEnabled);
+                                            }}
                                         />
                                     }
                                 />
                             </InputGroup>
-
+                            {readerEnabled && <QRReader handleInput={handleInput} />}
                             <FormLabel>Recipient</FormLabel>
                         </FormControl>
 
