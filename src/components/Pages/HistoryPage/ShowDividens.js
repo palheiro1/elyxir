@@ -1,4 +1,4 @@
-import { Button, Center, Spinner, TableContainer, Text, useColorModeValue } from '@chakra-ui/react';
+import { Button, Center, TableContainer, Text, useColorModeValue } from '@chakra-ui/react';
 
 import { Table } from '../../ResponsiveTable/table';
 import { Tbody } from '../../ResponsiveTable/tbody';
@@ -54,9 +54,7 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
                             let balance = transaction.change / NQTDIVIDER;
                             balance = balance.toLocaleString('en-US', { maximumFractionDigits: 2 });
                             return (
-                                <Tr
-                                    key={index}
-                                    _hover={{ bgColor: hoverColor }}>
+                                <Tr key={index} _hover={{ bgColor: hoverColor }}>
                                     <Td>
                                         <TableCard image={image} title={title} continent={continent} rarity={rarity} />
                                     </Td>
@@ -78,9 +76,8 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
         </TableContainer>
     ) : (
         <Center w="100%" textAlign="center" py={4} gap={4}>
-            <Spinner size="md" />{' '}
             <Text fontWeight="bolder" bgGradient="linear(to-l, #478299, #957bd2)" bgClip="text">
-                No dividends found, waiting for dividends...
+                No dividends yet
             </Text>
         </Center>
     );

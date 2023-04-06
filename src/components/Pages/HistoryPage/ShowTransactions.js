@@ -57,9 +57,8 @@ const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTra
         </TableContainer>
     ) : (
         <Center w="100%" textAlign="center" py={4} gap={4}>
-            <Spinner size="md" />{' '}
             <Text fontWeight="bolder" bgGradient="linear(to-l, #478299, #957bd2)" bgClip="text">
-                No transactions found, waiting for transactions...
+                No transactions yet
             </Text>
         </Center>
     );
