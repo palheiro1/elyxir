@@ -3,7 +3,6 @@ import {
     AlertDialogBody,
     AlertDialogCloseButton,
     AlertDialogContent,
-    AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogOverlay,
     Box,
@@ -48,7 +47,7 @@ import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/
  * @author Jesús Sánchez Fernández
  * @version 1.0.0
  */
-const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
+const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrders = [], bidOrders = [] }) => {
     const toast = useToast();
 
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
@@ -166,6 +165,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
 
     const handleClose = () => {
         setSelectedItem('');
+        setPassphrase('');
         setValue(0);
         setPriceCard(0);
         onClose();
@@ -185,19 +185,25 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
                     <AlertDialogHeader textAlign="center">
                         <Center>
-                            <Text>BID FOR {!isGem ? 'CARDS' : 'GEMS'} </Text>
+                            <Text>BUY {!isGem ? 'CARDS' : 'GEMS'} </Text>
                         </Center>
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
                         <VStack>
                             <Stack direction={{ base: 'column', md: 'row' }} spacing={4} w="100%">
-                                <Box minW="50%">
+                                <Box mx={2}>
                                     <Center>
-                                        <Image shadow={!isGem && "lg"} rounded={!isGem && "md"} src={!isGem ? card.cardImgUrl : gemImg} maxH="25rem" />
+                                        <Image
+                                            minW="22rem"
+                                            shadow={!isGem && 'lg'}
+                                            rounded={!isGem && 'md'}
+                                            src={!isGem ? card.cardImgUrl : gemImg}
+                                            maxH="30rem"
+                                        />
                                     </Center>
                                 </Box>
-                                <VStack spacing={4}>
+                                <VStack spacing={4} w="100%">
                                     <Box w="100%">
                                         <Text fontWeight="bold" fontSize="xl">
                                             {!isGem ? card.name : 'GEMs'}
@@ -277,27 +283,39 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                     <Box w="100%" mt={8}>
                                         <Button
                                             isDisabled={!isValidPin || sendingTx}
-                                            bgColor={isValidPin ? '#F18800' : null}
+                                            bgColor={isValidPin ? '#33B448' : null}
                                             w="100%"
                                             py={6}
                                             onClick={handleSend}>
-                                            Submit
+                                            Buy {isGem ? 'GEM' : card.name}
                                         </Button>
                                     </Box>
                                 </VStack>
+                                <Box w="50%">
+                                    <AskAndBidGrid
+                                        columns={1}
+                                        askOrders={card.askOrders.slice(0, 3)}
+                                        bidOrders={card.bidOrders.slice(0, 3)}
+                                        onlyOneAsset={true}
+                                        setSelectedItem={setSelectedItem}
+                                    />
+                                </Box>
                             </Stack>
+                            {/* 
                             <Box w="100%">
                                 <AskAndBidGrid
-                                    askOrders={card.askOrders.slice(0, 3)}
-                                    bidOrders={card.bidOrders.slice(0, 3)}
+                                    columns={2}
+                                    username={username}
+                                    askOrders={askOrders}
+                                    bidOrders={bidOrders}
                                     onlyOneAsset={true}
                                     setSelectedItem={setSelectedItem}
+                                    canDelete={true}
                                 />
                             </Box>
+                            */}
                         </VStack>
                     </AlertDialogBody>
-
-                    <AlertDialogFooter></AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
         </>

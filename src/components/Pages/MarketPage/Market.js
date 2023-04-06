@@ -38,8 +38,7 @@ const Market = ({ infoAccount, cards, gemCards }) => {
                     <GridCards
                         cards={cardsFiltered}
                         isMarket={true}
-                        username={infoAccount.name}
-                        ignis={infoAccount.IGNISBalance}
+                        infoAccount={infoAccount}
                     />
                 </>
             )}

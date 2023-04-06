@@ -1,10 +1,19 @@
-import { Table, TableContainer, Tbody, Text, Th, Thead, Tr, useColorModeValue } from '@chakra-ui/react';
+import { Table, TableContainer, Tbody, Text, Tfoot, Th, Thead, Tr, useColorModeValue } from '@chakra-ui/react';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getAsset } from '../../../../../utils/cardsUtils';
 import AskOrBidItem from './AskOrBidItem';
 
-const AskBidTable = ({ type, onlyOneAsset, orders, cards, onOpen, setSelectedOrder, canDelete, isLeft = false }) => {
-    const bgTitleColor = useColorModeValue('blackAlpha.50', 'whiteAlpha.50');
+const AskBidTable = ({
+    type,
+    onlyOneAsset,
+    orders,
+    cards,
+    onOpen,
+    setSelectedOrder,
+    canDelete,
+    isLeft = false,
+    newStyle = false,
+}) => {
     const bgHeadColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     const borderLeft = isLeft ? 'lg' : 'none';
@@ -13,28 +22,36 @@ const AskBidTable = ({ type, onlyOneAsset, orders, cards, onOpen, setSelectedOrd
 
     return (
         <TableContainer
-            border="1px"
             rounded="lg"
             bg="blackAlpha"
-            shadow="dark-lg"
+            shadow={!newStyle ? 'dark-lg' : 'none'}
             maxH="20rem"
             overflowY={'auto'}
             borderColor={bgHeadColor}
-            borderLeftRadius={borderLeft}
-            borderRightRadius={borderRight}
+            borderLeftRadius={!newStyle ? borderLeft : 'none'}
+            borderRightRadius={!newStyle ? borderRight : 'none'}
             boxShadow="inner">
-            <Text textAlign="center" p={4} fontSize="lg" borderBottom="1px" bgColor={bgTitleColor}>
-                {type}
-            </Text>
+            {(isAsk || newStyle === false) && (
+                <Text
+                    textAlign="center"
+                    p={4}
+                    fontSize="lg"
+                    borderBottom="1px"
+                    color={newStyle && (isAsk ? '#FF6962' : '#33B448')}>
+                    {type}
+                </Text>
+            )}
 
-            <Table variant="simple">
-                <Thead>
-                    <Tr>
-                        {!onlyOneAsset && <Th textAlign="center">Asset</Th>}
-                        <Th textAlign="center">Ignis</Th>
-                        <Th textAlign="center">Amount</Th>
-                    </Tr>
-                </Thead>
+            <Table variant="simple" color={newStyle && (isAsk ? '#FF6962' : '#33B448')}>
+                {!newStyle && (
+                    <Thead>
+                        <Tr>
+                            {!onlyOneAsset && <Th textAlign="center">Asset</Th>}
+                            <Th textAlign="center">Ignis</Th>
+                            <Th textAlign="center">Amount</Th>
+                        </Tr>
+                    </Thead>
+                )}
                 <Tbody>
                     {orders.map(order => {
                         const _asset = onlyOneAsset ? order.asset : getAsset(order.asset, cards);
@@ -54,7 +71,22 @@ const AskBidTable = ({ type, onlyOneAsset, orders, cards, onOpen, setSelectedOrd
                         );
                     })}
                 </Tbody>
+                {newStyle && isAsk && (
+                    <Tfoot bgColor="whiteAlpha.400">
+                        <Tr>
+                            {!onlyOneAsset && <Th textAlign="center">Asset</Th>}
+                            <Th textAlign="center">Ignis</Th>
+                            <Th textAlign="center">Amount</Th>
+                        </Tr>
+                    </Tfoot>
+                )}
             </Table>
+
+            {!isAsk && newStyle && (
+                <Text textAlign="center" p={4} fontSize="lg" borderTop="1px" color={isAsk ? '#FF6962' : '#33B448'}>
+                    {type}
+                </Text>
+            )}
         </TableContainer>
     );
 };

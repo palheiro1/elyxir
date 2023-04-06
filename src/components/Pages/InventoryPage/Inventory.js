@@ -24,7 +24,7 @@ const Inventory = ({ infoAccount, cards }) => {
     return (
         <Box>
             <SortAndFilterCards cards = {cards} setCardsFiltered = {setCardsFiltered} />
-            <GridCards cards={cardsFiltered} username={infoAccount.name} />
+            <GridCards cards={cardsFiltered} infoAccount={infoAccount} />
         </Box>
     );
 };

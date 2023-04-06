@@ -141,6 +141,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
 
     const handleClose = () => {
         setSelectedItem('');
+        setPassphrase('');
         setValue(0);
         setPriceCard(0);
         onClose();
@@ -160,19 +161,25 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
                     <AlertDialogHeader textAlign="center">
                         <Center>
-                            <Text>ASK FOR {!isGem ? 'CARDS' : 'GEMS'}</Text>
+                            <Text>SELL {!isGem ? 'CARDS' : 'GEMS'}</Text>
                         </Center>
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
                         <VStack>
                             <Stack direction={{ base: 'column', md: 'row' }} spacing={4} w="100%">
-                                <Box minW="50%">
+                                <Box mx={2}>
                                     <Center>
-                                        <Image shadow="md" src={!isGem ? card.cardImgUrl : gemImg} maxH="25rem" />
+                                        <Image
+                                            minW="22rem"
+                                            shadow={!isGem && 'lg'}
+                                            rounded={!isGem && 'md'}
+                                            src={!isGem ? card.cardImgUrl : gemImg}
+                                            maxH="30rem"
+                                        />
                                     </Center>
                                 </Box>
-                                <VStack spacing={4}>
+                                <VStack spacing={4} w="100%">
                                     <Box w="100%">
                                         <Text fontWeight="bold" fontSize="xl">
                                             {!isGem ? card.name : 'GEM'}
@@ -256,19 +263,20 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                             w="100%"
                                             py={6}
                                             onClick={handleSend}>
-                                            Submit
+                                            Buy {isGem ? 'GEM' : card.name}
                                         </Button>
                                     </Box>
                                 </VStack>
+                                <Box w="50%">
+                                    <AskAndBidGrid
+                                        columns={1}
+                                        askOrders={card.askOrders.slice(0, 3)}
+                                        bidOrders={card.bidOrders.slice(0, 3)}
+                                        onlyOneAsset={true}
+                                        setSelectedItem={setSelectedItem}
+                                    />
+                                </Box>
                             </Stack>
-                            <Box w="100%">
-                                <AskAndBidGrid
-                                    askOrders={card.askOrders}
-                                    bidOrders={card.bidOrders}
-                                    onlyOneAsset={true}
-                                    setSelectedItem={setSelectedItem}
-                                />
-                            </Box>
                         </VStack>
                     </AlertDialogBody>
 
