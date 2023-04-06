@@ -283,32 +283,42 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
             </Center>
 
             {/* ------------------------------------ HIDE DIALOGs ------------------------------------ */}
-            <SendDialog isOpen={isOpenSend} onClose={onCloseSend} reference={refSend} card={card} username={username} />
-            <CraftDialog
-                isOpen={isOpenCraft}
-                onClose={onCloseCraft}
-                reference={refCraft}
-                card={card}
-                username={username}
-            />
-            <MorphDialog
-                isOpen={isOpenMorph}
-                onClose={onCloseMorph}
-                reference={refMorph}
-                card={card}
-                username={username}
-            />
-            <TradeDialog
-                isOpen={isOpenTrade}
-                onClose={onCloseTrade}
-                reference={refTrade}
-                card={card}
-                username={username}
-                ignis={ignis}
-                onlyBid={fixOnlyBuy}
-                isBlocked={isBlocked}
-                lockedCards={lockedCards}
-            />
+            {card !== undefined && (
+                <>
+                    <SendDialog
+                        isOpen={isOpenSend}
+                        onClose={onCloseSend}
+                        reference={refSend}
+                        card={card}
+                        username={username}
+                    />
+                    <CraftDialog
+                        isOpen={isOpenCraft}
+                        onClose={onCloseCraft}
+                        reference={refCraft}
+                        card={card}
+                        username={username}
+                    />
+                    <MorphDialog
+                        isOpen={isOpenMorph}
+                        onClose={onCloseMorph}
+                        reference={refMorph}
+                        card={card}
+                        username={username}
+                    />
+                    <TradeDialog
+                        isOpen={isOpenTrade}
+                        onClose={onCloseTrade}
+                        reference={refTrade}
+                        card={card}
+                        username={username}
+                        ignis={ignis}
+                        onlyBid={fixOnlyBuy}
+                        isBlocked={isBlocked}
+                        lockedCards={lockedCards}
+                    />
+                </>
+            )}
             {/* -------------------------------------------------------------------------------------- */}
         </Box>
     );

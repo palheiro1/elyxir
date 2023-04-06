@@ -22,6 +22,7 @@ import AskDialog from './AskDialog/AskDialog';
 import BidDialog from './BidDialog/BidDialog';
 import { errorToast } from '../../../utils/alerts';
 import { NQTDIVIDER } from '../../../data/CONSTANTS';
+import AskAndBidGrid from '../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
 
 /**
  * @name TradeDialog
@@ -82,6 +83,7 @@ const TradeDialog = ({
             <AlertDialog
                 motionPreset="slideInBottom"
                 leastDestructiveRef={reference}
+                size={'2xl'}
                 onClose={onClose}
                 isOpen={isOpen}
                 isCentered>
@@ -129,7 +131,10 @@ const TradeDialog = ({
                         <SimpleGrid columns={onlyBid ? 1 : 2} my={4} shadow="lg">
                             {!onlyBid && (
                                 <Box
-                                    _hover={{ bgColor: 'whiteAlpha.300', cursor: isBlocked ? 'not-allowed' : 'pointer'  }}
+                                    _hover={{
+                                        bgColor: 'whiteAlpha.300',
+                                        cursor: isBlocked ? 'not-allowed' : 'pointer',
+                                    }}
                                     onClick={handleAsk}
                                     bgColor={bgMarkedColor}
                                     p={4}
@@ -161,6 +166,16 @@ const TradeDialog = ({
                                 BID
                             </Box>
                         </SimpleGrid>
+                        <Box>
+                            <AskAndBidGrid
+                                cards={card}
+                                askOrders={card?.askOrders}
+                                bidOrders={card?.bidOrders}
+                                onlyOneAsset={true}
+                                username={username}
+                                canDelete={false}
+                            />
+                        </Box>
                     </AlertDialogBody>
                 </AlertDialogContent>
             </AlertDialog>
