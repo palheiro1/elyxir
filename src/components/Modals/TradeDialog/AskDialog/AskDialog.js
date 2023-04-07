@@ -263,7 +263,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                             w="100%"
                                             py={6}
                                             onClick={handleSend}>
-                                            Buy {isGem ? 'GEM' : card.name}
+                                            Sell {isGem ? 'GEM' : card.name}
                                         </Button>
                                     </Box>
                                 </VStack>
