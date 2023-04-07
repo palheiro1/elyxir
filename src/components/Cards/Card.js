@@ -49,9 +49,10 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     const {
         name: username,
         IGNISBalance: ignis,
-        askOrders: askOrdersAccount,
-        bidOrders: bidOrdersAccount,
+        currentAsks: askOrdersAccount,
+        currentBids: bidOrdersAccount,
     } = infoAccount;
+
 
     const askOrdersForThisCard = askOrdersAccount?.filter(order => order.asset === card.asset);
     const bidOrdersForThisCard = bidOrdersAccount?.filter(order => order.asset === card.asset);
