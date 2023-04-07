@@ -17,7 +17,7 @@ import DetailedCard from './DetailedCard';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount }) => {
+const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {} }) => {
     const [actualCards, setActualCards] = useState(cards);
 
     // Card clicked
