@@ -126,14 +126,17 @@ export const getTxTimestamp = (tx, eb, showStatus = true) => {
 
     const datestring = formatDate(txstamp, 'yyyy-MM-dd');
     const timestring = formatTime(txstamp, 'HH:mm:ss');
+    const CompositeTimestamp = `${datestring} ${timestring}`;
 
     let confirmationStatus = "";
     if (showStatus) {
         if (tx.confirmations === 0) confirmationStatus = "(unconfirmed)";
         if (tx.confirmations === 1) confirmationStatus = "(just confirmed)";
+        return <div> {CompositeTimestamp} <br /> {confirmationStatus}</div>;
     }
-    
-    return `${datestring} ${timestring} ${confirmationStatus}`;
+
+    return CompositeTimestamp;
+
 }
 
 export const getTimestampForMessages = (msg) => {
