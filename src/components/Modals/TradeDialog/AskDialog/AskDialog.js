@@ -33,6 +33,7 @@ import { NQTDIVIDER } from '../../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../../utils/alerts';
 import { checkPin, sendAskOrder } from '../../../../utils/walletUtils';
 import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
+import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidList';
 
 /**
  * @name AskDialog - Ask dialog component
@@ -47,7 +48,7 @@ import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/
  * @author Jesús Sánchez Fernández
  * @version 1.0.0
  */
-const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
+const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [], bidOrders = [] }) => {
     const toast = useToast();
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
@@ -56,6 +57,9 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
     const isGem = card.assetname === 'GEM';
     const gemImg = './images/currency/gem.png';
     const maxCards = isGem ? Number(card.unconfirmedQuantityQNT) / NQTDIVIDER : Number(card.unconfirmedQuantityQNT);
+
+    // Mix ask with bid orders
+    const userOrders = [...askOrders, ...bidOrders];
 
     const [selectedItem, setSelectedItem] = useState(''); // selected item in the grid
 
@@ -263,7 +267,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                             w="100%"
                                             py={6}
                                             onClick={handleSend}>
-                                            Buy {isGem ? 'GEM' : card.name}
+                                            Sell {isGem ? 'GEM' : card.name}
                                         </Button>
                                     </Box>
                                 </VStack>
@@ -277,6 +281,12 @@ const AskDialog = ({ reference, isOpen, onClose, card, username }) => {
                                     />
                                 </Box>
                             </Stack>
+                            <Box w="100%">
+                                <AskAndBidList
+                                    orders={userOrders}
+                                    name={isGem ? 'GEMs' : card.name}
+                                />
+                            </Box>
                         </VStack>
                     </AlertDialogBody>
 

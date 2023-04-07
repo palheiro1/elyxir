@@ -32,6 +32,7 @@ import { NQTDIVIDER } from '../../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../../utils/alerts';
 import { checkPin, sendBidOrder } from '../../../../utils/walletUtils';
 import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
+import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidList';
 
 /**
  * @name BidDialog
@@ -61,6 +62,9 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
 
     const isGem = card.assetname === 'GEM';
     const gemImg = './images/currency/gem.png';
+
+    // Mix ask with bid orders
+    const userOrders = [...askOrders, ...bidOrders];
 
     const handlePriceCard = e => {
         e.preventDefault();
@@ -301,19 +305,14 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                     />
                                 </Box>
                             </Stack>
-                            {/* 
+
                             <Box w="100%">
-                                <AskAndBidGrid
-                                    columns={2}
-                                    username={username}
-                                    askOrders={askOrders}
-                                    bidOrders={bidOrders}
-                                    onlyOneAsset={true}
-                                    setSelectedItem={setSelectedItem}
-                                    canDelete={true}
+                                <AskAndBidList
+                                    orders={userOrders}
+                                    name={isGem ? 'GEMs' : card.name}
                                 />
                             </Box>
-                            */}
+
                         </VStack>
                     </AlertDialogBody>
                 </AlertDialogContent>
