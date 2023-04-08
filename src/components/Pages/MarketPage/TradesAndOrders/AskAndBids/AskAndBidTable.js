@@ -55,6 +55,7 @@ const AskBidTable = ({
                 <Tbody>
                     {orders.map(order => {
                         const _asset = onlyOneAsset ? order.asset : getAsset(order.asset, cards);
+                        if (!_asset) return null;
                         return (
                             <AskOrBidItem
                                 key={order.orderFullHash}
