@@ -310,6 +310,8 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                 <AskAndBidList
                                     orders={userOrders}
                                     name={isGem ? 'GEMs' : card.name}
+                                    canDelete={true}
+                                    username={username}
                                 />
                             </Box>
 

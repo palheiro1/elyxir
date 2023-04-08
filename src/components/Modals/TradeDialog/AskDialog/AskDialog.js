@@ -285,6 +285,8 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                 <AskAndBidList
                                     orders={userOrders}
                                     name={isGem ? 'GEMs' : card.name}
+                                    canDelete={true}
+                                    username={username}
                                 />
                             </Box>
                         </VStack>
