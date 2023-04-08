@@ -75,7 +75,7 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
-        <Stack direction={['column', 'row']} align="center" justify="space-between" position="relative" mb={4}>
+        <Stack direction={{ base: "column", lg: "row" }} align="center" justify="space-between" position="relative" mb={4}>
             {needSorting && (
                 <Stack
                     direction="row"
@@ -86,7 +86,7 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
                     shadow="md"
                     px={2}
                     align="center"
-                    w={{ base: '100%', md: 'unset' }}>
+                    w={{ base: '100%', lg: 'unset' }}>
                     <Box pl={1} py={2}>
                         <FaRegPaperPlane />
                     </Box>
@@ -101,30 +101,31 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
                 </Stack>
             )}
             <Stack
-                position={{ base: 'unset', md: 'absolute' }}
-                w={{ base: '100%', md: 'unset' }}
-                right={{ base: 'unset', md: '0.25%' }}
+                position={{ base: 'unset', lg: 'absolute' }}
+                w={{ base: '100%', lg: 'unset' }}
+                right={{ base: 'unset', lg: '0.25%' }}
                 direction={['column', 'row']}
                 spacing={2}>
-                <Button size="sm" bgColor={bgButtons} isActive={rarity === 'All'} onClick={() => handleRarity('All')}>
+                <Button w={{ base: '100%', lg: 'unset' }} size="sm" bgColor={bgButtons} isActive={rarity === 'All'} onClick={() => handleRarity('All')}>
                     All rarities
                 </Button>
                 <Button
-                    w={{ base: '100%', md: 'unset' }}
+                    w={{ base: '100%', lg: 'unset' }}
                     size="sm"
                     bgColor={bgButtons}
                     isActive={rarity === 'Common'}
                     onClick={() => handleRarity('Common')}>
                     Common
                 </Button>
-                <Button size="sm" bgColor={bgButtons} isActive={rarity === 'Rare'} onClick={() => handleRarity('Rare')}>
+                <Button w={{ base: '100%', lg: 'unset' }} size="sm" bgColor={bgButtons} isActive={rarity === 'Rare'} onClick={() => handleRarity('Rare')}>
                     Rare
                 </Button>
-                <Button size="sm" bgColor={bgButtons} isActive={rarity === 'Epic'} onClick={() => handleRarity('Epic')}>
+                <Button w={{ base: '100%', lg: 'unset' }} size="sm" bgColor={bgButtons} isActive={rarity === 'Epic'} onClick={() => handleRarity('Epic')}>
                     Epic
                 </Button>
                 {needSpecials && (
                     <Button
+                        w={{ base: '100%', lg: 'unset' }}
                         size="sm"
                         bgColor={bgButtons}
                         isActive={rarity === 'Special'}
