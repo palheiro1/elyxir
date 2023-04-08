@@ -1,9 +1,30 @@
+import { memo, useMemo, useEffect, useState } from 'react';
 import { Box, Stack, Switch, Text } from '@chakra-ui/react';
 import VerticalMenuButtons from './VerticalMenuButtons';
+import { BLOCKTIME } from '../../../data/CONSTANTS';
 
-const NormalMenu = ({ option, setOption, handleLogout, showAllCards, handleShowAllCards, nextBlock, children }) => {
-    const blockTime = nextBlock === 0 ? 'SOON' : nextBlock;
+const NormalMenu = memo(({ option, setOption, handleLogout, showAllCards, handleShowAllCards, nextBlock, children }) => {
+
+    const [actualBlock, setActualBlock] = useState(nextBlock);
+    const [timer, setTimer] = useState(BLOCKTIME);
+    const timeText = timer === 0 ? 'SOON' : timer;
+    const memoChildren = useMemo(() => children, [children]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (actualBlock === nextBlock) {
+                if (timer <= 0) return;
+                setTimer(timer - 1);
+            } else {
+                setActualBlock(nextBlock);
+                setTimer(BLOCKTIME);
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [timer, actualBlock, nextBlock]);
     return (
+
+
         <Stack direction="row">
             <Box>
                 <VerticalMenuButtons
@@ -14,7 +35,7 @@ const NormalMenu = ({ option, setOption, handleLogout, showAllCards, handleShowA
                 />
 
                 <Text fontWeight="bold" textAlign="center" fontSize="2xs" mt={2}>
-                    Block in... {blockTime}
+                    Block in... {timeText}
                 </Text>
 
                 <Stack p={2} align="center">
@@ -27,10 +48,10 @@ const NormalMenu = ({ option, setOption, handleLogout, showAllCards, handleShowA
 
             {/* This is the main section */}
             <Box w="100%" p={2}>
-                {children}
+                {memoChildren}
             </Box>
         </Stack>
     );
-};
+});
 
 export default NormalMenu;

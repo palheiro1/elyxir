@@ -28,7 +28,6 @@ import { isNotLogged } from '../../utils/validators';
 // -----------------------------------------------------------------
 // Data
 import {
-    BLOCKTIME,
     COLLECTIONACCOUNT,
     GEMASSETACCOUNT,
     NQTDIVIDER,
@@ -37,6 +36,7 @@ import {
     REFRESH_UNWRAP_TIME,
     TARASCACARDACCOUNT,
 } from '../../data/CONSTANTS';
+
 import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 
 // Services
@@ -123,7 +123,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Blockchain status
     const [blockchainStatus, setBlockchainStatus] = useState({
         prev_height: 0,
-        timer: BLOCKTIME,
         epoch_beginning: Date.UTC(2018, 0, 1, 0, 0, 0),
     });
 
@@ -308,7 +307,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     setBlockchainStatus({
                         ...blockchainStatus,
                         prev_height: nBlocks,
-                        timer: BLOCKTIME,
                     });
                 }
             } catch (error) {
@@ -323,17 +321,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         }, REFRESH_BLOCK_TIME);
 
         return () => clearInterval(intervalId);
-    }, [blockchainStatus]);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (blockchainStatus.timer <= 0) return;
-            setBlockchainStatus({
-                ...blockchainStatus,
-                timer: blockchainStatus.timer - 1,
-            });
-        }, 1000);
-        return () => clearInterval(interval);
     }, [blockchainStatus]);
 
     // -----------------------------------------------------------------
@@ -436,7 +423,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     showAllCards={showAllCards}
                     handleShowAllCards={handleShowAllCards}
                     goToSection={handleChangeOption}
-                    nextBlock={blockchainStatus.timer}
+                    nextBlock={blockchainStatus.prev_height}
                 />
             </Box>
 
