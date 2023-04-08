@@ -33,7 +33,6 @@ import { checkPin } from '../../../../utils/walletUtils';
  * @version 1.0
  */
 const CancelDialog = ({ reference, isOpen, onClose, username, selectedOrder }) => {
-    console.log("🚀 ~ file: CancelDialog.js:36 ~ CancelDialog ~ isOpen:", isOpen)
     const toast = useToast();
     const [passphrase, setPassphrase] = useState('');
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
@@ -43,7 +42,6 @@ const CancelDialog = ({ reference, isOpen, onClose, username, selectedOrder }) =
     if (!selectedOrder) return;
     const { order, isAsk } = selectedOrder;
     const typeTrade = isAsk ? 'ask' : 'bid';
-    console.log("🚀 ~ file: CancelDialog.js:46 ~ CancelDialog ~ typeTrade:", typeTrade)
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
