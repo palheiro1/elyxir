@@ -27,8 +27,6 @@ const AskAndBidList = ({ orders, name, username, canDelete = false }) => {
     const [selectedOrder, setSelectedOrder] = useState();
 
     const handleDelete = (value) => {
-        console.log("🚀 ~ file: AskAndBidList.js:24 ~ AskAndBidList ~ canDelete:", canDelete)
-        console.log("🚀 ~ file: AskAndBidList.js:30 ~ handleDelete ~ value:", value)
         setSelectedOrder(value);
         onOpen();
     }
