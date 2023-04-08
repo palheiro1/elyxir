@@ -135,11 +135,7 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
 
     useEffect(() => {
         const checkDisabled = () => {
-            const auxIsDisabled =
-                !isValidPin || !isValidArdorAccount || !passphrase || !input.value || input.value > maxCurrency;
-            console.log('🚀 ~ file: SendCurrencyDialog.js:140 ~ checkDisabled ~ auxIsDisabled:', auxIsDisabled);
-
-            setIsDisabled(auxIsDisabled);
+            setIsDisabled(!isValidPin || !isValidArdorAccount || !passphrase || !input.value || input.value > maxCurrency);
         };
         checkDisabled();
     }, [isValidPin, isValidArdorAccount, passphrase, input.value, maxCurrency]);
