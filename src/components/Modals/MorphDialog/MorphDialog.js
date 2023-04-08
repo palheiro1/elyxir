@@ -75,7 +75,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
 
     const infoMsg =
-        "For every 5 identical cards you sacrifice you will be rewarded with a card of higher ratity. The crafting costs depende on the sacrificed card's rarity.";
+        "Morph your card to one random card of the same rarity. If the random card would be the same card that you morphed, there is a small chance to get an additional random card back.";
 
     useEffect(() => {
         const { rarity } = card;

@@ -28,7 +28,6 @@ import { isNotLogged } from '../../utils/validators';
 // -----------------------------------------------------------------
 // Data
 import {
-    BLOCKTIME,
     COLLECTIONACCOUNT,
     GEMASSETACCOUNT,
     NQTDIVIDER,
@@ -37,6 +36,7 @@ import {
     REFRESH_UNWRAP_TIME,
     TARASCACARDACCOUNT,
 } from '../../data/CONSTANTS';
+
 import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 
 // Services
@@ -123,7 +123,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Blockchain status
     const [blockchainStatus, setBlockchainStatus] = useState({
         prev_height: 0,
-        timer: BLOCKTIME,
         epoch_beginning: Date.UTC(2018, 0, 1, 0, 0, 0),
     });
 
@@ -306,8 +305,8 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 if (blockchainStatus.prev_height !== nBlocks) {
                     console.log('Mythical Beings: New block detected!');
                     setBlockchainStatus({
+                        ...blockchainStatus,
                         prev_height: nBlocks,
-                        timer: BLOCKTIME,
                     });
                 }
             } catch (error) {
@@ -324,24 +323,13 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         return () => clearInterval(intervalId);
     }, [blockchainStatus]);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (blockchainStatus.timer <= 0) return;
-            setBlockchainStatus({
-                ...blockchainStatus,
-                timer: blockchainStatus.timer - 1,
-            });
-        }, 1000);
-        return () => clearInterval(interval);
-    }, [blockchainStatus]);
-
     // -----------------------------------------------------------------
     // Check for new cards notifications
     // -----------------------------------------------------------------
 
     useEffect(() => {
-        if (cardsNotification.length > 0) onOpenCardReceived();
-    }, [cardsNotification, onOpenCardReceived]);
+        if (cardsNotification.length > 0 && !isOpenCardReceived) onOpenCardReceived();
+    }, [cardsNotification, onOpenCardReceived, isOpenCardReceived]);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -435,18 +423,20 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     showAllCards={showAllCards}
                     handleShowAllCards={handleShowAllCards}
                     goToSection={handleChangeOption}
-                    nextBlock={blockchainStatus.timer}
+                    nextBlock={blockchainStatus.prev_height}
                 />
             </Box>
 
             {/* DIALOGS */}
             <BuyPackDialog isOpen={isOpen} onClose={onClose} reference={buyRef} infoAccount={infoAccount} />
-            <CardReceived
-                isOpen={isOpenCardReceived}
-                onClose={handleOnCloseCardReceived}
-                reference={cardReceivedRef}
-                cards={cardsNotification}
-            />
+            {isOpenCardReceived && cardsNotification.length > 0 && (
+                <CardReceived
+                    isOpen={isOpenCardReceived}
+                    onClose={handleOnCloseCardReceived}
+                    reference={cardReceivedRef}
+                    cards={cardsNotification}
+                />
+            )}
         </>
     );
 });

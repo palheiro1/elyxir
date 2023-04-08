@@ -50,7 +50,7 @@ export const getThumbsImage = name => {
 };
 
 export const getAsset = (asset, collectionCardsStatic) => {
-    return asset === GEMASSET ? 'GEM' : collectionCardsStatic.find(card => card.asset === asset);
+    return (asset === GEMASSET ? 'GEM' : collectionCardsStatic.find(card => card.asset === asset)) || "Unknown";
 };
 
 // -------------------------------------------------
