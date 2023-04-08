@@ -306,6 +306,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 if (blockchainStatus.prev_height !== nBlocks) {
                     console.log('Mythical Beings: New block detected!');
                     setBlockchainStatus({
+                        ...blockchainStatus,
                         prev_height: nBlocks,
                         timer: BLOCKTIME,
                     });
@@ -340,8 +341,8 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
 
     useEffect(() => {
-        if (cardsNotification.length > 0) onOpenCardReceived();
-    }, [cardsNotification, onOpenCardReceived]);
+        if (cardsNotification.length > 0 && !isOpenCardReceived) onOpenCardReceived();
+    }, [cardsNotification, onOpenCardReceived, isOpenCardReceived]);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -441,12 +442,14 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
             {/* DIALOGS */}
             <BuyPackDialog isOpen={isOpen} onClose={onClose} reference={buyRef} infoAccount={infoAccount} />
-            <CardReceived
-                isOpen={isOpenCardReceived}
-                onClose={handleOnCloseCardReceived}
-                reference={cardReceivedRef}
-                cards={cardsNotification}
-            />
+            {isOpenCardReceived && cardsNotification.length > 0 && (
+                <CardReceived
+                    isOpen={isOpenCardReceived}
+                    onClose={handleOnCloseCardReceived}
+                    reference={cardReceivedRef}
+                    cards={cardsNotification}
+                />
+            )}
         </>
     );
 });
