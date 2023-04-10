@@ -19,6 +19,7 @@ import ShowTransactions from './ShowTransactions';
 import Loader from './Loader';
 import TopBar from './TopBar';
 import ShowDividends from './ShowDividens';
+import { isMBAsset } from '../../../utils/cardsUtils';
 
 /**
  * @name History
@@ -55,13 +56,11 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
      * 14. IncomingGiftzOrder
      *
      */
-
     const [transactions, setTransactions] = useState([]);
     const [dividends, setDividends] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState(transactions);
     const [filteredDividends, setFilteredDividends] = useState(dividends);
 
-    //const [blockchainStatus, setBlockchainStatus] = useState({});
     const [needReload, setNeedReload] = useState(true);
     const [lastConfirmation, setLastConfirmation] = useState(false);
     const [section, setSection] = useState('transactions'); // transactions/dividends
@@ -72,22 +71,6 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
     // -------------------------------------------------
     const epoch_beginning = useMemo(() => new Date(Date.UTC(2018, 0, 1, 0, 0, 0)), []);
 
-    /*
-    useEffect(() => {
-        const fetchBlockchainStatus = async () => {
-            const response = await getBlockchainStatus();
-
-            setBlockchainStatus({
-                status: response.data,
-                epoch_beginning: new Date(
-                    response.data.isTestnet ? Date.UTC(2017, 11, 26, 14, 0, 0) : Date.UTC(2018, 0, 1, 0, 0, 0)
-                ),
-            });
-        };
-
-        fetchBlockchainStatus();
-    }, []);
-    */
     useEffect(() => {
         const checkConfirmation = () => {
             if (haveUnconfirmed) {
@@ -111,46 +94,48 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
             const dirtyTransactions = infoAccount.transactions;
 
             dirtyTransactions.forEach(tx => {
-                const timestamp = getTxTimestamp(tx, epoch_beginning);
-                const type = tx.type;
-                const subtype = tx.subtype;
-                let handler = null;
+                if (isMBAsset(tx.attachment.asset)) {
+                    const timestamp = getTxTimestamp(tx, epoch_beginning);
+                    const type = tx.type;
+                    const subtype = tx.subtype;
+                    let handler = null;
 
-                switch (type) {
-                    case 0:
-                        if (subtype === 0)
-                            // Money transfer
-                            handler = handleType0AndSubtype0(tx, timestamp, infoAccount);
-                        break;
-                    case 1:
-                        if (subtype === 0)
-                            // Message
-                            handler = handleType1AndSubtype0(tx, timestamp, infoAccount);
-                        break;
-                    case 2:
-                        if (subtype === 1)
-                            // GEM & Card transfer
-                            handler = handleType2AndSubtype1(tx, timestamp, infoAccount, collectionCardsStatic);
-                        if (subtype === 2 || subtype === 3)
-                            // GEM & Card exchange
-                            handler = handleType2AndSubtype2And3(tx, timestamp, infoAccount, collectionCardsStatic);
-                        if (subtype === 4 || subtype === 5)
-                            // Cancelled order
-                            handler = handleType2AndSubtype4And5(tx, timestamp, infoAccount);
-                        break;
-                    case 5:
-                        if (subtype === 3)
-                            // Currency transfer
-                            handler = handleType5AndSubtype3(tx, timestamp, infoAccount);
-                        if (subtype === 5 && tx.senderRS === infoAccount.accountRs)
-                            // Incoming GIFTZ (NOT WORKING)
-                            handler = handleIncomingGIFTZ(tx, timestamp, infoAccount);
-                        break;
-                    default:
-                        break;
+                    switch (type) {
+                        case 0:
+                            if (subtype === 0)
+                                // Money transfer
+                                handler = handleType0AndSubtype0(tx, timestamp, infoAccount);
+                            break;
+                        case 1:
+                            if (subtype === 0)
+                                // Message
+                                handler = handleType1AndSubtype0(tx, timestamp, infoAccount);
+                            break;
+                        case 2:
+                            if (subtype === 1)
+                                // GEM & Card transfer
+                                handler = handleType2AndSubtype1(tx, timestamp, infoAccount, collectionCardsStatic);
+                            if (subtype === 2 || subtype === 3)
+                                // GEM & Card exchange
+                                handler = handleType2AndSubtype2And3(tx, timestamp, infoAccount, collectionCardsStatic);
+                            if (subtype === 4 || subtype === 5)
+                                // Cancelled order
+                                handler = handleType2AndSubtype4And5(tx, timestamp, infoAccount);
+                            break;
+                        case 5:
+                            if (subtype === 3)
+                                // Currency transfer
+                                handler = handleType5AndSubtype3(tx, timestamp, infoAccount);
+                            if (subtype === 5 && tx.senderRS === infoAccount.accountRs)
+                                // Incoming GIFTZ (NOT WORKING)
+                                handler = handleIncomingGIFTZ(tx, timestamp, infoAccount);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (handler) newTransactions.push(handler);
                 }
-
-                if (handler) newTransactions.push(handler);
             });
 
             setDividends(infoAccount.dividends);

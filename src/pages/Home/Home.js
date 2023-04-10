@@ -28,6 +28,7 @@ import { isNotLogged } from '../../utils/validators';
 // -----------------------------------------------------------------
 // Data
 import {
+    ASSETS_IDS,
     COLLECTIONACCOUNT,
     GEMASSETACCOUNT,
     NQTDIVIDER,
@@ -360,7 +361,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
 
     useEffect(() => {
-        const haveUnconfirmed = infoAccount.unconfirmedTxs && infoAccount.unconfirmedTxs.length > 0;
+        //const haveUnconfirmed = infoAccount.unconfirmedTxs && infoAccount.unconfirmedTxs.length > 0;
+        // Check all array with include ASSETS_ID
+        const haveUnconfirmed = infoAccount.unconfirmedTxs.filter(tx => tx.attachment && ASSETS_IDS.includes(tx.attachment.asset)).length > 0;
 
         const components = [
             <Overview blockchainStatus={blockchainStatus} />, // Option 0 - Overview
