@@ -94,7 +94,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
             const dirtyTransactions = infoAccount.transactions;
 
             dirtyTransactions.forEach(tx => {
-                if (isMBAsset(tx.attachment.asset)) {
+                if (isMBAsset(tx.attachment.asset) || !tx.attachment.asset) {
                     const timestamp = getTxTimestamp(tx, epoch_beginning);
                     const type = tx.type;
                     const subtype = tx.subtype;
