@@ -64,12 +64,6 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0, blockchainStatus = {} 
             const minutes = Math.floor((delta % (60 * 60)) / 60);
 
             setJackpotTimer({ days, hours, minutes, remainingBlocks });
-            console.log(
-                '🚀 ~ file: JackpotWidget.js:67 ~ getJackpotTimer ~ days, hours, minutes:',
-                days,
-                hours,
-                minutes
-            );
         };
 
         blockchainStatus && getJackpotTimer();
