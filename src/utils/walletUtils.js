@@ -18,7 +18,7 @@ import {
     transferCurrencyZeroFee,
     transferGEM,
 } from '../services/Ardor/ardorInterface';
-import { getAsset } from './cardsUtils';
+import { getAsset, isMBAsset } from './cardsUtils';
 import { handleConfirmateNotification, handleNewIncomingNotification, handleNewOutcomingNotification } from './alerts';
 import { generateHash } from './hash';
 
@@ -75,7 +75,7 @@ export const handleNotifications = ({
     // Check for new transactions
     for (const tx of newsTransactions) {
         const index = auxUnconfirmed.findIndex(t => t.fullHash === tx.fullHash);
-        if (index === -1) {
+        if (index === -1 && isMBAsset(tx.attachment.asset)) {
             const isIncoming = tx.recipientRS === accountRs;
             if (isIncoming) {
                 counterIncomings++;
@@ -92,12 +92,12 @@ export const handleNotifications = ({
     const cardsForNotify = [...cardsNotification];
     for (const tx of auxUnconfirmed) {
         const index = newsTransactions.findIndex(t => t.fullHash === tx.fullHash);
-        if (index === -1) {
+        if (index === -1 && isMBAsset(tx.attachment.asset)) {
             const isIncoming = tx.recipientRS === accountRs;
             const asset = getAsset(tx.attachment.asset, cards);
             const amount = Number(tx.attachment.quantityQNT);
 
-            if (asset && asset !== 'GEM' && isIncoming) {
+            if (asset && asset !== 'GEM' && asset !== "Unknown" && isIncoming) {
                 cardsForNotify.push({ asset, amount });
             } else {
                 handleConfirmateNotification(tx, isIncoming, toast, confirmedTransactionRef);

@@ -1,4 +1,5 @@
 import {
+    ASSETS_IDS,
     BUYPACKACCOUNT,
     CATOBLEPASASSETWRONG,
     CURRENCY,
@@ -50,7 +51,9 @@ export const getThumbsImage = name => {
 };
 
 export const getAsset = (asset, collectionCardsStatic) => {
-    return (asset === GEMASSET ? 'GEM' : collectionCardsStatic.find(card => card.asset === asset)) || "Unknown";
+    if (isMBAsset(asset))
+        return (asset === GEMASSET ? 'GEM' : collectionCardsStatic.find(card => card.asset === asset)) || 'Unknown';
+    else return 'Unknown';
 };
 
 // -------------------------------------------------
@@ -160,7 +163,7 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
             lastPrice = 0;
             if (lastTradesResponse.trades.length > 0) {
                 const auxLastPrice = lastTradesResponse.trades[0].priceNQTPerShare / NQTDIVIDER;
-                lastPrice = Number.isInteger(auxLastPrice) ? auxLastPrice : auxLastPrice.toFixed(2)
+                lastPrice = Number.isInteger(auxLastPrice) ? auxLastPrice : auxLastPrice.toFixed(2);
             }
         }
 
@@ -191,4 +194,12 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
             bidOrders: bidOrders,
         };
     }
+};
+
+// -------------------------------------------------
+//               CHECK IF IS MB ASSET
+// -------------------------------------------------
+
+export const isMBAsset = asset => {
+    return ASSETS_IDS.includes(asset);
 };

@@ -27,7 +27,6 @@ import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/
  * <JackpotWidget cStyle = 2 /> // Style for the jackpot page
  */
 const JackpotWidget = ({ cStyle = 1, numParticipants = 0, blockchainStatus = {} }) => {
-
     const [jackpotTimer, setJackpotTimer] = useState({
         days: 0,
         hours: 0,
@@ -52,46 +51,13 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0, blockchainStatus = {} 
         fetchJackpotBalance();
     }, []);
 
-    /*
-    useEffect(() => {
-        const getJackpotStatus = async () => {
-            const response = await getBlockchainStatus();
-
-            if (jackpotStatus.prev_height !== response.data.numberOfBlocks) {
-                setJackpotStatus({
-                    prev_height: response.data.numberOfBlocks,
-                    status: response.data,
-                    timer: BLOCKTIME,
-                });
-            }
-        };
-
-        getJackpotStatus();
-
-        const interval = setInterval(() => {
-            getJackpotStatus();
-        }, 12500);
-        return () => clearInterval(interval);
-    }, [jackpotStatus.prev_height]);
-    
-    
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setJackpotStatus({
-                ...jackpotStatus,
-                timer: jackpotStatus.timer - 1,
-            });
-        }, 1000);
-        return () => clearInterval(interval);
-    }, [jackpotStatus]);
-    */
-
     useEffect(() => {
         const getJackpotTimer = () => {
             const modulo = blockchainStatus.prev_height % FREQUENCY;
             const remainingBlocks = FREQUENCY - modulo;
             const remainingSecs = remainingBlocks * BLOCKTIME;
-            const delta = Number(remainingSecs - (BLOCKTIME - blockchainStatus.timer));
+            //const delta = Number(remainingSecs - (BLOCKTIME - blockchainStatus.timer));
+            const delta = Number(remainingSecs - BLOCKTIME);
 
             const days = Math.floor(delta / (24 * 60 * 60));
             const hours = Math.floor((delta % (24 * 60 * 60)) / (60 * 60));
@@ -133,35 +99,33 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0, blockchainStatus = {} 
                 </Box>
             )}
             {cStyle === 2 && (
-                <>
-                    <Center my={4} mb={8}>
-                        <Grid
-                            templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
-                            border="1px"
-                            borderColor={borderColor}
-                            rounded="lg"
-                            bg="blackAlpha"
-                            shadow="dark-lg"
-                            direction="row">
-                            <GridItem colSpan={2} p={4} borderLeftRadius="lg">
-                                <HCountdown
-                                    jackpotTimer={jackpotTimer}
-                                    numParticipants={numParticipants}
-                                    jackpotBalance={jackpotBalance}
-                                    jackpotBalanceUSD={jackpotBalanceUSD}
-                                />
-                            </GridItem>
+                <Center my={4} mb={8}>
+                    <Grid
+                        templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
+                        border="1px"
+                        borderColor={borderColor}
+                        rounded="lg"
+                        bg="blackAlpha"
+                        shadow="dark-lg"
+                        direction="row">
+                        <GridItem colSpan={2} p={4} borderLeftRadius="lg">
+                            <HCountdown
+                                jackpotTimer={jackpotTimer}
+                                numParticipants={numParticipants}
+                                jackpotBalance={jackpotBalance}
+                                jackpotBalanceUSD={jackpotBalanceUSD}
+                            />
+                        </GridItem>
 
-                            <GridItem
-                                colSpan={{ base: 1, md: 2, lg: 1 }}
-                                p={4}
-                                borderRightRadius={{ base: 'none', md: 'none', lg: 'lg' }}
-                                bgColor={bgColor}>
-                                <BlockInfo jackpotStatus={blockchainStatus} jackpotTimer={jackpotTimer} cStyle={cStyle} />
-                            </GridItem>
-                        </Grid>
-                    </Center>
-                </>
+                        <GridItem
+                            colSpan={{ base: 1, md: 2, lg: 1 }}
+                            p={4}
+                            borderRightRadius={{ base: 'none', md: 'none', lg: 'lg' }}
+                            bgColor={bgColor}>
+                            <BlockInfo jackpotStatus={blockchainStatus} jackpotTimer={jackpotTimer} cStyle={cStyle} />
+                        </GridItem>
+                    </Grid>
+                </Center>
             )}
         </>
     );
