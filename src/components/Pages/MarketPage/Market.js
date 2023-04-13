@@ -27,8 +27,16 @@ const Market = ({ infoAccount, cards, gemCards }) => {
     // Filtered cards
     const [cardsFiltered, setCardsFiltered] = useState(cards);
 
+    const syleOption2 = {
+        base: '100%',
+        md: '80%',
+        lg: '70vw',
+        xl: '75vw',
+        '2xl': '100%',
+    };
+
     return (
-        <Box maxW={{ base: '100%', md: '80%', lg: '70vw', xl: '75vw', '2xl': '100%' }}>
+        <Box maxW={option === 2 ? syleOption2 : '100%'}>
             <GemWidget username={infoAccount.name} gemCards={gemCards} IGNISBalance={infoAccount.IGNISBalance} />
             <SectionSwitch option={option} setOption={setOption} />
 
