@@ -4,7 +4,7 @@ export const handleNewIncomingNotification = (tx, isIncoming, toast, counter, re
             title: 'New incoming transactions',
             description: `New incoming transactions waiting for confirmation (${counter})`,
             status: 'info',
-            duration: 25000,
+            duration: 8000,
             isClosable: true,
             position: 'bottom-right',
         });
@@ -26,7 +26,7 @@ export const handleNewOutcomingNotification = (tx, isIncoming, toast, counter, r
             title: 'New outgoing transactions',
             description: `New outgoing transactions waiting for confirmation (${counter})`,
             status: 'info',
-            duration: 25000,
+            duration: 8000,
             isClosable: true,
             position: 'bottom-right',
         });

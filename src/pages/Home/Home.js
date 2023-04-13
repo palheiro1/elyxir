@@ -210,7 +210,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             // -----------------------------------------------------------------
             // Check notifications - Unconfirmed transactions
             const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
-            console.log('🚀 ~ file: Home.js:212 ~ loadAll ~ unconfirmedTxs:', unconfirmedTxs);
             handleNotifications({
                 unconfirmedTransactions,
                 newsTransactions: unconfirmedTxs,
