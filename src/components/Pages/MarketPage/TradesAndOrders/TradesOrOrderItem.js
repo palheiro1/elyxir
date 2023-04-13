@@ -1,4 +1,6 @@
-import { Stack, Td, Text, Tr, useColorModeValue } from '@chakra-ui/react';
+import { Stack, Text, useColorModeValue } from '@chakra-ui/react';
+import { Td } from '../../../ResponsiveTable/td';
+import { Tr } from '../../../ResponsiveTable/tr';
 import InOutTransaction from '../../../Tables/InOutTransaction';
 
 import { FaCoins } from 'react-icons/fa';
