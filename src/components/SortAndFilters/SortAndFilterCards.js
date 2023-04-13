@@ -18,7 +18,7 @@ import Crypto from 'crypto-browserify';
 const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true, needSorting = true }) => {
     const bgButtons = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
     const [rarity, setRarity] = useState('All');
-    const [sort, setSort] = useState('none');
+    const [sort, setSort] = useState('moreQuantity');
     const [needReload, setNeedReload] = useState(true);
     const [actualCards, setActualCards] = useState(cards);
     const [cardsHash, setCardsHash] = useState('');
@@ -94,7 +94,6 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
                         Sort:{' '}
                     </Text>
                     <Select border="0px" borderColor="gray.800" size="xs" onChange={handleChange}>
-                        <option value="none">None</option>
                         <option value="moreQuantity">Descending</option>
                         <option value="lessQuantity">Acending</option>
                     </Select>

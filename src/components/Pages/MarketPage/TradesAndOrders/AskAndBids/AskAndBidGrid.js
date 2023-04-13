@@ -31,7 +31,7 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
 
     return (
         <>
-            <SimpleGrid columns={{ base: 1, md: columns }} mt={2}>
+            <SimpleGrid columns={{ base: 1, lg: columns }} mt={2}>
                 <AskBidTable
                     type={'Asks'}
                     onlyOneAsset={onlyOneAsset}

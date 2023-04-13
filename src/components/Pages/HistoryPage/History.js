@@ -1,9 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-
 import { Box } from '@chakra-ui/react';
-
-// import { getBlockchainStatus } from '../../../services/Ardor/ardorInterface';
-import { getTxTimestamp } from '../../../utils/txUtils';
 
 import {
     handleIncomingGIFTZ,
@@ -20,6 +16,7 @@ import Loader from './Loader';
 import TopBar from './TopBar';
 import ShowDividends from './ShowDividens';
 import { isMBAsset } from '../../../utils/cardsUtils';
+import { getTxTimestamp } from '../../../utils/txUtils';
 
 /**
  * @name History

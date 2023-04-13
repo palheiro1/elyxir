@@ -30,6 +30,7 @@ import { isNotLogged } from '../../utils/validators';
 import {
     ASSETS_IDS,
     COLLECTIONACCOUNT,
+    CURRENCY,
     GEMASSETACCOUNT,
     NQTDIVIDER,
     REFRESH_BLOCK_TIME,
@@ -363,7 +364,12 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     useEffect(() => {
         //const haveUnconfirmed = infoAccount.unconfirmedTxs && infoAccount.unconfirmedTxs.length > 0;
         // Check all array with include ASSETS_ID
-        const haveUnconfirmed = infoAccount.unconfirmedTxs ? infoAccount.unconfirmedTxs.filter(tx => tx.attachment && ASSETS_IDS.includes(tx.attachment.asset)).length > 0 : false;
+        const haveUnconfirmed = infoAccount.unconfirmedTxs
+            ? infoAccount.unconfirmedTxs.filter(
+                  tx =>
+                      tx.attachment && (ASSETS_IDS.includes(tx.attachment.asset) || tx.attachment.currency === CURRENCY)
+              ).length > 0
+            : false;
 
         const components = [
             <Overview blockchainStatus={blockchainStatus} />, // Option 0 - Overview

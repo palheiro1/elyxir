@@ -64,15 +64,15 @@ const GemWidget = ({ username, gemCards = [], IGNISBalance }) => {
 
     return (
         <>
-            <Center mt={4}>
+            <Center mt={4} w="100%">
                 <Grid
-                    templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
+                    templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}
                     border="1px"
                     borderColor="whiteAlpha.300"
                     rounded="lg"
                     bg="blackAlpha"
                     shadow="lg"
-                    w={{ base: '100%', md: 'unset' }}
+                    w={{ base: '100%', xl: 'unset' }}
                     direction="row">
                     <GridItem colSpan={2} p={4} borderLeftRadius="lg">
                         <Center>
@@ -122,13 +122,15 @@ const GemWidget = ({ username, gemCards = [], IGNISBalance }) => {
                     <GridItem bgColor={bgColor} p={4} borderRightRadius="lg">
                         <Center
                             h="100%"
+                            fontSize={{ base: '2xl', xl: 'xl' }}
                             fontWeight="bolder"
                             textTransform="full-width"
                             onClick={onOpen}
+                            textAlign="center"
                             style={hover ? hoverStyle : initialStyle}
                             onMouseEnter={() => setHover(true)}
                             onMouseLeave={() => setHover(false)}>
-                            TRADE NOW
+                            TRADE <br/>NOW
                         </Center>
                     </GridItem>
                 </Grid>
