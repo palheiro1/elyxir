@@ -46,13 +46,32 @@ import BidDialog from '../Modals/TradeDialog/BidDialog/BidDialog';
  * @version 1.0
  */
 const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, infoAccount }) => {
+
+    // ------------------------------
+
+    const { isOpen: isOpenCraft, onOpen: onOpenCraft, onClose: onCloseCraft } = useDisclosure();
+    const refCraft = useRef();
+
+    const { isOpen: isOpenMorph, onOpen: onOpenMorph, onClose: onCloseMorph } = useDisclosure();
+    const refMorph = useRef();
+
+    const { isOpen: isOpenSend, onOpen: onOpenSend, onClose: onCloseSend } = useDisclosure();
+    const refSend = useRef();
+
+    const { isOpen: isOpenAsk, onOpen: onOpenAsk, onClose: onCloseAsk } = useDisclosure();
+    const refAsk = useRef();
+
+    const { isOpen: isOpenBid, onOpen: onOpenBid, onClose: onCloseBid } = useDisclosure();
+    const refBid = useRef();
+
+    // ------------------------------
+
     const {
         name: username,
         IGNISBalance: ignis,
         currentAsks: askOrdersAccount,
         currentBids: bidOrdersAccount,
     } = infoAccount;
-
 
     const askOrdersForThisCard = askOrdersAccount?.filter(order => order.asset === card.asset);
     const bidOrdersForThisCard = bidOrdersAccount?.filter(order => order.asset === card.asset);
@@ -98,24 +117,9 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
 
     const haveThisCard = quantity > 0;
     const cardOpacity = haveThisCard ? 1 : 0.25;
-    // ------------------------------
-
-    const { isOpen: isOpenCraft, onOpen: onOpenCraft, onClose: onCloseCraft } = useDisclosure();
-    const refCraft = useRef();
-
-    const { isOpen: isOpenMorph, onOpen: onOpenMorph, onClose: onCloseMorph } = useDisclosure();
-    const refMorph = useRef();
-
-    const { isOpen: isOpenSend, onOpen: onOpenSend, onClose: onCloseSend } = useDisclosure();
-    const refSend = useRef();
-
-    const { isOpen: isOpenAsk, onOpen: onOpenAsk, onClose: onCloseAsk } = useDisclosure();
-    const refAsk = useRef();
-
-    const { isOpen: isOpenBid, onOpen: onOpenBid, onClose: onCloseBid } = useDisclosure();
-    const refBid = useRef();
 
     // ------------------------------
+    
     let lowedAskOrders = '';
     let highBidOrders = '';
     if (askOrders.length > 0) {
@@ -126,6 +130,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
         const auxBids = bidOrders[0].priceNQTPerShare / NQTDIVIDER;
         highBidOrders = Number.isInteger(auxBids) ? auxBids : auxBids.toFixed(2);
     }
+    
     // ------------------------------
     const unconfirmedQuantityQNT = Number(card.unconfirmedQuantityQNT);
     const isBlocked = quantity > unconfirmedQuantityQNT && unconfirmedQuantityQNT === 0;

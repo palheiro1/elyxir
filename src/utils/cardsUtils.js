@@ -51,9 +51,7 @@ export const getThumbsImage = name => {
 };
 
 export const getAsset = (asset, collectionCardsStatic) => {
-    if (isMBAsset(asset))
-        return (asset === GEMASSET ? 'GEM' : collectionCardsStatic.find(card => card.asset === asset)) || 'Unknown';
-    else return 'Unknown';
+    return (asset === GEMASSET ? 'GEM' : collectionCardsStatic.find(card => card.asset === asset)) || null;
 };
 
 // -------------------------------------------------

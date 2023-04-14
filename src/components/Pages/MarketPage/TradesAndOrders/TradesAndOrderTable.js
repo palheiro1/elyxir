@@ -52,12 +52,14 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
                             trades.map((trade, index) => {
                                 const card = getAsset(trade.asset, cards);
                                 if (card === undefined && trade.name !== 'GEM') return null;
+
                                 const type = imSeller(trade) ? 'out' : 'in';
                                 const account = imSeller(trade) ? trade.buyerRS : trade.sellerRS;
-                                const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
-                                const timestamp = getTxTimestamp(trade, eb, false);
-                                const amount =
-                                    trade.name === 'GEM' ? trade.quantityQNT / NQTDIVIDER : trade.quantityQNT;
+
+                                const timestamp = getTxTimestamp(trade, new Date(Date.UTC(2018, 0, 1, 0, 0, 0)), false);
+
+                                const { name, quantityQNT } = trade;
+                                const amount = name === 'GEM' ? quantityQNT / NQTDIVIDER : quantityQNT;
 
                                 return (
                                     <TradesOrOrderItem
