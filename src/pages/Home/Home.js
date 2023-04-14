@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, memo } from 'react';
+import { useEffect, useRef, useState, memo, useCallback, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 
@@ -30,7 +30,6 @@ import { isNotLogged } from '../../utils/validators';
 import {
     ASSETS_IDS,
     COLLECTIONACCOUNT,
-    CURRENCY,
     GEMASSETACCOUNT,
     NQTDIVIDER,
     REFRESH_BLOCK_TIME,
@@ -181,109 +180,104 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
     // Load all data from blockchain - Main flow
     // -----------------------------------------------------------------
-    useEffect(() => {
-        const loadAll = async () => {
-            console.log('Mythical Beings: Fetching all data...');
-            const { accountRs } = infoAccount;
-            setIsLoading(true);
-            setNeedReload(false);
+    const loadAll = useCallback(async () => {
+        console.log('Mythical Beings: Fetching all data...');
+        const { accountRs } = infoAccount;
+        setIsLoading(true);
+        setNeedReload(false);
 
-            // Fetch all info
-            const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades, dividends] =
-                await Promise.all([
-                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
-                    fetchGemCards(accountRs, GEMASSETACCOUNT, true),
-                    getIGNISBalance(accountRs),
-                    getGIFTZBalance(accountRs),
-                    getBlockchainTransactions(2, accountRs, true),
-                    getUnconfirmedTransactions(2, accountRs),
-                    getCurrentAskAndBids(accountRs),
-                    getTrades(2, accountRs),
-                    getAccountLedger({
-                        accountRs: accountRs,
-                        firstIndex: 0,
-                        lastIndex: 99,
-                        eventType: 'ASSET_DIVIDEND_PAYMENT',
-                    }),
-                ]);
+        // Fetch all info
+        const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades, dividends] =
+            await Promise.all([
+                fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
+                fetchGemCards(accountRs, GEMASSETACCOUNT, true),
+                getIGNISBalance(accountRs),
+                getGIFTZBalance(accountRs),
+                getBlockchainTransactions(2, accountRs, true),
+                getUnconfirmedTransactions(2, accountRs),
+                getCurrentAskAndBids(accountRs),
+                getTrades(2, accountRs),
+                getAccountLedger({
+                    accountRs: accountRs,
+                    firstIndex: 0,
+                    lastIndex: 99,
+                    eventType: 'ASSET_DIVIDEND_PAYMENT',
+                }),
+            ]);
 
-            // -----------------------------------------------------------------
-            // Check notifications - Unconfirmed transactions
-            const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
-            handleNotifications({
-                unconfirmedTransactions,
-                newsTransactions: unconfirmedTxs,
-                accountRs,
-                cardsNotification,
-                setCardsNotification,
-                toast,
-                cards,
-                setUnconfirmedTransactions,
-                newTransactionRef,
-                confirmedTransactionRef,
-            });
-            // -----------------------------------------------------------------
+        // -----------------------------------------------------------------
+        // Check notifications - Unconfirmed transactions
+        const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
+        console.log('🚀 ~ file: Home.js:212 ~ loadAll ~ unconfirmedTxs:', unconfirmedTxs);
+        handleNotifications({
+            unconfirmedTransactions,
+            newsTransactions: unconfirmedTxs,
+            accountRs,
+            cardsNotification,
+            setCardsNotification,
+            toast,
+            cards,
+            setUnconfirmedTransactions,
+            newTransactionRef,
+            confirmedTransactionRef,
+        });
+        // -----------------------------------------------------------------
 
-            const auxDividends = dividends.entries;
+        const auxDividends = dividends.entries;
+        const auxDividendsPromises = auxDividends.map(dividend => getTransaction(2, dividend.eventHash));
+        const dividendsTxs = await Promise.all(auxDividendsPromises);
 
-            const auxDividendsPromises = auxDividends.map(dividend => getTransaction(2, dividend.eventHash));
-            const dividendsTxs = await Promise.all(auxDividendsPromises);
+        // Search in cards attachment.asset and add to dividends
+        dividendsTxs.forEach((dividendTx, index) => {
+            const { attachment } = dividendTx;
+            const card = loadCards.find(card => card.asset === attachment.asset);
+            if (card) {
+                auxDividends[index].card = card;
+            }
+        });
 
-            // Search in cards attachment.asset and add to dividends
-            dividendsTxs.forEach((dividendTx, index) => {
-                const { attachment } = dividendTx;
-                const card = loadCards.find(card => card.asset === attachment.asset);
-                if (card) {
-                    auxDividends[index].card = card;
-                }
-            });
+        // -----------------------------------------------------------------
+        // Rebuild infoAccount
+        // -----------------------------------------------------------------
 
-            // -----------------------------------------------------------------
-            // Rebuild infoAccount
-            // -----------------------------------------------------------------
-
-            const _auxInfo = {
-                ...infoAccount,
-                IGNISBalance: ignis,
-                GIFTZBalance: giftz.unitsQNT || 0,
-                GEMSBalance: gems[0].quantityQNT / NQTDIVIDER,
-                transactions: txs.transactions,
-                dividends: auxDividends,
-                unconfirmedTxs: unconfirmedTxs,
-                currentAsks: currentAskOrBids.askOrders,
-                currentBids: currentAskOrBids.bidOrders,
-                trades: trades.trades,
-            };
-
-            // -----------------------------------------------------------------
-            // Get all hashes and compare
-            // -----------------------------------------------------------------
-            checkDataChange('Cards', cardsHash, setCards, setCardsHash, loadCards);
-            checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems[0]);
-            checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
-
-            setIsLoading(false);
+        const _auxInfo = {
+            ...infoAccount,
+            IGNISBalance: ignis,
+            GIFTZBalance: giftz.unitsQNT || 0,
+            GEMSBalance: gems[0].quantityQNT / NQTDIVIDER,
+            transactions: txs.transactions,
+            dividends: auxDividends,
+            unconfirmedTxs: unconfirmedTxs,
+            currentAsks: currentAskOrBids.askOrders,
+            currentBids: currentAskOrBids.bidOrders,
+            trades: trades.trades,
         };
 
-        if (infoAccount.accountRs && needReload && !isLoading) {
-            loadAll();
-        }
+        // -----------------------------------------------------------------
+        // Get all hashes and compare
+        // -----------------------------------------------------------------
+        checkDataChange('Cards', cardsHash, setCards, setCardsHash, loadCards);
+        checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems[0]);
+        checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
+
+        setIsLoading(false);
     }, [
         infoAccount,
-        needReload,
-        isLoading,
         setInfoAccount,
         cards,
-        gemCards,
         infoAccountHash,
         cardsHash,
         gemCardsHash,
         toast,
         unconfirmedTransactions,
-        onOpenCardReceived,
         cardsNotification,
-        blockchainStatus,
     ]);
+
+    useEffect(() => {
+        if (infoAccount.accountRs && needReload && !isLoading) {
+            loadAll();
+        }
+    }, [infoAccount, needReload, isLoading, loadAll]);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -299,92 +293,101 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Check for new blocks
     // -----------------------------------------------------------------
 
-    useEffect(() => {
-        const getStatus = async () => {
-            try {
-                const auxBlockchainStatus = await getBlockchainStatus();
-                const nBlocks = auxBlockchainStatus.data.numberOfBlocks;
-                if (blockchainStatus.prev_height !== nBlocks) {
-                    console.log('Mythical Beings: New block detected!');
-                    setBlockchainStatus({
-                        ...blockchainStatus,
-                        prev_height: nBlocks,
-                    });
-                }
-            } catch (error) {
-                console.log('Mythical Beings: Error fetching blockchain status', error);
+    const getStatus = useCallback(async () => {
+        try {
+            const {
+                data: { numberOfBlocks },
+            } = await getBlockchainStatus();
+
+            if (blockchainStatus.prev_height !== numberOfBlocks) {
+                console.log('Mythical Beings: New block detected!');
+                setBlockchainStatus(prevBlockchainStatus => ({
+                    ...prevBlockchainStatus,
+                    prev_height: numberOfBlocks,
+                }));
             }
-        };
+        } catch (error) {
+            console.log('Mythical Beings: Error fetching blockchain status', error);
+        }
+    }, [blockchainStatus]);
 
-        getStatus();
-
-        const intervalId = setInterval(async () => {
+    useEffect(() => {
+        const intervalId = setInterval(() => {
             getStatus();
         }, REFRESH_BLOCK_TIME);
 
         return () => clearInterval(intervalId);
-    }, [blockchainStatus]);
+    }, [getStatus]);
 
     // -----------------------------------------------------------------
     // Check for new cards notifications
     // -----------------------------------------------------------------
 
     useEffect(() => {
-        if (cardsNotification.length > 0 && !isOpenCardReceived) onOpenCardReceived();
+        if (cardsNotification.length > 0 && !isOpenCardReceived) {
+            onOpenCardReceived();
+        }
     }, [cardsNotification, onOpenCardReceived, isOpenCardReceived]);
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            newTransactionRef.current = null;
-            confirmedTransactionRef.current = null;
-        }, REFRESH_DATA_TIME * 4);
-
-        return () => clearInterval(intervalId);
+    const resetTransactionRefs = useCallback(() => {
+        newTransactionRef.current = null;
+        confirmedTransactionRef.current = null;
     }, []);
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            const checkUnwraps = async () => {
-                const { accountRs } = infoAccount;
-                const response = await processUnwrapsForAccount(accountRs);
-                if (response && response.starts) {
-                    okToast('DETECTED UNWRAP: ' + response.starts + ' transfers started.', toast);
-                }
-            };
-            checkUnwraps();
-        }, REFRESH_UNWRAP_TIME);
-
+        const intervalId = setInterval(resetTransactionRefs, REFRESH_DATA_TIME * 4);
         return () => clearInterval(intervalId);
+    }, [resetTransactionRefs]);
+
+    // -----------------------------------------------------------------
+    // Check for new unwraps
+    // -----------------------------------------------------------------
+
+    const checkUnwraps = useCallback(async () => {
+        const { accountRs } = infoAccount;
+        const response = await processUnwrapsForAccount(accountRs);
+        if (response && response.starts) {
+            okToast('DETECTED UNWRAP: ' + response.starts + ' transfers started.', toast);
+        }
     }, [infoAccount, toast]);
+
+    useEffect(() => {
+        const intervalId = setInterval(checkUnwraps, REFRESH_UNWRAP_TIME);
+        return () => clearInterval(intervalId);
+    }, [checkUnwraps]);
 
     // -----------------------------------------------------------------
     // Load component to render
     // -----------------------------------------------------------------
 
+    const haveUnconfirmed = useMemo(() => {
+        if (!infoAccount.unconfirmedTxs) {
+            return false;
+        }
+
+        return infoAccount.unconfirmedTxs.some(
+            tx => tx.attachment && (ASSETS_IDS.includes(tx.attachment.asset) || !tx.attachment.asset)
+        );
+    }, [infoAccount]);
+
+    const components = useMemo(
+        () => [
+            <Overview blockchainStatus={blockchainStatus} />,
+            <Inventory infoAccount={infoAccount} cards={cardsFiltered} />,
+            <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />,
+            <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />,
+            <Bridge infoAccount={infoAccount} cards={cardsFiltered} />,
+            <Jackpot infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />,
+            <Account infoAccount={infoAccount} />,
+            '',
+            <Exchange infoAccount={infoAccount} />,
+            <ArdorChat infoAccount={infoAccount} />,
+            <Book cards={cards} />,
+        ],
+        [infoAccount, cards, cardsFiltered, gemCards, blockchainStatus, haveUnconfirmed]
+    );
+
     useEffect(() => {
-        //const haveUnconfirmed = infoAccount.unconfirmedTxs && infoAccount.unconfirmedTxs.length > 0;
-        // Check all array with include ASSETS_ID
-        const haveUnconfirmed = infoAccount.unconfirmedTxs
-            ? infoAccount.unconfirmedTxs.filter(
-                  tx =>
-                      tx.attachment && (ASSETS_IDS.includes(tx.attachment.asset) || tx.attachment.currency === CURRENCY)
-              ).length > 0
-            : false;
-
-        const components = [
-            <Overview blockchainStatus={blockchainStatus} />, // Option 0 - Overview
-            <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // Option 1 - Inventory
-            <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />, // Option 2 - History
-            <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />, // Option 3 - Market
-            <Bridge infoAccount={infoAccount} cards={cardsFiltered} />, // Option 4 - Bridge
-            <Jackpot infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />, // Option 5 - Jackpot
-            <Account infoAccount={infoAccount} />, // Option 6 - Account
-            '', // Option 7 - Buy packs
-            <Exchange infoAccount={infoAccount} />, // Option 8 - Exchange
-            <ArdorChat infoAccount={infoAccount} />, // Option 9 - Ardor Chat
-            <Book cards={cards} />, // Option 10 - Book
-        ];
-
         const loadComponent = () => {
             if (option === 7) {
                 onOpen();
@@ -395,7 +398,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         };
 
         loadComponent();
-    }, [option, infoAccount, cards, cardsFiltered, gemCards, onOpen, lastOption, blockchainStatus]);
+    }, [option, components, onOpen, lastOption]);
 
     useEffect(() => {
         const checkAndGo = () => {

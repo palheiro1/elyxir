@@ -71,11 +71,12 @@ export const handleNotifications = ({
     const auxUnconfirmed = [...unconfirmedTransactions];
     let counterIncomings = auxUnconfirmed.filter(tx => tx.recipientRS === accountRs).length;
     let counterOutcomings = auxUnconfirmed.filter(tx => tx.senderRS === accountRs).length;
+    const isFromMB = tx => isMBAsset(tx.attachment.asset) || !tx.attachment.asset;
 
     // Check for new transactions
     for (const tx of newsTransactions) {
         const index = auxUnconfirmed.findIndex(t => t.fullHash === tx.fullHash);
-        if (index === -1 && (isMBAsset(tx.attachment.asset) || tx.attachment.currency === CURRENCY)) {
+        if (index === -1 && isFromMB(tx)) {
             const isIncoming = tx.recipientRS === accountRs;
             if (isIncoming) {
                 counterIncomings++;
@@ -92,12 +93,12 @@ export const handleNotifications = ({
     const cardsForNotify = [...cardsNotification];
     for (const tx of auxUnconfirmed) {
         const index = newsTransactions.findIndex(t => t.fullHash === tx.fullHash);
-        if (index === -1 && (isMBAsset(tx.attachment.asset) || tx.attachment.currency === CURRENCY)) {
+        if (index === -1 && isFromMB(tx)) {
             const isIncoming = tx.recipientRS === accountRs;
             const asset = getAsset(tx.attachment.asset, cards);
             const amount = Number(tx.attachment.quantityQNT);
 
-            if (asset && asset !== 'GEM' && asset !== "Unknown" && isIncoming) {
+            if (asset && asset !== 'GEM' && asset !== 'Unknown' && isIncoming) {
                 cardsForNotify.push({ asset, amount });
             } else {
                 handleConfirmateNotification(tx, isIncoming, toast, confirmedTransactionRef);
