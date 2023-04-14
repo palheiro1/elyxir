@@ -17,16 +17,26 @@ import SwapToPolygon from './SwapToPolygon';
 const Bridge = ({ infoAccount, cards }) => {
     const [option, setOption] = useState(0);
     const [swapAddresses, setSwapAddresses] = useState({ eth: '', ardor: '', isLoaded: false });
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        const getSwapAccounts = async () => {
-            const ethAddress = await getEthDepositAddress(infoAccount.accountRs);
-            const ardorAddress = await getPegAddresses();
-            setSwapAddresses({ eth: ethAddress, ardor: ardorAddress.ardorBlockedAccount, isLoaded: true });
+        const getSwapAddresses = async () => {
+            setIsLoading(true);
+            try {
+                const [ethAddress, { ardorBlockedAccount }] = await Promise.all([
+                    getEthDepositAddress(infoAccount.accountRs),
+                    getPegAddresses(),
+                ]);
+                setSwapAddresses({ eth: ethAddress, ardor: ardorBlockedAccount, isLoaded: true });
+            } catch (error) {
+                console.error(error);
+                // Manejar el error de forma adecuada
+            }
+            setIsLoading(false);
         };
 
-        !swapAddresses.isLoaded && getSwapAccounts();
-    }, [infoAccount.accountRs, swapAddresses.isLoaded]);
+        !swapAddresses.isLoaded && !isLoading && getSwapAddresses();
+    }, [infoAccount.accountRs, swapAddresses.isLoaded, isLoading]);
 
     return (
         <>
