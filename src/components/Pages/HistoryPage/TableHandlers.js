@@ -293,11 +293,7 @@ export const handleGEM = (type, amount, date, account) => {
                     <InOutTransaction type={type} />
                 </Td>
                 <Td>
-                    <Stack direction="row" align="center" spacing={24}>
-                        <Box>
-                            <GemCard />
-                        </Box>
-                    </Stack>
+                    <GemCard />
                 </Td>
                 <Td>{fixedAmount}</Td>
                 <Td>{date}</Td>
@@ -400,16 +396,7 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
                     <InOutTransaction type={type} />
                 </Td>
                 <Td>
-                    <Stack direction="row" align="center" spacing={24}>
-                        <Box>
-                            <GIFTZCard />
-                        </Box>
-                        <Box>
-                            <Text fontSize="xl" fontWeight="bold">
-                                GIFTZ
-                            </Text>
-                        </Box>
-                    </Stack>
+                    <GIFTZCard />
                 </Td>
                 <Td>{amount}</Td>
                 <Td>{date}</Td>
@@ -448,11 +435,13 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
                         <Box>
                             <IgnisCard />
                         </Box>
-                        <Box>
-                            <Text fontSize="xl" fontWeight="bold">
-                                {isJackpot ? 'Jackpot' : ''}
-                            </Text>
-                        </Box>
+                        {isJackpot && (
+                            <Box>
+                                <Text fontSize="xl" fontWeight="bold">
+                                    Jackpot
+                                </Text>
+                            </Box>
+                        )}
                     </Stack>
                 </Td>
                 <Td>{fixedAmount}</Td>
