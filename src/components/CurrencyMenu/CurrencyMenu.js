@@ -49,6 +49,12 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
             handler: () => goToSection(3),
             image: 'images/currency/GEMSicon.png',
         },
+        WETH: {
+            name: 'wETH',
+            balance: GEMSBalance,
+            handler: () => goToSection(3),
+            image: 'images/currency/GEMSicon.png',
+        },
     };
 
     const [currency, setCurrency] = useState(currencies.IGNIS);
@@ -167,6 +173,38 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                     <MenuList>
                                         <MenuItem onClick={() => handleOpenSendCurrency('GEMS')}>Send GEM</MenuItem>
                                         <MenuItem onClick={() => handleOpenGetMoreCurrency('GEMS')}>Get GEM</MenuItem>
+                                    </MenuList>
+                                </Portal>
+                            </Menu>
+                        </Center>
+                    </Box>
+                    <Box
+                        shadow="lg"
+                        border="4px"
+                        borderColor={borderColor}
+                        rounded="lg"
+                        minW="5rem"
+                        maxH={'2.2rem'}
+                        _hover={{ bg: hoverColor }}>
+                        <Center>
+                            <Menu>
+                                <MenuButton>
+                                    <Stack direction="row" align="center" mt={-2}>
+                                        <Image
+                                            ml={-5}
+                                            src="images/currency/weth.png"
+                                            alt="GEM Icon"
+                                            w="43px"
+                                            h="43px"
+                                        />
+                                        <Text pr={3}>{GEMSBalance.toFixed(0)}</Text>
+                                    </Stack>
+                                </MenuButton>
+
+                                <Portal>
+                                    <MenuList>
+                                        <MenuItem onClick={() => handleOpenSendCurrency('WETH')}>Send wETH</MenuItem>
+                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('WETH')}>Get wETH</MenuItem>
                                     </MenuList>
                                 </Portal>
                             </Menu>

@@ -15,7 +15,6 @@ import {
     Input,
     PinInput,
     PinInputField,
-    Stack,
     Text,
     useColorModeValue,
     useNumberInput,
@@ -27,29 +26,16 @@ import Hover from 'react-3d-hover';
 import { useEffect, useState } from 'react';
 import { PACKPRICE } from '../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../utils/alerts';
-import { buyPackWithGiftz, buyPackWithIgnis } from '../../../utils/cardsUtils';
+// import { buyPackWithGiftz, buyPackWithIgnis } from '../../../utils/cardsUtils';
 import { checkPin } from '../../../utils/walletUtils';
 
-/**
- * @name BuyPackDialog
- * @description This component is used to render the buy pack dialog
- * @param {Object} reference - Reference to the dialog
- * @param {Boolean} isOpen - Flag to open/close the dialog
- * @param {Function} onClose - Function to close the dialog
- * @param {Object} infoAccount - Account info
- * @returns {JSX.Element} BuyPackDialog component
- * @author Jesús Sánchez Fernández
- * @version 0.1
- */
-const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
+const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [value, setValue] = useState('1');
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
     const [ignisPrice, setIgnisPrice] = useState(0);
 
-    const { name, GIFTZBalance, IGNISBalance } = infoAccount;
-    const maxPacksWithIgnis = Math.floor(IGNISBalance / PACKPRICE);
-
+    const { name, GIFTZBalance } = infoAccount;
     const [sendingTx, setSendingTx] = useState(false);
 
     const toast = useToast();
@@ -61,7 +47,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             step: 1,
             defaultValue: 0,
             min: 0,
-            max: maxPacksWithIgnis,
+            max: GIFTZBalance,
         },
         {
             isReadOnly: false,
@@ -105,11 +91,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             return false;
         }
 
-        if (option === 1 && IGNISBalance < ignisPrice) {
-            errorToast("You don't have enough funds (IGNIS)", toast);
-            return false;
-        }
-
         return true;
     };
 
@@ -119,6 +100,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
         try {
             setSendingTx(true);
+            /*
             if (value === '1') {
                 // buy pack with ignis
                 const response = await buyPackWithIgnis(passphrase, input.value, IGNISBalance);
@@ -130,6 +112,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             } else {
                 itsOk = false;
             }
+            */
         } catch (error) {
             console.log('🚀 ~ file: BuyPackDialog.js:82 ~ handleBuyPack ~ error', error);
             itsOk = false;
@@ -153,7 +136,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     };
 
     const bgColor = useColorModeValue('', '#1D1D1D');
-    const isDisabled = !isValidPin || input.value > maxPacksWithIgnis || input.value === '0';
+    const isDisabled = !isValidPin || input.value === '0' || GIFTZBalance === 0 || sendingTx;
 
     return (
         <>
@@ -167,7 +150,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 <AlertDialogOverlay bgColor="blackAlpha.800" />
 
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
-                    <AlertDialogHeader textAlign="center">BUY A PACK OF CARDS</AlertDialogHeader>
+                    <AlertDialogHeader textAlign="center">OPEN A PACK OF CARDS</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>
                         <Grid templateColumns="repeat(2, 1fr)">
@@ -181,25 +164,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
                             <Center>
                                 <GridItem>
-                                    <Box>
-                                        <Text textAlign="center" mb={2}>
-                                            Payment method
-                                        </Text>
-                                        <Center w="100%">
-                                            <Stack direction="row" w="100%">
-                                                <Box
-                                                    textAlign="center"
-                                                    w="100%"
-                                                    bgColor="blackAlpha.400"
-                                                    px={4}
-                                                    py={2}
-                                                    fontWeight="bold"
-                                                    rounded="lg">
-                                                    wETH
-                                                </Box>
-                                            </Stack>
-                                        </Center>
-                                    </Box>
                                     <Box mt={6}>
                                         <Text textAlign="center" my={2}>
                                             Number of packs
@@ -228,20 +192,15 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         </Center>
                                     </Box>
 
-                                    <Box mt={6}>
-                                        <Text textAlign="center" my={2}>
-                                            Total price
+                                    {GIFTZBalance === 0 && (
+                                        <Text textAlign="center" color="red.500" fontWeight="bold" my={4}>
+                                            You don't have enough packs
                                         </Text>
-                                        <Center>
-                                            <Text fontWeight="bold" fontSize="2xl">
-                                                {ignisPrice} wETH
-                                            </Text>
-                                        </Center>
-                                    </Box>
+                                    )}
 
-                                    {maxPacksWithIgnis === 0 && value === '1' && (
-                                        <Text textAlign="center" color="red.500" fontWeight="bold">
-                                            You don't have enough wETH
+                                    {GIFTZBalance > 0 && (
+                                        <Text textAlign="center" color="red.500" fontWeight="bold" my={4}>
+                                            You own {GIFTZBalance} packs
                                         </Text>
                                     )}
 
@@ -267,12 +226,12 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
                                     <Box w="100%" mt={2}>
                                         <Button
-                                            isDisabled={isDisabled || sendingTx}
+                                            isDisabled={isDisabled}
                                             bgColor={!isDisabled ? '#F18800' : null}
                                             w="100%"
                                             py={6}
                                             onClick={handleBuyPack}>
-                                            Submit
+                                            OPEN
                                         </Button>
                                     </Box>
                                 </GridItem>
@@ -285,4 +244,4 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     );
 };
 
-export default BuyPackDialog;
+export default OpenPackDialog;

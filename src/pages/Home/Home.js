@@ -64,6 +64,7 @@ import Exchange from '../Exchange/Exchange';
 import ArdorChat from '../../components/Pages/ChatPage/ArdorChat';
 import Book from '../../components/Pages/BookPage/Book';
 import { okToast } from '../../utils/alerts';
+import OpenPackDialog from '../../components/Modals/OpenPackDialog/OpenPackDialog';
 
 /**
  * @name Home
@@ -89,6 +90,10 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Card received dialog
     const { isOpen: isOpenCardReceived, onOpen: onOpenCardReceived, onClose: onCloseCardReceived } = useDisclosure();
     const cardReceivedRef = useRef();
+
+    // Open pack dialog
+    const { isOpen: isOpenOpenPack, onOpen: onOpenOpenPack, onClose: onCloseOpenPack } = useDisclosure();
+    const openPackRef = useRef();
 
     // Navigate
     const navigate = useNavigate();
@@ -208,7 +213,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         // -----------------------------------------------------------------
         // Check notifications - Unconfirmed transactions
         const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
-        console.log('🚀 ~ file: Home.js:212 ~ loadAll ~ unconfirmedTxs:', unconfirmedTxs);
         handleNotifications({
             unconfirmedTransactions,
             newsTransactions: unconfirmedTxs,
@@ -383,6 +387,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             <Exchange infoAccount={infoAccount} />,
             <ArdorChat infoAccount={infoAccount} />,
             <Book cards={cards} />,
+            '',
         ],
         [infoAccount, cards, cardsFiltered, gemCards, blockchainStatus, haveUnconfirmed]
     );
@@ -392,13 +397,16 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             if (option === 7) {
                 onOpen();
                 setOption(lastOption);
+            } else if (option === 11) {
+                onOpenOpenPack();
+                setOption(lastOption);
             } else {
                 setRenderComponent(components[option]);
             }
         };
 
         loadComponent();
-    }, [option, components, onOpen, lastOption]);
+    }, [option, components, onOpen, lastOption, onOpenOpenPack]);
 
     useEffect(() => {
         const checkAndGo = () => {
@@ -440,7 +448,17 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             </Box>
 
             {/* DIALOGS */}
-            <BuyPackDialog isOpen={isOpen} onClose={onClose} reference={buyRef} infoAccount={infoAccount} />
+            {isOpen && <BuyPackDialog isOpen={isOpen} onClose={onClose} reference={buyRef} infoAccount={infoAccount} />}
+
+            {isOpenOpenPack && (
+                <OpenPackDialog
+                    isOpen={isOpenOpenPack}
+                    onClose={onCloseOpenPack}
+                    reference={openPackRef}
+                    infoAccount={infoAccount}
+                />
+            )}
+
             {isOpenCardReceived && cardsNotification.length > 0 && (
                 <CardReceived
                     isOpen={isOpenCardReceived}

@@ -31,15 +31,6 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
     // ---------------------------------------------
     const buttons = [
         {
-            icon: <BiPackage color={iconColor(7)} />,
-            text: 'BUY PACK',
-            onClick: () => setOption(7),
-            bgColor: '#F18800',
-            hoverBg: '#F18800',
-            textColor: textColor(7),
-            fontWeight: 'bolder',
-        },
-        {
             icon: (
                 <BsReverseLayoutTextWindowReverse
                     style={{ stroke: iconColor(0), strokeWidth: '1' }}
@@ -77,14 +68,6 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             textColor: textColor(3),
         },
         {
-            icon: <BsArrowLeftRight style={{ stroke: iconColor(4), strokeWidth: '1' }} color={iconColor(4)} />,
-            text: 'Bridge',
-            onClick: () => setOption(4),
-            bgColor: bgColor(4),
-            hoverBg: hoverColor(4),
-            textColor: textColor(4),
-        },
-        {
             icon: <GiCutDiamond style={{ stroke: iconColor(5), strokeWidth: '1' }} color={iconColor(5)} />,
             text: 'Jackpot',
             onClick: () => setOption(5),
@@ -93,7 +76,12 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             textColor: textColor(5),
         },
         {
-            icon: <BsReverseLayoutTextWindowReverse style={{ stroke: iconColor(9), strokeWidth: '1' }} color={iconColor(9)} />,
+            icon: (
+                <BsReverseLayoutTextWindowReverse
+                    style={{ stroke: iconColor(9), strokeWidth: '1' }}
+                    color={iconColor(9)}
+                />
+            ),
             text: 'Messages',
             onClick: () => setOption(9),
             bgColor: bgColor(9),
@@ -101,7 +89,12 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             textColor: textColor(9),
         },
         {
-            icon: <BsReverseLayoutTextWindowReverse style={{ stroke: iconColor(10), strokeWidth: '1' }} color={iconColor(9)} />,
+            icon: (
+                <BsReverseLayoutTextWindowReverse
+                    style={{ stroke: iconColor(10), strokeWidth: '1' }}
+                    color={iconColor(9)}
+                />
+            ),
             text: 'Book',
             onClick: () => setOption(10),
             bgColor: bgColor(10),
@@ -123,6 +116,32 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             bgColor: sBgColor,
             hoverBg: hoverColor(8),
             textColor: sTextColor,
+        },
+        {
+            icon: <BiPackage color={iconColor(7)} />,
+            text: 'BUY PACK',
+            onClick: () => setOption(7),
+            bgColor: '#F18800',
+            hoverBg: '#F18800',
+            textColor: textColor(7),
+            fontWeight: 'bolder',
+        },
+        {
+            icon: <BiPackage color={iconColor(11)} />,
+            text: 'OPEN PACK',
+            onClick: () => setOption(11),
+            bgColor: '#F18800',
+            hoverBg: '#F18800',
+            textColor: textColor(11),
+            fontWeight: 'bolder',
+        },
+        {
+            icon: <BsArrowLeftRight style={{ stroke: iconColor(4), strokeWidth: '1' }} color={iconColor(4)} />,
+            text: 'Bridge',
+            onClick: () => setOption(4),
+            bgColor: bgColor(4),
+            hoverBg: hoverColor(4),
+            textColor: textColor(4),
         },
     ];
 
