@@ -26,8 +26,9 @@ import Hover from 'react-3d-hover';
 import { useEffect, useState } from 'react';
 import { PACKPRICE } from '../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../utils/alerts';
-// import { buyPackWithGiftz, buyPackWithIgnis } from '../../../utils/cardsUtils';
+// import { openPackWithGiftz, buyPackWithIgnis } from '../../../utils/cardsUtils';
 import { checkPin } from '../../../utils/walletUtils';
+import { openPackWithGiftz } from '../../../utils/cardsUtils';
 
 const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [value, setValue] = useState('1');
@@ -100,29 +101,19 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
         try {
             setSendingTx(true);
-            /*
-            if (value === '1') {
-                // buy pack with ignis
-                const response = await buyPackWithIgnis(passphrase, input.value, IGNISBalance);
-                if (response) itsOk = true;
-            } else if (value === '2') {
-                // buy pack with giftz
-                const response2 = await buyPackWithGiftz(passphrase, input.value, GIFTZBalance, IGNISBalance);
-                if (response2) itsOk = true;
-            } else {
-                itsOk = false;
-            }
-            */
+            const response = await openPackWithGiftz(passphrase, input.value, GIFTZBalance);
+            console.log("🚀 ~ file: OpenPackDialog.js:105 ~ handleBuyPack ~ response:", response)
+            if (response) itsOk = true;
         } catch (error) {
             console.log('🚀 ~ file: BuyPackDialog.js:82 ~ handleBuyPack ~ error', error);
             itsOk = false;
         }
 
         if (itsOk) {
-            okToast('Pack bought successfully', toast);
+            okToast('Pack sent to open.', toast);
             cleanOnClose();
         } else {
-            errorToast('Error buying pack', toast);
+            errorToast('Error opening the pack.', toast);
         }
         setSendingTx(false);
     };
@@ -199,7 +190,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     )}
 
                                     {GIFTZBalance > 0 && (
-                                        <Text textAlign="center" color="red.500" fontWeight="bold" my={4}>
+                                        <Text textAlign="center" fontSize="sm" color="blackAlpha.500" fontWeight="bold">
                                             You own {GIFTZBalance} packs
                                         </Text>
                                     )}

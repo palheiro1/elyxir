@@ -4,11 +4,14 @@ import {
     CATOBLEPASASSETWRONG,
     CURRENCY,
     GEMASSET,
+    GIFTZASSET,
     IMGURL,
     IMG_MD_PATH,
     IMG_THUMB_PATH,
     MARUXAINAASSETWRONG,
     NQTDIVIDER,
+    OMNO_ACCOUNT,
+    OMNO_CONTRACT,
     PACKPRICE,
     PACKPRICEGIFTZ,
     QUANT_COMMON,
@@ -26,9 +29,12 @@ import {
     getBidOrders,
     getLastTrades,
     sendIgnis,
+    transferAsset,
     transferCurrency,
     transferCurrencyZeroFee,
 } from '../services/Ardor/ardorInterface';
+
+import { sendWETHWithMessage } from './walletUtils';
 
 // -------------------------------------------------
 //                  CARDS UTILS
@@ -69,9 +75,17 @@ export const fetchAllCards = async (accountRs, collectionRs, specialRs, fetchOrd
     return await cardsGenerator(account.accountAssets, fullCollection, fetchOrders);
 };
 
-export const fetchGemCards = async (accountRs, gemRs, fetchOrders = false) => {
-    const [account, gemAssets] = await Promise.all([getAccountAssets(accountRs), getAssetsByIssuer(gemRs)]);
-    return await cardsGenerator(account.accountAssets, gemAssets, fetchOrders);
+export const fetchCurrencyAssets = async (accountRs, currencyAssets = [], fetchOrders = false) => {
+    let response = [];
+
+    for (let i = 0; i < currencyAssets.length; i++) {
+        const asset = currencyAssets[i];
+        const [account, currencyAsset] = await Promise.all([getAccountAssets(accountRs), getAssetsByIssuer(asset)]);
+        const aux = await cardsGenerator(account.accountAssets, currencyAsset, fetchOrders);
+        response.push(aux);
+    }
+
+    return response;
 };
 
 // -------------------------------------------------
@@ -95,7 +109,84 @@ export const buyPackWithIgnis = async (passphrase, noPacks, ignisBalance) => {
     });
 };
 
-export const buyPackWithGiftz = async (passphrase, noPacks, giftzBalance, ignisBalance) => {
+export const buyPackWithWETH = async (passphrase, noPacks, WETHBalance, selectedOffers = [], priceInWETH = 0) => {
+    if (selectedOffers.length === 0) return false;
+    if (noPacks === 0) return false;
+    if (priceInWETH === 0) return false;
+
+    const balance = WETHBalance * NQTDIVIDER;
+    if (balance < priceInWETH) return false;
+
+    // Crear el mensaje para
+    // 1.- Enviar el WETH a Omno
+    // 2.- Aceptar el trade de GIFTZ por WETH
+
+    // Por cada selectedOffer, generar un trade
+    const trades = selectedOffers.map(offer => {
+        return {
+            service: 'trade',
+            request: 'accept',
+            parameter: {
+                id: offer.id.toString(),
+                multiplier: offer.amount.toString(),
+            },
+        };
+    });
+
+    const message = JSON.stringify({
+        contract: OMNO_CONTRACT,
+        operation: [
+            ...trades,
+            // 3.- Retirar el GIFTZ de Omno
+            {
+                service: 'user',
+                request: 'withdraw',
+                parameter: {
+                    value: {
+                        asset: {
+                            [GIFTZASSET]: noPacks,
+                        },
+                    },
+                },
+            },
+        ],
+    });
+
+    return await sendWETHWithMessage({
+        amountNQT: priceInWETH,
+        recipient: OMNO_ACCOUNT,
+        passphrase: passphrase,
+        message: message,
+    });
+};
+
+export const openPackWithGiftz = async (passphrase, noPacks, giftzBalance) => {
+    console.log("🚀 ~ file: cardsUtils.js:164 ~ openPackWithGiftz ~ noPacks:", noPacks)
+    console.log("🚀 ~ file: cardsUtils.js:164 ~ openPackWithGiftz ~ giftzBalance:", giftzBalance)
+    if (giftzBalance < noPacks) return false;
+    console.log("🚀 ~ file: cardsUtils.js:185 ~ openPackWithGiftz ~ giftzBalance < noPacks:", giftzBalance < noPacks)
+
+
+    const message = JSON.stringify({ contract: 'SellMachineGiftzAsset' });
+    let response = false;
+
+    try {
+        response = await transferAsset({
+            asset: GIFTZASSET,
+            quantityQNT: noPacks,
+            recipient: OMNO_ACCOUNT,
+            passPhrase: passphrase,
+            message: message,
+        });
+    } catch (error) {
+        console.log('🚀 ~ file: cardsUtils.js ~ line 242 ~ openPackWithGiftz ~ error', error);
+    }
+
+    return response;
+};
+
+/*
+export const openPackWithGiftz = async (passphrase, noPacks, giftzBalance, ignisBalance) => {
     const amountNQT = noPacks * PACKPRICEGIFTZ;
     if (giftzBalance < amountNQT) return false;
 
@@ -105,6 +196,7 @@ export const buyPackWithGiftz = async (passphrase, noPacks, giftzBalance, ignisB
         return await transferCurrencyZeroFee(CURRENCY, amountNQT, BUYPACKACCOUNT, passphrase, message, true);
     else return await transferCurrency(CURRENCY, amountNQT, BUYPACKACCOUNT, passphrase, message, true);
 };
+*/
 
 // -------------------------------------------------
 //            CARDS UTILS FOR INVENTORY

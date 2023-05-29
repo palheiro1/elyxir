@@ -31,17 +31,19 @@ import {
     ASSETS_IDS,
     COLLECTIONACCOUNT,
     GEMASSETACCOUNT,
+    GIFTZASSETACCOUNT,
     NQTDIVIDER,
     REFRESH_BLOCK_TIME,
     REFRESH_DATA_TIME,
     REFRESH_UNWRAP_TIME,
     TARASCACARDACCOUNT,
+    WETHASSETACCOUNT,
 } from '../../data/CONSTANTS';
 
 import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 
 // Services
-import { fetchAllCards, fetchGemCards } from '../../utils/cardsUtils';
+import { fetchAllCards, fetchCurrencyAssets } from '../../utils/cardsUtils';
 
 import {
     checkDataChange,
@@ -192,10 +194,10 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         setNeedReload(false);
 
         // Fetch all info
-        const [loadCards, gems, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades, dividends] =
+        const [loadCards, currencyAssets, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades, dividends] =
             await Promise.all([
                 fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
-                fetchGemCards(accountRs, GEMASSETACCOUNT, true),
+                fetchCurrencyAssets(accountRs, [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT], true),
                 getIGNISBalance(accountRs),
                 getGIFTZBalance(accountRs),
                 getBlockchainTransactions(2, accountRs, true),
@@ -210,6 +212,10 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 }),
             ]);
 
+        const gems = currencyAssets[0];
+        const weth = currencyAssets[1];
+        const giftzAsset = currencyAssets[2];
+        
         // -----------------------------------------------------------------
         // Check notifications - Unconfirmed transactions
         const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
@@ -247,8 +253,10 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         const _auxInfo = {
             ...infoAccount,
             IGNISBalance: ignis,
-            GIFTZBalance: giftz.unitsQNT || 0,
+            GIFTZOldBalance: giftz.unitsQNT || 0,
+            GIFTZBalance: giftzAsset[0].quantityQNT,
             GEMSBalance: gems[0].quantityQNT / NQTDIVIDER,
+            WETHBalance: weth[0].quantityQNT / NQTDIVIDER,
             transactions: txs.transactions,
             dividends: auxDividends,
             unconfirmedTxs: unconfirmedTxs,

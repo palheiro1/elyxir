@@ -1,6 +1,6 @@
 import equal from 'fast-deep-equal';
 
-import { BUYPACKACCOUNT, CURRENCY, GEMASSET, JACKPOTACCOUNT, NQTDIVIDER } from '../data/CONSTANTS';
+import { BUYPACKACCOUNT, CURRENCY, GEMASSET, JACKPOTACCOUNT, NQTDIVIDER, WETHASSET } from '../data/CONSTANTS';
 import { decrypt, getUser } from './storage';
 import {
     createAskOrder,
@@ -373,6 +373,32 @@ export const sendGem = async ({ passphrase, amountNQT, recipient }) => {
         quantityQNT: amountNQT * NQTDIVIDER,
         recipient: recipient,
         passPhrase: passphrase,
+    });
+};
+
+/**
+ * @name sendWETH
+ * @description Send wETH to an address
+ * @param {String} passphrase - Passphrase
+ * @param {Number} amountNQT - Amount to send
+ * @param {String} recipient - Recipient address
+ */
+export const sendWETH = async ({ passphrase, amountNQT, recipient }) => {
+    return await transferAsset({
+        asset: WETHASSET,
+        quantityQNT: amountNQT * NQTDIVIDER,
+        recipient: recipient,
+        passPhrase: passphrase,
+    });
+};
+
+export const sendWETHWithMessage = async ({ passphrase, amountNQT, recipient, message }) => {
+    return await transferAsset({
+        asset: WETHASSET,
+        quantityQNT: amountNQT,
+        recipient: recipient,
+        passPhrase: passphrase,
+        message: message,
     });
 };
 

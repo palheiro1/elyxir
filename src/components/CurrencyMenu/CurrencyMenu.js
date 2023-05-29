@@ -20,7 +20,13 @@ import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog'
 import BuyGiftzDialog from '../Modals/BuyGiftzDialog/BuyGiftzDialog';
 
 const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
-    const { IGNISBalance, GIFTZBalance, GEMSBalance, name: username } = infoAccount;
+    const { IGNISBalance, GIFTZBalance, GEMSBalance, WETHBalance, name: username } = infoAccount;
+    const parseWETH = parseFloat(WETHBalance);
+    let wEthDecimals = 0;
+    if (parseWETH) {
+        const aux = parseWETH.toString().split('.');
+        if (aux.length > 1) wEthDecimals = aux[1].length || 0;
+    }
 
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
@@ -35,25 +41,21 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
             name: 'IGNIS',
             balance: IGNISBalance,
             handler: () => goToSection(8),
-            image: 'images/currency/IGNISicon.png',
         },
         GIFTZ: {
             name: 'GIFTZ',
             balance: GIFTZBalance,
             handler: onOpenBuyGiftz,
-            image: 'images/currency/GIFTZicon.png',
         },
         GEMS: {
             name: 'GEMS',
             balance: GEMSBalance,
             handler: () => goToSection(3),
-            image: 'images/currency/GEMSicon.png',
         },
         WETH: {
             name: 'wETH',
-            balance: GEMSBalance,
+            balance: WETHBalance,
             handler: () => goToSection(3),
-            image: 'images/currency/GEMSicon.png',
         },
     };
 
@@ -96,7 +98,9 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                             w="45px"
                                             h="45px"
                                         />
-                                        <Text pr={2} align="center">{Number(IGNISBalance).toFixed(0)}</Text>
+                                        <Text pr={2} align="center">
+                                            {Number(IGNISBalance).toFixed(0)}
+                                        </Text>
                                     </Stack>
                                 </MenuButton>
 
@@ -131,7 +135,9 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                             minW="45px"
                                             h="45px"
                                         />
-                                        <Text pr={2} align="center">{Number(GIFTZBalance).toFixed(0)}</Text>
+                                        <Text pr={2} align="center">
+                                            {Number(GIFTZBalance).toFixed(0)}
+                                        </Text>
                                     </Stack>
                                 </MenuButton>
 
@@ -158,13 +164,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             <Menu>
                                 <MenuButton>
                                     <Stack direction="row" align="center" mt={-2}>
-                                        <Image
-                                            ml={-5}
-                                            src="images/currency/gem.png"
-                                            alt="GEM Icon"
-                                            w="43px"
-                                            h="43px"
-                                        />
+                                        <Image ml={-5} src="images/currency/gem.png" alt="GEM Icon" w="43px" h="43px" />
                                         <Text pr={3}>{GEMSBalance.toFixed(0)}</Text>
                                     </Stack>
                                 </MenuButton>
@@ -193,11 +193,13 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                         <Image
                                             ml={-5}
                                             src="images/currency/weth.png"
-                                            alt="GEM Icon"
+                                            alt="wETH Icon"
                                             w="43px"
                                             h="43px"
                                         />
-                                        <Text pr={3}>{GEMSBalance.toFixed(0)}</Text>
+                                        <Text pr={3}>
+                                            {parseWETH.toFixed(Math.max(0, wEthDecimals <= 6 ? wEthDecimals : 6))}
+                                        </Text>
                                     </Stack>
                                 </MenuButton>
 

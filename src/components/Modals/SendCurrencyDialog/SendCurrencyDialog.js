@@ -26,7 +26,7 @@ import {
 import { useEffect, useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
 import { sendIgnis } from '../../../services/Ardor/ardorInterface';
-import { checkPin, sendGem, sendGiftz } from '../../../utils/walletUtils';
+import { checkPin, sendGem, sendGiftz, sendWETH } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { isArdorAccount } from '../../../utils/validators';
 import { NQTDIVIDER } from '../../../data/CONSTANTS';
@@ -59,7 +59,7 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
     const input = getInputProps();
 
     const handleInput = address => {
-        if(address === 'ARDOR') return;
+        if (address === 'ARDOR') return;
         if (readerEnabled) setReaderEnabled(false);
         //Clean if ARDOR-ARDOR- prefix all phrased
         let auxAddress = address.replaceAll(prefix, '');
@@ -111,6 +111,13 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                         passphrase: passphrase,
                     });
                     break;
+                case 'wETH':
+                    response = await sendWETH({
+                        amountNQT: input.value,
+                        recipient: ardorAccount,
+                        passphrase: passphrase,
+                    });
+                    break;
                 default:
                     errorToast(toast, 'Currency not supported');
                     return;
@@ -135,7 +142,9 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
 
     useEffect(() => {
         const checkDisabled = () => {
-            setIsDisabled(!isValidPin || !isValidArdorAccount || !passphrase || !input.value || input.value > maxCurrency);
+            setIsDisabled(
+                !isValidPin || !isValidArdorAccount || !passphrase || !input.value || input.value > maxCurrency
+            );
         };
         checkDisabled();
     }, [isValidPin, isValidArdorAccount, passphrase, input.value, maxCurrency]);

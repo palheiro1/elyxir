@@ -25,10 +25,11 @@ import {
 import Hover from 'react-3d-hover';
 
 import { useEffect, useState } from 'react';
-import { PACKPRICE } from '../../../data/CONSTANTS';
+import { GIFTZASSET, NQTDIVIDER, PACKPRICEWETH, WETHASSET } from '../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../utils/alerts';
-import { buyPackWithGiftz, buyPackWithIgnis } from '../../../utils/cardsUtils';
+import { buyPackWithWETH } from '../../../utils/cardsUtils';
 import { checkPin } from '../../../utils/walletUtils';
+import { fetchOmnoMarket } from '../../../utils/omno';
 
 /**
  * @name BuyPackDialog
@@ -42,26 +43,81 @@ import { checkPin } from '../../../utils/walletUtils';
  * @version 0.1
  */
 const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
-    const [value, setValue] = useState('1');
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
-    const [ignisPrice, setIgnisPrice] = useState(0);
-
-    const { name, GIFTZBalance, IGNISBalance } = infoAccount;
-    const maxPacksWithIgnis = Math.floor(IGNISBalance / PACKPRICE);
-
+    const [priceInWETH, setpriceInWETH] = useState(0);
+    const [marketOffers, setMarketOffers] = useState([]); // list of market offers
+    const [totalOnSale, setTotalOnSale] = useState(0); // total packs on sale
     const [sendingTx, setSendingTx] = useState(false);
+    const [selectedOffers, setSelectedOffers] = useState([]); // selected offers
+
+    const { name, WETHBalance } = infoAccount;
+    const maxPacksWithIgnis = Math.floor(WETHBalance / PACKPRICEWETH);
 
     const toast = useToast();
-
     const colorText = useColorModeValue('black', 'white');
 
+    useEffect(() => {
+        const recoverMarketOffers = async () => {
+            const offers = await fetchOmnoMarket();
+            const wethAsset = offers.filter(item => {
+                return (
+                    Object.keys(item.give).length === 1 &&
+                    Object.keys(item.take).length === 1 &&
+                    item.give.asset[GIFTZASSET] &&
+                    item.take.asset[WETHASSET]
+                );
+            });
+            setMarketOffers(wethAsset);
+            console.log("🚀 ~ file: BuyPackDialog.js:79 ~ recoverMarketOffers ~ wethAsset:", wethAsset)
+
+
+            // Calcular el total de paquetes en venta
+            const totalOnSale = wethAsset.reduce((total, item) => {
+                return total + item.multiplier * item.give.asset[GIFTZASSET];
+            }, 0);
+            setTotalOnSale(totalOnSale);
+        };
+
+        recoverMarketOffers();
+    }, []);
+
+    // ------------------------------------------------------------
+    // ------------------ E A S Y  C H E C K E R ------------------
+    // ------------------------------------------------------------
+    const checker = () => {
+        if (!isValidPin || !passphrase) {
+            errorToast('You must enter a valid pin', toast);
+            return false;
+        }
+
+        if (!input.value) {
+            errorToast('You must enter a valid number of packs', toast);
+            return false;
+        }
+
+        if (!priceInWETH) {
+            errorToast('Error calculating prices', toast);
+            return false;
+        }
+
+        if (WETHBalance * NQTDIVIDER < priceInWETH) {
+            errorToast("You don't have enough funds (wETH)", toast);
+            return false;
+        }
+
+        return true;
+    };
+
+    // ------------------------------------------------------------
+    // ------------------ SELECT NUMBER OF PACKS ------------------
+    // ------------------------------------------------------------
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput(
         {
             step: 1,
             defaultValue: 0,
             min: 0,
-            max: maxPacksWithIgnis,
+            max: totalOnSale,
         },
         {
             isReadOnly: false,
@@ -72,64 +128,66 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const dec = getDecrementButtonProps();
     const input = getInputProps();
 
-    const handleCompletePin = pin => {
-        isValidPin && setIsValidPin(false); // reset invalid pin flag
-
-        const account = checkPin(name, pin);
-        if (account) {
-            setIsValidPin(true);
-            setPassphrase(account.passphrase);
-        }
-    };
-
     useEffect(() => {
         const calculatePrices = () => {
-            setIgnisPrice(input.value * PACKPRICE);
+            // Check amount is filled in the first offer
+            if (marketOffers.length === 0) return;
+            if (!input.value) return;
+
+            // Calculate price
+            let totalPrice = 0;
+            let totalPacks = 0;
+            // Save id and amount of packs to buy
+            const offersToTake = [];
+            for (let i = 0; i < marketOffers.length; i++) {
+                const offer = marketOffers[i];
+                const amount = offer.give.asset[GIFTZASSET];
+                const multiplier = offer.multiplier;
+                const totalAmount = amount * multiplier;
+                const price = offer.take.asset[WETHASSET];
+
+                if (totalPacks + totalAmount > input.value) {
+                    const packsToBuy = input.value - totalPacks;
+                    totalPrice += packsToBuy * price;
+
+                    offersToTake.push({
+                        id: offer.id,
+                        amount: packsToBuy,
+                        price: packsToBuy * price,
+                    });
+                    break;
+                } else {
+                    totalPrice += totalAmount * price;
+                    totalPacks += totalAmount;
+
+                    offersToTake.push({
+                        id: offer.id,
+                        amount: totalAmount,
+                        price: totalAmount * price,
+                    });
+                }
+
+                if (totalPacks >= input.value) break;
+            }
+
+            setpriceInWETH(totalPrice);
+            setSelectedOffers(offersToTake);
+            console.log('🚀 ~ file: BuyPackDialog.js:174 ~ calculatePrices ~ offersToTake:', offersToTake);
         };
 
         calculatePrices();
-    }, [input.value]);
-
-    const checker = option => {
-        if (!isValidPin || !passphrase) {
-            errorToast('You must enter a valid pin', toast);
-            return false;
-        }
-
-        if (!input.value) {
-            errorToast('You must enter a valid number of packs', toast);
-            return false;
-        }
-        if (!ignisPrice) {
-            errorToast('Error calculating prices', toast);
-            return false;
-        }
-
-        if (option === 1 && IGNISBalance < ignisPrice) {
-            errorToast("You don't have enough funds (IGNIS)", toast);
-            return false;
-        }
-
-        return true;
-    };
+    }, [input.value, marketOffers]);
+    // ------------------------------------------------------------
 
     const handleBuyPack = async () => {
-        if (checker(value) === false) return;
+        if (!checker()) return;
         let itsOk = false;
 
         try {
             setSendingTx(true);
-            if (value === '1') {
-                // buy pack with ignis
-                const response = await buyPackWithIgnis(passphrase, input.value, IGNISBalance);
-                if (response) itsOk = true;
-            } else if (value === '2') {
-                // buy pack with giftz
-                const response2 = await buyPackWithGiftz(passphrase, input.value, GIFTZBalance, IGNISBalance);
-                if (response2) itsOk = true;
-            } else {
-                itsOk = false;
-            }
+            // buy pack with ignis
+            const response = await buyPackWithWETH(passphrase, input.value, WETHBalance, selectedOffers, priceInWETH);
+            if (response) itsOk = true;
         } catch (error) {
             console.log('🚀 ~ file: BuyPackDialog.js:82 ~ handleBuyPack ~ error', error);
             itsOk = false;
@@ -144,8 +202,17 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         setSendingTx(false);
     };
 
+    const handleCompletePin = pin => {
+        isValidPin && setIsValidPin(false); // reset invalid pin flag
+
+        const account = checkPin(name, pin);
+        if (account) {
+            setIsValidPin(true);
+            setPassphrase(account.passphrase);
+        }
+    };
+
     const cleanOnClose = () => {
-        setValue('1');
         setPassphrase('');
         setIsValidPin(false);
         setSendingTx(false);
@@ -153,7 +220,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     };
 
     const bgColor = useColorModeValue('', '#1D1D1D');
-    const isDisabled = !isValidPin || input.value > maxPacksWithIgnis || input.value === '0';
+    const isDisabled = !isValidPin || input.value > totalOnSale || input.value === '0';
 
     return (
         <>
@@ -226,6 +293,13 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                 </Button>
                                             </HStack>
                                         </Center>
+                                        <Center>
+                                            <Text
+                                                fontSize="xs"
+                                                color={useColorModeValue('blackAlpha.600', 'whiteAlpha.600')}>
+                                                {totalOnSale} packs availables
+                                            </Text>
+                                        </Center>
                                     </Box>
 
                                     <Box mt={6}>
@@ -234,12 +308,12 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         </Text>
                                         <Center>
                                             <Text fontWeight="bold" fontSize="2xl">
-                                                {ignisPrice} wETH
+                                                {priceInWETH / NQTDIVIDER} wETH
                                             </Text>
                                         </Center>
                                     </Box>
 
-                                    {maxPacksWithIgnis === 0 && value === '1' && (
+                                    {maxPacksWithIgnis === 0 && (
                                         <Text textAlign="center" color="red.500" fontWeight="bold">
                                             You don't have enough wETH
                                         </Text>

@@ -34,6 +34,7 @@ export const EXCHANGERATE = 295;
 // ---------------------------------------------
 export const TARASCACARDASSET = '13187825386854631652';
 export const GEMASSET = '10230963490193589789';
+export const WETHASSET = '5748561916300082783'; // TEST ASSET
 export const REFERRALASSET = '15893499867718551186'; // mainnet
 export const SASQUATCHASSET = '13270129604409279596';
 export const MARUXAINAASSETWRONG = '7783220465634719235';
@@ -49,6 +50,8 @@ export const BUYPACKACCOUNT = 'ARDOR-4V3B-TVQA-Q6LF-GMH3T';
 export const TARASCACARDACCOUNT = 'ARDOR-5NCL-DRBZ-XBWF-DDN5T';
 export const BRIDGEACCOUNT = 'ARDOR-3YEX-JZFZ-UATF-EKGLN';
 export const GEMASSETACCOUNT = 'ARDOR-XG7G-V7BV-GT4P-FUGW6';
+export const WETHASSETACCOUNT = 'ARDOR-66J7-K4T7-8C9M-66W67';
+export const GIFTZASSETACCOUNT = 'ARDOR-TU3S-47Y5-6GSM-8ZSJ8';
 export const BURNACCOUNT = 'ARDOR-Q9KZ-74XD-WERK-CV6GB';
 export const REFERRALCONTRACTACCOUNT = 'ARDOR-YAAE-KL8S-28Y4-BNQW3';
 
@@ -59,6 +62,15 @@ export const PACKPRICE = 295;
 export const PACKPRICEGIFTZ = 1;
 export const MAXPACKS = 999;
 export const NQTDIVIDER = 100000000;
+
+// ---------------------------------------------
+// ---------- NEW ECONOMICS WITH OMNO ----------
+// ---------------------------------------------
+export const GIFTZASSET = '13993107092599641878';
+export const PACKPRICEWETH = 2;
+export const OMNO_CONTRACT = 'mythicalOmnoTest';
+export const OMNO_ACCOUNT = 'ARDOR-LQET-FNLD-USL8-2AGBP';
+export const OMNO_API = 'http://136.243.155.148:30001/api';
 
 // ---------------------------------------------
 // ---------------- IMAGE PATHS-- --------------
@@ -280,4 +292,5 @@ export const ASSETS_IDS = [
     '1310229991284473521',
     '10956456574154580310',
     GEMASSET,
+    WETHASSET,
 ];

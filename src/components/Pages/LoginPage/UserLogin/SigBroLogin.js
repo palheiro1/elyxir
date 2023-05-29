@@ -44,6 +44,7 @@ const SigBroLogin = ({ setInfoAccount }) => {
                 GEMSBalance: 0,
                 IGNISBalance: 0,
                 GIFTZBalance: 0,
+                WETHBalance: 0,
             });
             setWaitingForConnection(false);
             navigate('/home');
