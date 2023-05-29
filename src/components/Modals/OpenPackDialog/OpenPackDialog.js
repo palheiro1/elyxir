@@ -102,7 +102,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         try {
             setSendingTx(true);
             const response = await openPackWithGiftz(passphrase, input.value, GIFTZBalance);
-            console.log("🚀 ~ file: OpenPackDialog.js:105 ~ handleBuyPack ~ response:", response)
+            console.log('🚀 ~ file: OpenPackDialog.js:105 ~ handleBuyPack ~ response:', response);
             if (response) itsOk = true;
         } catch (error) {
             console.log('🚀 ~ file: BuyPackDialog.js:82 ~ handleBuyPack ~ error', error);
@@ -127,6 +127,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     };
 
     const bgColor = useColorModeValue('', '#1D1D1D');
+    const textColor = useColorModeValue('blackAlpha.500', 'whiteAlpha.500');
     const isDisabled = !isValidPin || input.value === '0' || GIFTZBalance === 0 || sendingTx;
 
     return (
@@ -190,7 +191,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     )}
 
                                     {GIFTZBalance > 0 && (
-                                        <Text textAlign="center" fontSize="sm" color="blackAlpha.500" fontWeight="bold">
+                                        <Text textAlign="center" fontSize="sm" color={textColor} fontWeight="bold">
                                             You own {GIFTZBalance} packs
                                         </Text>
                                     )}
