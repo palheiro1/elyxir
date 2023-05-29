@@ -2,7 +2,6 @@ import {
     ASSETS_IDS,
     BUYPACKACCOUNT,
     CATOBLEPASASSETWRONG,
-    CURRENCY,
     GEMASSET,
     GIFTZASSET,
     IMGURL,
@@ -13,7 +12,6 @@ import {
     OMNO_ACCOUNT,
     OMNO_CONTRACT,
     PACKPRICE,
-    PACKPRICEGIFTZ,
     QUANT_COMMON,
     QUANT_RARE,
     QUANT_SPECIAL,
@@ -30,8 +28,6 @@ import {
     getLastTrades,
     sendIgnis,
     transferAsset,
-    transferCurrency,
-    transferCurrencyZeroFee,
 } from '../services/Ardor/ardorInterface';
 
 import { sendWETHWithMessage } from './walletUtils';
@@ -161,11 +157,7 @@ export const buyPackWithWETH = async (passphrase, noPacks, WETHBalance, selected
 };
 
 export const openPackWithGiftz = async (passphrase, noPacks, giftzBalance) => {
-    console.log("🚀 ~ file: cardsUtils.js:164 ~ openPackWithGiftz ~ noPacks:", noPacks)
-    console.log("🚀 ~ file: cardsUtils.js:164 ~ openPackWithGiftz ~ giftzBalance:", giftzBalance)
     if (giftzBalance < noPacks) return false;
-    console.log("🚀 ~ file: cardsUtils.js:185 ~ openPackWithGiftz ~ giftzBalance < noPacks:", giftzBalance < noPacks)
-
 
     const message = JSON.stringify({ contract: 'SellMachineGiftzAsset' });
     let response = false;
