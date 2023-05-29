@@ -1,9 +1,9 @@
-import { Box, Center } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { getEthDepositAddress, getPegAddresses } from '../../../services/Ardor/ardorInterface';
-import SectionSwitch from './SectionSwitch';
-import SwapToArdor from './SwapToArdor';
-import SwapToPolygon from './SwapToPolygon';
+import { getEthDepositAddressFor1155, getEthDepositAddressFor20, getPegAddressesFor1155, getPegAddressesFor20 } from '../../../services/Ardor/ardorInterface';
+import BridgeERC1155 from './ERC1155/BridgeERC1155';
+import BridgeSelector from './BridgeSelector';
+import BridgeERC20 from './ERC20/BridgeERC20';
 
 /**
  * @name Bridge
@@ -15,19 +15,38 @@ import SwapToPolygon from './SwapToPolygon';
  * @returns {JSX.Element} - JSX element
  */
 const Bridge = ({ infoAccount, cards }) => {
-    const [option, setOption] = useState(0);
-    const [swapAddresses, setSwapAddresses] = useState({ eth: '', ardor: '', isLoaded: false });
+    const [swapAddresses, setSwapAddresses] = useState({
+        ERC20: { eth: '', ardor: '' },
+        ERC1155: { eth: '', ardor: '' },
+        isLoaded: false,
+    });
+    const [needReload, setNeedReload] = useState(true); // Flag to reload the page [true -> reload
     const [isLoading, setIsLoading] = useState(false);
+    const [bridgeType, setBridgeType] = useState(); // ERC20 or ERC1155
 
     useEffect(() => {
         const getSwapAddresses = async () => {
             setIsLoading(true);
+            setNeedReload(false);
             try {
-                const [ethAddress, { ardorBlockedAccount }] = await Promise.all([
-                    getEthDepositAddress(infoAccount.accountRs),
-                    getPegAddresses(),
+                const [ethAddress, { ardorBlockedAccount }, eth20Address, { ardorBlockedAccount:ardorBlockedAccount20 }] = await Promise.all([
+                    getEthDepositAddressFor1155(infoAccount.accountRs),
+                    getPegAddressesFor1155(),
+                    getEthDepositAddressFor20(infoAccount.accountRs),
+                    getPegAddressesFor20(),
                 ]);
-                setSwapAddresses({ eth: ethAddress, ardor: ardorBlockedAccount, isLoaded: true });
+                console.log('🚀 ~ file: Bridge.js:31 ~ getSwapAddresses ~ ethAddress:', ethAddress, ardorBlockedAccount, eth20Address);
+                setSwapAddresses({
+                    ERC20: {
+                        eth: eth20Address,
+                        ardor: ardorBlockedAccount20,
+                    },
+                    ERC1155: {
+                        eth: ethAddress,
+                        ardor: ardorBlockedAccount,
+                    },
+                    isLoaded: true,
+                });
             } catch (error) {
                 console.error(error);
                 // Manejar el error de forma adecuada
@@ -35,22 +54,17 @@ const Bridge = ({ infoAccount, cards }) => {
             setIsLoading(false);
         };
 
-        !swapAddresses.isLoaded && !isLoading && getSwapAddresses();
-    }, [infoAccount.accountRs, swapAddresses.isLoaded, isLoading]);
+        needReload && !swapAddresses.isLoaded && !isLoading && getSwapAddresses();
+    }, [infoAccount.accountRs, swapAddresses.isLoaded, isLoading, needReload]);
 
     return (
-        <>
-            <SectionSwitch option={option} setOption={setOption} />
-
-            <Center>
-                <Box maxW="50%">
-                    {option === 0 && (
-                        <SwapToPolygon infoAccount={infoAccount} ardorAddress={swapAddresses.ardor} cards={cards} />
-                    )}
-                    {option === 1 && <SwapToArdor infoAccount={infoAccount} ethAddress={swapAddresses.eth} />}
-                </Box>
-            </Center>
-        </>
+        <Box>
+            {bridgeType === undefined && <BridgeSelector setBridgeType={setBridgeType} />}
+            {bridgeType === 'ERC20' && <BridgeERC20 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} />}
+            {bridgeType === 'ERC1155' && (
+                <BridgeERC1155 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC1155} cards={cards} />
+            )}
+        </Box>
     );
 };
 

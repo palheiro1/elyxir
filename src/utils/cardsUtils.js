@@ -29,6 +29,7 @@ import {
     sendIgnis,
     transferAsset,
 } from '../services/Ardor/ardorInterface';
+import { getOmnoMarketOrdesForAsset } from '../services/Ardor/omnoInterface';
 
 import { sendWETHWithMessage } from './walletUtils';
 
@@ -232,17 +233,22 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
 
         let askOrders = [];
         let bidOrders = [];
+        let askOmnoOrders = [];
+        let bidOmnoOrders = [];
         let lastPrice = 0;
+        let lastOmnoPrice = 0;
         if (fetchOrders) {
-            const [askResponse, bidResponse, lastTradesResponse] = await Promise.all([
+            const [askResponse, bidResponse, lastTradesResponse, omnoOrdersResponse] = await Promise.all([
                 getAskOrders(asset.asset),
                 getBidOrders(asset.asset),
                 getLastTrades(asset.asset),
+                getOmnoMarketOrdesForAsset(asset.asset),
             ]);
 
             askOrders = askResponse.askOrders;
             bidOrders = bidResponse.bidOrders;
-            lastPrice = 0;
+            askOmnoOrders = omnoOrdersResponse.askOrders;
+            bidOmnoOrders = omnoOrdersResponse.bidOrders;
             if (lastTradesResponse.trades.length > 0) {
                 const auxLastPrice = lastTradesResponse.trades[0].priceNQTPerShare / NQTDIVIDER;
                 lastPrice = Number.isInteger(auxLastPrice) ? auxLastPrice : auxLastPrice.toFixed(2);
@@ -270,10 +276,13 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
             totalQuantityQNT: totalQuantityQNT,
             unconfirmedQuantityQNT: unconfirmedQuantityQNT,
             lastPrice: lastPrice,
+            lastOmnoPrice: lastOmnoPrice,
             cardImgUrl: getTarascaImage(asset.name),
             cardThumbUrl: getThumbsImage(asset.name),
             askOrders: askOrders,
             bidOrders: bidOrders,
+            askOmnoOrders: askOmnoOrders,
+            bidOmnoOrders: bidOmnoOrders,
         };
     }
 };

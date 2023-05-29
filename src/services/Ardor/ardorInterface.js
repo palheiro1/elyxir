@@ -530,7 +530,7 @@ export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => 
         };
 
         const url_postOrder = NODEURL + '?requestType=' + ORDERTYPE;
-        
+
         query.feeNQT = await calculateFee(query, url_postOrder);
         query.broadcast = false;
         const postOrderTransactionBytesResponse = await axios.post(url_postOrder, qs.stringify(query), config);
@@ -759,7 +759,34 @@ const getBlockchainStatus = async () => {
 // |                  B R I D G E               |
 // ----------------------------------------------
 
-export const getEthDepositAddress = async accountRs => {
+export const getEthDepositAddressFor20 = async accountRs => {
+    try {
+        const response = await axios.get(BRIDGEAPIURL, {
+            params: {
+                action: 'mbGetWrapDepositAddress',
+                account: accountRs,
+            },
+        });
+        return response.data.depositAddress;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:772 ~ getEthDepositAddressFor20 ~ error:', error);
+    }
+};
+
+export const getPegAddressesFor20 = async () => {
+    try {
+        const response = await axios.get(BRIDGEAPIURL, {
+            params: {
+                action: 'mbGetPegAddresses',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:785 ~ getPegAddressesFor20 ~ error:', error);
+    }
+};
+
+export const getEthDepositAddressFor1155 = async accountRs => {
     try {
         const response = await axios.get(BRIDGEAPIURL, {
             params: {
@@ -767,13 +794,14 @@ export const getEthDepositAddress = async accountRs => {
                 account: accountRs,
             },
         });
+        console.log("🚀 ~ file: ardorInterface.js:797 ~ getEthDepositAddressFor1155 ~ response:", response)
         return response.data.depositAddress;
     } catch (error) {
         console.log('🚀 ~ file: ardorInterface.js:741 ~ getEthDepositAddress ~ error', error);
     }
 };
 
-export const getPegAddresses = async () => {
+export const getPegAddressesFor1155 = async () => {
     try {
         const response = await axios.get(BRIDGEAPIURL, {
             params: {

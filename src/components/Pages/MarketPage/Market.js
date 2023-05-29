@@ -7,6 +7,7 @@ import AskAndBidGrid from './TradesAndOrders/AskAndBids/AskAndBidGrid';
 import GemWidget from './GemWidget';
 import SectionSwitch from './SectionSwitch';
 import TradesAndOrderTable from './TradesAndOrders/TradesAndOrderTable';
+import PairSelector from './PairSelector';
 
 /**
  * @name Market
@@ -21,8 +22,12 @@ import TradesAndOrderTable from './TradesAndOrders/TradesAndOrderTable';
 const Market = ({ infoAccount, cards, gemCards }) => {
     // Option
     // 0 -> Market
-    // 1 -> Trades and orders
+    // 1 -> Trades
+    // 2 -> Orders
     const [option, setOption] = useState(0);
+
+    // Market type
+    const [marketCurrency, setMarketCurrency] = useState('IGNIS');
 
     // Filtered cards
     const [cardsFiltered, setCardsFiltered] = useState(cards);
@@ -37,37 +42,52 @@ const Market = ({ infoAccount, cards, gemCards }) => {
 
     return (
         <Box maxW={option === 2 ? syleOption2 : '100%'}>
-            <GemWidget username={infoAccount.name} gemCards={gemCards} IGNISBalance={infoAccount.IGNISBalance} />
+            <GemWidget
+                username={infoAccount.name}
+                gemCards={gemCards}
+                IGNISBalance={infoAccount.IGNISBalance}
+                market={marketCurrency}
+            />
+
+            <PairSelector marketCurrency={marketCurrency} setMarketCurrency={setMarketCurrency} />
             <SectionSwitch option={option} setOption={setOption} />
 
             {option === 0 && (
-                <>
+                <Box>
                     <SortAndFilterCards cards={cards} setCardsFiltered={setCardsFiltered} />
-                    <GridCards cards={cardsFiltered} isMarket={true} infoAccount={infoAccount} />
-                </>
+
+                    <GridCards
+                        cards={cardsFiltered}
+                        isMarket={true}
+                        infoAccount={infoAccount}
+                        market={marketCurrency}
+                    />
+                </Box>
             )}
 
-            {(option === 1 || option === 2) && (
+            {option === 1 && (
                 <Box>
                     <Heading textAlign="center" mt={4}>
-                        {option === 1 ? 'Orders' : 'Trades'}
+                        Orders
                     </Heading>
 
-                    {option === 1 ? (
-                        <AskAndBidGrid
-                            username={infoAccount.name}
-                            cards={cards}
-                            askOrders={infoAccount.currentAsks}
-                            bidOrders={infoAccount.currentBids}
-                            canDelete={true}
-                        />
-                    ) : (
-                        <TradesAndOrderTable
-                            account={infoAccount.accountRs}
-                            cards={cards}
-                            trades={infoAccount.trades}
-                        />
-                    )}
+                    <AskAndBidGrid
+                        username={infoAccount.name}
+                        cards={cards}
+                        askOrders={infoAccount.currentAsks}
+                        bidOrders={infoAccount.currentBids}
+                        canDelete={false}
+                    />
+                </Box>
+            )}
+
+            {option === 2 && (
+                <Box>
+                    <Heading textAlign="center" mt={4}>
+                        Trades
+                    </Heading>
+
+                    <TradesAndOrderTable account={infoAccount.accountRs} cards={cards} trades={infoAccount.trades} />
                 </Box>
             )}
         </Box>

@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import { GiCutDiamond } from 'react-icons/gi';
-import { NQTDIVIDER } from '../../../data/CONSTANTS';
+import { NQTDIVIDER, WETHASSET } from '../../../data/CONSTANTS';
 import TradeDialog from '../../Modals/TradeDialog/TradeDialog';
 
 /**
@@ -22,11 +22,12 @@ import TradeDialog from '../../Modals/TradeDialog/TradeDialog';
  * @param {String} username - String with the username
  * @param {Object} gemCards - Object with the gemCards data
  * @param {Number} IGNISBalance - Object with the IGNIS balance data
+ * @param {String} market - String with the market currency
  * @returns {JSX.Element} - JSX Element with the widget
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const GemWidget = ({ username, gemCards = [], IGNISBalance }) => {
+const GemWidget = ({ username, gemCards = [], IGNISBalance, market = 'IGNIS' }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const tradeRef = useRef();
 
@@ -51,8 +52,23 @@ const GemWidget = ({ username, gemCards = [], IGNISBalance }) => {
 
     // ------------------------------
     if (gemCards.length === 0) return null;
-    const lowestGemAsk = gemCards.askOrders.length > 0 ? gemCards.askOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
-    const highestGemBid = gemCards.bidOrders.length > 0 ? gemCards.bidOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
+    let lowestGemAsk = 0;
+    let highestGemBid = 0;
+
+    if (market === 'IGNIS') {
+        lowestGemAsk = gemCards.askOrders.length > 0 ? gemCards.askOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
+    } else {
+        lowestGemAsk =
+            gemCards.askOmnoOrders.length > 0 ? gemCards.askOmnoOrders.take.asset[WETHASSET] / NQTDIVIDER : 0;
+    }
+    //const lowestGemAsk = gemCards.askOrders.length > 0 ? gemCards.askOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
+    if (market === 'IGNIS') {
+        highestGemBid = gemCards.bidOrders.length > 0 ? gemCards.bidOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
+    } else {
+        highestGemBid =
+            gemCards.bidOmnoOrders.length > 0 ? gemCards.askOmnoOrders.take.asset[WETHASSET] / NQTDIVIDER : 0;
+    }
+    //const highestGemBid = gemCards.bidOrders.length > 0 ? gemCards.bidOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
 
     let confirmedBalance = Number(gemCards.quantityQNT / NQTDIVIDER);
     confirmedBalance = Number.isInteger(confirmedBalance) ? confirmedBalance.toFixed(0) : confirmedBalance.toFixed(2);
@@ -130,7 +146,8 @@ const GemWidget = ({ username, gemCards = [], IGNISBalance }) => {
                             style={hover ? hoverStyle : initialStyle}
                             onMouseEnter={() => setHover(true)}
                             onMouseLeave={() => setHover(false)}>
-                            TRADE <br/>NOW
+                            TRADE <br />
+                            NOW
                         </Center>
                     </GridItem>
                 </Grid>

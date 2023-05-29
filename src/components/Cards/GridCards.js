@@ -11,13 +11,13 @@ import DetailedCard from './DetailedCard';
  * @param {Array} cards - Array with the cards
  * @param {Boolean} isMarket - Boolean to know if the cards are in the market
  * @param {Boolean} onlyBuy - Boolean to know if the cards are only buyable
- * @param {String} username - String with the username
- * @param {Object} ignis - Object with the ignis data
+ * @param {Object} infoAccount - Object with the info of the account
+ * @param {String} market - String with the market
  * @returns {JSX.Element} - JSX element
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {} }) => {
+const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {}, market = 'IGNIS' }) => {
     const [actualCards, setActualCards] = useState(cards);
 
     // Card clicked
@@ -114,6 +114,7 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {} 
                                 isMarket={isMarket}
                                 onlyBuy={onlyBuy}
                                 infoAccount={infoAccount}
+                                market={market}
                             />
                         </Animated>
                     );

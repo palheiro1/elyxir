@@ -16,7 +16,7 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 
-import { NQTDIVIDER } from '../../data/CONSTANTS';
+import { NQTDIVIDER, WETHASSET } from '../../data/CONSTANTS';
 import CardBadges from './CardBadges';
 // Modals
 import CraftDialog from '../Modals/CraftDialog/CraftDialog';
@@ -45,8 +45,7 @@ import BidDialog from '../Modals/TradeDialog/BidDialog/BidDialog';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, infoAccount }) => {
-
+const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, infoAccount, market = 'WETH' }) => {
     // ------------------------------
 
     const { isOpen: isOpenCraft, onOpen: onOpenCraft, onClose: onCloseCraft } = useDisclosure();
@@ -82,13 +81,20 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
         channel: continent,
         quantityQNT: quantity,
         rarity,
-        askOrders,
-        bidOrders,
-        lastPrice,
+        askOrders: askIgnisOrders,
+        askOmnoOrders,
+        bidOrders: bidIgnisOrders,
+        bidOmnoOrders,
+        lastPrice:lastIgnisPrice,
+        lastOmnoPrice,
     } = card;
 
     let fixOnlyBuy = onlyBuy;
     if (quantity === 0 && !isMarket) fixOnlyBuy = true;
+
+    let askOrders = market === 'IGNIS' ? askIgnisOrders : askOmnoOrders;
+    let bidOrders = market === 'IGNIS' ? bidIgnisOrders : bidOmnoOrders;
+    let lastPrice = market === 'IGNIS' ? lastIgnisPrice : lastOmnoPrice;
 
     // ------------------------------
 
@@ -119,18 +125,22 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     const cardOpacity = haveThisCard ? 1 : 0.25;
 
     // ------------------------------
-    
-    let lowedAskOrders = '';
-    let highBidOrders = '';
+
+    let lowedAskOrders = 0;
+    let highBidOrders = 0;
     if (askOrders.length > 0) {
-        const auxAsks = askOrders[0].priceNQTPerShare / NQTDIVIDER;
+        let auxAsks;
+        if(market === 'IGNIS') auxAsks = askOrders[0].priceNQTPerShare / NQTDIVIDER;
+        if(market === 'WETH') auxAsks = askOrders[0].take.asset[WETHASSET] / NQTDIVIDER;
         lowedAskOrders = Number.isInteger(auxAsks) ? auxAsks : auxAsks.toFixed(2);
     }
     if (bidOrders.length > 0) {
-        const auxBids = bidOrders[0].priceNQTPerShare / NQTDIVIDER;
+        let auxBids;
+        if(market === 'IGNIS') auxBids = bidOrders[0].priceNQTPerShare / NQTDIVIDER;
+        if(market === 'WETH') auxBids = bidOrders[0].give.asset[WETHASSET] / NQTDIVIDER;
         highBidOrders = Number.isInteger(auxBids) ? auxBids : auxBids.toFixed(2);
     }
-    
+
     // ------------------------------
     const unconfirmedQuantityQNT = Number(card.unconfirmedQuantityQNT);
     const isBlocked = quantity > unconfirmedQuantityQNT && unconfirmedQuantityQNT === 0;
@@ -308,46 +318,60 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
             {/* ------------------------------------ HIDE DIALOGs ------------------------------------ */}
             {card && (
                 <>
-                    <SendDialog
-                        isOpen={isOpenSend}
-                        onClose={onCloseSend}
-                        reference={refSend}
-                        card={card}
-                        username={username}
-                    />
-                    <CraftDialog
-                        isOpen={isOpenCraft}
-                        onClose={onCloseCraft}
-                        reference={refCraft}
-                        card={card}
-                        username={username}
-                    />
-                    <MorphDialog
-                        isOpen={isOpenMorph}
-                        onClose={onCloseMorph}
-                        reference={refMorph}
-                        card={card}
-                        username={username}
-                    />
-                    <AskDialog
-                        reference={refAsk}
-                        isOpen={isOpenAsk}
-                        onClose={onCloseAsk}
-                        card={card}
-                        username={username}
-                        askOrders={askOrdersForThisCard}
-                        bidOrders={bidOrdersForThisCard}
-                    />
-                    <BidDialog
-                        reference={refBid}
-                        isOpen={isOpenBid}
-                        onClose={onCloseBid}
-                        card={card}
-                        username={username}
-                        ignis={ignis}
-                        askOrders={askOrdersForThisCard}
-                        bidOrders={bidOrdersForThisCard}
-                    />
+                    {isOpenSend && (
+                        <SendDialog
+                            isOpen={isOpenSend}
+                            onClose={onCloseSend}
+                            reference={refSend}
+                            card={card}
+                            username={username}
+                        />
+                    )}
+
+                    {isOpenCraft && (
+                        <CraftDialog
+                            isOpen={isOpenCraft}
+                            onClose={onCloseCraft}
+                            reference={refCraft}
+                            card={card}
+                            username={username}
+                        />
+                    )}
+
+                    {isOpenMorph && (
+                        <MorphDialog
+                            isOpen={isOpenMorph}
+                            onClose={onCloseMorph}
+                            reference={refMorph}
+                            card={card}
+                            username={username}
+                        />
+                    )}
+
+                    {isOpenAsk && (
+                        <AskDialog
+                            reference={refAsk}
+                            isOpen={isOpenAsk}
+                            onClose={onCloseAsk}
+                            card={card}
+                            username={username}
+                            askOrders={askOrdersForThisCard}
+                            bidOrders={bidOrdersForThisCard}
+                        />
+                    )}
+
+                    {isOpenBid && (
+                        <BidDialog
+                            reference={refBid}
+                            isOpen={isOpenBid}
+                            onClose={onCloseBid}
+                            card={card}
+                            username={username}
+                            ignis={ignis}
+                            askOrders={askOrdersForThisCard}
+                            bidOrders={bidOrdersForThisCard}
+                        />
+                    )}
                 </>
             )}
             {/* -------------------------------------------------------------------------------------- */}

@@ -33,7 +33,7 @@ const SectionSwitch = ({ option, setOption }) => {
                 fontSize="md"
                 onClick={() => setOption(1)}
                 borderRightRadius="lg">
-                Swap to Ardor
+                Swap to ARDOR
             </Button>
         </SimpleGrid>
     );
