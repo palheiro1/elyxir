@@ -5,12 +5,10 @@ let isFetching = false;
 
 export const fetchOmnoMarket = async () => {
     if (cache) {
-        console.log("🚀 ~ file: omno.js:8 ~ fetchOmnoMarket ~ cache:", cache)
         return cache;
     }
 
     if (isFetching) {
-        console.log("🚀 ~ file: omno.js:13 ~ fetchOmnoMarket ~ isFetching:", isFetching)
         // Si ya hay una solicitud en curso, esperamos a que termine y retornamos la caché actualizada
         return new Promise((resolve) => {
             const interval = setInterval(() => {
