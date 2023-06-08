@@ -25,7 +25,7 @@ import {
 import Hover from 'react-3d-hover';
 
 import { useEffect, useState } from 'react';
-import { GIFTZASSET, NQTDIVIDER, PACKPRICEWETH, WETHASSET } from '../../../data/CONSTANTS';
+import { GIFTZASSET, NQTDIVIDER, WETHASSET } from '../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { buyPackWithWETH } from '../../../utils/cardsUtils';
 import { checkPin } from '../../../utils/walletUtils';
@@ -52,7 +52,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [selectedOffers, setSelectedOffers] = useState([]); // selected offers
 
     const { name, WETHBalance } = infoAccount;
-    const maxPacksWithIgnis = Math.floor(WETHBalance / PACKPRICEWETH);
 
     const toast = useToast();
     const colorText = useColorModeValue('black', 'white');
@@ -60,6 +59,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     useEffect(() => {
         const recoverMarketOffers = async () => {
             const offers = await fetchOmnoMarket();
+            console.log("🚀 ~ file: BuyPackDialog.js:62 ~ recoverMarketOffers ~ offers:", offers)
             const wethAsset = offers.filter(item => {
                 return (
                     Object.keys(item.give).length === 1 &&
@@ -69,8 +69,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 );
             });
             setMarketOffers(wethAsset);
-            console.log("🚀 ~ file: BuyPackDialog.js:79 ~ recoverMarketOffers ~ wethAsset:", wethAsset)
-
+            console.log('🚀 ~ file: BuyPackDialog.js:79 ~ recoverMarketOffers ~ wethAsset:', wethAsset);
 
             // Calcular el total de paquetes en venta
             const totalOnSale = wethAsset.reduce((total, item) => {
@@ -313,7 +312,13 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         </Center>
                                     </Box>
 
-                                    {maxPacksWithIgnis === 0 && (
+                                    {totalOnSale === 0 && (
+                                        <Text textAlign="center" color="red.500" fontWeight="bold">
+                                            There are no packs for sale.
+                                        </Text>
+                                    )}
+
+                                    {WETHASSET < priceInWETH / NQTDIVIDER && (
                                         <Text textAlign="center" color="red.500" fontWeight="bold">
                                             You don't have enough wETH
                                         </Text>

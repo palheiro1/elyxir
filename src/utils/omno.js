@@ -31,7 +31,7 @@ export const fetchOmnoMarket = async () => {
         cache = response.data;
         setTimeout(() => {
             cache = null;
-        }, 7500);
+        }, 5000);
         return cache;
     } catch (error) {
         console.log('🚀 ~ file: omno.js:12 ~ fetchOmnoMarket ~ error:', error);
