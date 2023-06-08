@@ -215,8 +215,11 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             ]);
 
         const gems = currencyAssets[0];
+        console.log("🚀 ~ file: Home.js:218 ~ loadAll ~ gems:", gems)
         const weth = currencyAssets[1];
+        console.log("🚀 ~ file: Home.js:220 ~ loadAll ~ weth:", weth)
         const giftzAsset = currencyAssets[2];
+        console.log("🚀 ~ file: Home.js:222 ~ loadAll ~ giftzAsset:", giftzAsset)
 
         // -----------------------------------------------------------------
         // Check notifications - Unconfirmed transactions

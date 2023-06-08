@@ -36,6 +36,7 @@ const getOmnoBidOrders = (allOffers, asset) => {
 
 export const getOmnoMarketOrdesForAsset = async asset => {
     const allOffers = await fetchOmnoMarket();
+    console.log("🚀 ~ file: omnoInterface.js:39 ~ getOmnoMarketOrdesForAsset ~ allOffers:", allOffers)
     const askOrders = getOmnoAskOrders(allOffers, asset);
     const bidOrders = getOmnoBidOrders(allOffers, asset);
     return { askOrders, bidOrders };
