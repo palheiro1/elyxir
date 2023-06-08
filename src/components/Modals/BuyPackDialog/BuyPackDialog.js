@@ -59,7 +59,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     useEffect(() => {
         const recoverMarketOffers = async () => {
             const offers = await fetchOmnoMarket();
-            console.log("🚀 ~ file: BuyPackDialog.js:62 ~ recoverMarketOffers ~ offers:", offers)
             const wethAsset = offers.filter(item => {
                 return (
                     Object.keys(item.give).length === 1 &&
@@ -69,7 +68,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 );
             });
             setMarketOffers(wethAsset);
-            console.log('🚀 ~ file: BuyPackDialog.js:79 ~ recoverMarketOffers ~ wethAsset:', wethAsset);
 
             // Calcular el total de paquetes en venta
             const totalOnSale = wethAsset.reduce((total, item) => {
