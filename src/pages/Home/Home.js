@@ -60,7 +60,9 @@ import {
     getTrades,
     getTransaction,
     getUnconfirmedTransactions,
-    processUnwrapsForAccount,
+    processUnwrapsFor1155,
+    processUnwrapsForOldBridge,
+    processWrapsFor20,
 } from '../../services/Ardor/ardorInterface';
 import Exchange from '../Exchange/Exchange';
 import ArdorChat from '../../components/Pages/ChatPage/ArdorChat';
@@ -215,7 +217,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         const gems = currencyAssets[0];
         const weth = currencyAssets[1];
         const giftzAsset = currencyAssets[2];
-        
+
         // -----------------------------------------------------------------
         // Check notifications - Unconfirmed transactions
         const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
@@ -357,9 +359,18 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     const checkUnwraps = useCallback(async () => {
         const { accountRs } = infoAccount;
-        const response = await processUnwrapsForAccount(accountRs);
-        if (response && response.starts) {
-            okToast('DETECTED UNWRAP: ' + response.starts + ' transfers started.', toast);
+        // TODO: CHECK ALL BRIDGES
+        const olbBridge = await processUnwrapsForOldBridge(accountRs);
+        const bridge1155 = await processUnwrapsFor1155(accountRs);
+        const bridge20 = await processWrapsFor20(accountRs);
+        if (olbBridge && olbBridge.starts) {
+            okToast('[OLD BRIDGE] DETECTED UNWRAP: ' + olbBridge.starts + ' transfers started.', toast);
+        }
+        if (bridge1155 && bridge1155.starts) {
+            okToast('[ERC-1155] DETECTED UNWRAP: ' + bridge1155.starts + ' transfers started.', toast);
+        }
+        if (bridge20 && bridge20.starts) {
+            okToast('[wETH] DETECTED WRAP: ' + bridge20.starts + ' transfers started.', toast);
         }
     }, [infoAccount, toast]);
 

@@ -2,7 +2,7 @@ import {
     ASSETS_IDS,
     BUYPACKACCOUNT,
     CATOBLEPASASSETWRONG,
-    GEMASSET,
+    CURRENCY_ASSETS,
     GIFTZASSET,
     IMGURL,
     IMG_MD_PATH,
@@ -54,7 +54,8 @@ export const getThumbsImage = name => {
 };
 
 export const getAsset = (asset, collectionCardsStatic) => {
-    return (asset === GEMASSET ? 'GEM' : collectionCardsStatic.find(card => card.asset === asset)) || null;
+    const isCurrencyAsset = Object.keys(CURRENCY_ASSETS).includes(asset);
+    return (isCurrencyAsset ? CURRENCY_ASSETS[asset] : collectionCardsStatic.find(card => card.asset === asset)) || null;
 };
 
 // -------------------------------------------------

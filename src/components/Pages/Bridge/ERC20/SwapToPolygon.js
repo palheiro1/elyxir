@@ -19,8 +19,9 @@ import {
 } from '@chakra-ui/react';
 
 // Utils
-import { checkPin } from '../../../../utils/walletUtils';
+import { checkPin, sendToPolygonBridge } from '../../../../utils/walletUtils';
 import { errorToast, infoToast, okToast } from '../../../../utils/alerts';
+import { NQTDIVIDER, WETHASSET } from '../../../../data/CONSTANTS';
 
 /**
  * @name SwapToPolygon
@@ -41,7 +42,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
     const [isSwapping, setIsSwapping] = useState(false);
 
     const [passphrase, setPassphrase] = useState('');
-    const [selectedCards, setSelectedCards] = useState([]);
+    const [wEthToSwap, setWEthToSwap] = useState(0);
 
     const { WETHBalance } = infoAccount;
 
@@ -68,20 +69,25 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
         infoToast('Swapping cards...', toast);
         setIsSwapping(true);
 
-        let success = false;
+        const amountQnt = wEthToSwap * NQTDIVIDER;
+        console.log("🚀 ~ file: SwapToPolygon.js:73 ~ handleSwap ~ amountQnt:", amountQnt)
 
-        /*
+        const cardsToSwap = [
+            {
+                asset: WETHASSET,
+                quantity: amountQnt,
+            },
+        ];
+
         const success = await sendToPolygonBridge({
             cards: cardsToSwap,
             ardorAccount: ardorAddress,
             ethAccount: polygonAccount,
             passPhrase: passphrase,
         });
-        */
 
         if (success) {
             okToast('Swap completed successfully', toast);
-            setSelectedCards([]);
             setPolygonAccount('');
             setIsSwapping(false);
         } else {
@@ -99,8 +105,8 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                 </Heading>
 
                 <Box>
-                    <NumberInput defaultValue={0} min={0.005} max={WETHBalance}>
-                        <NumberInputField />
+                    <NumberInput defaultValue={0} min={0.005} max={WETHBalance} precision={7} value={wEthToSwap}>
+                        <NumberInputField onChange={e => setWEthToSwap(e.target.value)} />
                     </NumberInput>
                     <Center>
                         <Text color={textColor}>Max: {WETHBalance}</Text>
@@ -113,8 +119,8 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                 </Heading>
 
                 <Input
-                    isDisabled={selectedCards.length === 0}
-                    placeholder={selectedCards.length === 0 ? 'Select cards first' : '0x...'}
+                    isDisabled={wEthToSwap === 0}
+                    placeholder={wEthToSwap === 0 ? 'Select amount to swap' : '0x...'}
                     value={polygonAccount}
                     onChange={handleInput}
                     isInvalid={!isValidAccount}
@@ -128,7 +134,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                 <Center>
                     <HStack spacing={7}>
                         <PinInput
-                            isDisabled={selectedCards.length === 0 || !isValidAccount}
+                            isDisabled={wEthToSwap === 0 || !isValidAccount}
                             size="lg"
                             placeholder="🔒"
                             onComplete={handleCompletePin}
@@ -148,7 +154,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                     w="100%"
                     colorScheme="blue"
                     variant="outline"
-                    disabled={!isValidAccount || !isValidPin || selectedCards.length === 0 || isSwapping}
+                    disabled={!isValidAccount || !isValidPin || wEthToSwap === 0 || isSwapping}
                     onClick={handleSwap}
                     letterSpacing="widest">
                     SWAP

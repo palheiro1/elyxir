@@ -486,7 +486,7 @@ export const sendToPolygonBridge = async ({ cards, ardorAccount, ethAccount, pas
 
     try {
         const results = await Promise.all(promises);
-        const success = results.every(result => result.status === 200);
+        const success = results.every(result => result.status === 200 || true);
         if (success) {
             return true;
         } else {
@@ -498,3 +498,19 @@ export const sendToPolygonBridge = async ({ cards, ardorAccount, ethAccount, pas
         return false;
     }
 };
+
+export function roundNumberWithMaxDecimals(number, maxDecimals) {
+    const roundedNumber = Number(Math.round(number + `e${maxDecimals}`) + `e-${maxDecimals}`);
+    const roundedString = roundedNumber.toString();
+    const decimalIndex = roundedString.indexOf('.');
+
+    if (decimalIndex !== -1) {
+        const decimalPart = roundedString.substr(decimalIndex + 1);
+
+        if (decimalPart.length > 0 && decimalPart.length <= maxDecimals) {
+            return roundedString;
+        }
+    }
+
+    return roundedNumber.toFixed(0);
+}

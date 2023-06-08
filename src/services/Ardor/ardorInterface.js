@@ -590,6 +590,7 @@ const transferAsset = async ({
     deadline = 30,
     priority = 'NORMAL',
 }) => {
+    console.log(asset, quantityQNT, recipient, passPhrase)
     if (!asset || !quantityQNT || !recipient || !passPhrase) return false;
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 
@@ -756,22 +757,90 @@ const getBlockchainStatus = async () => {
 };
 
 // ----------------------------------------------
-// |                  B R I D G E               |
+// |                B R I D G E S               |
 // ----------------------------------------------
 
-export const getEthDepositAddressFor20 = async accountRs => {
+// ----------------------------------------------
+// OLD BRIDGE
+// ONLY UNWRAP
+// ----------------------------------------------
+
+export const getEthDepositAddressForOldBridge = async accountRs => {
     try {
         const response = await axios.get(BRIDGEAPIURL, {
             params: {
-                action: 'mbGetWrapDepositAddress',
+                action: 'getUnwrapDepositAddress',
                 account: accountRs,
             },
         });
         return response.data.depositAddress;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:772 ~ getEthDepositAddressFor20 ~ error:', error);
+        console.log('🚀 ~ file: ardorInterface.js:775 ~ getEthDepositAddressForOldBridge ~ error:', error);
     }
 };
+
+export const processUnwrapsForOldBridge = async accountRs => {
+    try {
+        const response = await axios.get(BRIDGEAPIURL, {
+            params: {
+                action: 'processUnwrapsForAccount',
+                account: accountRs,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:768 ~ processUnwrapsForAccount ~ error', error);
+    }
+};
+
+// ----------------------------------------------
+// NEW BRIDGE - ERC 1155
+// ----------------------------------------------
+
+export const getPegAddressesFor1155 = async () => {
+    try {
+        const response = await axios.get(BRIDGEAPIURL, {
+            params: {
+                action: 'getPegAddressesFor1155',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:754 ~ getPegAddresses ~ error', error);
+    }
+};
+
+export const getEthDepositAddressFor1155 = async accountRs => {
+    try {
+        const response = await axios.get(BRIDGEAPIURL, {
+            params: {
+                action: 'getUnwrapDepositAddressFor1155',
+                account: accountRs,
+            },
+        });
+        return response.data.depositAddress;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:741 ~ getEthDepositAddress ~ error', error);
+    }
+};
+
+export const processUnwrapsFor1155 = async accountRs => {
+    try {
+        const response = await axios.get(BRIDGEAPIURL, {
+            params: {
+                action: 'processUnwrapsForAccountFor1155',
+                account: accountRs,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log('🚀 ~ file: ardorInterface.js:837 ~ processUnwrapsFor1155 ~ error:', error);
+    }
+};
+
+// ----------------------------------------------
+// NEW BRIDGE - ERC 20
+// ----------------------------------------------
 
 export const getPegAddressesFor20 = async () => {
     try {
@@ -786,45 +855,31 @@ export const getPegAddressesFor20 = async () => {
     }
 };
 
-export const getEthDepositAddressFor1155 = async accountRs => {
+export const getEthDepositAddressFor20 = async accountRs => {
     try {
         const response = await axios.get(BRIDGEAPIURL, {
             params: {
-                action: 'getUnwrapDepositAddress',
+                action: 'mbGetWrapDepositAddress',
                 account: accountRs,
             },
         });
-        console.log("🚀 ~ file: ardorInterface.js:797 ~ getEthDepositAddressFor1155 ~ response:", response)
         return response.data.depositAddress;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:741 ~ getEthDepositAddress ~ error', error);
+        console.log('🚀 ~ file: ardorInterface.js:868 ~ getEthDepositAddressFor20 ~ error:', error);
     }
 };
 
-export const getPegAddressesFor1155 = async () => {
+export const processWrapsFor20 = async accountRs => {
     try {
         const response = await axios.get(BRIDGEAPIURL, {
             params: {
-                action: 'getPegAddresses',
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:754 ~ getPegAddresses ~ error', error);
-    }
-};
-
-export const processUnwrapsForAccount = async accountRs => {
-    try {
-        const response = await axios.get(BRIDGEAPIURL, {
-            params: {
-                action: 'processUnwrapsForAccount',
+                action: 'mbProcessWrapsForAccount',
                 account: accountRs,
             },
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:768 ~ processUnwrapsForAccount ~ error', error);
+        console.log('🚀 ~ file: ardorInterface.js:882 ~ processUnwrapsFor20 ~ error:', error);
     }
 };
 

@@ -1,9 +1,16 @@
 import { Box } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { getEthDepositAddressFor1155, getEthDepositAddressFor20, getPegAddressesFor1155, getPegAddressesFor20 } from '../../../services/Ardor/ardorInterface';
+import {
+    getEthDepositAddressFor1155,
+    getEthDepositAddressFor20,
+    getEthDepositAddressForOldBridge,
+    getPegAddressesFor1155,
+    getPegAddressesFor20,
+} from '../../../services/Ardor/ardorInterface';
 import BridgeERC1155 from './ERC1155/BridgeERC1155';
 import BridgeSelector from './BridgeSelector';
 import BridgeERC20 from './ERC20/BridgeERC20';
+import OldBridge from './OldBridge/OldBridge';
 
 /**
  * @name Bridge
@@ -16,10 +23,12 @@ import BridgeERC20 from './ERC20/BridgeERC20';
  */
 const Bridge = ({ infoAccount, cards }) => {
     const [swapAddresses, setSwapAddresses] = useState({
+        OLD_BRIDGE: { eth: '' },
         ERC20: { eth: '', ardor: '' },
         ERC1155: { eth: '', ardor: '' },
         isLoaded: false,
     });
+    console.log("🚀 ~ file: Bridge.js:31 ~ Bridge ~ swapAddresses:", swapAddresses)
     const [needReload, setNeedReload] = useState(true); // Flag to reload the page [true -> reload
     const [isLoading, setIsLoading] = useState(false);
     const [bridgeType, setBridgeType] = useState(); // ERC20 or ERC1155
@@ -29,29 +38,43 @@ const Bridge = ({ infoAccount, cards }) => {
             setIsLoading(true);
             setNeedReload(false);
             try {
-                const [ethAddress, { ardorBlockedAccount }, eth20Address, { ardorBlockedAccount:ardorBlockedAccount20 }] = await Promise.all([
-                    getEthDepositAddressFor1155(infoAccount.accountRs),
+                const [
+                    ethAddressOldBridge,
+
+                    { ardorBlockedAccount: ardorBlockedAccount1155 },
+                    ethAddress1155Bridge,
+
+                    { ardorBlockedAccount: ardorBlockedAccount20 },
+                    ethAddress20Bridge,
+                ] = await Promise.all([
+                    getEthDepositAddressForOldBridge(infoAccount.accountRs),
+
                     getPegAddressesFor1155(),
-                    getEthDepositAddressFor20(infoAccount.accountRs),
+                    getEthDepositAddressFor1155(infoAccount.accountRs),
+
                     getPegAddressesFor20(),
+                    getEthDepositAddressFor20(infoAccount.accountRs),
                 ]);
-                console.log('🚀 ~ file: Bridge.js:31 ~ getSwapAddresses ~ ethAddress:', ethAddress, ardorBlockedAccount, eth20Address);
+
                 setSwapAddresses({
-                    ERC20: {
-                        eth: eth20Address,
-                        ardor: ardorBlockedAccount20,
+                    OLD_BRIDGE: {
+                        eth: ethAddressOldBridge,
                     },
                     ERC1155: {
-                        eth: ethAddress,
-                        ardor: ardorBlockedAccount,
+                        eth: ethAddress1155Bridge,
+                        ardor: ardorBlockedAccount1155,
+                    },
+                    ERC20: {
+                        eth: ethAddress20Bridge,
+                        ardor: ardorBlockedAccount20,
                     },
                     isLoaded: true,
                 });
             } catch (error) {
-                console.error(error);
-                // Manejar el error de forma adecuada
+                console.log('🚀 ~ file: Bridge.js:73 ~ getSwapAddresses ~ error:', error);
+            } finally {
+                setIsLoading(false);
             }
-            setIsLoading(false);
         };
 
         needReload && !swapAddresses.isLoaded && !isLoading && getSwapAddresses();
@@ -64,6 +87,7 @@ const Bridge = ({ infoAccount, cards }) => {
             {bridgeType === 'ERC1155' && (
                 <BridgeERC1155 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC1155} cards={cards} />
             )}
+            {bridgeType === 'OLD' && <OldBridge infoAccount={infoAccount} swapAddresses={swapAddresses?.OLD_BRIDGE} />}
         </Box>
     );
 };

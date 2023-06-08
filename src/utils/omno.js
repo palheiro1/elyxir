@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { OMNO_API } from '../data/CONSTANTS';
 
 let cache = null;
 let isFetching = false;
@@ -10,7 +11,7 @@ export const fetchOmnoMarket = async () => {
 
     if (isFetching) {
         // Si ya hay una solicitud en curso, esperamos a que termine y retornamos la caché actualizada
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             const interval = setInterval(() => {
                 if (!isFetching) {
                     clearInterval(interval);
@@ -22,7 +23,11 @@ export const fetchOmnoMarket = async () => {
 
     try {
         isFetching = true;
-        const response = await axios.get('https://api.mythicalbeings.io/index.php?action=getOmnoMarket');
+        const response = await axios.get(OMNO_API, {
+            params: {
+                action: 'getOmnoMarket',
+            },
+        });
         cache = response.data;
         setTimeout(() => {
             cache = null;

@@ -7,7 +7,6 @@ import SwapToPolygon from './SwapToPolygon';
 import SwapToArdor from './SwapToArdor';
 
 const   BridgeERC1155 = ({ infoAccount, swapAddresses, cards }) => {
-    console.log("🚀 ~ file: BridgeERC1155.js:10 ~ BridgeERC1155 ~ swapAddresses:", swapAddresses)
     const [option, setOption] = useState(0);
 
     return (

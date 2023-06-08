@@ -14,6 +14,8 @@ import { getAsset } from '../../../utils/cardsUtils';
 import GemCard from '../../Cards/GemCard';
 import IgnisCard from '../../Cards/IgnisCard';
 import GIFTZCard from '../../Cards/GIFTZCard';
+import { roundNumberWithMaxDecimals } from '../../../utils/walletUtils';
+import WETHCard from '../../Cards/WETHCard';
 
 // -------------------------------------------- //
 // ------------------ HANDLERS ---------------- //
@@ -79,6 +81,10 @@ export const handleType2AndSubtype1 = (tx, timestamp, infoAccount, collectionCar
     let handler = null;
     if (asset === 'GEM') {
         handler = handleGEM(inOut, fixedAmount, timestamp, sender);
+    } else if (asset === 'GIFTZ') {
+        handler = handleGIFTZ(inOut, fixedAmount, timestamp, sender);
+    } else if (asset === 'WETH') {
+        handler = handleWETH(inOut, fixedAmount, timestamp, sender);
     } else {
         handler = handleCardTransfer(inOut, fixedAmount, timestamp, sender, asset);
     }
@@ -294,6 +300,68 @@ export const handleGEM = (type, amount, date, account) => {
                 </Td>
                 <Td>
                     <GemCard />
+                </Td>
+                <Td>{fixedAmount}</Td>
+                <Td>{date}</Td>
+                <Td>{account}</Td>
+            </Tr>
+        );
+    };
+    return {
+        Component,
+        type,
+        isCurrency: true,
+    };
+};
+
+export const handleGIFTZ = (type, amount, date, account) => {
+    type = type.toLowerCase();
+    amount = Number(amount / NQTDIVIDER);
+    const fixedAmount = roundNumberWithMaxDecimals(amount, 8);
+    const Component = () => {
+        return (
+            <Tr
+                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                border={{ base: '2px', md: '0px' }}
+                borderColor="whiteAlpha.300"
+                rounded={{ base: 'md', md: 'unset' }}
+                m={{ base: 2, md: 0 }}>
+                <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+                <Td>
+                    <GIFTZCard />
+                </Td>
+                <Td>{fixedAmount}</Td>
+                <Td>{date}</Td>
+                <Td>{account}</Td>
+            </Tr>
+        );
+    };
+    return {
+        Component,
+        type,
+        isCurrency: true,
+    };
+};
+
+export const handleWETH = (type, amount, date, account) => {
+    type = type.toLowerCase();
+    amount = Number(amount / NQTDIVIDER);
+    const fixedAmount = roundNumberWithMaxDecimals(amount, 8);
+    const Component = () => {
+        return (
+            <Tr
+                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                border={{ base: '2px', md: '0px' }}
+                borderColor="whiteAlpha.300"
+                rounded={{ base: 'md', md: 'unset' }}
+                m={{ base: 2, md: 0 }}>
+                <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+                <Td>
+                    <WETHCard />
                 </Td>
                 <Td>{fixedAmount}</Td>
                 <Td>{date}</Td>

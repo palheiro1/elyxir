@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 
 // Utils
-import { processUnwrapsForAccount } from '../../../../services/Ardor/ardorInterface';
+import { processUnwrapsFor1155 } from '../../../../services/Ardor/ardorInterface';
 import { copyToast, errorToast, okToast } from '../../../../utils/alerts';
 
 /**
@@ -34,7 +34,7 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
     };
 
     const swap = async () => {
-        const response = await processUnwrapsForAccount(infoAccount.accountRs);
+        const response = await processUnwrapsFor1155(infoAccount.accountRs);
         if (response && response.starts) {
             okToast(response.starts + ' transfers started.', toast);
         } else if (response && response.requestProcessingTime) {

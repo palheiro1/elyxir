@@ -50,6 +50,7 @@ export const JACKPOTACCOUNT = 'ARDOR-4V3B-TVQA-Q6LF-GMH3T';
 export const BUYPACKACCOUNT = 'ARDOR-4V3B-TVQA-Q6LF-GMH3T';
 export const TARASCACARDACCOUNT = 'ARDOR-5NCL-DRBZ-XBWF-DDN5T';
 export const BRIDGEACCOUNT = 'ARDOR-3YEX-JZFZ-UATF-EKGLN';
+export const NEW_BRIDGEACCOUNT = 'ARDOR-LZ8A-PVC2-BMT7-C6346';
 export const GEMASSETACCOUNT = 'ARDOR-XG7G-V7BV-GT4P-FUGW6';
 export const WETHASSETACCOUNT = 'ARDOR-QXKT-JR64-SAWJ-3LM64';
 export const GIFTZASSETACCOUNT = 'ARDOR-TU3S-47Y5-6GSM-8ZSJ8';
@@ -68,7 +69,7 @@ export const NQTDIVIDER = 100000000;
 // ---------- NEW ECONOMICS WITH OMNO ----------
 // ---------------------------------------------
 export const PACKPRICEWETH = 2;
-export const OMNO_CONTRACT = 'mythicalOmnoTest';
+export const OMNO_CONTRACT = 'MBOmno';
 export const OMNO_ACCOUNT = 'ARDOR-LQET-FNLD-USL8-2AGBP';
 //export const OMNO_API = 'https://136.243.155.148:30001/api';
 
@@ -133,7 +134,10 @@ export const MORPHINGEPIC = 750;
 // ---------------------------------------------
 export const DEFAULT_CONTACTS = [
     { accountRs: COLLECTIONACCOUNT, name: 'Mythical Beings' },
-    { accountRs: BRIDGEACCOUNT, name: 'Mythical Beings ERC1155 Bridge' },
+    { accountRs: BRIDGEACCOUNT, name: 'Mythical Beings ERC1155 (Old) Bridge' },
+    { accountRs: NEW_BRIDGEACCOUNT, name: 'Mythical Beings New Bridge' },
+    { accountRs: WETHASSETACCOUNT, name: 'Mythical Beings WETH' },
+    { accountRs: GIFTZASSETACCOUNT, name: 'Mythical Beings GIFTZ' },
     { accountRs: BUYPACKACCOUNT, name: 'Mythical Beings' },
     { accountRs: TARASCACARDACCOUNT, name: 'Mythical Beings' },
     { accountRs: GEMASSETACCOUNT, name: 'Mythical Beings' },
@@ -143,7 +147,7 @@ export const DEFAULT_CONTACTS = [
 // ---------------------------------------------
 // ----------------- APIS URL ------------------
 // ---------------------------------------------
-export const GAMEAPIURL = 'https://api.mythicalbeings.io/';
+export const OMNO_API = 'https://api.mythicalbeings.io/';
 export const BRIDGEAPIURL = 'https://api.mythicalbeings.io/';
 export const NODEURL = 'https://node1.mythicalbeings.io:27876/nxt';
 export const APILIMIT = 125;
@@ -163,6 +167,10 @@ export const ALL_ACCOUNTS = [
     CURRENCYSELLER,
     BURNACCOUNT,
     REFERRALCONTRACTACCOUNT,
+    OMNO_ACCOUNT,
+    WETHASSETACCOUNT,
+    GIFTZASSETACCOUNT,
+    NEW_BRIDGEACCOUNT,
 ];
 
 // ---------------------------------------------
@@ -293,4 +301,11 @@ export const ASSETS_IDS = [
     '10956456574154580310',
     GEMASSET,
     WETHASSET,
+    GIFTZASSET,
 ];
+
+export const CURRENCY_ASSETS = {
+    [GEMASSET]: 'GEMs',
+    [WETHASSET]: 'WETH',
+    [GIFTZASSET]: 'GIFTZ',
+};
