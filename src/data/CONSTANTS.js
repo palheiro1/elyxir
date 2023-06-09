@@ -70,7 +70,7 @@ export const NQTDIVIDER = 100000000;
 // ---------------------------------------------
 export const PACKPRICEWETH = 2;
 export const OMNO_CONTRACT = 'MBOmno';
-export const OMNO_ACCOUNT = 'ARDOR-LQET-FNLD-USL8-2AGBP';
+export const OMNO_ACCOUNT = 'ARDOR-8WCM-6LBD-3AC9-9F22P';
 //export const OMNO_API = 'https://136.243.155.148:30001/api';
 
 // ---------------------------------------------
