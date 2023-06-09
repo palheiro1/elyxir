@@ -35,7 +35,6 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
 
     const swap = async () => {
         const response = await processWrapsFor20(infoAccount.accountRs);
-        console.log("🚀 ~ file: SwapToArdor.js:38 ~ swap ~ response:", response)
         if (response && response.starts) {
             okToast(response.starts + ' transfers started.', toast);
         } else if (response && response.requestProcessingTime) {
@@ -47,10 +46,13 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
 
     return (
         <Stack direction="column" spacing={8} align="center">
-            <Heading fontSize="3xl" fontWeight="light" mb={-8}>
-                1. Send the cards
-            </Heading>
-            <Text fontWeight="light">to your deposit address</Text>
+            <Box>
+                <Heading fontSize="3xl" fontWeight="light">
+                    1. Send the <strong>wETH</strong>
+                </Heading>
+                <Text fontWeight="light" textAlign="center">to your deposit address</Text>
+                <Text fontWeight="thin" fontSize="sm" textAlign="center">POLYGON</Text>
+            </Box>
 
             <FormControl variant="floatingTransparent" id="cards">
                 <Tooltip label="Click to copy">

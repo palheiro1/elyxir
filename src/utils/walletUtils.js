@@ -98,7 +98,7 @@ export const handleNotifications = ({
             const asset = getAsset(tx.attachment.asset, cards);
             const amount = Number(tx.attachment.quantityQNT);
 
-            if (asset && asset !== 'GEM' && asset !== 'Unknown' && isIncoming) {
+            if (asset && asset !== 'GEM' && asset !== 'GIFTZ' && asset !== 'wETH' && asset !== 'Unknown' && isIncoming) {
                 cardsForNotify.push({ asset, amount });
             } else {
                 handleConfirmateNotification(tx, isIncoming, toast, confirmedTransactionRef);
