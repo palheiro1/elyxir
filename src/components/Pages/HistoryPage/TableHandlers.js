@@ -316,8 +316,6 @@ export const handleGEM = (type, amount, date, account) => {
 
 export const handleGIFTZ = (type, amount, date, account) => {
     type = type.toLowerCase();
-    amount = Number(amount / NQTDIVIDER);
-    const fixedAmount = roundNumberWithMaxDecimals(amount, 8);
     const Component = () => {
         return (
             <Tr
@@ -332,7 +330,7 @@ export const handleGIFTZ = (type, amount, date, account) => {
                 <Td>
                     <GIFTZCard />
                 </Td>
-                <Td>{fixedAmount}</Td>
+                <Td>{amount}</Td>
                 <Td>{date}</Td>
                 <Td>{account}</Td>
             </Tr>
