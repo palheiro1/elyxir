@@ -289,7 +289,6 @@ const sendIgnis = async ({
         query.broadcast = false;
 
         const res2 = await axios.post(URL_SEND_MONEY, qs.stringify(query, config));
-        console.log('🚀 ~ file: ardorInterface.js:286 ~ res2:', res2);
         const signed = ardorjs.signTransactionBytes(res2.data.unsignedTransactionBytes, passPhrase);
 
         let txdata;
@@ -590,7 +589,6 @@ const transferAsset = async ({
     deadline = 30,
     priority = 'NORMAL',
 }) => {
-    console.log(asset, quantityQNT, recipient, passPhrase)
     if (!asset || !quantityQNT || !recipient || !passPhrase) return false;
     const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
 

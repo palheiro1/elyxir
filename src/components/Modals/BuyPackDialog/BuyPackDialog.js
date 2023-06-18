@@ -51,7 +51,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [sendingTx, setSendingTx] = useState(false);
     const [selectedOffers, setSelectedOffers] = useState([]); // selected offers
 
-    const { name, WETHBalance } = infoAccount;
+    const { name, WETHBalance, IGNISBalance } = infoAccount;
 
     const toast = useToast();
     const colorText = useColorModeValue('black', 'white');
@@ -100,6 +100,11 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
         if (WETHBalance * NQTDIVIDER < priceInWETH) {
             errorToast("You don't have enough funds (wETH)", toast);
+            return false;
+        }
+
+        if (!IGNISBalance || IGNISBalance < 0.5) {
+            errorToast("You don't have enough funds (0.5 IGNIS)", toast);
             return false;
         }
 
@@ -217,7 +222,11 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     };
 
     const bgColor = useColorModeValue('', '#1D1D1D');
-    const isDisabled = !isValidPin || input.value > totalOnSale || input.value === '0';
+    
+    const enoughtWETH = WETHBalance !== 0 && WETHBalance > priceInWETH / NQTDIVIDER;
+    const enoughtIGNIS = IGNISBalance > 0.5;
+    const canBuy = enoughtWETH && enoughtIGNIS;
+    const isDisabled = !isValidPin || input.value > totalOnSale || input.value === '0' || !canBuy;
 
     return (
         <>
@@ -316,9 +325,15 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         </Text>
                                     )}
 
-                                    {WETHASSET < priceInWETH / NQTDIVIDER && (
+                                    {!enoughtWETH && (
                                         <Text textAlign="center" color="red.500" fontWeight="bold">
                                             You don't have enough wETH
+                                        </Text>
+                                    )}
+
+                                    {!enoughtIGNIS && (
+                                        <Text textAlign="center" color="red.500" fontWeight="bold">
+                                            You don't have enough IGNIS (0.5 IGNIS)
                                         </Text>
                                     )}
 

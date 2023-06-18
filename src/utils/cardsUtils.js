@@ -18,6 +18,7 @@ import {
     QUANT_VERYRARE,
     REFERRALASSET,
     SASQUATCHASSET,
+    WETHASSET,
 } from '../data/CONSTANTS';
 
 import {
@@ -55,7 +56,9 @@ export const getThumbsImage = name => {
 
 export const getAsset = (asset, collectionCardsStatic) => {
     const isCurrencyAsset = Object.keys(CURRENCY_ASSETS).includes(asset);
-    return (isCurrencyAsset ? CURRENCY_ASSETS[asset] : collectionCardsStatic.find(card => card.asset === asset)) || null;
+    return (
+        (isCurrencyAsset ? CURRENCY_ASSETS[asset] : collectionCardsStatic.find(card => card.asset === asset)) || null
+    );
 };
 
 // -------------------------------------------------
@@ -108,18 +111,25 @@ export const buyPackWithIgnis = async (passphrase, noPacks, ignisBalance) => {
 };
 
 export const buyPackWithWETH = async (passphrase, noPacks, WETHBalance, selectedOffers = [], priceInWETH = 0) => {
-    if (selectedOffers.length === 0) return false;
-    if (noPacks === 0) return false;
-    if (priceInWETH === 0) return false;
+    if (selectedOffers.length === 0 || noPacks === 0 || priceInWETH === 0) return false;
 
     const balance = WETHBalance * NQTDIVIDER;
     if (balance < priceInWETH) return false;
 
-    // Crear el mensaje para
-    // 1.- Enviar el WETH a Omno
-    // 2.- Aceptar el trade de GIFTZ por WETH
+    const fee = await sendIgnis({
+        amountNQT: "50000000",
+        recipient: OMNO_ACCOUNT,
+        passPhrase: passphrase,
+        message: JSON.stringify({
+            contract: OMNO_CONTRACT,
+        }),
+    });
 
-    // Por cada selectedOffer, generar un trade
+    if (!fee) {
+        console.log('🚀 ~ file: cardsUtils.js ~ line 156 ~ buyPackWithWETH ~ ERROR SENDING FEE');
+        return false;
+    }
+
     const trades = selectedOffers.map(offer => {
         return {
             service: 'trade',
@@ -134,18 +144,38 @@ export const buyPackWithWETH = async (passphrase, noPacks, WETHBalance, selected
     const message = JSON.stringify({
         contract: OMNO_CONTRACT,
         operation: [
+            {
+                service: 'platform',
+                request: 'failClear',
+            },
             ...trades,
-            // 3.- Retirar el GIFTZ de Omno
             {
                 service: 'user',
                 request: 'withdraw',
                 parameter: {
                     value: {
                         asset: {
-                            [GIFTZASSET]: noPacks,
+                            [GIFTZASSET]: noPacks.toString(),
                         },
                     },
+                    requireFailClear: true,
                 },
+            },
+            {
+                service: 'user',
+                request: 'withdraw',
+                parameter: {
+                    value: {
+                        asset: {
+                            [WETHASSET]: priceInWETH.toString(),
+                        },
+                    },
+                    requireFailSet: true,
+                },
+            },
+            {
+                service: 'platform',
+                request: 'failClear',
             },
         ],
     });
