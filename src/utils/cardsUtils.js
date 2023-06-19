@@ -4,6 +4,7 @@ import {
     CATOBLEPASASSETWRONG,
     CURRENCY_ASSETS,
     GIFTZASSET,
+    GIFTZ_OPEN_MACHINE,
     IMGURL,
     IMG_MD_PATH,
     IMG_THUMB_PATH,
@@ -198,7 +199,7 @@ export const openPackWithGiftz = async (passphrase, noPacks, giftzBalance) => {
         response = await transferAsset({
             asset: GIFTZASSET,
             quantityQNT: noPacks,
-            recipient: OMNO_ACCOUNT,
+            recipient: GIFTZ_OPEN_MACHINE,
             passPhrase: passphrase,
             message: message,
         });
