@@ -223,7 +223,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
     const bgColor = useColorModeValue('', '#1D1D1D');
     
-    const enoughtWETH = WETHBalance !== 0 && WETHBalance > priceInWETH / NQTDIVIDER;
+    const enoughtWETH = WETHBalance !== 0 && WETHBalance >= priceInWETH / NQTDIVIDER;
     const enoughtIGNIS = IGNISBalance > 0.5;
     const canBuy = enoughtWETH && enoughtIGNIS;
     const isDisabled = !isValidPin || input.value > totalOnSale || input.value === '0' || !canBuy;
