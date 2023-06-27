@@ -8,6 +8,7 @@ import {
     getPegAddressesFor20,
 } from '../../../services/Ardor/ardorInterface';
 import BridgeERC1155 from './ERC1155/BridgeERC1155';
+import BridgeERC1155GIFTZ from './GIFTZ/BridgeERC1155GIFTZ';
 import BridgeSelector from './BridgeSelector';
 import BridgeERC20 from './ERC20/BridgeERC20';
 import OldBridge from './OldBridge/OldBridge';
@@ -28,7 +29,6 @@ const Bridge = ({ infoAccount, cards }) => {
         ERC1155: { eth: '', ardor: '' },
         isLoaded: false,
     });
-    console.log("🚀 ~ file: Bridge.js:31 ~ Bridge ~ swapAddresses:", swapAddresses)
     const [needReload, setNeedReload] = useState(true); // Flag to reload the page [true -> reload
     const [isLoading, setIsLoading] = useState(false);
     const [bridgeType, setBridgeType] = useState(); // ERC20 or ERC1155
@@ -86,6 +86,9 @@ const Bridge = ({ infoAccount, cards }) => {
             {bridgeType === 'ERC20' && <BridgeERC20 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} />}
             {bridgeType === 'ERC1155' && (
                 <BridgeERC1155 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC1155} cards={cards} />
+            )}
+            {bridgeType === 'ERC1155GIFTZ' && (
+                <BridgeERC1155GIFTZ infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC1155} />
             )}
             {bridgeType === 'OLD' && <OldBridge infoAccount={infoAccount} swapAddresses={swapAddresses?.OLD_BRIDGE} />}
         </Box>
