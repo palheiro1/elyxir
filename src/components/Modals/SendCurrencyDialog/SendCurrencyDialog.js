@@ -26,7 +26,7 @@ import {
 import { useEffect, useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
 import { sendIgnis } from '../../../services/Ardor/ardorInterface';
-import { checkPin, sendGem, sendGiftz, sendWETH } from '../../../utils/walletUtils';
+import { checkPin, sendGem, sendGiftzAsset, sendWETH } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { isArdorAccount } from '../../../utils/validators';
 import { NQTDIVIDER } from '../../../data/CONSTANTS';
@@ -97,11 +97,10 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                     });
                     break;
                 case 'GIFTZ':
-                    response = await sendGiftz({
+                    response = await sendGiftzAsset({
                         amountNQT: input.value,
                         recipient: ardorAccount,
                         passphrase: passphrase,
-                        ignisBalance: IGNISBalance,
                     });
                     break;
                 case 'GEMS':

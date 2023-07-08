@@ -1,6 +1,14 @@
 import equal from 'fast-deep-equal';
 
-import { BUYPACKACCOUNT, CURRENCY, GEMASSET, JACKPOTACCOUNT, NQTDIVIDER, WETHASSET } from '../data/CONSTANTS';
+import {
+    BUYPACKACCOUNT,
+    CURRENCY,
+    GEMASSET,
+    GIFTZASSET,
+    JACKPOTACCOUNT,
+    NQTDIVIDER,
+    WETHASSET,
+} from '../data/CONSTANTS';
 import { decrypt, getUser } from './storage';
 import {
     createAskOrder,
@@ -351,8 +359,8 @@ export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
 };
 
 /**
- * @name sendIgnis
- * @description Send ignis
+ * @name sendGiftz
+ * @description Send GIFTZ currency
  * @param {String} passphrase - Passphrase
  * @param {Number} amountNQT - Amount to send
  * @param {String} ignisBalance - IGNIS balance
@@ -365,6 +373,23 @@ export const sendGiftz = async ({ passphrase, amountNQT, ignisBalance, recipient
     if (parseFloat(Number(ignisBalance)) < parseFloat(0.1))
         return await transferCurrencyZeroFee(CURRENCY, amount, recipient, passphrase, '');
     else return await transferCurrency(CURRENCY, amount, recipient, passphrase, '');
+};
+
+export const sendGiftzAsset = async ({ passphrase, amountNQT, recipient }) => {
+    let response = false;
+
+    try {
+        response = await transferAsset({
+            asset: GIFTZASSET,
+            quantityQNT: amountNQT,
+            recipient: recipient,
+            passPhrase: passphrase,
+        });
+    } catch (error) {
+        console.error('🚀 ~ file: walletUtils.js:389 ~ sendGiftzAsset ~ error:', error);
+    }
+
+    return response;
 };
 
 /**
