@@ -144,9 +144,6 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                 <Portal>
                                     <MenuList>
                                         <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
-                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('GIFTZ')}>
-                                            Get GIFTZ
-                                        </MenuItem>
                                     </MenuList>
                                 </Portal>
                             </Menu>
