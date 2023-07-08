@@ -3,16 +3,20 @@ const fs = require('fs');
 const readline = require('readline');
 
 async function processLineByLine() {
-    const fileStream = fs.createReadStream('.env');
+    try {
+        const fileStream = fs.createReadStream('.env');
 
-    const rl = readline.createInterface({
-        input: fileStream,
-        crlfDelay: Infinity,
-    });
+        const rl = readline.createInterface({
+            input: fileStream,
+            crlfDelay: Infinity,
+        });
 
-    const outputs = [];
-    for await (const line of rl) {
-        outputs.push(line);
+        const outputs = [];
+        for await (const line of rl) {
+            outputs.push(line);
+        }
+    } catch (err) {
+        console.log(err);
     }
     return outputs;
 }
