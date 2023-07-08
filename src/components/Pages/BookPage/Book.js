@@ -48,25 +48,23 @@ const Book = ({ cards }) => {
             <Heading>Book</Heading>
             <Stack direction="row" spacing={0}>
                 <Stack direction="column" spacing={0} maxH="73vh" overflowY={'auto'} minW="15%">
-                    {haveAllCards && (
-                        <Box
-                            bgColor={'#F18800'}
-                            fontWeight="bolder"
-                            color="white"
-                            border="1px"
-                            borderColor={borderColor}
-                            onClick={downloadPDF}
-                            _hover={{
-                                cursor: 'pointer',
-                            }}
-                            key={'all'}
-                            rounded="sm"
-                            p={2}
-                            w="100%"
-                            variant="outline">
-                            DOWNLOAD BOOK
-                        </Box>
-                    )}
+                    <Box
+                        bgColor={haveAllCards ? '#F18800' : "gray"}
+                        fontWeight="bolder"
+                        color="white"
+                        border="1px"
+                        borderColor={borderColor}
+                        onClick={haveAllCards ? downloadPDF : null}
+                        _hover={{
+                            cursor: haveAllCards ? 'pointer' : 'not-allowed',
+                        }}
+                        key={'all'}
+                        rounded="sm"
+                        p={2}
+                        w="100%"
+                        variant="outline">
+                        DOWNLOAD BOOK
+                    </Box>
                     {cards.map(card => {
                         const haveThisCard = card.quantityQNT > 0;
                         return (
