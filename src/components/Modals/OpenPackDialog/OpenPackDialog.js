@@ -110,7 +110,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         }
 
         if (itsOk) {
-            okToast('Pack sent to open.', toast);
+            okToast('Opening your pack.', toast);
             cleanOnClose();
         } else {
             errorToast('Error opening the pack.', toast);
