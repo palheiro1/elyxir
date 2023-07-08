@@ -3,6 +3,7 @@ const fs = require('fs');
 const readline = require('readline');
 
 async function processLineByLine() {
+    const outputs = [];
     try {
         const fileStream = fs.createReadStream('.env');
 
@@ -11,7 +12,6 @@ async function processLineByLine() {
             crlfDelay: Infinity,
         });
 
-        const outputs = [];
         for await (const line of rl) {
             outputs.push(line);
         }
