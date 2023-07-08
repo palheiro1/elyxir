@@ -29,7 +29,7 @@ import { GIFTZASSET } from '../../../../data/CONSTANTS';
 
 /**
  * @name SwapToPolygon
- * @description This component is used to swap cards to Polygon
+ * @description This component is used to swap GIFTZ to Polygon
  * @author Jesús Sánchez Fernández
  * @version 0.1
  * @param {Object} infoAccount - Account info

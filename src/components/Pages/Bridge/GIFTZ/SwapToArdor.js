@@ -18,7 +18,7 @@ import { copyToast, errorToast, okToast } from '../../../../utils/alerts';
 
 /**
  * @name SwapToArdor
- * @description This component is used to swap cards to Ardor
+ * @description This component is used to swap GIFTZ to Ardor
  * @author Jesús Sánchez Fernández
  * @version 0.1
  * @param {Object} infoAccount - Account info
