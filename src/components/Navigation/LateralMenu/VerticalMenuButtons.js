@@ -31,6 +31,24 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
     // ---------------------------------------------
     const buttons = [
         {
+            icon: <BiPackage color={iconColor(7)} />,
+            text: 'BUY PACK',
+            onClick: () => setOption(7),
+            bgColor: '#F18800',
+            hoverBg: '#F18800',
+            textColor: textColor(7),
+            fontWeight: 'bolder',
+        },
+        {
+            icon: <BiPackage color={iconColor(11)} />,
+            text: 'OPEN PACK',
+            onClick: () => setOption(11),
+            bgColor: '#F18800',
+            hoverBg: '#F18800',
+            textColor: textColor(11),
+            fontWeight: 'bolder',
+        },
+        {
             icon: (
                 <BsReverseLayoutTextWindowReverse
                     style={{ stroke: iconColor(0), strokeWidth: '1' }}
@@ -110,38 +128,20 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             textColor: textColor(6),
         },
         {
-            icon: <AiOutlineLogout />,
-            text: 'Logout',
-            onClick: handleLogout,
-            bgColor: sBgColor,
-            hoverBg: hoverColor(8),
-            textColor: sTextColor,
-        },
-        {
-            icon: <BiPackage color={iconColor(7)} />,
-            text: 'BUY PACK',
-            onClick: () => setOption(7),
-            bgColor: '#F18800',
-            hoverBg: '#F18800',
-            textColor: textColor(7),
-            fontWeight: 'bolder',
-        },
-        {
-            icon: <BiPackage color={iconColor(11)} />,
-            text: 'OPEN PACK',
-            onClick: () => setOption(11),
-            bgColor: '#F18800',
-            hoverBg: '#F18800',
-            textColor: textColor(11),
-            fontWeight: 'bolder',
-        },
-        {
             icon: <BsArrowLeftRight style={{ stroke: iconColor(4), strokeWidth: '1' }} color={iconColor(4)} />,
             text: 'Bridge',
             onClick: () => setOption(4),
             bgColor: bgColor(4),
             hoverBg: hoverColor(4),
             textColor: textColor(4),
+        },
+        {
+            icon: <AiOutlineLogout />,
+            text: 'Logout',
+            onClick: handleLogout,
+            bgColor: sBgColor,
+            hoverBg: hoverColor(8),
+            textColor: sTextColor,
         },
     ];
 
