@@ -28,7 +28,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                     />
                     <VStack align="flex-start">
                         <Text color={textColor} fontSize="3xl" fontWeight="bold" mb={-3}>
-                            {jackpotBalance} IGNIS
+                            {jackpotBalance} WETH
                         </Text>
                         <Text color={textColor} fontSize="md">
                             ({jackpotBalanceUSD} USD)

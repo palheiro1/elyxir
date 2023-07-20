@@ -29,7 +29,7 @@ const VCountdown = ({ jackpotTimer, jackpotBalance, jackpotBalanceUSD }) => {
                     />
                     <VStack textAlign="center">
                         <Text color="white" fontSize="3xl" fontWeight="bold" mb={-3}>
-                            {jackpotBalance} IGNIS
+                            {jackpotBalance} WETH
                         </Text>
                         <Text color="white" fontSize="md">
                             ({jackpotBalanceUSD} USD)
