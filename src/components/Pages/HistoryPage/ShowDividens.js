@@ -52,7 +52,7 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
                             const timestamp = getTxTimestamp(transaction, epoch_beginning);
                             const currency = transaction.holdingInfo?.name ? transaction.holdingInfo.name : 'IGNIS';
                             let balance = transaction.change / NQTDIVIDER;
-                            balance = balance.toLocaleString('en-US', { maximumFractionDigits: 2 });
+                            balance = balance.toLocaleString('en-US', { maximumFractionDigits: 6 });
                             return (
                                 <Tr key={index} _hover={{ bgColor: hoverColor }}>
                                     <Td>
