@@ -9,7 +9,7 @@ import TableCard from '../../Cards/TableCard';
 
 // Utils
 import { calculateFixedAmount, getReason, parseJson, parseRecipient, parseSender } from '../../../utils/txUtils';
-import { JACKPOTACCOUNT, NQTDIVIDER } from '../../../data/CONSTANTS';
+import { JACKPOTACCOUNT, NQTDIVIDER, OMNO_ACCOUNT } from '../../../data/CONSTANTS';
 import { getAsset } from '../../../utils/cardsUtils';
 import GemCard from '../../Cards/GemCard';
 import IgnisCard from '../../Cards/IgnisCard';
@@ -37,6 +37,8 @@ export const handleType0AndSubtype0 = (tx, timestamp, infoAccount) => {
     if (!account) return;
 
     const { jackpot, reason } = getJackpotAndReason(tx);
+    if (inOut === 'out' && account === OMNO_ACCOUNT) return;
+
     return handleMoneyTransfer(inOut, tx.amountNQT / NQTDIVIDER, timestamp, account, jackpot, reason);
 };
 
