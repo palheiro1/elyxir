@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Box, Center, Grid, GridItem, Stack, StackDivider, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Center, Stack, StackDivider, Text, useColorModeValue } from '@chakra-ui/react';
 
 // Components
-import BlockInfo from './BlockInfo';
+// import BlockInfo from './BlockInfo';
 import VCountdown from './VCountdown';
 import HCountdown from './HCountdown';
 
@@ -69,7 +69,6 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0, blockchainStatus = {} 
         blockchainStatus && getJackpotTimer();
     }, [blockchainStatus]);
 
-    const bgColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
@@ -92,39 +91,27 @@ const JackpotWidget = ({ cStyle = 1, numParticipants = 0, blockchainStatus = {} 
                                 jackpotBalance={jackpotBalance}
                                 jackpotBalanceUSD={jackpotBalanceUSD}
                             />
-
-                            <BlockInfo jackpotStatus={blockchainStatus} jackpotTimer={jackpotTimer} />
                         </Stack>
                     </Center>
                 </Box>
             )}
             {cStyle === 2 && (
                 <Center my={4} mb={8}>
-                    <Grid
-                        templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
+                    <Box
+                        p={4}
                         border="1px"
                         borderColor={borderColor}
                         rounded="lg"
                         bg="blackAlpha"
                         shadow="dark-lg"
                         direction="row">
-                        <GridItem colSpan={2} p={4} borderLeftRadius="lg">
                             <HCountdown
                                 jackpotTimer={jackpotTimer}
                                 numParticipants={numParticipants}
                                 jackpotBalance={jackpotBalance}
                                 jackpotBalanceUSD={jackpotBalanceUSD}
                             />
-                        </GridItem>
-
-                        <GridItem
-                            colSpan={{ base: 1, md: 2, lg: 1 }}
-                            p={4}
-                            borderRightRadius={{ base: 'none', md: 'none', lg: 'lg' }}
-                            bgColor={bgColor}>
-                            <BlockInfo jackpotStatus={blockchainStatus} jackpotTimer={jackpotTimer} cStyle={cStyle} />
-                        </GridItem>
-                    </Grid>
+                    </Box>
                 </Center>
             )}
         </>
