@@ -22,17 +22,6 @@ import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
 // Styles
 import './App.css';
 
-/* ------------------------------------------------------------
- * DESCRIPTION OF quantityQNT AND unconfirmedQuantityQNT
- * ------------------------------------------------------------
- * quantityQNT = total cards you own
- * unconfirmedQuantityQNT = total cards you own that are available and not locked
- * --------------------
- * cardsLocked = unconfirmedQuantityQNT < quantityQNT
- * NumberOfCardsLocked = quantityQNT - unconfirmedQuantityQNT
- * cardAvailableBalance = Math.min(Number(quantityQNT), Number(unconfirmedQuantityQNT))
- */
-
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
     const isLogged = infoAccount.token !== null && infoAccount.accountRs !== null;
