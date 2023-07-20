@@ -1,25 +1,20 @@
-import { Box, Center, Select, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Center, SimpleGrid } from '@chakra-ui/react';
 
-const PairSelector = ({ marketCurrency, setMarketCurrency }) => {
-
-    const selectColor = useColorModeValue('blackAlpha.50', 'whiteAlpha.50');
-
+const PairSelector = ({ setMarketCurrency }) => {
     return (
         <Center>
             <Box minW="44%" my={2}>
-                <Text textAlign="center" fontSize="md" mb={2}>
-                    Select pair to trade
-                </Text>
-                <Select
-                    value={marketCurrency}
-                    textAlign="center"
-                    onChange={e => setMarketCurrency(e.target.value)}
-                    fontWeight="bold"
-                    textTransform="full-width"
-                    bgColor={selectColor}>
-                    <option value={'IGNIS'}>IGNIS</option>
-                    <option value={'WETH'}>wETH</option>
-                </Select>
+                <SimpleGrid columns={2} spacing={2} mt={2}>
+                    <Button size="sm" variant="outline"onClick={() => setMarketCurrency('CARDS')}>
+                        CARDS
+                    </Button>
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setMarketCurrency('CURRENCIES')}>
+                        CURRENCIES
+                    </Button>
+                </SimpleGrid>
             </Box>
         </Center>
     );
