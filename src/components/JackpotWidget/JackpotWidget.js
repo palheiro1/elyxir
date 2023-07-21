@@ -26,7 +26,7 @@ import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/
  * <JackpotWidget cStyle = 1 /> // Default style - Same as the home page
  * <JackpotWidget cStyle = 2 /> // Style for the jackpot page
  */
-const JackpotWidget = ({ cStyle = 1, numParticipants = 0, blockchainStatus = {} }) => {
+const JackpotWidget = ({ cStyle = 2, numParticipants = 0, blockchainStatus = {} }) => {
     const [jackpotTimer, setJackpotTimer] = useState({
         days: 0,
         hours: 0,
