@@ -1,4 +1,5 @@
 import { Box, Stack } from '@chakra-ui/react';
+import { Timeline } from 'react-twitter-widgets';
 import Jackpot from '../../JackpotWidget/JackpotWidget';
 //import LatestTransaction from './LatestTransactions/LatestTransaction';
 import News from './News/News';
@@ -13,6 +14,18 @@ const Overview = ({ blockchainStatus }) => {
                     <LatestTransaction/>
                 </Box>
                 */}
+                <Box minW="33%" height="100%">
+                    <Timeline
+                        dataSource={{
+                            sourceType: 'profile',
+                            screenName: 'BeingsMythical',
+                        }}
+                        options={{
+                            height: '1600px',
+                            theme: 'dark',
+                        }}
+                    />
+                </Box>
                 <Box>
                     <News />
                 </Box>
