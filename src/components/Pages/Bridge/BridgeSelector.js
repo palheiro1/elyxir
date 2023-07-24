@@ -25,9 +25,6 @@ const BridgeSelector = ({ setBridgeType }) => {
                     <Text fontSize="2xl" fontWeight="medium" textAlign="center">
                         wETH
                     </Text>
-                    <Text fontSize="sm" fontWeight="light" textAlign="center">
-                        (ERC-20)
-                    </Text>
                 </Box>
                 <Box
                     w="100%"
@@ -41,9 +38,6 @@ const BridgeSelector = ({ setBridgeType }) => {
                     _hover={{ bgColor: hoverColor, cursor: 'pointer' }}>
                     <Text fontSize="2xl" fontWeight="medium" textAlign="center" h="100%">
                         Cards
-                    </Text>
-                    <Text fontSize="sm" fontWeight="light" textAlign="center">
-                        (ERC-1155)
                     </Text>
                 </Box>
             </Stack>
@@ -61,9 +55,6 @@ const BridgeSelector = ({ setBridgeType }) => {
                     <Text fontSize="2xl" fontWeight="medium" textAlign="center" h="100%">
                         GIFTZ
                     </Text>
-                    <Text fontSize="sm" fontWeight="light" textAlign="center">
-                        (ERC-1155)
-                    </Text>
                 </Box>
                 <Box
                     w="100%"
@@ -76,10 +67,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                     onClick={() => setBridgeType('OLD')}
                     _hover={{ bgColor: hoverColor, cursor: 'pointer' }}>
                     <Text fontSize="2xl" fontWeight="medium" textAlign="center" h="100%">
-                        Old card bridge
-                    </Text>
-                    <Text fontSize="sm" fontWeight="light" textAlign="center">
-                        (Only to Ardor)
+                        Old card bridge <small>(Only to ardor)</small>
                     </Text>
                 </Box>
             </Stack>

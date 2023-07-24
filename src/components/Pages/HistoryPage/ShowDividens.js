@@ -1,4 +1,4 @@
-import { Button, Center, TableContainer, Text, useColorModeValue } from '@chakra-ui/react';
+import { Button, Center, Image, TableContainer, Text, useColorModeValue } from '@chakra-ui/react';
 
 import { Table } from '../../ResponsiveTable/table';
 import { Tbody } from '../../ResponsiveTable/tbody';
@@ -18,6 +18,7 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
     };
     // -------------------------------------------------
     const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+
     return filteredDividends && filteredDividends.length > 0 ? (
         <TableContainer
             border="1px"
@@ -53,6 +54,20 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
                             const currency = transaction.holdingInfo?.name ? transaction.holdingInfo.name : 'IGNIS';
                             let balance = transaction.change / NQTDIVIDER;
                             balance = balance.toLocaleString('en-US', { maximumFractionDigits: 6 });
+                            let currencyImage;
+                            switch (currency) {
+                                case 'GEM':
+                                    currencyImage = '/images/currency/gem.png';
+                                    break;
+                                case 'GIFTZ':
+                                    currencyImage = '/images/currency/giftz.png';
+                                    break;
+                                case 'wETH':
+                                    currencyImage = '/images/currency/weth.png';
+                                    break;
+                                default:
+                                    break;
+                            }
                             return (
                                 <Tr key={index} _hover={{ bgColor: hoverColor }}>
                                     <Td>
@@ -61,7 +76,9 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
                                     <Td>{unconfirmedQuantityQNT}</Td>
                                     <Td>{timestamp}</Td>
                                     <Td>{balance}</Td>
-                                    <Td>{currency}</Td>
+                                    <Td>
+                                        <Image maxW="50px" src={currencyImage} alt={currency} />
+                                    </Td>
                                 </Tr>
                             );
                         })}

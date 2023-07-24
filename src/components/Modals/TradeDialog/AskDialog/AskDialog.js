@@ -42,7 +42,7 @@ import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/
  * @param {Object} reference - Reference to the dialog
  * @param {Boolean} isOpen - Flag to open the dialog
  * @param {Function} onClose - Function to close the dialog
- * @param {Object} card - Card object (or GEM)
+ * @param {Object} card - Card object (or currency assets)
  * @param {String} username - Username
  * @returns {JSX.Element} - JSX element
  * @author Jesús Sánchez Fernández
@@ -54,9 +54,22 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
     const [passphrase, setPassphrase] = useState('');
     const [sendingTx, setSendingTx] = useState(false);
 
-    const isGem = card.assetname === 'GEM';
-    const gemImg = './images/currency/gem.png';
-    const maxCards = isGem ? Number(card.unconfirmedQuantityQNT) / NQTDIVIDER : Number(card.unconfirmedQuantityQNT);
+    const isCurrency = card.assetname === 'GEM' || card.assetname === 'GIFTZ' || card.assetname === 'wETH';
+    const currencyName = isCurrency ? card.assetname : '';
+    let currencyImg;
+    if (currencyName === 'GEM') {
+        currencyImg = '/images/currency/gem.png';
+    } else if (currencyName === 'GIFTZ') {
+        currencyImg = '/images/currency/giftz.png';
+    } else if (currencyName === 'wETH') {
+        currencyImg = '/images/currency/weth.png';
+    }
+
+    let maxCards = Number(card.unconfirmedQuantityQNT);
+
+    if (isCurrency && currencyName !== 'GIFTZ') {
+        maxCards = Number(card.unconfirmedQuantityQNT) / NQTDIVIDER;
+    }
 
     // Mix ask with bid orders
     const userOrders = [...askOrders, ...bidOrders];
@@ -70,12 +83,37 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
     };
 
     const [value, setValue] = useState(0);
+
+    let inputStep = 1,
+        inputPrecision = 0;
+
+    if (isCurrency) {
+        switch (currencyName) {
+            case 'GEM':
+                inputStep = 0.01;
+                inputPrecision = 2;
+                break;
+            case 'GIFTZ':
+                inputStep = 1;
+                inputPrecision = 0;
+                break;
+            case 'wETH':
+                inputStep = 0.0001;
+                inputPrecision = 6;
+                break;
+            default:
+                inputStep = 1;
+                inputPrecision = 0;
+                break;
+        }
+    }
+
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
-        step: isGem ? 0.01 : 1,
+        step: inputStep,
         defaultValue: 0,
-        min: 1,
+        min: currencyName === "wETH" ? 0.000001 : 1,
         max: maxCards,
-        precision: isGem ? 2 : 0,
+        precision: inputPrecision,
         value: value,
         onChange: setValue,
     });
@@ -98,7 +136,18 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
         try {
             setSendingTx(true);
             const value = Number(input.value);
-            const quantity = !isGem ? value : value * NQTDIVIDER;
+            let quantity;
+            if (isCurrency) {
+                if(currencyName === 'GIFTZ') {
+                    quantity = value;
+                } else {
+                    quantity = value * NQTDIVIDER;
+                }
+            } else {
+                quantity = value;
+            }
+
+            // const quantity = !isCurrency ? value : value * NQTDIVIDER;
             const response = await sendAskOrder({
                 asset: card.asset,
                 quantity: quantity,
@@ -165,7 +214,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
                     <AlertDialogHeader textAlign="center">
                         <Center>
-                            <Text>SELL {!isGem ? 'CARDS' : 'GEMS'}</Text>
+                            <Text>SELL {!isCurrency ? 'CARDS' : currencyName}</Text>
                         </Center>
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
@@ -176,9 +225,9 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                     <Center>
                                         <Image
                                             minW="22rem"
-                                            shadow={!isGem && 'lg'}
-                                            rounded={!isGem && 'md'}
-                                            src={!isGem ? card.cardImgUrl : gemImg}
+                                            shadow={!isCurrency && 'lg'}
+                                            rounded={!isCurrency && 'md'}
+                                            src={!isCurrency ? card.cardImgUrl : currencyImg}
                                             maxH="30rem"
                                         />
                                     </Center>
@@ -186,9 +235,9 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                 <VStack spacing={4} w="100%">
                                     <Box w="100%">
                                         <Text fontWeight="bold" fontSize="xl">
-                                            {!isGem ? card.name : 'GEM'}
+                                            {!isCurrency ? card.name : currencyName}
                                         </Text>
-                                        {!isGem && (
+                                        {!isCurrency && (
                                             <Text color="gray">
                                                 {card.channel} / {card.rarity}
                                             </Text>
@@ -213,7 +262,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                                     +
                                                 </Button>
                                             </HStack>
-                                            <FormLabel>Amount of {!isGem ? 'cards' : 'GEMs'} </FormLabel>
+                                            <FormLabel>Amount of {!isCurrency ? 'cards' : currencyName} </FormLabel>
                                         </FormControl>
                                     </Box>
                                     <Box py={2}>
@@ -237,7 +286,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                                     borderLeftRadius="lg"
                                                 />
                                             </InputGroup>
-                                            <FormLabel>Price per {!isGem ? 'card' : 'GEM'}</FormLabel>
+                                            <FormLabel>Price per {!isCurrency ? 'card' : currencyName}</FormLabel>
                                         </FormControl>
                                     </Box>
                                     <Box py={2}>
@@ -267,7 +316,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                             w="100%"
                                             py={6}
                                             onClick={handleSend}>
-                                            Sell {isGem ? 'GEM' : card.name}
+                                            Sell {isCurrency ? currencyName : card.name}
                                         </Button>
                                     </Box>
                                 </VStack>
@@ -284,7 +333,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                             <Box w="100%">
                                 <AskAndBidList
                                     orders={userOrders}
-                                    name={isGem ? 'GEMs' : card.name}
+                                    name={isCurrency ? currencyName : card.name}
                                     canDelete={true}
                                     username={username}
                                 />

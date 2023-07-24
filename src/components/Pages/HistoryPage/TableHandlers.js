@@ -105,12 +105,17 @@ export const handleType2AndSubtype2And3 = (tx, timestamp, infoAccount, collectio
     if (!asset) return;
 
     const orderType = tx.subtype === 2 ? 'ask' : 'bid';
-    let fixedAmount = calculateFixedAmount(tx.attachment.quantityQNT);
+    let fixedAmount;
+    if (asset === 'WETH') {
+        fixedAmount = Number(tx.attachment.quantityQNT / NQTDIVIDER);
+    } else {
+        fixedAmount = calculateFixedAmount(tx.attachment.quantityQNT);
+    }
 
-    let sender = parseSender(tx);
-    sender = sender === infoAccount.accountRs ? 'You' : sender;
+    // let sender = parseSender(tx);
+    // sender = sender === infoAccount.accountRs ? 'You' : sender;
 
-    return handleAssetExchange(orderType, fixedAmount, timestamp, sender, asset);
+    return handleAssetExchange(orderType, fixedAmount, timestamp, asset);
 };
 
 /**
@@ -407,11 +412,13 @@ export const handleCardTransfer = (type, amount, date, account, card) => {
     };
 };
 
-export const handleAssetExchange = (type, amount, date, account, asset) => {
+export const handleAssetExchange = (type, amount, date, asset) => {
     type = type.toLowerCase();
     // CONTROLAR PARA GEMAS O ASSETS
 
-    const isGem = asset === 'GEM';
+    const currencyAsset = asset === 'GEM' || asset === 'GIFTZ' || asset === 'WETH';
+    console.log('🚀 ~ file: TableHandlers.js:416 ~ handleAssetExchange ~ asset:', asset);
+    console.log('🚀 ~ file: TableHandlers.js:416 ~ handleAssetExchange ~ currencyAsset:', currencyAsset);
     const fixedType = type === 'ask' ? 'Market ASK' : 'Market BID';
 
     const Component = () => {
@@ -426,8 +433,12 @@ export const handleAssetExchange = (type, amount, date, account, asset) => {
                     <InOutTransaction type={'placed'} />
                 </Td>
                 <Td>
-                    {isGem ? (
-                        <GemCard />
+                    {currencyAsset ? (
+                        <>
+                            {asset === 'GEM' && <GemCard />}
+                            {asset === 'GIFTZ' && <GIFTZCard />}
+                            {asset === 'WETH' && <WETHCard />}
+                        </>
                     ) : (
                         <TableCard
                             title={asset.name}

@@ -103,7 +103,7 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                         passphrase: passphrase,
                     });
                     break;
-                case 'GEMS':
+                case 'GEM':
                     response = await sendGem({
                         amountNQT: input.value,
                         recipient: ardorAccount,

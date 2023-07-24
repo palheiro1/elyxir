@@ -16,7 +16,7 @@ import CurrencyMarket from './CurrencyMarket';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const Market = ({ infoAccount, cards, gemCards }) => {
+const Market = ({ infoAccount, cards, gemCards, giftzCards, wethCards }) => {
     // Market type
     const [marketCurrency, setMarketCurrency] = useState('CARDS');
 
@@ -41,6 +41,8 @@ const Market = ({ infoAccount, cards, gemCards }) => {
                 <CurrencyMarket
                     username={infoAccount.name}
                     gemCards={gemCards}
+                    giftzCards={giftzCards}
+                    wethCards={wethCards}
                     IGNISBalance={infoAccount.IGNISBalance}
                 />
             )}

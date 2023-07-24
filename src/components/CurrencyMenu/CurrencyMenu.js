@@ -20,7 +20,7 @@ import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog'
 import BuyGiftzDialog from '../Modals/BuyGiftzDialog/BuyGiftzDialog';
 
 const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
-    const { IGNISBalance, GIFTZBalance, GEMSBalance, WETHBalance, name: username } = infoAccount;
+    const { IGNISBalance, GIFTZBalance, GEMBalance, WETHBalance, name: username } = infoAccount;
     const parseWETH = parseFloat(WETHBalance);
     let wEthDecimals = 0;
     if (parseWETH) {
@@ -47,9 +47,9 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
             balance: GIFTZBalance,
             handler: onOpenBuyGiftz,
         },
-        GEMS: {
-            name: 'GEMS',
-            balance: GEMSBalance,
+        GEM: {
+            name: 'GEM',
+            balance: GEMBalance,
             handler: () => goToSection(3),
         },
         WETH: {
@@ -162,14 +162,14 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                 <MenuButton>
                                     <Stack direction="row" align="center" mt={-2}>
                                         <Image ml={-5} src="images/currency/gem.png" alt="GEM Icon" w="43px" h="43px" />
-                                        <Text pr={3}>{GEMSBalance.toFixed(0)}</Text>
+                                        <Text pr={3}>{GEMBalance.toFixed(0)}</Text>
                                     </Stack>
                                 </MenuButton>
 
                                 <Portal>
                                     <MenuList>
-                                        <MenuItem onClick={() => handleOpenSendCurrency('GEMS')}>Send GEM</MenuItem>
-                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('GEMS')}>Get GEM</MenuItem>
+                                        <MenuItem onClick={() => handleOpenSendCurrency('GEM')}>Send GEM</MenuItem>
+                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('GEM')}>Get GEM</MenuItem>
                                     </MenuList>
                                 </Portal>
                             </Menu>

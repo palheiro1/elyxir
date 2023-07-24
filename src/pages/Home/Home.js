@@ -105,12 +105,20 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // GEM Cards
     const [gemCards, setGemCards] = useState([]);
 
+    // GIFTZ Cards
+    const [giftzCards, setGiftzCards] = useState([]);
+
+    // wETH Cards
+    const [wethCards, setWethCards] = useState([]);
+
     // All cards
     const [cards, setCards] = useState([]);
 
     // Hashes
     const [infoAccountHash, setInfoAccountHash] = useState(cleanInfoAccount);
     const [gemCardsHash, setGemCardsHash] = useState('');
+    const [giftzCardsHash, setGiftzCardsHash] = useState('');
+    const [wethCardsHash, setWethCardsHash] = useState('');
     const [cardsHash, setCardsHash] = useState('');
 
     // Filtered cards
@@ -257,7 +265,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             IGNISBalance: ignis,
             GIFTZOldBalance: giftz.unitsQNT || 0,
             GIFTZBalance: giftzAsset[0].quantityQNT,
-            GEMSBalance: gems[0].quantityQNT / NQTDIVIDER,
+            GEMBalance: gems[0].quantityQNT / NQTDIVIDER,
             WETHBalance: weth[0].quantityQNT / NQTDIVIDER,
             transactions: txs.transactions,
             dividends: auxDividends,
@@ -272,6 +280,8 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         // -----------------------------------------------------------------
         checkDataChange('Cards', cardsHash, setCards, setCardsHash, loadCards);
         checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems[0]);
+        checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset[0]);
+        checkDataChange('wETH', wethCardsHash, setWethCards, setWethCardsHash, weth[0]);
         checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
 
         setIsLoading(false);
@@ -285,6 +295,8 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         toast,
         unconfirmedTransactions,
         cardsNotification,
+        giftzCardsHash,
+        wethCardsHash,
     ]);
 
     useEffect(() => {
@@ -398,7 +410,13 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             <Overview blockchainStatus={blockchainStatus} />,
             <Inventory infoAccount={infoAccount} cards={cardsFiltered} />,
             <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />,
-            <Market infoAccount={infoAccount} cards={cardsFiltered} gemCards={gemCards} />,
+            <Market
+                infoAccount={infoAccount}
+                cards={cardsFiltered}
+                gemCards={gemCards}
+                giftzCards={giftzCards}
+                wethCards={wethCards}
+            />,
             <Bridge infoAccount={infoAccount} cards={cardsFiltered} />,
             <Jackpot infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />,
             <Account infoAccount={infoAccount} />,
@@ -408,7 +426,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             <Book cards={cards} />,
             '',
         ],
-        [infoAccount, cards, cardsFiltered, gemCards, blockchainStatus, haveUnconfirmed]
+        [infoAccount, cards, cardsFiltered, gemCards, blockchainStatus, haveUnconfirmed, giftzCards, wethCards]
     );
 
     useEffect(() => {

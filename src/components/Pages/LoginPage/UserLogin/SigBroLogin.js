@@ -41,7 +41,7 @@ const SigBroLogin = ({ setInfoAccount }) => {
                 accountRs: check.accountRS,
                 token: check.token,
                 isSigBro: true,
-                GEMSBalance: 0,
+                GEMBalance: 0,
                 IGNISBalance: 0,
                 GIFTZBalance: 0,
                 WETHBalance: 0,

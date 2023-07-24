@@ -41,7 +41,7 @@ import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/
  * @param {Object} reference - reference to the dialog
  * @param {Boolean} isOpen - dialog open flag
  * @param {Function} onClose - dialog close function
- * @param {Object} card - card to bid for (or gem)
+ * @param {Object} card - card to bid for (or currency assets)
  * @param {String} username - user's name
  * @param {Number} ignis - user's ignis balance
  * @returns {JSX.Element} - BidDialog component
@@ -60,8 +60,16 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
     const [priceCard, setPriceCard] = useState(0);
     const [maxPrice, setMaxPrice] = useState(0);
 
-    const isGem = card.assetname === 'GEM';
-    const gemImg = './images/currency/gem.png';
+    const isCurrency = card.assetname === 'GEM' || card.assetname === 'GIFTZ' || card.assetname === 'wETH';
+    const currencyName = isCurrency ? card.assetname : '';
+    let currencyImg;
+    if (currencyName === 'GEM') {
+        currencyImg = '/images/currency/gem.png';
+    } else if (currencyName === 'GIFTZ') {
+        currencyImg = '/images/currency/giftz.png';
+    } else if (currencyName === 'wETH') {
+        currencyImg = '/images/currency/weth.png';
+    }
 
     // Mix ask with bid orders
     const userOrders = [...askOrders, ...bidOrders];
@@ -78,13 +86,37 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
         }
     };
 
+    let inputStep = 1,
+        inputPrecision = 0;
+
+    if (isCurrency) {
+        switch (currencyName) {
+            case 'GEM':
+                inputStep = 0.01;
+                inputPrecision = 2;
+                break;
+            case 'GIFTZ':
+                inputStep = 1;
+                inputPrecision = 0;
+                break;
+            case 'wETH':
+                inputStep = 0.0001;
+                inputPrecision = 6;
+                break;
+            default:
+                inputStep = 1;
+                inputPrecision = 0;
+                break;
+        }
+    }
+
     const [value, setValue] = useState(0);
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
-        step: isGem ? 0.01 : 1,
+        step: inputStep,
         defaultValue: 0,
         min: 1,
-        max: isGem ? 999999 : 999,
-        precision: isGem ? 2 : 0,
+        max: isCurrency ? 999999 : 999,
+        precision: inputPrecision,
         value,
         onChange: setValue,
     });
@@ -122,7 +154,17 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
         try {
             setSendingTx(true);
             const value = Number(input.value);
-            const quantity = !isGem ? value : value * NQTDIVIDER;
+            let quantity;
+            if (isCurrency) {
+                if(currencyName === 'GIFTZ') {
+                    quantity = value;
+                } else {
+                    quantity = value * NQTDIVIDER;
+                }
+            } else {
+                quantity = value;
+            }
+            // const quantity = !isCurrency ? value : value * NQTDIVIDER;
             const response = await sendBidOrder({
                 asset: card.asset,
                 quantity: quantity,
@@ -189,7 +231,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
                     <AlertDialogHeader textAlign="center">
                         <Center>
-                            <Text>BUY {!isGem ? 'CARDS' : 'GEMS'} </Text>
+                            <Text>BUY {!isCurrency ? 'CARDS' : currencyName} </Text>
                         </Center>
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
@@ -200,9 +242,9 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                     <Center>
                                         <Image
                                             minW="22rem"
-                                            shadow={!isGem && 'lg'}
-                                            rounded={!isGem && 'md'}
-                                            src={!isGem ? card.cardImgUrl : gemImg}
+                                            shadow={!isCurrency && 'lg'}
+                                            rounded={!isCurrency && 'md'}
+                                            src={!isCurrency ? card.cardImgUrl : currencyImg}
                                             maxH="30rem"
                                         />
                                     </Center>
@@ -210,9 +252,9 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                 <VStack spacing={4} w="100%">
                                     <Box w="100%">
                                         <Text fontWeight="bold" fontSize="xl">
-                                            {!isGem ? card.name : 'GEMs'}
+                                            {!isCurrency ? card.name : currencyName}
                                         </Text>
-                                        {!isGem && (
+                                        {!isCurrency && (
                                             <Text color="gray">
                                                 {card.channel} / {card.rarity}
                                             </Text>
@@ -235,7 +277,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                                     +
                                                 </Button>
                                             </HStack>
-                                            <FormLabel>Amount of {!isGem ? 'cards' : 'GEMs'}</FormLabel>
+                                            <FormLabel>Amount of {!isCurrency ? 'cards' : currencyName}</FormLabel>
                                         </FormControl>
                                     </Box>
                                     <Box py={2}>
@@ -260,7 +302,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                                 />
                                             </InputGroup>
                                             <FormLabel>
-                                                Price per {!isGem ? 'cards' : 'GEMs'} (Max: {maxPrice})
+                                                Price per {!isCurrency ? 'cards' : currencyName} (Max: {maxPrice})
                                             </FormLabel>
                                         </FormControl>
                                     </Box>
@@ -291,7 +333,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                             w="100%"
                                             py={6}
                                             onClick={handleSend}>
-                                            Buy {isGem ? 'GEM' : card.name}
+                                            Buy {isCurrency ? currencyName : card.name}
                                         </Button>
                                     </Box>
                                 </VStack>
@@ -309,7 +351,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                             <Box w="100%">
                                 <AskAndBidList
                                     orders={userOrders}
-                                    name={isGem ? 'GEMs' : card.name}
+                                    name={isCurrency ? currencyName : card.name}
                                     canDelete={true}
                                     username={username}
                                 />

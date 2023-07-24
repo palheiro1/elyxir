@@ -6,6 +6,8 @@ import InOutTransaction from '../../../Tables/InOutTransaction';
 import { FaCoins } from 'react-icons/fa';
 import TableCard from '../../../Cards/TableCard';
 import GemCard from '../../../Cards/GemCard';
+import GIFTZCard from '../../../Cards/GIFTZCard';
+import WETHCard from '../../../Cards/WETHCard';
 
 /**
  * @name TradesOrOrderItem
@@ -22,17 +24,44 @@ import GemCard from '../../../Cards/GemCard';
  * @version 1.0
  */
 const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, card }) => {
+    console.log('🚀 ~ file: TradesOrOrderItem.js:27 ~ TradesOrOrderItem ~ card:', name, card);
     const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
     const iconColor = useColorModeValue('blackAlpha.500', 'yellow');
 
-    if (card === 'GEM' || card === undefined) {
+    const isCurrency = name === 'GEM' || name === 'GIFTZ' || name === 'wETH';
+
+    if (card === undefined || card === null) {
         return (
             <Tr _hover={{ bgColor: hoverColor }}>
                 <Td>
                     <InOutTransaction type={type} />
                 </Td>
                 <Td fontWeight="bold" fontSize="xl">
-                    {name === 'GEM' ? <GemCard /> : name}
+                    {name}
+                </Td>
+                <Td>{amount}</Td>
+                <Td>
+                    <Stack direction="row" align="center">
+                        <FaCoins color={iconColor} />
+                        <Text>{price}</Text>
+                    </Stack>
+                </Td>
+                <Td>{date}</Td>
+                <Td>{sellerOrBuyer}</Td>
+            </Tr>
+        );
+    }
+
+    if (isCurrency) {
+        return (
+            <Tr _hover={{ bgColor: hoverColor }}>
+                <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+                <Td fontWeight="bold" fontSize="xl">
+                    {name === 'GEM' && <GemCard />}
+                    {name === 'GIFTZ' && <GIFTZCard />}
+                    {name === 'wETH' && <WETHCard />}
                 </Td>
                 <Td>{amount}</Td>
                 <Td>

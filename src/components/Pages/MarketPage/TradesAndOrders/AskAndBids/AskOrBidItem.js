@@ -1,8 +1,10 @@
 import { Td, Tr } from '@chakra-ui/react';
 import { useState } from 'react';
-import { GEMASSET, NQTDIVIDER } from '../../../../../data/CONSTANTS';
+import { GEMASSET, GIFTZASSET, NQTDIVIDER, WETHASSET } from '../../../../../data/CONSTANTS';
 import TableCard from '../../../../Cards/TableCard';
 import GemCard from '../../../../Cards/GemCard';
+import GIFTZCard from '../../../../Cards/GIFTZCard';
+import WETHCard from '../../../../Cards/WETHCard';
 
 /**
  * @name AskOrBidItem
@@ -37,19 +39,28 @@ const AskOrBidItem = ({
     const fixedIgnis = Number.isInteger(ignis) ? ignis.toFixed(0) : ignis.toFixed(2);
 
     const isGem = asset === 'GEM' || asset === GEMASSET;
+    const isGiftz = asset === 'GIFTZ' || asset === GIFTZASSET;
+    const isWeth = asset === 'WETH' || asset === WETHASSET;
 
-    const name = isGem ? (
-        <GemCard hover={hover} />
-    ) : (
-        <TableCard
-            key={asset.asset}
-            image={asset.cardImgUrl}
-            title={asset.name}
-            rarity={asset.rarity}
-            continent={asset.channel}
-            needDelete={hover ? true : false}
-        />
-    );
+    let name;
+    if (isGem) {
+        name = <GemCard hover={hover} />;
+    } else if (isGiftz) {
+        name = <GIFTZCard hover={hover} />;
+    } else if (isWeth) {
+        name = <WETHCard hover={hover} />;
+    } else {
+        name = (
+            <TableCard
+                key={asset.asset}
+                image={asset.cardImgUrl}
+                title={asset.name}
+                rarity={asset.rarity}
+                continent={asset.channel}
+                needDelete={hover ? true : false}
+            />
+        );
+    }
 
     const showAmount = isGem ? amount / NQTDIVIDER : amount;
 

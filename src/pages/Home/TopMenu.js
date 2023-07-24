@@ -26,7 +26,7 @@ const TopMenu = ({ infoAccount, goToSection }) => {
 
                 <Spacer />
 
-                {infoAccount.GEMSBalance !== undefined && infoAccount.GEMSBalance !== null && (
+                {infoAccount.GEMBalance !== undefined && infoAccount.GEMBalance !== null && (
                     <CurrencyMenu infoAccount={infoAccount} goToSection={goToSection} />
                 )}
             </Flex>

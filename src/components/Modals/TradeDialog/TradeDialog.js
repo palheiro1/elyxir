@@ -33,7 +33,7 @@ import AskAndBidGrid from '../../Pages/MarketPage/TradesAndOrders/AskAndBids/Ask
  * @param {Object} card - Object with the card data
  * @param {String} username - String with the username
  * @param {Object} ignis - Object with the ignis data
- * @param {Object} gemCards - Gem cards data - Optional
+ * @param {Object} currencyCards - Gem cards data - Optional
  * @param {Object} onlyBid - Boolean to know if the dialog only has the bid option - Optional
  */
 const TradeDialog = ({
@@ -43,11 +43,13 @@ const TradeDialog = ({
     card,
     username,
     ignis,
-    gemCards = false,
+    currencyCards = false,
+    currencyName = '',
     onlyBid = false,
     isBlocked = false,
     lockedCards = false,
 }) => {
+    console.log('🚀 ~ file: TradeDialog.js:52 ~ currencyCards:', currencyCards);
     const toast = useToast();
 
     const { isOpen: isOpenAsk, onOpen: onOpenAsk, onClose: onCloseAsk } = useDisclosure();
@@ -61,7 +63,7 @@ const TradeDialog = ({
             errorToast(`${lockedCards} card(s) locked for all actions. Check for open Ask orders to unlock.`, toast);
             return;
         }
-        if (!gemCards && card.quantityQNT === 0) {
+        if (!currencyCards && card.quantityQNT === 0) {
             errorToast("You can't ask for a card you don't have", toast);
             return;
         }
@@ -92,12 +94,12 @@ const TradeDialog = ({
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
                     <AlertDialogHeader textAlign="center">
                         <Center>
-                            <Text>TRADE CARD</Text>
+                            <Text>TRADE</Text>
                         </Center>
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
-                        {!gemCards ? (
+                        {!currencyCards ? (
                             <Center rounded="lg" bgColor={bgMarkedColor} p={4}>
                                 <Stack direction="row" align="center" spacing={4}>
                                     <Image src={card.cardImgUrl} maxH="10rem" />
@@ -119,10 +121,14 @@ const TradeDialog = ({
                                 <Stack direction="row" align="center" spacing={4}>
                                     <Box>
                                         <Text fontSize="2xl" fontWeight="bold" textAlign="center">
-                                            GEM
+                                            {currencyName}
                                         </Text>
                                         <Text fontSize="sm" color="gray.500">
-                                            Quantity: {Number(gemCards.quantityQNT / NQTDIVIDER).toFixed(2)}
+                                            Quantity: {currencyCards.assetname === 'GIFTZ' && currencyCards.quantityQNT}
+                                            {currencyCards.assetname === 'GEM' &&
+                                                Number(currencyCards.quantityQNT / NQTDIVIDER).toFixed(2)}
+                                            {currencyCards.assetname === 'wETH' &&
+                                                Number(currencyCards.quantityQNT / NQTDIVIDER).toFixed(6)}
                                         </Text>
                                     </Box>
                                 </Stack>
@@ -168,9 +174,9 @@ const TradeDialog = ({
                         </SimpleGrid>
                         <Box>
                             <AskAndBidGrid
-                                cards={card || gemCards}
-                                askOrders={card?.askOrders || gemCards?.askOrders}
-                                bidOrders={card?.bidOrders || gemCards?.bidOrders}
+                                cards={card || currencyCards}
+                                askOrders={card?.askOrders || currencyCards?.askOrders}
+                                bidOrders={card?.bidOrders || currencyCards?.bidOrders}
                                 onlyOneAsset={true}
                                 username={username}
                                 canDelete={false}
@@ -183,14 +189,14 @@ const TradeDialog = ({
                 reference={refAsk}
                 isOpen={isOpenAsk}
                 onClose={onCloseAsk}
-                card={!gemCards ? card : gemCards}
+                card={!currencyCards ? card : currencyCards}
                 username={username}
             />
             <BidDialog
                 reference={refBid}
                 isOpen={isOpenBid}
                 onClose={onCloseBid}
-                card={!gemCards ? card : gemCards}
+                card={!currencyCards ? card : currencyCards}
                 username={username}
                 ignis={ignis}
             />

@@ -306,7 +306,7 @@ export const ASSETS_IDS = [
 ];
 
 export const CURRENCY_ASSETS = {
-    [GEMASSET]: 'GEMs',
+    [GEMASSET]: 'GEM',
     [WETHASSET]: 'WETH',
     [GIFTZASSET]: 'GIFTZ',
 };

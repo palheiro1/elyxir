@@ -28,7 +28,8 @@ import { useNavigate } from 'react-router-dom';
  * @version 1.0
  */
 const Account = ({ infoAccount }) => {
-    const { accountRs, name, IGNISBalance, GIFTZBalance, GEMSBalance } = infoAccount;
+    const { accountRs, name, IGNISBalance, GIFTZBalance, GEMBalance, WETHBalance } = infoAccount;
+    console.log('🚀 ~ file: Account.js:32 ~ Account ~ WETHBalance:', WETHBalance);
     const [isInvalidPinBackup, setIsInvalidPinBackup] = useState(true);
     const [isInvalidPinDelete, setIsInvalidPinDelete] = useState(true);
     const [needReload, setNeedReload] = useState(false);
@@ -80,7 +81,8 @@ const Account = ({ infoAccount }) => {
                     accountRs={accountRs}
                     IGNISBalance={IGNISBalance}
                     GIFTZBalance={GIFTZBalance}
-                    GEMSBalance={GEMSBalance.toFixed(2)}
+                    GEMBalance={GEMBalance.toFixed(2)}
+                    WETHBalance={WETHBalance.toFixed(6)}
                     bgColor={bgColor}
                 />
                 <GridItem>
