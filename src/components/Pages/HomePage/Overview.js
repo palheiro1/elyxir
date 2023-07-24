@@ -17,10 +17,11 @@ const Overview = ({ blockchainStatus }) => {
                 <Box minW="33%" height="100%">
                     <Timeline
                         dataSource={{
-                            sourceType: 'profile',
-                            screenName: 'BeingsMythical',
+                            sourceType: 'url',
+                            url: 'https://twitter.com/BeingsMythical',
                         }}
                         options={{
+                            chrome: 'noheader, nofooter',
                             height: '1600px',
                             theme: 'dark',
                         }}
