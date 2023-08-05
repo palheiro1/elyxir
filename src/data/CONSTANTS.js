@@ -36,6 +36,7 @@ export const TARASCACARDASSET = '13187825386854631652';
 export const GEMASSET = '10230963490193589789';
 export const WETHASSET = '935701767940516955';
 export const GIFTZASSET = '13993107092599641878';
+export const MANAASSET = '2188455459770682500';
 export const REFERRALASSET = '15893499867718551186'; // mainnet
 export const SASQUATCHASSET = '13270129604409279596';
 export const MARUXAINAASSETWRONG = '7783220465634719235';
@@ -50,6 +51,7 @@ export const JACKPOTACCOUNT = 'ARDOR-4V3B-TVQA-Q6LF-GMH3T';
 export const BUYPACKACCOUNT = 'ARDOR-4V3B-TVQA-Q6LF-GMH3T';
 export const TARASCACARDACCOUNT = 'ARDOR-5NCL-DRBZ-XBWF-DDN5T';
 export const BRIDGEACCOUNT = 'ARDOR-3YEX-JZFZ-UATF-EKGLN';
+export const MANAACCOUNT = 'ARDOR-XG7G-V7BV-GT4P-FUGW6';
 export const NEW_BRIDGEACCOUNT = 'ARDOR-LZ8A-PVC2-BMT7-C6346';
 export const GEMASSETACCOUNT = 'ARDOR-XG7G-V7BV-GT4P-FUGW6';
 export const WETHASSETACCOUNT = 'ARDOR-QXKT-JR64-SAWJ-3LM64';
@@ -143,6 +145,7 @@ export const DEFAULT_CONTACTS = [
     { accountRs: TARASCACARDACCOUNT, name: 'Mythical Beings' },
     { accountRs: GEMASSETACCOUNT, name: 'Mythical Beings' },
     { accountRs: JACKPOTACCOUNT, name: 'Mythical Beings' },
+    { accountRs: MANAACCOUNT, name: 'Mythical Beings' },
 ];
 
 // ---------------------------------------------
@@ -172,6 +175,7 @@ export const ALL_ACCOUNTS = [
     WETHASSETACCOUNT,
     GIFTZASSETACCOUNT,
     NEW_BRIDGEACCOUNT,
+    MANAACCOUNT,
 ];
 
 // ---------------------------------------------
@@ -303,10 +307,12 @@ export const ASSETS_IDS = [
     GEMASSET,
     WETHASSET,
     GIFTZASSET,
+    MANAASSET,
 ];
 
 export const CURRENCY_ASSETS = {
     [GEMASSET]: 'GEM',
     [WETHASSET]: 'WETH',
     [GIFTZASSET]: 'GIFTZ',
+    [MANAASSET]: 'MANA',
 };

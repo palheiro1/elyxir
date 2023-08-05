@@ -74,6 +74,7 @@ const UserLogin = ({ setInfoAccount }) => {
             IGNISBalance: 0,
             GIFTZBalance: 0,
             WETHBalance: 0,
+            MANABalance: 0,
         };
 
         setInfoAccount(account);

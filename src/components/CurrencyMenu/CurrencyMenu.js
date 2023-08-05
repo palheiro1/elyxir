@@ -20,12 +20,20 @@ import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog'
 import BuyGiftzDialog from '../Modals/BuyGiftzDialog/BuyGiftzDialog';
 
 const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
-    const { IGNISBalance, GIFTZBalance, GEMBalance, WETHBalance, name: username } = infoAccount;
+    const { IGNISBalance, GIFTZBalance, GEMBalance, WETHBalance, MANABalance, name: username } = infoAccount;
     const parseWETH = parseFloat(WETHBalance);
+    const parseMANA = parseFloat(MANABalance);
+
     let wEthDecimals = 0;
     if (parseWETH) {
         const aux = parseWETH.toString().split('.');
         if (aux.length > 1) wEthDecimals = aux[1].length || 0;
+    }
+
+    let manaDecimals = 0;
+    if (parseMANA) {
+        const aux = parseMANA.toString().split('.');
+        if (aux.length > 1) manaDecimals = aux[1].length || 0;
     }
 
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
@@ -55,6 +63,11 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
         WETH: {
             name: 'wETH',
             balance: WETHBalance,
+            handler: () => goToSection(3),
+        },
+        MANA: {
+            name: 'MANA',
+            balance: MANABalance,
             handler: () => goToSection(3),
         },
     };
@@ -204,6 +217,41 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                     <MenuList>
                                         <MenuItem onClick={() => handleOpenSendCurrency('WETH')}>Send wETH</MenuItem>
                                         <MenuItem onClick={() => handleOpenGetMoreCurrency('WETH')}>Get wETH</MenuItem>
+                                    </MenuList>
+                                </Portal>
+                            </Menu>
+                        </Center>
+                    </Box>
+
+                    <Box
+                        shadow="lg"
+                        border="4px"
+                        borderColor={borderColor}
+                        rounded="lg"
+                        minW="5rem"
+                        maxH={'2.2rem'}
+                        _hover={{ bg: hoverColor }}>
+                        <Center>
+                            <Menu>
+                                <MenuButton>
+                                    <Stack direction="row" align="center" mt={-2}>
+                                        <Image
+                                            ml={-5}
+                                            src="images/currency/mana.png"
+                                            alt="MANA Icon"
+                                            w="43px"
+                                            h="43px"
+                                        />
+                                        <Text pr={3}>
+                                            {parseMANA.toFixed(Math.max(0, manaDecimals <= 6 ? manaDecimals : 6))}
+                                        </Text>
+                                    </Stack>
+                                </MenuButton>
+
+                                <Portal>
+                                    <MenuList>
+                                        <MenuItem onClick={() => handleOpenSendCurrency('MANA')}>Send MANA</MenuItem>
+                                        <MenuItem onClick={() => handleOpenGetMoreCurrency('MANA')}>Get MANA</MenuItem>
                                     </MenuList>
                                 </Portal>
                             </Menu>

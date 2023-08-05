@@ -30,13 +30,18 @@ import { isNotLogged } from '../../utils/validators';
 import {
     ASSETS_IDS,
     COLLECTIONACCOUNT,
+    GEMASSET,
     GEMASSETACCOUNT,
+    GIFTZASSET,
     GIFTZASSETACCOUNT,
+    MANAACCOUNT,
+    MANAASSET,
     NQTDIVIDER,
     REFRESH_BLOCK_TIME,
     REFRESH_DATA_TIME,
     REFRESH_UNWRAP_TIME,
     TARASCACARDACCOUNT,
+    WETHASSET,
     WETHASSETACCOUNT,
 } from '../../data/CONSTANTS';
 
@@ -207,7 +212,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         const [loadCards, currencyAssets, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades, dividends] =
             await Promise.all([
                 fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
-                fetchCurrencyAssets(accountRs, [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT], true),
+                fetchCurrencyAssets(accountRs, [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT], true),
                 getIGNISBalance(accountRs),
                 getGIFTZBalance(accountRs),
                 getBlockchainTransactions(2, accountRs, true),
@@ -222,9 +227,10 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 }),
             ]);
 
-        const gems = currencyAssets[0];
-        const weth = currencyAssets[1];
-        const giftzAsset = currencyAssets[2];
+        const gems = currencyAssets[0].find(asset => asset.asset === GEMASSET);
+        const weth = currencyAssets[1].find(asset => asset.asset === WETHASSET);
+        const giftzAsset = currencyAssets[2].find(asset => asset.asset === GIFTZASSET);
+        const mana = currencyAssets[3].find(asset => asset.asset === MANAASSET);
 
         // -----------------------------------------------------------------
         // Check notifications - Unconfirmed transactions
@@ -264,9 +270,10 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             ...infoAccount,
             IGNISBalance: ignis,
             GIFTZOldBalance: giftz.unitsQNT || 0,
-            GIFTZBalance: giftzAsset[0].quantityQNT,
-            GEMBalance: gems[0].quantityQNT / NQTDIVIDER,
-            WETHBalance: weth[0].quantityQNT / NQTDIVIDER,
+            GIFTZBalance: giftzAsset.quantityQNT,
+            GEMBalance: gems.quantityQNT / NQTDIVIDER,
+            WETHBalance: weth.quantityQNT / NQTDIVIDER,
+            MANABalance: mana.quantityQNT / NQTDIVIDER,
             transactions: txs.transactions,
             dividends: auxDividends,
             unconfirmedTxs: unconfirmedTxs,
@@ -279,9 +286,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         // Get all hashes and compare
         // -----------------------------------------------------------------
         checkDataChange('Cards', cardsHash, setCards, setCardsHash, loadCards);
-        checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems[0]);
-        checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset[0]);
-        checkDataChange('wETH', wethCardsHash, setWethCards, setWethCardsHash, weth[0]);
+        checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems);
+        checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset);
+        checkDataChange('wETH', wethCardsHash, setWethCards, setWethCardsHash, weth);
         checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
 
         setIsLoading(false);

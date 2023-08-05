@@ -6,6 +6,7 @@ import {
     GEMASSET,
     GIFTZASSET,
     JACKPOTACCOUNT,
+    MANAASSET,
     NQTDIVIDER,
     WETHASSET,
 } from '../data/CONSTANTS';
@@ -431,6 +432,22 @@ export const sendWETHWithMessage = async ({ passphrase, amountNQT, recipient, me
         recipient: recipient,
         passPhrase: passphrase,
         message: message,
+    });
+};
+
+/**
+ * @name sendMANA
+ * @description Send wETH to an address
+ * @param {String} passphrase - Passphrase
+ * @param {Number} amount - Amount to send
+ * @param {String} recipient - Recipient address
+ */
+export const sendMANA = async ({ passphrase, amount, recipient }) => {
+    return await transferAsset({
+        asset: MANAASSET,
+        quantityQNT: amount * NQTDIVIDER,
+        recipient: recipient,
+        passPhrase: passphrase,
     });
 };
 

@@ -7,6 +7,7 @@ export const cleanInfoAccount = () => {
         GIFTZBalance: 0,
         GEMBalance: 0,
         WETHBalance: 0,
+        MANABalance: 0,
         transactions: [],
         unconfirmedTxs: [],
         currentAsks: [],
