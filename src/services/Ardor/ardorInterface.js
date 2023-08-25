@@ -792,6 +792,24 @@ export const processUnwrapsForOldBridge = async accountRs => {
 };
 
 // ----------------------------------------------
+// ONLY UNWRAP
+// ----------------------------------------------
+
+export const processUnwrapsForGemBridge = async accountRs => {
+    try {
+        const response = await axios.get(BRIDGEAPIURL, {
+            params: {
+                action: 'processUnwrapsForGemBridge',
+                account: accountRs,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("🚀 ~ file: ardorInterface.js:808 ~ processUnwrapsForGemBridge ~ error:", error)
+    }
+};
+
+// ----------------------------------------------
 // NEW BRIDGE - ERC 1155
 // ----------------------------------------------
 

@@ -66,6 +66,7 @@ import {
     getTransaction,
     getUnconfirmedTransactions,
     processUnwrapsFor1155,
+    processUnwrapsForGemBridge,
     processUnwrapsForOldBridge,
     processWrapsFor20,
 } from '../../services/Ardor/ardorInterface';
@@ -379,9 +380,12 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const checkUnwraps = useCallback(async () => {
         const { accountRs } = infoAccount;
         // TODO: CHECK ALL BRIDGES
-        const olbBridge = await processUnwrapsForOldBridge(accountRs);
-        const bridge1155 = await processUnwrapsFor1155(accountRs);
-        const bridge20 = await processWrapsFor20(accountRs);
+        const [ olbBridge, gemBridge, bridge1155, bridge20 ] = await Promise.all([
+            processUnwrapsForOldBridge(accountRs),
+            processUnwrapsForGemBridge(accountRs),
+            processUnwrapsFor1155(accountRs),
+            processWrapsFor20(accountRs),
+        ]);
         if (olbBridge && olbBridge.starts) {
             okToast('[OLD BRIDGE] DETECTED UNWRAP: ' + olbBridge.starts + ' transfers started.', toast);
         }
@@ -390,6 +394,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         }
         if (bridge20 && bridge20.starts) {
             okToast('[wETH] DETECTED WRAP: ' + bridge20.starts + ' transfers started.', toast);
+        }
+        if (gemBridge && gemBridge.starts) {
+            okToast('[GEM BRIDGE] DETECTED UNWRAP: ' + gemBridge.starts + ' transfers started.', toast);
         }
     }, [infoAccount, toast]);
 
