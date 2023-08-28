@@ -10,6 +10,7 @@ import {
     Box,
     Button,
     Center,
+    Collapse,
     FormControl,
     FormLabel,
     HStack,
@@ -44,7 +45,7 @@ import CardBadges from '../../Cards/CardBadges';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
+const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
     const toast = useToast();
     const maxCards = Number(card.unconfirmedQuantityQNT);
     const maxCrafts = Math.floor(maxCards / 5);
@@ -193,7 +194,13 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
                             <FormLabel>Crafting costs</FormLabel>
                         </FormControl>
 
-                        <Center>
+                        <Collapse in={ignis < craftingCost}>
+                            <Text color="red.500" textAlign="center" fontWeight="bold">
+                                Not enough IGNIS
+                            </Text>
+                        </Collapse>
+
+                        <Center mt={4}>
                             <HStack spacing={7}>
                                 <PinInput
                                     size="lg"
@@ -213,7 +220,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username }) => {
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button
-                            isDisabled={!isValidPin || sendingTx}
+                            isDisabled={!isValidPin || sendingTx || ignis < craftingCost}
                             bgColor={isValidPin ? '#F18800' : null}
                             w="100%"
                             py={6}

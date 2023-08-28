@@ -10,6 +10,7 @@ import {
     Box,
     Button,
     Center,
+    Collapse,
     FormControl,
     FormLabel,
     HStack,
@@ -44,7 +45,7 @@ import CardBadges from '../../Cards/CardBadges';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
+const MorphDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
     const toast = useToast();
     const maxCards = Number(card.unconfirmedQuantityQNT);
     const [sendingTx, setSendingTx] = useState(false);
@@ -75,7 +76,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
 
     const infoMsg =
-        "Morph your card to one random card of the same rarity. If the random card would be the same card that you morphed, there is a small chance to get an additional random card back.";
+        'Morph your card to one random card of the same rarity. If the random card would be the same card that you morphed, there is a small chance to get an additional random card back.';
 
     useEffect(() => {
         const { rarity } = card;
@@ -183,7 +184,13 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
                             <FormLabel>Morphing costs</FormLabel>
                         </FormControl>
 
-                        <Center>
+                        <Collapse in={ignis < morphingCost}>
+                            <Text color="red.500" textAlign="center" fontWeight="bold">
+                                Not enough IGNIS
+                            </Text>
+                        </Collapse>
+
+                        <Center mt={4}>
                             <HStack spacing={7}>
                                 <PinInput
                                     size="lg"
@@ -203,7 +210,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username }) => {
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button
-                            isDisabled={!isValidPin || sendingTx}
+                            isDisabled={!isValidPin || sendingTx || ignis < morphingCost}
                             bgColor={isValidPin ? '#F18800' : null}
                             w="100%"
                             py={6}

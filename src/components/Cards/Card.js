@@ -334,6 +334,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                             onClose={onCloseCraft}
                             reference={refCraft}
                             card={card}
+                            ignis={ignis}
                             username={username}
                         />
                     )}
@@ -344,6 +345,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                             onClose={onCloseMorph}
                             reference={refMorph}
                             card={card}
+                            ignis={ignis}
                             username={username}
                         />
                     )}
