@@ -385,13 +385,15 @@ export const handleCardTransfer = (type, amount, date, account, card) => {
     type = type.toLowerCase();
     const { cardImgUrl: image, name: title, channel: continent, rarity } = card;
 
-    const Component = () => {
+    const Component = ({ handleClick }) => {
         return (
             <Tr
                 _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
                 border={{ base: '2px', md: '0px' }}
                 borderColor="whiteAlpha.300"
                 rounded={{ base: 'md', md: 'unset' }}
+                onClick={() => handleClick({card})}
+                cursor="pointer"
                 m={{ base: 2, md: 0 }}>
                 <Td>
                     <InOutTransaction type={type} />

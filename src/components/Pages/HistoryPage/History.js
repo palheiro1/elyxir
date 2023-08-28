@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Box } from '@chakra-ui/react';
+import { Box, useDisclosure } from '@chakra-ui/react';
 
 import {
     handleIncomingGIFTZ,
@@ -17,6 +17,7 @@ import TopBar from './TopBar';
 import ShowDividends from './ShowDividens';
 import { isMBAsset } from '../../../utils/cardsUtils';
 import { getTxTimestamp } from '../../../utils/txUtils';
+import DetailedCard from '../../Cards/DetailedCard';
 
 /**
  * @name History
@@ -67,6 +68,16 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
     const [visibleDividends, setVisibleDividends] = useState(10);
     // -------------------------------------------------
     const epoch_beginning = useMemo(() => new Date(Date.UTC(2018, 0, 1, 0, 0, 0)), []);
+
+    const { isOpen, onClose, onOpen} = useDisclosure();
+    const handleClick = ({ card }) => {
+        console.log("🚀 ~ file: History.js:74 ~ handleClick ~ card:", card)
+        setCardClicked(card);
+        onOpen();
+    };
+
+    // Card clicked
+    const [cardClicked, setCardClicked] = useState();
 
     useEffect(() => {
         const checkConfirmation = () => {
@@ -148,37 +159,41 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
     }, [infoAccount, transactions, epoch_beginning, needReload, collectionCardsStatic]);
 
     return (
-        <Box>
-            <TopBar
-                setFilteredTransactions={setFilteredTransactions}
-                setFilteredDividends={setFilteredDividends}
-                setVisibleTransactions={setVisibleTransactions}
-                setVisibleDividends={setVisibleDividends}
-                transactions={transactions}
-                dividends={dividends}
-                section={section}
-                setSection={setSection}
-            />
-
-            {needReload && <Loader />}
-
-            {!needReload && section === 'transactions' && (
-                <ShowTransactions
-                    haveUnconfirmed={haveUnconfirmed}
-                    filteredTransactions={filteredTransactions}
+        <>
+            <Box>
+                <TopBar
+                    setFilteredTransactions={setFilteredTransactions}
+                    setFilteredDividends={setFilteredDividends}
                     setVisibleTransactions={setVisibleTransactions}
-                    visibleTransactions={visibleTransactions}
-                />
-            )}
-            {!needReload && section === 'dividends' && (
-                <ShowDividends
-                    filteredDividends={filteredDividends}
                     setVisibleDividends={setVisibleDividends}
-                    visibleDividends={visibleDividends}
-                    epoch_beginning={epoch_beginning}
+                    transactions={transactions}
+                    dividends={dividends}
+                    section={section}
+                    setSection={setSection}
                 />
-            )}
-        </Box>
+
+                {needReload && <Loader />}
+
+                {!needReload && section === 'transactions' && (
+                    <ShowTransactions
+                        haveUnconfirmed={haveUnconfirmed}
+                        filteredTransactions={filteredTransactions}
+                        setVisibleTransactions={setVisibleTransactions}
+                        visibleTransactions={visibleTransactions}
+                        handleClick={handleClick}
+                    />
+                )}
+                {!needReload && section === 'dividends' && (
+                    <ShowDividends
+                        filteredDividends={filteredDividends}
+                        setVisibleDividends={setVisibleDividends}
+                        visibleDividends={visibleDividends}
+                        epoch_beginning={epoch_beginning}
+                    />
+                )}
+            </Box>
+            {isOpen && <DetailedCard isOpen={isOpen} onClose={onClose} data={cardClicked} />}
+        </>
     );
 };
 

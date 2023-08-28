@@ -6,7 +6,7 @@ import { Thead } from '../../ResponsiveTable/thead';
 import { Tr } from '../../ResponsiveTable/tr';
 import { Th } from '../../ResponsiveTable/th';
 
-const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTransactions, visibleTransactions }) => {
+const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTransactions, visibleTransactions, handleClick }) => {
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
     // -------------------------------------------------
     const loadMoreTransactions = () => {
@@ -44,7 +44,7 @@ const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTra
                 <Tbody>
                     {filteredTransactions &&
                         filteredTransactions.slice(0, visibleTransactions).map((transaction, index) => {
-                            return <transaction.Component key={index} />;
+                            return <transaction.Component key={index} handleClick={handleClick} />;
                         })}
                 </Tbody>
             </Table>
