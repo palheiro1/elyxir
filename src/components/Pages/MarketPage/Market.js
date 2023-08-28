@@ -30,7 +30,7 @@ const Market = ({ infoAccount, cards, gemCards, giftzCards, wethCards }) => {
 
     // <Box maxW={option === 2 ? syleOption2 : '100%'}>
     return (
-        <Box>
+        <Box maxW={{ base: '100%', md: '80%', lg: '70vw', xl: '77.5vw', '2xl': "100%" }}>
             <PairSelector marketCurrency={marketCurrency} setMarketCurrency={setMarketCurrency} />
 
             {marketCurrency === 'CARDS' && (
