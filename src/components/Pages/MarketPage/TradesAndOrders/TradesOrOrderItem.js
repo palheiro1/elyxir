@@ -24,7 +24,6 @@ import WETHCard from '../../../Cards/WETHCard';
  * @version 1.0
  */
 const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, card }) => {
-    console.log('🚀 ~ file: TradesOrOrderItem.js:27 ~ TradesOrOrderItem ~ card:', name, card);
     const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
     const iconColor = useColorModeValue('blackAlpha.500', 'yellow');
 

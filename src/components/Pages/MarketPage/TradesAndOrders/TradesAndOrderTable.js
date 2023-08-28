@@ -51,7 +51,6 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
                         {trades &&
                             trades.map((trade, index) => {
                                 const card = getAsset(trade.asset, cards);
-                                console.log('🚀 ~ file: TradesAndOrderTable.js:54 ~ TradesAndOrderTable ~ card:', card);
                                 if (card === undefined && trade.name !== 'GEM') return null;
 
                                 const type = imSeller(trade) ? 'out' : 'in';
