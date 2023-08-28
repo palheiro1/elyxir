@@ -58,6 +58,15 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
     const dec = getDecrementButtonProps();
     const input = getInputProps();
 
+    const handleClose = () => {
+        setIsValidPin(false);
+        setPassphrase('');
+        setIgnisPrice(0);
+        setSendingTx(false);
+        input.onChange(0);
+        onClose();
+    };
+
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
 
@@ -115,7 +124,7 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
 
         if (itsOk) {
             okToast('GIFTZs bought successfully', toast);
-            onClose();
+            handleClose();
         } else {
             errorToast('Error buying GIFTZs', toast);
         }
@@ -131,7 +140,7 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
             <AlertDialog
                 motionPreset="slideInBottom"
                 leastDestructiveRef={reference}
-                onClose={onClose}
+                onClose={handleClose}
                 isOpen={isOpen}
                 isCentered>
                 <AlertDialogOverlay />

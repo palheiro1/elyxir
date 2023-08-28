@@ -49,15 +49,22 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             defaultValue: 0,
             min: 0,
             max: GIFTZBalance,
-        },
-        {
-            isReadOnly: false,
         }
     );
 
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
     const input = getInputProps();
+
+    const handleClose = () => {
+        setValue('1');
+        setPassphrase('');
+        setIsValidPin(false);
+        setIgnisPrice(0);
+        setSendingTx(false);
+        input.onChange(0);
+        onClose();
+    };
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -111,19 +118,11 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
         if (itsOk) {
             okToast('Opening your pack.', toast);
-            cleanOnClose();
+            handleClose();
         } else {
             errorToast('Error opening the pack.', toast);
         }
         setSendingTx(false);
-    };
-
-    const cleanOnClose = () => {
-        setValue('1');
-        setPassphrase('');
-        setIsValidPin(false);
-        setSendingTx(false);
-        onClose();
     };
 
     const bgColor = useColorModeValue('', '#1D1D1D');
@@ -136,7 +135,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 size="3xl"
                 motionPreset="slideInBottom"
                 leastDestructiveRef={reference}
-                onClose={cleanOnClose}
+                onClose={handleClose}
                 isOpen={isOpen}
                 isCentered>
                 <AlertDialogOverlay bgColor="blackAlpha.800" />

@@ -56,6 +56,17 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const toast = useToast();
     const colorText = useColorModeValue('black', 'white');
 
+    const handleClose = () => {
+        setIsValidPin(false);
+        setPassphrase('');
+        setpriceInWETH(0);
+        setMarketOffers([]);
+        setTotalOnSale(0);
+        setSendingTx(false);
+        setSelectedOffers([]);
+        onClose();
+    };
+
     useEffect(() => {
         const recoverMarketOffers = async () => {
             const offers = await fetchOmnoMarket();
@@ -120,9 +131,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             defaultValue: 0,
             min: 0,
             max: totalOnSale,
-        },
-        {
-            isReadOnly: false,
         }
     );
 
@@ -197,7 +205,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
         if (itsOk) {
             okToast('Pack bought successfully', toast);
-            cleanOnClose();
+            handleClose();
         } else {
             errorToast('Error buying pack', toast);
         }
@@ -214,13 +222,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         }
     };
 
-    const cleanOnClose = () => {
-        setPassphrase('');
-        setIsValidPin(false);
-        setSendingTx(false);
-        onClose();
-    };
-
     const bgColor = useColorModeValue('', '#1D1D1D');
     
     const enoughtWETH = WETHBalance !== 0 && WETHBalance >= priceInWETH / NQTDIVIDER;
@@ -234,7 +235,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 size="3xl"
                 motionPreset="slideInBottom"
                 leastDestructiveRef={reference}
-                onClose={cleanOnClose}
+                onClose={handleClose}
                 isOpen={isOpen}
                 isCentered>
                 <AlertDialogOverlay bgColor="blackAlpha.800" />
