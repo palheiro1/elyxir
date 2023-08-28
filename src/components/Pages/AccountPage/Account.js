@@ -98,7 +98,7 @@ const Account = ({ infoAccount }) => {
                             Backup your passphrase
                         </Heading>
                         <Text fontSize="sm" pb={2} textAlign="justify">
-                            Risk of loosing your funds and cards: You store your pass phrase on device. You should
+                            Risk of losing your funds and cards: You store your passphrase on your device. You should
                             export the passphrase and store it somewhere safe.
                         </Text>
                         <Text fontSize="sm" textAlign="justify">
