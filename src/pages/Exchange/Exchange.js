@@ -1,7 +1,8 @@
-import { Box, Button, ButtonGroup, Center, Heading, Stack, Text, Tooltip, useToast } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Center, Heading, Image, Input, Stack, Text, Tooltip, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { copyToast } from '../../utils/alerts';
+import { EXCHANGES } from '../../data/CONSTANTS';
 
 function Iframe(props) {
     return <div dangerouslySetInnerHTML={{ __html: props.iframe ? props.iframe : '' }} />;
@@ -41,9 +42,7 @@ const Exchange = ({ infoAccount }) => {
                 <Stack direction="column" spacing={4} align="center">
                     <Heading my={2}>FUND ACCOUNT</Heading>
                     <Tooltip label="Click to copy" hasArrow placement="top-end">
-                        <Text textAlign="center" onClick={copyToClipboard} _hover={{ cursor: 'pointer' }}>
-                            {infoAccount.accountRs}
-                        </Text>
+                        <Input isReadOnly textAlign="center" value={infoAccount.accountRs} onClick={copyToClipboard} _hover={{ cursor: 'pointer' }} />
                     </Tooltip>
 
                     <ButtonGroup variant="outline">
@@ -54,6 +53,21 @@ const Exchange = ({ infoAccount }) => {
                             FIAT
                         </Button>
                     </ButtonGroup>
+
+                    <Box>
+                        <Center>
+                            <Stack direction="row" spacing={4} align="center">
+                                {EXCHANGES.map(exchange => (
+                                    <a href={exchange.url} target="_blank" rel="noreferrer" key={exchange.name}>
+                                        <Image maxW={'50px'} src={exchange.image} alt={exchange.name} />
+                                    </a>
+                                ))}
+                            </Stack>
+                        </Center>
+                        <Text fontSize="xs" textAlign="center">
+                            *Click on the logo to go to the exchange
+                        </Text>
+                    </Box>
                 </Stack>
             </Center>
             <Center my={10} rounded="lg">

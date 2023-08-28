@@ -188,64 +188,14 @@ export const EXCHANGES = [
         image: 'images/exchanges/bittrex.png',
     },
     {
-        name: 'Bilaxy',
-        url: 'https://bilaxy.com',
-        image: 'images/exchanges/bilaxy.png',
-    },
-    {
-        name: 'Biteeu',
-        url: 'https://biteeu.com',
-        image: 'images/exchanges/biteeu.png',
-    },
-    {
-        name: 'Changelly',
-        url: 'https://changelly.com',
-        image: 'images/exchanges/changelly.png',
-    },
-    {
-        name: 'ChangeNOW',
-        url: 'https://changenow.io',
-        image: 'images/exchanges/changenow.png',
-    },
-    {
-        name: 'Hanbitco',
-        url: 'https://hanbitco.com',
-        image: 'images/exchanges/hanbitco.png',
-    },
-    {
         name: 'Indodax',
         url: 'https://indodax.com',
         image: 'images/exchanges/indodax.png',
     },
     {
-        name: 'p2pb2b',
-        url: 'https://p2pb2b.io',
-        image: 'images/exchanges/p2pb2b.png',
-    },
-    {
-        name: 'STEX',
-        url: 'https://stex.com',
-        image: 'images/exchanges/stex.png',
-    },
-    {
         name: 'ProBit',
         url: 'https://probit.com',
         image: 'images/exchanges/probit.png',
-    },
-    {
-        name: 'SimpleSwap',
-        url: 'https://simpleswap.io',
-        image: 'images/exchanges/simpleswap.png',
-    },
-    {
-        name: 'TOKOK',
-        url: 'https://tokok.com',
-        image: 'images/exchanges/tokok.png',
-    },
-    {
-        name: 'VCC Exchange',
-        url: 'https://vcc.exchange',
-        image: 'images/exchanges/vcc.png',
     },
 ];
 
