@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { EXCHANGES } from '../../../data/CONSTANTS';
 
 const Welcome = () => {
-
     const navigate = useNavigate();
 
     const bgColor = useColorModeValue('blackAlpha.50', 'whiteAlpha.50');
@@ -21,8 +20,21 @@ const Welcome = () => {
                     </Text>
                 </Box>
 
+                <Center
+                    p={4}
+                    border="1px"
+                    borderColor={bgHoverColor}
+                    bgColor={"#F18800"}
+                    rounded="lg"
+                    _hover={{ cursor: 'pointer', bgColor: bgHoverColor }}
+                    onClick={() => navigate('/home')}>
+                    GO TO MY WALLET
+                </Center>
+
                 <Box>
-                    <Text my={2} textAlign="center">Fund your account using</Text>
+                    <Text my={2} textAlign="center">
+                        Fund your account using
+                    </Text>
                     <SimpleGrid columns={2} spacing={4}>
                         <Box
                             textAlign="center"
@@ -31,7 +43,7 @@ const Welcome = () => {
                             borderColor="whiteAlpha.300"
                             bgColor={bgColor}
                             _hover={{ cursor: 'pointer', bgColor: bgHoverColor }}
-                            onClick={() => navigate("/home?goToSection=8")}>
+                            onClick={() => navigate('/home?goToSection=8')}>
                             <Text>Simplex</Text>
                             <Text>(Fiat to IGNIS)</Text>
                         </Box>
@@ -42,7 +54,7 @@ const Welcome = () => {
                             rounded="lg"
                             borderColor="whiteAlpha.300"
                             _hover={{ cursor: 'pointer', bgColor: bgHoverColor }}
-                            onClick={() => navigate("/home?goToSection=8")}>
+                            onClick={() => navigate('/home?goToSection=8')}>
                             <Text>Changelly</Text>
                             <Text>(Crypto to IGNIS)</Text>
                         </Box>
@@ -58,7 +70,12 @@ const Welcome = () => {
                     </Center>
                     <SimpleGrid columns={[1, 2, 3, 4]} spacing={4}>
                         {EXCHANGES.map(exchange => (
-                            <Center p={4} border="1px" borderColor={bgHoverColor} rounded="lg" _hover={ { cursor: 'pointer', bgColor: bgHoverColor } }>
+                            <Center
+                                p={4}
+                                border="1px"
+                                borderColor={bgHoverColor}
+                                rounded="lg"
+                                _hover={{ cursor: 'pointer', bgColor: bgHoverColor }}>
                                 <a href={exchange.url} target="_blank" rel="noreferrer">
                                     <Box textAlign="center">
                                         <Center>
@@ -71,9 +88,6 @@ const Welcome = () => {
                         ))}
                     </SimpleGrid>
                 </Box>
-                <Center p={4} border="1px" borderColor={bgHoverColor} rounded="lg" _hover={ { cursor: 'pointer', bgColor: bgHoverColor } } onClick={() => navigate("/home")}>
-                    GO TO MY WALLET
-                </Center>
             </Stack>
         </Center>
     );
