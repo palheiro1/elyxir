@@ -21,7 +21,7 @@ import {
 // Utils
 import { checkPin, sendToPolygonBridge } from '../../../../utils/walletUtils';
 import { errorToast, infoToast, okToast } from '../../../../utils/alerts';
-import { GEMASSET, NQTDIVIDER, WETHASSET } from '../../../../data/CONSTANTS';
+import { GEMASSET, NQTDIVIDER } from '../../../../data/CONSTANTS';
 
 /**
  * @name SwapToPolygon
