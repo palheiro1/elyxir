@@ -2,8 +2,8 @@ import { Box, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import OneSenderMessages from './OneSenderMessages';
 
 const Messages = ({ messages = {}, username, account }) => {
-    const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
-    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+    const bgColor = useColorModeValue('blackAlpha.100', 'rgba(59,67,151,0.35)');
+    const borderColor = useColorModeValue('blackAlpha.300', 'rgba(59,67,151,1)');
     return (
         <Box>
             <Stack

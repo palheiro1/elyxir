@@ -28,7 +28,14 @@ import TradeDialog from '../../Modals/TradeDialog/TradeDialog';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const CurrencyWidget = ({ username, currencyCards = [], IGNISBalance, market = 'IGNIS', currencyName = '', decimals = 2 }) => {
+const CurrencyWidget = ({
+    username,
+    currencyCards = [],
+    IGNISBalance,
+    market = 'IGNIS',
+    currencyName = '',
+    decimals = 2,
+}) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const tradeRef = useRef();
 
@@ -57,20 +64,24 @@ const CurrencyWidget = ({ username, currencyCards = [], IGNISBalance, market = '
     let highestGemBid = 0;
 
     if (market === 'IGNIS') {
-        lowestGemAsk = currencyCards.askOrders.length > 0 ? currencyCards.askOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
+        lowestGemAsk =
+            currencyCards.askOrders.length > 0 ? currencyCards.askOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
     } else {
         lowestGemAsk =
             currencyCards.askOmnoOrders.length > 0 ? currencyCards.askOmnoOrders.take.asset[WETHASSET] / NQTDIVIDER : 0;
     }
     if (market === 'IGNIS') {
-        highestGemBid = currencyCards.bidOrders.length > 0 ? currencyCards.bidOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
+        highestGemBid =
+            currencyCards.bidOrders.length > 0 ? currencyCards.bidOrders[0].priceNQTPerShare / NQTDIVIDER : 0;
     } else {
         highestGemBid =
             currencyCards.bidOmnoOrders.length > 0 ? currencyCards.askOmnoOrders.take.asset[WETHASSET] / NQTDIVIDER : 0;
     }
 
     let confirmedBalance = Number(currencyCards.quantityQNT / NQTDIVIDER);
-    confirmedBalance = Number.isInteger(confirmedBalance) ? confirmedBalance.toFixed(0) : confirmedBalance.toFixed(decimals);
+    confirmedBalance = Number.isInteger(confirmedBalance)
+        ? confirmedBalance.toFixed(0)
+        : confirmedBalance.toFixed(decimals);
 
     let unconfirmedBalance = Number(currencyCards.unconfirmedQuantityQNT / NQTDIVIDER);
     unconfirmedBalance = Number.isInteger(unconfirmedBalance)
@@ -79,11 +90,11 @@ const CurrencyWidget = ({ username, currencyCards = [], IGNISBalance, market = '
 
     let icon;
     if (currencyName === 'GEM') {
-        icon = "/images/currency/gem.png"
+        icon = '/images/currency/gem.png';
     } else if (currencyName === 'GIFTZ') {
-        icon = "/images/currency/giftz.png"
+        icon = '/images/currency/giftz.png';
     } else if (currencyName === 'wETH') {
-        icon = "/images/currency/weth.png"
+        icon = '/images/currency/weth.png';
     }
 
     return (
@@ -92,7 +103,7 @@ const CurrencyWidget = ({ username, currencyCards = [], IGNISBalance, market = '
                 <Grid
                     templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}
                     border="1px"
-                    borderColor="whiteAlpha.300"
+                    borderColor="#3b6497"
                     rounded="lg"
                     bg="blackAlpha"
                     shadow="lg"
@@ -143,7 +154,7 @@ const CurrencyWidget = ({ username, currencyCards = [], IGNISBalance, market = '
                         </Center>
                     </GridItem>
 
-                    <GridItem bgColor={bgColor} p={4} borderRightRadius="lg">
+                    <GridItem bgColor={'rgba(59,100,151,0.35)'} p={4} borderRightRadius="lg">
                         <Center
                             h="100%"
                             fontSize={{ base: '2xl', xl: 'xl' }}

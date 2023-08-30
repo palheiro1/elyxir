@@ -1,17 +1,26 @@
 import { Box, Button, Center, SimpleGrid, Text, useColorModeValue } from '@chakra-ui/react';
 
 const PairSelector = ({ setMarketCurrency }) => {
-
     const textColor = useColorModeValue('gray.700', 'gray.300');
 
     return (
         <Center>
             <Box minW="44%" my={2}>
                 <SimpleGrid columns={2} spacing={2} mt={2}>
-                    <Button size="sm" variant="outline" onClick={() => setMarketCurrency('CARDS')}>
+                    <Button
+                        borderColor="#3b6497"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setMarketCurrency('CARDS')}
+                        _hover={{ bgColor: 'rgba(59,100,151,0.59)' }}>
                         CARDS
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => setMarketCurrency('CURRENCIES')}>
+                    <Button
+                        borderColor="#3b6497"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setMarketCurrency('CURRENCIES')}
+                        _hover={{ bgColor: 'rgba(59,100,151,0.59)' }}>
                         CURRENCIES
                     </Button>
                 </SimpleGrid>

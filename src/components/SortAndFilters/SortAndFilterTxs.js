@@ -45,13 +45,13 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
         }
     }, [transactions, filter, sort, setFilteredTransactions, setVisibleTransactions]);
 
-    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+    const borderColor = useColorModeValue('blackAlpha.300', '#3b7197');
 
     return (
         <Stack direction={{ base: 'column', md: 'row' }} pb={2} w="100%">
             <Stack
                 direction="row"
-                border="1px"
+                border="2px"
                 borderColor={borderColor}
                 rounded="lg"
                 bg="blackAlpha"
@@ -75,7 +75,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                 w={{ base: '100%', md: 'unset' }}>
                 <Stack
                     direction="row"
-                    border="1px"
+                    border="2px"
                     borderColor={borderColor}
                     rounded="lg"
                     bg="blackAlpha"

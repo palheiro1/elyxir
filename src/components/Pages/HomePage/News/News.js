@@ -28,7 +28,7 @@ const News = () => {
     };
 
     return (
-        <Box mt={8}>
+        <Box>
             <Text mb={4} fontSize="2xl">
                 News
             </Text>

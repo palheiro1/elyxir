@@ -41,17 +41,17 @@ const TopBar = ({
                 <ButtonGroup variant="outline" isAttached size="sm" w="100%">
                     <Button
                         w="100%"
-                        bgColor={isTransactions && '#F18800'}
+                        bgColor={isTransactions && '#3b7197'}
                         color={isTransactions && 'white'}
-                        _hover={{ bg: '#F18800', color: 'white' }}
+                        _hover={{ color: 'white' }}
                         onClick={() => setSection('transactions')}>
                         Transactions
                     </Button>
                     <Button
                         w="100%"
-                        bgColor={isDividends && '#F18800'}
+                        bgColor={isDividends && '#3b7197'}
                         color={isDividends && 'white'}
-                        _hover={{ bg: '#F18800', color: 'white' }}
+                        _hover={{ color: 'white' }}
                         onClick={() => setSection('dividends')}>
                         Dividends
                     </Button>

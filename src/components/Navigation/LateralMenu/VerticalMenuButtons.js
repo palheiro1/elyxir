@@ -1,28 +1,15 @@
-import { Button, Stack, Text, useColorModeValue, VStack } from '@chakra-ui/react';
-
-// Icons
-import { BsReverseLayoutTextWindowReverse, BsClockHistory, BsArrowLeftRight } from 'react-icons/bs';
-import { GiCardRandom, GiCutDiamond } from 'react-icons/gi';
-import { AiOutlineLogout, AiOutlineSetting, AiOutlineShoppingCart } from 'react-icons/ai';
-import { BiPackage } from 'react-icons/bi';
+import { Button, Image, Stack, Text, useColorModeValue, VStack } from '@chakra-ui/react';
 
 const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) => {
     // ---------------------------------------------
     // ------------------ COLORS ------------------
     // ---------------------------------------------
     const isActive = index => index === option;
-    const GetColor = (light, dark) => useColorModeValue(light, dark);
+    const sTextActiveColor = useColorModeValue('white', 'white');
+    const sTextColor = useColorModeValue('white', 'white');
+    const hoverChangeColor = useColorModeValue('blackAlpha.700', 'whiteAlpha.300');
 
-    const sBgActiveColor = GetColor('blackAlpha.900', '#FFFFFF');
-    const sBgColor = GetColor('blackAlpha.600', '#282828');
-    const sTextActiveColor = GetColor('white', 'black');
-    const sTextColor = GetColor('white', 'white');
-    const sIconColor = GetColor('white', '#F18000');
-    const hoverChangeColor = GetColor('blackAlpha.700', 'whiteAlpha.300');
-
-    const bgColor = index => (isActive(index) ? sBgActiveColor : sBgColor);
     const textColor = index => (isActive(index) ? sTextActiveColor : sTextColor);
-    const iconColor = index => (isActive(index) ? sIconColor : 'white');
     const hoverColor = index => (isActive(index) ? null : hoverChangeColor);
     // ---------------------------------------------
 
@@ -31,115 +18,143 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
     // ---------------------------------------------
     const buttons = [
         {
-            icon: <BiPackage color={iconColor(7)} />,
-            text: 'BUY PACK',
+            icon: <Image src="/images/icons/menu/BuyPack.png" w="25px" />,
+            text: 'Buy pack',
             onClick: () => setOption(7),
-            bgColor: '#F18800',
-            hoverBg: '#F18800',
+            hoverBg: hoverColor(7),
+            bgColor: '#9f3772',
             textColor: textColor(7),
-            fontWeight: 'bolder',
         },
         {
-            icon: <BiPackage color={iconColor(11)} />,
-            text: 'OPEN PACK',
+            icon: <Image src="/images/icons/menu/OpenPack.png" w="25px" />,
+            text: 'Open pack',
             onClick: () => setOption(11),
-            bgColor: '#F18800',
-            hoverBg: '#F18800',
+            hoverBg: hoverColor(11),
+            bgColor: '#e094b3',
             textColor: textColor(11),
-            fontWeight: 'bolder',
         },
         {
-            icon: (
-                <BsReverseLayoutTextWindowReverse
-                    style={{ stroke: iconColor(0), strokeWidth: '1' }}
-                    color={iconColor(0)}
-                />
+            icon: !isActive(0) ? (
+                <Image src="/images/icons/menu/blanco/overview.png" w="25px" />
+            ) : (
+                <Image src="/images/icons/menu/color/overview.jpg" w="25px" />
             ),
             text: 'Overview',
             onClick: () => setOption(0),
-            bgColor: bgColor(0),
+            bgColor: isActive(0) ? "white" : '#2f9088',
             hoverBg: hoverColor(0),
-            textColor: textColor(0),
+            textColor: isActive(0) ? "#2f9088" : "white",
+            fontWeight: isActive(0) ? "bolder" : "normal",
         },
         {
-            icon: <GiCardRandom style={{ stroke: iconColor(1), strokeWidth: '1' }} color={iconColor(1)} />,
+            icon: !isActive(1) ? (
+                <Image src="/images/icons/menu/blanco/inventory.png" w="25px" />
+            ) : (
+                <Image src="/images/icons/menu/color/inventory.jpg" w="25px" />
+            ),
             text: 'Inventory',
             onClick: () => setOption(1),
-            bgColor: bgColor(1),
+            bgColor: isActive(1) ? "white" : '#2f8190',
             hoverBg: hoverColor(1),
-            textColor: textColor(1),
+            textColor: isActive(1) ? "#2f8190" : "white",
+            fontWeight: isActive(1) ? "bolder" : "normal",
         },
         {
-            icon: <BsClockHistory style={{ stroke: iconColor(2), strokeWidth: '1' }} color={iconColor(2)} />,
+            icon: !isActive(2) ? (
+                <Image src="/images/icons/menu/blanco/history.png" w="25px" />
+            ) : (
+                <Image src="/images/icons/menu/color/history.jpg" w="25px" />
+            ),
             text: 'History',
             onClick: () => setOption(2),
-            bgColor: bgColor(2),
+            bgColor: isActive(2) ? "white" : '#3b7197',
             hoverBg: hoverColor(2),
-            textColor: textColor(2),
+            textColor: isActive(2) ? "#3b7197" : "white",
+            fontWeight: isActive(2) ? "bolder" : "normal",
         },
         {
-            icon: <AiOutlineShoppingCart style={{ stroke: iconColor(3), strokeWidth: '1' }} color={iconColor(3)} />,
+            icon: !isActive(3) ? (
+                <Image src="/images/icons/menu/blanco/market.png" w="25px" />
+            ) : (
+                <Image src="/images/icons/menu/color/market.jpg" w="25px" />
+            ),
             text: 'Market',
             onClick: () => setOption(3),
-            bgColor: bgColor(3),
+            bgColor: isActive(3) ? "white" : '#3b6497',
             hoverBg: hoverColor(3),
-            textColor: textColor(3),
+            textColor: isActive(3) ? "#3b6497" : "white",
+            fontWeight: isActive(3) ? "bolder" : "normal",
         },
         {
-            icon: <GiCutDiamond style={{ stroke: iconColor(5), strokeWidth: '1' }} color={iconColor(5)} />,
+            icon: !isActive(5) ? (
+                <Image src="/images/icons/menu/blanco/jackpot.png" w="25px" />
+            ) : (
+                <Image src="/images/icons/menu/color/jackpot.jpg" w="25px" />
+            ),
             text: 'Jackpot',
             onClick: () => setOption(5),
-            bgColor: bgColor(5),
+            bgColor: isActive(5) ? "white" : '#3b5397',
             hoverBg: hoverColor(5),
-            textColor: textColor(5),
+            textColor: isActive(5) ? "#3b5397" : "white",
+            fontWeight: isActive(5) ? "bolder" : "normal",
         },
         {
-            icon: (
-                <BsReverseLayoutTextWindowReverse
-                    style={{ stroke: iconColor(9), strokeWidth: '1' }}
-                    color={iconColor(9)}
-                />
+            icon: !isActive(9) ? (
+                <Image src="/images/icons/menu/blanco/messages.png" w="25px" />
+            ) : (
+                <Image src="/images/icons/menu/color/messages.jpg" w="25px" />
             ),
             text: 'Messages',
             onClick: () => setOption(9),
-            bgColor: bgColor(9),
+            bgColor: isActive(9) ? "white" : '#3b4397',
             hoverBg: hoverColor(9),
-            textColor: textColor(9),
+            textColor: isActive(9) ? "#3b4397" : "white",
+            fontWeight: isActive(9) ? "bolder" : "normal",
         },
         {
-            icon: (
-                <BsReverseLayoutTextWindowReverse
-                    style={{ stroke: iconColor(10), strokeWidth: '1' }}
-                    color={iconColor(9)}
-                />
+            icon: !isActive(10) ? (
+                <Image src="/images/icons/menu/blanco/book.png" w="25px" />
+            ) : (
+                <Image src="/images/icons/menu/color/book.jpg" w="25px" />
             ),
             text: 'Book',
             onClick: () => setOption(10),
-            bgColor: bgColor(10),
+            bgColor: isActive(10) ? "white" : '#413b97',
             hoverBg: hoverColor(10),
-            textColor: textColor(10),
+            textColor: isActive(10) ? "#413b97" : "white",
+            fontWeight: isActive(10) ? "bolder" : "normal",
         },
         {
-            icon: <AiOutlineSetting style={{ stroke: iconColor(6), strokeWidth: '1' }} color={iconColor(6)} />,
+            icon: !isActive(6) ? (
+                <Image src="/images/icons/menu/blanco/account.png" w="25px" />
+            ) : (
+                <Image src="/images/icons/menu/color/account.jpg" w="25px" />
+            ),
             text: 'Account',
             onClick: () => setOption(6),
-            bgColor: bgColor(6),
+            bgColor: isActive(6) ? "white" : '#4e3b97',
             hoverBg: hoverColor(6),
-            textColor: textColor(6),
+            textColor: isActive(6) ? "#4e3b97" : "white",
+            fontWeight: isActive(6) ? "bolder" : "normal",
         },
         {
-            icon: <BsArrowLeftRight style={{ stroke: iconColor(4), strokeWidth: '1' }} color={iconColor(4)} />,
+            icon: !isActive(4) ? (
+                <Image src="/images/icons/menu/blanco/bridge.png" w="25px" />
+            ) : (
+                <Image src="/images/icons/menu/color/bridge.jpg" w="25px" />
+            ),
             text: 'Bridge',
             onClick: () => setOption(4),
-            bgColor: bgColor(4),
+            bgColor: isActive(4) ? "white" : '#573b97',
             hoverBg: hoverColor(4),
-            textColor: textColor(4),
+            textColor: isActive(4) ? "#573b97" : "white",
+            fontWeight: isActive(4) ? "bolder" : "normal",
         },
         {
-            icon: <AiOutlineLogout />,
+            icon: <Image src="/images/icons/menu/blanco/logout.png" w="25px" />,
             text: 'Logout',
             onClick: handleLogout,
-            bgColor: sBgColor,
+            bgColor: '#5d3b97',
             hoverBg: hoverColor(8),
             textColor: sTextColor,
         },

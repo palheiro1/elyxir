@@ -1,4 +1,4 @@
-import { Box, TableContainer, useColorModeValue } from '@chakra-ui/react';
+import { Box, TableContainer } from '@chakra-ui/react';
 import { Table } from '../../../ResponsiveTable/table';
 import { Tbody } from '../../../ResponsiveTable/tbody';
 import { Th } from '../../../ResponsiveTable/th';
@@ -24,7 +24,7 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
         return trade.sellerRS === account;
     };
 
-    const bgHeadColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+    // const bgHeadColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
         <Box>
@@ -33,7 +33,7 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
                 border="1px"
                 rounded="lg"
                 boxShadow="inner"
-                borderColor={bgHeadColor}
+                borderColor={"#3b6497"}
                 bg="blackAlpha"
                 shadow="dark-lg">
                 <Table>

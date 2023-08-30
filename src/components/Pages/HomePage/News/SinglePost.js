@@ -1,9 +1,9 @@
 import { Box, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 
 const SinglePost = ({ date, title, text, url }) => {
-    const bgColor = useColorModeValue('blackAlpha.50', 'whiteAlpha.50');
-    const bgHoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
-    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+    const bgColor = useColorModeValue('blackAlpha.50', 'rgba(47,144,136,0.5)');
+    const bgHoverColor = useColorModeValue('blackAlpha.100', 'rgba(47,144,136,0.7)');
+    const borderColor = useColorModeValue('blackAlpha.300', 'rgba(47,144,136,1)');
     const textColor = useColorModeValue('black', 'white');
 
     return (

@@ -29,12 +29,13 @@ import { useNavigate } from 'react-router-dom';
  */
 const Account = ({ infoAccount }) => {
     const { accountRs, name, IGNISBalance, GIFTZBalance, GEMBalance, WETHBalance } = infoAccount;
-    console.log('🚀 ~ file: Account.js:32 ~ Account ~ WETHBalance:', WETHBalance);
     const [isInvalidPinBackup, setIsInvalidPinBackup] = useState(true);
     const [isInvalidPinDelete, setIsInvalidPinDelete] = useState(true);
     const [needReload, setNeedReload] = useState(false);
     const [passphrase, setPassphrase] = useState();
-    const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+    const bgColor = useColorModeValue('blackAlpha.100', 'rgba(47,59,151,0.5)');
+    const borderColor = useColorModeValue('blackAlpha.300', 'rgba(47,59,151,1)');
+
 
     const navigate = useNavigate();
 
@@ -71,7 +72,6 @@ const Account = ({ infoAccount }) => {
         setIsInvalidPinDelete(false);
     };
 
-    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
         <>

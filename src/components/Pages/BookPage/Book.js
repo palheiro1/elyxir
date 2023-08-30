@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Heading, Stack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Stack, useColorModeValue } from '@chakra-ui/react';
 import PDFReader from './PDFReader';
 import MB_Book from './pdfs/MB_50_Book.pdf';
 
@@ -23,9 +23,9 @@ const Book = ({ cards }) => {
         loadPdf();
     }, [currentCard]);
 
-    const colorHaveCard = useColorModeValue('white', '');
-    const colorNotHaveCard = useColorModeValue('blackAlpha.200', 'whiteAlpha.300');
-    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+    const colorHaveCard = useColorModeValue('white', 'rgba(65,59,151,1)');
+    const colorNotHaveCard = useColorModeValue('blackAlpha.200', 'rgba(65,59,151,0.5)');
+    const borderColor = useColorModeValue('blackAlpha.300', 'rgba(65,59,151,1)');
 
     let haveAllCards = false;
     haveAllCards = cards.every(card => {
@@ -44,12 +44,11 @@ const Book = ({ cards }) => {
     };
 
     return (
-        <Box overflow="hidden">
-            <Heading>Book</Heading>
+        <Box overflow="hidden" mt={2}>
             <Stack direction="row" spacing={0}>
                 <Stack direction="column" spacing={0} maxH="73vh" overflowY={'auto'} minW="15%">
                     <Box
-                        bgColor={haveAllCards ? '#F18800' : "gray"}
+                        bgColor={haveAllCards ? '#413b97' : 'rgba(65,59,151,0.35)'}
                         fontWeight="bolder"
                         color="white"
                         border="1px"
@@ -75,7 +74,7 @@ const Book = ({ cards }) => {
                                 onClick={() => (haveThisCard ? handleChangeCard(card) : null)}
                                 _hover={{
                                     cursor: haveThisCard ? 'pointer' : 'not-allowed',
-                                    bgColor: haveThisCard ? '#F18800' : 'none',
+                                    bgColor: haveThisCard ? 'rgba(65,59,151,0.9)' : 'none',
                                 }}
                                 key={card.asset}
                                 rounded="sm"

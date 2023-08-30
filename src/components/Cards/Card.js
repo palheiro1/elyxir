@@ -23,10 +23,6 @@ import CraftDialog from '../Modals/CraftDialog/CraftDialog';
 import MorphDialog from '../Modals/MorphDialog/MorphDialog';
 import SendDialog from '../Modals/SendDialog/SendDialog';
 
-// Icons
-import { BsArrowLeftRight, BsTools } from 'react-icons/bs';
-import { FaRegPaperPlane } from 'react-icons/fa';
-
 import { BiLockAlt } from 'react-icons/bi';
 import AskDialog from '../Modals/TradeDialog/AskDialog/AskDialog';
 import BidDialog from '../Modals/TradeDialog/BidDialog/BidDialog';
@@ -46,6 +42,8 @@ import BidDialog from '../Modals/TradeDialog/BidDialog/BidDialog';
  * @version 1.0
  */
 const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, infoAccount, market = 'WETH' }) => {
+    const newBgColor = useColorModeValue('blackAlpha.300', 'rgba(47, 129, 144, 0.35)');
+    const newBorderColor = useColorModeValue('blackAlpha.300', 'rgba(47, 129, 144, 1)');
     // ------------------------------
 
     const { isOpen: isOpenCraft, onOpen: onOpenCraft, onClose: onCloseCraft } = useDisclosure();
@@ -85,7 +83,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
         askOmnoOrders,
         bidOrders: bidIgnisOrders,
         bidOmnoOrders,
-        lastPrice:lastIgnisPrice,
+        lastPrice: lastIgnisPrice,
         lastOmnoPrice,
     } = card;
 
@@ -130,14 +128,14 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     let highBidOrders = 0;
     if (askOrders.length > 0) {
         let auxAsks;
-        if(market === 'IGNIS') auxAsks = askOrders[0].priceNQTPerShare / NQTDIVIDER;
-        if(market === 'WETH') auxAsks = askOrders[0].take.asset[WETHASSET] / NQTDIVIDER;
+        if (market === 'IGNIS') auxAsks = askOrders[0].priceNQTPerShare / NQTDIVIDER;
+        if (market === 'WETH') auxAsks = askOrders[0].take.asset[WETHASSET] / NQTDIVIDER;
         lowedAskOrders = Number.isInteger(auxAsks) ? auxAsks : auxAsks.toFixed(2);
     }
     if (bidOrders.length > 0) {
         let auxBids;
-        if(market === 'IGNIS') auxBids = bidOrders[0].priceNQTPerShare / NQTDIVIDER;
-        if(market === 'WETH') auxBids = bidOrders[0].give.asset[WETHASSET] / NQTDIVIDER;
+        if (market === 'IGNIS') auxBids = bidOrders[0].priceNQTPerShare / NQTDIVIDER;
+        if (market === 'WETH') auxBids = bidOrders[0].give.asset[WETHASSET] / NQTDIVIDER;
         highBidOrders = Number.isInteger(auxBids) ? auxBids : auxBids.toFixed(2);
     }
 
@@ -150,11 +148,26 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
     const lockedCards = quantity - unconfirmedQuantityQNT;
     const haveCardsInMarket = lockedCards > 0;
     const isSingular = Number(lockedCards) === 1;
+    // ------------------------------
+
+    const CardButton = ({ text, onClick, isDisabled = false, icon }) => (
+        <Button
+            fontWeight="medium"
+            border="2px"
+            borderColor={newBorderColor}
+            bgColor={newBgColor}
+            fontSize={{ base: 'xs', md: 'sm', '2xl': 'md' }}
+            leftIcon={icon}
+            _hover={{ fontWeight: 'bold', shadow: 'xl', bgColor: newBorderColor }}
+            onClick={onClick}
+            isDisabled={isDisabled}>
+            {text}
+        </Button>
+    );
 
     return (
         <Box
             p={3}
-            border="1px"
             rounded="lg"
             shadow="lg"
             bgColor={bgColor}
@@ -203,35 +216,24 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                             onMouseLeave={() => isBlocked && setHoverButton(false)}>
                             {!hoverButton && (
                                 <SimpleGrid columns={3} gap={1}>
-                                    <Button
-                                        fontWeight="medium"
-                                        fontSize={{ base: 'xs', md: 'sm', '2xl': 'md' }}
-                                        leftIcon={<FaRegPaperPlane />}
-                                        _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                                    <CardButton
+                                        text="Send"
                                         onClick={onOpenSend}
-                                        isDisabled={isBlocked}>
-                                        Send
-                                    </Button>
-
-                                    <Button
-                                        fontWeight="medium"
-                                        fontSize={{ base: 'xs', md: 'sm', '2xl': 'md' }}
-                                        leftIcon={<BsTools />}
-                                        _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                                        isDisabled={isBlocked}
+                                        icon={<Image src="/images/icons/send.png" w="20px" />}
+                                    />
+                                    <CardButton
+                                        text="Craft"
                                         onClick={onOpenCraft}
-                                        isDisabled={isBlockedCraft}>
-                                        Craft
-                                    </Button>
-
-                                    <Button
-                                        fontWeight="medium"
-                                        fontSize={{ base: 'xs', md: 'sm', '2xl': 'md' }}
-                                        leftIcon={<BsArrowLeftRight />}
-                                        _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                                        isDisabled={isBlockedCraft}
+                                        icon={<Image src="/images/icons/craft.png" w="20px" />}
+                                    />
+                                    <CardButton
+                                        text="Morph"
                                         onClick={onOpenMorph}
-                                        isDisabled={isBlocked}>
-                                        Morph
-                                    </Button>
+                                        isDisabled={isBlocked}
+                                        icon={<Image src="/images/icons/morph.png" w="20px" />}
+                                    />
                                 </SimpleGrid>
                             )}
                             {hoverButton && (
@@ -251,7 +253,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                     <Button
                                         onClick={onOpenBid}
                                         size="lg"
-                                        bgColor="#33B448"
+                                        bgColor="#29a992"
                                         w="100%"
                                         fontWeight={'black'}
                                         _hover={{ shadow: 'lg' }}>
@@ -261,7 +263,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                         onClick={onOpenAsk}
                                         size="lg"
                                         w="100%"
-                                        bgColor="#FF6962"
+                                        bgColor="#eb6473"
                                         isDisabled={isBlocked}
                                         fontWeight={'black'}
                                         _hover={{ shadow: 'lg' }}>
@@ -303,9 +305,10 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                         <Box>
                             <Button
                                 w="100%"
-                                color="black"
+                                color="white"
+                                fontWeight={'black'}
                                 variant="solid"
-                                bgColor="#F18800"
+                                bgColor="#9f3772"
                                 _hover={{ fontWeight: 'bold', shadow: 'xl' }}
                                 onClick={onOpenBid}>
                                 BUY

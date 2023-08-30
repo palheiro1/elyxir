@@ -20,15 +20,6 @@ const Market = ({ infoAccount, cards, gemCards, giftzCards, wethCards }) => {
     // Market type
     const [marketCurrency, setMarketCurrency] = useState('CARDS');
 
-    // const syleOption2 = {
-    //     base: '100%',
-    //     md: '80%',
-    //     lg: '70vw',
-    //     xl: '75vw',
-    //     '2xl': '100%',
-    // };
-
-    // <Box maxW={option === 2 ? syleOption2 : '100%'}>
     return (
         <Box maxW={{ base: '100%', md: '80%', lg: '70vw', xl: '77.5vw', '2xl': "100%" }}>
             <PairSelector marketCurrency={marketCurrency} setMarketCurrency={setMarketCurrency} />

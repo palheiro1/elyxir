@@ -27,10 +27,8 @@ const Overview = ({ blockchainStatus }) => {
                         }}
                     />
                 </Box>
-                */}
-                <Box>
-                    <News />
-                </Box>
+                */} 
+                <News />
             </Stack>
         </Box>
     );

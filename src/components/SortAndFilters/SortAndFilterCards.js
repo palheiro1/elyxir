@@ -1,4 +1,4 @@
-import { Box, Button, Select, Stack, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Image, Select, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaRegPaperPlane } from 'react-icons/fa';
 import equal from 'fast-deep-equal';
@@ -16,7 +16,9 @@ import Crypto from 'crypto-browserify';
  * @version 1.0
  */
 const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true, needSorting = true }) => {
-    const bgButtons = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+    const bgButtons = useColorModeValue('blackAlpha.300', 'rgba(47, 129, 144, 0.35)');
+    const borderButtons = useColorModeValue('blackAlpha.300', 'rgba(47, 129, 144, 1)');
+
     const [rarity, setRarity] = useState('All');
     const [sort, setSort] = useState('moreQuantity');
     const [needReload, setNeedReload] = useState(true);
@@ -72,17 +74,38 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
         }
     };
 
-    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+    const RarityButton = ({ name, icon, isActive }) => {
+        return (
+            <Button
+                w={{ base: '100%', lg: 'unset' }}
+                size="sm"
+                bgColor={bgButtons}
+                isActive={isActive}
+                border="2px"
+                borderColor={borderButtons}
+                onClick={() => handleRarity(name)}
+                _hover={{ bgColor: borderButtons }}
+                _active={{ bgColor: borderButtons }}
+                leftIcon={icon}>
+                {name}
+            </Button>
+        );
+    };
 
     return (
-        <Stack direction={{ base: "column", lg: "row" }} align="center" justify="space-between" position="relative" mb={4}>
+        <Stack
+            direction={{ base: 'column', lg: 'row' }}
+            align="center"
+            justify="space-between"
+            position="relative"
+            mb={4}>
             {needSorting && (
                 <Stack
                     direction="row"
-                    border="1px"
-                    borderColor={borderColor}
+                    border="2px"
+                    borderColor={borderButtons}
                     rounded="lg"
-                    bg="blackAlpha"
+                    bg="transparent"
                     shadow="md"
                     px={2}
                     align="center"
@@ -105,32 +128,36 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
                 right={{ base: 'unset', lg: '0.25%' }}
                 direction={['column', 'row']}
                 spacing={2}>
-                <Button w={{ base: '100%', lg: 'unset' }} size="sm" bgColor={bgButtons} isActive={rarity === 'All'} onClick={() => handleRarity('All')}>
-                    All rarities
-                </Button>
-                <Button
-                    w={{ base: '100%', lg: 'unset' }}
-                    size="sm"
-                    bgColor={bgButtons}
+                <RarityButton
+                    name="All"
+                    isActive={rarity === 'All'}
+                    icon={<Image width={'20px'} src="/images/rarities/all.png" />}
+                />
+
+                <RarityButton
+                    name="Common"
                     isActive={rarity === 'Common'}
-                    onClick={() => handleRarity('Common')}>
-                    Common
-                </Button>
-                <Button w={{ base: '100%', lg: 'unset' }} size="sm" bgColor={bgButtons} isActive={rarity === 'Rare'} onClick={() => handleRarity('Rare')}>
-                    Rare
-                </Button>
-                <Button w={{ base: '100%', lg: 'unset' }} size="sm" bgColor={bgButtons} isActive={rarity === 'Epic'} onClick={() => handleRarity('Epic')}>
-                    Epic
-                </Button>
+                    icon={<Image width={'20px'} src="/images/rarities/common.png" />}
+                />
+
+                <RarityButton
+                    name="Rare"
+                    isActive={rarity === 'Rare'}
+                    icon={<Image width={'20px'} src="/images/rarities/rare.png" />}
+                />
+
+                <RarityButton
+                    name="Epic"
+                    isActive={rarity === 'Epic'}
+                    icon={<Image width={'20px'} src="/images/rarities/epic.png" />}
+                />
+
                 {needSpecials && (
-                    <Button
-                        w={{ base: '100%', lg: 'unset' }}
-                        size="sm"
-                        bgColor={bgButtons}
+                    <RarityButton
+                        name="Special"
                         isActive={rarity === 'Special'}
-                        onClick={() => handleRarity('Special')}>
-                        Special
-                    </Button>
+                        icon={<Image width={'20px'} src="/images/rarities/special.png" />}
+                    />
                 )}
             </Stack>
         </Stack>

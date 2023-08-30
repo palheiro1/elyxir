@@ -36,7 +36,8 @@ const AskBidTable = ({
                     textAlign="center"
                     p={4}
                     fontSize="lg"
-                    borderBottom="1px"
+                    borderBottom="2px"
+                    borderColor={"#3b6497"}
                     color={newStyle && (isAsk ? '#FF6962' : '#33B448')}>
                     {type}
                 </Text>

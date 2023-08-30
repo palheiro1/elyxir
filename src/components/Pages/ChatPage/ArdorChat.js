@@ -47,14 +47,14 @@ const ArdorChat = ({ infoAccount }) => {
 
     return (
         <>
-            <Box>
+            <Box my={2}>
                 <Warning />
                 <Stack direction={['column', 'row']} spacing={4} mt={4}>
                     <Center>
                         <Heading fontSize="md">Messages</Heading>
                     </Center>
                     <Spacer />
-                    <Button size="sm" onClick={handleNewMessage}>
+                    <Button size="sm" onClick={handleNewMessage} bgColor={"rgba(59,67,151,0.5)"}>
                         New message
                     </Button>
                 </Stack>

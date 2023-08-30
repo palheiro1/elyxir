@@ -1,5 +1,4 @@
-import { Box, Center, HStack, IconButton, Stack, Text, useColorModeValue, VStack } from '@chakra-ui/react';
-import { GiCutDiamond } from 'react-icons/gi';
+import { Box, Center, HStack, IconButton, Image, Stack, Text, useColorModeValue, VStack } from '@chakra-ui/react';
 
 /**
  * @name HCountdown
@@ -11,14 +10,14 @@ import { GiCutDiamond } from 'react-icons/gi';
  */
 const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBalanceUSD }) => {
     const textColor = useColorModeValue('black', 'white');
-    const bgColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
+    const bgColor = useColorModeValue('blackAlpha.200', 'rgba(59,83,151,0.35)');
 
     return (
         <Center>
             <Stack direction="column">
                 <Stack direction={{ base: 'column', md: 'row' }} spacing={4} align="center">
                     <IconButton
-                        icon={<GiCutDiamond />}
+                        icon={<Image src="/images/currency/gem.png" w="35px" />}
                         size="xl"
                         p={4}
                         mr={2}

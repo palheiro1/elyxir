@@ -69,7 +69,7 @@ const JackpotWidget = ({ cStyle = 2, numParticipants = 0, blockchainStatus = {} 
         blockchainStatus && getJackpotTimer();
     }, [blockchainStatus]);
 
-    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+    const borderColor = useColorModeValue('blackAlpha.300', '#3b5397');
 
     return (
         <>

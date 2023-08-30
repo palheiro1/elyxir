@@ -1,8 +1,9 @@
 import { Box, Center, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 
 const BridgeSelector = ({ setBridgeType }) => {
-    const borderColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.600');
-    const hoverColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
+    const borderColor = useColorModeValue('blackAlpha.600', '#573b97');
+    const bgColor = useColorModeValue('blackAlpha.600', 'rgba(57,59,151,0.5)');
+    const hoverColor = useColorModeValue('blackAlpha.200', 'rgba(57,59,151,0.7)');
 
     return (
         <>
@@ -14,6 +15,7 @@ const BridgeSelector = ({ setBridgeType }) => {
             <Stack direction={{ base: 'column', md: 'row' }} spacing={2} align="center">
                 <Box
                     w="100%"
+                    bgColor={bgColor}
                     border="1px"
                     borderColor={borderColor}
                     p={8}
@@ -29,6 +31,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                 <Box
                     w="100%"
                     border="1px"
+                    bgColor={bgColor}
                     borderColor={borderColor}
                     p={8}
                     rounded="md"
@@ -43,6 +46,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                 <Box
                     w="100%"
                     border="1px"
+                    bgColor={bgColor}
                     borderColor={borderColor}
                     p={8}
                     rounded="md"
@@ -59,6 +63,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                 <Box
                     w="100%"
                     border="1px"
+                    bgColor={bgColor}
                     borderColor={borderColor}
                     p={8}
                     rounded="md"
@@ -73,6 +78,7 @@ const BridgeSelector = ({ setBridgeType }) => {
 
                 <Box
                     w="100%"
+                    bgColor={bgColor}
                     border="1px"
                     borderColor={borderColor}
                     p={8}

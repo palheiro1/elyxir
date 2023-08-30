@@ -14,6 +14,9 @@ const SectionSwitch = ({ option, setOption }) => {
         <Box w="100%" my={6} shadow="md" rounded="lg">
             <Button
                 isActive={option === 0}
+                _active={{ bgColor: '#3b6497' }}
+                bgColor={'rgba(59,100,151,0.5)'}
+                _hover={{ bgColor: 'rgba(59,100,151,0.7)' }}
                 w="33.333%"
                 size="lg"
                 rounded="node"
@@ -26,6 +29,9 @@ const SectionSwitch = ({ option, setOption }) => {
 
             <Button
                 isActive={option === 1}
+                _active={{ bgColor: '#3b6497' }}
+                bgColor={'rgba(59,100,151,0.5)'}
+                _hover={{ bgColor: 'rgba(59,100,151,0.7)' }}
                 w="33.333%"
                 size="lg"
                 rounded="node"
@@ -37,6 +43,9 @@ const SectionSwitch = ({ option, setOption }) => {
 
             <Button
                 isActive={option === 2}
+                _active={{ bgColor: '#3b6497' }}
+                bgColor={'rgba(59,100,151,0.5)'}
+                _hover={{ bgColor: 'rgba(59,100,151,0.7)' }}
                 w="33.333%"
                 size="lg"
                 rounded="node"

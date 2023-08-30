@@ -1,4 +1,4 @@
-import { Button, Center, Spinner, TableContainer, Text, useColorModeValue } from '@chakra-ui/react';
+import { Button, Center, Spinner, TableContainer, Text } from '@chakra-ui/react';
 
 import { Table } from '../../ResponsiveTable/table';
 import { Tbody } from '../../ResponsiveTable/tbody';
@@ -7,7 +7,7 @@ import { Tr } from '../../ResponsiveTable/tr';
 import { Th } from '../../ResponsiveTable/th';
 
 const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTransactions, visibleTransactions, handleClick }) => {
-    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+    // const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
     // -------------------------------------------------
     const loadMoreTransactions = () => {
         setVisibleTransactions(prevVisibleTransactions => prevVisibleTransactions + 10);
@@ -16,7 +16,7 @@ const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTra
     return filteredTransactions.length > 0 ? (
         <TableContainer
             border="1px"
-            borderColor={borderColor}
+            borderColor={"#3b7197"}
             rounded="lg"
             bg="blackAlpha"
             shadow="dark-lg"
@@ -50,8 +50,8 @@ const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTra
             </Table>
 
             {filteredTransactions.length > visibleTransactions && (
-                <Button size="lg" w="100%" p={6} onClick={loadMoreTransactions}>
-                    Load More
+                <Button size="lg" w="100%" bgColor="transparent" p={12} onClick={loadMoreTransactions} color="#3b7197">
+                    LOAD MORE
                 </Button>
             )}
         </TableContainer>
