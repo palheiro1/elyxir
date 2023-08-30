@@ -12,6 +12,7 @@ import BridgeERC1155GIFTZ from './GIFTZ/BridgeERC1155GIFTZ';
 import BridgeSelector from './BridgeSelector';
 import BridgeERC20 from './ERC20/BridgeERC20';
 import OldBridge from './OldBridge/OldBridge';
+import BridgeERC20GEM from './ERC20GEM/BridgeERC20GEM';
 
 /**
  * @name Bridge
@@ -84,6 +85,7 @@ const Bridge = ({ infoAccount, cards }) => {
         <Box>
             {bridgeType === undefined && <BridgeSelector setBridgeType={setBridgeType} />}
             {bridgeType === 'ERC20' && <BridgeERC20 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} />}
+            {bridgeType === 'ERC20GEM' && <BridgeERC20GEM infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} />}
             {bridgeType === 'ERC1155' && (
                 <BridgeERC1155 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC1155} cards={cards} />
             )}

@@ -34,10 +34,24 @@ const BridgeSelector = ({ setBridgeType }) => {
                     rounded="md"
                     shadow="md"
                     minH="5rem"
-                    onClick={() => setBridgeType('ERC1155')}
+                    onClick={() => setBridgeType('ERC1155GIFTZ')}
                     _hover={{ bgColor: hoverColor, cursor: 'pointer' }}>
                     <Text fontSize="2xl" fontWeight="medium" textAlign="center" h="100%">
-                        Cards
+                        GIFTZ
+                    </Text>
+                </Box>
+                <Box
+                    w="100%"
+                    border="1px"
+                    borderColor={borderColor}
+                    p={8}
+                    rounded="md"
+                    shadow="md"
+                    minH="5rem"
+                    onClick={() => setBridgeType('ERC20GEM')}
+                    _hover={{ bgColor: hoverColor, cursor: 'pointer' }}>
+                    <Text fontSize="2xl" fontWeight="medium" textAlign="center" h="100%">
+                        GEM
                     </Text>
                 </Box>
             </Stack>
@@ -50,12 +64,13 @@ const BridgeSelector = ({ setBridgeType }) => {
                     rounded="md"
                     shadow="md"
                     minH="5rem"
-                    onClick={() => setBridgeType('ERC1155GIFTZ')}
+                    onClick={() => setBridgeType('ERC1155')}
                     _hover={{ bgColor: hoverColor, cursor: 'pointer' }}>
                     <Text fontSize="2xl" fontWeight="medium" textAlign="center" h="100%">
-                        GIFTZ
+                        Cards
                     </Text>
                 </Box>
+
                 <Box
                     w="100%"
                     border="1px"
