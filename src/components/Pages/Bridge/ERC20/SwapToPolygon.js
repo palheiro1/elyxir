@@ -70,7 +70,6 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
         setIsSwapping(true);
 
         const amountQnt = wEthToSwap * NQTDIVIDER;
-        console.log("🚀 ~ file: SwapToPolygon.js:73 ~ handleSwap ~ amountQnt:", amountQnt)
 
         const cardsToSwap = [
             {
@@ -105,8 +104,8 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                 </Heading>
 
                 <Box>
-                    <NumberInput defaultValue={0} min={0.005} max={WETHBalance} precision={7} value={wEthToSwap}>
-                        <NumberInputField onChange={e => setWEthToSwap(e.target.value)} />
+                    <NumberInput defaultValue={0} min={0.005} max={WETHBalance} precision={7} value={wEthToSwap} onChange={e => setWEthToSwap(e)}>
+                        <NumberInputField />
                     </NumberInput>
                     <Center>
                         <Text color={textColor}>Max: {WETHBalance}</Text>
