@@ -17,9 +17,9 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
             <Stack direction="column">
                 <Stack direction={{ base: 'column', md: 'row' }} spacing={4} align="center">
                     <IconButton
-                        icon={<Image src="/images/currency/gem.png" w="35px" />}
+                        icon={<Image src="/images/currency/gem.png" w="50px" />}
                         size="xl"
-                        p={4}
+                        p={2}
                         mr={2}
                         fontSize="4xl"
                         bg={bgColor}
