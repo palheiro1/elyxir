@@ -27,6 +27,7 @@ import { errorToast, okToast } from '../../../utils/alerts';
 import { buyPackWithWETH } from '../../../utils/cardsUtils';
 import { checkPin } from '../../../utils/walletUtils';
 import { fetchOmnoMarket } from '../../../utils/omno';
+import { Animated } from 'react-animated-css';
 
 /**
  * @name BuyPackDialog
@@ -223,6 +224,10 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const canBuy = enoughtWETH && enoughtIGNIS;
     const isDisabled = !isValidPin || input.value > totalOnSale || input.value === '0' || !canBuy;
 
+    const randomTime = () => {
+        return Math.floor(Math.random() * (10000 - 1000 + 1)) + 1000;
+    }
+
     return (
         <>
             <AlertDialog
@@ -234,18 +239,20 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 isCentered>
                 <AlertDialogOverlay bgColor="blackAlpha.900" />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="#371328" shadow="dark-lg" color="white">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="#9f3772" shadow="dark-lg" color="white">
                     <AlertDialogHeader textAlign="center">BUY A PACK OF CARDS</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>
                         <Grid templateColumns="repeat(2, 1fr)">
                             <GridItem w="100%">
                                 <Center w="100%">
-                                    <Image
-                                        src="/images/cardPacks/BuyPackExpendedora.png"
-                                        alt="Card Pack"
-                                        maxH="30rem"
-                                    />
+                                    <Animated animationIn="shake" animationInDelay={randomTime()} isVisible={true}>
+                                        <Image
+                                            src="/images/cardPacks/BuyPackExpendedora.png"
+                                            alt="Card Pack"
+                                            maxH="30rem"
+                                        />
+                                    </Animated>
                                 </Center>
                             </GridItem>
 
@@ -282,7 +289,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     rounded="none"
                                                     borderLeftRadius="lg"
                                                     color={colorText}
-                                                    bgColor={'rgba(159, 55, 114, 0.5)'}>
+                                                    bgColor={'#6b254d'}>
                                                     -
                                                 </Button>
                                                 <Input
@@ -295,7 +302,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                 />
                                                 <Button
                                                     {...inc}
-                                                    bgColor={'rgba(159, 55, 114, 0.5)'}
+                                                    bgColor={'#6b254d'}
                                                     rounded="none"
                                                     borderRightRadius="lg"
                                                     color={colorText}>
@@ -304,9 +311,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                             </HStack>
                                         </Center>
                                         <Center>
-                                            <Text
-                                                fontSize="xs"
-                                                color={'whiteAlpha.600'}>
+                                            <Text fontSize="xs" color={'whiteAlpha.600'}>
                                                 {totalOnSale} packs availables
                                             </Text>
                                         </Center>
@@ -352,10 +357,10 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     isInvalid={!isValidPin}
                                                     variant="filled"
                                                     mask>
-                                                    <PinInputField bgColor={'rgba(159, 55, 114, 0.3)'} />
-                                                    <PinInputField bgColor={'rgba(159, 55, 114, 0.3)'} />
-                                                    <PinInputField bgColor={'rgba(159, 55, 114, 0.3)'} />
-                                                    <PinInputField bgColor={'rgba(159, 55, 114, 0.3)'} />
+                                                    <PinInputField bgColor={'#6b254d'} />
+                                                    <PinInputField bgColor={'#6b254d'} />
+                                                    <PinInputField bgColor={'#6b254d'} />
+                                                    <PinInputField bgColor={'#6b254d'} />
                                                 </PinInput>
                                             </HStack>
                                         </Box>
@@ -364,7 +369,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     <Box w="100%" mt={2}>
                                         <Button
                                             isDisabled={isDisabled || sendingTx}
-                                            bgColor={'rgba(159, 55, 114, 0.5)'}
+                                            bgColor={'#6b254d'}
                                             w="100%"
                                             py={6}
                                             onClick={handleBuyPack}>
