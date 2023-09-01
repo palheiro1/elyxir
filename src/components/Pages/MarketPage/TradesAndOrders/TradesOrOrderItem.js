@@ -24,7 +24,7 @@ import WETHCard from '../../../Cards/WETHCard';
  * @version 1.0
  */
 const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, card }) => {
-    const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+    const hoverColor = "rgba(59, 100, 151, 0.15)"
     const iconColor = useColorModeValue('blackAlpha.500', 'yellow');
 
     const isCurrency = name === 'GEM' || name === 'GIFTZ' || name === 'wETH';

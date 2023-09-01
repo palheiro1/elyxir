@@ -56,7 +56,7 @@ const PDFReader = ({ pdf }) => {
             {isLargerThan800 && (
                 <Stack>
                     <Center>
-                        <Box width={width * 2}>
+                        <Box width={(width + 1) * 2}>
                             <ButtonGroup w="100%" spacing="0" isAttached>
                                 <Button
                                     w="50%"

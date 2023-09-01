@@ -24,7 +24,6 @@ const ShowTransactions = ({
             border="1px"
             borderColor={'#3b7197'}
             rounded="lg"
-            bg="blackAlpha"
             shadow="dark-lg"
             boxShadow="inner"
             textAlign="center"

@@ -181,7 +181,7 @@ export const handleIncomingGIFTZ = (amount, date) => {
     const Component = () => {
         return (
             <Tr
-                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+            _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
                 border={{ base: '2px', md: '0px' }}
                 rounded={{ base: 'md', md: 'unset' }}
                 m={{ base: 2, md: 0 }}>
@@ -218,7 +218,7 @@ export const handleMessage = (type, msg, date) => {
     const Component = () => {
         return (
             <Tr
-                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
                 border={{ base: '2px', md: '0px' }}
                 rounded={{ base: 'md', md: 'unset' }}
                 m={{ base: 2, md: 0 }}>
@@ -255,7 +255,7 @@ export const cancelledOrder = (type, date, account) => {
     const Component = () => {
         return (
             <Tr
-                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
                 border={{ base: '2px', md: '0px' }}
                 rounded={{ base: 'md', md: 'unset' }}
                 m={{ base: 2, md: 0 }}>
@@ -297,7 +297,7 @@ export const handleGEM = (type, amount, date, account) => {
     const Component = () => {
         return (
             <Tr
-                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
                 border={{ base: '2px', md: '0px' }}
                 borderColor="whiteAlpha.300"
                 rounded={{ base: 'md', md: 'unset' }}
@@ -326,7 +326,7 @@ export const handleGIFTZ = (type, amount, date, account) => {
     const Component = () => {
         return (
             <Tr
-                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
                 border={{ base: '2px', md: '0px' }}
                 borderColor="whiteAlpha.300"
                 rounded={{ base: 'md', md: 'unset' }}
@@ -357,7 +357,7 @@ export const handleWETH = (type, amount, date, account) => {
     const Component = () => {
         return (
             <Tr
-                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
                 border={{ base: '2px', md: '0px' }}
                 borderColor="whiteAlpha.300"
                 rounded={{ base: 'md', md: 'unset' }}
@@ -388,11 +388,11 @@ export const handleCardTransfer = (type, amount, date, account, card) => {
     const Component = ({ handleClick }) => {
         return (
             <Tr
-                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
                 border={{ base: '2px', md: '0px' }}
                 borderColor="whiteAlpha.300"
                 rounded={{ base: 'md', md: 'unset' }}
-                onClick={() => handleClick({card})}
+                onClick={() => handleClick({ card })}
                 cursor="pointer"
                 m={{ base: 2, md: 0 }}>
                 <Td>
@@ -424,7 +424,7 @@ export const handleAssetExchange = (type, amount, date, asset) => {
     const Component = () => {
         return (
             <Tr
-                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
                 border={{ base: '2px', md: '0px' }}
                 borderColor="whiteAlpha.300"
                 rounded={{ base: 'md', md: 'unset' }}
@@ -466,7 +466,7 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
     const Component = () => {
         return (
             <Tr
-                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
                 border={{ base: '2px', md: '0px' }}
                 borderColor="whiteAlpha.300"
                 rounded={{ base: 'md', md: 'unset' }}
@@ -501,7 +501,7 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
     const Component = () => {
         return (
             <Tr
-                _hover={{ bgColor: useColorModeValue('blackAlpha.100', 'whiteAlpha.100') }}
+                _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
                 border={{ base: '2px', md: '0px' }}
                 borderColor="whiteAlpha.300"
                 rounded={{ base: 'md', md: 'unset' }}
