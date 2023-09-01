@@ -1,10 +1,10 @@
-import { Box, Stack, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Stack, Text } from '@chakra-ui/react';
 
 const SinglePost = ({ date, title, text, url }) => {
-    const bgColor = useColorModeValue('blackAlpha.50', 'rgba(47,144,136,0.5)');
-    const bgHoverColor = useColorModeValue('blackAlpha.100', 'rgba(47,144,136,0.7)');
-    const borderColor = useColorModeValue('blackAlpha.300', 'rgba(47,144,136,1)');
-    const textColor = useColorModeValue('black', 'white');
+    const bgColor = 'rgba(47, 144, 136, 0.25)';
+    const bgHoverColor = 'rgba(47, 144, 136, 0.35)';
+    const borderColor = 'rgba(47, 144, 136, 1)';
+    const textColor = 'white';
 
     return (
         <a href={url} target="_blank" rel="noreferrer">
@@ -24,7 +24,7 @@ const SinglePost = ({ date, title, text, url }) => {
                     <Text color={textColor} fontSize="2xl">
                         {title}
                     </Text>
-                    <Text color="grey">{text}</Text>
+                    <Text color={textColor}>{text}</Text>
                 </Stack>
             </Box>
         </a>
