@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Box, Center, Stack, StackDivider, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Center } from '@chakra-ui/react';
 
 // Components
-// import BlockInfo from './BlockInfo';
-import VCountdown from './VCountdown';
 import HCountdown from './HCountdown';
 
 // Data
@@ -22,11 +20,10 @@ import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/
  * @param {Number} numParticipants - Number of participants in the jackpot
  * @param {Object} blockchainStatus - Blockchain status
  * @returns {JSX.Element} - JSX element
- * @example
- * <JackpotWidget cStyle = 1 /> // Default style - Same as the home page
- * <JackpotWidget cStyle = 2 /> // Style for the jackpot page
+ * @example <JackpotWidget cStyle={0} numParticipants={0} blockchainStatus={{}} /> --> Home page
+ * @example <JackpotWidget cStyle={1} numParticipants={0} blockchainStatus={{}} /> --> Jackpot page
  */
-const JackpotWidget = ({ cStyle = 2, numParticipants = 0, blockchainStatus = {} }) => {
+const JackpotWidget = ({ numParticipants = 0, blockchainStatus = {}, cStyle = 0 }) => {
     const [jackpotTimer, setJackpotTimer] = useState({
         days: 0,
         hours: 0,
@@ -69,52 +66,27 @@ const JackpotWidget = ({ cStyle = 2, numParticipants = 0, blockchainStatus = {} 
         blockchainStatus && getJackpotTimer();
     }, [blockchainStatus]);
 
-    const borderColor = useColorModeValue('blackAlpha.300', '#3b5397');
+    const borderColor = cStyle === 0 ? '#2f9088' : '#3b5397';
 
     return (
-        <>
-            {cStyle === 1 && (
-                <Box alignContent="center">
-                    <Text mb={4} fontSize="2xl" textAlign="center" fontWeight="bolder">
-                        Jackpot
-                    </Text>
-                    <Center>
-                        <Stack
-                            bg="#1A273D"
-                            shadow="dark-lg"
-                            rounded="lg"
-                            p={4}
-                            direction={{ base: 'column', lg: 'row' }}
-                            divider={<StackDivider borderColor="blue.800" />}>
-                            <VCountdown
-                                jackpotTimer={jackpotTimer}
-                                jackpotBalance={jackpotBalance}
-                                jackpotBalanceUSD={jackpotBalanceUSD}
-                            />
-                        </Stack>
-                    </Center>
-                </Box>
-            )}
-            {cStyle === 2 && (
-                <Center my={4} mb={8}>
-                    <Box
-                        p={4}
-                        border="1px"
-                        borderColor={borderColor}
-                        rounded="lg"
-                        bg="blackAlpha"
-                        shadow="dark-lg"
-                        direction="row">
-                            <HCountdown
-                                jackpotTimer={jackpotTimer}
-                                numParticipants={numParticipants}
-                                jackpotBalance={jackpotBalance}
-                                jackpotBalanceUSD={jackpotBalanceUSD}
-                            />
-                    </Box>
-                </Center>
-            )}
-        </>
+        <Center my={4} mb={8}>
+            <Box
+                p={4}
+                border="1px"
+                borderColor={borderColor}
+                rounded="lg"
+                bg="blackAlpha"
+                shadow="dark-lg"
+                direction="row">
+                <HCountdown
+                    cStyle={cStyle}
+                    jackpotTimer={jackpotTimer}
+                    numParticipants={numParticipants}
+                    jackpotBalance={jackpotBalance}
+                    jackpotBalanceUSD={jackpotBalanceUSD}
+                />
+            </Box>
+        </Center>
     );
 };
 

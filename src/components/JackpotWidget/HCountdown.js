@@ -1,4 +1,4 @@
-import { Box, Center, HStack, IconButton, Image, Stack, Text, useColorModeValue, VStack } from '@chakra-ui/react';
+import { Box, Center, HStack, IconButton, Image, Stack, Text, VStack } from '@chakra-ui/react';
 
 /**
  * @name HCountdown
@@ -8,9 +8,9 @@ import { Box, Center, HStack, IconButton, Image, Stack, Text, useColorModeValue,
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBalanceUSD }) => {
-    const textColor = useColorModeValue('black', 'white');
-    const bgColor = useColorModeValue('blackAlpha.200', 'rgba(59,83,151,0.35)');
+const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBalanceUSD, cStyle }) => {
+    const textColor = cStyle === 0 ? '#2f9088' : 'white';
+    const bgColor = cStyle === 0 ? 'rgba(47, 144, 136 ,0.35)' : 'rgba(59, 83, 151, 0.35)';
 
     return (
         <Center>
@@ -64,7 +64,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                         </HStack>
                     </Center>
                 </Stack>
-                <Box py={2} bg={bgColor} rounded="lg" minW="90px" w="100%">
+                <Box py={2} bg={bgColor} rounded="lg" minW="90px" w="100%" color={textColor}>
                     <Text textAlign="center">
                         Total claims in this round: <strong>{numParticipants}</strong>
                     </Text>
