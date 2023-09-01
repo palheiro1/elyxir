@@ -9,7 +9,6 @@ import {
     PinInput,
     PinInputField,
     Text,
-    useColorModeValue,
     useDisclosure,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
@@ -33,9 +32,9 @@ const Account = ({ infoAccount }) => {
     const [isInvalidPinDelete, setIsInvalidPinDelete] = useState(true);
     const [needReload, setNeedReload] = useState(false);
     const [passphrase, setPassphrase] = useState();
-    const bgColor = useColorModeValue('blackAlpha.100', 'rgba(47,59,151,0.5)');
-    const borderColor = useColorModeValue('blackAlpha.300', 'rgba(47,59,151,1)');
-
+    const bgColor = 'rgba(47,59,151,0.5)';
+    const hoverColor = 'rgba(47,59,151,0.75)';
+    const borderColor = 'rgba(47,59,151,1)';
 
     const navigate = useNavigate();
 
@@ -72,7 +71,6 @@ const Account = ({ infoAccount }) => {
         setIsInvalidPinDelete(false);
     };
 
-
     return (
         <>
             <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={4}>
@@ -84,6 +82,7 @@ const Account = ({ infoAccount }) => {
                     GEMBalance={GEMBalance.toFixed(2)}
                     WETHBalance={WETHBalance.toFixed(6)}
                     bgColor={bgColor}
+                    borderColor={borderColor}
                 />
                 <GridItem>
                     <Box
@@ -128,7 +127,9 @@ const Account = ({ infoAccount }) => {
                                 color="white"
                                 mt={4}
                                 w="100%"
-                                bgColor="blue.800"
+                                bgColor={bgColor}
+                                _hover={{ bgColor: hoverColor }}
+                                isDisabled={isInvalidPinBackup}
                                 onClick={!isInvalidPinBackup ? onOpenBackup : undefined}>
                                 Export passphrase
                             </Button>
@@ -173,7 +174,9 @@ const Account = ({ infoAccount }) => {
                                 color="white"
                                 mt={4}
                                 w="100%"
-                                bgColor="blue.800"
+                                _hover={{ bgColor: hoverColor }}
+                                bgColor={bgColor}
+                                isDisabled={isInvalidPinDelete}
                                 onClick={!isInvalidPinDelete ? onOpenDelete : undefined}>
                                 Delete account
                             </Button>
@@ -181,21 +184,25 @@ const Account = ({ infoAccount }) => {
                     </Box>
                 </GridItem>
             </Grid>
-            <BackupDialog
-                reference={refBackup}
-                isOpen={isOpenBackup}
-                onClose={onCloseBackup}
-                account={accountRs}
-                username={name}
-                passphrase={passphrase}
-            />
-            <ConfirmDialog
-                reference={refDelete}
-                isOpen={isOpenDelete}
-                onClose={onCloseDelete}
-                user={name}
-                setNeedReload={setNeedReload}
-            />
+            {isOpenBackup && (
+                <BackupDialog
+                    reference={refBackup}
+                    isOpen={isOpenBackup}
+                    onClose={onCloseBackup}
+                    account={accountRs}
+                    username={name}
+                    passphrase={passphrase}
+                />
+            )}
+            {isOpenDelete && (
+                <ConfirmDialog
+                    reference={refDelete}
+                    isOpen={isOpenDelete}
+                    onClose={onCloseDelete}
+                    user={name}
+                    setNeedReload={setNeedReload}
+                />
+            )}
         </>
     );
 };

@@ -47,9 +47,9 @@ const AskBidTable = ({
                 {!newStyle && (
                     <Thead>
                         <Tr>
-                            {!onlyOneAsset && <Th textAlign="center">Asset</Th>}
-                            <Th textAlign="center">Ignis</Th>
-                            <Th textAlign="center">Amount</Th>
+                            {!onlyOneAsset && <Th textAlign="center" color={"#3b6497"}>Asset</Th>}
+                            <Th textAlign="center" color={"#3b6497"}>Ignis</Th>
+                            <Th textAlign="center" color={"#3b6497"}>Amount</Th>
                         </Tr>
                     </Thead>
                 )}

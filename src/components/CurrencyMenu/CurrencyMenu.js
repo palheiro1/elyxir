@@ -96,8 +96,8 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                         shadow="lg"
                         border="4px"
                         borderColor={borderColor}
-                        bgColor={"white"}
-                        color={"black"}
+                        bgColor={'white'}
+                        color={'black'}
                         rounded="lg"
                         minW="5rem"
                         maxH={'2.2rem'}
@@ -110,10 +110,10 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                             ml={-8}
                                             src="images/currency/ignis.png"
                                             alt="IGNIS Icon"
-                                            w="35px"
+                                            w="50px"
                                             h="50px"
                                         />
-                                        <Text pr={2} align="center">
+                                        <Text pr={4} align="center">
                                             {Number(IGNISBalance).toFixed(0)}
                                         </Text>
                                     </Stack>
@@ -134,8 +134,8 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                         shadow="lg"
                         border="4px"
                         rounded="lg"
-                        bgColor={"white"}
-                        color={"black"}
+                        bgColor={'white'}
+                        color={'black'}
                         minW="5rem"
                         maxH={'2.2rem'}
                         borderColor={borderColor}
@@ -149,10 +149,10 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                             mr={2}
                                             src="images/currency/giftz.png"
                                             alt="GIFTZ Icon"
-                                            minW="35px"
+                                            minW="50px"
                                             h="50px"
                                         />
-                                        <Text pr={2} align="center">
+                                        <Text pr={4} align="center">
                                             {Number(GIFTZBalance).toFixed(0)}
                                         </Text>
                                     </Stack>
@@ -169,8 +169,8 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     <Box
                         shadow="lg"
                         border="4px"
-                        bgColor={"white"}
-                        color={"black"}
+                        bgColor={'white'}
+                        color={'black'}
                         borderColor={borderColor}
                         rounded="lg"
                         minW="5rem"
@@ -180,8 +180,8 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             <Menu>
                                 <MenuButton>
                                     <Stack direction="row" align="center" mt={-2.5}>
-                                        <Image ml={-5} src="images/currency/gem.png" alt="GEM Icon" w="45px" h="50px" />
-                                        <Text pr={3}>{GEMBalance.toFixed(0)}</Text>
+                                        <Image ml={-7} src="images/currency/gem.png" alt="GEM Icon" w="55px" h="50px" />
+                                        <Text pr={4}>{GEMBalance.toFixed(0)}</Text>
                                     </Stack>
                                 </MenuButton>
 
@@ -197,8 +197,8 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     <Box
                         shadow="lg"
                         border="4px"
-                        bgColor={"white"}
-                        color={"black"}
+                        bgColor={'white'}
+                        color={'black'}
                         borderColor={borderColor}
                         rounded="lg"
                         minW="5rem"
@@ -212,10 +212,10 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                             ml={-6}
                                             src="images/currency/weth.png"
                                             alt="wETH Icon"
-                                            w="43px"
+                                            w="50px"
                                             h="50px"
                                         />
-                                        <Text pr={3}>
+                                        <Text pr={4}>
                                             {parseWETH.toFixed(Math.max(0, wEthDecimals <= 6 ? wEthDecimals : 6))}
                                         </Text>
                                     </Stack>
@@ -235,8 +235,8 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                         shadow="lg"
                         border="4px"
                         borderColor={borderColor}
-                        bgColor={"white"}
-                        color={"black"}
+                        bgColor={'white'}
+                        color={'black'}
                         rounded="lg"
                         minW="5rem"
                         maxH={'2.2rem'}
@@ -244,15 +244,15 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                         <Center>
                             <Menu>
                                 <MenuButton>
-                                    <Stack direction="row" align="center" mt={-2.5}>
+                                    <Stack direction="row" align="center" mt={-3.5}>
                                         <Image
                                             ml={-7}
                                             src="images/currency/mana.png"
                                             alt="MANA Icon"
-                                            w="47px"
+                                            w="50px"
                                             h="50px"
                                         />
-                                        <Text pr={3}>
+                                        <Text pr={4} pt={2}>
                                             {parseMANA.toFixed(Math.max(0, manaDecimals <= 6 ? manaDecimals : 6))}
                                         </Text>
                                     </Stack>

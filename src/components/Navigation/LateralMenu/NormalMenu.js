@@ -22,10 +22,9 @@ const NormalMenu = memo(({ option, setOption, handleLogout, showAllCards, handle
         }, 1000);
         return () => clearInterval(interval);
     }, [timer, actualBlock, nextBlock]);
+
     return (
-
-
-        <Stack direction="row">
+        <Stack direction="row" pt={5}>
             <Box>
                 <VerticalMenuButtons
                     setOption={setOption}
@@ -47,7 +46,7 @@ const NormalMenu = memo(({ option, setOption, handleLogout, showAllCards, handle
             </Box>
 
             {/* This is the main section */}
-            <Box w="100%" p={2}>
+            <Box w="100%" px={2}>
                 {memoChildren}
             </Box>
         </Stack>

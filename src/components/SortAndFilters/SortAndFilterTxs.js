@@ -1,6 +1,7 @@
 import { Box, Select, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { FaRegPaperPlane, FaFilter } from 'react-icons/fa';
+import { FaFilter } from 'react-icons/fa';
+import { BsArrowDownUp } from 'react-icons/bs';
 
 const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTransactions }) => {
     const [filter, setFilter] = useState('all');
@@ -59,7 +60,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                 px={2}
                 align="center">
                 <Box pl={1} py={2}>
-                    <FaRegPaperPlane />
+                    <BsArrowDownUp color="#3b7197" />
                 </Box>
                 <Text fontSize="sm" color="gray.400">
                     Sort:{' '}
@@ -84,7 +85,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                     align="center"
                     w={{ base: '100%', md: 'unset' }}>
                     <Box pl={1} py={2}>
-                        <FaFilter />
+                        <FaFilter color="#3b7197" />
                     </Box>
                     <Text fontSize="sm" color="gray.400">
                         Filter:{' '}

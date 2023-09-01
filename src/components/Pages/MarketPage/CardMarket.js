@@ -8,7 +8,7 @@ import AskAndBidGrid from './TradesAndOrders/AskAndBids/AskAndBidGrid';
 import SectionSwitch from './SectionSwitch';
 import TradesAndOrderTable from './TradesAndOrders/TradesAndOrderTable';
 
-const CardMarket = ({ cards, infoAccount, marketCurrency }) => {
+const CardMarket = ({ cards, infoAccount }) => {
     // Option
     // 0 -> Market
     // 1 -> Trades
@@ -23,7 +23,7 @@ const CardMarket = ({ cards, infoAccount, marketCurrency }) => {
 
             {option === 0 && (
                 <Box>
-                    <SortAndFilterCards cards={cards} setCardsFiltered={setCardsFiltered} />
+                    <SortAndFilterCards cards={cards} setCardsFiltered={setCardsFiltered} rgbColor={"59, 100, 151"} />
 
                     <GridCards
                         cards={cardsFiltered}

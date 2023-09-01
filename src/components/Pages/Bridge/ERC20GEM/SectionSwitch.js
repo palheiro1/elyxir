@@ -1,4 +1,4 @@
-import { Button, SimpleGrid } from '@chakra-ui/react';
+import { Button, ButtonGroup } from '@chakra-ui/react';
 
 /**
  * @name SectionSwitch
@@ -10,32 +10,31 @@ import { Button, SimpleGrid } from '@chakra-ui/react';
  * @version 1.0
  */
 const SectionSwitch = ({ option, setOption }) => {
-    return (
-        <SimpleGrid columns={2} w="100%" mb={6} shadow="md" rounded="lg">
-            <Button
-                isActive={option === 0}
-                w="100%"
-                size="lg"
-                rounded="node"
-                fontWeight="medium"
-                fontSize="md"
-                onClick={() => setOption(0)}
-                borderLeftRadius="lg">
-                Swap to ARDOR
-            </Button>
 
+    const bgColor = 'rgba(57,59,151,0.5)';
+    const fillColor = 'rgba(57,59,151,0.25)';
+    const borderColor = 'rgba(57,59,151,1)';
+
+    const ButtonSwitch = ({ isActive, onClick, text }) => {
+        return (
             <Button
-                isActive={option === 1}
+                isActive={isActive}
                 w="100%"
-                size="lg"
-                rounded="node"
-                fontWeight="medium"
-                fontSize="md"
-                onClick={() => setOption(1)}
-                borderRightRadius="lg">
-                Swap to Polygon
+                bgColor={fillColor}
+                _active={{ bgColor: bgColor }}
+                _disabled={{ bgColor: fillColor }}
+                _hover={{ bgColor: fillColor }}
+                onClick={onClick}>
+                {text}
             </Button>
-        </SimpleGrid>
+        );
+    };
+
+    return (
+        <ButtonGroup size="lg" minW="100%" isAttached mb={4} border="2px" borderColor={borderColor} rounded={'lg'}>
+            <ButtonSwitch isActive={option === 0} onClick={() => setOption(0)} text="Swap to ARDOR" />
+            <ButtonSwitch isActive={option === 1} onClick={() => setOption(1)} text="Swap to Polygon" />
+        </ButtonGroup>
     );
 };
 

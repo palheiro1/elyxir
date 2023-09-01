@@ -22,7 +22,7 @@ const Inventory = ({ infoAccount, cards }) => {
     const [cardsFiltered, setCardsFiltered] = useState(cards);
 
     return (
-        <Box my={2}>
+        <Box mb={2}>
             <SortAndFilterCards cards = {cards} setCardsFiltered = {setCardsFiltered} />
             <GridCards cards={cardsFiltered} infoAccount={infoAccount} />
         </Box>

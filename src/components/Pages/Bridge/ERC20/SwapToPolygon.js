@@ -112,7 +112,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                     </Center>
                 </Box>
 
-                <Divider />
+                <Divider bgColor="#393b97" />
                 <Heading fontSize="3xl" fontWeight="light" textAlign="center">
                     2. Enter your polygon address
                 </Heading>
@@ -125,7 +125,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                     isInvalid={!isValidAccount}
                 />
 
-                <Divider />
+                <Divider bgColor="#393b97" />
                 <Heading fontSize="3xl" fontWeight="light" textAlign="center">
                     3. Sign and submit
                 </Heading>
@@ -151,8 +151,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
 
                 <Button
                     w="100%"
-                    colorScheme="blue"
-                    variant="outline"
+                    variant="bridge"
                     disabled={!isValidAccount || !isValidPin || wEthToSwap === 0 || isSwapping}
                     onClick={handleSwap}
                     letterSpacing="widest">

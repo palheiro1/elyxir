@@ -64,7 +64,7 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
                 <FormLabel>Deposit address</FormLabel>
             </FormControl>
 
-            <Divider />
+            <Divider bgColor="#393b97" />
 
             <Box>
                 <Heading fontSize="3xl" fontWeight="light">
@@ -75,7 +75,7 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
                 </Text>
             </Box>
 
-            <Divider />
+            <Divider bgColor="#393b97" />
 
             <Heading fontSize="3xl" fontWeight="light">
                 3. Initiate the swap to this wallet
@@ -86,7 +86,7 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
                 <FormLabel>ARDOR address</FormLabel>
             </FormControl>
 
-            <Button w="100%" colorScheme="blue" variant="outline" letterSpacing="widest" onClick={swap}>
+            <Button w="100%" variant="bridge" letterSpacing="widest" onClick={swap}>
                 SWAP
             </Button>
         </Stack>

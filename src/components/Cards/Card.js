@@ -41,9 +41,19 @@ import BidDialog from '../Modals/TradeDialog/BidDialog/BidDialog';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, infoAccount, market = 'WETH' }) => {
-    const newBgColor = useColorModeValue('blackAlpha.300', 'rgba(47, 129, 144, 0.35)');
-    const newBorderColor = useColorModeValue('blackAlpha.300', 'rgba(47, 129, 144, 1)');
+const Card = ({
+    card,
+    setCardClicked,
+    onOpen,
+    isMarket = false,
+    onlyBuy = true,
+    infoAccount,
+    market = 'WETH',
+    rgbColor = '59, 100, 151',
+}) => {
+    const separatorColor = `rgba(${rgbColor}, 1)`;
+    const newBgColor = 'rgba(47, 129, 144, 0.35)';
+    const newBorderColor = 'rgba(47, 129, 144, 1)';
     // ------------------------------
 
     const { isOpen: isOpenCraft, onOpen: onOpenCraft, onClose: onCloseCraft } = useDisclosure();
@@ -270,7 +280,7 @@ const Card = ({ card, setCardClicked, onOpen, isMarket = false, onlyBuy = true, 
                                         SELL
                                     </Button>
                                 </Stack>
-                                <Box borderTop="1px" borderTopColor="gray.600" pt={4}>
+                                <Box borderTop="1px" borderTopColor={separatorColor} pt={4}>
                                     <SimpleGrid columns={3} spacing={4}>
                                         <Box>
                                             <Text fontSize="sm" color="gray" textAlign="center">

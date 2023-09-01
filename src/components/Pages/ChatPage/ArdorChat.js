@@ -47,7 +47,7 @@ const ArdorChat = ({ infoAccount }) => {
 
     return (
         <>
-            <Box my={2}>
+            <Box mb={2}>
                 <Warning />
                 <Stack direction={['column', 'row']} spacing={4} mt={4}>
                     <Center>

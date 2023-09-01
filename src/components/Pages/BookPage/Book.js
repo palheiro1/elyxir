@@ -44,7 +44,7 @@ const Book = ({ cards }) => {
     };
 
     return (
-        <Box overflow="hidden" mt={2}>
+        <Box overflow="hidden">
             <Stack direction="row" spacing={0}>
                 <Stack direction="column" spacing={0} maxH="73vh" overflowY={'auto'} minW="15%">
                     <Box

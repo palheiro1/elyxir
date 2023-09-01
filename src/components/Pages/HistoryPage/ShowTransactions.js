@@ -6,17 +6,23 @@ import { Thead } from '../../ResponsiveTable/thead';
 import { Tr } from '../../ResponsiveTable/tr';
 import { Th } from '../../ResponsiveTable/th';
 
-const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTransactions, visibleTransactions, handleClick }) => {
-    // const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+const ShowTransactions = ({
+    haveUnconfirmed,
+    filteredTransactions,
+    setVisibleTransactions,
+    visibleTransactions,
+    handleClick,
+}) => {
     // -------------------------------------------------
     const loadMoreTransactions = () => {
         setVisibleTransactions(prevVisibleTransactions => prevVisibleTransactions + 10);
     };
     // -------------------------------------------------
+
     return filteredTransactions.length > 0 ? (
         <TableContainer
             border="1px"
-            borderColor={"#3b7197"}
+            borderColor={'#3b7197'}
             rounded="lg"
             bg="blackAlpha"
             shadow="dark-lg"
@@ -33,12 +39,12 @@ const ShowTransactions = ({ haveUnconfirmed, filteredTransactions, setVisibleTra
             )}
             <Table variant="simple" size={{ base: 'sm', lg: 'md' }}>
                 <Thead>
-                    <Tr w="1rem">
+                    <Tr w="1rem" >
                         <Th />
-                        <Th>Title</Th>
-                        <Th>Amount</Th>
-                        <Th>Date and Time</Th>
-                        <Th>To/From</Th>
+                        <Th color="#3b7197">Title</Th>
+                        <Th color="#3b7197">Amount</Th>
+                        <Th color="#3b7197">Date and Time</Th>
+                        <Th color="#3b7197">To/From</Th>
                     </Tr>
                 </Thead>
                 <Tbody>

@@ -1,6 +1,6 @@
-import { Box, Button, Image, Select, Stack, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Image, Select, Stack, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { FaRegPaperPlane } from 'react-icons/fa';
+import { BsArrowDownUp } from 'react-icons/bs';
 import equal from 'fast-deep-equal';
 import Crypto from 'crypto-browserify';
 
@@ -15,9 +15,9 @@ import Crypto from 'crypto-browserify';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true, needSorting = true }) => {
-    const bgButtons = useColorModeValue('blackAlpha.300', 'rgba(47, 129, 144, 0.35)');
-    const borderButtons = useColorModeValue('blackAlpha.300', 'rgba(47, 129, 144, 1)');
+const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true, needSorting = true, rgbColor = "47, 129, 144" }) => {
+    const bgButtons = `rgba(${rgbColor}, 0.35)`;
+    const borderButtons = `rgba(${rgbColor}, 1)`;
 
     const [rarity, setRarity] = useState('All');
     const [sort, setSort] = useState('moreQuantity');
@@ -81,11 +81,10 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
                 size="sm"
                 bgColor={bgButtons}
                 isActive={isActive}
-                border="2px"
-                borderColor={borderButtons}
+                border="0px"
                 onClick={() => handleRarity(name)}
                 _hover={{ bgColor: borderButtons }}
-                _active={{ bgColor: borderButtons }}
+                _active={{ border: '2px', borderColor: borderButtons }}
                 leftIcon={icon}>
                 {name}
             </Button>
@@ -111,7 +110,7 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
                     align="center"
                     w={{ base: '100%', lg: 'unset' }}>
                     <Box pl={1} py={2}>
-                        <FaRegPaperPlane />
+                        <BsArrowDownUp color={borderButtons} />
                     </Box>
                     <Text fontSize="sm" color="gray.400">
                         Sort:{' '}

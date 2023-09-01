@@ -1,8 +1,17 @@
-import { Box, Grid, GridItem, Heading, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Heading, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getIgnisPrice } from '../../../services/coingecko/utils';
 
-const UserDataItem = ({ accountRs, name, IGNISBalance, GIFTZBalance, GEMBalance, WETHBalance, bgColor }) => {
+const UserDataItem = ({
+    accountRs,
+    name,
+    IGNISBalance,
+    GIFTZBalance,
+    GEMBalance,
+    WETHBalance,
+    bgColor,
+    borderColor,
+}) => {
     const [IGNISUSDBalance, setIGNISUSDBalance] = useState(0);
 
     useEffect(() => {
@@ -12,8 +21,6 @@ const UserDataItem = ({ accountRs, name, IGNISBalance, GIFTZBalance, GEMBalance,
         };
         calculateUSD();
     }, [IGNISBalance]);
-
-    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
         <GridItem>

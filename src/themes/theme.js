@@ -20,11 +20,19 @@ const styles = {
             display: 'flex',
             flexDirection: 'column',
             minHeight: '100vh',
-        }
+        },
     }),
 };
 
 const components = {
+    Button: {
+        variants: {
+            bridge: props => ({
+                border: '2px solid #393b97',
+                color: 'white',
+            }),
+        },
+    },
     Drawer: {
         baseStyle: props => ({
             dialog: {
@@ -108,6 +116,9 @@ const components = {
             }),
             floatingTransparent: props => ({
                 container: {
+                    input: {
+                        borderColor: '#393b97',
+                    },
                     label: {
                         bg: 'transparent',
                         color: props.colorMode === 'dark' ? 'white' : 'black',

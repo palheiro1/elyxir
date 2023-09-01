@@ -1,4 +1,4 @@
-import { Box, Center, HStack, IconButton, Image, Stack, Text, VStack } from '@chakra-ui/react';
+import { Box, Center, HStack, IconButton, Image, Stack, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 
 /**
  * @name HCountdown
@@ -9,7 +9,7 @@ import { Box, Center, HStack, IconButton, Image, Stack, Text, VStack } from '@ch
  * @version 1.0
  */
 const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBalanceUSD, cStyle }) => {
-    const textColor = cStyle === 0 ? '#2f9088' : 'white';
+    const textColor = useColorModeValue('black', 'white');
     const bgColor = cStyle === 0 ? 'rgba(47, 144, 136 ,0.35)' : 'rgba(59, 83, 151, 0.35)';
 
     return (

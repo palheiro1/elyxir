@@ -24,8 +24,6 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
         return trade.sellerRS === account;
     };
 
-    // const bgHeadColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
-
     return (
         <Box>
             <TableContainer
@@ -40,11 +38,11 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
                     <Thead>
                         <Tr>
                             <Th />
-                            <Th>Title</Th>
-                            <Th>Amount</Th>
-                            <Th>Price</Th>
-                            <Th>Date and Time</Th>
-                            <Th>Seller/Buyer</Th>
+                            <Th color="#3b6497">Title</Th>
+                            <Th color="#3b6497">Amount</Th>
+                            <Th color="#3b6497">Price</Th>
+                            <Th color="#3b6497">Date and Time</Th>
+                            <Th color="#3b6497">Seller/Buyer</Th>
                         </Tr>
                     </Thead>
                     <Tbody>

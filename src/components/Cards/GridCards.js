@@ -115,6 +115,7 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {},
                                 onlyBuy={onlyBuy}
                                 infoAccount={infoAccount}
                                 market={market}
+                                rgbColor="59, 100, 151"
                             />
                         </Animated>
                     );

@@ -21,7 +21,7 @@ const TopBar = ({
             align={{ base: 'start', lg: 'center' }}
             justify={{ base: 'center', lg: 'space-between' }}
             minW={{ base: '100%', lg: 'auto' }}
-            py={4}>
+            pb={4}>
             {isTransactions && (
                 <SortAndFilterTxs
                     setFilteredTransactions={setFilteredTransactions}
@@ -41,6 +41,8 @@ const TopBar = ({
                 <ButtonGroup variant="outline" isAttached size="sm" w="100%">
                     <Button
                         w="100%"
+                        border="2px"
+                        borderColor="#367197"
                         bgColor={isTransactions && '#3b7197'}
                         color={isTransactions && 'white'}
                         _hover={{ color: 'white' }}
@@ -49,6 +51,8 @@ const TopBar = ({
                     </Button>
                     <Button
                         w="100%"
+                        border="2px"
+                        borderColor="#367197"
                         bgColor={isDividends && '#3b7197'}
                         color={isDividends && 'white'}
                         _hover={{ color: 'white' }}

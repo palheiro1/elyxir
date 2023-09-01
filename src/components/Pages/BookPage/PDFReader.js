@@ -1,5 +1,5 @@
 import { useState, forwardRef } from 'react';
-import { Box, Button, Center, useBreakpointValue, useMediaQuery } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Center, Stack, useBreakpointValue, useMediaQuery } from '@chakra-ui/react';
 import HTMLFlipBook from 'react-pageflip';
 import { pdfjs, Document, Page as ReactPdfPage } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
@@ -15,7 +15,6 @@ const Page = forwardRef(({ pageNumber, width }, ref) => {
 });
 
 const PDFReader = ({ pdf }) => {
-    
     // ---------------------------------------------
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
@@ -26,6 +25,7 @@ const PDFReader = ({ pdf }) => {
     }
 
     const handleNextPage = () => {
+        console.log("pageNumber", pageNumber, "numPages", numPages)
         if (pageNumber < numPages) setPageNumber(pageNumber + 1);
     };
 
@@ -39,15 +39,29 @@ const PDFReader = ({ pdf }) => {
     return (
         <Box>
             {isLargerThan800 && (
-                <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+                <Stack>
                     <Center>
-                        <HTMLFlipBook width={width} height={height}>
-                            {Array.from(new Array(numPages), (el, index) => {
-                                return <Page key={`page_${index + 1}`} pageNumber={index + 1} width={width} />;
-                            })}
-                        </HTMLFlipBook>
+                        <Box width={width * 2}>
+                            <ButtonGroup w="100%" spacing="0" isAttached>
+                                <Button w="50%" onClick={handlePrevPage}>
+                                    Prev page
+                                </Button>
+                                <Button w="50%" onClick={handleNextPage}>
+                                    Next page
+                                </Button>
+                            </ButtonGroup>
+                        </Box>
                     </Center>
-                </Document>
+                    <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+                        <Center>
+                            <HTMLFlipBook width={width} height={height} usePortrait={true} >
+                                {Array.from(new Array(numPages), (el, index) => {
+                                    return <Page key={`page_${index + 1}`} pageNumber={index + 1} width={width} />;
+                                })}
+                            </HTMLFlipBook>
+                        </Center>
+                    </Document>
+                </Stack>
             )}
 
             {!isLargerThan800 && (

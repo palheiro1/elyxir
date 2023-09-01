@@ -1,7 +1,8 @@
-import { Box, Button, Center, SimpleGrid, Text, useColorModeValue, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Center, SimpleGrid, Text, useDisclosure } from '@chakra-ui/react';
 import { useRef } from 'react';
 import DecryptMessage from '../../Modals/DecryptMessage/DecryptMessage';
 import { getMessageTimestamp } from '../../../utils/dateAndTime';
+import { TARASCACARDACCOUNT } from '../../../data/CONSTANTS';
 
 const OneSenderMessages = ({ sender, messages, username, account }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -9,11 +10,11 @@ const OneSenderMessages = ({ sender, messages, username, account }) => {
 
     const { timeElapsedText, isDate } = getMessageTimestamp(messages[0]);
 
-    const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
-    const borderColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
-    const hoverColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+    const bgColor = 'rgba(59, 67, 151, 0.25)';
+    const borderColor = 'rgba(59, 67, 151, 1)';
+    const hoverColor = 'rgba(59, 67, 151, 0.155)';
 
-    const fixedSender = sender === 'ARDOR-5NCL-DRBZ-XBWF-DDN5T' ? 'Mythical Being’s official' : sender;
+    const fixedSender = sender === TARASCACARDACCOUNT ? 'Mythical Being’s official' : sender;
 
     return (
         <>
@@ -35,8 +36,8 @@ const OneSenderMessages = ({ sender, messages, username, account }) => {
                         </Text>
                     </Center>
                     <Center>
-                        <Button variant="outline" size="md" onClick={onOpen}>
-                            Read conversation
+                        <Button variant="ghost" size="lg" onClick={onOpen} w="90%">
+                            READ
                         </Button>
                     </Center>
                 </SimpleGrid>

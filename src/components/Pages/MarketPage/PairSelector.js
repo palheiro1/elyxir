@@ -5,8 +5,8 @@ const PairSelector = ({ setMarketCurrency }) => {
 
     return (
         <Center>
-            <Box minW="44%" my={2}>
-                <SimpleGrid columns={2} spacing={2} mt={2}>
+            <Box minW="44%" mb={2}>
+                <SimpleGrid columns={2} spacing={2}>
                     <Button
                         borderColor="#3b6497"
                         size="sm"

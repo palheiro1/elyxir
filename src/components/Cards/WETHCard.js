@@ -5,7 +5,7 @@ const WETHCard = ({ hover = false }) => {
         <Stack direction={'row'} spacing={4} align="center">
             <Image maxW="75px" src="/images/currency/weth.png" alt="wETH" />
             <Text fontWeight="bold" fontSize="2xl">
-                {hover ? 'Delete order' : 'wETH'}
+                {hover ? 'DELETE' : 'wETH'}
             </Text>
         </Stack>
     );

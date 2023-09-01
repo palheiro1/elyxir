@@ -1,4 +1,5 @@
 import { Box, Text, useColorModeValue } from '@chakra-ui/react';
+import { TARASCACARDACCOUNT } from '../../../data/CONSTANTS';
 
 const Warning = () => {
     const bgColor = useColorModeValue('blackAlpha.100', 'rgba(59,67,151,0.35)');
@@ -8,10 +9,7 @@ const Warning = () => {
             <Text textAlign="center">
                 <strong>WARNING: Any user can send messages to other users.</strong>
                 <br />
-                Mythical Being’s official messages are sent only from the <strong>
-                    ARDOR-5NCL-DRBZ-XBWF-DDN5T
-                </strong>{' '}
-                account.
+                Mythical Being’s official messages are sent only from the <strong>{TARASCACARDACCOUNT}</strong> account.
             </Text>
         </Box>
     );

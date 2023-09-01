@@ -69,7 +69,7 @@ const JackpotWidget = ({ numParticipants = 0, blockchainStatus = {}, cStyle = 0 
     const borderColor = cStyle === 0 ? '#2f9088' : '#3b5397';
 
     return (
-        <Center my={4} mb={8}>
+        <Center mb={4}>
             <Box
                 p={4}
                 border="1px"

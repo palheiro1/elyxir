@@ -1,10 +1,10 @@
-import { Box, Stack, Text } from '@chakra-ui/react';
+import { Box, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 
 const SinglePost = ({ date, title, text, url }) => {
     const bgColor = 'rgba(47, 144, 136, 0.25)';
     const bgHoverColor = 'rgba(47, 144, 136, 0.35)';
     const borderColor = 'rgba(47, 144, 136, 1)';
-    const textColor = 'white';
+    const textColor = useColorModeValue('black', 'white');
 
     return (
         <a href={url} target="_blank" rel="noreferrer">
