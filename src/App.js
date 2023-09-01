@@ -34,7 +34,7 @@ function App() {
                 await emptyCacheStorage();
                 window.location.reload();
             } catch (error) {
-                console.log('🚀 ~ file: App.js:50 ~ checkVersion ~ error:', error);
+                console.error('🚀 ~ file: App.js:50 ~ checkVersion ~ error:', error);
             }
         };
 

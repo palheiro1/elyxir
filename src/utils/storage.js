@@ -45,7 +45,7 @@ export const encrypt = (passPhrase, userPin) => {
         // Return the encrypted pass phrase
         return iv.toString('hex') + ':' + encrypted.toString('hex');
     } catch (exception) {
-        console.log("🚀 ~ file: storage.js:41 ~ encrypt ~ exception", exception)
+        console.error("🚀 ~ file: storage.js:41 ~ encrypt ~ exception", exception)
         throw new Error(exception.message);
     }
 }

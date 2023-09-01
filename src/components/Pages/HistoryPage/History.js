@@ -71,7 +71,6 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
 
     const { isOpen, onClose, onOpen} = useDisclosure();
     const handleClick = ({ card }) => {
-        console.log("🚀 ~ file: History.js:74 ~ handleClick ~ card:", card)
         setCardClicked(card);
         onOpen();
     };

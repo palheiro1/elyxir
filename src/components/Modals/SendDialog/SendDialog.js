@@ -109,7 +109,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                 errorToast('Error sending card', toast);
             }
         } catch (error) {
-            console.log('🚀 ~ file: SendDialog.js:104 ~ handleSend ~ error:', error);
+            console.error('🚀 ~ file: SendDialog.js:104 ~ handleSend ~ error:', error);
             errorToast('Error sending card', toast);
         } finally {
             setSendingTx(false);

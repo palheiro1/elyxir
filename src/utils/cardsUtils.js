@@ -127,7 +127,7 @@ export const buyPackWithWETH = async (passphrase, noPacks, WETHBalance, selected
     });
 
     if (!fee) {
-        console.log('🚀 ~ file: cardsUtils.js ~ line 156 ~ buyPackWithWETH ~ ERROR SENDING FEE');
+        console.error('🚀 ~ file: cardsUtils.js ~ line 156 ~ buyPackWithWETH ~ ERROR SENDING FEE');
         return false;
     }
 
@@ -204,7 +204,7 @@ export const openPackWithGiftz = async (passphrase, noPacks, giftzBalance) => {
             message: message,
         });
     } catch (error) {
-        console.log('🚀 ~ file: cardsUtils.js ~ line 242 ~ openPackWithGiftz ~ error', error);
+        console.error('🚀 ~ file: cardsUtils.js ~ line 242 ~ openPackWithGiftz ~ error', error);
     }
 
     return response;

@@ -11,7 +11,7 @@ const QRReader = ({ handleInput }) => {
                 }
 
                 if (error) {
-                    console.log('🚀 ~ file: QRReader.js:23 ~ QRReader ~ error:', error);
+                    console.error('🚀 ~ file: QRReader.js:23 ~ QRReader ~ error:', error);
                 }
             }}
         />

@@ -50,7 +50,7 @@ export const fetchAssetCount = async asset => {
         const result = await response.json();
         return result.quantityQNT ? result.quantityQNT : 0;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:53 ~ fetchAssetCount ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:53 ~ fetchAssetCount ~ error', error);
         return 0;
     }
 };
@@ -70,7 +70,7 @@ const getRequestToIgnisByAccount = async (type, account) => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:68 ~ getRequestToIgnisByAccount ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:68 ~ getRequestToIgnisByAccount ~ error', error);
     }
 };
 
@@ -85,7 +85,7 @@ const getRequestToIgnisByAsset = async (type, asset) => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:95 ~ getRequestToIgnisByAsset ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:95 ~ getRequestToIgnisByAsset ~ error', error);
     }
 };
 
@@ -100,7 +100,7 @@ const getRequestToIgnisByOrder = async (type, order) => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:118 ~ getRequestToIgnisByOrder ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:118 ~ getRequestToIgnisByOrder ~ error', error);
     }
 };
 
@@ -173,7 +173,7 @@ export const getTrades = async (chain, account, timestamp) => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:167 ~ getTrades ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:167 ~ getTrades ~ error', error);
     }
 };
 
@@ -188,7 +188,7 @@ export const getTransaction = async (chain, fullHash) => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:190 ~ getTransaction ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:190 ~ getTransaction ~ error', error);
     }
 };
 
@@ -203,7 +203,7 @@ export const getLastTrades = async assets => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:182 ~ getLastTrades ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:182 ~ getLastTrades ~ error', error);
     }
 };
 
@@ -239,7 +239,7 @@ const getCurrency = async currency => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:210 ~ getCurrency ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:210 ~ getCurrency ~ error', error);
     }
 };
 
@@ -254,7 +254,7 @@ export const getAccountCurrencies = async (account, currency) => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:198 ~ getAccountCurrencies ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:198 ~ getAccountCurrencies ~ error', error);
     }
 };
 
@@ -305,7 +305,7 @@ const sendIgnis = async ({
         const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
         return respuesta.status === 200;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:262 ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:262 ~ error', error);
         return false;
     }
 };
@@ -350,7 +350,7 @@ const transferCurrency = async (currency, unitsQNT, recipient, passPhrase, messa
         const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
         return respuesta.status === 200;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:305 ~ transferCurrency ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:305 ~ transferCurrency ~ error', error);
         return false;
     }
 };
@@ -394,7 +394,7 @@ const transferCurrencyZeroFee = async (
         const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
         return respuesta.status === 200;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:346 ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:346 ~ error', error);
         return false;
     }
 };
@@ -432,7 +432,7 @@ export const buyGiftz = async ({ passphrase, amountNQT }) => {
         const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
         return respuesta.status === 200;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:397 ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:397 ~ error', error);
         return false;
     }
 };
@@ -476,7 +476,7 @@ export const createAskOrder = async ({ asset, price, quantity, passPhrase }) => 
         const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
         return respuesta.status === 200;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
         return false;
     }
 };
@@ -503,7 +503,7 @@ export const cancelAskOrder = async (order, passPhrase) => {
         const respuesta = await axios.post(URL_BROADCAST, qs.stringify({ transactionBytes: signed }), config);
         return respuesta.status === 200;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:341 ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:341 ~ error', error);
         return false;
     }
 };
@@ -541,7 +541,7 @@ export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => 
         const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
         return respuesta.status === 200;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
         return false;
     }
 };
@@ -625,7 +625,7 @@ const transferAsset = async ({
         const response_2 = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
         return response_2.status === 200;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:604 ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:604 ~ error', error);
         return false;
     }
 };
@@ -644,7 +644,7 @@ export const getAccountLedger = async ({ accountRs, firstIndex = 0, lastIndex = 
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:614 ~ getAccountLedger ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:614 ~ getAccountLedger ~ error', error);
         // handle error
         throw new Error(`Error al obtener el libro de cuentas: ${error.message}`);
     }
@@ -697,7 +697,7 @@ const transferGEM = async ({
         const response_2 = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
         return response_2.status === 200;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:670 ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:670 ~ error', error);
         return false;
     }
 };
@@ -720,7 +720,7 @@ const getBlockchainTransactions = async (chain, account, executedOnly = true, ti
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:693 ~ getBlockchainTransactions ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:693 ~ getBlockchainTransactions ~ error', error);
     }
 };
 
@@ -737,7 +737,7 @@ const getUnconfirmedTransactions = async (chain, account, type, subtype) => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:711 ~ getUnconfirmedTransactions ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:711 ~ getUnconfirmedTransactions ~ error', error);
     }
 };
 
@@ -750,7 +750,7 @@ const getBlockchainStatus = async () => {
         });
         return response;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:723 ~ getBlockchainStatus ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:723 ~ getBlockchainStatus ~ error', error);
     }
 };
 
@@ -773,7 +773,7 @@ export const getEthDepositAddressForOldBridge = async accountRs => {
         });
         return response.data.depositAddress;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:775 ~ getEthDepositAddressForOldBridge ~ error:', error);
+        console.error('🚀 ~ file: ardorInterface.js:775 ~ getEthDepositAddressForOldBridge ~ error:', error);
     }
 };
 
@@ -787,7 +787,7 @@ export const processUnwrapsForOldBridge = async accountRs => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:768 ~ processUnwrapsForAccount ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:768 ~ processUnwrapsForAccount ~ error', error);
     }
 };
 
@@ -822,7 +822,7 @@ export const getPegAddressesFor1155 = async () => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:754 ~ getPegAddresses ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:754 ~ getPegAddresses ~ error', error);
     }
 };
 
@@ -836,7 +836,7 @@ export const getEthDepositAddressFor1155 = async accountRs => {
         });
         return response.data.depositAddress;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:741 ~ getEthDepositAddress ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:741 ~ getEthDepositAddress ~ error', error);
     }
 };
 
@@ -850,7 +850,7 @@ export const processUnwrapsFor1155 = async accountRs => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:837 ~ processUnwrapsFor1155 ~ error:', error);
+        console.error('🚀 ~ file: ardorInterface.js:837 ~ processUnwrapsFor1155 ~ error:', error);
     }
 };
 
@@ -867,7 +867,7 @@ export const getPegAddressesFor20 = async () => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:785 ~ getPegAddressesFor20 ~ error:', error);
+        console.error('🚀 ~ file: ardorInterface.js:785 ~ getPegAddressesFor20 ~ error:', error);
     }
 };
 
@@ -881,7 +881,7 @@ export const getEthDepositAddressFor20 = async accountRs => {
         });
         return response.data.depositAddress;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:868 ~ getEthDepositAddressFor20 ~ error:', error);
+        console.error('🚀 ~ file: ardorInterface.js:868 ~ getEthDepositAddressFor20 ~ error:', error);
     }
 };
 
@@ -895,7 +895,7 @@ export const processWrapsFor20 = async accountRs => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:882 ~ processUnwrapsFor20 ~ error:', error);
+        console.error('🚀 ~ file: ardorInterface.js:882 ~ processUnwrapsFor20 ~ error:', error);
     }
 };
 
@@ -938,7 +938,7 @@ export const sendDirectMessage = async ({ recipient, passPhrase, message }) => {
         if (respuesta.errorCode) return false;
         return respuesta.status === 200;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:820 ~ sendDirectMessage ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:820 ~ sendDirectMessage ~ error', error);
         return false;
     }
 };
@@ -955,7 +955,7 @@ export const getAllMessages = async accountRs => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:858 ~ getAllMessages ~ error:', error);
+        console.error('🚀 ~ file: ardorInterface.js:858 ~ getAllMessages ~ error:', error);
     }
 };
 
@@ -976,7 +976,7 @@ export const decryptMessage = async ({ passPhrase, message, publicKey }) => {
         const mensaje = ardorjs.decryptNote(data, publicKeyMessage, passPhrase);
         return mensaje.message;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:872 ~ decryptMessage ~ error:', error);
+        console.error('🚀 ~ file: ardorInterface.js:872 ~ decryptMessage ~ error:', error);
         return false;
     }
 };
@@ -991,7 +991,7 @@ export const getAccountPublicKey = async accountRs => {
         });
         return response.data;
     } catch (error) {
-        console.log('🚀 ~ file: ardorInterface.js:887 ~ getAccountPublicKey ~ error:', error);
+        console.error('🚀 ~ file: ardorInterface.js:887 ~ getAccountPublicKey ~ error:', error);
         return false;
     }
 };

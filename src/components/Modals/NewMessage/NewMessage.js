@@ -94,7 +94,7 @@ const NewMessage = ({ reference, isOpen, onClose, username, defaultRecipient = '
             else errorToast('Error sending message', toast);
             cleanAndClose();
         } catch (error) {
-            console.log('🚀 ~ file: NewMessage.js:85 ~ handleOk ~ error:', error);
+            console.error('🚀 ~ file: NewMessage.js:85 ~ handleOk ~ error:', error);
             errorToast('Error sending message', toast);
         }
     };

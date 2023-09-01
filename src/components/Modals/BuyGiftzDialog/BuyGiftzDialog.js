@@ -118,7 +118,7 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
             await buyGiftz({ passphrase: passphrase, amountNQT: input.value });
             itsOk = true;
         } catch (error) {
-            console.log('🚀 ~ file: BuyGiftzDialog.js:115 ~ handleBuyPack ~ error', error);
+            console.error('🚀 ~ file: BuyGiftzDialog.js:115 ~ handleBuyPack ~ error', error);
             itsOk = false;
         }
 

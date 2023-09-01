@@ -419,8 +419,6 @@ export const handleAssetExchange = (type, amount, date, asset) => {
     // CONTROLAR PARA GEMAS O ASSETS
 
     const currencyAsset = asset === 'GEM' || asset === 'GIFTZ' || asset === 'WETH';
-    console.log('🚀 ~ file: TableHandlers.js:416 ~ handleAssetExchange ~ asset:', asset);
-    console.log('🚀 ~ file: TableHandlers.js:416 ~ handleAssetExchange ~ currencyAsset:', currencyAsset);
     const fixedType = type === 'ask' ? 'Market ASK' : 'Market BID';
 
     const Component = () => {

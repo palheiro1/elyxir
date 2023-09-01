@@ -172,7 +172,7 @@ export const getCurrentAskAndBids = async account => {
         const bidOrders = bidOrdersResponse.bidOrders;
         return { askOrders, bidOrders };
     } catch (error) {
-        console.log('🚀 ~ file: walletUtils.js:141 ~ error', error);
+        console.error('🚀 ~ file: walletUtils.js:141 ~ error', error);
         return { askOrders: [], bidOrders: [] };
     }
 };
@@ -194,7 +194,7 @@ export const getAskAndBids = async asset => {
         const bidOrdersResponse = bidOrders.bidOrders;
         return { askOrders: askOrdersResponse, bidOrders: bidOrdersResponse, assetCount };
     } catch (error) {
-        console.log('🚀 ~ file: walletUtils.js:167 ~ getAskAndBids ~ error', error);
+        console.error('🚀 ~ file: walletUtils.js:167 ~ getAskAndBids ~ error', error);
         return { askOrders: [], bidOrders: [], assetCount: 0 };
     }
 };
@@ -210,7 +210,7 @@ export const getGIFTZBalance = async address => {
         const balanceData = await getAccountCurrencies(address, CURRENCY);
         return Object.keys(balanceData).length > 0 ? balanceData : 0;
     } catch (error) {
-        console.log('🚀 ~ file: walletUtils.js:183 ~ getGIFTZBalance ~ error', error);
+        console.error('🚀 ~ file: walletUtils.js:183 ~ getGIFTZBalance ~ error', error);
         return 0;
     }
 };
@@ -287,7 +287,7 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
         deadline: 1440,
         priority: 'HIGH',
     }).catch(error => {
-        console.log('🚀 ~ file: walletUtils.js:260 ~ sendToMorph ~ transferAsset', error);
+        console.error('🚀 ~ file: walletUtils.js:260 ~ sendToMorph ~ transferAsset', error);
         success = false;
     });
 
@@ -303,7 +303,7 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
         deadline: 1440,
         priority: 'HIGH',
     }).catch(error => {
-        console.log('🚀 ~ file: walletUtils.js:277 ~ sendToMorph ~ transferGEM', error);
+        console.error('🚀 ~ file: walletUtils.js:277 ~ sendToMorph ~ transferGEM', error);
         success = false;
     });
 
@@ -337,7 +337,7 @@ export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
         deadline: 1440,
         priority: 'HIGH',
     }).catch(function (error) {
-        console.log('🚀 ~ file: ardorInterface.js:669 ~ sendToCraft ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:669 ~ sendToCraft ~ error', error);
         success = false;
     });
 
@@ -352,7 +352,7 @@ export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
         deadline: 1440,
         priority: 'HIGH',
     }).catch(function (error) {
-        console.log('🚀 ~ file: ardorInterface.js:685 ~ sendToCraft ~ error', error);
+        console.error('🚀 ~ file: ardorInterface.js:685 ~ sendToCraft ~ error', error);
         success = false;
     });
 

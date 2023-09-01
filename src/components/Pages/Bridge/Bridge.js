@@ -72,7 +72,7 @@ const Bridge = ({ infoAccount, cards }) => {
                     isLoaded: true,
                 });
             } catch (error) {
-                console.log('🚀 ~ file: Bridge.js:73 ~ getSwapAddresses ~ error:', error);
+                console.error('🚀 ~ file: Bridge.js:73 ~ getSwapAddresses ~ error:', error);
             } finally {
                 setIsLoading(false);
             }

@@ -96,7 +96,7 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
                 errorToast('Error decrypting message', toast);
             }
         } catch (error) {
-            console.log('🚀 ~ file: NewMessage.js:85 ~ handleOk ~ error:', error);
+            console.error('🚀 ~ file: NewMessage.js:85 ~ handleOk ~ error:', error);
             errorToast('Error decrypting message', toast);
         }
     };
