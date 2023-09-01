@@ -1,9 +1,10 @@
-import { Box, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { TARASCACARDACCOUNT } from '../../../data/CONSTANTS';
 
 const Warning = () => {
-    const bgColor = useColorModeValue('blackAlpha.100', 'rgba(59,67,151,0.35)');
-    const borderColor = useColorModeValue('blackAlpha.300', 'rgba(59,67,151,1)');
+    const bgColor = 'rgba(59,67,151,0.35)';
+    const borderColor = 'rgba(59,67,151,1)';
+
     return (
         <Box border="1px" rounded="md" p={2} bgColor={bgColor} borderColor={borderColor}>
             <Text textAlign="center">

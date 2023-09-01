@@ -1,4 +1,4 @@
-import { useState, forwardRef } from 'react';
+import { useState, forwardRef, useRef } from 'react';
 import { Box, Button, ButtonGroup, Center, Stack, useBreakpointValue, useMediaQuery } from '@chakra-ui/react';
 import HTMLFlipBook from 'react-pageflip';
 import { pdfjs, Document, Page as ReactPdfPage } from 'react-pdf';
@@ -20,12 +20,27 @@ const PDFReader = ({ pdf }) => {
     const [pageNumber, setPageNumber] = useState(1);
     const [isLargerThan800] = useMediaQuery('(min-width: 800px)');
 
+    const pageFlipRef = useRef(null);
+
     function onDocumentLoadSuccess({ numPages }) {
         setNumPages(numPages);
     }
 
+    // ---------------------------------------------
+    const handleFlipNext = () => {
+        if (pageFlipRef.current) {
+            pageFlipRef.current.pageFlip().flipNext();
+        }
+    };
+
+    const handleFlipPrev = () => {
+        if (pageFlipRef.current) {
+            pageFlipRef.current.pageFlip().flipPrev(); // Avanzar a la página siguiente
+        }
+    };
+
+    // ---------------------------------------------
     const handleNextPage = () => {
-        console.log("pageNumber", pageNumber, "numPages", numPages)
         if (pageNumber < numPages) setPageNumber(pageNumber + 1);
     };
 
@@ -43,10 +58,18 @@ const PDFReader = ({ pdf }) => {
                     <Center>
                         <Box width={width * 2}>
                             <ButtonGroup w="100%" spacing="0" isAttached>
-                                <Button w="50%" onClick={handlePrevPage}>
+                                <Button
+                                    w="50%"
+                                    onClick={handleFlipPrev}
+                                    bgColor={'rgba(65,59,151,0.5)'}
+                                    _hover={{ bgColor: 'rgba(65,59,151,0.4)' }}>
                                     Prev page
                                 </Button>
-                                <Button w="50%" onClick={handleNextPage}>
+                                <Button
+                                    w="50%"
+                                    onClick={handleFlipNext}
+                                    bgColor={'rgba(65,59,151,0.5)'}
+                                    _hover={{ bgColor: 'rgba(65,59,151,0.4)' }}>
                                     Next page
                                 </Button>
                             </ButtonGroup>
@@ -54,7 +77,7 @@ const PDFReader = ({ pdf }) => {
                     </Center>
                     <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
                         <Center>
-                            <HTMLFlipBook width={width} height={height} usePortrait={true} >
+                            <HTMLFlipBook width={width} height={height} ref={pageFlipRef}>
                                 {Array.from(new Array(numPages), (el, index) => {
                                     return <Page key={`page_${index + 1}`} pageNumber={index + 1} width={width} />;
                                 })}

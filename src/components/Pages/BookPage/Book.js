@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Stack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Stack } from '@chakra-ui/react';
 import PDFReader from './PDFReader';
 import MB_Book from './pdfs/MB_50_Book.pdf';
 
@@ -23,9 +23,9 @@ const Book = ({ cards }) => {
         loadPdf();
     }, [currentCard]);
 
-    const colorHaveCard = useColorModeValue('white', 'rgba(65,59,151,1)');
-    const colorNotHaveCard = useColorModeValue('blackAlpha.200', 'rgba(65,59,151,0.5)');
-    const borderColor = useColorModeValue('blackAlpha.300', 'rgba(65,59,151,1)');
+    const colorHaveCard = 'rgba(65,59,151,1)';
+    const colorNotHaveCard = 'rgba(65,59,151,0.5)';
+    const borderColor = 'rgba(65,59,151,1)';
 
     let haveAllCards = false;
     haveAllCards = cards.every(card => {
@@ -68,6 +68,7 @@ const Book = ({ cards }) => {
                         const haveThisCard = card.quantityQNT > 0;
                         return (
                             <Box
+                                color={"white"}
                                 bgColor={haveThisCard ? colorHaveCard : colorNotHaveCard}
                                 border="1px"
                                 borderColor={borderColor}

@@ -1,4 +1,4 @@
-import { Box, Select, Stack, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Select, Stack, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaFilter } from 'react-icons/fa';
 import { BsArrowDownUp } from 'react-icons/bs';
@@ -46,7 +46,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
         }
     }, [transactions, filter, sort, setFilteredTransactions, setVisibleTransactions]);
 
-    const borderColor = useColorModeValue('blackAlpha.300', '#3b7197');
+    const borderColor = '#3b7197';
 
     return (
         <Stack direction={{ base: 'column', md: 'row' }} pb={2} w="100%">
@@ -71,9 +71,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                 </Select>
             </Stack>
 
-            <Stack
-                direction="row"
-                w={{ base: '100%', md: 'unset' }}>
+            <Stack direction="row" w={{ base: '100%', md: 'unset' }}>
                 <Stack
                     direction="row"
                     border="2px"

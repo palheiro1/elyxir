@@ -86,7 +86,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
         }
     };
 
-    const hoverColor = useColorModeValue('blackAlpha.800', 'whiteAlpha.800');
+    const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.800');
 
     return (
         <>
