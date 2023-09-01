@@ -485,7 +485,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         "#5d3b97"
     ]
 
-    const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+    const bgColor = useColorModeValue('white', 'whiteAlpha.100');
     const borderColor = MENU_OPTIONS_COLOR[option] || 'whiteAlpha.100';
 
     return (

@@ -1,4 +1,4 @@
-import { Box, Stack, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Stack, Text } from '@chakra-ui/react';
 import { Tr } from '../../ResponsiveTable/tr';
 import { Td } from '../../ResponsiveTable/td';
 import { FaFilter, FaInbox } from 'react-icons/fa';

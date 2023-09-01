@@ -93,6 +93,7 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
                         setCardsFiltered={setCardsFiltered}
                         needSpecials={false}
                         needSorting={false}
+                        rgbColor={"59, 83, 151"}
                     />
                     <RemainingCards
                         username={infoAccount.name}
