@@ -16,7 +16,6 @@ import {
     PinInput,
     PinInputField,
     Text,
-    useColorModeValue,
     useNumberInput,
     useToast,
 } from '@chakra-ui/react';
@@ -26,7 +25,6 @@ import Hover from 'react-3d-hover';
 import { useEffect, useState } from 'react';
 import { PACKPRICE } from '../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../utils/alerts';
-// import { openPackWithGiftz, buyPackWithIgnis } from '../../../utils/cardsUtils';
 import { checkPin } from '../../../utils/walletUtils';
 import { openPackWithGiftz } from '../../../utils/cardsUtils';
 
@@ -106,10 +104,9 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         try {
             setSendingTx(true);
             const response = await openPackWithGiftz(passphrase, input.value, GIFTZBalance);
-            console.log('🚀 ~ file: OpenPackDialog.js:105 ~ handleBuyPack ~ response:', response);
             if (response) itsOk = true;
         } catch (error) {
-            console.log('🚀 ~ file: BuyPackDialog.js:82 ~ handleBuyPack ~ error', error);
+            console.error('🚀 ~ file: BuyPackDialog.js:82 ~ handleBuyPack ~ error', error);
             itsOk = false;
         }
 
@@ -137,7 +134,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 isCentered>
                 <AlertDialogOverlay bgColor="blackAlpha.900" />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="whiteAlpha.400" shadow="dark-lg" color="white">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="#5e3e4b" shadow="dark-lg" color="white">
                     <AlertDialogHeader textAlign="center">OPEN A PACK OF CARDS</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>

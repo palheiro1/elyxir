@@ -177,7 +177,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
             setpriceInWETH(totalPrice);
             setSelectedOffers(offersToTake);
-            console.log('🚀 ~ file: BuyPackDialog.js:174 ~ calculatePrices ~ offersToTake:', offersToTake);
         };
 
         calculatePrices();
@@ -194,7 +193,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             const response = await buyPackWithWETH(passphrase, input.value, WETHBalance, selectedOffers, priceInWETH);
             if (response) itsOk = true;
         } catch (error) {
-            console.log('🚀 ~ file: BuyPackDialog.js:82 ~ handleBuyPack ~ error', error);
+            console.error('🚀 ~ file: BuyPackDialog.js:82 ~ handleBuyPack ~ error', error);
             itsOk = false;
         }
 
@@ -235,7 +234,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 isCentered>
                 <AlertDialogOverlay bgColor="blackAlpha.900" />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="whiteAlpha.400" shadow="dark-lg" color="white">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="#371328" shadow="dark-lg" color="white">
                     <AlertDialogHeader textAlign="center">BUY A PACK OF CARDS</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>

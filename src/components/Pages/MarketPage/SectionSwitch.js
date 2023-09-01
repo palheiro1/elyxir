@@ -1,4 +1,4 @@
-import { Box, Button } from '@chakra-ui/react';
+import { Button, ButtonGroup } from '@chakra-ui/react';
 
 /**
  * @name SectionSwitch
@@ -10,52 +10,29 @@ import { Box, Button } from '@chakra-ui/react';
  * @version 1.0
  */
 const SectionSwitch = ({ option, setOption }) => {
+    const ButtonSwitch = ({ isActive, onClick, text }) => {
+        return (
+            <Button
+                isActive={isActive}
+                _active={{ bgColor: '#3b6497', color: 'white' }}
+                bgColor={'rgba(59,100,151,0.5)'}
+                _hover={{ bgColor: 'rgba(59,100,151,0.7)' }}
+                w="33.333%"
+                size="lg"
+                fontWeight="medium"
+                fontSize="md"
+                onClick={onClick}>
+                {text}
+            </Button>
+        );
+    };
+
     return (
-        <Box w="100%" my={6} shadow="md" rounded="lg">
-            <Button
-                isActive={option === 0}
-                _active={{ bgColor: '#3b6497' }}
-                bgColor={'rgba(59,100,151,0.5)'}
-                _hover={{ bgColor: 'rgba(59,100,151,0.7)' }}
-                w="33.333%"
-                size="lg"
-                rounded="node"
-                fontWeight="medium"
-                fontSize="md"
-                onClick={() => setOption(0)}
-                borderLeftRadius="lg">
-                Market
-            </Button>
-
-            <Button
-                isActive={option === 1}
-                _active={{ bgColor: '#3b6497' }}
-                bgColor={'rgba(59,100,151,0.5)'}
-                _hover={{ bgColor: 'rgba(59,100,151,0.7)' }}
-                w="33.333%"
-                size="lg"
-                rounded="node"
-                fontWeight="medium"
-                fontSize="md"
-                onClick={() => setOption(1)}>
-                Orders
-            </Button>
-
-            <Button
-                isActive={option === 2}
-                _active={{ bgColor: '#3b6497' }}
-                bgColor={'rgba(59,100,151,0.5)'}
-                _hover={{ bgColor: 'rgba(59,100,151,0.7)' }}
-                w="33.333%"
-                size="lg"
-                rounded="node"
-                fontWeight="medium"
-                fontSize="md"
-                onClick={() => setOption(2)}
-                borderRightRadius="lg">
-                Trades
-            </Button>
-        </Box>
+        <ButtonGroup w="100%" my={6} shadow="md" isAttached>
+            <ButtonSwitch isActive={option === 0} onClick={() => setOption(0)} text={'Market'} />
+            <ButtonSwitch isActive={option === 1} onClick={() => setOption(1)} text={'Orders'} />
+            <ButtonSwitch isActive={option === 2} onClick={() => setOption(2)} text={'Trades'} />
+        </ButtonGroup>
     );
 };
 
