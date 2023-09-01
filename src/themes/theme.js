@@ -25,6 +25,24 @@ const styles = {
 };
 
 const components = {
+    Switch: {
+        variants: {
+            mbswitch: props => ({
+                track: {
+                    bg: mode('blackAlpha.300', 'whiteAlpha.300')(props),
+                    _checked: {
+                        bg: '#70348c',
+                    },
+                },
+                thumb: {
+                    bg: 'white',
+                    _checked: {
+                        bg: 'white',
+                    },
+                },
+            }),
+        },
+    },
     Button: {
         variants: {
             bridge: props => ({

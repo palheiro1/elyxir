@@ -470,8 +470,23 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         directSectionToRender && checkAndGo();
     }, [directSectionToRender, searchParams, setSearchParams]);
 
+    const MENU_OPTIONS_COLOR = [
+        "#9f3772",
+        "#e094b3",
+        "#2f9088",
+        "#2f8190",
+        "#3b7197",
+        "#3b6497",
+        "#3b5397",
+        "#3b4397",
+        "#413b97",
+        "#4e3b97",
+        "#573b97",
+        "#5d3b97"
+    ]
+
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
-    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+    const borderColor = MENU_OPTIONS_COLOR[option] || 'whiteAlpha.100';
 
     return (
         <>

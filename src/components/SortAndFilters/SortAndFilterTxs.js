@@ -62,7 +62,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                 <Box pl={1} py={2}>
                     <BsArrowDownUp color="#3b7197" />
                 </Box>
-                <Text fontSize="sm" color="gray.400">
+                <Text fontSize="sm" color="#3b7197">
                     Sort:{' '}
                 </Text>
                 <Select border="0px" borderColor="gray.800" size="xs" onChange={handleSort}>
@@ -85,7 +85,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                     <Box pl={1} py={2}>
                         <FaFilter color="#3b7197" />
                     </Box>
-                    <Text fontSize="sm" color="gray.400">
+                    <Text fontSize="sm" color="#3b7197">
                         Filter:{' '}
                     </Text>
                     <Select border="0px" borderColor="gray.800" size="xs" onChange={handleFilter}>

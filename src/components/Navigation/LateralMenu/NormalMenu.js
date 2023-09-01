@@ -41,7 +41,7 @@ const NormalMenu = memo(({ option, setOption, handleLogout, showAllCards, handle
                     <Text fontWeight="bold" textAlign="center" fontSize="sm">
                         Show all cards
                     </Text>
-                    <Switch isChecked={showAllCards} onChange={handleShowAllCards} colorScheme="blue" />
+                    <Switch isChecked={showAllCards} onChange={handleShowAllCards} variant="mbswitch" />
                 </Stack>
             </Box>
 

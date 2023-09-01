@@ -112,7 +112,7 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
                     <Box pl={1} py={2}>
                         <BsArrowDownUp color={borderButtons} />
                     </Box>
-                    <Text fontSize="sm" color="gray.400">
+                    <Text fontSize="sm" color={borderButtons}>
                         Sort:{' '}
                     </Text>
                     <Select border="0px" borderColor="gray.800" size="xs" onChange={handleChange}>
