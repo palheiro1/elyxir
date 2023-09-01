@@ -17,12 +17,9 @@ import {
     PinInputField,
     Stack,
     Text,
-    useColorModeValue,
     useNumberInput,
     useToast,
 } from '@chakra-ui/react';
-
-import Hover from 'react-3d-hover';
 
 import { useEffect, useState } from 'react';
 import { GIFTZASSET, NQTDIVIDER, WETHASSET } from '../../../data/CONSTANTS';
@@ -54,7 +51,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const { name, WETHBalance, IGNISBalance } = infoAccount;
 
     const toast = useToast();
-    const colorText = useColorModeValue('black', 'white');
+    const colorText = 'white';
 
     const handleClose = () => {
         setIsValidPin(false);
@@ -125,14 +122,12 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     // ------------------------------------------------------------
     // ------------------ SELECT NUMBER OF PACKS ------------------
     // ------------------------------------------------------------
-    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput(
-        {
-            step: 1,
-            defaultValue: 0,
-            min: 0,
-            max: totalOnSale,
-        }
-    );
+    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
+        step: 1,
+        defaultValue: 0,
+        min: 0,
+        max: totalOnSale,
+    });
 
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
@@ -222,8 +217,8 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         }
     };
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
-    
+    const bgColor = '#371328';
+
     const enoughtWETH = WETHBalance !== 0 && WETHBalance >= priceInWETH / NQTDIVIDER;
     const enoughtIGNIS = IGNISBalance > 0.5;
     const canBuy = enoughtWETH && enoughtIGNIS;
@@ -238,18 +233,20 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 onClose={handleClose}
                 isOpen={isOpen}
                 isCentered>
-                <AlertDialogOverlay bgColor="blackAlpha.800" />
+                <AlertDialogOverlay bgColor="blackAlpha.900" />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="whiteAlpha.400" shadow="dark-lg" color="white">
                     <AlertDialogHeader textAlign="center">BUY A PACK OF CARDS</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>
                         <Grid templateColumns="repeat(2, 1fr)">
                             <GridItem w="100%">
                                 <Center w="100%">
-                                    <Hover scale={1.15} perspective={200}>
-                                        <Image src="/images/cardPacks/cardPack.png" alt="Card Pack" maxH="25rem" />
-                                    </Hover>
+                                    <Image
+                                        src="/images/cardPacks/BuyPackExpendedora.png"
+                                        alt="Card Pack"
+                                        maxH="30rem"
+                                    />
                                 </Center>
                             </GridItem>
 
@@ -262,6 +259,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         <Center w="100%">
                                             <Stack direction="row" w="100%">
                                                 <Box
+                                                    border="1px solid #9f3772"
                                                     textAlign="center"
                                                     w="100%"
                                                     bgColor="blackAlpha.400"
@@ -279,8 +277,13 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                             Number of packs
                                         </Text>
                                         <Center>
-                                            <HStack spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
-                                                <Button {...dec} rounded="none" borderLeftRadius="lg" color={colorText}>
+                                            <HStack spacing={0} border="1px" rounded="lg" borderColor="#9f3772">
+                                                <Button
+                                                    {...dec}
+                                                    rounded="none"
+                                                    borderLeftRadius="lg"
+                                                    color={colorText}
+                                                    bgColor={'rgba(159, 55, 114, 0.5)'}>
                                                     -
                                                 </Button>
                                                 <Input
@@ -293,6 +296,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                 />
                                                 <Button
                                                     {...inc}
+                                                    bgColor={'rgba(159, 55, 114, 0.5)'}
                                                     rounded="none"
                                                     borderRightRadius="lg"
                                                     color={colorText}>
@@ -303,7 +307,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         <Center>
                                             <Text
                                                 fontSize="xs"
-                                                color={useColorModeValue('blackAlpha.600', 'whiteAlpha.600')}>
+                                                color={'whiteAlpha.600'}>
                                                 {totalOnSale} packs availables
                                             </Text>
                                         </Center>
@@ -321,19 +325,19 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     </Box>
 
                                     {totalOnSale === 0 && (
-                                        <Text textAlign="center" color="red.500" fontWeight="bold">
+                                        <Text textAlign="center" color="#9f3772" fontWeight="bold">
                                             There are no packs for sale.
                                         </Text>
                                     )}
 
                                     {!enoughtWETH && (
-                                        <Text textAlign="center" color="red.500" fontWeight="bold">
+                                        <Text textAlign="center" color="#9f3772" fontWeight="bold">
                                             You don't have enough wETH
                                         </Text>
                                     )}
 
                                     {!enoughtIGNIS && (
-                                        <Text textAlign="center" color="red.500" fontWeight="bold">
+                                        <Text textAlign="center" color="#9f3772" fontWeight="bold">
                                             You don't have enough IGNIS (0.5 IGNIS)
                                         </Text>
                                     )}
@@ -349,10 +353,10 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     isInvalid={!isValidPin}
                                                     variant="filled"
                                                     mask>
-                                                    <PinInputField />
-                                                    <PinInputField />
-                                                    <PinInputField />
-                                                    <PinInputField />
+                                                    <PinInputField bgColor={'rgba(159, 55, 114, 0.3)'} />
+                                                    <PinInputField bgColor={'rgba(159, 55, 114, 0.3)'} />
+                                                    <PinInputField bgColor={'rgba(159, 55, 114, 0.3)'} />
+                                                    <PinInputField bgColor={'rgba(159, 55, 114, 0.3)'} />
                                                 </PinInput>
                                             </HStack>
                                         </Box>
@@ -361,7 +365,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     <Box w="100%" mt={2}>
                                         <Button
                                             isDisabled={isDisabled || sendingTx}
-                                            bgColor={!isDisabled ? '#F18800' : null}
+                                            bgColor={'rgba(159, 55, 114, 0.5)'}
                                             w="100%"
                                             py={6}
                                             onClick={handleBuyPack}>

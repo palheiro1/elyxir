@@ -41,16 +41,14 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
     const toast = useToast();
 
-    const colorText = useColorModeValue('black', 'white');
+    const colorText = 'white';
 
-    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput(
-        {
-            step: 1,
-            defaultValue: 0,
-            min: 0,
-            max: GIFTZBalance,
-        }
-    );
+    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
+        step: 1,
+        defaultValue: 0,
+        min: 0,
+        max: GIFTZBalance,
+    });
 
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
@@ -62,7 +60,6 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         setIsValidPin(false);
         setIgnisPrice(0);
         setSendingTx(false);
-        input.onChange(0);
         onClose();
     };
 
@@ -125,8 +122,8 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         setSendingTx(false);
     };
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
-    const textColor = useColorModeValue('blackAlpha.500', 'whiteAlpha.500');
+    const bgColor = '#5e3e4b';
+    const textColor = 'whiteAlpha.500';
     const isDisabled = !isValidPin || input.value === '0' || GIFTZBalance === 0 || sendingTx;
 
     return (
@@ -138,9 +135,9 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 onClose={handleClose}
                 isOpen={isOpen}
                 isCentered>
-                <AlertDialogOverlay bgColor="blackAlpha.800" />
+                <AlertDialogOverlay bgColor="blackAlpha.900" />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="whiteAlpha.400" shadow="dark-lg" color="white">
                     <AlertDialogHeader textAlign="center">OPEN A PACK OF CARDS</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>
@@ -156,12 +153,17 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                             <Center>
                                 <GridItem>
                                     <Box mt={6}>
-                                        <Text textAlign="center" my={2}>
+                                        <Text textAlign="center" my={2} border="1px solid #9f3772" rounded="lg" p={2}>
                                             Number of packs
                                         </Text>
                                         <Center>
-                                            <HStack spacing={0} border="1px" rounded="lg" borderColor="whiteAlpha.200">
-                                                <Button {...dec} rounded="none" borderLeftRadius="lg" color={colorText}>
+                                            <HStack spacing={0} border="1px" rounded="lg" borderColor="#9f3772">
+                                                <Button
+                                                    {...dec}
+                                                    rounded="none"
+                                                    borderLeftRadius="lg"
+                                                    color={colorText}
+                                                    bgColor={'rgba(159, 55, 114, 0.5)'}>
                                                     -
                                                 </Button>
                                                 <Input
@@ -174,6 +176,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                 />
                                                 <Button
                                                     {...inc}
+                                                    bgColor={'rgba(159, 55, 114, 0.5)'}
                                                     rounded="none"
                                                     borderRightRadius="lg"
                                                     color={colorText}>
@@ -206,10 +209,10 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     isInvalid={!isValidPin}
                                                     variant="filled"
                                                     mask>
-                                                    <PinInputField />
-                                                    <PinInputField />
-                                                    <PinInputField />
-                                                    <PinInputField />
+                                                    <PinInputField bgColor={"rgba(159, 55, 114, 0.35)"} />
+                                                    <PinInputField bgColor={"rgba(159, 55, 114, 0.35)"} />
+                                                    <PinInputField bgColor={"rgba(159, 55, 114, 0.35)"} />
+                                                    <PinInputField bgColor={"rgba(159, 55, 114, 0.35)"} />
                                                 </PinInput>
                                             </HStack>
                                         </Box>
@@ -218,7 +221,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     <Box w="100%" mt={2}>
                                         <Button
                                             isDisabled={isDisabled}
-                                            bgColor={!isDisabled ? '#F18800' : null}
+                                            bgColor={"rgba(159, 55, 114, 0.5)"}
                                             w="100%"
                                             py={6}
                                             onClick={handleBuyPack}>
