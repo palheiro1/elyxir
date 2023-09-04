@@ -117,6 +117,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // wETH Cards
     const [wethCards, setWethCards] = useState([]);
 
+    // MANA Cards
+    const [manaCards, setManaCards] = useState([]);
+
     // All cards
     const [cards, setCards] = useState([]);
 
@@ -125,6 +128,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const [gemCardsHash, setGemCardsHash] = useState('');
     const [giftzCardsHash, setGiftzCardsHash] = useState('');
     const [wethCardsHash, setWethCardsHash] = useState('');
+    const [manaCardsHash, setManaCardsHash] = useState('');
     const [cardsHash, setCardsHash] = useState('');
 
     // Filtered cards
@@ -290,6 +294,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems);
         checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset);
         checkDataChange('wETH', wethCardsHash, setWethCards, setWethCardsHash, weth);
+        checkDataChange('MANA', manaCardsHash, setManaCards, setManaCardsHash, mana);
         checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
 
         setIsLoading(false);
@@ -305,6 +310,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         cardsNotification,
         giftzCardsHash,
         wethCardsHash,
+        manaCardsHash,
     ]);
 
     useEffect(() => {
@@ -430,6 +436,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 gemCards={gemCards}
                 giftzCards={giftzCards}
                 wethCards={wethCards}
+                manaCards={manaCards}
             />,
             <Bridge infoAccount={infoAccount} cards={cardsFiltered} />,
             <Jackpot infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />,
@@ -440,7 +447,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             <Book cards={cards} />,
             '',
         ],
-        [infoAccount, cards, cardsFiltered, gemCards, blockchainStatus, haveUnconfirmed, giftzCards, wethCards]
+        [infoAccount, cards, cardsFiltered, gemCards, blockchainStatus, haveUnconfirmed, giftzCards, wethCards, manaCards]
     );
 
     useEffect(() => {

@@ -95,6 +95,8 @@ const CurrencyWidget = ({
         icon = '/images/currency/giftz.png';
     } else if (currencyName === 'wETH') {
         icon = '/images/currency/weth.png';
+    } else if (currencyName === 'MANA') {
+        icon = '/images/currency/mana.png';
     }
 
     return (
@@ -115,7 +117,7 @@ const CurrencyWidget = ({
                                 <IconButton
                                     icon={<Image src={icon} />}
                                     size="xl"
-                                    p={4}
+                                    p={2}
                                     mr={2}
                                     fontSize="4xl"
                                     bg={bgColor}

@@ -98,7 +98,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         }
 
         if (!input.value) {
-            errorToast('You must enter a valid number of packs', toast);
+            errorToast('You must enter a valid number of GIFTZ', toast);
             return false;
         }
 
@@ -199,10 +199,10 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         }
 
         if (itsOk) {
-            okToast('Pack bought successfully', toast);
+            okToast('GIFTZ bought successfully', toast);
             handleClose();
         } else {
-            errorToast('Error buying pack', toast);
+            errorToast('Error buying GIFTZ', toast);
         }
         setSendingTx(false);
     };
@@ -280,7 +280,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     </Box>
                                     <Box mt={6}>
                                         <Text textAlign="center" my={2}>
-                                            Number of packs
+                                            Number of GIFTZ
                                         </Text>
                                         <Center>
                                             <HStack spacing={0} border="1px" rounded="lg" borderColor="#9f3772">
@@ -312,7 +312,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         </Center>
                                         <Center>
                                             <Text fontSize="xs" color={'whiteAlpha.600'}>
-                                                {totalOnSale} packs availables
+                                                {totalOnSale} GIFTZ availables
                                             </Text>
                                         </Center>
                                     </Box>
@@ -330,7 +330,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
                                     {totalOnSale === 0 && (
                                         <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                            There are no packs for sale.
+                                            There are no GIFTZ left in the machine. You can wait for it to refill or buy them on the secondary market.
                                         </Text>
                                     )}
 

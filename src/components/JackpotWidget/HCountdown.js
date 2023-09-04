@@ -16,22 +16,42 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
         <Center>
             <Stack direction="column">
                 <Stack direction={{ base: 'column', md: 'row' }} spacing={4} align="center">
-                    <IconButton
-                        icon={<Image src="/images/currency/gem.png" w="50px" />}
-                        size="xl"
-                        p={2}
-                        mr={2}
-                        fontSize="4xl"
-                        bg={bgColor}
-                        color={textColor}
-                    />
-                    <VStack align="flex-start">
-                        <Text color={textColor} fontSize="3xl" fontWeight="bold" mb={-3}>
-                            {jackpotBalance} WETH
-                        </Text>
-                        <Text color={textColor} fontSize="md">
-                            ({jackpotBalanceUSD} USD)
-                        </Text>
+                    <VStack>
+                        <HStack>
+                            <IconButton
+                                icon={<Image src="/images/currency/weth.png" w="50px" />}
+                                size="xl"
+                                p={2}
+                                mr={2}
+                                fontSize="4xl"
+                                bg={bgColor}
+                                color={textColor}
+                            />
+                            <VStack align="flex-start">
+                                <Text color={textColor} fontSize="3xl" fontWeight="bold" mb={-3}>
+                                    {jackpotBalance} WETH
+                                </Text>
+                                <Text color={textColor} fontSize="md">
+                                    ({jackpotBalanceUSD} USD)
+                                </Text>
+                            </VStack>
+                        </HStack>
+                        <HStack w="100%">
+                            <IconButton
+                                icon={<Image src="/images/currency/mana.png" w="50px" />}
+                                size="xl"
+                                p={2}
+                                mr={2}
+                                fontSize="4xl"
+                                bg={bgColor}
+                                color={textColor}
+                            />
+                            <VStack align="flex-start">
+                                <Text color={textColor} fontSize="3xl" fontWeight="bold">
+                                    9375 MANA
+                                </Text>
+                            </VStack>
+                        </HStack>
                     </VStack>
                     <Center pl={{ base: 0, md: 4 }} w={{ base: '100%', md: 'auto' }}>
                         <HStack spacing={4} color={textColor}>

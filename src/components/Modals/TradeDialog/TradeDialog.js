@@ -129,6 +129,9 @@ const TradeDialog = ({
                                                 Number(currencyCards.quantityQNT / NQTDIVIDER).toFixed(2)}
                                             {currencyCards.assetname === 'wETH' &&
                                                 Number(currencyCards.quantityQNT / NQTDIVIDER).toFixed(6)}
+                                            {currencyCards.assetname === 'MANA' &&
+                                                Number(currencyCards.quantityQNT / NQTDIVIDER).toFixed(2)}
+
                                         </Text>
                                     </Box>
                                 </Stack>

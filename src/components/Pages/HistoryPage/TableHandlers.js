@@ -16,6 +16,7 @@ import IgnisCard from '../../Cards/IgnisCard';
 import GIFTZCard from '../../Cards/GIFTZCard';
 import { roundNumberWithMaxDecimals } from '../../../utils/walletUtils';
 import WETHCard from '../../Cards/WETHCard';
+import ManaCard from '../../Cards/ManaCard';
 
 // -------------------------------------------- //
 // ------------------ HANDLERS ---------------- //
@@ -87,6 +88,8 @@ export const handleType2AndSubtype1 = (tx, timestamp, infoAccount, collectionCar
         handler = handleGIFTZ(inOut, fixedAmount, timestamp, sender);
     } else if (asset === 'WETH') {
         handler = handleWETH(inOut, fixedAmount, timestamp, sender);
+    } else if(asset === "MANA") {
+        handler = handleMANA(inOut, fixedAmount, timestamp, sender);
     } else {
         handler = handleCardTransfer(inOut, fixedAmount, timestamp, sender, asset);
     }
@@ -381,9 +384,39 @@ export const handleWETH = (type, amount, date, account) => {
     };
 };
 
+export const handleMANA = (type, amount, date, account) => {
+    type = type.toLowerCase();
+    const Component = () => {
+        return (
+            <Tr
+                _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
+                border={{ base: '2px', md: '0px' }}
+                borderColor="whiteAlpha.300"
+                rounded={{ base: 'md', md: 'unset' }}
+                m={{ base: 2, md: 0 }}>
+                <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+                <Td>
+                    <ManaCard />
+                </Td>
+                <Td>{amount}</Td>
+                <Td>{date}</Td>
+                <Td>{account}</Td>
+            </Tr>
+        );
+    };
+    return {
+        Component,
+        type,
+        isCurrency: true,
+    };
+};
+
 export const handleCardTransfer = (type, amount, date, account, card) => {
     type = type.toLowerCase();
     const { cardImgUrl: image, name: title, channel: continent, rarity } = card;
+    console.log("🚀 ~ file: TableHandlers.js:387 ~ handleCardTransfer ~ image:", title, image, card)
 
     const Component = ({ handleClick }) => {
         return (
@@ -411,6 +444,7 @@ export const handleCardTransfer = (type, amount, date, account, card) => {
         Component,
         type,
         isCard: true,
+        card: card,
     };
 };
 
@@ -418,7 +452,7 @@ export const handleAssetExchange = (type, amount, date, asset) => {
     type = type.toLowerCase();
     // CONTROLAR PARA GEMAS O ASSETS
 
-    const currencyAsset = asset === 'GEM' || asset === 'GIFTZ' || asset === 'WETH';
+    const currencyAsset = asset === 'GEM' || asset === 'GIFTZ' || asset === 'WETH' || asset === 'MANA';
     const fixedType = type === 'ask' ? 'Market ASK' : 'Market BID';
 
     const Component = () => {
@@ -438,6 +472,7 @@ export const handleAssetExchange = (type, amount, date, asset) => {
                             {asset === 'GEM' && <GemCard />}
                             {asset === 'GIFTZ' && <GIFTZCard />}
                             {asset === 'WETH' && <WETHCard />}
+                            {asset === "MANA" && <ManaCard />}
                         </>
                     ) : (
                         <TableCard

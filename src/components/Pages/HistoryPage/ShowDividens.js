@@ -94,7 +94,7 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
     ) : (
         <Center w="100%" textAlign="center" py={4} gap={4}>
             <Text fontWeight="bolder" bgGradient="linear(to-l, #478299, #957bd2)" bgClip="text">
-                No dividends yet
+                Only dividends received in the last 20 days are shown. To see more, you can log in at ardor.jelurida.com
             </Text>
         </Center>
     );

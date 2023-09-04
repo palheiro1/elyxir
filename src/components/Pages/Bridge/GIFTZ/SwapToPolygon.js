@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ethereum_address from 'ethereum-address';
 import {
+    Box,
     Button,
     Center,
     Divider,
@@ -19,6 +20,7 @@ import {
     SliderThumb,
     SliderTrack,
     Stack,
+    Text,
     useToast,
 } from '@chakra-ui/react';
 
@@ -101,10 +103,15 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
 
     return (
         <Center>
-            <Stack direction="column" spacing={8}>
-                <Heading fontSize="3xl" fontWeight="light" textAlign="center">
-                    1. Select GIFTZ to swap
-                </Heading>
+            <Stack direction="column" spacing={8} align="center">
+                <Box>
+                    <Heading fontSize="3xl" fontWeight="light">
+                        1. Select <strong>GIFTZ</strong>
+                    </Heading>
+                    <Text fontWeight="light" textAlign="center">
+                        to swap
+                    </Text>
+                </Box>
 
                 <Stack>
                     <NumberInput w="100%" value={giftzToSwap} min={1} max={GIFTZBalance} onChange={handleChange}>

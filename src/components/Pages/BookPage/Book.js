@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Stack } from '@chakra-ui/react';
+import { Box, Stack, Text } from '@chakra-ui/react';
 import PDFReader from './PDFReader';
 import MB_Book from './pdfs/MB_50_Book.pdf';
 
@@ -45,6 +45,9 @@ const Book = ({ cards }) => {
 
     return (
         <Box overflow="hidden">
+            <Text mb={2}>
+                Once you have completed the collection, you can download the e-book to read on your favorite device.
+            </Text>
             <Stack direction="row" spacing={0}>
                 <Stack direction="column" spacing={0} maxH="73vh" overflowY={'auto'} minW="15%">
                     <Box

@@ -86,7 +86,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         }
 
         if (!input.value) {
-            errorToast('You must enter a valid number of packs', toast);
+            errorToast('You must enter a valid number of GIFTZ', toast);
             return false;
         }
         if (!ignisPrice) {
@@ -151,7 +151,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                 <GridItem>
                                     <Box mt={6}>
                                         <Text textAlign="center" my={2} border="1px solid #e094b3" rounded="lg" p={2}>
-                                            Number of packs
+                                            Number of GIFTZ
                                         </Text>
                                         <Center>
                                             <HStack spacing={0} border="1px" rounded="lg" borderColor="#e094b3">
@@ -186,13 +186,13 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
                                     {GIFTZBalance === 0 && (
                                         <Text textAlign="center" color="red.500" fontWeight="bold" my={4}>
-                                            You don't have enough packs
+                                            You don't have enough GIFTZ
                                         </Text>
                                     )}
 
                                     {GIFTZBalance > 0 && (
                                         <Text textAlign="center" fontSize="sm" color={textColor} fontWeight="bold">
-                                            You own {GIFTZBalance} packs
+                                            You own {GIFTZBalance} GIFTZ
                                         </Text>
                                     )}
 

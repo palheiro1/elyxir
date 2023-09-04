@@ -27,7 +27,7 @@ import { useNavigate } from 'react-router-dom';
  * @version 1.0
  */
 const Account = ({ infoAccount }) => {
-    const { accountRs, name, IGNISBalance, GIFTZBalance, GEMBalance, WETHBalance } = infoAccount;
+    const { accountRs, name, IGNISBalance, GIFTZBalance, GEMBalance, WETHBalance, MANABalance } = infoAccount;
     const [isInvalidPinBackup, setIsInvalidPinBackup] = useState(true);
     const [isInvalidPinDelete, setIsInvalidPinDelete] = useState(true);
     const [needReload, setNeedReload] = useState(false);
@@ -81,6 +81,7 @@ const Account = ({ infoAccount }) => {
                     GIFTZBalance={GIFTZBalance}
                     GEMBalance={GEMBalance.toFixed(2)}
                     WETHBalance={WETHBalance.toFixed(6)}
+                    MANABalance={MANABalance.toFixed(2)}
                     bgColor={bgColor}
                     borderColor={borderColor}
                 />

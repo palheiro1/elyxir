@@ -9,6 +9,7 @@ const UserDataItem = ({
     GIFTZBalance,
     GEMBalance,
     WETHBalance,
+    MANABalance,
     bgColor,
     borderColor,
 }) => {
@@ -37,7 +38,7 @@ const UserDataItem = ({
                 <Text>{name}</Text>
             </Box>
             <Grid
-                templateColumns="repeat(2, 1fr)"
+                templateColumns="repeat(3, 1fr)"
                 p={6}
                 bgColor={bgColor}
                 rounded="lg"
@@ -69,6 +70,12 @@ const UserDataItem = ({
                         wETH
                     </Heading>
                     <Text fontSize="sm">{WETHBalance}</Text>
+                </GridItem>
+                <GridItem>
+                    <Heading fontSize="lg" pb={2}>
+                        MANA
+                    </Heading>
+                    <Text fontSize="sm">{MANABalance}</Text>
                 </GridItem>
             </Grid>
         </GridItem>
