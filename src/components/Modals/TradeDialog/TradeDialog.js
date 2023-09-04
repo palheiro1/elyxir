@@ -131,12 +131,13 @@ const TradeDialog = ({
                                                 Number(currencyCards.quantityQNT / NQTDIVIDER).toFixed(6)}
                                             {currencyCards.assetname === 'MANA' &&
                                                 Number(currencyCards.quantityQNT / NQTDIVIDER).toFixed(2)}
-
                                         </Text>
                                     </Box>
                                 </Stack>
                             </Center>
                         )}
+
+
                         <SimpleGrid columns={onlyBid ? 1 : 2} my={4} shadow="lg">
                             {!onlyBid && (
                                 <Box
@@ -175,6 +176,8 @@ const TradeDialog = ({
                                 BID
                             </Box>
                         </SimpleGrid>
+
+                        
                         <Box>
                             <AskAndBidGrid
                                 cards={card || currencyCards}
@@ -188,21 +191,25 @@ const TradeDialog = ({
                     </AlertDialogBody>
                 </AlertDialogContent>
             </AlertDialog>
-            <AskDialog
-                reference={refAsk}
-                isOpen={isOpenAsk}
-                onClose={onCloseAsk}
-                card={!currencyCards ? card : currencyCards}
-                username={username}
-            />
-            <BidDialog
-                reference={refBid}
-                isOpen={isOpenBid}
-                onClose={onCloseBid}
-                card={!currencyCards ? card : currencyCards}
-                username={username}
-                ignis={ignis}
-            />
+            {isOpenAsk && (
+                <AskDialog
+                    reference={refAsk}
+                    isOpen={isOpenAsk}
+                    onClose={onCloseAsk}
+                    card={!currencyCards ? card : currencyCards}
+                    username={username}
+                />
+            )}
+            {isOpenBid && (
+                <BidDialog
+                    reference={refBid}
+                    isOpen={isOpenBid}
+                    onClose={onCloseBid}
+                    card={!currencyCards ? card : currencyCards}
+                    username={username}
+                    ignis={ignis}
+                />
+            )}
         </>
     );
 };
