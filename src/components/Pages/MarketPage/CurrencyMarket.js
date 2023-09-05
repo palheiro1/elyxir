@@ -4,9 +4,9 @@ import CurrencyWidget from './CurrencyWidget';
 const CurrencyMarket = ({ username, gemCards, giftzCards, wethCards, IGNISBalance, market, manaCards }) => {
     const textGiftz = (
         <Box>
-            GIFTZ are a sealed pack of cards. The are sold from a vending machine that is refilled every day. They can
-            also be bought and sold on the secondary market, both on Ardor and Polygon. When you open a GIFTZ, you lose
-            it in exchange for three random cards.
+            GIFTZ are a sealed pack of cards. The are sold from a vending machine that is refilled every day.
+            <br /> They can also be bought and sold on the secondary market, both on Ardor and Polygon.
+            <br /> When you open a GIFTZ, you lose it in exchange for three random cards.
         </Box>
     );
 
@@ -21,6 +21,7 @@ const CurrencyMarket = ({ username, gemCards, giftzCards, wethCards, IGNISBalanc
     const textMana = (
         <Box>
             MANA is the governance token of the Mythic DAO, the user organisation for this set.
+            <br />
             You can trade MANA in Ardor, but to use it in the DAO, you must bridge it and store it in Polygon.
         </Box>
     );
