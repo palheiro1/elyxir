@@ -32,12 +32,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                         wETH / MANA
                     </Text>
                     <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg" textAlign="left">
-                        wETH is the most widely used cryptocurrency on web3 and is used to buy random packs of Mythical
-                        Beings cards. <br />
-                        MANA is the governance token of the Mythic DAO, the user organisation for this set.
-                        <br />
-                        You can trade MANA in Ardor, but to use it in the DAO, you must bridge it and store it in
-                        Polygon.
+                        Bring your wETH to Ardor to buy card packs from the vending machine.
                     </Text>
                 </Box>
                 <Box
@@ -54,10 +49,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                         GIFTZ
                     </Text>
                     <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg" textAlign="left">
-                        GIFTZ are a sealed pack of cards. The are sold from a vending machine that is refilled every
-                        day.
-                        <br /> They can also be bought and sold on the secondary market, both on Ardor and Polygon.
-                        <br /> When you open a GIFTZ, you lose it in exchange for three random cards.
+                        Bring your GIFTZ to Ardor to open the 3 random NFT they contain.
                     </Text>
                 </Box>
                 <Box
@@ -74,10 +66,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                         GEM
                     </Text>
                     <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg" textAlign="left">
-                        GIFTZ are a sealed pack of cards. The are sold from a vending machine that is refilled every
-                        day.
-                        <br /> They can also be bought and sold on the secondary market, both on Ardor and Polygon.
-                        <br /> When you open a GIFTZ, you lose it in exchange for three random cards.
+                        Use the bridge to trade your GEM in Polygon.
                     </Text>
                 </Box>
                 <Box
@@ -95,10 +84,8 @@ const BridgeSelector = ({ setBridgeType }) => {
                         CARDs
                     </Text>
                     <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg" textAlign="left">
-                        GIFTZ are a sealed pack of cards. The are sold from a vending machine that is refilled every
-                        day.
-                        <br /> They can also be bought and sold on the secondary market, both on Ardor and Polygon.
-                        <br /> When you open a GIFTZ, you lose it in exchange for three random cards.
+                        Take your cards to Polygon to sell them on the main NFT marketplaces, or bring them to Ardor to
+                        craft, morph, claim jackpots or access unlockable content.
                     </Text>
                 </Box>
             </SimpleGrid>
