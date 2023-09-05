@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { OMNO_API } from '../data/CONSTANTS';
 
-let cache = [];
+let cache = null;
 let isFetching = false;
 
 export const fetchOmnoMarket = async () => {
