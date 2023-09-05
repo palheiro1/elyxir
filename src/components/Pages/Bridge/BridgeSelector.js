@@ -29,10 +29,27 @@ const BridgeSelector = ({ setBridgeType }) => {
                     onClick={() => setBridgeType('ERC20')}
                     _hover={{ bgColor: hoverColor, cursor: 'pointer' }}>
                     <Text fontSize="2xl" fontWeight="medium" textAlign="center">
-                        wETH / MANA
+                        wETH
                     </Text>
-                    <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg" textAlign="left">
+                    <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg">
                         Bring your wETH to Ardor to buy card packs from the vending machine.
+                    </Text>
+                </Box>
+                <Box
+                    w="100%"
+                    border="1px"
+                    borderColor={borderColor}
+                    p={8}
+                    rounded="md"
+                    shadow="md"
+                    minH="5rem"
+                    onClick={() => setBridgeType('ERC20')}
+                    _hover={{ bgColor: hoverColor, cursor: 'pointer' }}>
+                    <Text fontSize="2xl" fontWeight="medium" textAlign="center">
+                        MANA
+                    </Text>
+                    <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg">
+                        Bring your MANA to Polygon to exercise your right to vote in the Mythic DAO.
                     </Text>
                 </Box>
                 <Box
@@ -48,7 +65,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                     <Text fontSize="2xl" fontWeight="medium" textAlign="center">
                         GIFTZ
                     </Text>
-                    <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg" textAlign="left">
+                    <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg">
                         Bring your GIFTZ to Ardor to open the 3 random NFT they contain.
                     </Text>
                 </Box>
@@ -65,30 +82,30 @@ const BridgeSelector = ({ setBridgeType }) => {
                     <Text fontSize="2xl" fontWeight="medium" textAlign="center">
                         GEM
                     </Text>
-                    <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg" textAlign="left">
+                    <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg">
                         Use the bridge to trade your GEM in Polygon.
                     </Text>
                 </Box>
-                <Box
-                    w="100%"
-                    border="1px"
-                    borderColor={borderColor}
-                    p={8}
-                    mt={2}
-                    rounded="md"
-                    shadow="md"
-                    minH="5rem"
-                    onClick={() => setBridgeType('ERC1155')}
-                    _hover={{ bgColor: hoverColor, cursor: 'pointer' }}>
-                    <Text fontSize="2xl" fontWeight="medium" textAlign="center">
-                        CARDs
-                    </Text>
-                    <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg" textAlign="left">
-                        Take your cards to Polygon to sell them on the main NFT marketplaces, or bring them to Ardor to
-                        craft, morph, claim jackpots or access unlockable content.
-                    </Text>
-                </Box>
             </SimpleGrid>
+            <Box
+                w="100%"
+                border="1px"
+                borderColor={borderColor}
+                p={8}
+                mt={2}
+                rounded="md"
+                shadow="md"
+                minH="5rem"
+                onClick={() => setBridgeType('ERC1155')}
+                _hover={{ bgColor: hoverColor, cursor: 'pointer' }}>
+                <Text fontSize="2xl" fontWeight="medium" textAlign="center">
+                    CARDs
+                </Text>
+                <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg" textAlign="center">
+                    Take your cards to Polygon to sell them on the main NFT marketplaces, or bring them to Ardor to
+                    craft, morph, claim jackpots or access unlockable content.
+                </Text>
+            </Box>
         </>
     );
 };
