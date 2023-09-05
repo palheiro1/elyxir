@@ -49,7 +49,6 @@ const TradeDialog = ({
     isBlocked = false,
     lockedCards = false,
 }) => {
-    console.log('🚀 ~ file: TradeDialog.js:52 ~ currencyCards:', currencyCards);
     const toast = useToast();
 
     const { isOpen: isOpenAsk, onOpen: onOpenAsk, onClose: onCloseAsk } = useDisclosure();
@@ -58,7 +57,7 @@ const TradeDialog = ({
     const { isOpen: isOpenBid, onOpen: onOpenBid, onClose: onCloseBid } = useDisclosure();
     const refBid = useRef();
 
-    const handleAsk = () => {
+    const handleAsk = async () => {
         if (isBlocked) {
             errorToast(`${lockedCards} card(s) locked for all actions. Check for open Ask orders to unlock.`, toast);
             return;
@@ -137,7 +136,6 @@ const TradeDialog = ({
                             </Center>
                         )}
 
-
                         <SimpleGrid columns={onlyBid ? 1 : 2} my={4} shadow="lg">
                             {!onlyBid && (
                                 <Box
@@ -177,7 +175,6 @@ const TradeDialog = ({
                             </Box>
                         </SimpleGrid>
 
-                        
                         <Box>
                             <AskAndBidGrid
                                 cards={card || currencyCards}
@@ -191,25 +188,21 @@ const TradeDialog = ({
                     </AlertDialogBody>
                 </AlertDialogContent>
             </AlertDialog>
-            {isOpenAsk && (
-                <AskDialog
-                    reference={refAsk}
-                    isOpen={isOpenAsk}
-                    onClose={onCloseAsk}
-                    card={!currencyCards ? card : currencyCards}
-                    username={username}
-                />
-            )}
-            {isOpenBid && (
-                <BidDialog
-                    reference={refBid}
-                    isOpen={isOpenBid}
-                    onClose={onCloseBid}
-                    card={!currencyCards ? card : currencyCards}
-                    username={username}
-                    ignis={ignis}
-                />
-            )}
+            <AskDialog
+                reference={refAsk}
+                isOpen={isOpenAsk}
+                onClose={onCloseAsk}
+                card={!currencyCards ? card : currencyCards}
+                username={username}
+            />
+            <BidDialog
+                reference={refBid}
+                isOpen={isOpenBid}
+                onClose={onCloseBid}
+                card={!currencyCards ? card : currencyCards}
+                username={username}
+                ignis={ignis}
+            />
         </>
     );
 };

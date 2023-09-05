@@ -251,6 +251,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                             alt="MANA Icon"
                                             w="55px"
                                             h="55px"
+                                            mb={2}
                                         />
                                         <Text pr={6}>
                                             {parseMANA.toFixed(Math.max(0, manaDecimals <= 6 ? manaDecimals : 6))}

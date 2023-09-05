@@ -69,6 +69,8 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
         currencyImg = '/images/currency/giftz.png';
     } else if (currencyName === 'wETH') {
         currencyImg = '/images/currency/weth.png';
+    } else if (currencyName === 'MANA') {
+        currencyImg = '/images/currency/mana.png';
     }
 
     // Mix ask with bid orders
@@ -156,7 +158,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
             const value = Number(input.value);
             let quantity;
             if (isCurrency) {
-                if(currencyName === 'GIFTZ') {
+                if (currencyName === 'GIFTZ') {
                     quantity = value;
                 } else {
                     quantity = value * NQTDIVIDER;
@@ -356,7 +358,6 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                     username={username}
                                 />
                             </Box>
-
                         </VStack>
                     </AlertDialogBody>
                 </AlertDialogContent>

@@ -15,9 +15,9 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
     return (
         <Center>
             <Stack direction="column">
-                <Stack direction={{ base: 'column', md: 'row' }} spacing={4} align="center">
-                    <VStack>
-                        <HStack>
+                <Stack direction={{ base: 'column', md: 'column' }} spacing={4} align="center">
+                    <HStack w="100%" minW="xl">
+                        <HStack w="100%">
                             <IconButton
                                 icon={<Image src="/images/currency/weth.png" w="50px" />}
                                 size="xl"
@@ -28,7 +28,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                                 color={textColor}
                             />
                             <VStack align="flex-start">
-                                <Text color={textColor} fontSize="3xl" fontWeight="bold" mb={-3}>
+                                <Text color={textColor} fontSize="2xl" fontWeight="bold" mb={-3}>
                                     {jackpotBalance} WETH
                                 </Text>
                                 <Text color={textColor} fontSize="md">
@@ -47,15 +47,18 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                                 color={textColor}
                             />
                             <VStack align="flex-start">
-                                <Text color={textColor} fontSize="3xl" fontWeight="bold">
+                                <Text color={textColor} fontSize="2xl" fontWeight="bold" mb={-3}>
                                     9375 MANA
+                                </Text>
+                                <Text color={textColor} fontSize="md">
+                                    (SOON)
                                 </Text>
                             </VStack>
                         </HStack>
-                    </VStack>
-                    <Center pl={{ base: 0, md: 4 }} w={{ base: '100%', md: 'auto' }}>
+                    </HStack>
+                    <Center w={{ base: '100%', md: 'auto' }}>
                         <HStack spacing={4} color={textColor}>
-                            <Box p={2} bg={bgColor} rounded="lg" minW="90px">
+                            <Box p={2} bg={bgColor} rounded="lg" minW="150px">
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
                                     {jackpotTimer.days}
                                 </Text>
@@ -64,7 +67,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                                 </Text>
                             </Box>
 
-                            <Box p={2} bg={bgColor} rounded="lg" minW="90px">
+                            <Box p={2} bg={bgColor} rounded="lg" minW="150px">
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
                                     {jackpotTimer.hours}
                                 </Text>
@@ -73,7 +76,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                                 </Text>
                             </Box>
 
-                            <Box p={2} bg={bgColor} rounded="lg" minW="90px">
+                            <Box p={2} bg={bgColor} rounded="lg" minW="150px">
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
                                     {jackpotTimer.minutes}
                                 </Text>
@@ -81,14 +84,17 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                                     minutes
                                 </Text>
                             </Box>
+                            <Box p={2} bg={bgColor} rounded="lg" minW="150px">
+                                <Text textAlign="center" fontSize="xl" fontWeight="bold">
+                                    {numParticipants}
+                                </Text>
+                                <Text textAlign="center" fontSize="xs">
+                                    Total claims in this round
+                                </Text>
+                            </Box>
                         </HStack>
                     </Center>
                 </Stack>
-                <Box py={2} bg={bgColor} rounded="lg" minW="90px" w="100%" color={textColor}>
-                    <Text textAlign="center">
-                        Total claims in this round: <strong>{numParticipants}</strong>
-                    </Text>
-                </Box>
             </Stack>
         </Center>
     );

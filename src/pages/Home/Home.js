@@ -425,6 +425,21 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         );
     }, [infoAccount]);
 
+    const MENU_OPTIONS_COLOR = [
+        "#2f9088", // Overview
+        "#2f8190", // Inventory
+        "#3b7197", // History
+        "#3b6497", // Market
+        "#573b97", // Bridge
+        "#3b5397", // Jackpot
+        "#4e3b97", // Account
+        "#9f3772", // Buy pack
+        "#413b97", // Exchange
+        "#3b4397", // Chat
+        "#413b97", // Book
+        "#e094b3" // Open pack
+    ]
+
     const components = useMemo(
         () => [
             <Overview blockchainStatus={blockchainStatus} />,
@@ -441,7 +456,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             <Bridge infoAccount={infoAccount} cards={cardsFiltered} />,
             <Jackpot infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />,
             <Account infoAccount={infoAccount} />,
-            '',
+            '', // Buy pack
             <Exchange infoAccount={infoAccount} />,
             <ArdorChat infoAccount={infoAccount} />,
             <Book cards={cards} />,
@@ -477,20 +492,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         directSectionToRender && checkAndGo();
     }, [directSectionToRender, searchParams, setSearchParams]);
 
-    const MENU_OPTIONS_COLOR = [
-        "#9f3772",
-        "#e094b3",
-        "#2f9088",
-        "#2f8190",
-        "#3b7197",
-        "#3b6497",
-        "#3b5397",
-        "#3b4397",
-        "#413b97",
-        "#4e3b97",
-        "#573b97",
-        "#5d3b97"
-    ]
+    
 
     const bgColor = useColorModeValue('white', 'whiteAlpha.100');
     const borderColor = MENU_OPTIONS_COLOR[option] || 'whiteAlpha.100';

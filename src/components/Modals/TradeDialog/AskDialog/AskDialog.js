@@ -49,6 +49,7 @@ import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/
  * @version 1.0.0
  */
 const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [], bidOrders = [] }) => {
+    console.log("🚀 ~ file: AskDialog.js:52 ~ AskDialog ~ isOpen:", isOpen)
     const toast = useToast();
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
@@ -63,6 +64,8 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
         currencyImg = '/images/currency/giftz.png';
     } else if (currencyName === 'wETH') {
         currencyImg = '/images/currency/weth.png';
+    } else if (currencyName === 'MANA') {
+        currencyImg = '/images/currency/mana.png';
     }
 
     let maxCards = Number(card.unconfirmedQuantityQNT);

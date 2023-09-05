@@ -83,9 +83,11 @@ const Bridge = ({ infoAccount, cards }) => {
 
     return (
         <Box>
-            {bridgeType === undefined && <BridgeSelector setBridgeType={setBridgeType} />}
+            {!bridgeType && <BridgeSelector setBridgeType={setBridgeType} />}
             {bridgeType === 'ERC20' && <BridgeERC20 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} />}
-            {bridgeType === 'ERC20GEM' && <BridgeERC20GEM infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} />}
+            {bridgeType === 'ERC20GEM' && (
+                <BridgeERC20GEM infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} />
+            )}
             {bridgeType === 'ERC1155' && (
                 <BridgeERC1155 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC1155} cards={cards} />
             )}

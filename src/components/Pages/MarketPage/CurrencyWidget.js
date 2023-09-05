@@ -35,6 +35,7 @@ const CurrencyWidget = ({
     market = 'IGNIS',
     currencyName = '',
     decimals = 2,
+    message = '',
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const tradeRef = useRef();
@@ -56,7 +57,7 @@ const CurrencyWidget = ({
     };
 
     const textColor = useColorModeValue('black', 'white');
-    const bgColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
+    const bgColor = 'rgba(59,100,151,0.35)';
 
     // ------------------------------
     if (currencyCards.length === 0) return null;
@@ -103,7 +104,7 @@ const CurrencyWidget = ({
         <>
             <Center mt={4} w="100%">
                 <Grid
-                    templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}
+                    templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(1, 1fr)' }}
                     border="1px"
                     borderColor="#3b6497"
                     rounded="lg"
@@ -113,28 +114,27 @@ const CurrencyWidget = ({
                     direction="row">
                     <GridItem colSpan={2} p={4} borderLeftRadius="lg">
                         <Center>
-                            <Stack direction={{ base: 'column', xl: 'row' }} spacing={4} align="center">
+                            <Stack direction={{ base: 'column', xl: 'row' }} spacing={4} align="center" w="100%">
                                 <IconButton
-                                    icon={<Image src={icon} />}
+                                    icon={<Image src={icon} maxW={'50px'} />}
                                     size="xl"
                                     p={2}
                                     mr={2}
-                                    fontSize="4xl"
                                     bg={bgColor}
                                     color={textColor}
                                 />
-                                <VStack align="flex-start" minW="md">
-                                    <Text color={textColor} fontSize="3xl" fontWeight="bold" mb={-3}>
+                                <VStack minW="sm" align={{ base: 'center', xl: 'flex-start' }}>
+                                    <Text color={textColor} fontSize="2xl" fontWeight="bold" mb={-3}>
                                         {confirmedBalance} {currencyName}
                                     </Text>
                                     <Text color={textColor} fontSize="md" textAlign={{ base: 'center', xl: 'left' }}>
                                         ({unconfirmedBalance} unconfirmed)
                                     </Text>
                                 </VStack>
-                                <Center pl={4}>
+                                <Center>
                                     <HStack spacing={4} color={textColor}>
                                         <Box p={2} bg={bgColor} rounded="lg" minW="90px">
-                                            <Text textAlign="center" fontSize="xl" fontWeight="bold">
+                                            <Text textAlign="center" fontSize="lg" fontWeight="bold">
                                                 {lowestGemAsk}
                                             </Text>
                                             <Text textAlign="center" fontSize="xs">
@@ -143,17 +143,30 @@ const CurrencyWidget = ({
                                         </Box>
 
                                         <Box p={2} bg={bgColor} rounded="lg" minW="90px">
-                                            <Text textAlign="center" fontSize="xl" fontWeight="bold">
+                                            <Text textAlign="center" fontSize="lg" fontWeight="bold">
                                                 {highestGemBid}
                                             </Text>
                                             <Text textAlign="center" fontSize="xs">
                                                 HIGHEST BID
                                             </Text>
                                         </Box>
+
+                                        <Box p={2} rounded="lg" minW="90px">
+                                            <Text
+                                                fontSize={'xs'}
+                                                mt={2}
+                                                p={2}
+                                                w="100%"
+                                                bgColor={'rgba(59,100,151,0.35)'}
+                                                rounded="lg">
+                                                {message}
+                                            </Text>
+                                        </Box>
                                     </HStack>
                                 </Center>
                             </Stack>
                         </Center>
+                        {message !== '' && <Center></Center>}
                     </GridItem>
 
                     <GridItem bgColor={'rgba(59,100,151,0.35)'} p={4} borderRightRadius="lg">
@@ -167,8 +180,7 @@ const CurrencyWidget = ({
                             style={hover ? hoverStyle : initialStyle}
                             onMouseEnter={() => setHover(true)}
                             onMouseLeave={() => setHover(false)}>
-                            TRADE <br />
-                            NOW
+                            TRADE NOW
                         </Center>
                     </GridItem>
                 </Grid>

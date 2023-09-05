@@ -21,7 +21,6 @@ import {
     PinInputField,
     Stack,
     Text,
-    useColorModeValue,
     useNumberInput,
     useToast,
 } from '@chakra-ui/react';
@@ -116,8 +115,8 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
         }
     };
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
-    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const bgColor = '#246773';
+    const borderColor = '#2f8190';
     const isDisabled = !isValidPin || !isValidArdorAccount || input.value === 0;
 
     const cleanOnClose = () => {
@@ -163,8 +162,8 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                         <Box my={4}>
                             <Text textAlign="center">Amount (max: {maxCards})</Text>
                             <Center my={2}>
-                                <HStack maxW="50%" spacing={0} border="1px" rounded="lg" borderColor={borderColor}>
-                                    <Button {...dec} rounded="none" borderLeftRadius="lg">
+                                <HStack spacing={0} border="1px" rounded="lg" borderColor={borderColor} w="100%">
+                                    <Button {...dec} rounded="none" borderLeftRadius="lg" bgColor={borderColor}>
                                         -
                                     </Button>
                                     <Input
@@ -175,21 +174,21 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                                         fontWeight="bold"
                                         disabled
                                     />
-                                    <Button {...inc} rounded="none" borderRightRadius="lg">
+                                    <Button {...inc} rounded="none" borderRightRadius="lg" bgColor={borderColor}>
                                         +
                                     </Button>
                                 </HStack>
                             </Center>
                         </Box>
 
-                        <FormControl variant="floatingGray" id="Recipient" my={4}>
-                            <InputGroup size="lg" border="1px" borderColor={borderColor} rounded="lg">
+                        <FormControl variant="floatingModal" id="Recipient" my={6}>
+                            <InputGroup size="lg" border="2px" borderColor={borderColor} rounded="lg">
                                 <Input
                                     placeholder=" "
                                     value={ardorAccount}
                                     onChange={e => handleInput(e.target.value)}
                                     border="0px"
-                                    isInvalid={!isValidArdorAccount}
+                                    isInvalid={ardorAccount !== 'ARDOR-' && !isValidArdorAccount}
                                 />
                                 <InputRightAddon
                                     bgColor="transparent"
@@ -198,6 +197,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                                         <IconButton
                                             bgColor="transparent"
                                             aria-label="Scan QR CODE"
+                                            w="100%"
                                             icon={<FaQrcode />}
                                             onClick={() => {
                                                 setReaderEnabled(!readerEnabled);
@@ -220,10 +220,10 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                                     isInvalid={!isValidPin}
                                     variant="filled"
                                     mask>
-                                    <PinInputField />
-                                    <PinInputField />
-                                    <PinInputField />
-                                    <PinInputField />
+                                    <PinInputField bgColor={borderColor} />
+                                    <PinInputField bgColor={borderColor} />
+                                    <PinInputField bgColor={borderColor} />
+                                    <PinInputField bgColor={borderColor} />
                                 </PinInput>
                             </HStack>
                         </Center>
@@ -231,7 +231,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                     <AlertDialogFooter>
                         <Button
                             isDisabled={isDisabled || sendingTx}
-                            bgColor={!isDisabled ? '#F18800' : null}
+                            bgColor={borderColor}
                             w="100%"
                             py={6}
                             onClick={handleSend}>

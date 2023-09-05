@@ -23,7 +23,6 @@ import {
     Stack,
     Text,
     Tooltip,
-    useColorModeValue,
     useNumberInput,
     useToast,
 } from '@chakra-ui/react';
@@ -122,8 +121,8 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
         }
     };
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
-    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const bgColor = '#246773';
+    const borderColor = '#2f8190';
 
     return (
         <>
@@ -161,8 +160,8 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                         <Box my={4}>
                             <Text textAlign="center">Crafts (max: {maxCrafts})</Text>
                             <Center my={2}>
-                                <HStack maxW="50%" spacing={0} border="1px" rounded="lg" borderColor={borderColor}>
-                                    <Button {...dec} rounded="none" borderLeftRadius="lg">
+                                <HStack spacing={0} border="1px" rounded="lg" borderColor={borderColor} w="100%">
+                                    <Button {...dec} rounded="none" borderLeftRadius="lg" bgColor={borderColor}>
                                         -
                                     </Button>
                                     <Input
@@ -173,23 +172,23 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                         fontWeight="bold"
                                         disabled
                                     />
-                                    <Button {...inc} rounded="none" borderRightRadius="lg">
+                                    <Button {...inc} rounded="none" borderRightRadius="lg" bgColor={borderColor}>
                                         +
                                     </Button>
                                 </HStack>
                             </Center>
                         </Box>
 
-                        <FormControl variant="floatingGray" id="name" my={4} mt={8}>
-                            <InputGroup size="lg">
+                        <FormControl variant="floatingModal" id="name" my={4} mt={8}>
+                            <InputGroup size="lg" border="1px solid #2f8190" rounded="lg">
                                 <Input placeholder=" " value={input.value * 5} disabled />
-                                <InputRightAddon bgColor="transparent" children={card.name} />
+                                <InputRightAddon bgColor={borderColor} children={card.name} />
                             </InputGroup>
 
                             <FormLabel>Cards to sacrifice</FormLabel>
                         </FormControl>
 
-                        <FormControl variant="floatingGray" id="name" my={4}>
+                        <FormControl variant="floatingModal" id="name" my={6} border="1px solid #2f8190" rounded="lg">
                             <Input placeholder=" " value={craftingCost + ' IGNIS'} size="lg" disabled />
                             <FormLabel>Crafting costs</FormLabel>
                         </FormControl>
@@ -210,10 +209,10 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                                     isInvalid={!isValidPin}
                                     variant="filled"
                                     mask>
-                                    <PinInputField />
-                                    <PinInputField />
-                                    <PinInputField />
-                                    <PinInputField />
+                                    <PinInputField bgColor={borderColor} />
+                                    <PinInputField bgColor={borderColor} />
+                                    <PinInputField bgColor={borderColor} />
+                                    <PinInputField bgColor={borderColor} />
                                 </PinInput>
                             </HStack>
                         </Center>
@@ -221,7 +220,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                     <AlertDialogFooter>
                         <Button
                             isDisabled={!isValidPin || sendingTx || ignis < craftingCost}
-                            bgColor={isValidPin ? '#F18800' : null}
+                            bgColor={borderColor}
                             w="100%"
                             py={6}
                             onClick={handleCrafting}>
