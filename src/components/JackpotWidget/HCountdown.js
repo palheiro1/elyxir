@@ -32,7 +32,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                                     {jackpotBalance} WETH
                                 </Text>
                                 <Text color={textColor} fontSize="md">
-                                    ({jackpotBalanceUSD} USD)
+                                    ({Number(jackpotBalanceUSD).toFixed(2)} USD)
                                 </Text>
                             </VStack>
                         </HStack>
