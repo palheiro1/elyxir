@@ -1,7 +1,7 @@
 import { WETHASSET } from '../../data/CONSTANTS';
 import { fetchOmnoMarket } from '../../utils/omno';
 
-const getOmnoAskOrders = (allOffers, asset) => {
+const getOmnoAskOrders = (allOffers = [], asset) => {
     const selectedOffers = allOffers.filter(item => {
         if (item.give.asset === undefined || item.take.asset === undefined) return false;
         return (
@@ -18,7 +18,7 @@ const getOmnoAskOrders = (allOffers, asset) => {
     return selectedOffers;
 };
 
-const getOmnoBidOrders = (allOffers, asset) => {
+const getOmnoBidOrders = (allOffers = [], asset) => {
     const selectedOffers = allOffers.filter(item => {
         if (item.give.asset === undefined || item.take.asset === undefined) return false;
         return (
