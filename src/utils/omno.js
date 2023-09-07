@@ -1,21 +1,16 @@
 import axios from 'axios';
 import { OMNO_API } from '../data/CONSTANTS';
 
-let cache = null;
 let isFetching = false;
 
 export const fetchOmnoMarket = async () => {
-    if (cache) {
-        return cache;
-    }
-
     if (isFetching) {
-        // Si ya hay una solicitud en curso, esperamos a que termine y retornamos la caché actualizada
+        // If there's already a request in progress, wait for it to complete.
         return new Promise(resolve => {
             const interval = setInterval(() => {
                 if (!isFetching) {
                     clearInterval(interval);
-                    resolve(cache);
+                    resolve();
                 }
             }, 300);
         });
@@ -28,13 +23,10 @@ export const fetchOmnoMarket = async () => {
                 action: 'getOmnoMarket',
             },
         });
-        cache = response.data;
-        setTimeout(() => {
-            cache = [];
-        }, 5000);
-        return cache;
+        return response.data;
     } catch (error) {
-        console.error('🚀 ~ file: omno.js:12 ~ fetchOmnoMarket ~ error:', error);
+        console.error('Error:', error);
+        throw error; // Rethrow the error so the caller can handle it if needed
     } finally {
         isFetching = false;
     }
