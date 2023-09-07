@@ -49,6 +49,8 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [sendingTx, setSendingTx] = useState(false);
     const [selectedOffers, setSelectedOffers] = useState([]); // selected offers
 
+    const [needReload, setNeedReload] = useState(true);
+
     const { name, WETHBalance, IGNISBalance } = infoAccount;
 
     const toast = useToast();
@@ -62,12 +64,15 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         setTotalOnSale(0);
         setSendingTx(false);
         setSelectedOffers([]);
+        setNeedReload(true);
         onClose();
     };
 
     useEffect(() => {
         const recoverMarketOffers = async () => {
+            setNeedReload(false);
             const offers = await fetchOmnoMarket();
+            console.log("🚀 ~ file: BuyPackDialog.js:75 ~ recoverMarketOffers ~ offers:", offers)
             const wethAsset = offers.filter(item => {
                 return (
                     Object.keys(item.give).length === 1 &&
@@ -85,8 +90,8 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             setTotalOnSale(totalOnSale);
         };
 
-        recoverMarketOffers();
-    }, []);
+        needReload && recoverMarketOffers();
+    }, [needReload]);
 
     // ------------------------------------------------------------
     // ------------------ E A S Y  C H E C K E R ------------------
@@ -205,6 +210,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             errorToast('Error buying GIFTZ', toast);
         }
         setSendingTx(false);
+        setNeedReload(true);
     };
 
     const handleCompletePin = pin => {

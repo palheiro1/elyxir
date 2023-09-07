@@ -416,7 +416,6 @@ export const handleMANA = (type, amount, date, account) => {
 export const handleCardTransfer = (type, amount, date, account, card) => {
     type = type.toLowerCase();
     const { cardImgUrl: image, name: title, channel: continent, rarity } = card;
-    console.log("🚀 ~ file: TableHandlers.js:387 ~ handleCardTransfer ~ image:", title, image, card)
 
     const Component = ({ handleClick }) => {
         return (

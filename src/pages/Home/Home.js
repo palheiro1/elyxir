@@ -208,7 +208,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Load all data from blockchain - Main flow
     // -----------------------------------------------------------------
     const loadAll = useCallback(async () => {
-        console.log('Mythical Beings: Fetching all data...');
         const { accountRs } = infoAccount;
         setIsLoading(true);
         setNeedReload(false);
