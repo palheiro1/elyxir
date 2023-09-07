@@ -146,6 +146,7 @@ export const DEFAULT_CONTACTS = [
     { accountRs: GEMASSETACCOUNT, name: 'Mythical Beings' },
     { accountRs: JACKPOTACCOUNT, name: 'Mythical Beings' },
     { accountRs: MANAACCOUNT, name: 'Mythical Beings' },
+    { accountRs: OMNO_ACCOUNT, name: 'Omno (Layer 2)' },
 ];
 
 // ---------------------------------------------

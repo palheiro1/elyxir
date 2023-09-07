@@ -160,6 +160,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     rounded="none"
                                                     borderLeftRadius="lg"
                                                     color={colorText}
+                                                    _hover={{ bgColor: '#9f3772' }}
                                                     bgColor={'#b3778f'}>
                                                     -
                                                 </Button>
@@ -176,6 +177,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     {...inc}
                                                     bgColor={'#b3778f'}
                                                     rounded="none"
+                                                    _hover={{ bgColor: '#9f3772' }}
                                                     borderRightRadius="lg"
                                                     color={colorText}>
                                                     +
@@ -207,10 +209,10 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     isInvalid={!isValidPin}
                                                     variant="filled"
                                                     mask>
-                                                    <PinInputField bgColor={"#b3778f"} />
-                                                    <PinInputField bgColor={"#b3778f"} />
-                                                    <PinInputField bgColor={"#b3778f"} />
-                                                    <PinInputField bgColor={"#b3778f"} />
+                                                    <PinInputField bgColor={'#b3778f'} />
+                                                    <PinInputField bgColor={'#b3778f'} />
+                                                    <PinInputField bgColor={'#b3778f'} />
+                                                    <PinInputField bgColor={'#b3778f'} />
                                                 </PinInput>
                                             </HStack>
                                         </Box>
@@ -219,7 +221,8 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     <Box w="100%" mt={2}>
                                         <Button
                                             isDisabled={isDisabled}
-                                            bgColor={"#b3778f"}
+                                            bgColor={'#b3778f'}
+                                            _hover={{ bgColor: '#9f3772' }}
                                             w="100%"
                                             py={6}
                                             onClick={handleBuyPack}>

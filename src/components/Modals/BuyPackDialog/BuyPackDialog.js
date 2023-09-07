@@ -231,7 +231,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
     const randomTime = () => {
         return Math.floor(Math.random() * (10000 - 1000 + 1)) + 1000;
-    }
+    };
 
     return (
         <>
@@ -294,6 +294,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     rounded="none"
                                                     borderLeftRadius="lg"
                                                     color={colorText}
+                                                    _hover={{ bgColor: '#9f3772' }}
                                                     bgColor={'#6b254d'}>
                                                     -
                                                 </Button>
@@ -310,6 +311,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     bgColor={'#6b254d'}
                                                     rounded="none"
                                                     borderRightRadius="lg"
+                                                    _hover={{ bgColor: '#9f3772' }}
                                                     color={colorText}>
                                                     +
                                                 </Button>
@@ -335,7 +337,8 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
                                     {totalOnSale === 0 && (
                                         <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                            There are no GIFTZ left in the machine. You can wait for it to refill or buy them on the secondary market.
+                                            There are no GIFTZ left in the machine. You can wait for it to refill or buy
+                                            them on the secondary market.
                                         </Text>
                                     )}
 
@@ -375,6 +378,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         <Button
                                             isDisabled={isDisabled || sendingTx}
                                             bgColor={'#6b254d'}
+                                            _hover={{ bgColor: '#9f3772' }}
                                             w="100%"
                                             py={6}
                                             onClick={handleBuyPack}>
