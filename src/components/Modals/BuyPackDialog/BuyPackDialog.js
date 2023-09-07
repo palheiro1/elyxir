@@ -72,7 +72,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         const recoverMarketOffers = async () => {
             setNeedReload(false);
             const offers = await fetchOmnoMarket();
-            console.log("🚀 ~ file: BuyPackDialog.js:75 ~ recoverMarketOffers ~ offers:", offers)
             const wethAsset = offers.filter(item => {
                 return (
                     Object.keys(item.give).length === 1 &&
@@ -243,7 +242,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 onClose={handleClose}
                 isOpen={isOpen}
                 isCentered>
-                <AlertDialogOverlay bgColor="blackAlpha.900" />
+                <AlertDialogOverlay bgColor="blackAlpha.500" />
 
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor="#9f3772" shadow="dark-lg" color="white">
                     <AlertDialogHeader textAlign="center">BUY A PACK OF CARDS</AlertDialogHeader>

@@ -81,7 +81,7 @@ const components = {
             floatingModal: props => ({
                 container: {
                     label: {
-                        bg: '#246773',
+                        bg: '#122f34',
                         color: props.colorMode === 'dark' ? 'white' : 'black',
                         top: -6,
                         left: 0,

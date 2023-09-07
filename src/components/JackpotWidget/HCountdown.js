@@ -1,4 +1,15 @@
-import { Box, Center, HStack, IconButton, Image, Stack, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import {
+    Box,
+    Center,
+    HStack,
+    IconButton,
+    Image,
+    SimpleGrid,
+    Stack,
+    Text,
+    VStack,
+    useColorModeValue,
+} from '@chakra-ui/react';
 
 /**
  * @name HCountdown
@@ -16,26 +27,28 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
         <Center>
             <Stack direction="column">
                 <Stack direction={{ base: 'column', md: 'column' }} spacing={4} align="center">
-                    <HStack w="100%" minW="xl">
-                        <HStack w="100%">
-                            <IconButton
-                                icon={<Image src="/images/currency/weth.png" w="50px" />}
-                                size="xl"
-                                p={2}
-                                mr={2}
-                                fontSize="4xl"
-                                bg={bgColor}
-                                color={textColor}
-                            />
-                            <VStack align="flex-start">
-                                <Text color={textColor} fontSize="2xl" fontWeight="bold" mb={-3}>
-                                    {jackpotBalance} WETH
-                                </Text>
-                                <Text color={textColor} fontSize="md">
-                                    ({Number(jackpotBalanceUSD).toFixed(2)} USD)
-                                </Text>
-                            </VStack>
-                        </HStack>
+                    <Stack direction={{ base: 'column', md: 'row' }} w="100%">
+                        <Center w="100%">
+                            <HStack w="100%">
+                                <IconButton
+                                    icon={<Image src="/images/currency/weth.png" w="50px" />}
+                                    size="xl"
+                                    p={2}
+                                    mr={2}
+                                    fontSize="4xl"
+                                    bg={bgColor}
+                                    color={textColor}
+                                />
+                                <VStack align="flex-start">
+                                    <Text color={textColor} fontSize="2xl" fontWeight="bold" mb={-3}>
+                                        {jackpotBalance} WETH
+                                    </Text>
+                                    <Text color={textColor} fontSize="md">
+                                        ({Number(jackpotBalanceUSD).toFixed(2)} USD)
+                                    </Text>
+                                </VStack>
+                            </HStack>
+                        </Center>
                         <HStack w="100%">
                             <IconButton
                                 icon={<Image src="/images/currency/mana.png" w="50px" />}
@@ -55,9 +68,9 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                                 </Text>
                             </VStack>
                         </HStack>
-                    </HStack>
+                    </Stack>
                     <Center w={{ base: '100%', md: 'auto' }}>
-                        <HStack spacing={4} color={textColor}>
+                        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4} color={textColor}>
                             <Box p={2} bg={bgColor} rounded="lg" minW="150px">
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
                                     {jackpotTimer.days}
@@ -92,7 +105,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                                     Total claims in this round
                                 </Text>
                             </Box>
-                        </HStack>
+                        </SimpleGrid>
                     </Center>
                 </Stack>
             </Stack>

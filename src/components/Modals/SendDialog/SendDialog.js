@@ -115,7 +115,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
         }
     };
 
-    const bgColor = '#246773';
+    const bgColor = '#122f34';
     const borderColor = '#2f8190';
     const isDisabled = !isValidPin || !isValidArdorAccount || input.value === 0;
 
