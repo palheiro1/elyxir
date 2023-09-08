@@ -2,7 +2,7 @@ import { Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import { RARITY_COLORS } from '../../data/CONSTANTS';
 
 const CardBadges = ({ rarity, continent, size = 'md' }) => {
-    const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
+    const badgeColor = useColorModeValue('linear-gradient(45deg, #8e9eab, #eef2f3) 1', 'linear-gradient(45deg, #8e9eab, #eef2f3) 1');
 
     return (
         <Stack direction={{ base: 'column', md: 'row' }} spacing={1}>
@@ -22,9 +22,9 @@ const CardBadges = ({ rarity, continent, size = 'md' }) => {
                 fontSize={size}
                 w={{ base: '6rem', md: 'auto' }}
                 h={{ base: '1.5rem', md: 'auto' }}
-                bgColor={badgeColor}
+                bgGradient={badgeColor}
                 rounded="lg"
-                color="white"
+                color="black"
                 textAlign="center">
                 {continent}
             </Text>

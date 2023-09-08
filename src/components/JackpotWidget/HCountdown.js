@@ -2,7 +2,6 @@ import {
     Box,
     Center,
     HStack,
-    IconButton,
     Image,
     SimpleGrid,
     Stack,
@@ -30,15 +29,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                     <Stack direction={{ base: 'column', md: 'row' }} w="100%">
                         <Center w="100%">
                             <HStack w="100%">
-                                <IconButton
-                                    icon={<Image src="/images/currency/weth.png" w="50px" />}
-                                    size="xl"
-                                    p={2}
-                                    mr={2}
-                                    fontSize="4xl"
-                                    bg={bgColor}
-                                    color={textColor}
-                                />
+                                <Image src="/images/currency/weth.png" w="50px" mr={2} />
                                 <VStack align="flex-start">
                                     <Text color={textColor} fontSize="2xl" fontWeight="bold" mb={-3}>
                                         {jackpotBalance} WETH
@@ -50,15 +41,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                             </HStack>
                         </Center>
                         <HStack w="100%">
-                            <IconButton
-                                icon={<Image src="/images/currency/mana.png" w="50px" />}
-                                size="xl"
-                                p={2}
-                                mr={2}
-                                fontSize="4xl"
-                                bg={bgColor}
-                                color={textColor}
-                            />
+                            <Image src="/images/currency/mana.png" w="55px" mr={2} mb={1} />
                             <VStack align="flex-start">
                                 <Text color={textColor} fontSize="2xl" fontWeight="bold" mb={-3}>
                                     9375 MANA

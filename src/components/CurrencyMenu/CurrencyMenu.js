@@ -249,8 +249,9 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                             ml={-6}
                                             src="images/currency/mana.png"
                                             alt="MANA Icon"
-                                            w="50px"
-                                            h="50px"
+                                            w="55px"
+                                            h="55px"
+                                            mb={2}
                                         />
                                         <Text pr={6}>
                                             {parseMANA.toFixed(Math.max(0, manaDecimals <= 6 ? manaDecimals : 6))}

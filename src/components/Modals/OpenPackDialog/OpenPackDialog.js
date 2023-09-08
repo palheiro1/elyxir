@@ -132,7 +132,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 onClose={handleClose}
                 isOpen={isOpen}
                 isCentered>
-                <AlertDialogOverlay bgColor="blackAlpha.900" />
+                <AlertDialogOverlay bgColor="blackAlpha.500" />
 
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor="#e094b3" shadow="dark-lg" color="white">
                     <AlertDialogHeader textAlign="center">OPEN A PACK OF CARDS</AlertDialogHeader>
@@ -160,7 +160,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     rounded="none"
                                                     borderLeftRadius="lg"
                                                     color={colorText}
-                                                    _hover={{ bgColor: '#9f3772' }}
+                                                    _hover={{ bgColor: '#e094b3' }}
                                                     bgColor={'#b3778f'}>
                                                     -
                                                 </Button>
@@ -177,7 +177,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     {...inc}
                                                     bgColor={'#b3778f'}
                                                     rounded="none"
-                                                    _hover={{ bgColor: '#9f3772' }}
+                                                    _hover={{ bgColor: '#e094b3' }}
                                                     borderRightRadius="lg"
                                                     color={colorText}>
                                                     +

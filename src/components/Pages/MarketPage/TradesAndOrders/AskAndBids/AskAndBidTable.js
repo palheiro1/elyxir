@@ -38,12 +38,12 @@ const AskBidTable = ({
                     fontSize="lg"
                     borderBottom="2px"
                     borderColor={"#3b6497"}
-                    color={newStyle && (isAsk ? '#FF6962' : '#33B448')}>
+                    color={newStyle && (isAsk ? '#eb6473' : '#29a992')}>
                     {type}
                 </Text>
             )}
 
-            <Table variant="simple" color={newStyle && (isAsk ? '#FF6962' : '#33B448')}>
+            <Table variant="simple" color={newStyle && (isAsk ? '#eb6473' : '#29a992')}>
                 {!newStyle && (
                     <Thead>
                         <Tr>
@@ -85,7 +85,7 @@ const AskBidTable = ({
             </Table>
 
             {!isAsk && newStyle && (
-                <Text textAlign="center" p={4} fontSize="lg" borderTop="1px" color={isAsk ? '#FF6962' : '#33B448'}>
+                <Text textAlign="center" p={4} fontSize="lg" borderTop="1px" color={isAsk ? '#eb6473' : '#29a992'}>
                     {type}
                 </Text>
             )}

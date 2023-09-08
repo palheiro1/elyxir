@@ -49,7 +49,17 @@ const Book = ({ cards }) => {
                 Once you have completed the collection, you can download the e-book to read on your favorite device.
             </Text>
             <Stack direction="row" spacing={0}>
-                <Stack direction="column" spacing={0} maxH="73vh" overflowY={'auto'} minW="15%">
+                <Stack
+                    direction="column"
+                    spacing={0}
+                    maxH="73vh"
+                    overflowY={'auto'}
+                    minW="15%"
+                    rounded={'md'}
+                    style={{
+                        scrollbarColor: '#413b97 #fff',
+                        scrollbarWidth: 'thin',
+                    }}>
                     <Box
                         bgColor={haveAllCards ? '#413b97' : 'rgba(65,59,151,0.35)'}
                         fontWeight="bolder"
@@ -71,9 +81,9 @@ const Book = ({ cards }) => {
                         const haveThisCard = card.quantityQNT > 0;
                         return (
                             <Box
-                                color={"white"}
+                                color={'white'}
                                 bgColor={haveThisCard ? colorHaveCard : colorNotHaveCard}
-                                border="1px"
+                                border="0px"
                                 borderColor={borderColor}
                                 onClick={() => (haveThisCard ? handleChangeCard(card) : null)}
                                 _hover={{
@@ -81,7 +91,6 @@ const Book = ({ cards }) => {
                                     bgColor: haveThisCard ? 'rgba(65,59,151,0.9)' : 'none',
                                 }}
                                 key={card.asset}
-                                rounded="sm"
                                 p={2}
                                 w="100%"
                                 variant="outline">

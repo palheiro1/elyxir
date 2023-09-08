@@ -25,6 +25,20 @@ const styles = {
 };
 
 const components = {
+    // Change Menu default color in dark mode to black
+    Menu: {
+        baseStyle: props => ({
+            list: {
+                bg: mode('white', 'black')(props),
+            },
+            item: {
+                bg: mode('white', 'black')(props),
+                _focus: {
+                    bg: mode('gray.100', 'whiteAlpha.200')(props),
+                },
+            },
+        }),
+    },
     Switch: {
         variants: {
             mbswitch: props => ({
