@@ -57,7 +57,7 @@ const Book = ({ cards }) => {
                     minW="15%"
                     rounded={'md'}
                     style={{
-                        scrollbarColor: '#413b97 #fff',
+                        scrollbarColor: '#312c71 #fff',
                         scrollbarWidth: 'thin',
                     }}>
                     <Box
