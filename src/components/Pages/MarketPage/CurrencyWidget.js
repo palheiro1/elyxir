@@ -187,17 +187,15 @@ const CurrencyWidget = ({
                     </GridItem>
                 </Grid>
             </Center>
-            {isOpen && (
-                <TradeDialog
-                    isOpen={isOpen}
-                    onClose={onClose}
-                    reference={tradeRef}
-                    username={username}
-                    currencyCards={currencyCards}
-                    currencyName={currencyName}
-                    ignis={IGNISBalance}
-                />
-            )}
+            <TradeDialog
+                isOpen={isOpen}
+                onClose={onClose}
+                reference={tradeRef}
+                username={username}
+                currencyCards={currencyCards}
+                currencyName={currencyName}
+                ignis={IGNISBalance}
+            />
         </>
     );
 };
