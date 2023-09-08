@@ -3,7 +3,9 @@ import { Box, Center, Heading, SimpleGrid, Text, useColorModeValue } from '@chak
 const BridgeSelector = ({ setBridgeType }) => {
     const borderColor = useColorModeValue('blackAlpha.600', '#573b97');
     const bgColor = useColorModeValue('blackAlpha.600', 'rgba(57,59,151,0.5)');
-    const hoverColor = useColorModeValue('blackAlpha.200', 'rgba(57,59,151,0.7)');
+    const hoverColor = useColorModeValue('blackAlpha.200', 'rgba(57,59,151,0.3)');
+
+    const lightBgColor = 'rgba(57,59,151,0.15)';
 
     return (
         <>
@@ -22,6 +24,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                     w="100%"
                     border="1px"
                     borderColor={borderColor}
+                    bgColor={lightBgColor}
                     p={8}
                     rounded="md"
                     shadow="md"
@@ -39,6 +42,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                     w="100%"
                     border="1px"
                     borderColor={borderColor}
+                    bgColor={lightBgColor}
                     p={8}
                     rounded="md"
                     shadow="md"
@@ -56,6 +60,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                     w="100%"
                     border="1px"
                     borderColor={borderColor}
+                    bgColor={lightBgColor}
                     p={8}
                     rounded="md"
                     shadow="md"
@@ -73,6 +78,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                     w="100%"
                     border="1px"
                     borderColor={borderColor}
+                    bgColor={lightBgColor}
                     p={8}
                     rounded="md"
                     shadow="md"
@@ -91,6 +97,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                 w="100%"
                 border="1px"
                 borderColor={borderColor}
+                bgColor={lightBgColor}
                 p={8}
                 mt={2}
                 rounded="md"
