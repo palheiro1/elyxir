@@ -8,10 +8,10 @@
 // ---------------------------------------------------------
 // ------------------ APP CONFIGURATION --------------------
 // ---------------------------------------------------------
-export const REFRESH_DATA_TIME = 5 * 1000; // 5 seconds
-export const REFRESH_BLOCK_TIME = 2 * 1000; // 10 seconds
+export const REFRESH_DATA_TIME = 6 * 1000; // 5 seconds
+export const REFRESH_BLOCK_TIME = 2.5 * 1000; // 10 seconds
 export const REFRESH_UNWRAP_TIME = 30 * 1000; // 30 seconds
-export const REFRESH_JACKPOT_PARTICIPANTS = 15 * 1000; // 30 seconds
+export const REFRESH_JACKPOT_PARTICIPANTS = 22 * 1000; // 30 seconds
 
 export const RARITY_COLORS = {
     Common: 'linear-gradient(45deg, #8e9eab, #eef2f3) 1',

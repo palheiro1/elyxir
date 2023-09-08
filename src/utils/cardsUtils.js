@@ -78,17 +78,16 @@ export const fetchAllCards = async (accountRs, collectionRs, specialRs, fetchOrd
 };
 
 export const fetchCurrencyAssets = async (accountRs, currencyAssets = [], fetchOrders = false) => {
-    let response = [];
-
-    for (let i = 0; i < currencyAssets.length; i++) {
-        const asset = currencyAssets[i];
-        const [account, currencyAsset] = await Promise.all([getAccountAssets(accountRs), getAssetsByIssuer(asset)]);
-        const aux = await cardsGenerator(account.accountAssets, currencyAsset, fetchOrders);
-        response.push(aux);
-    }
+    const response = await Promise.all(
+        currencyAssets.map(async (asset) => {
+            const [account, currencyAsset] = await Promise.all([getAccountAssets(accountRs), getAssetsByIssuer(asset)]);
+            return await cardsGenerator(account.accountAssets, currencyAsset, fetchOrders);
+        })
+    );
 
     return response;
 };
+
 
 // -------------------------------------------------
 //                  BUY PACKS

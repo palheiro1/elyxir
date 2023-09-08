@@ -53,7 +53,6 @@ import { fetchAllCards, fetchCurrencyAssets } from '../../utils/cardsUtils';
 import {
     checkDataChange,
     getCurrentAskAndBids,
-    getGIFTZBalance,
     getIGNISBalance,
     handleNotifications,
 } from '../../utils/walletUtils';
@@ -207,18 +206,33 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
     // Load all data from blockchain - Main flow
     // -----------------------------------------------------------------
+    const updateDividendsWithCards = async (auxDividends, allCards) => {
+        const auxDividendsPromises = auxDividends.map(dividend => getTransaction(2, dividend.eventHash));
+        const dividendsTxs = await Promise.all(auxDividendsPromises);
+    
+        dividendsTxs.forEach((dividendTx, index) => {
+            const { attachment } = dividendTx;
+            const card = allCards.find(card => card.asset === attachment.asset);
+            if (card) {
+                auxDividends[index].card = card;
+            }
+        });
+    };
+
+    const [firstTime, setFirstTime] = useState(true);
+
     const loadAll = useCallback(async () => {
         const { accountRs } = infoAccount;
+        setFirstTime(false);
         setIsLoading(true);
         setNeedReload(false);
 
         // Fetch all info
-        const [loadCards, currencyAssets, ignis, giftz, txs, unconfirmed, currentAskOrBids, trades, dividends] =
+        const [loadCards, currencyAssets, ignis, txs, unconfirmed, currentAskOrBids, trades, dividends] =
             await Promise.all([
-                fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
+                fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, firstTime ? false : true),
                 fetchCurrencyAssets(accountRs, [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT], true),
                 getIGNISBalance(accountRs),
-                getGIFTZBalance(accountRs),
                 getBlockchainTransactions(2, accountRs, true),
                 getUnconfirmedTransactions(2, accountRs),
                 getCurrentAskAndBids(accountRs),
@@ -246,7 +260,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             cardsNotification,
             setCardsNotification,
             toast,
-            cards,
+            loadCards,
             setUnconfirmedTransactions,
             newTransactionRef,
             confirmedTransactionRef,
@@ -254,17 +268,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         // -----------------------------------------------------------------
 
         const auxDividends = dividends.entries;
-        const auxDividendsPromises = auxDividends.map(dividend => getTransaction(2, dividend.eventHash));
-        const dividendsTxs = await Promise.all(auxDividendsPromises);
-
-        // Search in cards attachment.asset and add to dividends
-        dividendsTxs.forEach((dividendTx, index) => {
-            const { attachment } = dividendTx;
-            const card = loadCards.find(card => card.asset === attachment.asset);
-            if (card) {
-                auxDividends[index].card = card;
-            }
-        });
+        await updateDividendsWithCards(auxDividends, loadCards);
 
         // -----------------------------------------------------------------
         // Rebuild infoAccount
@@ -273,7 +277,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         const _auxInfo = {
             ...infoAccount,
             IGNISBalance: ignis,
-            GIFTZOldBalance: giftz.unitsQNT || 0,
             GIFTZBalance: giftzAsset.quantityQNT,
             GEMBalance: gems.quantityQNT / NQTDIVIDER,
             WETHBalance: weth.quantityQNT / NQTDIVIDER,
@@ -300,7 +303,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     }, [
         infoAccount,
         setInfoAccount,
-        cards,
+        firstTime,
         infoAccountHash,
         cardsHash,
         gemCardsHash,
