@@ -54,7 +54,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                     </Stack>
                     <Center w={{ base: '100%', md: 'auto' }}>
                         <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4} color={textColor}>
-                            <Box p={2} bg={bgColor} rounded="lg" minW="150px">
+                            <Box p={2} bg={bgColor} rounded="lg" minW={{ base: '100px', lg: '150px' }}>
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
                                     {jackpotTimer.days}
                                 </Text>
@@ -63,7 +63,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                                 </Text>
                             </Box>
 
-                            <Box p={2} bg={bgColor} rounded="lg" minW="150px">
+                            <Box p={2} bg={bgColor} rounded="lg" minW={{ base: '100px', lg: '150px' }}>
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
                                     {jackpotTimer.hours}
                                 </Text>
@@ -72,7 +72,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                                 </Text>
                             </Box>
 
-                            <Box p={2} bg={bgColor} rounded="lg" minW="150px">
+                            <Box p={2} bg={bgColor} rounded="lg" minW={{ base: '100px', lg: '150px' }}>
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
                                     {jackpotTimer.minutes}
                                 </Text>
@@ -80,7 +80,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                                     minutes
                                 </Text>
                             </Box>
-                            <Box p={2} bg={bgColor} rounded="lg" minW="150px">
+                            <Box p={2} bg={bgColor} rounded="lg" minW={{ base: '100px', lg: '150px' }}>
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
                                     {numParticipants}
                                 </Text>
