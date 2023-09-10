@@ -61,6 +61,8 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
 
     const [needReload, setNeedReload] = useState(true);
     const [lastConfirmation, setLastConfirmation] = useState(false);
+    console.log(needReload, lastConfirmation, haveUnconfirmed)
+
     const [section, setSection] = useState('transactions'); // transactions/dividends
 
     // -------------------------------------------------
@@ -69,7 +71,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
     // -------------------------------------------------
     const epoch_beginning = useMemo(() => new Date(Date.UTC(2018, 0, 1, 0, 0, 0)), []);
 
-    const { isOpen, onClose, onOpen} = useDisclosure();
+    const { isOpen, onClose, onOpen } = useDisclosure();
     const handleClick = ({ card }) => {
         setCardClicked(card);
         onOpen();
@@ -151,7 +153,6 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
         };
 
         infoAccount.transactions !== undefined &&
-            epoch_beginning !== undefined &&
             collectionCardsStatic !== undefined &&
             needReload &&
             processTransactions();

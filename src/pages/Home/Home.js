@@ -50,12 +50,7 @@ import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 // Services
 import { fetchAllCards, fetchCurrencyAssets } from '../../utils/cardsUtils';
 
-import {
-    checkDataChange,
-    getCurrentAskAndBids,
-    getIGNISBalance,
-    handleNotifications,
-} from '../../utils/walletUtils';
+import { checkDataChange, getCurrentAskAndBids, getIGNISBalance, handleNotifications } from '../../utils/walletUtils';
 
 import {
     getAccountLedger,
@@ -209,7 +204,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const updateDividendsWithCards = async (auxDividends, allCards) => {
         const auxDividendsPromises = auxDividends.map(dividend => getTransaction(2, dividend.eventHash));
         const dividendsTxs = await Promise.all(auxDividendsPromises);
-    
+
         dividendsTxs.forEach((dividendTx, index) => {
             const { attachment } = dividendTx;
             const card = allCards.find(card => card.asset === attachment.asset);
@@ -231,7 +226,11 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         const [loadCards, currencyAssets, ignis, txs, unconfirmed, currentAskOrBids, trades, dividends] =
             await Promise.all([
                 fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, firstTime ? false : true),
-                fetchCurrencyAssets(accountRs, [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT], true),
+                fetchCurrencyAssets(
+                    accountRs,
+                    [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT],
+                    true
+                ),
                 getIGNISBalance(accountRs),
                 getBlockchainTransactions(2, accountRs, true),
                 getUnconfirmedTransactions(2, accountRs),
@@ -260,7 +259,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             cardsNotification,
             setCardsNotification,
             toast,
-            loadCards,
+            cards: loadCards,
             setUnconfirmedTransactions,
             newTransactionRef,
             confirmedTransactionRef,
@@ -388,7 +387,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const checkUnwraps = useCallback(async () => {
         const { accountRs } = infoAccount;
         // TODO: CHECK ALL BRIDGES
-        const [ olbBridge, gemBridge, bridge1155, bridge20 ] = await Promise.all([
+        const [olbBridge, gemBridge, bridge1155, bridge20] = await Promise.all([
             processUnwrapsForOldBridge(accountRs),
             processUnwrapsForGemBridge(accountRs),
             processUnwrapsFor1155(accountRs),
@@ -428,19 +427,19 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     }, [infoAccount]);
 
     const MENU_OPTIONS_COLOR = [
-        "#2f9088", // Overview
-        "#2f8190", // Inventory
-        "#3b7197", // History
-        "#3b6497", // Market
-        "#573b97", // Bridge
-        "#3b5397", // Jackpot
-        "#4e3b97", // Account
-        "#9f3772", // Buy pack
-        "#413b97", // Exchange
-        "#3b4397", // Chat
-        "#413b97", // Book
-        "#e094b3" // Open pack
-    ]
+        '#2f9088', // Overview
+        '#2f8190', // Inventory
+        '#3b7197', // History
+        '#3b6497', // Market
+        '#573b97', // Bridge
+        '#3b5397', // Jackpot
+        '#4e3b97', // Account
+        '#9f3772', // Buy pack
+        '#413b97', // Exchange
+        '#3b4397', // Chat
+        '#413b97', // Book
+        '#e094b3', // Open pack
+    ];
 
     const components = useMemo(
         () => [
@@ -464,7 +463,17 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             <Book cards={cards} />,
             '',
         ],
-        [infoAccount, cards, cardsFiltered, gemCards, blockchainStatus, haveUnconfirmed, giftzCards, wethCards, manaCards]
+        [
+            infoAccount,
+            cards,
+            cardsFiltered,
+            gemCards,
+            blockchainStatus,
+            haveUnconfirmed,
+            giftzCards,
+            wethCards,
+            manaCards,
+        ]
     );
 
     useEffect(() => {
@@ -493,8 +502,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         };
         directSectionToRender && checkAndGo();
     }, [directSectionToRender, searchParams, setSearchParams]);
-
-    
 
     const bgColor = useColorModeValue('white', 'whiteAlpha.100');
     const borderColor = MENU_OPTIONS_COLOR[option] || 'whiteAlpha.100';
