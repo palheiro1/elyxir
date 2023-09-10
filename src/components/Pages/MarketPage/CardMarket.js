@@ -44,7 +44,7 @@ const CardMarket = ({ cards, infoAccount }) => {
                         cards={cards}
                         askOrders={infoAccount.currentAsks}
                         bidOrders={infoAccount.currentBids}
-                        canDelete={false}
+                        canDelete={true}
                     />
                 </Box>
             )}
