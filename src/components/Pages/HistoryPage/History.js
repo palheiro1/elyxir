@@ -61,8 +61,6 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
 
     const [needReload, setNeedReload] = useState(true);
     const [lastConfirmation, setLastConfirmation] = useState(false);
-    console.log(needReload, lastConfirmation, haveUnconfirmed)
-
     const [section, setSection] = useState('transactions'); // transactions/dividends
 
     // -------------------------------------------------
