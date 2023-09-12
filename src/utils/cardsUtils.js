@@ -167,8 +167,8 @@ export const buyPackWithWETH = async (passphrase, noPacks, WETHBalance, selected
                 service: 'user',
                 request: 'withdraw',
                 parameter: {
+                    contractPaysWithdrawFee: true,
                     value: {
-                        contractPaysWithdrawFee: true,
                         asset: {
                             [WETHASSET]: priceInWETH.toString(),
                         },
