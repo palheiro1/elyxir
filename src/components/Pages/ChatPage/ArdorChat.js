@@ -1,4 +1,4 @@
-import { Box, Button, Center, Heading, Spacer, Stack, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Spacer, Stack, useColorModeValue, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { getAllMessages } from '../../../services/Ardor/ardorInterface';
 import NewMessage from '../../Modals/NewMessage/NewMessage';
@@ -11,6 +11,8 @@ const ArdorChat = ({ infoAccount }) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const ref = useRef();
+
+    const textColor = useColorModeValue("rgb(59,67,151)", "white");
 
     useEffect(() => {
         const getMessages = async () => {
@@ -51,10 +53,10 @@ const ArdorChat = ({ infoAccount }) => {
                 <Warning />
                 <Stack direction={['column', 'row']} spacing={4} mt={4}>
                     <Center>
-                        <Heading fontSize="md">Messages</Heading>
+                        <Heading fontSize="md" color={textColor}>Messages</Heading>
                     </Center>
                     <Spacer />
-                    <Button size="sm" onClick={handleNewMessage} bgColor={"rgba(59,67,151,0.5)"}>
+                    <Button size="sm" onClick={handleNewMessage} bgColor={"rgba(59,67,151,0.5)"} color="white">
                         New message
                     </Button>
                 </Stack>

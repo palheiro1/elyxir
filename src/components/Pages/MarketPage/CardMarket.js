@@ -23,7 +23,7 @@ const CardMarket = ({ cards, infoAccount }) => {
 
             {option === 0 && (
                 <Box>
-                    <SortAndFilterCards cards={cards} setCardsFiltered={setCardsFiltered} rgbColor={"59, 100, 151"} />
+                    <SortAndFilterCards cards={cards} setCardsFiltered={setCardsFiltered} rgbColor={"59,100,151,0.7"} />
 
                     <GridCards
                         cards={cardsFiltered}

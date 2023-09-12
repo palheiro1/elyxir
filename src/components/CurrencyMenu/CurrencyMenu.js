@@ -90,20 +90,18 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
         <>
             <Stack direction={{ base: 'column', md: 'row' }} gap={4} align="flex-end">
                 <Spacer />
-                <SimpleGrid columns={{ base: 2, md: 3, lg: 5 }} spacing={4} w="100%">
+                <SimpleGrid columns={{ base: 2, md: 3, lg: 5 }} spacing={{ base: 4, lg: 6 }} w="100%">
                     <Menu>
                         <MenuButton
-                            shadow="lg"
-                            border="4px"
-                            bgColor={'white'}
                             color={'black'}
+                            bgColor="#eaeaea"
                             borderColor={borderColor}
                             rounded="lg"
                             minW={{ base: '100%', md: '5rem' }}
                             maxH={'2.2rem'}
                             _hover={{ bg: hoverColor }}>
                             <Stack direction="row" align="center">
-                                <Image ml={-7} src="images/currency/ignis.png" alt="IGNIS Icon" w="50px" h="50px" />
+                                <Image ml={-5} src="images/currency/ignis.png" alt="IGNIS Icon" w="50px" h="50px" />
                                 <Text pr={6} align="center" w="100%" textAlign="center">
                                     {Number(IGNISBalance).toFixed(0)}
                                 </Text>
@@ -119,9 +117,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     </Menu>
                     <Menu>
                         <MenuButton
-                            shadow="lg"
-                            border="4px"
-                            bgColor={'white'}
+                            bgColor="#eaeaea"
                             color={'black'}
                             borderColor={borderColor}
                             rounded="lg"
@@ -129,7 +125,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             maxH={'2.2rem'}
                             _hover={{ bg: hoverColor }}>
                             <Stack direction="row" align="center">
-                                <Image ml={-7} src="images/currency/giftz.png" alt="GIFTZ Icon" minW="50px" h="50px" />
+                                <Image ml={-5} src="images/currency/giftz.png" alt="GIFTZ Icon" minW="50px" h="50px" />
                                 <Text pr={6} align="center" textAlign={'center'} w="100%">
                                     {Number(GIFTZBalance).toFixed(0)}
                                 </Text>
@@ -144,9 +140,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     </Menu>
                     <Menu>
                         <MenuButton
-                            shadow="lg"
-                            border="4px"
-                            bgColor={'white'}
+                            bgColor="#eaeaea"
                             color={'black'}
                             borderColor={borderColor}
                             rounded="lg"
@@ -154,7 +148,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             maxH={'2.2rem'}
                             _hover={{ bg: hoverColor }}>
                             <Stack direction="row" align="center">
-                                <Image ml={-7} src="images/currency/gem.png" alt="GEM Icon" w="55px" h="50px" />
+                                <Image ml={-5} src="images/currency/gem.png" alt="GEM Icon" w="55px" h="50px" />
                                 <Text pr={6} w="100%" textAlign="center">
                                     {GEMBalance.toFixed(0)}
                                 </Text>
@@ -170,9 +164,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     </Menu>
                     <Menu>
                         <MenuButton
-                            shadow="lg"
-                            border="4px"
-                            bgColor={'white'}
+                            bgColor="#eaeaea"
                             color={'black'}
                             borderColor={borderColor}
                             rounded="lg"
@@ -180,7 +172,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             maxH={'2.2rem'}
                             _hover={{ bg: hoverColor }}>
                             <Stack direction="row" align="center">
-                                <Image ml={-7} src="images/currency/weth.png" alt="wETH Icon" w="50px" h="50px" />
+                                <Image ml={-5} src="images/currency/weth.png" alt="wETH Icon" w="50px" h="50px" />
                                 <Text pr={6} w="100%" textAlign="center">
                                     {parseWETH.toFixed(Math.max(0, wEthDecimals <= 6 ? wEthDecimals : 6))}
                                 </Text>
@@ -197,9 +189,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
 
                     <Menu>
                         <MenuButton
-                            shadow="lg"
-                            border="4px"
-                            bgColor={'white'}
+                            bgColor="#eaeaea"
                             color={'black'}
                             borderColor={borderColor}
                             rounded="lg"
@@ -208,7 +198,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             _hover={{ bg: hoverColor }}>
                             <Stack direction="row" align="center">
                                 <Image
-                                    ml={-6}
+                                    ml={-5}
                                     src="images/currency/mana.png"
                                     alt="MANA Icon"
                                     w="55px"

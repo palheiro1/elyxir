@@ -179,7 +179,6 @@ const Card = ({
         <Box
             p={3}
             rounded="lg"
-            shadow="lg"
             bgColor={bgColor}
             borderColor={borderColor}
             minH={{ base: '25rem', md: '29rem' }}
@@ -265,6 +264,7 @@ const Card = ({
                                         size="lg"
                                         bgColor="#29a992"
                                         w="100%"
+                                        color="white"
                                         fontWeight={'black'}
                                         _hover={{ shadow: 'lg' }}>
                                         BUY
@@ -273,6 +273,7 @@ const Card = ({
                                         onClick={onOpenAsk}
                                         size="lg"
                                         w="100%"
+                                        color="white"
                                         bgColor="#eb6473"
                                         isDisabled={isBlocked}
                                         fontWeight={'black'}

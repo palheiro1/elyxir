@@ -14,6 +14,7 @@ const SectionSwitch = ({ option, setOption }) => {
         return (
             <Button
                 isActive={isActive}
+                color="white"
                 _active={{ bgColor: '#3b6497', color: 'white' }}
                 bgColor={'rgba(59,100,151,0.5)'}
                 _hover={{ bgColor: 'rgba(59,100,151,0.7)' }}

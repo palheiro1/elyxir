@@ -28,15 +28,15 @@ const OneSenderMessages = ({ sender, messages, username, account }) => {
                 _hover={{ bgColor: hoverColor, shadow: 'lg' }}>
                 <SimpleGrid columns={3} spacing={4}>
                     <Center>
-                        <Text align="center">{fixedSender}</Text>
+                        <Text align="center" color="white">{fixedSender}</Text>
                     </Center>
                     <Center>
-                        <Text align="left">
+                        <Text align="left" color="white">
                             Last message: <strong>{timeElapsedText}</strong> {!isDate && 'ago'}
                         </Text>
                     </Center>
                     <Center>
-                        <Button variant="ghost" size="lg" onClick={onOpen} w="90%">
+                        <Button variant="ghost" size="lg" onClick={onOpen} w="90%" color="white">
                             READ
                         </Button>
                     </Center>
