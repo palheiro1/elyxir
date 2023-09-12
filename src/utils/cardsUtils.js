@@ -79,7 +79,7 @@ export const fetchAllCards = async (accountRs, collectionRs, specialRs, fetchOrd
 
 export const fetchCurrencyAssets = async (accountRs, currencyAssets = [], fetchOrders = false) => {
     const response = await Promise.all(
-        currencyAssets.map(async (asset) => {
+        currencyAssets.map(async asset => {
             const [account, currencyAsset] = await Promise.all([getAccountAssets(accountRs), getAssetsByIssuer(asset)]);
             return await cardsGenerator(account.accountAssets, currencyAsset, fetchOrders);
         })
@@ -87,7 +87,6 @@ export const fetchCurrencyAssets = async (accountRs, currencyAssets = [], fetchO
 
     return response;
 };
-
 
 // -------------------------------------------------
 //                  BUY PACKS
@@ -116,6 +115,7 @@ export const buyPackWithWETH = async (passphrase, noPacks, WETHBalance, selected
     const balance = WETHBalance * NQTDIVIDER;
     if (balance < priceInWETH) return false;
 
+    /*
     const fee = await sendIgnis({
         amountNQT: "50000000",
         recipient: OMNO_ACCOUNT,
@@ -129,6 +129,7 @@ export const buyPackWithWETH = async (passphrase, noPacks, WETHBalance, selected
         console.error('🚀 ~ file: cardsUtils.js ~ line 156 ~ buyPackWithWETH ~ ERROR SENDING FEE');
         return false;
     }
+    */
 
     const trades = selectedOffers.map(offer => {
         return {
@@ -153,6 +154,7 @@ export const buyPackWithWETH = async (passphrase, noPacks, WETHBalance, selected
                 service: 'user',
                 request: 'withdraw',
                 parameter: {
+                    contractPaysWithdrawFee: true,
                     value: {
                         asset: {
                             [GIFTZASSET]: noPacks.toString(),
@@ -166,6 +168,7 @@ export const buyPackWithWETH = async (passphrase, noPacks, WETHBalance, selected
                 request: 'withdraw',
                 parameter: {
                     value: {
+                        contractPaysWithdrawFee: true,
                         asset: {
                             [WETHASSET]: priceInWETH.toString(),
                         },
