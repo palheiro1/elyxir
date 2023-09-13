@@ -216,109 +216,112 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     const [firstTime, setFirstTime] = useState(true);
 
-    const loadAll = useCallback(async () => {
-        const { accountRs } = infoAccount;
-        setFirstTime(false);
-        setIsLoading(true);
-        setNeedReload(false);
+    useEffect(() => {
+        const loadAll = async () => {
+            const { accountRs } = infoAccount;
+            setFirstTime(false);
+            setIsLoading(true);
+            setNeedReload(false);
 
-        // Fetch all info
-        const [loadCards, currencyAssets, ignis, txs, unconfirmed, currentAskOrBids, trades, dividends] =
-            await Promise.all([
-                fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, firstTime ? false : true),
-                fetchCurrencyAssets(
-                    accountRs,
-                    [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT],
-                    true
-                ),
-                getIGNISBalance(accountRs),
-                getBlockchainTransactions(2, accountRs, true),
-                getUnconfirmedTransactions(2, accountRs),
-                getCurrentAskAndBids(accountRs),
-                getTrades(2, accountRs),
-                getAccountLedger({
-                    accountRs: accountRs,
-                    firstIndex: 0,
-                    lastIndex: 99,
-                    eventType: 'ASSET_DIVIDEND_PAYMENT',
-                }),
-            ]);
+            // Fetch all info
+            const [loadCards, currencyAssets, ignis, txs, unconfirmed, currentAskOrBids, trades, dividends] =
+                await Promise.all([
+                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, firstTime ? false : true),
+                    fetchCurrencyAssets(
+                        accountRs,
+                        [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT],
+                        true
+                    ),
+                    getIGNISBalance(accountRs),
+                    getBlockchainTransactions(2, accountRs, true),
+                    getUnconfirmedTransactions(2, accountRs),
+                    getCurrentAskAndBids(accountRs),
+                    getTrades(2, accountRs),
+                    getAccountLedger({
+                        accountRs: accountRs,
+                        firstIndex: 0,
+                        lastIndex: 99,
+                        eventType: 'ASSET_DIVIDEND_PAYMENT',
+                    }),
+                ]);
 
-        const gems = currencyAssets[0].find(asset => asset.asset === GEMASSET);
-        const weth = currencyAssets[1].find(asset => asset.asset === WETHASSET);
-        const giftzAsset = currencyAssets[2].find(asset => asset.asset === GIFTZASSET);
-        const mana = currencyAssets[3].find(asset => asset.asset === MANAASSET);
+            const gems = currencyAssets[0].find(asset => asset.asset === GEMASSET);
+            const weth = currencyAssets[1].find(asset => asset.asset === WETHASSET);
+            const giftzAsset = currencyAssets[2].find(asset => asset.asset === GIFTZASSET);
+            const mana = currencyAssets[3].find(asset => asset.asset === MANAASSET);
 
-        // -----------------------------------------------------------------
-        // Check notifications - Unconfirmed transactions
-        const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
-        handleNotifications({
-            unconfirmedTransactions,
-            newsTransactions: unconfirmedTxs,
-            accountRs,
-            cardsNotification,
-            setCardsNotification,
-            toast,
-            cards: loadCards,
-            setUnconfirmedTransactions,
-            newTransactionRef,
-            confirmedTransactionRef,
-        });
-        // -----------------------------------------------------------------
+            // -----------------------------------------------------------------
+            // Check notifications - Unconfirmed transactions
+            const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
+            handleNotifications({
+                unconfirmedTransactions,
+                newsTransactions: unconfirmedTxs,
+                accountRs,
+                cardsNotification,
+                setCardsNotification,
+                toast,
+                cards: loadCards,
+                setUnconfirmedTransactions,
+                newTransactionRef,
+                confirmedTransactionRef,
+            });
+            // -----------------------------------------------------------------
 
-        const auxDividends = dividends.entries;
-        await updateDividendsWithCards(auxDividends, loadCards);
+            const auxDividends = dividends.entries;
+            await updateDividendsWithCards(auxDividends, loadCards);
 
-        // -----------------------------------------------------------------
-        // Rebuild infoAccount
-        // -----------------------------------------------------------------
+            // -----------------------------------------------------------------
+            // Rebuild infoAccount
+            // -----------------------------------------------------------------
 
-        const _auxInfo = {
-            ...infoAccount,
-            IGNISBalance: ignis,
-            GIFTZBalance: giftzAsset.quantityQNT,
-            GEMBalance: gems.quantityQNT / NQTDIVIDER,
-            WETHBalance: weth.quantityQNT / NQTDIVIDER,
-            MANABalance: mana.quantityQNT / NQTDIVIDER,
-            transactions: txs.transactions,
-            dividends: auxDividends,
-            unconfirmedTxs: unconfirmedTxs,
-            currentAsks: currentAskOrBids.askOrders,
-            currentBids: currentAskOrBids.bidOrders,
-            trades: trades.trades,
+            const _auxInfo = {
+                ...infoAccount,
+                IGNISBalance: ignis,
+                GIFTZBalance: giftzAsset.quantityQNT,
+                GEMBalance: gems.quantityQNT / NQTDIVIDER,
+                WETHBalance: weth.quantityQNT / NQTDIVIDER,
+                MANABalance: mana.quantityQNT / NQTDIVIDER,
+                transactions: txs.transactions,
+                dividends: auxDividends,
+                unconfirmedTxs: unconfirmedTxs,
+                currentAsks: currentAskOrBids.askOrders,
+                currentBids: currentAskOrBids.bidOrders,
+                trades: trades.trades,
+            };
+
+            // -----------------------------------------------------------------
+            // Get all hashes and compare
+            // -----------------------------------------------------------------
+            checkDataChange('Cards', cardsHash, setCards, setCardsHash, loadCards);
+            checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems);
+            checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset);
+            checkDataChange('wETH', wethCardsHash, setWethCards, setWethCardsHash, weth);
+            checkDataChange('MANA', manaCardsHash, setManaCards, setManaCardsHash, mana);
+            checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
+
+            setIsLoading(false);
         };
 
-        // -----------------------------------------------------------------
-        // Get all hashes and compare
-        // -----------------------------------------------------------------
-        checkDataChange('Cards', cardsHash, setCards, setCardsHash, loadCards);
-        checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems);
-        checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset);
-        checkDataChange('wETH', wethCardsHash, setWethCards, setWethCardsHash, weth);
-        checkDataChange('MANA', manaCardsHash, setManaCards, setManaCardsHash, mana);
-        checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
-
-        setIsLoading(false);
-    }, [
-        infoAccount,
-        setInfoAccount,
-        firstTime,
-        infoAccountHash,
-        cardsHash,
-        gemCardsHash,
-        toast,
-        unconfirmedTransactions,
-        cardsNotification,
-        giftzCardsHash,
-        wethCardsHash,
-        manaCardsHash,
-    ]);
-
-    useEffect(() => {
         if (infoAccount.accountRs && needReload && !isLoading) {
             loadAll();
         }
-    }, [infoAccount, needReload, isLoading, loadAll]);
+    }, [
+        infoAccount,
+        needReload,
+        isLoading,
+        firstTime,
+        cardsHash,
+        gemCardsHash,
+        giftzCardsHash,
+        wethCardsHash,
+        manaCardsHash,
+        infoAccountHash,
+        setInfoAccount,
+        setCards,
+        cardsNotification,
+        toast,
+        unconfirmedTransactions,
+    ]);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -365,20 +368,33 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
 
     useEffect(() => {
-        if (cardsNotification.length > 0 && !isOpenCardReceived) {
-            onOpenCardReceived();
-        }
+        const handleOpenCardReceived = () => {
+            if (cardsNotification.length > 0 && !isOpenCardReceived) {
+                // Wait 10 seconds to show the notification
+                setTimeout(() => {
+                    if (!isOpenCardReceived && cardsNotification.length > 0) {
+                        onOpenCardReceived();
+                    }
+                }, 10000);
+            }
+        };
+        handleOpenCardReceived();
     }, [cardsNotification, onOpenCardReceived, isOpenCardReceived]);
 
-    const resetTransactionRefs = useCallback(() => {
-        newTransactionRef.current = null;
-        confirmedTransactionRef.current = null;
-    }, []);
+    // const resetTransactionRefs = useCallback(() => {
+    //     newTransactionRef.current = null;
+    //     confirmedTransactionRef.current = null;
+    // }, []);
 
     useEffect(() => {
+        const resetTransactionRefs = () => {
+            newTransactionRef.current = null;
+            confirmedTransactionRef.current = null;
+        };
+
         const intervalId = setInterval(resetTransactionRefs, REFRESH_DATA_TIME * 4);
         return () => clearInterval(intervalId);
-    }, [resetTransactionRefs]);
+    }, []);
 
     // -----------------------------------------------------------------
     // Check for new unwraps
