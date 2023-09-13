@@ -224,25 +224,29 @@ const Card = ({
                             onMouseEnter={() => isBlocked && setHoverButton(true)}
                             onMouseLeave={() => isBlocked && setHoverButton(false)}>
                             {!hoverButton && (
-                                <SimpleGrid columns={3} gap={1}>
+                                <SimpleGrid columns={rarity === 'Special' ? 1 : 3} gap={1}>
                                     <CardButton
                                         text="Send"
                                         onClick={onOpenSend}
                                         isDisabled={isBlocked}
                                         icon={<Image src="/images/icons/send.png" w="20px" />}
                                     />
-                                    <CardButton
-                                        text="Craft"
-                                        onClick={onOpenCraft}
-                                        isDisabled={isBlockedCraft}
-                                        icon={<Image src="/images/icons/craft.png" w="20px" />}
-                                    />
-                                    <CardButton
-                                        text="Morph"
-                                        onClick={onOpenMorph}
-                                        isDisabled={isBlocked}
-                                        icon={<Image src="/images/icons/morph.png" w="20px" />}
-                                    />
+                                    {rarity !== 'Special' && (
+                                        <>
+                                            <CardButton
+                                                text="Craft"
+                                                onClick={onOpenCraft}
+                                                isDisabled={isBlockedCraft}
+                                                icon={<Image src="/images/icons/craft.png" w="20px" />}
+                                            />
+                                            <CardButton
+                                                text="Morph"
+                                                onClick={onOpenMorph}
+                                                isDisabled={isBlocked}
+                                                icon={<Image src="/images/icons/morph.png" w="20px" />}
+                                            />
+                                        </>
+                                    )}
                                 </SimpleGrid>
                             )}
                             {hoverButton && (

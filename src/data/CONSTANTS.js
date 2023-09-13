@@ -147,6 +147,7 @@ export const DEFAULT_CONTACTS = [
     { accountRs: JACKPOTACCOUNT, name: 'Mythical Beings' },
     { accountRs: MANAACCOUNT, name: 'Mythical Beings' },
     { accountRs: OMNO_ACCOUNT, name: 'Mythical Beings' },
+    { accountRs: GIFTZ_OPEN_MACHINE, name: 'Mythical Beings' },
 ];
 
 // ---------------------------------------------
@@ -177,6 +178,7 @@ export const ALL_ACCOUNTS = [
     GIFTZASSETACCOUNT,
     NEW_BRIDGEACCOUNT,
     MANAACCOUNT,
+    GIFTZ_OPEN_MACHINE,
 ];
 
 // ---------------------------------------------
