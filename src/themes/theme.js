@@ -39,6 +39,13 @@ const components = {
             },
         }),
     },
+    Table: {
+        baseStyle: props => ({
+            td: {
+                borderBotton: 'none',
+            },
+        }),
+    },
     Switch: {
         variants: {
             mbswitch: props => ({
@@ -96,6 +103,24 @@ const components = {
                 container: {
                     label: {
                         bg: '#122f34',
+                        color: props.colorMode === 'dark' ? 'white' : 'black',
+                        top: -6,
+                        left: 0,
+                        zIndex: 2,
+                        position: 'absolute',
+                        fontSize: 'sm',
+                        fontWeight: 'bold',
+                        pointerEvents: 'none',
+                        px: 1,
+                        my: 2,
+                        transformOrigin: 'left top',
+                    },
+                },
+            }),
+            floatingModalTransparent: props => ({
+                container: {
+                    label: {
+                        bg: 'transparent',
                         color: props.colorMode === 'dark' ? 'white' : 'black',
                         top: -6,
                         left: 0,
