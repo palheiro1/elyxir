@@ -1,6 +1,6 @@
 import { Td, Tr } from '@chakra-ui/react';
 import { useState } from 'react';
-import { GEMASSET, GIFTZASSET, NQTDIVIDER, WETHASSET } from '../../../../../data/CONSTANTS';
+import { GEMASSET, GIFTZASSET, MANAASSET, NQTDIVIDER, WETHASSET } from '../../../../../data/CONSTANTS';
 import TableCard from '../../../../Cards/TableCard';
 import GemCard from '../../../../Cards/GemCard';
 import GIFTZCard from '../../../../Cards/GIFTZCard';
@@ -41,6 +41,9 @@ const AskOrBidItem = ({
     const isGem = asset === 'GEM' || asset === GEMASSET;
     const isGiftz = asset === 'GIFTZ' || asset === GIFTZASSET;
     const isWeth = asset === 'WETH' || asset === WETHASSET;
+    const isMana = asset === 'MANA' || asset === MANAASSET;
+
+    const needDivider = isGem || isWeth || isMana;
 
     let name;
     if (isGem) {
@@ -62,9 +65,9 @@ const AskOrBidItem = ({
         );
     }
 
-    const showAmount = isGem ? amount / NQTDIVIDER : amount;
+    const showAmount = needDivider ? amount / NQTDIVIDER : amount;
 
-    amount = isGem ? Number(amount / NQTDIVIDER) : Number(amount);
+    amount = needDivider ? Number(amount / NQTDIVIDER) : Number(amount);
     const fixedAmount = Number.isInteger(amount) ? amount.toFixed(0) : amount.toFixed(2);
 
     const hoverStyle = {

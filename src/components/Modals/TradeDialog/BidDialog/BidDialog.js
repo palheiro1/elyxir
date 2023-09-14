@@ -60,7 +60,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
     const [priceCard, setPriceCard] = useState(0);
     const [maxPrice, setMaxPrice] = useState(0);
 
-    const isCurrency = card.assetname === 'GEM' || card.assetname === 'GIFTZ' || card.assetname === 'wETH';
+    const isCurrency = card.assetname === 'GEM' || card.assetname === 'GIFTZ' || card.assetname === 'wETH' || card.assetname === 'MANA';
     const currencyName = isCurrency ? card.assetname : '';
     let currencyImg;
     if (currencyName === 'GEM') {
@@ -104,6 +104,10 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
             case 'wETH':
                 inputStep = 0.0001;
                 inputPrecision = 6;
+                break;
+            case 'MANA':
+                inputStep = 0.01;
+                inputPrecision = 2;
                 break;
             default:
                 inputStep = 1;

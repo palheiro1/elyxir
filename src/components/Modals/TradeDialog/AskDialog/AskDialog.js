@@ -49,13 +49,12 @@ import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/
  * @version 1.0.0
  */
 const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [], bidOrders = [] }) => {
-    console.log("🚀 ~ file: AskDialog.js:52 ~ AskDialog ~ isOpen:", isOpen)
     const toast = useToast();
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
     const [sendingTx, setSendingTx] = useState(false);
 
-    const isCurrency = card.assetname === 'GEM' || card.assetname === 'GIFTZ' || card.assetname === 'wETH';
+    const isCurrency = card.assetname === 'GEM' || card.assetname === 'GIFTZ' || card.assetname === 'wETH' || card.assetname === 'MANA';
     const currencyName = isCurrency ? card.assetname : '';
     let currencyImg;
     if (currencyName === 'GEM') {
@@ -103,6 +102,10 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
             case 'wETH':
                 inputStep = 0.0001;
                 inputPrecision = 6;
+                break;
+            case 'MANA':
+                inputStep = 0.01;
+                inputPrecision = 2;
                 break;
             default:
                 inputStep = 1;
@@ -314,7 +317,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                     </Box>
                                     <Box w="100%" mt={8}>
                                         <Button
-                                            isDisabled={!isValidPin || sendingTx}
+                                            isDisabled={!isValidPin || sendingTx || value === 0 || priceCard === 0 || card.unconfirmedQuantityQNT < value}
                                             bgColor={isValidPin ? '#F18800' : null}
                                             w="100%"
                                             py={6}
