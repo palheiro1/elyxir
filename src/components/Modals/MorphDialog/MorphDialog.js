@@ -44,7 +44,7 @@ import CardBadges from '../../Cards/CardBadges';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const MorphDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
+const MorphDialog = ({ reference, isOpen, onClose, card, username, gem }) => {
     const toast = useToast();
     const maxCards = Number(card.unconfirmedQuantityQNT);
     const [sendingTx, setSendingTx] = useState(false);
@@ -169,7 +169,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                             </Center>
                         </Box>
 
-                        <FormControl variant="floatingModal" id="name" my={4} mt={8}>
+                        <FormControl variant="floatingModalTransparent" id="name" my={4} mt={8}>
                             <InputGroup size="lg" border="1px solid #2f8190" rounded="lg">
                                 <Input placeholder=" " value={input.value} disabled />
                                 <InputRightAddon bgColor="transparent" children={card.name} />
@@ -178,14 +178,14 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                             <FormLabel>Cards to sacrifice</FormLabel>
                         </FormControl>
 
-                        <FormControl variant="floatingModal" id="name" my={6} border="1px solid #2f8190" rounded="lg">
+                        <FormControl variant="floatingModalTransparent" id="name" my={6} border="1px solid #2f8190" rounded="lg">
                             <Input placeholder=" " value={morphingCost + ' GEM'} size="lg" disabled />
                             <FormLabel>Morphing costs</FormLabel>
                         </FormControl>
 
-                        <Collapse in={ignis < morphingCost}>
+                        <Collapse in={gem < morphingCost}>
                             <Text color="red.500" textAlign="center" fontWeight="bold">
-                                Not enough IGNIS
+                                Not enough GEM
                             </Text>
                         </Collapse>
 
@@ -209,7 +209,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button
-                            isDisabled={!isValidPin || sendingTx || ignis < morphingCost}
+                            isDisabled={!isValidPin || sendingTx || gem < morphingCost}
                             bgColor={borderColor}
                             w="100%"
                             py={6}

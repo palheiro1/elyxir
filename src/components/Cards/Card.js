@@ -76,6 +76,7 @@ const Card = ({
     const {
         name: username,
         IGNISBalance: ignis,
+        GEMBalance: gem,
         currentAsks: askOrdersAccount,
         currentBids: bidOrdersAccount,
     } = infoAccount;
@@ -363,7 +364,7 @@ const Card = ({
                             onClose={onCloseMorph}
                             reference={refMorph}
                             card={card}
-                            ignis={ignis}
+                            gem={gem}
                             username={username}
                         />
                     )}
