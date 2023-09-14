@@ -370,21 +370,16 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     useEffect(() => {
         const handleOpenCardReceived = () => {
             if (cardsNotification.length > 0 && !isOpenCardReceived) {
-                // Wait 10 seconds to show the notification
+                // Wait 45 seconds to show the notification
                 setTimeout(() => {
                     if (!isOpenCardReceived && cardsNotification.length > 0) {
                         onOpenCardReceived();
                     }
-                }, 10000);
+                }, 45000);
             }
         };
         handleOpenCardReceived();
     }, [cardsNotification, onOpenCardReceived, isOpenCardReceived]);
-
-    // const resetTransactionRefs = useCallback(() => {
-    //     newTransactionRef.current = null;
-    //     confirmedTransactionRef.current = null;
-    // }, []);
 
     useEffect(() => {
         const resetTransactionRefs = () => {
