@@ -78,43 +78,38 @@ export const handleNotifications = ({
     confirmedTransactionRef,
 }) => {
     const auxUnconfirmed = [...unconfirmedTransactions];
-    let counterIncomings = auxUnconfirmed.filter(tx => tx.recipientRS === accountRs).length;
-    let counterOutcomings = auxUnconfirmed.filter(tx => tx.senderRS === accountRs).length;
     const isFromMB = tx => isMBAsset(tx.attachment.asset) || !tx.attachment.asset;
 
-    // Check for new transactions
+    let counterIncomings = auxUnconfirmed.filter(tx => tx.recipientRS === accountRs).length;
+    let counterOutcomings = auxUnconfirmed.filter(tx => tx.senderRS === accountRs).length;
+
+    const handleTransactionNotification = (tx, isIncoming) => {
+        if (isIncoming) {
+            counterIncomings++;
+            handleNewIncomingNotification(tx, true, toast, counterIncomings, newTransactionRef);
+        } else {
+            counterOutcomings++;
+            handleNewOutcomingNotification(tx, false, toast, counterOutcomings, newTransactionRef);
+        }
+    };
+
+    const cardsForNotify = [...cardsNotification];
+    const assetsToIgnore = ['GEM', 'GIFTZ', 'WETH', 'Unknown'];
+
     for (const tx of newsTransactions) {
-        const index = auxUnconfirmed.findIndex(t => t.fullHash === tx.fullHash);
-        if (index === -1 && isFromMB(tx)) {
-            const isIncoming = tx.recipientRS === accountRs;
-            if (isIncoming) {
-                counterIncomings++;
-                handleNewIncomingNotification(tx, isIncoming, toast, counterIncomings, newTransactionRef);
-            } else {
-                counterOutcomings++;
-                handleNewOutcomingNotification(tx, isIncoming, toast, counterOutcomings, newTransactionRef);
-            }
+        if (isFromMB(tx) && !auxUnconfirmed.some(t => t.fullHash === tx.fullHash)) {
+            handleTransactionNotification(tx, tx.recipientRS === accountRs);
             auxUnconfirmed.push(tx);
         }
     }
 
-    // Check for confirmed transactions
-    const cardsForNotify = [...cardsNotification];
     for (const tx of auxUnconfirmed) {
-        const index = newsTransactions.findIndex(t => t.fullHash === tx.fullHash);
-        if (index === -1 && isFromMB(tx)) {
+        if (isFromMB(tx) && !newsTransactions.some(t => t.fullHash === tx.fullHash)) {
             const isIncoming = tx.recipientRS === accountRs;
             const asset = getAsset(tx.attachment.asset, cards);
             const amount = Number(tx.attachment.quantityQNT);
 
-            if (
-                asset &&
-                asset !== 'GEM' &&
-                asset !== 'GIFTZ' &&
-                asset !== 'WETH' &&
-                asset !== 'Unknown' &&
-                isIncoming
-            ) {
+            if (asset && !assetsToIgnore.includes(asset) && isIncoming) {
                 cardsForNotify.push({ asset, amount });
             } else {
                 handleConfirmateNotification(tx, isIncoming, toast, confirmedTransactionRef);
@@ -124,9 +119,7 @@ export const handleNotifications = ({
         }
     }
 
-    // Set cards to notify
     setCardsNotification(cardsForNotify);
-    // Set unconfirmed transactions
     setUnconfirmedTransactions(auxUnconfirmed);
 };
 
