@@ -18,6 +18,10 @@
     border: none;
 }
 
+td {
+    border-bottom: none !important;
+}
+
 /* inspired by: https://css-tricks.com/responsive-data-tables/ */
 
 .responsiveTable td .tdBefore {
