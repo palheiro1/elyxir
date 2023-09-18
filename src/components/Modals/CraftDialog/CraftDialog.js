@@ -179,7 +179,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                             </Center>
                         </Box>
 
-                        <FormControl variant="floatingModal" id="name" my={4} mt={8}>
+                        <FormControl variant="floatingModalTransparent" id="name" my={4} mt={8}>
                             <InputGroup size="lg" border="1px solid #2f8190" rounded="lg">
                                 <Input placeholder=" " value={input.value * 5} disabled />
                                 <InputRightAddon bgColor={borderColor} children={card.name} />
@@ -188,7 +188,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                             <FormLabel>Cards to sacrifice</FormLabel>
                         </FormControl>
 
-                        <FormControl variant="floatingModal" id="name" my={6} border="1px solid #2f8190" rounded="lg">
+                        <FormControl variant="floatingModalTransparent" id="name" my={6} border="1px solid #2f8190" rounded="lg">
                             <Input placeholder=" " value={craftingCost + ' IGNIS'} size="lg" disabled />
                             <FormLabel>Crafting costs</FormLabel>
                         </FormControl>
