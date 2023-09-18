@@ -482,7 +482,7 @@ export const sendBidOrder = async ({ asset, price, quantity, passPhrase }) => {
 export const sendToJackpot = async ({ cards, passPhrase }) => {
     const isBlocked = cards.some(card => card.quantityQNT < card.unconfirmedQuantityQNT);
     if (!isBlocked) {
-        const message = JSON.stringify({ contract: 'Jackpot' });
+        const message = JSON.stringify({ contract: 'MBJackpotETH' });
         const promises = cards.map(card =>
             transferAsset({
                 asset: card.asset,
