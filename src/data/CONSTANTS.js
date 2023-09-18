@@ -137,8 +137,8 @@ export const MORPHINGEPIC = 750;
 // ---------------------------------------------
 export const DEFAULT_CONTACTS = [
     { accountRs: COLLECTIONACCOUNT, name: 'Mythical Beings' },
-    { accountRs: BRIDGEACCOUNT, name: 'Mythical Beings ERC1155 (Old) Bridge' },
-    { accountRs: NEW_BRIDGEACCOUNT, name: 'Mythical Beings New Bridge' },
+    { accountRs: BRIDGEACCOUNT, name: 'Mythical Beings Bridge (Old)' },
+    { accountRs: NEW_BRIDGEACCOUNT, name: 'Mythical Beings Bridge' },
     { accountRs: WETHASSETACCOUNT, name: 'Mythical Beings WETH' },
     { accountRs: GIFTZASSETACCOUNT, name: 'Mythical Beings GIFTZ' },
     { accountRs: BUYPACKACCOUNT, name: 'Mythical Beings' },
