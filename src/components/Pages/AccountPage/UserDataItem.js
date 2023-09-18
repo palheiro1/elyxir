@@ -1,6 +1,8 @@
-import { Box, Grid, GridItem, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Grid, GridItem, Heading, Text, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getIgnisPrice } from '../../../services/coingecko/utils';
+import { getIgnisFromFaucet } from '../../../services/Faucet/faucet';
+import { errorToast, okToast } from '../../../utils/alerts';
 
 const UserDataItem = ({
     accountRs,
@@ -14,6 +16,7 @@ const UserDataItem = ({
     borderColor,
 }) => {
     const [IGNISUSDBalance, setIGNISUSDBalance] = useState(0);
+    const toast = useToast();
 
     useEffect(() => {
         const calculateUSD = async () => {
@@ -22,6 +25,21 @@ const UserDataItem = ({
         };
         calculateUSD();
     }, [IGNISBalance]);
+
+    const handleClaim = async () => {
+        try {
+            const response = await getIgnisFromFaucet(accountRs);
+            console.log('🚀 ~ file: UserDataItem.js:30 ~ handleClaim ~ response:', response);
+            if (!response.error) {
+                okToast(response.message, toast);
+            } else {
+                errorToast(response.message, toast);
+            }
+        } catch (error) {
+            console.error('🚀 ~ file: UserDataItem.js:32 ~ handleClaim ~ error:', error);
+            errorToast(error.message, toast);
+        }
+    };
 
     return (
         <GridItem>
@@ -40,6 +58,7 @@ const UserDataItem = ({
             <Grid
                 templateColumns="repeat(3, 1fr)"
                 p={6}
+                mb={2}
                 bgColor={bgColor}
                 rounded="lg"
                 border="1px"
@@ -78,6 +97,26 @@ const UserDataItem = ({
                     <Text fontSize="sm">{MANABalance}</Text>
                 </GridItem>
             </Grid>
+            <Box p={6} bgColor={bgColor} rounded="lg" border="1px" borderColor={borderColor} shadow="dark-lg">
+                <Heading fontSize="lg" pb={2}>
+                    Faucet (IGNIS)
+                </Heading>
+                <Text fontSize="sm">
+                    {parseFloat(IGNISBalance) >= 0.3 ? (
+                        <>
+                            <Button w="100%" bgColor={bgColor} borderColor={borderColor} onClick={handleClaim}>
+                                Claim
+                            </Button>
+                            <Text fontSize={'xs'} mt={2}>
+                                Use this transfer to get more ignis for your operations, selling currencies or cards in
+                                the Market
+                            </Text>
+                        </>
+                    ) : (
+                        <Text>You can only claim if you have less than 0.3 IGNIS.</Text>
+                    )}
+                </Text>
+            </Box>
         </GridItem>
     );
 };
