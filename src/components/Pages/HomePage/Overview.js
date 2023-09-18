@@ -1,4 +1,4 @@
-import { Box, Center, Heading, Image, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Image, Stack, Text } from '@chakra-ui/react';
 // import { Timeline } from 'react-twitter-widgets';
 import Jackpot from '../../JackpotWidget/JackpotWidget';
 //import LatestTransaction from './LatestTransactions/LatestTransaction';
@@ -6,7 +6,7 @@ import Jackpot from '../../JackpotWidget/JackpotWidget';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 
 const Overview = ({ blockchainStatus }) => {
-    const FlowItem = ({ title, image, number, hasNext = false }) => {
+    const FlowItem = ({ title, button, number, hasNext = false }) => {
         return (
             <Stack direction={'row'}>
                 <Stack>
@@ -14,11 +14,7 @@ const Overview = ({ blockchainStatus }) => {
                         {number}
                     </Heading>
                     <Text textAlign={'center'}>{title}</Text>
-                    {image && (
-                        <Center>
-                            <Image src={image} alt={title} maxW={'125px'} />
-                        </Center>
-                    )}
+                    <Center>{button}</Center>
                 </Stack>
                 {hasNext && (
                     <Center>
@@ -26,6 +22,29 @@ const Overview = ({ blockchainStatus }) => {
                     </Center>
                 )}
             </Stack>
+        );
+    };
+
+    const MenuButton = ({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive }) => {
+        return (
+            <Button
+                key={text}
+                minW={'140px'}
+                maxW={'140px'}
+                minH="50px"
+                _hover={{ background: hoverBg, color: 'white' }}
+                bgColor={bgColor}
+                textColor={textColor}
+                onClick={onClick}>
+                <Stack direction="row" align="center" w="100%">
+                    <Box minW={'2rem'}>
+                        <Image src={icon} w={isActive ? '30px' : '25px'} />
+                    </Box>
+                    <Text fontSize="sm" fontWeight={fontWeight}>
+                        {text}
+                    </Text>
+                </Stack>
+            </Button>
         );
     };
 
@@ -47,25 +66,61 @@ const Overview = ({ blockchainStatus }) => {
                         <FlowItem
                             number={1}
                             title="Obtain cards by purchasing GIFTZ"
-                            image="/images/overview/buy.png"
+                            button={
+                                <MenuButton
+                                    bgColor={'#9f3772'}
+                                    fontWeight={'bold'}
+                                    hoverBg={'rgba(159, 55, 114, 0.75)'}
+                                    icon={'/images/icons/menu/BuyPack.png'}
+                                    isActive={false}
+                                    text={'Buy Pack'}
+                                />
+                            }
                             hasNext={true}
                         />
                         <FlowItem
                             number={2}
                             title="Redeem packs fo 3 random cards"
-                            image="/images/overview/open.png"
+                            button={
+                                <MenuButton
+                                    bgColor={'#e094b3'}
+                                    fontWeight={'bold'}
+                                    hoverBg={'rgba(224, 148, 179, 0.75)'}
+                                    icon={'/images/icons/menu/OpenPack.png'}
+                                    isActive={false}
+                                    text={'Open pack'}
+                                />
+                            }
                             hasNext={true}
                         />
                         <FlowItem
                             number={3}
                             title="Watch your History"
-                            image="/images/overview/history.png"
+                            button={
+                                <MenuButton
+                                    bgColor={'#3b7197'}
+                                    fontWeight={'bold'}
+                                    hoverBg={'rgba(59, 113, 151, 0.75)'}
+                                    icon={'/images/icons/menu/blanco/history.png'}
+                                    isActive={false}
+                                    text={'History'}
+                                />
+                            }
                             hasNext={true}
                         />
                         <FlowItem
                             number={4}
                             title="Investigate your inventory"
-                            image="/images/overview/inventory.png"
+                            button={
+                                <MenuButton
+                                    bgColor={'#2f8190'}
+                                    fontWeight={'bold'}
+                                    hoverBg={'rgba(47, 129, 144, 0.75)'}
+                                    icon={'/images/icons/menu/blanco/inventory.png'}
+                                    isActive={false}
+                                    text={'Inventory'}
+                                />
+                            }
                         />
                     </Stack>
                 </Center>
