@@ -102,7 +102,7 @@ const UserDataItem = ({
                     Faucet (IGNIS)
                 </Heading>
                 <Text fontSize="sm">
-                    {parseFloat(IGNISBalance) >= 0.3 ? (
+                    {parseFloat(IGNISBalance) <= 0.3 ? (
                         <>
                             <Button w="100%" bgColor={bgColor} borderColor={borderColor} onClick={handleClaim}>
                                 Claim
