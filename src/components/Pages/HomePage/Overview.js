@@ -73,14 +73,14 @@ const Overview = ({ blockchainStatus }) => {
                     <FlowItem number={5} title="The Jackpot: Your Ultimate Challenge Awaits!" />
                 </Center>
                 <Jackpot blockchainStatus={blockchainStatus} />
-                <Stack pt={8}>
+                <Stack pt={8} px={{ base: 0, md: 12 }}>
                     <Text fontWeight={'bold'}>Here are the mythical currencies you'll encounter on your journey:</Text>
                     <Stack direction="row" align={'center'}>
                         <Image src="/images/currency/ignis.png" alt="Ignis" maxW={'30px'} />
                         <Text>
-                            These ethereal flames hold the essence of mythical beings. Every transaction needs a small
-                            portion of it. Obtain some daily using our faucet or exchange on our market (or on other
-                            centralized exchanges).
+                            These ethereal flames IGNIS hold the essence of mythical beings. Every transaction needs a
+                            small portion of it. Obtain some daily using our faucet or exchange on our market (or on
+                            other centralized exchanges).
                         </Text>
                     </Stack>
                     <Stack direction="row" align={'center'}>
