@@ -8,6 +8,6 @@ export const getIgnisFromFaucet = async address => {
         return response.data;
     } catch (error) {
         console.error('🚀 ~ file: faucet.js:10 ~ getIgnisFromFaucet ~ error:', error);
-        throw error.message;
+        throw error;
     }
 };
