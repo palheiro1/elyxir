@@ -36,7 +36,7 @@ const UserDataItem = ({
             }
         } catch (error) {
             console.error('🚀 ~ file: UserDataItem.js:32 ~ handleClaim ~ error:', error);
-            errorToast(error.data.message, toast);
+            errorToast(error.response.data.message, toast);
         }
     };
 
