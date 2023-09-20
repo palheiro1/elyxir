@@ -15,9 +15,9 @@ import Crypto from 'crypto-browserify';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true, needSorting = true, rgbColor = "47, 129, 144, 0.35" }) => {
-    const bgButtons = `rgba(${rgbColor})`;
-    const borderButtons = `rgba(${rgbColor})`;
+const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true, needSorting = true, rgbColor = "47, 129, 144" }) => {
+    const bgButtons = `rgba(${rgbColor}, 0.35)`;
+    const borderButtons = `rgba(${rgbColor}, 1)`;
 
     const [rarity, setRarity] = useState('All');
     const [sort, setSort] = useState('moreQuantity');

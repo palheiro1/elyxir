@@ -1,9 +1,9 @@
 import { Box, Center, Heading, SimpleGrid, Text, useColorModeValue } from '@chakra-ui/react';
 
 const BridgeSelector = ({ setBridgeType }) => {
-    const borderColor = useColorModeValue('blackAlpha.600', '#573b97');
-    const bgColor = useColorModeValue('blackAlpha.600', 'rgba(57,59,151,0.5)');
-    const hoverColor = useColorModeValue('blackAlpha.200', 'rgba(57,59,151,0.3)');
+    const borderColor = useColorModeValue('#573b97', '#573b97');
+    const bgColor = useColorModeValue('rgba(57,59,151,0.5)', 'rgba(57,59,151,0.5)');
+    const hoverColor = useColorModeValue('rgba(57,59,151,0.3)', 'rgba(57,59,151,0.3)');
 
     const lightBgColor = 'rgba(57,59,151,0.15)';
 

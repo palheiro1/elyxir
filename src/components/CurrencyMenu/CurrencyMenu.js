@@ -94,7 +94,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     <Menu>
                         <MenuButton
                             color={'black'}
-                            bgColor="#eaeaea"
+                            bgColor="rgba(234, 234, 234, 0.5)"
                             borderColor={borderColor}
                             rounded="lg"
                             minW={{ base: '100%', md: '5rem' }}
@@ -117,7 +117,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     </Menu>
                     <Menu>
                         <MenuButton
-                            bgColor="#eaeaea"
+                            bgColor="rgba(234, 234, 234, 0.5)"
                             color={'black'}
                             borderColor={borderColor}
                             rounded="lg"
@@ -140,7 +140,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     </Menu>
                     <Menu>
                         <MenuButton
-                            bgColor="#eaeaea"
+                            bgColor="rgba(234, 234, 234, 0.5)"
                             color={'black'}
                             borderColor={borderColor}
                             rounded="lg"
@@ -164,7 +164,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     </Menu>
                     <Menu>
                         <MenuButton
-                            bgColor="#eaeaea"
+                            bgColor="rgba(234, 234, 234, 0.5)"
                             color={'black'}
                             borderColor={borderColor}
                             rounded="lg"
@@ -189,7 +189,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
 
                     <Menu>
                         <MenuButton
-                            bgColor="#eaeaea"
+                            bgColor="rgba(234, 234, 234, 0.5)"
                             color={'black'}
                             borderColor={borderColor}
                             rounded="lg"

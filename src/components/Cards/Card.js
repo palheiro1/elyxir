@@ -52,7 +52,7 @@ const Card = ({
     rgbColor = '59, 100, 151',
 }) => {
     const separatorColor = `rgba(${rgbColor}, 1)`;
-    const newBgColor = 'rgba(47, 129, 144, 0.35)';
+    const newBgColor = 'rgba(47, 129, 144, 0.6)';
     const newBorderColor = 'rgba(47, 129, 144, 1)';
     // ------------------------------
 
@@ -114,7 +114,7 @@ const Card = ({
 
     // ------------------------------
 
-    const bgColor = useColorModeValue('white', 'transparent');
+    const bgColor = "rgba(47, 129, 144, 0.1)";
     const [hover, setHover] = useState(false);
     const [hoverButton, setHoverButton] = useState(false);
 
@@ -167,6 +167,7 @@ const Card = ({
             border="2px"
             borderColor={newBorderColor}
             bgColor={newBgColor}
+            color="white"
             fontSize={{ base: 'xs', md: 'sm', '2xl': 'md' }}
             leftIcon={icon}
             _hover={{ fontWeight: 'bold', shadow: 'xl', bgColor: newBorderColor }}
@@ -191,7 +192,6 @@ const Card = ({
                         src={image}
                         alt={name}
                         rounded="lg"
-                        shadow="md"
                         onClick={() => (haveThisCard ? handleClick({ card: card }) : null)}
                         style={hover ? hoverStyle : initialStyle}
                         onMouseEnter={() => (haveThisCard ? setHover(true) : null)}
