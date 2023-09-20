@@ -29,7 +29,6 @@ const UserDataItem = ({
     const handleClaim = async () => {
         try {
             const response = await getIgnisFromFaucet(accountRs);
-            console.log('🚀 ~ file: UserDataItem.js:30 ~ handleClaim ~ response:', response);
             if (!response.error) {
                 okToast(response.message, toast);
             } else {
@@ -37,7 +36,7 @@ const UserDataItem = ({
             }
         } catch (error) {
             console.error('🚀 ~ file: UserDataItem.js:32 ~ handleClaim ~ error:', error);
-            errorToast(error.message, toast);
+            errorToast(error.response.data.message, toast);
         }
     };
 
