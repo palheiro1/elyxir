@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Heading, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import {
     getEthDepositAddressFor1155,
@@ -34,6 +34,8 @@ const Bridge = ({ infoAccount, cards }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [bridgeType, setBridgeType] = useState(); // ERC20 or ERC1155
 
+    const [isError, setIsError] = useState(false); // Flag to show error message
+
     useEffect(() => {
         const getSwapAddresses = async () => {
             setIsLoading(true);
@@ -56,7 +58,12 @@ const Bridge = ({ infoAccount, cards }) => {
                     getPegAddressesFor20(),
                     getEthDepositAddressFor20(infoAccount.accountRs),
                 ]);
+                console.log('🚀 ~ file: Bridge.js:63 ~ getSwapAddresses ~ ethAddress1155Bridge:', ethAddress1155Bridge);
 
+                if (!ethAddress1155Bridge || !ethAddress20Bridge || !ethAddressOldBridge) {
+                    setIsError(true);
+                    return;
+                }
                 setSwapAddresses({
                     OLD_BRIDGE: {
                         eth: ethAddressOldBridge,
@@ -81,7 +88,7 @@ const Bridge = ({ infoAccount, cards }) => {
         needReload && !swapAddresses.isLoaded && !isLoading && getSwapAddresses();
     }, [infoAccount.accountRs, swapAddresses.isLoaded, isLoading, needReload]);
 
-    return (
+    return !isError ? (
         <Box>
             {!bridgeType && <BridgeSelector setBridgeType={setBridgeType} />}
             {bridgeType === 'ERC20' && <BridgeERC20 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} />}
@@ -95,6 +102,15 @@ const Bridge = ({ infoAccount, cards }) => {
                 <BridgeERC1155GIFTZ infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC1155} />
             )}
             {bridgeType === 'OLD' && <OldBridge infoAccount={infoAccount} swapAddresses={swapAddresses?.OLD_BRIDGE} />}
+        </Box>
+    ) : (
+        <Box>
+            <Heading textAlign={'center'}>Unregistered account</Heading>
+            <Text textAlign={'center'} mt={3}>
+                Deposit address cannot be generated because your pubkey is not yet registered on the blockchain.
+                <br />
+                Use the faucet in Account to get 5 IGNIS and register your account.
+            </Text>
         </Box>
     );
 };
