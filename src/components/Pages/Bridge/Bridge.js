@@ -107,9 +107,8 @@ const Bridge = ({ infoAccount, cards }) => {
         <Box>
             <Heading textAlign={'center'}>Unregistered account</Heading>
             <Text textAlign={'center'} mt={3}>
-                Deposit address cannot be generated because your pubkey is not yet registered on the blockchain.
-                <br />
-                Use the faucet in Account to get 5 IGNIS and register your account.
+                The wallet address cannot be generated because your pubkey is not yet registered on the blockchain.
+                <br /> Use the Faucet on Account to generate your first transaction (and earn 5 ignis).
             </Text>
         </Box>
     );
