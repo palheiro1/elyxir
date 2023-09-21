@@ -398,20 +398,19 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const checkUnwraps = useCallback(async () => {
         const { accountRs } = infoAccount;
         // TODO: CHECK ALL BRIDGES
-        const [olbBridge, gemBridge, bridge1155, bridge20] = await Promise.all([
-            processUnwrapsForOldBridge(accountRs),
+        const [gemBridge, bridge1155, bridge20] = await Promise.all([
             processUnwrapsForGemBridge(accountRs),
             processUnwrapsFor1155(accountRs),
             processWrapsFor20(accountRs),
         ]);
-        if (olbBridge && olbBridge.starts) {
-            okToast('[OLD BRIDGE] DETECTED UNWRAP: ' + olbBridge.starts + ' transfers started.', toast);
-        }
+        // if (olbBridge && olbBridge.starts) {
+        //     okToast('[OLD BRIDGE] DETECTED UNWRAP: ' + olbBridge.starts + ' transfers started.', toast);
+        // }
         if (bridge1155 && bridge1155.starts) {
             okToast('[ERC-1155] DETECTED UNWRAP: ' + bridge1155.starts + ' transfers started.', toast);
         }
         if (bridge20 && bridge20.starts) {
-            okToast('[wETH] DETECTED WRAP: ' + bridge20.starts + ' transfers started.', toast);
+            okToast('[ERC-20] DETECTED WRAP: ' + bridge20.starts + ' transfers started.', toast);
         }
         if (gemBridge && gemBridge.starts) {
             okToast('[GEM BRIDGE] DETECTED UNWRAP: ' + gemBridge.starts + ' transfers started.', toast);
