@@ -30,7 +30,8 @@ const Overview = ({ blockchainStatus }) => {
             <Button
                 key={text}
                 minW={'140px'}
-                maxW={'140px'}
+                maxW={'160px'}
+                color="white"
                 minH="50px"
                 _hover={{ background: hoverBg, color: 'white' }}
                 bgColor={bgColor}
@@ -40,7 +41,7 @@ const Overview = ({ blockchainStatus }) => {
                     <Box minW={'2rem'}>
                         <Image src={icon} w={isActive ? '30px' : '25px'} />
                     </Box>
-                    <Text fontSize="sm" fontWeight={fontWeight}>
+                    <Text fontSize="sm" fontWeight={fontWeight} color="white">
                         {text}
                     </Text>
                 </Stack>
