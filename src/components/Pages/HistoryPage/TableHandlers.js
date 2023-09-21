@@ -386,6 +386,8 @@ export const handleWETH = (type, amount, date, account) => {
 
 export const handleMANA = (type, amount, date, account) => {
     type = type.toLowerCase();
+    amount = Number(amount / NQTDIVIDER);
+    const fixedAmount = roundNumberWithMaxDecimals(amount, 8);
     const Component = () => {
         return (
             <Tr
@@ -400,7 +402,7 @@ export const handleMANA = (type, amount, date, account) => {
                 <Td>
                     <ManaCard />
                 </Td>
-                <Td>{amount}</Td>
+                <Td>{fixedAmount}</Td>
                 <Td>{date}</Td>
                 <Td>{account}</Td>
             </Tr>

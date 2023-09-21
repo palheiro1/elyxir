@@ -94,7 +94,7 @@ export const handleNotifications = ({
     };
 
     const cardsForNotify = [...cardsNotification];
-    const assetsToIgnore = ['GEM', 'GIFTZ', 'WETH', 'Unknown'];
+    const assetsToIgnore = ['GEM', 'GIFTZ', 'WETH', 'MANA', 'Unknown'];
 
     for (const tx of newsTransactions) {
         if (isFromMB(tx) && !auxUnconfirmed.some(t => t.fullHash === tx.fullHash)) {
