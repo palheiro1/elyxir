@@ -258,6 +258,14 @@ export const getAccountCurrencies = async (account, currency) => {
     }
 };
 
+export const getArdorPublicKey = passPhrase => {
+    try {
+        return ardorjs.secretPhraseToPublicKey(passPhrase);
+    } catch (error) {
+        console.error('🚀 ~ file: ardorInterface.js:221 ~ getArdorPublicKey ~ error', error);
+    }
+};
+
 const sendIgnis = async ({
     amountNQT,
     recipient,

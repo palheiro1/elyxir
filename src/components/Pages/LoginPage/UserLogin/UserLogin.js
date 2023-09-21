@@ -17,6 +17,7 @@ import { ImCross } from 'react-icons/im';
 import { useNavigate } from 'react-router-dom';
 import { checkPin } from '../../../../utils/walletUtils';
 import { backupToast } from '../../../../utils/alerts';
+import { getArdorPublicKey } from '../../../../services/Ardor/ardorInterface';
 
 /**
  * This component is used to render the user login form
@@ -62,14 +63,20 @@ const UserLogin = ({ setInfoAccount }) => {
     }, [needReload]);
 
     const handleLogin = pin => {
-        let account = checkPin(user, pin, false);
+        let account = checkPin(user, pin);
         if (!account) {
             setIsInvalidPin(true);
             return;
         }
 
         account = {
-            ...account,
+            accountRs: account.accountRs,
+            backupDone: account.backupDone,
+            firstTime: account.firstTime,
+            name: account.name,
+            token: account.token,
+            usePin: account.usePin,
+            publicKey: getArdorPublicKey(account.passphrase),
             GEMBalance: 0,
             IGNISBalance: 0,
             GIFTZBalance: 0,

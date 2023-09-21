@@ -30,7 +30,7 @@ const NormalMenu = memo(({ option, setOption, handleLogout, showAllCards, handle
                     setOption={setOption}
                     option={option}
                     handleLogout={handleLogout}
-                    widthBotones="140px"
+                    widthBotones="150px"
                 />
 
                 <Text fontWeight="bold" textAlign="center" fontSize="2xs" mt={2}>

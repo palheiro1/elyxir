@@ -77,6 +77,7 @@ const Account = ({ infoAccount }) => {
                 <UserDataItem
                     name={name}
                     accountRs={accountRs}
+                    publicKey={infoAccount.publicKey}
                     IGNISBalance={IGNISBalance}
                     GIFTZBalance={GIFTZBalance}
                     GEMBalance={GEMBalance.toFixed(2)}

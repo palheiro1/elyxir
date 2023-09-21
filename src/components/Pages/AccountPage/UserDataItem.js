@@ -6,6 +6,7 @@ import { errorToast, okToast } from '../../../utils/alerts';
 
 const UserDataItem = ({
     accountRs,
+    publicKey,
     name,
     IGNISBalance,
     GIFTZBalance,
@@ -28,7 +29,7 @@ const UserDataItem = ({
 
     const handleClaim = async () => {
         try {
-            const response = await getIgnisFromFaucet(accountRs);
+            const response = await getIgnisFromFaucet(accountRs, publicKey);
             if (!response.error) {
                 okToast(response.message, toast);
             } else {
