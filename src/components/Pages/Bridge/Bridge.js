@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import {
     getEthDepositAddressFor1155,
     getEthDepositAddressFor20,
-    getEthDepositAddressForOldBridge,
     getPegAddressesFor1155,
     getPegAddressesFor20,
 } from '../../../services/Ardor/ardorInterface';
@@ -42,32 +41,24 @@ const Bridge = ({ infoAccount, cards }) => {
             setNeedReload(false);
             try {
                 const [
-                    ethAddressOldBridge,
-
                     { ardorBlockedAccount: ardorBlockedAccount1155 },
                     ethAddress1155Bridge,
 
                     { ardorBlockedAccount: ardorBlockedAccount20 },
                     ethAddress20Bridge,
                 ] = await Promise.all([
-                    getEthDepositAddressForOldBridge(infoAccount.accountRs),
-
                     getPegAddressesFor1155(),
                     getEthDepositAddressFor1155(infoAccount.accountRs),
 
                     getPegAddressesFor20(),
                     getEthDepositAddressFor20(infoAccount.accountRs),
                 ]);
-                console.log('🚀 ~ file: Bridge.js:63 ~ getSwapAddresses ~ ethAddress1155Bridge:', ethAddress1155Bridge);
 
-                if (!ethAddress1155Bridge || !ethAddress20Bridge || !ethAddressOldBridge) {
+                if (!ethAddress20Bridge || !ethAddress1155Bridge) {
                     setIsError(true);
                     return;
                 }
                 setSwapAddresses({
-                    OLD_BRIDGE: {
-                        eth: ethAddressOldBridge,
-                    },
                     ERC1155: {
                         eth: ethAddress1155Bridge,
                         ardor: ardorBlockedAccount1155,
