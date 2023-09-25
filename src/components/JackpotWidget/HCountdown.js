@@ -7,7 +7,6 @@ import {
     Stack,
     Text,
     VStack,
-    useColorModeValue,
 } from '@chakra-ui/react';
 
 /**

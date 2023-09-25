@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useClearCacheCtx } from 'react-clear-cache';
+import { useClearCache } from 'react-clear-cache';
 
 import { theme } from './themes/theme';
 
@@ -25,7 +25,7 @@ import './App.css';
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
     const isLogged = infoAccount.token !== null && infoAccount.accountRs !== null;
-    const { isLatestVersion, emptyCacheStorage } = useClearCacheCtx();
+    const { isLatestVersion, emptyCacheStorage } = useClearCache();
 
     useEffect(() => {
         const checkVersion = async () => {
