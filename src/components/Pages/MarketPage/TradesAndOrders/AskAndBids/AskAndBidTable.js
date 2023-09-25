@@ -13,6 +13,7 @@ const AskBidTable = ({
     canDelete,
     isLeft = false,
     newStyle = false,
+    textColor = 'black',
 }) => {
     const bgHeadColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
@@ -24,32 +25,38 @@ const AskBidTable = ({
         <TableContainer
             rounded="lg"
             bg="blackAlpha"
-            shadow={!newStyle ? 'dark-lg' : 'none'}
             maxH={newStyle ? '20rem' : '60rem'}
             overflowY={'auto'}
             borderColor={bgHeadColor}
             borderLeftRadius={!newStyle ? borderLeft : 'none'}
-            borderRightRadius={!newStyle ? borderRight : 'none'}
-            boxShadow="inner">
+            borderRightRadius={!newStyle ? borderRight : 'none'}>
             {(isAsk || newStyle === false) && (
                 <Text
                     textAlign="center"
                     p={4}
                     fontSize="lg"
                     borderBottom="2px"
-                    borderColor={"#3b6497"}
-                    color={newStyle && (isAsk ? '#eb6473' : '#29a992')}>
+                    borderColor={'#3b6497'}
+                    color={newStyle ? (isAsk ? '#eb6473' : '#29a992') : textColor}>
                     {type}
                 </Text>
             )}
 
-            <Table variant="simple" color={newStyle && (isAsk ? '#eb6473' : '#29a992')}>
+            <Table variant="simple" color={newStyle ? (isAsk ? '#eb6473' : '#29a992') : textColor}>
                 {!newStyle && (
                     <Thead>
                         <Tr>
-                            {!onlyOneAsset && <Th textAlign="center" color={"#3b6497"}>Asset</Th>}
-                            <Th textAlign="center" color={"#3b6497"}>Ignis</Th>
-                            <Th textAlign="center" color={"#3b6497"}>Amount</Th>
+                            {!onlyOneAsset && (
+                                <Th textAlign="center" color={'#3b6497'}>
+                                    Asset
+                                </Th>
+                            )}
+                            <Th textAlign="center" color={'#3b6497'}>
+                                Ignis
+                            </Th>
+                            <Th textAlign="center" color={'#3b6497'}>
+                                Amount
+                            </Th>
                         </Tr>
                     </Thead>
                 )}

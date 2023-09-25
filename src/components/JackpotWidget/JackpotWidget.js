@@ -76,7 +76,6 @@ const JackpotWidget = ({ numParticipants = 0, blockchainStatus = {}, cStyle = 0 
                 borderColor={borderColor}
                 rounded="lg"
                 bg="blackAlpha"
-                shadow="dark-lg"
                 direction="row">
                 <HCountdown
                     cStyle={cStyle}

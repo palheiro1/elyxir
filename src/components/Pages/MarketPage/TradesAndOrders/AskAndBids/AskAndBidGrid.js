@@ -15,7 +15,7 @@ import AskBidTable from './AskAndBidTable';
  * @author Jesús Sánchez Fernández
  * @version 1.0.0
  */
-const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, username, canDelete, setSelectedItem, columns = 2 }) => {
+const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, username, canDelete, setSelectedItem, columns = 2, textColor }) => {
     const [selectedOrder, setSelectedOrder] = useState();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const refCancel = useRef();
@@ -42,6 +42,7 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
                     canDelete={canDelete}
                     isLeft={true}
                     newStyle = {columns === 1}
+                    textColor={textColor}
                 />
                 <AskBidTable
                     type={'Bids'}
@@ -52,6 +53,7 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
                     setSelectedOrder={setSelectedOrder}
                     canDelete={canDelete}
                     newStyle = {columns === 1}
+                    textColor={textColor}
                 />
             </SimpleGrid>
             <CancelDialog

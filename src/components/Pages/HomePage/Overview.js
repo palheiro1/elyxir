@@ -3,24 +3,16 @@ import { Box, Button, Center, Heading, Image, Stack, Text } from '@chakra-ui/rea
 import Jackpot from '../../JackpotWidget/JackpotWidget';
 //import LatestTransaction from './LatestTransactions/LatestTransaction';
 // import News from './News/News';
-import { ArrowForwardIcon } from '@chakra-ui/icons';
 
 const Overview = ({ blockchainStatus }) => {
-    const FlowItem = ({ title, button, number, hasNext = false }) => {
+    const FlowItem = ({ title, button, number, color }) => {
         return (
-            <Stack direction={'row'}>
-                <Stack>
-                    <Heading textAlign={'center'} fontSize={'2xl'}>
-                        {number}
-                    </Heading>
-                    <Text textAlign={'center'}>{title}</Text>
-                    <Center>{button}</Center>
-                </Stack>
-                {hasNext && (
-                    <Center>
-                        <ArrowForwardIcon boxSize={12} mx={4} />
-                    </Center>
-                )}
+            <Stack color={color}>
+                <Heading textAlign={'center'} fontSize={'2xl'}>
+                    {number}
+                </Heading>
+                <Text textAlign={'center'}>{title}</Text>
+                <Center>{button}</Center>
             </Stack>
         );
     };
@@ -52,21 +44,25 @@ const Overview = ({ blockchainStatus }) => {
     return (
         <Box>
             <Stack direction={{ base: 'column' }} spacing={4}>
-                <Heading textAlign={'center'} fontWeight={'light'} fontSize={'6xl'}>
+                <Heading textAlign={'center'} fontWeight={'light'} fontSize={'6xl'} color="#2f9088">
                     Welcome to Mythical Beings
                 </Heading>
-                <Text px={{ base: 0, md: 12 }}>
+                <Text px={{ base: 0, md: 12 }} color="#2f9088">
                     Explore the rich tapestry of Mythical Beings, where every card is a treasure waiting to be
                     unearthed. Dive into the lore, uncover forgotten legends, and become a collector of mythical
                     creatures from across the globe. Complete your collection by gathering all creatures, with
-                    enchanting beings hailing from each continent. These creatures are divided into four esteemed
-                    groups.
+                    enchanting beings hailing from each continent.
                 </Text>
                 <Center>
-                    <Stack direction={{ base: 'column', md: 'row' }} spacing={{ base: 4 }} my={6} align={'center'}>
+                    <Stack
+                        direction={{ base: 'column', md: 'row' }}
+                        spacing={{ base: 4, md: 8, lg: 12 }}
+                        my={6}
+                        align={'center'}>
                         <FlowItem
                             number={1}
                             title="Obtain cards by purchasing GIFTZ"
+                            color={'#9f3772'}
                             button={
                                 <MenuButton
                                     bgColor={'#9f3772'}
@@ -77,11 +73,11 @@ const Overview = ({ blockchainStatus }) => {
                                     text={'Buy Pack'}
                                 />
                             }
-                            hasNext={true}
                         />
                         <FlowItem
                             number={2}
                             title="Redeem packs fo 3 random cards"
+                            color={'#e094b3'}
                             button={
                                 <MenuButton
                                     bgColor={'#e094b3'}
@@ -92,11 +88,11 @@ const Overview = ({ blockchainStatus }) => {
                                     text={'Open pack'}
                                 />
                             }
-                            hasNext={true}
                         />
                         <FlowItem
                             number={3}
                             title="Watch your History"
+                            color={'#3b7197'}
                             button={
                                 <MenuButton
                                     bgColor={'#3b7197'}
@@ -107,11 +103,11 @@ const Overview = ({ blockchainStatus }) => {
                                     text={'History'}
                                 />
                             }
-                            hasNext={true}
                         />
                         <FlowItem
                             number={4}
                             title="Investigate your inventory"
+                            color={'#2f8190'}
                             button={
                                 <MenuButton
                                     bgColor={'#2f8190'}
@@ -125,11 +121,14 @@ const Overview = ({ blockchainStatus }) => {
                         />
                     </Stack>
                 </Center>
+
                 <Center>
-                    <FlowItem number={5} title="The Jackpot: Your Ultimate Challenge Awaits!" />
+                    <FlowItem number={5} title="The Jackpot: Your Ultimate Challenge Awaits!" color="#3b5397" />
                 </Center>
-                <Jackpot blockchainStatus={blockchainStatus} />
-                <Stack pt={8} px={{ base: 0, md: 12 }}>
+
+                <Jackpot blockchainStatus={blockchainStatus} cStyle={1} />
+
+                <Stack pt={8} px={{ base: 0, md: 12 }} color="#2f9088">
                     <Text fontWeight={'bold'}>Here are the mythical currencies you'll encounter on your journey:</Text>
                     <Stack direction="row" align={'center'}>
                         <Image src="/images/currency/ignis.png" alt="Ignis" maxW={'30px'} />

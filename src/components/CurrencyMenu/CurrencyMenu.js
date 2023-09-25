@@ -11,14 +11,26 @@ import {
     Text,
     Spacer,
     SimpleGrid,
+    useToast,
 } from '@chakra-ui/react';
 
 import { useRef, useState } from 'react';
 import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog';
 import BuyGiftzDialog from '../Modals/BuyGiftzDialog/BuyGiftzDialog';
+import { getIgnisFromFaucet } from '../../services/Faucet/faucet';
+import { errorToast, okToast } from '../../utils/alerts';
 
 const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
-    const { IGNISBalance, GIFTZBalance, GEMBalance, WETHBalance, MANABalance, name: username } = infoAccount;
+    const {
+        IGNISBalance,
+        GIFTZBalance,
+        GEMBalance,
+        WETHBalance,
+        MANABalance,
+        name: username,
+        accountRs,
+        publicKey,
+    } = infoAccount;
     const parseWETH = parseFloat(WETHBalance);
     const parseMANA = parseFloat(MANABalance);
 
@@ -41,6 +53,8 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     // ----------------------- SEND CURRENCY -----------------------
     const { isOpen: isOpenSendCurrency, onClose: onCloseSendCurrency, onOpen: onOpenSendCurrency } = useDisclosure();
     const reference = useRef();
+
+    const toast = useToast();
 
     const currencies = {
         IGNIS: {
@@ -86,6 +100,20 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
 
     const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.800');
 
+    const handleClaim = async () => {
+        try {
+            const response = await getIgnisFromFaucet(accountRs, publicKey);
+            if (!response.error) {
+                okToast(response.message, toast);
+            } else {
+                errorToast(response.message, toast);
+            }
+        } catch (error) {
+            console.error('🚀 ~ file: UserDataItem.js:32 ~ handleClaim ~ error:', error);
+            errorToast(error.response.data.message || 'ERROR', toast);
+        }
+    };
+
     return (
         <>
             <Stack direction={{ base: 'column', md: 'row' }} gap={4} align="flex-end">
@@ -112,6 +140,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             <MenuList>
                                 <MenuItem onClick={() => handleOpenSendCurrency('IGNIS')}>Send IGNIS</MenuItem>
                                 <MenuItem onClick={() => handleOpenGetMoreCurrency('IGNIS')}>Get IGNIS</MenuItem>
+                                <MenuItem onClick={() => handleClaim()}>Claim Faucet</MenuItem>
                             </MenuList>
                         </Portal>
                     </Menu>

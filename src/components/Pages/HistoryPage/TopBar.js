@@ -45,7 +45,7 @@ const TopBar = ({
                         borderColor="#367197"
                         bgColor={isTransactions && '#3b7197'}
                         color={isTransactions && 'white'}
-                        _hover={{ color: 'white' }}
+                        _hover={{ color: '#3b7197' }}
                         onClick={() => setSection('transactions')}>
                         Transactions
                     </Button>
@@ -53,9 +53,9 @@ const TopBar = ({
                         w="100%"
                         border="2px"
                         borderColor="#367197"
-                        bgColor={isDividends && '#3b7197'}
-                        color={isDividends && 'white'}
-                        _hover={{ color: 'white' }}
+                        bgColor={isDividends ? '#3b7197' : "white"}
+                        color={isDividends ? 'white' : '#3b7197'}
+                        _hover={{ color: '#3b7197' }}
                         onClick={() => setSection('dividends')}>
                         Dividends
                     </Button>

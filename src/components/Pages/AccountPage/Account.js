@@ -32,7 +32,7 @@ const Account = ({ infoAccount }) => {
     const [isInvalidPinDelete, setIsInvalidPinDelete] = useState(true);
     const [needReload, setNeedReload] = useState(false);
     const [passphrase, setPassphrase] = useState();
-    const bgColor = 'rgba(78,59,151,0.5)';
+    const bgColor = 'rgba(78,59,151,0.6)';
     const hoverColor = 'rgba(78,59,151,0.75)';
     const borderColor = 'rgba(78,59,151,1)';
 
@@ -73,7 +73,10 @@ const Account = ({ infoAccount }) => {
 
     return (
         <>
-            <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={4}>
+            <Grid
+                templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
+                gap={4}
+                color="white">
                 <UserDataItem
                     name={name}
                     accountRs={accountRs}
@@ -87,14 +90,7 @@ const Account = ({ infoAccount }) => {
                     borderColor={borderColor}
                 />
                 <GridItem>
-                    <Box
-                        p={4}
-                        bgColor={bgColor}
-                        rounded="lg"
-                        mb={2}
-                        border="1px"
-                        borderColor={borderColor}
-                        shadow="dark-lg">
+                    <Box p={4} bgColor={bgColor} rounded="lg" mb={2} border="1px" borderColor={borderColor}>
                         <Heading fontSize="lg" pb={2}>
                             Backup your passphrase
                         </Heading>
@@ -139,14 +135,7 @@ const Account = ({ infoAccount }) => {
                     </Box>
                 </GridItem>
                 <GridItem>
-                    <Box
-                        p={4}
-                        bgColor={bgColor}
-                        rounded="lg"
-                        mb={2}
-                        border="1px"
-                        borderColor={borderColor}
-                        shadow="dark-lg">
+                    <Box p={4} bgColor={bgColor} rounded="lg" mb={2} border="1px" borderColor={borderColor}>
                         <Heading fontSize="lg" pb={2}>
                             Delete account from device
                         </Heading>

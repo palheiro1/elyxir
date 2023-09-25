@@ -79,12 +79,14 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
             <Button
                 w={{ base: '100%', lg: 'unset' }}
                 size="sm"
+                border="2px"
+                borderColor={bgButtons}
                 bgColor={bgButtons}
                 isActive={isActive}
                 color="white"
                 onClick={() => handleRarity(name)}
-                _hover={{ bgColor: borderButtons }}
-                _active={{ border: '2px', borderColor: borderButtons }}
+                _hover={{ borderColor: borderButtons }}
+                _active={{ borderColor: borderButtons, bgColor: borderButtons }}
                 leftIcon={icon}>
                 {name}
             </Button>

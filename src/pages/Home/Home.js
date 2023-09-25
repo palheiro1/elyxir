@@ -525,8 +525,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 py={4}
                 rounded="lg"
                 border="1px"
-                borderColor={borderColor}
-                shadow="dark-lg">
+                borderColor={borderColor}>
                 <LateralMenu
                     infoAccount={infoAccount}
                     handleLogout={handleLogout}

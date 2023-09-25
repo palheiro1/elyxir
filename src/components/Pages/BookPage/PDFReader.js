@@ -62,12 +62,14 @@ const PDFReader = ({ pdf }) => {
                                     w="50%"
                                     onClick={handleFlipPrev}
                                     bgColor={'rgba(65,59,151,0.5)'}
+                                    color="white"
                                     _hover={{ bgColor: 'rgba(65,59,151,0.4)' }}>
                                     Prev page
                                 </Button>
                                 <Button
                                     w="50%"
                                     onClick={handleFlipNext}
+                                    color="white"
                                     bgColor={'rgba(65,59,151,0.5)'}
                                     _hover={{ bgColor: 'rgba(65,59,151,0.4)' }}>
                                     Next page

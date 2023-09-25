@@ -140,12 +140,10 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
 
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
                     <AlertDialogHeader textAlign="center">
-                        <Center>
-                            <Text>SEND CARD</Text>
-                        </Center>
+                        <Text color="white">SEND CARD</Text>
                     </AlertDialogHeader>
-                    <AlertDialogCloseButton />
-                    <AlertDialogBody>
+                    <AlertDialogCloseButton color="white" />
+                    <AlertDialogBody color="white">
                         <Center rounded="lg" bgColor={borderColor} p={4}>
                             <Stack direction="row" align="center" spacing={4}>
                                 <Image src={card.cardImgUrl} maxH="5rem" />

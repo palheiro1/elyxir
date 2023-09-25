@@ -16,7 +16,7 @@ import CardBadges from './CardBadges';
 const TableCard = ({ image, title, continent, rarity, needDelete = false }) => {
     return (
         <Stack direction={'row'} spacing={4}>
-            <Image maxW="75px" src={image} alt={title} shadow="lg" rounded="sm" />
+            <Image maxW="75px" src={image} alt={title} rounded="sm" />
 
             <Stack direction={'row'} align="center">
                 {!needDelete ? (

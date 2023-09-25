@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react';
 
 import { useState } from 'react';
 
-import PairSelector from './PairSelector';
+import PairSelector from './PairSelector/PairSelector';
 import CardMarket from './CardMarket';
 import CurrencyMarket from './CurrencyMarket';
 
@@ -20,12 +20,14 @@ const Market = ({ infoAccount, cards, gemCards, giftzCards, wethCards, manaCards
     // Market type
     const [marketCurrency, setMarketCurrency] = useState('CARDS');
 
+    const textColor = '#3b6497';
+
     return (
         <Box maxW={{ base: '100%', md: '80%', lg: '70vw', xl: '77.5vw', '2xl': "100%" }}>
-            <PairSelector marketCurrency={marketCurrency} setMarketCurrency={setMarketCurrency} />
+            <PairSelector marketCurrency={marketCurrency} setMarketCurrency={setMarketCurrency} textColor={textColor} />
 
             {marketCurrency === 'CARDS' && (
-                <CardMarket cards={cards} infoAccount={infoAccount} marketCurrency={marketCurrency} />
+                <CardMarket cards={cards} infoAccount={infoAccount} marketCurrency={marketCurrency} textColor={textColor} />
             )}
 
             {marketCurrency === 'CURRENCIES' && (

@@ -37,19 +37,19 @@ const UserDataItem = ({
             }
         } catch (error) {
             console.error('🚀 ~ file: UserDataItem.js:32 ~ handleClaim ~ error:', error);
-            errorToast(error.response.data.message || "ERROR", toast);
+            errorToast(error.response.data.message || 'ERROR', toast);
         }
     };
 
     return (
         <GridItem>
-            <Box p={6} bgColor={bgColor} mb={2} border="1px" borderColor={borderColor} rounded="lg" shadow="dark-lg">
+            <Box p={6} bgColor={bgColor} mb={2} border="1px" borderColor={borderColor} rounded="lg">
                 <Heading fontSize="lg" pb={2}>
                     Your Ardor account
                 </Heading>
                 <Text>{accountRs}</Text>
             </Box>
-            <Box p={6} bgColor={bgColor} rounded="lg" mb={2} border="1px" borderColor={borderColor} shadow="dark-lg">
+            <Box p={6} bgColor={bgColor} rounded="lg" mb={2} border="1px" borderColor={borderColor}>
                 <Heading fontSize="lg" pb={2}>
                     User
                 </Heading>
@@ -62,8 +62,7 @@ const UserDataItem = ({
                 bgColor={bgColor}
                 rounded="lg"
                 border="1px"
-                borderColor={borderColor}
-                shadow="dark-lg">
+                borderColor={borderColor}>
                 <GridItem>
                     <Heading fontSize="lg" pb={2}>
                         IGNIS
@@ -97,7 +96,7 @@ const UserDataItem = ({
                     <Text fontSize="sm">{MANABalance}</Text>
                 </GridItem>
             </Grid>
-            <Box p={6} bgColor={bgColor} rounded="lg" border="1px" borderColor={borderColor} shadow="dark-lg">
+            <Box p={6} bgColor={bgColor} rounded="lg" border="1px" borderColor={borderColor}>
                 <Heading fontSize="lg" pb={2}>
                     Faucet (IGNIS)
                 </Heading>

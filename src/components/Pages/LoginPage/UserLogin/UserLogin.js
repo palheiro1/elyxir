@@ -86,16 +86,16 @@ const UserLogin = ({ setInfoAccount }) => {
 
         setInfoAccount(account);
 
+        navigate('/home');
+        // Alerta de backup
+        if (!account.backupDone && !activeToast) {
+            backupToast(toast);
+            activeToast = true;
+        }
+
         if (account.firstTime) {
-            navigate('/welcome');
+            // navigate('/welcome');
             setNotFirstTime(user);
-        } else {
-            navigate('/home');
-            // Alerta de backup
-            if (!account.backupDone && !activeToast) {
-                backupToast(toast);
-                activeToast = true;
-            }
         }
     };
 

@@ -134,7 +134,12 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                <AlertDialogContent
+                    bgColor={bgColor}
+                    border="1px"
+                    borderColor={borderColor}
+                    shadow="dark-lg"
+                    color="white">
                     <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text mr={2}>CRAFTING</Text>
@@ -188,7 +193,12 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                             <FormLabel>Cards to sacrifice</FormLabel>
                         </FormControl>
 
-                        <FormControl variant="floatingModalTransparent" id="name" my={6} border="1px solid #2f8190" rounded="lg">
+                        <FormControl
+                            variant="floatingModalTransparent"
+                            id="name"
+                            my={6}
+                            border="1px solid #2f8190"
+                            rounded="lg">
                             <Input placeholder=" " value={craftingCost + ' IGNIS'} size="lg" disabled />
                             <FormLabel>Crafting costs</FormLabel>
                         </FormControl>

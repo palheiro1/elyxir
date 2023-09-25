@@ -124,7 +124,12 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username, gem }) => {
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                <AlertDialogContent
+                    bgColor={bgColor}
+                    border="1px"
+                    borderColor={borderColor}
+                    shadow="dark-lg"
+                    color="white">
                     <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text mr={2}>MORPHING</Text>
@@ -178,7 +183,12 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username, gem }) => {
                             <FormLabel>Cards to sacrifice</FormLabel>
                         </FormControl>
 
-                        <FormControl variant="floatingModalTransparent" id="name" my={6} border="1px solid #2f8190" rounded="lg">
+                        <FormControl
+                            variant="floatingModalTransparent"
+                            id="name"
+                            my={6}
+                            border="1px solid #2f8190"
+                            rounded="lg">
                             <Input placeholder=" " value={morphingCost + ' GEM'} size="lg" disabled />
                             <FormLabel>Morphing costs</FormLabel>
                         </FormControl>

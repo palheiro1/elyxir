@@ -57,7 +57,7 @@ const CurrencyWidget = ({
     };
 
     const textColor = useColorModeValue('black', 'white');
-    const bgColor = 'rgba(59,100,151,0.35)';
+    const bgColor = 'rgba(59,100,151,0.5)';
 
     // ------------------------------
     if (currencyCards.length === 0) return null;
@@ -109,7 +109,6 @@ const CurrencyWidget = ({
                     borderColor="#3b6497"
                     rounded="lg"
                     bg="blackAlpha"
-                    shadow="lg"
                     w={{ base: '100%', xl: '75%' }}
                     direction="row">
                     <GridItem colSpan={2} p={4} borderLeftRadius="lg">
@@ -120,7 +119,7 @@ const CurrencyWidget = ({
                                     size="xl"
                                     p={1}
                                     mr={2}
-                                    bg={bgColor}
+                                    bg={"transparent"}
                                     color={textColor}
                                 />
                                 <VStack minW="md" align={{ base: 'center', xl: 'flex-start' }} spacing={2}>
@@ -132,7 +131,7 @@ const CurrencyWidget = ({
                                     </Text>
                                 </VStack>
                                 <Center pl={4}>
-                                    <HStack spacing={4} color={textColor}>
+                                    <HStack spacing={4} color="white">
                                         <Box p={2} bg={bgColor} rounded="lg" minW="90px">
                                             <Text textAlign="center" fontSize="lg" fontWeight="bold">
                                                 {lowestGemAsk}
@@ -159,10 +158,11 @@ const CurrencyWidget = ({
                                 <Text
                                     fontSize={'xs'}
                                     textAlign={'left'}
+                                    color="white"
                                     mt={2}
                                     p={2}
                                     w="100%"
-                                    bgColor={'rgba(59,100,151,0.35)'}
+                                    bgColor={bgColor}
                                     rounded="md">
                                     {message}
                                 </Text>
@@ -170,7 +170,7 @@ const CurrencyWidget = ({
                         )}
                     </GridItem>
 
-                    <GridItem bgColor={'rgba(59,100,151,0.35)'} p={4} borderRightRadius="lg">
+                    <GridItem bgColor={bgColor} p={4} borderRightRadius="lg">
                         <Center
                             h="100%"
                             fontSize={{ base: '2xl', xl: 'xl' }}
@@ -178,6 +178,7 @@ const CurrencyWidget = ({
                             textTransform="full-width"
                             onClick={onOpen}
                             textAlign="center"
+                            color="white"
                             style={hover ? hoverStyle : initialStyle}
                             onMouseEnter={() => setHover(true)}
                             onMouseLeave={() => setHover(false)}>

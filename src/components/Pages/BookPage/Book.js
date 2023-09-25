@@ -64,7 +64,7 @@ const Book = ({ cards }) => {
                         bgColor={haveAllCards ? '#413b97' : 'rgba(65,59,151,0.35)'}
                         fontWeight="bolder"
                         color="white"
-                        border="1px"
+                        border="2px"
                         borderColor={borderColor}
                         onClick={haveAllCards ? downloadPDF : null}
                         _hover={{
