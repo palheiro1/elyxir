@@ -133,7 +133,7 @@ const Overview = ({ blockchainStatus }) => {
                     <Stack direction="row" align={'center'}>
                         <Image src="/images/currency/ignis.png" alt="Ignis" maxW={'30px'} />
                         <Text>
-                            These ethereal flames IGNIS hold the essence of mythical beings. Every transaction needs a
+                            These mystic flames IGNIS hold the essence of mythical beings. Every transaction needs a
                             small portion of it. Obtain some daily using our faucet or exchange on our market (or on
                             other centralized exchanges).
                         </Text>
