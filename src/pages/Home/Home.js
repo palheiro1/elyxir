@@ -61,7 +61,6 @@ import {
     getUnconfirmedTransactions,
     processUnwrapsFor1155,
     processUnwrapsForGemBridge,
-    processUnwrapsForOldBridge,
     processWrapsFor20,
 } from '../../services/Ardor/ardorInterface';
 import Exchange from '../Exchange/Exchange';

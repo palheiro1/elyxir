@@ -1,4 +1,4 @@
-import { BRIDGEACCOUNT, DEFAULT_CONTACTS, NQTDIVIDER } from '../data/CONSTANTS';
+import { DEFAULT_CONTACTS, NQTDIVIDER } from '../data/CONSTANTS';
 import { formatDate, formatTime } from './dateAndTime';
 
 // ------------------------------------------------
@@ -46,7 +46,8 @@ export const getReason = msg => {
 export function parseSender(tx) {
     const { senderRS: account } = tx;
     const found = findContactByAccount(account, DEFAULT_CONTACTS);
-    if (found === undefined) {
+
+    if (!found) {
         return account;
     } else {
         let nameSuffix = '';
@@ -85,17 +86,16 @@ export function parseSender(tx) {
 export function parseRecipient(tx) {
     const { recipientRS: account } = tx;
     const found = findContactByAccount(account, DEFAULT_CONTACTS);
-    if (found === undefined) {
+
+    if (!found) {
         return account;
-    } else if (found.accountRs === BRIDGEACCOUNT) {
-        return found.name;
     } else {
         let nameSuffix = '';
         const { message } = tx.attachment;
 
         if (message) {
             const msg = parseJson(message);
-            if (!msg) return account;
+            if (!msg) return found.name;
 
             switch (msg.contract) {
                 case 'Jackpot':

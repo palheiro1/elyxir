@@ -48,7 +48,7 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
         <Stack direction="column" spacing={8} align="center">
             <Box>
                 <Heading fontSize="3xl" fontWeight="light">
-                    1. Send the <strong>wETH/MANA</strong>
+                    1. Send the <strong>MANA</strong>
                 </Heading>
                 <Text fontWeight="light" textAlign="center">to your deposit address</Text>
                 <Text fontWeight="thin" fontSize="sm" textAlign="center">POLYGON</Text>

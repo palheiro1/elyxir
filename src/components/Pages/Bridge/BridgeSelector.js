@@ -29,7 +29,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                     rounded="md"
                     shadow="md"
                     minH="5rem"
-                    onClick={() => setBridgeType('ERC20')}
+                    onClick={() => setBridgeType('ERC20wETH')}
                     _hover={{ bgColor: hoverColor, cursor: 'pointer' }}>
                     <Text fontSize="2xl" fontWeight="medium" textAlign="center">
                         wETH
@@ -47,7 +47,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                     rounded="md"
                     shadow="md"
                     minH="5rem"
-                    onClick={() => setBridgeType('ERC20')}
+                    onClick={() => setBridgeType('ERC20Mana')}
                     _hover={{ bgColor: hoverColor, cursor: 'pointer' }}>
                     <Text fontSize="2xl" fontWeight="medium" textAlign="center">
                         MANA
