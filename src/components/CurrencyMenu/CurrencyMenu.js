@@ -1,3 +1,5 @@
+import Web3 from 'web3';
+
 import {
     useDisclosure,
     Menu,
@@ -114,6 +116,67 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
         }
     };
 
+    const TOKEN_OPTIONS = [
+        {
+            name: 'GEM',
+            symbol: 'GEM',
+            type: 'ERC20',
+            address: '0x5F790ffA0695967A2d711872EcB4c7553e24794D',
+            decimals: 18,
+            image: 'https://weth.mythicalbeings.io/images/thumb/gem.png',
+        },
+        {
+            name: 'MANA',
+            symbol: 'MANA',
+            type: 'ERC20',
+            address: '0x2caCCa1266653bB090D3Fb511456EBCA33150562',
+            decimals: 18,
+            image: 'https://weth.mythicalbeings.io/images/thumb/mana.png',
+        },
+        {
+            name: 'wETH',
+            symbol: 'wETH',
+            type: 'ERC20',
+            address: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
+            decimals: 18,
+            image: 'https://weth.mythicalbeings.io/images/thumb/weth.png',
+        },
+    ];
+
+    const addToMetamask = async currencyName => {
+        if (window.ethereum) {
+            const currencyOptions = TOKEN_OPTIONS.find(token => token.name === currencyName);
+            const web3 = new Web3(window.ethereum);
+
+            try {
+                // Prompt the user to connect to MetaMask
+                await window.ethereum.enable();
+
+                // Add the custom token
+                await web3.currentProvider.sendAsync({
+                    method: 'metamask_watchAsset',
+                    params: {
+                        type: currencyOptions.type, // Initially only supports ERC20, but eventually more!
+                        options: {
+                            address: currencyOptions.address, // The address that the token is at.
+                            symbol: currencyOptions.symbol, // A ticker symbol or shorthand, up to 5 chars.
+                            decimals: currencyOptions.decimals, // The number of decimals in the token
+                            image: currencyOptions.image, // A string url of the token logo
+                        },
+                    },
+                    id: Math.round(Math.random() * 100000),
+                });
+
+                okToast(`${currencyName} added to MetaMask`, toast);
+            } catch (error) {
+                console.error('🚀 ~ file: CurrencyMenu.js:175 ~ addToMetamask ~ error:', error);
+                errorToast("Couldn't add token to MetaMask", toast);
+            }
+        } else {
+            errorToast('MetaMask is not installed', toast);
+        }
+    };
+
     return (
         <>
             <Stack direction={{ base: 'column', md: 'row' }} gap={4} align="flex-end">
@@ -188,6 +251,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             <MenuList>
                                 <MenuItem onClick={() => handleOpenSendCurrency('GEM')}>Send GEM</MenuItem>
                                 <MenuItem onClick={() => handleOpenGetMoreCurrency('GEM')}>Get GEM</MenuItem>
+                                <MenuItem onClick={() => addToMetamask('GEM')}>Add to Metamask</MenuItem>
                             </MenuList>
                         </Portal>
                     </Menu>
@@ -212,6 +276,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             <MenuList>
                                 <MenuItem onClick={() => handleOpenSendCurrency('WETH')}>Send wETH</MenuItem>
                                 <MenuItem onClick={() => handleOpenGetMoreCurrency('WETH')}>Get wETH</MenuItem>
+                                <MenuItem onClick={() => addToMetamask('WETH')}>Add to Metamask</MenuItem>
                             </MenuList>
                         </Portal>
                     </Menu>
@@ -244,6 +309,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             <MenuList>
                                 <MenuItem onClick={() => handleOpenSendCurrency('MANA')}>Send MANA</MenuItem>
                                 <MenuItem onClick={() => handleOpenGetMoreCurrency('MANA')}>Get MANA</MenuItem>
+                                <MenuItem onClick={() => addToMetamask('MANA')}>Add to Metamask</MenuItem>
                             </MenuList>
                         </Portal>
                     </Menu>
