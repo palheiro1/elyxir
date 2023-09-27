@@ -15,6 +15,7 @@
     "crypto": "^1.0.1",
     "crypto-browserify": "^3.12.0",
     "ethereum-address": "0.0.4",
+    "ethers": "^6.7.1",
     "framer-motion": "^6.5.1",
     "patch-package": "^6.5.0",
     "qs": "^6.11.0",
@@ -35,8 +36,7 @@
     "react-twitter-widgets": "^1.11.0",
     "stream": "^0.0.2",
     "uuidv4": "^6.2.13",
-    "web-vitals": "^2.1.4",
-    "web3": "^4.1.2"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "postinstall": "patch-package",

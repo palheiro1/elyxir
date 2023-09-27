@@ -1,4 +1,4 @@
-import Web3 from 'web3';
+import { ethers } from 'ethers';
 
 import {
     useDisclosure,
@@ -144,32 +144,35 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     ];
 
     const addToMetamask = async currencyName => {
+        console.log('addToMetamask -> currencyName', currencyName);
+        if (!currencyName) return;
+
         if (window && window.ethereum) {
             const currencyOptions = TOKEN_OPTIONS.find(token => token.name === currencyName);
-            const web3 = new Web3(window.ethereum);
 
             try {
                 // Prompt the user to connect to MetaMask
                 await window.ethereum.enable();
 
+                // Create an ethers provider using MetaMask's provider
+                const provider = new ethers.BrowserProvider(window.ethereum);
+
                 // Add the custom token
-                await web3.currentProvider.request({
-                    method: 'metamask_watchAsset',
-                    params: {
-                        type: currencyOptions.type, // Initially only supports ERC20, but eventually more!
+                await provider.send('metamask_watchAsset', [
+                    {
+                        type: currencyOptions.type,
                         options: {
-                            address: currencyOptions.address, // The address that the token is at.
-                            symbol: currencyOptions.symbol, // A ticker symbol or shorthand, up to 5 chars.
-                            decimals: currencyOptions.decimals, // The number of decimals in the token
-                            image: currencyOptions.image, // A string url of the token logo
+                            address: currencyOptions.address,
+                            symbol: currencyOptions.symbol,
+                            decimals: currencyOptions.decimals,
+                            image: currencyOptions.image,
                         },
                     },
-                    id: Math.round(Math.random() * 100000),
-                });
+                ]);
 
                 okToast(`${currencyName} added to MetaMask`, toast);
             } catch (error) {
-                console.error('🚀 ~ file: CurrencyMenu.js:175 ~ addToMetamask ~ error:', error);
+                console.error('🚀 ~ error:', error);
                 errorToast("Couldn't add token to MetaMask", toast);
             }
         } else {
