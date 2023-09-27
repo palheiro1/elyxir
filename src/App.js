@@ -31,7 +31,7 @@ function App() {
         const checkVersion = async () => {
             try {
                 console.log('New version available! Cleaning cache and hard reloading...');
-                await emptyCacheStorage();
+                // await emptyCacheStorage();
                 window.location.reload();
             } catch (error) {
                 console.error('🚀 ~ file: App.js:50 ~ checkVersion ~ error:', error);
