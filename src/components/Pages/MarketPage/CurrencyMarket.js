@@ -13,7 +13,7 @@ const CurrencyMarket = ({ username, gemCards, giftzCards, wethCards, IGNISBalanc
     const textGem = (
         <Box>
             GEM is the in-game currency for Mythical Beings. <br />
-            You will need it to perfirm operations such as crafting and morphing, as well as to participate in
+            You will need it to perform operations such as crafting and morphing, as well as to participate in
             Battleground, the game in development.
         </Box>
     );
