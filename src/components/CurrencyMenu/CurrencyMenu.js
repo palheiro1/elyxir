@@ -144,37 +144,37 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     ];
 
     const addToMetamask = async currencyName => {
-        // if (window && window.ethereum) {
-        //     const currencyOptions = TOKEN_OPTIONS.find(token => token.name === currencyName);
-        //     const web3 = new Web3(window.ethereum);
+        if (window && window.ethereum) {
+            const currencyOptions = TOKEN_OPTIONS.find(token => token.name === currencyName);
+            const web3 = new Web3(window.ethereum);
 
-        //     try {
-        //         // Prompt the user to connect to MetaMask
-        //         await window.ethereum.enable();
+            try {
+                // Prompt the user to connect to MetaMask
+                await window.ethereum.enable();
 
-        //         // Add the custom token
-        //         await web3.currentProvider.sendAsync({
-        //             method: 'metamask_watchAsset',
-        //             params: {
-        //                 type: currencyOptions.type, // Initially only supports ERC20, but eventually more!
-        //                 options: {
-        //                     address: currencyOptions.address, // The address that the token is at.
-        //                     symbol: currencyOptions.symbol, // A ticker symbol or shorthand, up to 5 chars.
-        //                     decimals: currencyOptions.decimals, // The number of decimals in the token
-        //                     image: currencyOptions.image, // A string url of the token logo
-        //                 },
-        //             },
-        //             id: Math.round(Math.random() * 100000),
-        //         });
+                // Add the custom token
+                await web3.currentProvider.request({
+                    method: 'metamask_watchAsset',
+                    params: {
+                        type: currencyOptions.type, // Initially only supports ERC20, but eventually more!
+                        options: {
+                            address: currencyOptions.address, // The address that the token is at.
+                            symbol: currencyOptions.symbol, // A ticker symbol or shorthand, up to 5 chars.
+                            decimals: currencyOptions.decimals, // The number of decimals in the token
+                            image: currencyOptions.image, // A string url of the token logo
+                        },
+                    },
+                    id: Math.round(Math.random() * 100000),
+                });
 
-        //         okToast(`${currencyName} added to MetaMask`, toast);
-        //     } catch (error) {
-        //         console.error('🚀 ~ file: CurrencyMenu.js:175 ~ addToMetamask ~ error:', error);
-        //         errorToast("Couldn't add token to MetaMask", toast);
-        //     }
-        // } else {
-        //     errorToast('MetaMask is not installed', toast);
-        // }
+                okToast(`${currencyName} added to MetaMask`, toast);
+            } catch (error) {
+                console.error('🚀 ~ file: CurrencyMenu.js:175 ~ addToMetamask ~ error:', error);
+                errorToast("Couldn't add token to MetaMask", toast);
+            }
+        } else {
+            errorToast('MetaMask is not installed', toast);
+        }
     };
 
     return (
