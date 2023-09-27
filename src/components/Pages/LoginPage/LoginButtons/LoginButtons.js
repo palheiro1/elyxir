@@ -1,6 +1,6 @@
-import { Button, Stack } from "@chakra-ui/react"
+import { Button, Image, Stack } from '@chakra-ui/react';
 
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from 'react-router-dom';
 
 /**
  * This component is used to render Register and Restore buttons
@@ -15,37 +15,33 @@ import { useNavigate } from "react-router-dom"
  * @version 0.1
  * @returns {JSX.Element} Register and Restore buttons component
  */
-const LoginButtons = ({ showNewUser, showLogIn, showRestore }) => {
+const LoginButtons = ({ showNewUser, showLogIn, showRestore, loginType, setLoginType }) => {
+    const navigate = useNavigate();
+    const handleNewUser = () => navigate('/register');
+    const handleRestoreUser = () => navigate('/restore');
+    const handleLogin = () => navigate('/login');
 
-    const navigate = useNavigate()
-    const handleNewUser = () => navigate("/register");
-    const handleRestoreUser = () => navigate("/restore");
-    const handleLogin = () => navigate("/login");
+    return (
+        <Stack direction={'row'} spacing={0} mb={4}>
+            {showNewUser && <Button rounded="none" w="100%" onClick={handleNewUser}>New user</Button>}
 
+            {showLogIn && <Button rounded="none" w="100%" onClick={handleLogin}>Log in</Button>}
 
-    return(
-        <Stack direction={"row"} spacing={4} mb={4}>
+            {showRestore && <Button rounded="none" w="100%" onClick={handleRestoreUser}>Restore user</Button>}
 
-            {showNewUser && (
-                <Button onClick={handleNewUser}>
-                    New user
+            {loginType === 'normal' && (
+                <Button rounded="none" w="100%" px={6} onClick={() => setLoginType('sigbro')} leftIcon={<Image src="/images/logos/sigbro.png" w="20px" />}>
+                    Sigbro login
                 </Button>
             )}
 
-            {showLogIn && (
-                <Button onClick={handleLogin}>
-                    Log in
+            {loginType === 'sigbro' && (
+                <Button rounded="none" w="100%" onClick={() => setLoginType('normal')}>
+                    Legacy login
                 </Button>
             )}
-
-            {showRestore && (
-                <Button onClick={handleRestoreUser}>
-                    Restore user
-                </Button>
-            )}
-
         </Stack>
-    )
-}
+    );
+};
 
-export default LoginButtons
+export default LoginButtons;
