@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useClearCache } from 'react-clear-cache';
