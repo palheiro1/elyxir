@@ -19,7 +19,7 @@ const Login = ({ setInfoAccount }) => {
     return (
         <Box px={8}>
             <Center>
-                <Stack direction={'row'} spacing={4} pt={8} align="center">
+                <Stack direction={'row'} spacing={4} pt={12} align="center">
                     <Box w={['100%', '100%', '60%', '60%']} p={4}>
                         <LoginButtons
                             showNewUser={true}
@@ -28,7 +28,7 @@ const Login = ({ setInfoAccount }) => {
                             setLoginType={setLoginType}
                         />
 
-                        <Heading>
+                        <Heading my={6}>
                             Welcome to <br />
                             Mythical Beings
                         </Heading>

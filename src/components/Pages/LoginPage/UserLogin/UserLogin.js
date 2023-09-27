@@ -6,6 +6,7 @@ import {
     PinInputField,
     Select,
     Stack,
+    Text,
     useDisclosure,
     useToast,
 } from '@chakra-ui/react';
@@ -101,7 +102,7 @@ const UserLogin = ({ setInfoAccount }) => {
 
     return (
         <>
-            <Stack spacing={3} pt={4} w="100%">
+            <Stack spacing={4} pt={4} w="100%">
                 <HStack>
                     <Select size="lg" w="100%" onChange={handleSelectUser} variant="filled">
                         {accounts.map(account => (
@@ -127,6 +128,10 @@ const UserLogin = ({ setInfoAccount }) => {
                         <PinInputField />
                     </PinInput>
                 </Center>
+
+                <Text fontSize="sm" align="center">
+                    Enter PIN to Login
+                </Text>
             </Stack>
             <ConfirmDialog
                 reference={reference}

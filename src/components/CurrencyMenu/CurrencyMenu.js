@@ -134,8 +134,8 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
             image: 'https://weth.mythicalbeings.io/images/thumb/mana.png',
         },
         {
-            name: 'wETH',
-            symbol: 'wETH',
+            name: 'WETH',
+            symbol: 'WETH',
             type: 'ERC20',
             address: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
             decimals: 18,
@@ -144,7 +144,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     ];
 
     const addToMetamask = async currencyName => {
-        if (window.ethereum) {
+        if (window && window.ethereum) {
             const currencyOptions = TOKEN_OPTIONS.find(token => token.name === currencyName);
             const web3 = new Web3(window.ethereum);
 
