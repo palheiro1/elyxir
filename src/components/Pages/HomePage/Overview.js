@@ -149,7 +149,7 @@ const Overview = ({ blockchainStatus }) => {
                         <Image src="/images/currency/weth.png" alt="wETH" maxW={'30px'} />
                         <Text>
                             WETH are the ethereal threads connecting our world with the mythical blockchain. They act as
-                            a , allowing you to exchange them for GIFTZ, other currencies or cards, expanding your
+                            a bridge, allowing you to exchange them for GIFTZ, other currencies or cards, expanding your
                             collection and influence.
                         </Text>
                     </Stack>
