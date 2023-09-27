@@ -1,5 +1,3 @@
-import { ethers } from 'ethers';
-
 import {
     useDisclosure,
     Menu,
@@ -144,7 +142,6 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     ];
 
     const addToMetamask = async currencyName => {
-        console.log('addToMetamask -> currencyName', currencyName);
         if (!currencyName) return;
 
         if (window && window.ethereum) {
@@ -154,23 +151,27 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                 // Prompt the user to connect to MetaMask
                 await window.ethereum.enable();
 
-                // Create an ethers provider using MetaMask's provider
-                const provider = new ethers.BrowserProvider(window.ethereum);
+                const options = {
+                    type: currencyOptions.type, // Token type
+                    options: {
+                        address: currencyOptions.address,
+                        symbol: currencyOptions.symbol,
+                        decimals: currencyOptions.decimals,
+                        image: currencyOptions.image,
+                    },
+                };
 
                 // Add the custom token
-                await provider.send('metamask_watchAsset', [
-                    {
-                        type: currencyOptions.type,
-                        options: {
-                            address: currencyOptions.address,
-                            symbol: currencyOptions.symbol,
-                            decimals: currencyOptions.decimals,
-                            image: currencyOptions.image,
-                        },
-                    },
-                ]);
+                const result = await window.ethereum.request({
+                    method: 'wallet_watchAsset',
+                    params: options,
+                });
 
-                okToast(`${currencyName} added to MetaMask`, toast);
+                if (result) {
+                    okToast(`${currencyName} added to MetaMask`, toast);
+                } else {
+                    errorToast("Couldn't add token to MetaMask", toast);
+                }
             } catch (error) {
                 console.error('🚀 ~ error:', error);
                 errorToast("Couldn't add token to MetaMask", toast);
