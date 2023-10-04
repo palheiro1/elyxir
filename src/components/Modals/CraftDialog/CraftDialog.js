@@ -44,7 +44,7 @@ import CardBadges from '../../Cards/CardBadges';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
+const CraftDialog = ({ reference, isOpen, onClose, card, username, gem }) => {
     const toast = useToast();
     const maxCards = Number(card.unconfirmedQuantityQNT);
     const maxCrafts = Math.floor(maxCards / 5);
@@ -93,8 +93,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
     }, [input, card]);
 
     const handleCrafting = async () => {
-        if (!isValidPin) return errorToast('Invalid PIN', toast);
-        if (!passPhrase) return errorToast('Invalid PIN', toast);
+        if (!isValidPin || !passPhrase) return errorToast('Invalid PIN', toast);
         if (noCrafts > maxCrafts) return errorToast('Invalid number of crafts', toast);
         if (noCrafts === 0) return errorToast('Invalid number of crafts', toast);
         if (craftingCost === 0) return errorToast('Invalid number of crafts', toast);
@@ -199,13 +198,13 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                             my={6}
                             border="1px solid #2f8190"
                             rounded="lg">
-                            <Input placeholder=" " value={craftingCost + ' IGNIS'} size="lg" disabled />
+                            <Input placeholder=" " value={craftingCost + ' GEM'} size="lg" disabled />
                             <FormLabel>Crafting costs</FormLabel>
                         </FormControl>
 
-                        <Collapse in={ignis < craftingCost}>
+                        <Collapse in={gem < craftingCost}>
                             <Text color="red.500" textAlign="center" fontWeight="bold">
-                                Not enough IGNIS
+                                Not enough GEM
                             </Text>
                         </Collapse>
 
@@ -229,7 +228,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, ignis }) => {
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button
-                            isDisabled={!isValidPin || sendingTx || ignis < craftingCost}
+                            isDisabled={!isValidPin || sendingTx || gem < craftingCost}
                             bgColor={borderColor}
                             w="100%"
                             py={6}

@@ -69,6 +69,9 @@ export function parseSender(tx) {
                 case 'TarascaDAOCardCraft':
                     nameSuffix = ' Crafting';
                     break;
+                case 'CardCraftGEM':
+                    nameSuffix = ' Crafting';
+                    break;
                 case 'AssetDistributor':
                     nameSuffix = ' Creator';
                     break;
@@ -107,6 +110,9 @@ export function parseRecipient(tx) {
                 case 'TarascaDAOCardCraft':
                     nameSuffix = ' Crafting';
                     break;
+                case 'CardCraftGEM':
+                    nameSuffix = ' Crafting';
+                    break;
                 case 'AssetDistributor':
                     nameSuffix = ' Creator';
                     break;
@@ -128,18 +134,22 @@ export const getTxTimestamp = (tx, eb, showStatus = true) => {
     const timestring = formatTime(txstamp, 'HH:mm:ss');
     const CompositeTimestamp = `${datestring} ${timestring}`;
 
-    let confirmationStatus = "";
+    let confirmationStatus = '';
     if (showStatus) {
-        if (tx.confirmations === 0) confirmationStatus = "(unconfirmed)";
-        if (tx.confirmations === 1) confirmationStatus = "(just confirmed)";
-        return <div> {CompositeTimestamp} <br /> {confirmationStatus}</div>;
+        if (tx.confirmations === 0) confirmationStatus = '(unconfirmed)';
+        if (tx.confirmations === 1) confirmationStatus = '(just confirmed)';
+        return (
+            <div>
+                {' '}
+                {CompositeTimestamp} <br /> {confirmationStatus}
+            </div>
+        );
     }
 
     return CompositeTimestamp;
+};
 
-}
-
-export const getTimestampForMessages = (msg) => {
+export const getTimestampForMessages = msg => {
     const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
     const msgstamp = new Date(eb.getTime() + msg.blockTimestamp * 1000);
 
@@ -147,4 +157,4 @@ export const getTimestampForMessages = (msg) => {
     const timestring = formatTime(msgstamp, 'HH:mm:ss');
 
     return `${datestring} ${timestring}`;
-}
+};

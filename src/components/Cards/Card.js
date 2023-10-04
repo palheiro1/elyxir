@@ -353,7 +353,7 @@ const Card = ({
                             onClose={onCloseCraft}
                             reference={refCraft}
                             card={card}
-                            ignis={ignis}
+                            gem={gem}
                             username={username}
                         />
                     )}

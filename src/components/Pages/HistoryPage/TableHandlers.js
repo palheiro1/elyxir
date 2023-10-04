@@ -56,6 +56,8 @@ export const handleType1AndSubtype0 = (tx, timestamp, infoAccount) => {
             return handleMessage('Participation', 'Our Jackpot contract confirmed your participation.', timestamp);
         } else if (msg.submittedBy === 'TarascaDAOCardCraft') {
             return;
+        } else if (msg.submittedBy === 'CardCraftGEM') {
+            return;
         } else {
             console.log('TXHistory -> Unhandled message received.', msg);
         }

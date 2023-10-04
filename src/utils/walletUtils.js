@@ -317,7 +317,8 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
  * @dev This function is used to send cards to craft
  */
 export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
-    const message = JSON.stringify({ contract: 'TarascaDAOCardCraft' });
+    // const message = JSON.stringify({ contract: 'TarascaDAOCardCraft' });
+    const message = JSON.stringify({ contract: 'CardCraftGEM' });
     let success = true;
 
     const transferedAsset = await transferAsset({
@@ -336,8 +337,21 @@ export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
 
     if (!transferedAsset || !success) return false;
 
-    const transferedIgnis = await sendIgnis({
-        amountNQT: cost * NQTDIVIDER,
+    // const transferedIgnis = await sendIgnis({
+    //     amountNQT: cost * NQTDIVIDER,
+    //     recipient: BUYPACKACCOUNT,
+    //     passPhrase,
+    //     message,
+    //     messagePrunable: true,
+    //     deadline: 1440,
+    //     priority: 'HIGH',
+    // }).catch(function (error) {
+    //     console.error('🚀 ~ file: ardorInterface.js:685 ~ sendToCraft ~ error', error);
+    //     success = false;
+    // });
+
+    const transferedGem = await transferGEM({
+        quantityQNT: cost * NQTDIVIDER,
         recipient: BUYPACKACCOUNT,
         passPhrase,
         message,
@@ -349,7 +363,7 @@ export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
         success = false;
     });
 
-    return transferedIgnis && success;
+    return transferedGem && success;
 };
 
 /**
