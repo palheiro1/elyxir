@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 
 // Utils
-import { checkPin, sendToPolygonBridge } from '../../../../utils/walletUtils';
+import { checkPin, roundNumberWithMaxDecimals, sendToPolygonBridge } from '../../../../utils/walletUtils';
 import { errorToast, infoToast, okToast } from '../../../../utils/alerts';
 import { GEMASSET, NQTDIVIDER } from '../../../../data/CONSTANTS';
 
@@ -114,7 +114,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                         <NumberInputField />
                     </NumberInput>
                     <Center>
-                        <Text color={textColor}>Max: {GEMBalance}</Text>
+                        <Text color={textColor}>Max: {roundNumberWithMaxDecimals(GEMBalance, 7)}</Text>
                     </Center>
                 </Box>
 

@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 
 // Utils
-import { checkPin, sendToPolygonBridge } from '../../../../utils/walletUtils';
+import { checkPin, roundNumberWithMaxDecimals, sendToPolygonBridge } from '../../../../utils/walletUtils';
 import { errorToast, infoToast, okToast } from '../../../../utils/alerts';
 import { MANAASSET, NQTDIVIDER } from '../../../../data/CONSTANTS';
 
@@ -108,7 +108,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                         <NumberInputField />
                     </NumberInput>
                     <Center>
-                        <Text color={textColor}>Max: {parseFloat(MANABalance).toPrecision(2)}</Text>
+                        <Text color={textColor}>Max: {roundNumberWithMaxDecimals(MANABalance, 7)}</Text>
                     </Center>
                 </Box>
 
