@@ -91,7 +91,7 @@ export const handleType2AndSubtype1 = (tx, timestamp, infoAccount, collectionCar
     } else if (asset === 'WETH') {
         handler = handleWETH(inOut, fixedAmount, timestamp, sender);
     } else if(asset === "MANA") {
-        handler = handleMANA(inOut, fixedAmount, timestamp, sender);
+        handler = handleMANA(inOut, tx.attachment.quantityQNT, timestamp, sender);
     } else {
         handler = handleCardTransfer(inOut, fixedAmount, timestamp, sender, asset);
     }
