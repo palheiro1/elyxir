@@ -11,9 +11,9 @@ import { CURRENCY_ASSETS } from '../../../data/CONSTANTS';
 
 const CardMarket = ({ cards, infoAccount, textColor }) => {
     // Filter only cards, no currencies
-    const accountAsk = infoAccount.currentAsks;
-    const accountBid = infoAccount.currentBids;
-    const trades = infoAccount.trades;
+    const accountAsk = infoAccount.currentAsks || [];
+    const accountBid = infoAccount.currentBids || [];
+    const trades = infoAccount.trades || [];
     const askWithoutCurrencies = accountAsk.filter((ask) => !Object.keys(CURRENCY_ASSETS).includes(ask.asset));
     const bidWithoutCurrencies = accountBid.filter((bid) => !Object.keys(CURRENCY_ASSETS).includes(bid.asset));
     const tradesWithoutCurrencies = trades.filter((trade) => !Object.keys(CURRENCY_ASSETS).includes(trade.asset));

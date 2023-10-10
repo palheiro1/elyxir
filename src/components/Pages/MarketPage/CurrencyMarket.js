@@ -13,9 +13,9 @@ const CurrencyMarket = ({ username, gemCards, giftzCards, wethCards, IGNISBalanc
     // 2 -> Orders
     const [option, setOption] = useState(0);
 
-    const accountAsk = infoAccount.currentAsks;
-    const accountBid = infoAccount.currentBids;
-    const trades = infoAccount.trades;
+    const accountAsk = infoAccount.currentAsks || [];
+    const accountBid = infoAccount.currentBids || [];
+    const trades = infoAccount.trades || [];
     const askWithoutCurrencies = accountAsk.filter((ask) => Object.keys(CURRENCY_ASSETS).includes(ask.asset));
     const bidWithoutCurrencies = accountBid.filter((bid) => Object.keys(CURRENCY_ASSETS).includes(bid.asset));
     const tradesWithoutCurrencies = trades.filter((trade) => Object.keys(CURRENCY_ASSETS).includes(trade.asset));
