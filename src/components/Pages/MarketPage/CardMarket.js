@@ -7,8 +7,17 @@ import SortAndFilterCards from '../../SortAndFilters/SortAndFilterCards';
 import AskAndBidGrid from './TradesAndOrders/AskAndBids/AskAndBidGrid';
 import SectionSwitch from './SectionSwitch';
 import TradesAndOrderTable from './TradesAndOrders/TradesAndOrderTable';
+import { CURRENCY_ASSETS } from '../../../data/CONSTANTS';
 
 const CardMarket = ({ cards, infoAccount, textColor }) => {
+    // Filter only cards, no currencies
+    const accountAsk = infoAccount.currentAsks;
+    const accountBid = infoAccount.currentBids;
+    const trades = infoAccount.trades;
+    const askWithoutCurrencies = accountAsk.filter((ask) => !Object.keys(CURRENCY_ASSETS).includes(ask.asset));
+    const bidWithoutCurrencies = accountBid.filter((bid) => !Object.keys(CURRENCY_ASSETS).includes(bid.asset));
+    const tradesWithoutCurrencies = trades.filter((trade) => !Object.keys(CURRENCY_ASSETS).includes(trade.asset));
+    
     // Option
     // 0 -> Market
     // 1 -> Trades
@@ -42,8 +51,8 @@ const CardMarket = ({ cards, infoAccount, textColor }) => {
                     <AskAndBidGrid
                         username={infoAccount.name}
                         cards={cards}
-                        askOrders={infoAccount.currentAsks}
-                        bidOrders={infoAccount.currentBids}
+                        askOrders={askWithoutCurrencies}
+                        bidOrders={bidWithoutCurrencies}
                         canDelete={true}
                         textColor={textColor}
                     />
@@ -56,7 +65,7 @@ const CardMarket = ({ cards, infoAccount, textColor }) => {
                         Trades
                     </Heading>
 
-                    <TradesAndOrderTable account={infoAccount.accountRs} cards={cards} trades={infoAccount.trades} />
+                    <TradesAndOrderTable account={infoAccount.accountRs} cards={cards} trades={tradesWithoutCurrencies} />
                 </Box>
             )}
         </>

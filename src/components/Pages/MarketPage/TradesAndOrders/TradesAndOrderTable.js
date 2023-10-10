@@ -30,10 +30,8 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
                 mt={4}
                 border="1px"
                 rounded="lg"
-                boxShadow="inner"
                 borderColor={"#3b6497"}
-                bg="blackAlpha"
-                shadow="dark-lg">
+                bg="blackAlpha">
                 <Table>
                     <Thead>
                         <Tr>

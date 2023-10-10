@@ -1,7 +1,25 @@
-import { Box, Stack } from '@chakra-ui/react';
+import { Box, Heading, Stack } from '@chakra-ui/react';
 import CurrencyWidget from './CurrencyWidget';
+import { useState } from 'react';
+import SectionSwitch from './SectionSwitch';
+import AskAndBidGrid from './TradesAndOrders/AskAndBids/AskAndBidGrid';
+import TradesAndOrderTable from './TradesAndOrders/TradesAndOrderTable';
+import { CURRENCY_ASSETS } from '../../../data/CONSTANTS';
 
-const CurrencyMarket = ({ username, gemCards, giftzCards, wethCards, IGNISBalance, market, manaCards }) => {
+const CurrencyMarket = ({ username, gemCards, giftzCards, wethCards, IGNISBalance, market, manaCards, infoAccount, cards, textColor }) => {
+    // Option
+    // 0 -> Market
+    // 1 -> Trades
+    // 2 -> Orders
+    const [option, setOption] = useState(0);
+
+    const accountAsk = infoAccount.currentAsks;
+    const accountBid = infoAccount.currentBids;
+    const trades = infoAccount.trades;
+    const askWithoutCurrencies = accountAsk.filter((ask) => Object.keys(CURRENCY_ASSETS).includes(ask.asset));
+    const bidWithoutCurrencies = accountBid.filter((bid) => Object.keys(CURRENCY_ASSETS).includes(bid.asset));
+    const tradesWithoutCurrencies = trades.filter((trade) => Object.keys(CURRENCY_ASSETS).includes(trade.asset));
+
     const textGiftz = (
         <Box>
             GIFTZ are a sealed pack of cards. The are sold from a vending machine that is refilled every day.
@@ -28,38 +46,75 @@ const CurrencyMarket = ({ username, gemCards, giftzCards, wethCards, IGNISBalanc
 
     return (
         <Stack spacing={4} mb={6}>
-            <CurrencyWidget
-                username={username}
-                currencyCards={wethCards}
-                IGNISBalance={IGNISBalance}
-                currencyName={'wETH'}
-                decimals={6}
-                message={`wETH is the most widely used cryptocurrency on web3 and is used to buy random packs of Mythical
+            <SectionSwitch option={option} setOption={setOption} />
+
+            {option === 0 && (
+                <>
+                    <CurrencyWidget
+                        username={username}
+                        currencyCards={wethCards}
+                        IGNISBalance={IGNISBalance}
+                        currencyName={'wETH'}
+                        decimals={6}
+                        message={`wETH is the most widely used cryptocurrency on web3 and is used to buy random packs of Mythical
                     Beings cards from the vending machine.`}
-            />
-            <CurrencyWidget
-                username={username}
-                currencyCards={gemCards}
-                IGNISBalance={IGNISBalance}
-                currencyName={'GEM'}
-                message={textGem}
-            />
-            <CurrencyWidget
-                username={username}
-                currencyCards={giftzCards}
-                IGNISBalance={IGNISBalance}
-                currencyName={'GIFTZ'}
-                decimals={0}
-                message={textGiftz}
-            />
-            <CurrencyWidget
-                username={username}
-                currencyCards={manaCards}
-                IGNISBalance={IGNISBalance}
-                currencyName={'MANA'}
-                decimals={0}
-                message={textMana}
-            />
+                    />
+                    <CurrencyWidget
+                        username={username}
+                        currencyCards={gemCards}
+                        IGNISBalance={IGNISBalance}
+                        currencyName={'GEM'}
+                        message={textGem}
+                    />
+                    <CurrencyWidget
+                        username={username}
+                        currencyCards={giftzCards}
+                        IGNISBalance={IGNISBalance}
+                        currencyName={'GIFTZ'}
+                        decimals={0}
+                        message={textGiftz}
+                    />
+                    <CurrencyWidget
+                        username={username}
+                        currencyCards={manaCards}
+                        IGNISBalance={IGNISBalance}
+                        currencyName={'MANA'}
+                        decimals={0}
+                        message={textMana}
+                    />
+                </>
+            )}
+
+            {option === 1 && (
+                <Box>
+                    <Heading textAlign="center" mt={4} color={textColor}>
+                        Orders
+                    </Heading>
+
+                    <AskAndBidGrid
+                        username={infoAccount.name}
+                        cards={cards}
+                        askOrders={askWithoutCurrencies}
+                        bidOrders={bidWithoutCurrencies}
+                        canDelete={true}
+                        textColor={textColor}
+                    />
+                </Box>
+            )}
+
+            {option === 2 && (
+                <Box>
+                    <Heading textAlign="center" mt={4}>
+                        Trades
+                    </Heading>
+
+                    <TradesAndOrderTable
+                        account={infoAccount.accountRs}
+                        cards={cards}
+                        trades={tradesWithoutCurrencies}
+                    />
+                </Box>
+            )}
         </Stack>
     );
 };

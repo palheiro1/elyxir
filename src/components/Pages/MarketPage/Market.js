@@ -38,6 +38,9 @@ const Market = ({ infoAccount, cards, gemCards, giftzCards, wethCards, manaCards
                     wethCards={wethCards}
                     manaCards={manaCards}
                     IGNISBalance={infoAccount.IGNISBalance}
+                    infoAccount={infoAccount}
+                    cards={cards}
+                    textColor={textColor}
                 />
             )}
         </Box>
