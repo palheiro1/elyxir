@@ -1,4 +1,4 @@
-import { Box, Button, Center, Heading, Image, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Image, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 // import { Timeline } from 'react-twitter-widgets';
 import Jackpot from '../../JackpotWidget/JackpotWidget';
 //import LatestTransaction from './LatestTransactions/LatestTransaction';
@@ -11,7 +11,7 @@ const Overview = ({ blockchainStatus }) => {
                 <Heading textAlign={'center'} fontSize={'2xl'}>
                     {number}
                 </Heading>
-                <Text textAlign={'center'}>{title}</Text>
+                <Text textAlign={'center'} fontWeight="bold">{title}</Text>
                 <Center>{button}</Center>
             </Stack>
         );
@@ -41,13 +41,20 @@ const Overview = ({ blockchainStatus }) => {
         );
     };
 
+    const textColor = useColorModeValue('#2f9088', 'white');
+    const textBuy = useColorModeValue('#9f3772', 'white');
+    const textOpen = useColorModeValue('#e094b3', 'white');
+    const textHistory = useColorModeValue('#3b7197', 'white');
+    const textInventory = useColorModeValue('#2f8190', 'white');
+    const textJackpot = useColorModeValue('#3b5397', 'white');
+
     return (
         <Box>
             <Stack direction={{ base: 'column' }} spacing={4}>
                 <Heading textAlign={'center'} fontWeight={'light'} fontSize={'6xl'} color="#2f9088">
                     Welcome to Mythical Beings
                 </Heading>
-                <Text px={{ base: 0, md: 12 }} color="#2f9088">
+                <Text px={{ base: 0, md: 12 }} color={textColor}>
                     Explore the rich tapestry of Mythical Beings, where every card is a treasure waiting to be
                     unearthed. Dive into the lore, uncover forgotten legends, and become a collector of mythical
                     creatures from across the globe. Complete your collection by gathering all creatures, with
@@ -62,7 +69,7 @@ const Overview = ({ blockchainStatus }) => {
                         <FlowItem
                             number={1}
                             title="Obtain cards by purchasing GIFTZ"
-                            color={'#9f3772'}
+                            color={textBuy}
                             button={
                                 <MenuButton
                                     bgColor={'#9f3772'}
@@ -77,7 +84,7 @@ const Overview = ({ blockchainStatus }) => {
                         <FlowItem
                             number={2}
                             title="Redeem packs fo 3 random cards"
-                            color={'#e094b3'}
+                            color={textOpen}
                             button={
                                 <MenuButton
                                     bgColor={'#e094b3'}
@@ -92,7 +99,7 @@ const Overview = ({ blockchainStatus }) => {
                         <FlowItem
                             number={3}
                             title="Watch your History"
-                            color={'#3b7197'}
+                            color={textHistory}
                             button={
                                 <MenuButton
                                     bgColor={'#3b7197'}
@@ -107,7 +114,7 @@ const Overview = ({ blockchainStatus }) => {
                         <FlowItem
                             number={4}
                             title="Investigate your inventory"
-                            color={'#2f8190'}
+                            color={textInventory}
                             button={
                                 <MenuButton
                                     bgColor={'#2f8190'}
@@ -123,48 +130,51 @@ const Overview = ({ blockchainStatus }) => {
                 </Center>
 
                 <Center>
-                    <FlowItem number={5} title="The Jackpot: Your Ultimate Challenge Awaits!" color="#3b5397" />
+                    <FlowItem number={5} title="The Jackpot: Your Ultimate Challenge Awaits!" color={textJackpot} />
                 </Center>
 
                 <Jackpot blockchainStatus={blockchainStatus} cStyle={1} />
 
-                <Stack pt={8} px={{ base: 0, md: 12 }} color="#2f9088">
+                <Stack py={8} px={{ base: 0, md: 12 }} spacing={6} color={textColor}>
                     <Text fontWeight={'bold'}>Here are the mythical currencies you'll encounter on your journey:</Text>
                     <Stack direction="row" align={'center'}>
-                        <Image src="/images/currency/ignis.png" alt="Ignis" maxW={'30px'} />
+                        <Image src="/images/currency/ignis.png" alt="Ignis" maxW={'35px'} />
                         <Text>
                             These mystic flames IGNIS hold the essence of mythical beings. Every transaction needs a
-                            small portion of it. Obtain some daily using our faucet or exchange on our market (or on
-                            other centralized exchanges).
+                            small portion of it. <br />
+                            Obtain some daily using our faucet or exchange on our market (or on other centralized
+                            exchanges).
                         </Text>
                     </Stack>
                     <Stack direction="row" align={'center'}>
-                        <Image src="/images/currency/giftz.png" alt="GIFTZ" maxW={'30px'} />
+                        <Image src="/images/currency/giftz.png" alt="GIFTZ" maxW={'35px'} />
                         <Text>
-                            The very essence of generosity. GIFTZ are tokens of appreciation. They enable you to buy
-                            card packs.
+                            The very essence of generosity. GIFTZ are tokens of appreciation. <br />
+                            They enable you to buy card packs.
                         </Text>
                     </Stack>
                     <Stack direction="row" align={'center'}>
-                        <Image src="/images/currency/weth.png" alt="wETH" maxW={'30px'} />
+                        <Image src="/images/currency/weth.png" alt="wETH" maxW={'35px'} />
                         <Text>
-                            WETH are the ethereal threads connecting our world with the mythical blockchain. They act as
-                            a bridge, allowing you to exchange them for GIFTZ, other currencies or cards, expanding your
-                            collection and influence.
+                            WETH are the ethereal threads connecting our world with the mythical blockchain.
+                            <br /> They act as a bridge, allowing you to exchange them for GIFTZ, other currencies or
+                            cards, expanding your collection and influence.
                         </Text>
                     </Stack>
                     <Stack direction="row" align={'center'}>
-                        <Image src="/images/currency/gem.png" alt="GEM" maxW={'30px'} />
+                        <Image src="/images/currency/gem.png" alt="GEM" maxW={'35px'} />
                         <Text>
-                            Rare gems from forgotten treasure troves, GEM stones open doors to secret realms. They are
-                            the lifeblood of crafting and morphing, allowing you to shape your cards into new forms.
+                            Rare gems from forgotten treasure troves, GEM stones open doors to secret realms. <br />
+                            They are the lifeblood of crafting and morphing, allowing you to shape your cards into new
+                            forms.
                         </Text>
                     </Stack>
                     <Stack direction="row" align={'center'}>
-                        <Image src="/images/currency/mana.png" alt="MANA" maxW={'30px'} />
+                        <Image src="/images/currency/mana.png" alt="MANA" maxW={'35px'} />
                         <Text>
-                            Crystalline sources of mana, MANA crystals are the essence of magic itself. They serve as
-                            governance tokens, allowing you to have a say in the destiny of this enchanted realm.
+                            Crystalline sources of mana, MANA crystals are the essence of magic itself. <br />
+                            They serve as governance tokens, allowing you to have a say in the destiny of this enchanted
+                            realm.
                         </Text>
                     </Stack>
                 </Stack>
