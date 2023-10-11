@@ -145,7 +145,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
                     textColor={textColor}
                     onClick={onClick}>
                     <Stack direction="row" align="center" w="100%">
-                        <Box minW={"2rem"}>
+                        <Box minW={"2rem"} ml={isActive ? -1 : 0}>
                             <Image src={icon} w={isActive ? '30px' : '25px'} />
                         </Box>
                         <Text fontSize="sm" fontWeight={fontWeight}>
