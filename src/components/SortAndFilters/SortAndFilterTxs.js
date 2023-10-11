@@ -1,4 +1,4 @@
-import { Box, Select, Stack, Text } from '@chakra-ui/react';
+import { Box, Select, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaFilter } from 'react-icons/fa';
 import { BsArrowDownUp } from 'react-icons/bs';
@@ -47,6 +47,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
     }, [transactions, filter, sort, setFilteredTransactions, setVisibleTransactions]);
 
     const borderColor = '#3b7197';
+    const textColor = useColorModeValue('#3b7197', 'white');
 
     return (
         <Stack direction={{ base: 'column', md: 'row' }} pb={2} w="100%">
@@ -65,7 +66,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                 <Text fontSize="sm" color="#3b7197">
                     Sort:{' '}
                 </Text>
-                <Select border="0px" borderColor="gray.800" size="xs" onChange={handleSort} color="#3b7197">
+                <Select border="0px" borderColor="gray.800" size="xs" onChange={handleSort} color={textColor}>
                     <option value="recent">Newest</option>
                     <option value="older">Oldest</option>
                 </Select>
@@ -88,7 +89,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                     <Text fontSize="sm" color="#3b7197">
                         Filter:{' '}
                     </Text>
-                    <Select border="0px" borderColor="gray.800" size="xs" onChange={handleFilter} color="#3b7197">
+                    <Select border="0px" borderColor="gray.800" size="xs" onChange={handleFilter} color={textColor}>
                         <option value="all">All transactions</option>
                         <option value="in">Received</option>
                         <option value="out">Sent</option>

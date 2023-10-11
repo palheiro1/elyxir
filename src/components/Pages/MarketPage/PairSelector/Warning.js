@@ -2,8 +2,8 @@ import { Text } from "@chakra-ui/react";
 
 const Warning = ({ textColor }) => {
     return (
-        <Text fontSize="xs" color={textColor} textAlign="center" mt={2}>
-            Want to trade your cards or currencies for wETH, MATIC or DAI?
+        <Text fontSize="xs" textAlign="center" mt={2}>
+            <strong>Want to trade your cards or currencies for wETH, MATIC or DAI?</strong>
             <br /> Send them to Polygon via Bridge, and use the marketplaces{' '}
             <a href="https://polygon.mythicalbeings.io" target="_blank" rel="noreferrer">
                 polygon.mythicalbeings.io

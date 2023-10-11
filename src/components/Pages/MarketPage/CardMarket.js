@@ -44,7 +44,7 @@ const CardMarket = ({ cards, infoAccount, textColor }) => {
 
             {option === 1 && (
                 <Box>
-                    <Heading textAlign="center" mt={4} color={textColor}>
+                    <Heading textAlign="center" mt={4}>
                         Orders
                     </Heading>
 
