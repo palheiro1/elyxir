@@ -117,7 +117,7 @@ const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
                     <Center>
                         <Stack direction={'row'} spacing={24} align="center">
                             <Box px={8}></Box>
-                            <Text textAlign="center" fontSize="small" textColor="gray.600" pb={2} w="100%">
+                            <Text textAlign="center" fontSize="small" textColor="gray.600" py={2} w="100%">
                                 © 2022 Tarasca GmbH. All Rights Reserved.
                                 <br />
                                 Build: {process.env.REACT_APP_GIT_SHA}
