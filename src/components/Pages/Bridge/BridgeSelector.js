@@ -2,6 +2,7 @@ import { Box, Center, Heading, SimpleGrid, Text, useColorModeValue } from '@chak
 
 const BridgeSelector = ({ setBridgeType }) => {
     const borderColor = useColorModeValue('#573b97', '#573b97');
+    const buttonColor = useColorModeValue('#573b97', 'white');
     const bgColor = useColorModeValue('rgba(57,59,151,0.5)', 'rgba(57,59,151,0.5)');
     const hoverColor = useColorModeValue('rgba(57,59,151,0.3)', 'rgba(57,59,151,0.3)');
 
@@ -20,7 +21,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                 minH="5rem"
                 onClick={() => setBridgeType(bridgeType)}
                 _hover={{ bgColor: hoverColor, cursor: 'pointer' }}>
-                <Text fontSize="2xl" fontWeight="medium" textAlign="center" color={borderColor}>
+                <Text fontSize="2xl" fontWeight="medium" textAlign="center" color={buttonColor}>
                     {text}
                 </Text>
                 <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg" color="white">
@@ -28,7 +29,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                 </Text>
             </Box>
         );
-    }
+    };
 
     return (
         <>
@@ -43,10 +44,26 @@ const BridgeSelector = ({ setBridgeType }) => {
                 </Box>
             </Center>
             <SimpleGrid columns={2} spacing={2} align="center">
-                <BridgeButton bridgeType="ERC20wETH" text="wETH" description="Bring your wETH to Ardor to buy card packs from the vending machine." />
-                <BridgeButton bridgeType="ERC20Mana" text="MANA" description="Bring your MANA to Polygon to exercise your right to vote in the Mythic DAO." />
-                <BridgeButton bridgeType="ERC1155GIFTZ" text="GIFTZ" description="Bring your GIFTZ to Ardor to open the 3 random NFT they contain." />
-                <BridgeButton bridgeType="ERC20GEM" text="GEM" description="Use the bridge to trade your GEM in Polygon." />
+                <BridgeButton
+                    bridgeType="ERC20wETH"
+                    text="wETH"
+                    description="Bring your wETH to Ardor to buy card packs from the vending machine."
+                />
+                <BridgeButton
+                    bridgeType="ERC20Mana"
+                    text="MANA"
+                    description="Bring your MANA to Polygon to exercise your right to vote in the Mythic DAO."
+                />
+                <BridgeButton
+                    bridgeType="ERC1155GIFTZ"
+                    text="GIFTZ"
+                    description="Bring your GIFTZ to Ardor to open the 3 random NFT they contain."
+                />
+                <BridgeButton
+                    bridgeType="ERC20GEM"
+                    text="GEM"
+                    description="Use the bridge to trade your GEM in Polygon."
+                />
             </SimpleGrid>
             <Box
                 w="100%"
@@ -60,10 +77,18 @@ const BridgeSelector = ({ setBridgeType }) => {
                 minH="5rem"
                 onClick={() => setBridgeType('ERC1155')}
                 _hover={{ bgColor: hoverColor, cursor: 'pointer' }}>
-                <Text fontSize="2xl" fontWeight="medium" textAlign="center" color={borderColor}>
+                <Text fontSize="2xl" fontWeight="medium" textAlign="center" color={buttonColor}>
                     CARDs
                 </Text>
-                <Text fontSize={'xs'} mt={2} p={2} w="100%" bgColor={bgColor} rounded="lg" textAlign="center" color="white">
+                <Text
+                    fontSize={'xs'}
+                    mt={2}
+                    p={2}
+                    w="100%"
+                    bgColor={bgColor}
+                    rounded="lg"
+                    textAlign="center"
+                    color="white">
                     Take your cards to Polygon to sell them on the main NFT marketplaces, or bring them to Ardor to
                     craft, morph, claim jackpots or access unlockable content.
                 </Text>
