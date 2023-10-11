@@ -7,6 +7,7 @@ import {
     Stack,
     Text,
     VStack,
+    useColorModeValue,
 } from '@chakra-ui/react';
 
 /**
@@ -19,7 +20,8 @@ import {
  */
 const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBalanceUSD, cStyle }) => {
     // const textColor = useColorModeValue('black', 'white');
-    const textColor = cStyle === 0 ? '#2f9088' : '#3b5397';
+    const selectedColor = cStyle === 0 ? '#2f9088' : '#3b5397';
+    const textColor = useColorModeValue(selectedColor, 'white');
     const bgColor = cStyle === 0 ? 'rgba(47, 144, 136 ,0.35)' : 'rgba(59, 83, 151, 0.35)';
 
     return (
