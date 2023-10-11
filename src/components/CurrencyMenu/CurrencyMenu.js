@@ -181,6 +181,8 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
         }
     };
 
+    const bgColor = useColorModeValue("rgba(234, 234, 234, 0.5)", "rgba(234, 234, 234, 1)");
+
     return (
         <>
             <Stack direction={{ base: 'column', md: 'row' }} gap={4} align="flex-end">
@@ -189,7 +191,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     <Menu>
                         <MenuButton
                             color={'black'}
-                            bgColor="rgba(234, 234, 234, 0.5)"
+                            bgColor={bgColor}
                             borderColor={borderColor}
                             rounded="lg"
                             minW={{ base: '100%', md: '5rem' }}
@@ -213,7 +215,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     </Menu>
                     <Menu>
                         <MenuButton
-                            bgColor="rgba(234, 234, 234, 0.5)"
+                            bgColor={bgColor}
                             color={'black'}
                             borderColor={borderColor}
                             rounded="lg"
@@ -236,7 +238,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     </Menu>
                     <Menu>
                         <MenuButton
-                            bgColor="rgba(234, 234, 234, 0.5)"
+                            bgColor={bgColor}
                             color={'black'}
                             borderColor={borderColor}
                             rounded="lg"
@@ -261,7 +263,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     </Menu>
                     <Menu>
                         <MenuButton
-                            bgColor="rgba(234, 234, 234, 0.5)"
+                            bgColor={bgColor}
                             color={'black'}
                             borderColor={borderColor}
                             rounded="lg"
@@ -287,7 +289,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
 
                     <Menu>
                         <MenuButton
-                            bgColor="rgba(234, 234, 234, 0.5)"
+                            bgColor={bgColor}
                             color={'black'}
                             borderColor={borderColor}
                             rounded="lg"
