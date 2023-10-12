@@ -46,7 +46,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                             <Image src="/images/currency/mana.png" w="55px" mr={2} mb={1} />
                             <VStack align="flex-start">
                                 <Text color={textColor} fontSize="2xl" fontWeight="bold" mb={-3}>
-                                    9375 MANA
+                                    9000 MANA
                                 </Text>
                                 <Text color={textColor} fontSize="md">
                                     (SOON)

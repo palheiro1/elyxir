@@ -85,8 +85,7 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                                 shadow="lg"
                                 my={4}
                                 bgColor="blackAlpha.600"
-                                color="white"
-                                >
+                                color="white">
                                 <Text textAlign="center" color="whiteAlpha.800">
                                     Please read before claiming
                                 </Text>
@@ -139,11 +138,11 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                                     </GridItem>
                                     <GridItem colSpan={7}>
                                         <Text>
-                                            Enter into a{' '}
+                                            Participate in the {' '}
                                             <strong>
-                                                <u>drawing of 7</u>
+                                                <u>drawing of 9 lots</u>
                                             </strong>{' '}
-                                            Special Cards per cycle.
+                                            of 1000 MANA for each cycle.
                                         </Text>
                                     </GridItem>
                                 </Grid>
