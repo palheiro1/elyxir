@@ -217,88 +217,92 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     useEffect(() => {
         const loadAll = async () => {
-            const { accountRs } = infoAccount;
-            setFirstTime(false);
-            setIsLoading(true);
-            setNeedReload(false);
+            try {
+                const { accountRs } = infoAccount;
+                setFirstTime(false);
+                setIsLoading(true);
+                setNeedReload(false);
 
-            // Fetch all info
-            const [loadCards, currencyAssets, ignis, txs, unconfirmed, currentAskOrBids, trades, dividends] =
-                await Promise.all([
-                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, firstTime ? false : true),
-                    fetchCurrencyAssets(
-                        accountRs,
-                        [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT],
-                        true
-                    ),
-                    getIGNISBalance(accountRs),
-                    getBlockchainTransactions(2, accountRs, true),
-                    getUnconfirmedTransactions(2, accountRs),
-                    getCurrentAskAndBids(accountRs),
-                    getTrades(2, accountRs),
-                    getAccountLedger({
-                        accountRs: accountRs,
-                        firstIndex: 0,
-                        lastIndex: 99,
-                        eventType: 'ASSET_DIVIDEND_PAYMENT',
-                    }),
-                ]);
+                // Fetch all info
+                const [loadCards, currencyAssets, ignis, txs, unconfirmed, currentAskOrBids, trades, dividends] =
+                    await Promise.all([
+                        fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, firstTime ? false : true),
+                        fetchCurrencyAssets(
+                            accountRs,
+                            [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT],
+                            true
+                        ),
+                        getIGNISBalance(accountRs),
+                        getBlockchainTransactions(2, accountRs, true),
+                        getUnconfirmedTransactions(2, accountRs),
+                        getCurrentAskAndBids(accountRs),
+                        getTrades(2, accountRs),
+                        getAccountLedger({
+                            accountRs: accountRs,
+                            firstIndex: 0,
+                            lastIndex: 99,
+                            eventType: 'ASSET_DIVIDEND_PAYMENT',
+                        }),
+                    ]);
 
-            const gems = currencyAssets[0].find(asset => asset.asset === GEMASSET);
-            const weth = currencyAssets[1].find(asset => asset.asset === WETHASSET);
-            const giftzAsset = currencyAssets[2].find(asset => asset.asset === GIFTZASSET);
-            const mana = currencyAssets[3].find(asset => asset.asset === MANAASSET);
+                const gems = currencyAssets[0].find(asset => asset.asset === GEMASSET);
+                const weth = currencyAssets[1].find(asset => asset.asset === WETHASSET);
+                const giftzAsset = currencyAssets[2].find(asset => asset.asset === GIFTZASSET);
+                const mana = currencyAssets[3].find(asset => asset.asset === MANAASSET);
 
-            // -----------------------------------------------------------------
-            // Check notifications - Unconfirmed transactions
-            const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
-            handleNotifications({
-                unconfirmedTransactions,
-                newsTransactions: unconfirmedTxs,
-                accountRs,
-                cardsNotification,
-                setCardsNotification,
-                toast,
-                cards: loadCards,
-                setUnconfirmedTransactions,
-                newTransactionRef,
-                confirmedTransactionRef,
-            });
-            // -----------------------------------------------------------------
+                // -----------------------------------------------------------------
+                // Check notifications - Unconfirmed transactions
+                const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
+                handleNotifications({
+                    unconfirmedTransactions,
+                    newsTransactions: unconfirmedTxs,
+                    accountRs,
+                    cardsNotification,
+                    setCardsNotification,
+                    toast,
+                    cards: loadCards,
+                    setUnconfirmedTransactions,
+                    newTransactionRef,
+                    confirmedTransactionRef,
+                });
+                // -----------------------------------------------------------------
 
-            const auxDividends = dividends.entries;
-            await updateDividendsWithCards(auxDividends, loadCards);
+                const auxDividends = dividends.entries;
+                await updateDividendsWithCards(auxDividends, loadCards);
 
-            // -----------------------------------------------------------------
-            // Rebuild infoAccount
-            // -----------------------------------------------------------------
+                // -----------------------------------------------------------------
+                // Rebuild infoAccount
+                // -----------------------------------------------------------------
 
-            const _auxInfo = {
-                ...infoAccount,
-                IGNISBalance: ignis,
-                GIFTZBalance: giftzAsset.quantityQNT,
-                GEMBalance: gems.quantityQNT / NQTDIVIDER,
-                WETHBalance: weth.quantityQNT / NQTDIVIDER,
-                MANABalance: mana.quantityQNT / NQTDIVIDER,
-                transactions: txs.transactions,
-                dividends: auxDividends,
-                unconfirmedTxs: unconfirmedTxs,
-                currentAsks: currentAskOrBids.askOrders,
-                currentBids: currentAskOrBids.bidOrders,
-                trades: trades.trades,
-            };
+                const _auxInfo = {
+                    ...infoAccount,
+                    IGNISBalance: ignis,
+                    GIFTZBalance: giftzAsset.quantityQNT,
+                    GEMBalance: gems.quantityQNT / NQTDIVIDER,
+                    WETHBalance: weth.quantityQNT / NQTDIVIDER,
+                    MANABalance: mana.quantityQNT / NQTDIVIDER,
+                    transactions: txs.transactions,
+                    dividends: auxDividends,
+                    unconfirmedTxs: unconfirmedTxs,
+                    currentAsks: currentAskOrBids.askOrders,
+                    currentBids: currentAskOrBids.bidOrders,
+                    trades: trades.trades,
+                };
 
-            // -----------------------------------------------------------------
-            // Get all hashes and compare
-            // -----------------------------------------------------------------
-            checkDataChange('Cards', cardsHash, setCards, setCardsHash, loadCards);
-            checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems);
-            checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset);
-            checkDataChange('wETH', wethCardsHash, setWethCards, setWethCardsHash, weth);
-            checkDataChange('MANA', manaCardsHash, setManaCards, setManaCardsHash, mana);
-            checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
-
-            setIsLoading(false);
+                // -----------------------------------------------------------------
+                // Get all hashes and compare
+                // -----------------------------------------------------------------
+                checkDataChange('Cards', cardsHash, setCards, setCardsHash, loadCards);
+                checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems);
+                checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset);
+                checkDataChange('wETH', wethCardsHash, setWethCards, setWethCardsHash, weth);
+                checkDataChange('MANA', manaCardsHash, setManaCards, setManaCardsHash, mana);
+                checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
+            } catch (error) {
+                console.error('Mythical Beings: Error loading data', error);
+            } finally {
+                setIsLoading(false);
+            }
         };
 
         if (infoAccount.accountRs && needReload && !isLoading) {
