@@ -9,7 +9,7 @@ import { BLOCKTIME, FREQUENCY } from '../../data/CONSTANTS';
 
 // Services
 //import { getBlockchainStatus } from '../../services/Ardor/ardorInterface';
-import { getJackpotBalance, getJackpotBalanceUSD } from '../../services/Jackpot/utils';
+import { getJackpotBalance, getJackpotBalanceUSD, getJackpotParticipants } from '../../services/Jackpot/utils';
 
 /**
  * @name JackpotWidget
@@ -33,16 +33,32 @@ const JackpotWidget = ({ numParticipants = 0, blockchainStatus = {}, cStyle = 0 
 
     const [jackpotBalance, setJackpotBalance] = useState(0);
     const [jackpotBalanceUSD, setJackpotBalanceUSD] = useState(0);
+    const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
 
     useEffect(() => {
         const fetchJackpotBalance = async () => {
-            // Recover Jackpot balance - IGNIS
-            const jackpotBalance = await getJackpotBalance();
-            setJackpotBalance(jackpotBalance);
+            try {
+                const [jackpotBalance, jackpotBalanceUSD, responseParticipants] = await Promise.all([
+                    getJackpotBalance(),
+                    getJackpotBalanceUSD(),
+                    getJackpotParticipants(),
+                ]);
+                setJackpotBalance(jackpotBalance);
+                setJackpotBalanceUSD(jackpotBalanceUSD);
 
-            // Recover Jackpot balance - USD
-            const jackpotBalanceUSD = await getJackpotBalanceUSD(jackpotBalance);
-            setJackpotBalanceUSD(jackpotBalanceUSD);
+                let auxParticipants = [];
+                let numParticipants = 0;
+                Object.entries(responseParticipants).forEach(entry => {
+                    const [key, value] = entry;
+                    if (value > 0) {
+                        auxParticipants.push({ account: key, quantity: value });
+                        numParticipants += value;
+                    }
+                });
+                setParticipants({ numParticipants, participants: auxParticipants });
+            } catch (error) {
+                console.error('🚀 ~ file: JackpotWidget.js:47 ~ fetchJackpotBalance ~ error:', error);
+            }
         };
 
         fetchJackpotBalance();
@@ -70,17 +86,11 @@ const JackpotWidget = ({ numParticipants = 0, blockchainStatus = {}, cStyle = 0 
 
     return (
         <Center mb={4}>
-            <Box
-                p={4}
-                border="1px"
-                borderColor={borderColor}
-                rounded="lg"
-                bg="blackAlpha"
-                direction="row">
+            <Box p={4} border="1px" borderColor={borderColor} rounded="lg" bg="blackAlpha" direction="row">
                 <HCountdown
                     cStyle={cStyle}
                     jackpotTimer={jackpotTimer}
-                    numParticipants={numParticipants}
+                    numParticipants={participants.numParticipants || numParticipants}
                     jackpotBalance={jackpotBalance}
                     jackpotBalanceUSD={jackpotBalanceUSD}
                 />
