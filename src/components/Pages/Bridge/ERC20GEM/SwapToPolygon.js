@@ -108,13 +108,13 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                         defaultValue={0}
                         min={0.005}
                         max={GEMBalance}
-                        precision={7}
+                        precision={8}
                         value={gemToSwap}
                         onChange={(value) => setGemToSwap(value)}>
                         <NumberInputField />
                     </NumberInput>
                     <Center>
-                        <Text color={textColor}>Max: {roundNumberWithMaxDecimals(GEMBalance, 7)}</Text>
+                        <Text color={textColor}>Max: {roundNumberWithMaxDecimals(GEMBalance, 8)}</Text>
                     </Center>
                 </Box>
 

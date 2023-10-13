@@ -104,11 +104,11 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                 </Heading>
 
                 <Box>
-                    <NumberInput defaultValue={0} min={0.005} max={WETHBalance} precision={7} value={wEthToSwap} onChange={e => setWEthToSwap(e)}>
+                    <NumberInput defaultValue={0} min={0.005} max={WETHBalance} precision={8} value={wEthToSwap} onChange={e => setWEthToSwap(e)}>
                         <NumberInputField />
                     </NumberInput>
                     <Center>
-                        <Text color={textColor}>Max: {roundNumberWithMaxDecimals(WETHBalance, 7)}</Text>
+                        <Text color={textColor}>Max: {roundNumberWithMaxDecimals(WETHBalance, 8)}</Text>
                     </Center>
                 </Box>
 
