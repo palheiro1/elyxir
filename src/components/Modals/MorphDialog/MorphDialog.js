@@ -180,7 +180,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username, gem }) => {
                                 <InputRightAddon bgColor="transparent" children={card.name} />
                             </InputGroup>
 
-                            <FormLabel>Cards to sacrifice</FormLabel>
+                            <FormLabel color="white">Cards to sacrifice</FormLabel>
                         </FormControl>
 
                         <FormControl

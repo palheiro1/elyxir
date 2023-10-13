@@ -119,7 +119,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         setSendingTx(false);
     };
 
-    const bgColor = '#86596b';
+    const bgColor = '#e094b3';
     const textColor = 'whiteAlpha.500';
     const isDisabled = !isValidPin || input.value === '0' || GIFTZBalance === 0 || sendingTx;
 
@@ -134,7 +134,7 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 isCentered>
                 <AlertDialogOverlay bgColor="blackAlpha.500" />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="#e094b3" shadow="dark-lg" color="white">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="#f7e4ec" shadow="dark-lg" color="white">
                     <AlertDialogHeader textAlign="center">OPEN A PACK OF CARDS</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>
@@ -150,18 +150,18 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                             <Center>
                                 <GridItem>
                                     <Box mt={6}>
-                                        <Text textAlign="center" my={2} border="1px solid #e094b3" rounded="lg" p={2}>
+                                        <Text textAlign="center" my={2} border="1px solid #f7e4ec" rounded="lg" p={2}>
                                             Number of GIFTZ
                                         </Text>
                                         <Center>
-                                            <HStack spacing={0} border="1px" rounded="lg" borderColor="#e094b3">
+                                            <HStack spacing={0} border="1px" rounded="lg" borderColor="#f7e4ec">
                                                 <Button
                                                     {...dec}
                                                     rounded="none"
                                                     borderLeftRadius="lg"
                                                     color={colorText}
-                                                    _hover={{ bgColor: '#e094b3' }}
-                                                    bgColor={'#b3778f'}>
+                                                    _hover={{ bgColor: '#f7e4ec' }}
+                                                    bgColor={'#efc9d9'}>
                                                     -
                                                 </Button>
                                                 <Input
@@ -175,9 +175,9 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                 />
                                                 <Button
                                                     {...inc}
-                                                    bgColor={'#b3778f'}
+                                                    bgColor={'#e8afc6'}
                                                     rounded="none"
-                                                    _hover={{ bgColor: '#e094b3' }}
+                                                    _hover={{ bgColor: '#f7e4ec' }}
                                                     borderRightRadius="lg"
                                                     color={colorText}>
                                                     +
@@ -209,10 +209,10 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     isInvalid={!isValidPin}
                                                     variant="filled"
                                                     mask>
-                                                    <PinInputField bgColor={'#b3778f'} />
-                                                    <PinInputField bgColor={'#b3778f'} />
-                                                    <PinInputField bgColor={'#b3778f'} />
-                                                    <PinInputField bgColor={'#b3778f'} />
+                                                    <PinInputField bgColor={'#e8afc6'} />
+                                                    <PinInputField bgColor={'#e8afc6'} />
+                                                    <PinInputField bgColor={'#e8afc6'} />
+                                                    <PinInputField bgColor={'#e8afc6'} />
                                                 </PinInput>
                                             </HStack>
                                         </Box>
@@ -221,8 +221,9 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     <Box w="100%" mt={2}>
                                         <Button
                                             isDisabled={isDisabled}
-                                            bgColor={'#b3778f'}
-                                            _hover={{ bgColor: '#9f3772' }}
+                                            bgColor={'#efc9d9'}
+                                            color="black"
+                                            _hover={{ bgColor: '#e8afc6', color: 'white' }}
                                             w="100%"
                                             py={6}
                                             onClick={handleBuyPack}>

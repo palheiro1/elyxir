@@ -104,7 +104,7 @@ const CurrencyMarket = ({ username, gemCards, giftzCards, wethCards, IGNISBalanc
 
             {option === 2 && (
                 <Box>
-                    <Heading textAlign="center" mt={4}>
+                    <Heading textAlign="center" mt={4} color={textColor}>
                         Trades
                     </Heading>
 

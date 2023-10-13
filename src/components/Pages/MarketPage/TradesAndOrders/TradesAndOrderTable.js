@@ -26,15 +26,10 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
 
     return (
         <Box>
-            <TableContainer
-                mt={4}
-                border="1px"
-                rounded="lg"
-                borderColor={"#3b6497"}
-                bg="blackAlpha">
+            <TableContainer mt={4} bg="blackAlpha">
                 <Table>
                     <Thead>
-                        <Tr>
+                        <Tr borderBottom={'2px solid #3b6497'} borderTop={'2px solid #3b6497'}>
                             <Th />
                             <Th color="#3b6497">Title</Th>
                             <Th color="#3b6497">Amount</Th>

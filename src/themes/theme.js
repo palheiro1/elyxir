@@ -103,7 +103,7 @@ const components = {
                 container: {
                     label: {
                         bg: '#122f34',
-                        color: props.colorMode === 'dark' ? 'white' : 'black',
+                        color: "white",
                         top: -6,
                         left: 0,
                         zIndex: 2,
@@ -121,7 +121,7 @@ const components = {
                 container: {
                     label: {
                         bg: 'transparent',
-                        color: props.colorMode === 'dark' ? 'white' : 'black',
+                        color: 'white',
                         top: -6,
                         left: 0,
                         zIndex: 2,

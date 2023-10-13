@@ -6,7 +6,7 @@ const BridgeSelector = ({ setBridgeType }) => {
     const bgColor = useColorModeValue('rgba(57,59,151,0.5)', 'rgba(57,59,151,0.5)');
     const hoverColor = useColorModeValue('rgba(57,59,151,0.3)', 'rgba(57,59,151,0.3)');
 
-    const lightBgColor = 'rgba(57,59,151,0.15)';
+    const lightBgColor = 'rgba(57,59,151,0.35)';
 
     const BridgeButton = ({ bridgeType, text, description }) => {
         return (

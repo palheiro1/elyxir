@@ -1,5 +1,12 @@
 import { useState, forwardRef, useRef } from 'react';
-import { Box, Button, ButtonGroup, Center, Stack, useBreakpointValue, useMediaQuery } from '@chakra-ui/react';
+import {
+    Box,
+    Center,
+    Image,
+    Stack,
+    useBreakpointValue,
+    useMediaQuery,
+} from '@chakra-ui/react';
 import HTMLFlipBook from 'react-pageflip';
 import { pdfjs, Document, Page as ReactPdfPage } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
@@ -49,43 +56,37 @@ const PDFReader = ({ pdf }) => {
     };
     // ---------------------------------------------
     const width = useBreakpointValue({ base: 324, xl: 540 });
-    const height = useBreakpointValue({ base: 763, xl: 763 });
+    const height = useBreakpointValue({ base: 763, xl: 680 });
 
     return (
         <Box>
             {isLargerThan800 && (
                 <Stack>
-                    <Center>
-                        <Box width={(width + 1) * 2}>
-                            <ButtonGroup w="100%" spacing="0" isAttached>
-                                <Button
-                                    w="50%"
-                                    onClick={handleFlipPrev}
-                                    bgColor={'rgba(65,59,151,0.5)'}
-                                    color="white"
-                                    _hover={{ bgColor: 'rgba(65,59,151,0.4)' }}>
-                                    Prev page
-                                </Button>
-                                <Button
-                                    w="50%"
-                                    onClick={handleFlipNext}
-                                    color="white"
-                                    bgColor={'rgba(65,59,151,0.5)'}
-                                    _hover={{ bgColor: 'rgba(65,59,151,0.4)' }}>
-                                    Next page
-                                </Button>
-                            </ButtonGroup>
-                        </Box>
-                    </Center>
                     <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
                         <Center>
-                            <HTMLFlipBook width={width} height={height} ref={pageFlipRef}>
+                            <HTMLFlipBook width={width} height={height} ref={pageFlipRef} maxShadowOpacity={0}>
                                 {Array.from(new Array(numPages), (el, index) => {
                                     return <Page key={`page_${index + 1}`} pageNumber={index + 1} width={width} />;
                                 })}
                             </HTMLFlipBook>
                         </Center>
                     </Document>
+                    <Center gap={1}>
+                        <Image
+                            src="/images/book/left.png"
+                            maxW="5rem"
+                            onClick={handleFlipPrev}
+                            cursor={'pointer'}
+                            _hover={{ filter: 'invert(1)' }}
+                        />
+                        <Image
+                            src="/images/book/right.png"
+                            maxW="5rem"
+                            onClick={handleFlipNext}
+                            cursor={'pointer'}
+                            _hover={{ filter: 'invert(1)' }}
+                        />
+                    </Center>
                 </Stack>
             )}
 
@@ -94,12 +95,22 @@ const PDFReader = ({ pdf }) => {
                     <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
                         <ReactPdfPage pageNumber={pageNumber} width={340} />
                     </Document>
-                    <Button w="50%" onClick={handlePrevPage}>
-                        Prev
-                    </Button>
-                    <Button w="50%" onClick={handleNextPage}>
-                        Next
-                    </Button>
+                    <Center gap={1} mt={2}>
+                        <Image
+                            src="/images/book/left.png"
+                            maxW="5rem"
+                            onClick={handlePrevPage}
+                            cursor={'pointer'}
+                            _hover={{ filter: 'invert(1)' }}
+                        />
+                        <Image
+                            src="/images/book/right.png"
+                            maxW="5rem"
+                            onClick={handleNextPage}
+                            cursor={'pointer'}
+                            _hover={{ filter: 'invert(1)' }}
+                        />
+                    </Center>
                 </Box>
             )}
         </Box>

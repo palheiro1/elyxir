@@ -23,7 +23,7 @@ const RemainingCards = ({ totalCards, remainingCards, cards }) => {
                 </Text>
                 <Text fontSize="xs">Complete the collection to claim the jackpot. {remainingCards.length } cards missing.</Text>
             </Box>
-            <GridCards cards={cards} onlyBuy={true} />
+            <GridCards cards={cards} onlyBuy={true} rgbColor={"59, 83, 151"} />
         </Box>
     )
 };

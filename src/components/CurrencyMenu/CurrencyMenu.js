@@ -98,7 +98,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
         }
     };
 
-    const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.800');
+    const hoverColor = useColorModeValue('blackAlpha.100', 'white');
 
     const handleClaim = async () => {
         try {

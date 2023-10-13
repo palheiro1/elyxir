@@ -56,8 +56,9 @@ const CurrencyWidget = ({
         shadow: 'lg',
     };
 
-    const textColor = useColorModeValue('black', 'white');
+    const textColor = useColorModeValue('rgba(59,100,151,1)', 'white');
     const bgColor = 'rgba(59,100,151,0.5)';
+    const bgLightColor = 'rgba(59,100,151,0.15)';
 
     // ------------------------------
     if (currencyCards.length === 0) return null;
@@ -104,6 +105,7 @@ const CurrencyWidget = ({
         <>
             <Center mt={4} w="100%">
                 <Grid
+                    bgColor={bgLightColor}
                     templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}
                     border="1px"
                     borderColor="#3b6497"
@@ -113,7 +115,7 @@ const CurrencyWidget = ({
                     direction="row">
                     <GridItem colSpan={2} p={4} borderLeftRadius="lg">
                         <Center>
-                            <Stack direction={{ base: 'column', xl: 'row' }} spacing={4} align="center">
+                            <Stack direction={{ base: 'column', xl: 'row' }} spacing={4} align="center" w="100%">
                                 <IconButton
                                     icon={<Image src={icon} maxW={'50px'} />}
                                     size="xl"

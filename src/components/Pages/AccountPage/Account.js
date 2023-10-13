@@ -32,7 +32,7 @@ const Account = ({ infoAccount }) => {
     const [isInvalidPinDelete, setIsInvalidPinDelete] = useState(true);
     const [needReload, setNeedReload] = useState(false);
     const [passphrase, setPassphrase] = useState();
-    const bgColor = 'rgba(78,59,151,0.6)';
+    const bgColor = 'rgba(78,59,151,0.35)';
     const hoverColor = 'rgba(78,59,151,0.75)';
     const borderColor = 'rgba(78,59,151,1)';
 

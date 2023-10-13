@@ -55,7 +55,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                         </HStack>
                     </Stack>
                     <Center w={{ base: '100%', md: 'auto' }}>
-                        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4} color={textColor}>
+                        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4} color={"white"}>
                             <Box p={2} bg={bgColor} rounded="lg" minW={{ base: '100px', lg: '150px' }}>
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
                                     {jackpotTimer.days}

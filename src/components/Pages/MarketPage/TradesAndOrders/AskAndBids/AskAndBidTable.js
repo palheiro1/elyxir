@@ -45,7 +45,7 @@ const AskBidTable = ({
             <Table variant="simple">
                 {!newStyle && (
                     <Thead>
-                        <Tr>
+                        <Tr borderBottom={"2px solid #3b6497"}>
                             {!onlyOneAsset && (
                                 <Th textAlign="center" color={'#3b6497'}>
                                     Asset

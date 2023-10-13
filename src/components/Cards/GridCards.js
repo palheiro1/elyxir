@@ -17,7 +17,7 @@ import DetailedCard from './DetailedCard';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {}, market = 'IGNIS' }) => {
+const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {}, market = 'IGNIS', rgbColor="59, 100, 151" }) => {
     const [actualCards, setActualCards] = useState(cards);
 
     // Card clicked
@@ -115,7 +115,7 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {},
                                 onlyBuy={onlyBuy}
                                 infoAccount={infoAccount}
                                 market={market}
-                                rgbColor="59, 100, 151"
+                                rgbColor={rgbColor}
                             />
                         </Animated>
                     );

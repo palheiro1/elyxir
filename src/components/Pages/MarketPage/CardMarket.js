@@ -38,13 +38,14 @@ const CardMarket = ({ cards, infoAccount, textColor }) => {
                         cards={cardsFiltered}
                         isMarket={true}
                         infoAccount={infoAccount}
+                        rgbColor={"59,100,151"}
                     />
                 </Box>
             )}
 
             {option === 1 && (
                 <Box>
-                    <Heading textAlign="center" mt={4}>
+                    <Heading textAlign="center" mt={4} color="rgb(59,100,151)">
                         Orders
                     </Heading>
 
@@ -61,7 +62,7 @@ const CardMarket = ({ cards, infoAccount, textColor }) => {
 
             {option === 2 && (
                 <Box>
-                    <Heading textAlign="center" mt={4}>
+                    <Heading textAlign="center" mt={4} color="rgb(59,100,151)">
                         Trades
                     </Heading>
 

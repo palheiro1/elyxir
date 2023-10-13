@@ -82,11 +82,12 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
         blockchainStatus && getJackpotTimer();
     }, [blockchainStatus]);
 
-    const borderColor = cStyle === 0 ? '#2f9088' : '#3b5397';
+    const borderColor = cStyle === 0 ? 'rgb(47,144,136)' : 'rgb(59,83,151)';
+    const bgColor = cStyle === 0 ? 'rgba(47, 144, 136 ,0.15)' : 'rgba(59, 83, 151, 0.15)';
 
     return (
-        <Center mb={4}>
-            <Box p={4} border="1px" borderColor={borderColor} rounded="lg" bg="blackAlpha" direction="row">
+        <Center py={4}>
+            <Box p={4} border="1px" borderColor={borderColor} rounded="lg" bg="blackAlpha" direction="row" bgColor={bgColor}>
                 <HCountdown
                     cStyle={cStyle}
                     jackpotTimer={jackpotTimer}

@@ -99,7 +99,7 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
             align="center"
             justify="space-between"
             position="relative"
-            mb={4}>
+            my={4}>
             {needSorting && (
                 <Stack
                     direction="row"
