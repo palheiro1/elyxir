@@ -448,10 +448,10 @@ export const sendWETHWithMessage = async ({ passphrase, amountNQT, recipient, me
  * @param {Number} amount - Amount to send
  * @param {String} recipient - Recipient address
  */
-export const sendMANA = async ({ passphrase, amount, recipient }) => {
+export const sendMANA = async ({ passphrase, amountNQT, recipient }) => {
     return await transferAsset({
         asset: MANAASSET,
-        quantityQNT: amount * NQTDIVIDER,
+        quantityQNT: amountNQT * NQTDIVIDER,
         recipient: recipient,
         passPhrase: passphrase,
     });
