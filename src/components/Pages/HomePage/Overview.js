@@ -7,11 +7,13 @@ import Jackpot from '../../JackpotWidget/JackpotWidget';
 const Overview = ({ blockchainStatus }) => {
     const FlowItem = ({ title, button, number, color }) => {
         return (
-            <Stack color={color}>
+            <Stack color={color} maxW={"17rem"}>
                 <Heading textAlign={'center'} fontSize={'2xl'}>
                     {number}
                 </Heading>
-                <Text textAlign={'center'} fontWeight="bold">{title}</Text>
+                <Text textAlign={'center'} fontWeight="bold">
+                    {title}
+                </Text>
                 <Center>{button}</Center>
             </Stack>
         );
@@ -48,18 +50,23 @@ const Overview = ({ blockchainStatus }) => {
     const textInventory = useColorModeValue('#2f8190', 'white');
     const textJackpot = useColorModeValue('#3b5397', 'white');
 
+    const borderColor = 'rgb(47,144,136)';
+    const bgColor = 'rgba(47,144,136,0.10)';
+
     return (
         <Box>
             <Stack direction={{ base: 'column' }} spacing={4}>
-                <Heading textAlign={'center'} fontWeight={'light'} fontSize={'6xl'} color="#2f9088">
-                    Welcome to Mythical Beings
-                </Heading>
-                <Text px={{ base: 0, md: 12 }} color={textColor}>
-                    Explore the rich tapestry of Mythical Beings, where every card is a treasure waiting to be
-                    unearthed. Dive into the lore, uncover forgotten legends, and become a collector of mythical
-                    creatures from across the globe. Complete your collection by gathering all creatures, with
-                    enchanting beings hailing from each continent.
-                </Text>
+                <Box border="1px" borderColor={borderColor} bgColor={bgColor} rounded="md" p={4}>
+                    <Heading textAlign={'center'} fontWeight={'light'} fontSize={'6xl'} color="#2f9088">
+                        Welcome to Mythical Beings
+                    </Heading>
+                    <Text px={{ base: 0, md: 12 }} my={2} color={textColor}>
+                        Explore the rich tapestry of Mythical Beings, where every card is a treasure waiting to be
+                        unearthed. Dive into the lore, uncover forgotten legends, and become a collector of mythical
+                        creatures from across the globe. Complete your collection by gathering all creatures, with
+                        enchanting beings hailing from each continent.
+                    </Text>
+                </Box>
                 <Center>
                     <Stack
                         direction={{ base: 'column', md: 'row' }}
@@ -129,13 +136,34 @@ const Overview = ({ blockchainStatus }) => {
                     </Stack>
                 </Center>
 
-                <Center>
-                    <FlowItem number={5} title="The Jackpot: Your Ultimate Challenge Awaits!" color={textJackpot} />
+                <Center gap={8}>
+                    <FlowItem
+                        number={5}
+                        title="The Jackpot: Your Ultimate Challenge Awaits!"
+                        color={textJackpot}
+                        button={
+                            <MenuButton
+                                bgColor={'#3b5397'}
+                                fontWeight={'bold'}
+                                hoverBg={'rgba(59, 83, 151, 0.75)'}
+                                icon={'/images/icons/menu/blanco/jackpot.png'}
+                                isActive={false}
+                                text={'Jackpot'}
+                            />
+                        }
+                    />
+                    <Jackpot blockchainStatus={blockchainStatus} cStyle={1} />
                 </Center>
 
-                <Jackpot blockchainStatus={blockchainStatus} cStyle={1} />
-
-                <Stack py={8} px={{ base: 0, md: 12 }} spacing={6} color={textColor}>
+                <Stack
+                    py={8}
+                    px={{ base: 0, md: 12 }}
+                    spacing={6}
+                    color={textColor}
+                    border="1px"
+                    borderColor={borderColor}
+                    bgColor={bgColor}
+                    rounded="md">
                     <Text fontWeight={'bold'}>Here are the mythical currencies you'll encounter on your journey:</Text>
                     <Stack direction="row" align={'center'}>
                         <Image src="/images/currency/ignis.png" alt="Ignis" maxW={'35px'} />
