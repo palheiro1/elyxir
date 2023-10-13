@@ -183,6 +183,7 @@ const TradeDialog = ({
                                 onlyOneAsset={true}
                                 username={username}
                                 canDelete={false}
+                                textColor="rgb( 59, 100, 151 )"
                             />
                         </Box>
                     </AlertDialogBody>

@@ -7,7 +7,7 @@ import Jackpot from '../../JackpotWidget/JackpotWidget';
 const Overview = ({ blockchainStatus }) => {
     const FlowItem = ({ title, button, number, color }) => {
         return (
-            <Stack color={color} maxW={"17rem"}>
+            <Stack color={color} maxW={'17rem'}>
                 <Heading textAlign={'center'} fontSize={'2xl'}>
                     {number}
                 </Heading>
@@ -55,12 +55,18 @@ const Overview = ({ blockchainStatus }) => {
 
     return (
         <Box>
-            <Stack direction={{ base: 'column' }} spacing={4}>
-                <Box border="1px" borderColor={borderColor} bgColor={bgColor} rounded="md" p={4}>
+            <Stack direction={{ base: 'column' }} spacing={4} px={{ base: 0, lg: 4, xl: 64 }}>
+                <Box
+                    border="1px"
+                    borderColor={borderColor}
+                    bgColor={bgColor}
+                    rounded="md"
+                    p={4}
+                    px={{ base: 2, lg: 12 }}>
                     <Heading textAlign={'center'} fontWeight={'light'} fontSize={'6xl'} color="#2f9088">
                         Welcome to Mythical Beings
                     </Heading>
-                    <Text px={{ base: 0, md: 12 }} my={2} color={textColor}>
+                    <Text my={2} color={textColor}>
                         Explore the rich tapestry of Mythical Beings, where every card is a treasure waiting to be
                         unearthed. Dive into the lore, uncover forgotten legends, and become a collector of mythical
                         creatures from across the globe. Complete your collection by gathering all creatures, with
@@ -69,8 +75,8 @@ const Overview = ({ blockchainStatus }) => {
                 </Box>
                 <Center>
                     <Stack
-                        direction={{ base: 'column', md: 'row' }}
-                        spacing={{ base: 4, md: 8, lg: 12 }}
+                        direction={{ base: 'column', lg: 'row' }}
+                        spacing={{ base: 4, md: 4, lg: 12 }}
                         my={6}
                         align={'center'}>
                         <FlowItem
@@ -136,7 +142,7 @@ const Overview = ({ blockchainStatus }) => {
                     </Stack>
                 </Center>
 
-                <Center gap={8}>
+                <Stack gap={8} direction={{ base: 'column', lg: 'row' }} align={'center'} justify={'center'}>
                     <FlowItem
                         number={5}
                         title="The Jackpot: Your Ultimate Challenge Awaits!"
@@ -153,7 +159,7 @@ const Overview = ({ blockchainStatus }) => {
                         }
                     />
                     <Jackpot blockchainStatus={blockchainStatus} cStyle={1} />
-                </Center>
+                </Stack>
 
                 <Stack
                     py={8}
