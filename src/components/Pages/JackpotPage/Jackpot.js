@@ -76,7 +76,6 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
         <Box>
             <JackpotWidget
                 cStyle={2}
-                numParticipants={participants.numParticipants}
                 blockchainStatus={blockchainStatus}
             />
 

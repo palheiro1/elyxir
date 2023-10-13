@@ -23,7 +23,7 @@ import { getJackpotBalance, getJackpotBalanceUSD, getJackpotParticipants } from 
  * @example <JackpotWidget cStyle={0} numParticipants={0} blockchainStatus={{}} /> --> Home page
  * @example <JackpotWidget cStyle={1} numParticipants={0} blockchainStatus={{}} /> --> Jackpot page
  */
-const JackpotWidget = ({ numParticipants = 0, blockchainStatus = {}, cStyle = 0 }) => {
+const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
     const [jackpotTimer, setJackpotTimer] = useState({
         days: 0,
         hours: 0,
@@ -38,12 +38,12 @@ const JackpotWidget = ({ numParticipants = 0, blockchainStatus = {}, cStyle = 0 
     useEffect(() => {
         const fetchJackpotBalance = async () => {
             try {
-                const [jackpotBalance, jackpotBalanceUSD, responseParticipants] = await Promise.all([
+                const [jackpotBalance, responseParticipants] = await Promise.all([
                     getJackpotBalance(),
-                    getJackpotBalanceUSD(),
                     getJackpotParticipants(),
                 ]);
                 setJackpotBalance(jackpotBalance);
+                const jackpotBalanceUSD = await getJackpotBalanceUSD(jackpotBalance);
                 setJackpotBalanceUSD(jackpotBalanceUSD);
 
                 let auxParticipants = [];
@@ -90,7 +90,7 @@ const JackpotWidget = ({ numParticipants = 0, blockchainStatus = {}, cStyle = 0 
                 <HCountdown
                     cStyle={cStyle}
                     jackpotTimer={jackpotTimer}
-                    numParticipants={participants.numParticipants || numParticipants}
+                    numParticipants={participants.numParticipants}
                     jackpotBalance={jackpotBalance}
                     jackpotBalanceUSD={jackpotBalanceUSD}
                 />
