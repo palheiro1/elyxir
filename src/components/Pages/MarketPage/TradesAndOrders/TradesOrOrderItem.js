@@ -8,6 +8,7 @@ import TableCard from '../../../Cards/TableCard';
 import GemCard from '../../../Cards/GemCard';
 import GIFTZCard from '../../../Cards/GIFTZCard';
 import WETHCard from '../../../Cards/WETHCard';
+import ManaCard from '../../../Cards/ManaCard';
 
 /**
  * @name TradesOrOrderItem
@@ -27,7 +28,7 @@ const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, car
     const hoverColor = "rgba(59, 100, 151, 0.15)"
     const iconColor = useColorModeValue('blackAlpha.500', 'yellow');
 
-    const isCurrency = name === 'GEM' || name === 'GIFTZ' || name === 'wETH';
+    const isCurrency = name === 'GEM' || name === 'GIFTZ' || name === 'wETH' || name === 'MANA';
 
     if (card === undefined || card === null) {
         return (
@@ -61,6 +62,7 @@ const TradesOrOrderItem = ({ type, name, amount, price, date, sellerOrBuyer, car
                     {name === 'GEM' && <GemCard />}
                     {name === 'GIFTZ' && <GIFTZCard />}
                     {name === 'wETH' && <WETHCard />}
+                    {name === 'MANA' && <ManaCard />}
                 </Td>
                 <Td>{amount}</Td>
                 <Td>

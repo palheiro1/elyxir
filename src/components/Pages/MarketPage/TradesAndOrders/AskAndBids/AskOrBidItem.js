@@ -5,6 +5,7 @@ import TableCard from '../../../../Cards/TableCard';
 import GemCard from '../../../../Cards/GemCard';
 import GIFTZCard from '../../../../Cards/GIFTZCard';
 import WETHCard from '../../../../Cards/WETHCard';
+import ManaCard from '../../../../Cards/ManaCard';
 
 /**
  * @name AskOrBidItem
@@ -52,6 +53,8 @@ const AskOrBidItem = ({
         name = <GIFTZCard hover={hover} />;
     } else if (isWeth) {
         name = <WETHCard hover={hover} />;
+    } else if (isMana) {
+        name = <ManaCard hover={hover} />;
     } else {
         name = (
             <TableCard
