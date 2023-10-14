@@ -148,6 +148,20 @@ export const backupToast = toast => {
     });
 };
 
+export const firstTimeToast = toast => {
+    const id = 'firstTime-toast';
+    if (toast.isActive(id)) return;
+
+    toast({
+        id,
+        title: 'No transactions have been detected at this address!',
+        description: 'Please use our Faucet to publish your public key to increase the security of your account.',
+        status: 'warning',
+        duration: 15000,
+        isClosable: true,
+    });
+};
+
 /**
  * @param {string} text - Text to display in the toast
  * @param {function} toast - Toast function
