@@ -66,7 +66,7 @@ import {
 import Exchange from '../Exchange/Exchange';
 import ArdorChat from '../../components/Pages/ChatPage/ArdorChat';
 import Book from '../../components/Pages/BookPage/Book';
-import { okToast } from '../../utils/alerts';
+import { firstTimeToast, okToast } from '../../utils/alerts';
 import OpenPackDialog from '../../components/Modals/OpenPackDialog/OpenPackDialog';
 
 /**
@@ -85,6 +85,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Refs
     const newTransactionRef = useRef();
     const confirmedTransactionRef = useRef();
+    const cardsNotificationRef = useRef();
 
     // Buy pack dialog
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -183,11 +184,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         navigate('/login');
     };
 
-    const handleOnCloseCardReceived = () => {
-        setCardsNotification([]);
-        onCloseCardReceived();
-    };
-
     // -----------------------------------------------------------------
     // Handle change option with flag
     // -----------------------------------------------------------------
@@ -216,12 +212,14 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const [firstTime, setFirstTime] = useState(true);
 
     useEffect(() => {
+        if (!infoAccount.accountRs || !needReload || isLoading) return;
+
         const loadAll = async () => {
             try {
-                const { accountRs } = infoAccount;
                 setFirstTime(false);
                 setIsLoading(true);
                 setNeedReload(false);
+                const { accountRs } = infoAccount;
 
                 // Fetch all info
                 const [loadCards, currencyAssets, ignis, txs, unconfirmed, currentAskOrBids, trades, dividends] =
@@ -250,21 +248,28 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 const giftzAsset = currencyAssets[2].find(asset => asset.asset === GIFTZASSET);
                 const mana = currencyAssets[3].find(asset => asset.asset === MANAASSET);
 
+                if (txs.transactions.length === 0) {
+                    firstTimeToast(toast);
+                }
+
                 // -----------------------------------------------------------------
                 // Check notifications - Unconfirmed transactions
                 const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
-                handleNotifications({
-                    unconfirmedTransactions,
-                    newsTransactions: unconfirmedTxs,
-                    accountRs,
-                    cardsNotification,
-                    setCardsNotification,
-                    toast,
-                    cards: loadCards,
-                    setUnconfirmedTransactions,
-                    newTransactionRef,
-                    confirmedTransactionRef,
-                });
+                if (cardsNotificationRef.current !== cardsNotification) {
+                    handleNotifications({
+                        unconfirmedTransactions,
+                        newsTransactions: unconfirmedTxs,
+                        accountRs,
+                        cardsNotification,
+                        setCardsNotification,
+                        toast,
+                        cards: loadCards,
+                        setUnconfirmedTransactions,
+                        newTransactionRef,
+                        confirmedTransactionRef,
+                    });
+                }
+
                 // -----------------------------------------------------------------
 
                 const auxDividends = dividends.entries;
@@ -292,12 +297,12 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 // -----------------------------------------------------------------
                 // Get all hashes and compare
                 // -----------------------------------------------------------------
+                checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
                 checkDataChange('Cards', cardsHash, setCards, setCardsHash, loadCards);
                 checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems);
                 checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset);
                 checkDataChange('wETH', wethCardsHash, setWethCards, setWethCardsHash, weth);
                 checkDataChange('MANA', manaCardsHash, setManaCards, setManaCardsHash, mana);
-                checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
             } catch (error) {
                 console.error('Mythical Beings: Error loading data', error);
             } finally {
@@ -305,9 +310,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             }
         };
 
-        if (infoAccount.accountRs && needReload && !isLoading) {
-            loadAll();
-        }
+        loadAll();
     }, [
         infoAccount,
         needReload,
@@ -370,19 +373,34 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Check for new cards notifications
     // -----------------------------------------------------------------
 
+    const handleOnCloseCardReceived = () => {
+        cardsNotificationRef.current = cardsNotification;
+        onCloseCardReceived();
+        setCardsNotification([]);
+    };
+
     useEffect(() => {
         const handleOpenCardReceived = () => {
-            if (cardsNotification.length > 0 && !isOpenCardReceived) {
-                // Wait 45 seconds to show the notification
-                setTimeout(() => {
-                    if (!isOpenCardReceived && cardsNotification.length > 0) {
-                        onOpenCardReceived();
-                    }
-                }, 45000);
-            }
+            // Wait 45 seconds to show the notification
+            setTimeout(() => {
+                if (!isOpenCardReceived && cardsNotification.length > 0) {
+                    onOpenCardReceived();
+                }
+            }, 45000);
         };
-        handleOpenCardReceived();
-    }, [cardsNotification, onOpenCardReceived, isOpenCardReceived]);
+        if (cardsNotification.length > 0 && !isOpenCardReceived) {
+            handleOpenCardReceived();
+        }
+
+        if (cardsNotification.length === 0 && isOpenCardReceived) {
+            onCloseCardReceived();
+        }
+
+        if (cardsNotification.length > 0 && cardsNotificationRef.current === cardsNotification) {
+            setCardsNotification([]);
+            onCloseCardReceived();
+        }
+    }, [cardsNotification, onOpenCardReceived, onCloseCardReceived, isOpenCardReceived]);
 
     useEffect(() => {
         const resetTransactionRefs = () => {
@@ -399,24 +417,25 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
 
     const checkUnwraps = useCallback(async () => {
-        const { accountRs } = infoAccount;
-        // TODO: CHECK ALL BRIDGES
-        const [gemBridge, bridge1155, bridge20] = await Promise.all([
-            processUnwrapsForGemBridge(accountRs),
-            processUnwrapsFor1155(accountRs),
-            processWrapsFor20(accountRs),
-        ]);
-        // if (olbBridge && olbBridge.starts) {
-        //     okToast('[OLD BRIDGE] DETECTED UNWRAP: ' + olbBridge.starts + ' transfers started.', toast);
-        // }
-        if (bridge1155 && bridge1155.starts) {
-            okToast('[ERC-1155] DETECTED UNWRAP: ' + bridge1155.starts + ' transfers started.', toast);
-        }
-        if (bridge20 && bridge20.starts) {
-            okToast('[ERC-20] DETECTED WRAP: ' + bridge20.starts + ' transfers started.', toast);
-        }
-        if (gemBridge && gemBridge.starts) {
-            okToast('[GEM BRIDGE] DETECTED UNWRAP: ' + gemBridge.starts + ' transfers started.', toast);
+        try {
+            const { accountRs } = infoAccount;
+            // TODO: CHECK ALL BRIDGES
+            const [gemBridge, bridge1155, bridge20] = await Promise.all([
+                processUnwrapsForGemBridge(accountRs),
+                processUnwrapsFor1155(accountRs),
+                processWrapsFor20(accountRs),
+            ]);
+
+            if (bridge1155 && bridge1155.starts)
+                okToast('[ERC-1155] DETECTED UNWRAP: ' + bridge1155.starts + ' transfers started.', toast);
+
+            if (bridge20 && bridge20.starts)
+                okToast('[ERC-20] DETECTED WRAP: ' + bridge20.starts + ' transfers started.', toast);
+
+            if (gemBridge && gemBridge.starts)
+                okToast('[GEM BRIDGE] DETECTED UNWRAP: ' + gemBridge.starts + ' transfers started.', toast);
+        } catch (error) {
+            console.error('Mythical Beings: Error checking unwraps', error);
         }
     }, [infoAccount, toast]);
 
