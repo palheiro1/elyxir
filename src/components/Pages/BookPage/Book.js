@@ -48,7 +48,7 @@ const Book = ({ cards }) => {
             <Text mb={2}>
                 Once you have completed the collection, you can download the e-book to read on your favorite device.
             </Text>
-            <Stack spacing={0} direction={{ base: 'column', xl: 'row' }} overflow="hidden">
+            <Stack spacing={0} direction={{ base: 'column', xl: 'row' }} overflow="hidden" gap={2}>
                 <Stack
                     direction="column"
                     spacing={0}
@@ -101,7 +101,7 @@ const Book = ({ cards }) => {
                 </Stack>
                 <Box
                     width="100%"
-                    py="3"
+                    py={8}
                     border={'1px'}
                     borderColor="rgb(65,59,151)"
                     bgColor="rgba(65,59,151,0.15)"

@@ -55,7 +55,7 @@ const Overview = ({ blockchainStatus }) => {
 
     return (
         <Box>
-            <Stack direction={{ base: 'column' }} spacing={4} px={{ base: 0, lg: 4, xl: 64 }}>
+            <Stack direction={{ base: 'column' }} spacing={4}>
                 <Box
                     border="1px"
                     borderColor={borderColor}
@@ -73,93 +73,101 @@ const Overview = ({ blockchainStatus }) => {
                         enchanting beings hailing from each continent.
                     </Text>
                 </Box>
-                <Center>
-                    <Stack
-                        direction={{ base: 'column', lg: 'row' }}
-                        spacing={{ base: 4, md: 4, lg: 12 }}
-                        my={6}
-                        align={'center'}>
-                        <FlowItem
-                            number={1}
-                            title="Obtain cards by purchasing GIFTZ"
-                            color={textBuy}
-                            button={
-                                <MenuButton
-                                    bgColor={'#9f3772'}
-                                    fontWeight={'bold'}
-                                    hoverBg={'rgba(159, 55, 114, 0.75)'}
-                                    icon={'/images/icons/menu/BuyPack.png'}
-                                    isActive={false}
-                                    text={'Buy Pack'}
-                                />
-                            }
-                        />
-                        <FlowItem
-                            number={2}
-                            title="Redeem packs for 3 random cards"
-                            color={textOpen}
-                            button={
-                                <MenuButton
-                                    bgColor={'#e094b3'}
-                                    fontWeight={'bold'}
-                                    hoverBg={'rgba(224, 148, 179, 0.75)'}
-                                    icon={'/images/icons/menu/OpenPack.png'}
-                                    isActive={false}
-                                    text={'Open pack'}
-                                />
-                            }
-                        />
-                        <FlowItem
-                            number={3}
-                            title="Watch your History"
-                            color={textHistory}
-                            button={
-                                <MenuButton
-                                    bgColor={'#3b7197'}
-                                    fontWeight={'bold'}
-                                    hoverBg={'rgba(59, 113, 151, 0.75)'}
-                                    icon={'/images/icons/menu/blanco/history.png'}
-                                    isActive={false}
-                                    text={'History'}
-                                />
-                            }
-                        />
-                        <FlowItem
-                            number={4}
-                            title="Investigate your inventory"
-                            color={textInventory}
-                            button={
-                                <MenuButton
-                                    bgColor={'#2f8190'}
-                                    fontWeight={'bold'}
-                                    hoverBg={'rgba(47, 129, 144, 0.75)'}
-                                    icon={'/images/icons/menu/blanco/inventory.png'}
-                                    isActive={false}
-                                    text={'Inventory'}
-                                />
-                            }
-                        />
-                    </Stack>
-                </Center>
-
-                <Stack gap={8} direction={{ base: 'column', lg: 'row' }} align={'center'} justify={'center'}>
-                    <FlowItem
-                        number={5}
-                        title="The Jackpot: Your Ultimate Challenge Awaits!"
-                        color={textJackpot}
-                        button={
-                            <MenuButton
-                                bgColor={'#3b5397'}
-                                fontWeight={'bold'}
-                                hoverBg={'rgba(59, 83, 151, 0.75)'}
-                                icon={'/images/icons/menu/blanco/jackpot.png'}
-                                isActive={false}
-                                text={'Jackpot'}
+                <Box py={6}>
+                    <Center>
+                        <Stack
+                            direction={{ base: 'column', lg: 'row' }}
+                            spacing={{ base: 4, md: 4, lg: 12 }}
+                            mb={6}
+                            align={'center'}>
+                            <FlowItem
+                                number={1}
+                                title="Obtain cards by purchasing GIFTZ"
+                                color={textBuy}
+                                button={
+                                    <MenuButton
+                                        bgColor={'#9f3772'}
+                                        fontWeight={'bold'}
+                                        hoverBg={'rgba(159, 55, 114, 0.75)'}
+                                        icon={'/images/icons/menu/BuyPack.png'}
+                                        isActive={false}
+                                        text={'Buy Pack'}
+                                    />
+                                }
                             />
-                        }
-                    />
-                    <Jackpot blockchainStatus={blockchainStatus} cStyle={1} />
-                </Stack>
+                            <FlowItem
+                                number={2}
+                                title="Redeem packs for 3 random cards"
+                                color={textOpen}
+                                button={
+                                    <MenuButton
+                                        bgColor={'#e094b3'}
+                                        fontWeight={'bold'}
+                                        hoverBg={'rgba(224, 148, 179, 0.75)'}
+                                        icon={'/images/icons/menu/OpenPack.png'}
+                                        isActive={false}
+                                        text={'Open pack'}
+                                    />
+                                }
+                            />
+                            <FlowItem
+                                number={3}
+                                title="Watch your History"
+                                color={textHistory}
+                                button={
+                                    <MenuButton
+                                        bgColor={'#3b7197'}
+                                        fontWeight={'bold'}
+                                        hoverBg={'rgba(59, 113, 151, 0.75)'}
+                                        icon={'/images/icons/menu/blanco/history.png'}
+                                        isActive={false}
+                                        text={'History'}
+                                    />
+                                }
+                            />
+                            <FlowItem
+                                number={4}
+                                title="Investigate your inventory"
+                                color={textInventory}
+                                button={
+                                    <MenuButton
+                                        bgColor={'#2f8190'}
+                                        fontWeight={'bold'}
+                                        hoverBg={'rgba(47, 129, 144, 0.75)'}
+                                        icon={'/images/icons/menu/blanco/inventory.png'}
+                                        isActive={false}
+                                        text={'Inventory'}
+                                    />
+                                }
+                            />
+                        </Stack>
+                    </Center>
+
+                    <Stack
+                        gap={8}
+                        direction={{ base: 'column', lg: 'row' }}
+                        align={{ base: 'center', lg: 'flex-end' }}
+                        justify={'center'}>
+                        <Box my={4} mr={{ base: 0, md: 4, lg: 8 }}>
+                            <FlowItem
+                                number={5}
+                                title="The Jackpot: Your Ultimate Challenge Awaits!"
+                                color={textJackpot}
+                                button={
+                                    <MenuButton
+                                        bgColor={'#3b5397'}
+                                        fontWeight={'bold'}
+                                        hoverBg={'rgba(59, 83, 151, 0.75)'}
+                                        icon={'/images/icons/menu/blanco/jackpot.png'}
+                                        isActive={false}
+                                        text={'Jackpot'}
+                                    />
+                                }
+                            />
+                        </Box>
+                        <Jackpot blockchainStatus={blockchainStatus} cStyle={1} />
+                    </Stack>
+                </Box>
 
                 <Stack
                     py={8}
@@ -213,31 +221,6 @@ const Overview = ({ blockchainStatus }) => {
                     </Stack>
                 </Stack>
             </Stack>
-            {/* 
-            
-            <Stack direction={{ base: 'column', xl: 'row' }} spacing={4}>
-                
-                <Box>
-                    <LatestTransaction/>
-                </Box>
-                
-                <Box minW="33%" height="100%">
-                    <Timeline
-                        dataSource={{
-                            sourceType: 'url',
-                            url: 'https://twitter.com/BeingsMythical',
-                        }}
-                        options={{
-                            chrome: 'noheader, nofooter',
-                            height: '1600px',
-                            theme: 'dark',
-                        }}
-                    />
-                </Box>
-                
-                <News />
-            </Stack>
-            */}
         </Box>
     );
 };

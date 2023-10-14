@@ -378,11 +378,12 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         <Button
                                             isDisabled={isDisabled || sendingTx}
                                             bgColor={'#6b254d'}
+                                            fontWeight={'black'}
                                             _hover={{ bgColor: '#9f3772' }}
                                             w="100%"
                                             py={6}
                                             onClick={handleBuyPack}>
-                                            Submit
+                                            SUBMIT
                                         </Button>
                                     </Box>
                                 </GridItem>

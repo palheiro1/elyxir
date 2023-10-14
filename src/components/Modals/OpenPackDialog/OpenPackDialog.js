@@ -222,7 +222,8 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         <Button
                                             isDisabled={isDisabled}
                                             bgColor={'#efc9d9'}
-                                            color="black"
+                                            color="white"
+                                            fontWeight={'black'}
                                             _hover={{ bgColor: '#e8afc6', color: 'white' }}
                                             w="100%"
                                             py={6}
