@@ -192,7 +192,7 @@ export const buyPackWithWETH = async (passphrase, noPacks, WETHBalance, selected
 };
 
 export const openPackWithGiftz = async (passphrase, noPacks, giftzBalance) => {
-    if (giftzBalance < noPacks) return false;
+    if (parseInt(giftzBalance) < parseInt(noPacks)) return false;
 
     const message = JSON.stringify({ contract: 'SellMachineGiftzAsset' });
     let response = false;
