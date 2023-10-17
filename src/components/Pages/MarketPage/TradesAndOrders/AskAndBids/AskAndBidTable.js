@@ -36,9 +36,9 @@ const AskBidTable = ({
                     p={4}
                     fontSize="lg"
                     borderBottom="2px"
-                    fontWeight={"black"}
+                    fontWeight={'black'}
                     borderColor={'#3b6497'}
-                    color={newStyle ? (isAsk ? '#eb6473' : '#29a992') : textColor}>
+                    color={newStyle ? (isAsk ? 'white' : '#29a992') : textColor}>
                     {type}
                 </Text>
             )}
@@ -46,7 +46,7 @@ const AskBidTable = ({
             <Table variant="simple">
                 {!newStyle && (
                     <Thead>
-                        <Tr borderBottom={"2px solid #3b6497"}>
+                        <Tr borderBottom={'2px solid #3b6497'}>
                             {!onlyOneAsset && (
                                 <Th textAlign="center" color={'#3b6497'}>
                                     Asset
@@ -93,7 +93,13 @@ const AskBidTable = ({
             </Table>
 
             {!isAsk && newStyle && (
-                <Text textAlign="center" p={4} fontSize="lg" borderTop="1px" color={isAsk ? '#eb6473' : '#29a992'}>
+                <Text
+                    textAlign="center"
+                    p={4}
+                    fontSize="lg"
+                    borderTop="1px"
+                    color={isAsk ? '#eb6473' : 'white'}
+                    fontWeight={'black'}>
                     {type}
                 </Text>
             )}

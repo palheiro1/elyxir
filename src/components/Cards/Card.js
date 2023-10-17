@@ -114,7 +114,7 @@ const Card = ({
 
     // ------------------------------
 
-    const bgColor = "rgba(47, 129, 144, 0.1)";
+    const bgColor = `rgba(${rgbColor}, 0.1)`;
     const [hover, setHover] = useState(false);
     const [hoverButton, setHoverButton] = useState(false);
 

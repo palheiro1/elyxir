@@ -90,7 +90,7 @@ const Account = ({ infoAccount }) => {
                     borderColor={borderColor}
                 />
                 <GridItem>
-                    <Box p={4} bgColor={bgColor} rounded="lg" mb={2} border="1px" borderColor={borderColor}>
+                    <Box p={4} bgColor={bgColor} rounded="lg" mb={2} border="1px" borderColor={borderColor} color={borderColor}>
                         <Heading fontSize="lg" pb={2}>
                             Backup your passphrase
                         </Heading>
@@ -108,7 +108,6 @@ const Account = ({ infoAccount }) => {
                                 <HStack spacing={2} pt={4}>
                                     <PinInput
                                         size="lg"
-                                        placeholder="🔒"
                                         variant="filled"
                                         mask
                                         onComplete={handleCheckPinBackup}
@@ -135,7 +134,7 @@ const Account = ({ infoAccount }) => {
                     </Box>
                 </GridItem>
                 <GridItem>
-                    <Box p={4} bgColor={bgColor} rounded="lg" mb={2} border="1px" borderColor={borderColor}>
+                    <Box p={4} bgColor={bgColor} rounded="lg" mb={2} border="1px" borderColor={borderColor} color={borderColor}>
                         <Heading fontSize="lg" pb={2}>
                             Delete account from device
                         </Heading>
@@ -148,7 +147,6 @@ const Account = ({ infoAccount }) => {
                                 <HStack spacing={2} pt={4}>
                                     <PinInput
                                         size="lg"
-                                        placeholder="🔒"
                                         variant="filled"
                                         mask
                                         onComplete={handleCheckPinDelete}

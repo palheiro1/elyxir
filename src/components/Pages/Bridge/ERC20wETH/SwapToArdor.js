@@ -50,8 +50,12 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
                 <Heading fontSize="3xl" fontWeight="light">
                     1. Send the <strong>wETH</strong>
                 </Heading>
-                <Text fontWeight="light" textAlign="center">to your deposit address</Text>
-                <Text fontWeight="thin" fontSize="sm" textAlign="center">POLYGON</Text>
+                <Text fontWeight="light" textAlign="center">
+                    to your deposit address
+                </Text>
+                <Text fontWeight="thin" fontSize="sm" textAlign="center">
+                    POLYGON
+                </Text>
             </Box>
 
             <FormControl variant="floatingTransparent" id="cards">

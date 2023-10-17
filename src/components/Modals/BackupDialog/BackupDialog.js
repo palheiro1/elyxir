@@ -9,7 +9,6 @@ import {
     Button,
     Text,
     Textarea,
-    useColorModeValue,
 } from '@chakra-ui/react';
 
 import { setBackupDone } from '../../../utils/storage';
@@ -31,8 +30,9 @@ const BackupDialog = ({ reference, isOpen, onClose, account, passphrase, usernam
         onClose();
     };
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
-    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const bgColor = '#d86471';
+    const borderColor = '#f39d54';
+    const filledColor = '#f79c27';
 
     return (
         <>
@@ -44,7 +44,12 @@ const BackupDialog = ({ reference, isOpen, onClose, account, passphrase, usernam
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                <AlertDialogContent
+                    bgColor={bgColor}
+                    border="1px"
+                    borderColor={borderColor}
+                    shadow="dark-lg"
+                    color="white">
                     <AlertDialogHeader>Confirm passphrase backup</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
@@ -56,17 +61,17 @@ const BackupDialog = ({ reference, isOpen, onClose, account, passphrase, usernam
                         <Text textAlign="center" py={1} pb={2} fontWeight="bold">
                             {account}
                         </Text>
-                        <Textarea textAlign="center">{passphrase}</Textarea>
+                        <Textarea textAlign="center" isReadOnly>{passphrase}</Textarea>
                         <Text pt={4}>
-                            By selecting OK you disable the backup reminder after login. <br />
-                            Select CANCEL to keep the reminder.
+                            Selecting <strong>OK</strong> you disable the backup reminder. <br />
+                            Select <strong>CANCEL</strong> to keep the reminder.
                         </Text>
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button mx={2} ref={reference} onClick={onClose}>
+                        <Button mx={2} ref={reference} onClick={onClose} bgColor={filledColor} fontWeight={'black'}>
                             CANCEL
                         </Button>
-                        <Button ref={reference} onClick={handleOk}>
+                        <Button ref={reference} onClick={handleOk} bgColor={filledColor} fontWeight={'black'}>
                             OK
                         </Button>
                     </AlertDialogFooter>

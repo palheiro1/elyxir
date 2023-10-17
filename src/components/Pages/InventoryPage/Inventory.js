@@ -24,7 +24,7 @@ const Inventory = ({ infoAccount, cards }) => {
     return (
         <Box mb={2}>
             <SortAndFilterCards cards = {cards} setCardsFiltered = {setCardsFiltered} />
-            <GridCards cards={cardsFiltered} infoAccount={infoAccount} />
+            <GridCards cards={cardsFiltered} infoAccount={infoAccount} rgbColor="47, 129, 144" />
         </Box>
     );
 };

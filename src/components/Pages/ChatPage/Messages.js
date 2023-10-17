@@ -18,7 +18,7 @@ const Messages = ({ messages = {}, username, account }) => {
                 bgColor={bgColor}
                 borderColor={borderColor}>
                 {Object.keys(messages).length === 0 && (
-                    <Box>
+                    <Box color="rgba(59,67,151,1)" fontWeight={'bold'}>
                         <Text align="center">You don't have any messages yet</Text>
                     </Box>
                 )}

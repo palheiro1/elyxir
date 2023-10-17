@@ -77,14 +77,14 @@ const PDFReader = ({ pdf }) => {
                             maxW="5rem"
                             onClick={handleFlipPrev}
                             cursor={'pointer'}
-                            _hover={{ filter: 'invert(1)' }}
+                            _hover={{ filter: 'brightness(1.3)' }}
                         />
                         <Image
                             src="/images/book/right.png"
                             maxW="5rem"
                             onClick={handleFlipNext}
                             cursor={'pointer'}
-                            _hover={{ filter: 'invert(1)' }}
+                            _hover={{ filter: 'brightness(1.3)' }}
                         />
                     </Center>
                 </Stack>

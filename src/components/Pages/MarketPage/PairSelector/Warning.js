@@ -1,8 +1,10 @@
-import { Text } from "@chakra-ui/react";
+import { Text, useColorModeValue } from "@chakra-ui/react";
 
-const Warning = ({ textColor }) => {
+const Warning = () => {
+
+    const textColor = useColorModeValue('rgba(57,59,151,1)', "white")
     return (
-        <Text fontSize="xs" textAlign="center" mt={2}>
+        <Text fontSize="xs" textAlign="center" mt={2} color={textColor}>
             <strong>Want to trade your cards or currencies for wETH, MATIC or DAI?</strong>
             <br /> Send them to Polygon via Bridge, and use the marketplaces{' '}
             <a href="https://polygon.mythicalbeings.io" target="_blank" rel="noreferrer">

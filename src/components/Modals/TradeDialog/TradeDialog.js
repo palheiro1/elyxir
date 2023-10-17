@@ -75,9 +75,13 @@ const TradeDialog = ({
         onOpenBid();
     };
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
+    // const bgColor = useColorModeValue('', '#1D1D1D');
+    // const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+
+    const bgColor = '#d86471';
+    const borderColor = '#f39d54';
+    const filledColor = '#f79c27';
     const bgMarkedColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
-    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     return (
         <>
@@ -90,7 +94,12 @@ const TradeDialog = ({
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor="whiteAlpha.400" shadow="dark-lg">
+                <AlertDialogContent
+                    bgColor={bgColor}
+                    border="1px"
+                    borderColor="whiteAlpha.400"
+                    shadow="dark-lg"
+                    color="white">
                     <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text>TRADE</Text>
@@ -140,14 +149,15 @@ const TradeDialog = ({
                             {!onlyBid && (
                                 <Box
                                     _hover={{
-                                        bgColor: 'whiteAlpha.300',
+                                        bgColor: borderColor,
                                         cursor: isBlocked ? 'not-allowed' : 'pointer',
                                     }}
                                     onClick={handleAsk}
-                                    bgColor={bgMarkedColor}
+                                    bgColor={filledColor}
                                     p={4}
                                     borderLeftRadius="lg"
                                     textAlign="center"
+                                    fontWeight={'black'}
                                     fontSize="xl"
                                     borderRight="0px"
                                     borderBottom="1px"
@@ -159,12 +169,13 @@ const TradeDialog = ({
                             )}
                             <Box
                                 onClick={handleBid}
-                                bgColor="whiteAlpha.100"
                                 p={4}
                                 borderRightRadius="lg"
                                 borderLeftRadius={onlyBid ? 'lg' : '0px'}
                                 textAlign="center"
                                 fontSize="xl"
+                                bgColor={filledColor}
+                                fontWeight={'black'}
                                 _hover={{ bgColor: borderColor, cursor: 'pointer' }}
                                 borderRight="1px"
                                 borderBottom="1px"

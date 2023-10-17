@@ -19,7 +19,6 @@ import {
     PinInput,
     PinInputField,
     Text,
-    useColorModeValue,
     useNumberInput,
     useToast,
 } from '@chakra-ui/react';
@@ -117,7 +116,7 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                         passphrase: passphrase,
                     });
                     break;
-                case "MANA":
+                case 'MANA':
                     response = await sendMANA({
                         amountNQT: input.value,
                         recipient: ardorAccount,
@@ -142,8 +141,9 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
         }
     };
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
-    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const bgColor = '#d86471';
+    const borderColor = '#f39d54';
+    const filledColor = '#f79c27';
     const [isDisabled, setIsDisabled] = useState(true);
 
     useEffect(() => {
@@ -175,20 +175,33 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                     <AlertDialogBody>
                         <Box>
                             <Center>
-                                <FormControl variant="floatingGray" id="Recipient" my={4}>
+                                <FormControl variant="floatingModalTransparent" id="Amount" my={4}>
                                     <HStack spacing={0} border="1px" rounded="lg" borderColor={borderColor}>
-                                        <Button {...dec} rounded="none" borderLeftRadius="lg" size="lg">
+                                        <Button
+                                            {...dec}
+                                            rounded="none"
+                                            borderLeftRadius="lg"
+                                            size="lg"
+                                            color="white"
+                                            bgColor={filledColor}>
                                             -
                                         </Button>
                                         <Input
                                             {...input}
                                             rounded="none"
                                             border="none"
+                                            color="white"
                                             textAlign="center"
                                             fontWeight="bold"
                                             size="lg"
                                         />
-                                        <Button {...inc} rounded="none" borderRightRadius="lg" size="lg">
+                                        <Button
+                                            {...inc}
+                                            rounded="none"
+                                            borderRightRadius="lg"
+                                            color="white"
+                                            size="lg"
+                                            bgColor={filledColor}>
                                             +
                                         </Button>
                                     </HStack>
@@ -197,13 +210,14 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                             </Center>
                         </Box>
 
-                        <FormControl variant="floatingGray" id="Recipient" my={4}>
+                        <FormControl variant="floatingModalTransparent" id="Recipient" my={4}>
                             <InputGroup size="lg" border="1px" borderColor={borderColor} rounded="lg">
                                 <Input
                                     placeholder=" "
                                     value={ardorAccount}
                                     onChange={e => handleInput(e.target.value)}
                                     border="0px"
+                                    color="white"
                                     isInvalid={!isValidArdorAccount}
                                 />
                                 <InputRightAddon
@@ -213,6 +227,7 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                                         <IconButton
                                             bgColor="transparent"
                                             aria-label="Scan QR CODE"
+                                            color="white"
                                             icon={<FaQrcode />}
                                             onClick={() => {
                                                 setReaderEnabled(!readerEnabled);
@@ -229,16 +244,31 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                             <HStack spacing={7}>
                                 <PinInput
                                     size="lg"
-                                    placeholder="🔒"
                                     onComplete={handleCompletePin}
                                     onChange={handleCompletePin}
                                     isInvalid={!isValidPin}
                                     variant="filled"
                                     mask>
-                                    <PinInputField />
-                                    <PinInputField />
-                                    <PinInputField />
-                                    <PinInputField />
+                                    <PinInputField
+                                        bgColor={'whiteAlpha.200'}
+                                        _hover={{ bgColor: 'whiteAlpha.500' }}
+                                        color="white"
+                                    />
+                                    <PinInputField
+                                        bgColor={'whiteAlpha.200'}
+                                        _hover={{ bgColor: 'whiteAlpha.500' }}
+                                        color="white"
+                                    />
+                                    <PinInputField
+                                        bgColor={'whiteAlpha.200'}
+                                        _hover={{ bgColor: 'whiteAlpha.500' }}
+                                        color="white"
+                                    />
+                                    <PinInputField
+                                        bgColor={'whiteAlpha.200'}
+                                        _hover={{ bgColor: 'whiteAlpha.500' }}
+                                        color="white"
+                                    />
                                 </PinInput>
                             </HStack>
                         </Center>
@@ -246,11 +276,13 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                     <AlertDialogFooter>
                         <Button
                             isDisabled={isDisabled || sendingTx}
-                            bgColor={!isDisabled ? '#F18800' : null}
+                            bgColor={filledColor}
+                            fontWeight={'black'}
+                            color="white"
                             w="100%"
                             py={6}
                             onClick={handleSend}>
-                            Submit
+                            SUBMIT
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>

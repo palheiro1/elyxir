@@ -68,7 +68,8 @@ const components = {
         variants: {
             bridge: props => ({
                 border: '2px solid #393b97',
-                color: 'white',
+                color: mode('rgba(57,59,151,1)', 'white')(props),
+                fontWeight: 'black',
             }),
         },
     },
@@ -103,7 +104,7 @@ const components = {
                 container: {
                     label: {
                         bg: '#122f34',
-                        color: "white",
+                        color: 'white',
                         top: -6,
                         left: 0,
                         zIndex: 2,
@@ -122,24 +123,6 @@ const components = {
                     label: {
                         bg: 'transparent',
                         color: 'white',
-                        top: -6,
-                        left: 0,
-                        zIndex: 2,
-                        position: 'absolute',
-                        fontSize: 'sm',
-                        fontWeight: 'bold',
-                        pointerEvents: 'none',
-                        px: 1,
-                        my: 2,
-                        transformOrigin: 'left top',
-                    },
-                },
-            }),
-            floatingGray: props => ({
-                container: {
-                    label: {
-                        bg: props.colorMode === 'dark' ? '#1D1D1D' : 'transparent',
-                        color: props.colorMode === 'dark' ? 'white' : 'black',
                         top: -6,
                         left: 0,
                         zIndex: 2,

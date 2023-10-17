@@ -42,7 +42,7 @@ const AskAndBidGrid = ({ cards, askOrders, bidOrders, onlyOneAsset = false, user
                     canDelete={canDelete}
                     isLeft={true}
                     newStyle = {columns === 1}
-                    textColor={textColor}
+                    textColor={columns === 1}
                 />
                 <AskBidTable
                     type={'Bids'}

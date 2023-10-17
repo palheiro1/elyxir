@@ -20,7 +20,6 @@ import {
     PinInput,
     PinInputField,
     Textarea,
-    useColorModeValue,
     useToast,
 } from '@chakra-ui/react';
 
@@ -55,7 +54,7 @@ const NewMessage = ({ reference, isOpen, onClose, username, defaultRecipient = '
         const checkValidity = () => {
             const isValid = isArdorAccount(ardorAccount);
             setIsValidArdorAccount(isValid);
-        }
+        };
         ardorAccount && checkValidity();
     }, [ardorAccount]);
 
@@ -99,12 +98,14 @@ const NewMessage = ({ reference, isOpen, onClose, username, defaultRecipient = '
         }
     };
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
-    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const bgColor = '#d86471';
+    const borderColor = '#f39d54';
+    const filledColor = '#f79c27';
 
     return (
         <>
             <AlertDialog
+                variant="generic"
                 motionPreset="slideInBottom"
                 leastDestructiveRef={reference}
                 onClose={onClose}
@@ -112,11 +113,16 @@ const NewMessage = ({ reference, isOpen, onClose, username, defaultRecipient = '
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                <AlertDialogContent
+                    bgColor={bgColor}
+                    border="1px"
+                    borderColor={borderColor}
+                    shadow="dark-lg"
+                    color="white">
                     <AlertDialogHeader>Send message</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
-                        <FormControl variant="floatingGray" id="Recipient" my={4} mt={8}>
+                        <FormControl variant="floatingModalTransparent" id="Recipient" my={4} mt={8}>
                             <InputGroup size="lg" border="1px" borderColor={borderColor} rounded="lg">
                                 <Input
                                     placeholder=" "
@@ -141,7 +147,7 @@ const NewMessage = ({ reference, isOpen, onClose, username, defaultRecipient = '
                             <FormLabel>Recipient</FormLabel>
                         </FormControl>
 
-                        <FormControl variant="floatingGray" id="Message" my={4} mt={8}>
+                        <FormControl variant="floatingModalTransparent" id="Message" my={4} mt={8}>
                             <Textarea placeholder=" " value={message} onChange={handleInputMessage} />
                             <FormLabel>Message</FormLabel>
                         </FormControl>
@@ -150,7 +156,6 @@ const NewMessage = ({ reference, isOpen, onClose, username, defaultRecipient = '
                             <HStack spacing={7}>
                                 <PinInput
                                     size="lg"
-                                    placeholder="🔒"
                                     onComplete={handleCompletePin}
                                     onChange={handleCompletePin}
                                     isInvalid={!isValidPin}
@@ -165,10 +170,15 @@ const NewMessage = ({ reference, isOpen, onClose, username, defaultRecipient = '
                         </Center>
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button mx={2} ref={reference} onClick={onClose}>
+                        <Button mx={2} ref={reference} onClick={onClose} bgColor={filledColor} fontWeight={'black'}>
                             CANCEL
                         </Button>
-                        <Button ref={reference} onClick={handleOk} isDisabled={!isValidArdorAccount || !isValidPin}>
+                        <Button
+                            ref={reference}
+                            onClick={handleOk}
+                            fontWeight={'black'}
+                            isDisabled={!isValidArdorAccount || !isValidPin}
+                            bgColor={filledColor}>
                             SEND NOW
                         </Button>
                     </AlertDialogFooter>

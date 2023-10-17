@@ -117,7 +117,6 @@ const UserLogin = ({ setInfoAccount }) => {
                 <Center gap={12} w="100%">
                     <PinInput
                         size="lg"
-                        placeholder="🔒"
                         onChange={handleCompletePin}
                         isInvalid={isInvalidPin}
                         variant="filled"

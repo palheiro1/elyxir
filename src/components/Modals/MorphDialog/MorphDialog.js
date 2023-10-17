@@ -203,7 +203,6 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username, gem }) => {
                             <HStack spacing={7}>
                                 <PinInput
                                     size="lg"
-                                    placeholder="🔒"
                                     onComplete={handleCompletePin}
                                     onChange={handleCompletePin}
                                     isInvalid={!isValidPin}
@@ -222,9 +221,12 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username, gem }) => {
                             isDisabled={!isValidPin || sendingTx || gem < morphingCost}
                             bgColor={borderColor}
                             w="100%"
+                            color="white"
+                            _hover={{ filter: 'brightness(1.2)' }}
+                            fontWeight={'black'}
                             py={6}
                             onClick={handleMorph}>
-                            Submit
+                            SUBMIT
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>

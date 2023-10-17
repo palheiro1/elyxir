@@ -203,7 +203,6 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                             <HStack spacing={4}>
                                                 <PinInput
                                                     size="lg"
-                                                    placeholder="🔒"
                                                     onComplete={handleCompletePin}
                                                     onChange={handleCompletePin}
                                                     isInvalid={!isValidPin}

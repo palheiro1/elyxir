@@ -196,7 +196,6 @@ const BuyGiftzDialog = ({ reference, isOpen, onClose, name, IGNISBalance }) => {
                                         <HStack spacing={4}>
                                             <PinInput
                                                 size="lg"
-                                                placeholder="🔒"
                                                 onComplete={handleCompletePin}
                                                 onChange={handleCompletePin}
                                                 isInvalid={!isValidPin}

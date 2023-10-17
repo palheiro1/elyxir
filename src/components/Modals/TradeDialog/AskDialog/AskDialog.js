@@ -23,7 +23,6 @@ import {
     Stack,
     Text,
     useBreakpointValue,
-    useColorModeValue,
     useNumberInput,
     useToast,
     VStack,
@@ -54,7 +53,11 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
     const [passphrase, setPassphrase] = useState('');
     const [sendingTx, setSendingTx] = useState(false);
 
-    const isCurrency = card.assetname === 'GEM' || card.assetname === 'GIFTZ' || card.assetname === 'wETH' || card.assetname === 'MANA';
+    const isCurrency =
+        card.assetname === 'GEM' ||
+        card.assetname === 'GIFTZ' ||
+        card.assetname === 'wETH' ||
+        card.assetname === 'MANA';
     const currencyName = isCurrency ? card.assetname : '';
     let currencyImg;
     if (currencyName === 'GEM') {
@@ -117,7 +120,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: inputStep,
         defaultValue: 0,
-        min: currencyName === "wETH" ? 0.000001 : 1,
+        min: currencyName === 'wETH' ? 0.000001 : 1,
         max: maxCards,
         precision: inputPrecision,
         value: value,
@@ -144,7 +147,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
             const value = Number(input.value);
             let quantity;
             if (isCurrency) {
-                if(currencyName === 'GIFTZ') {
+                if (currencyName === 'GIFTZ') {
                     quantity = value;
                 } else {
                     quantity = value * NQTDIVIDER;
@@ -174,8 +177,9 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
         }
     };
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
-    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const bgColor = '#d86471';
+    const borderColor = '#f39d54';
+    const filledColor = '#f79c27';
     const isCentered = useBreakpointValue(
         {
             base: false,
@@ -217,7 +221,12 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                 isCentered={isCentered}>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                <AlertDialogContent
+                    bgColor={bgColor}
+                    border="1px"
+                    borderColor={borderColor}
+                    shadow="dark-lg"
+                    color="white">
                     <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text>SELL {!isCurrency ? 'CARDS' : currencyName}</Text>
@@ -240,19 +249,25 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                 </Box>
                                 <VStack spacing={4} w="100%">
                                     <Box w="100%">
-                                        <Text fontWeight="bold" fontSize="xl">
-                                            {!isCurrency ? card.name : currencyName}
-                                        </Text>
                                         {!isCurrency && (
-                                            <Text color="gray">
-                                                {card.channel} / {card.rarity}
-                                            </Text>
+                                            <>
+                                                <Text fontWeight="bold" fontSize="xl">
+                                                    {!isCurrency ? card.name : currencyName}
+                                                </Text>
+                                                <Text color="gray">
+                                                    {card.channel} / {card.rarity}
+                                                </Text>
+                                            </>
                                         )}
                                     </Box>
                                     <Box py={2}>
-                                        <FormControl variant="floatingGray" id="PricePerCard">
+                                        <FormControl variant="floatingModalTransparent" id="PricePerCard">
                                             <HStack spacing={0} border="1px" rounded="lg" borderColor={borderColor}>
-                                                <Button {...dec} rounded="none" borderLeftRadius="lg">
+                                                <Button
+                                                    {...dec}
+                                                    rounded="none"
+                                                    borderLeftRadius="lg"
+                                                    bgColor={filledColor}>
                                                     -
                                                 </Button>
 
@@ -264,7 +279,11 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                                     fontWeight="bold"
                                                 />
 
-                                                <Button {...inc} rounded="none" borderRightRadius="lg">
+                                                <Button
+                                                    {...inc}
+                                                    rounded="none"
+                                                    borderRightRadius="lg"
+                                                    bgColor={filledColor}>
                                                     +
                                                 </Button>
                                             </HStack>
@@ -272,7 +291,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                         </FormControl>
                                     </Box>
                                     <Box py={2}>
-                                        <FormControl variant="floatingGray" id="PricePerCard">
+                                        <FormControl variant="floatingModalTransparent" id="PricePerCard">
                                             <InputGroup border="1px" borderColor={borderColor} rounded="lg">
                                                 <NumberInput value={priceCard}>
                                                     <NumberInputField
@@ -296,20 +315,31 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                         </FormControl>
                                     </Box>
                                     <Box py={2}>
-                                        <FormControl variant="floatingGray" id="SecurityPIN">
+                                        <FormControl variant="floatingModalTransparent" id="SecurityPIN">
                                             <HStack spacing={4}>
                                                 <PinInput
                                                     size="lg"
-                                                    placeholder="🔒"
                                                     onComplete={handleCompletePin}
                                                     onChange={handleCompletePin}
                                                     isInvalid={!isValidPin}
                                                     variant="filled"
                                                     mask>
-                                                    <PinInputField />
-                                                    <PinInputField />
-                                                    <PinInputField />
-                                                    <PinInputField />
+                                                    <PinInputField
+                                                        bgColor={'whiteAlpha.200'}
+                                                        _hover={{ bgColor: 'whiteAlpha.400' }}
+                                                    />
+                                                    <PinInputField
+                                                        bgColor={'whiteAlpha.200'}
+                                                        _hover={{ bgColor: 'whiteAlpha.400' }}
+                                                    />
+                                                    <PinInputField
+                                                        bgColor={'whiteAlpha.200'}
+                                                        _hover={{ bgColor: 'whiteAlpha.400' }}
+                                                    />
+                                                    <PinInputField
+                                                        bgColor={'whiteAlpha.200'}
+                                                        _hover={{ bgColor: 'whiteAlpha.400' }}
+                                                    />
                                                 </PinInput>
                                             </HStack>
                                             <FormLabel>Security PIN</FormLabel>
@@ -317,12 +347,19 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                     </Box>
                                     <Box w="100%" mt={8}>
                                         <Button
-                                            isDisabled={!isValidPin || sendingTx || value === 0 || priceCard === 0 || card.unconfirmedQuantityQNT < value}
-                                            bgColor={isValidPin ? '#F18800' : null}
+                                            isDisabled={
+                                                !isValidPin ||
+                                                sendingTx ||
+                                                value === 0 ||
+                                                priceCard === 0 ||
+                                                card.unconfirmedQuantityQNT < value
+                                            }
+                                            bgColor={filledColor}
+                                            fontWeight={'black'}
                                             w="100%"
                                             py={6}
                                             onClick={handleSend}>
-                                            Sell {isCurrency ? currencyName : card.name}
+                                            SELL {isCurrency ? currencyName : card.name}
                                         </Button>
                                     </Box>
                                 </VStack>

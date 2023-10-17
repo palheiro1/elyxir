@@ -41,62 +41,75 @@ const UserDataItem = ({
         }
     };
 
+    const ContainerText = ({ children }) => (
+        <Box p={2} bgColor={bgColor} mb={2} border="1px" borderColor={borderColor} rounded="lg">
+            <Box p={6} bgColor={bgColor} border="1px" borderColor={borderColor} rounded="lg">
+                {children}
+            </Box>
+        </Box>
+    );
+
     return (
         <GridItem>
-            <Box p={6} bgColor={bgColor} mb={2} border="1px" borderColor={borderColor} rounded="lg">
+            <ContainerText>
                 <Heading fontSize="lg" pb={2}>
                     Your Ardor account
                 </Heading>
                 <Text>{accountRs}</Text>
-            </Box>
-            <Box p={6} bgColor={bgColor} rounded="lg" mb={2} border="1px" borderColor={borderColor}>
+            </ContainerText>
+            <ContainerText>
                 <Heading fontSize="lg" pb={2}>
                     User
                 </Heading>
                 <Text>{name}</Text>
-            </Box>
-            <Grid
-                templateColumns="repeat(3, 1fr)"
-                p={6}
-                mb={2}
-                bgColor={bgColor}
-                rounded="lg"
-                border="1px"
-                borderColor={borderColor}>
-                <GridItem>
-                    <Heading fontSize="lg" pb={2}>
-                        IGNIS
-                    </Heading>
-                    <Text fontSize="sm">
-                        {IGNISBalance} ({IGNISUSDBalance} USD)
-                    </Text>
-                </GridItem>
-                <GridItem>
-                    <Heading fontSize="lg" pb={2}>
-                        GIFTZ
-                    </Heading>
-                    <Text fontSize="sm">{GIFTZBalance}</Text>
-                </GridItem>
-                <GridItem>
-                    <Heading fontSize="lg" pb={2}>
-                        GEM
-                    </Heading>
-                    <Text fontSize="sm">{GEMBalance}</Text>
-                </GridItem>
-                <GridItem>
-                    <Heading fontSize="lg" pb={2}>
-                        wETH
-                    </Heading>
-                    <Text fontSize="sm">{WETHBalance}</Text>
-                </GridItem>
-                <GridItem>
-                    <Heading fontSize="lg" pb={2}>
-                        MANA
-                    </Heading>
-                    <Text fontSize="sm">{MANABalance}</Text>
-                </GridItem>
-            </Grid>
-            <Box p={6} bgColor={bgColor} rounded="lg" border="1px" borderColor={borderColor}>
+            </ContainerText>
+            <ContainerText>
+                <Grid templateColumns="repeat(3, 1fr)" gap={2}>
+                    <GridItem>
+                        <Box bgColor={bgColor} rounded="lg" p={4}>
+                            <Heading fontSize="lg" pb={2}>
+                                IGNIS
+                            </Heading>
+                            <Text fontSize="sm">
+                                {IGNISBalance} ({IGNISUSDBalance} USD)
+                            </Text>
+                        </Box>
+                    </GridItem>
+                    <GridItem>
+                        <Box bgColor={bgColor} rounded="lg" p={4}>
+                            <Heading fontSize="lg" pb={2}>
+                                GIFTZ
+                            </Heading>
+                            <Text fontSize="sm">{GIFTZBalance}</Text>
+                        </Box>
+                    </GridItem>
+                    <GridItem>
+                        <Box bgColor={bgColor} rounded="lg" p={4}>
+                            <Heading fontSize="lg" pb={2}>
+                                GEM
+                            </Heading>
+                            <Text fontSize="sm">{GEMBalance}</Text>
+                        </Box>
+                    </GridItem>
+                    <GridItem>
+                        <Box bgColor={bgColor} rounded="lg" p={4}>
+                            <Heading fontSize="lg" pb={2}>
+                                wETH
+                            </Heading>
+                            <Text fontSize="sm">{WETHBalance}</Text>
+                        </Box>
+                    </GridItem>
+                    <GridItem>
+                        <Box bgColor={bgColor} rounded="lg" p={4}>
+                            <Heading fontSize="lg" pb={2}>
+                                MANA
+                            </Heading>
+                            <Text fontSize="sm">{MANABalance}</Text>
+                        </Box>
+                    </GridItem>
+                </Grid>
+            </ContainerText>
+            <ContainerText>
                 <Heading fontSize="lg" pb={2}>
                     Faucet (IGNIS)
                 </Heading>
@@ -115,7 +128,7 @@ const UserDataItem = ({
                         <Text>You can only claim if you have less than 0.3 IGNIS.</Text>
                     )}
                 </Text>
-            </Box>
+            </ContainerText>
         </GridItem>
     );
 };

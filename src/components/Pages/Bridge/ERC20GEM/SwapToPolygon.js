@@ -141,7 +141,6 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                         <PinInput
                             isDisabled={gemToSwap === 0 || !isValidAccount}
                             size="lg"
-                            placeholder="🔒"
                             onComplete={handleCompletePin}
                             onChange={handleCompletePin}
                             isInvalid={!isValidPin}

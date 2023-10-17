@@ -1,10 +1,26 @@
-import { Box, Button, FormControl, FormHelperText, FormLabel, HStack, Input, InputGroup, InputRightAddon, PinInput, PinInputField, Stack, Text, Textarea, useToast } from "@chakra-ui/react";
-import { useState } from "react";
-import { generatePassphrase } from "../../../../services/Ardor/generatePassphrase";
-import { getAccountFromPhrase } from "../../../../services/Ardor/ardorInterface";
-import { addToAllUsers, getUser, initUser } from "../../../../utils/storage";
-import { copyToast, errorToast, okToast } from "../../../../utils/alerts";
-import { useNavigate } from "react-router-dom";
+import {
+    Box,
+    Button,
+    FormControl,
+    FormHelperText,
+    FormLabel,
+    HStack,
+    Input,
+    InputGroup,
+    InputRightAddon,
+    PinInput,
+    PinInputField,
+    Stack,
+    Text,
+    Textarea,
+    useToast,
+} from '@chakra-ui/react';
+import { useState } from 'react';
+import { generatePassphrase } from '../../../../services/Ardor/generatePassphrase';
+import { getAccountFromPhrase } from '../../../../services/Ardor/ardorInterface';
+import { addToAllUsers, getUser, initUser } from '../../../../utils/storage';
+import { copyToast, errorToast, okToast } from '../../../../utils/alerts';
+import { useNavigate } from 'react-router-dom';
 /**
  * @description This component is used to render the user register form
  * @description Auto-generates a wallet and saves it in the local storage
@@ -15,48 +31,46 @@ import { useNavigate } from "react-router-dom";
  * @todo Add logic to check if the user is already logged in
  */
 const UserRegister = () => {
-
     const toast = useToast();
     const navigate = useNavigate();
 
     // Generated wallet
-    const [ account, setAccount ] = useState("");
-    const [ passphrase, setPassphrase ] = useState("");
+    const [account, setAccount] = useState('');
+    const [passphrase, setPassphrase] = useState('');
 
     // Controlled inputs
-    const [ name, setName ] = useState("");
-    const handleChangeName = (e) => setName(e.target.value);
+    const [name, setName] = useState('');
+    const handleChangeName = e => setName(e.target.value);
 
-    const [ pin, setPin ] = useState("");
-    const handleChangePin = (e) => setPin(e);
+    const [pin, setPin] = useState('');
+    const handleChangePin = e => setPin(e);
 
     const clearFormData = () => {
-        setName("");
-        setPin("");
-        setAccount("");
-        setPassphrase("");
-    }
+        setName('');
+        setPin('');
+        setAccount('');
+        setPassphrase('');
+    };
 
-    const handleCopyToast = (text) => copyToast(text, toast);
+    const handleCopyToast = text => copyToast(text, toast);
 
     const handleGenerateWallet = async () => {
         const auxPassphrase = generatePassphrase();
         const auxAccount = await getAccountFromPhrase(auxPassphrase);
         setAccount(auxAccount);
         setPassphrase(auxPassphrase);
-    }
+    };
 
     const handleSaveWallet = () => {
-
         // Check if all fields are filled
-        if(!name || !account || !passphrase || !pin || pin.length !== 4) {
-            errorToast("Please generate a wallet and set an account name and PIN number", toast);
+        if (!name || !account || !passphrase || !pin || pin.length !== 4) {
+            errorToast('Please generate a wallet and set an account name and PIN number', toast);
             return;
         }
 
         // Check if user already exists
-        if(getUser(name)) {
-            errorToast("User already exists", toast);
+        if (getUser(name)) {
+            errorToast('User already exists', toast);
             return;
         }
 
@@ -64,18 +78,18 @@ const UserRegister = () => {
         const user = initUser(name, account, true, passphrase, pin, true);
         // Save user in local storage
         saveUserAndRedirect(user);
-    }
+    };
 
-    const saveUserAndRedirect = (user) => {
+    const saveUserAndRedirect = user => {
         // Save user in local storage
         localStorage.setItem(user.name, JSON.stringify(user));
         addToAllUsers(user);
-        okToast("Wallet saved successfully", toast);
+        okToast('Wallet saved successfully', toast);
         clearFormData();
-        navigate("/login");
-    }
+        navigate('/login');
+    };
 
-    return(
+    return (
         <Box>
             <Text my={4} mb={8} maxW="70%">
                 Account name and PIN are not saved on any server, <strong>only on your own device.</strong>
@@ -88,9 +102,14 @@ const UserRegister = () => {
             <Box>
                 <FormControl variant="floating" id="account" my={6}>
                     <InputGroup size="lg">
-                        <Input disabled placeholder=" " value={account}/>
+                        <Input disabled placeholder=" " value={account} />
                         <InputRightAddon bgColor="transparent">
-                            <Button variant="outline" borderColor="blue" onClick={() => { navigator.clipboard.writeText(account) && handleCopyToast("Account") }}>
+                            <Button
+                                variant="outline"
+                                borderColor="blue"
+                                onClick={() => {
+                                    navigator.clipboard.writeText(account) && handleCopyToast('Account');
+                                }}>
                                 COPY
                             </Button>
                         </InputRightAddon>
@@ -102,7 +121,12 @@ const UserRegister = () => {
                     <InputGroup size="lg">
                         <Textarea disabled placeholder=" " value={passphrase} resize="none" minH="80px" />
                         <InputRightAddon bgColor="transparent" minH="80px">
-                            <Button variant="outline" borderColor="blue" onClick={() => { navigator.clipboard.writeText(passphrase) && handleCopyToast("Passphrase")}}>
+                            <Button
+                                variant="outline"
+                                borderColor="blue"
+                                onClick={() => {
+                                    navigator.clipboard.writeText(passphrase) && handleCopyToast('Passphrase');
+                                }}>
                                 COPY
                             </Button>
                         </InputRightAddon>
@@ -112,7 +136,7 @@ const UserRegister = () => {
 
                 <Stack direction={'row'}>
                     <FormControl variant="floating" id="name">
-                        <Input placeholder=" " value={name} size="lg" onChange={handleChangeName}/>
+                        <Input placeholder=" " value={name} size="lg" onChange={handleChangeName} />
                         <FormLabel>Name</FormLabel>
                         <FormHelperText textAlign="center">Used to identify you on this device</FormHelperText>
                     </FormControl>
@@ -120,23 +144,30 @@ const UserRegister = () => {
                     <FormControl variant="floating" id="pin">
                         <HStack spacing={4}>
                             <PinInput size="lg" onComplete={handleChangePin} manageFocus={true}>
-                                <PinInputField placeholder="P" />
-                                <PinInputField placeholder="I" />
-                                <PinInputField placeholder="N" />
-                                <PinInputField placeholder="🔒" />
+                                <PinInputField />
+                                <PinInputField />
+                                <PinInputField />
+                                <PinInputField />
                             </PinInput>
                         </HStack>
                         <FormLabel mx={16}>PIN</FormLabel>
                         <FormHelperText textAlign="center">Used to access easily.</FormHelperText>
                     </FormControl>
                 </Stack>
-                <Button w="100%" p={4} mt={6} bgColor="blue" textColor="white" fontWeight="bold" onClick={handleSaveWallet}>
+                <Button
+                    w="100%"
+                    p={4}
+                    mt={6}
+                    bgColor="blue"
+                    textColor="white"
+                    fontWeight="bold"
+                    onClick={handleSaveWallet}>
                     Save account
                 </Button>
             </Box>
         </Box>
-    )
-}
+    );
+};
 
 export default UserRegister;
 

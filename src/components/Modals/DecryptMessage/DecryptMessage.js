@@ -20,7 +20,6 @@ import {
     PinInputField,
     Spacer,
     Textarea,
-    useColorModeValue,
     useDisclosure,
     useToast,
 } from '@chakra-ui/react';
@@ -51,7 +50,7 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
     const [totalMessages, setTotalMessages] = useState([]);
     const toast = useToast();
 
-    const { isOpen:isOpenResponse, onOpen:onOpenResponse, onClose:onCloseResponse } = useDisclosure();
+    const { isOpen: isOpenResponse, onOpen: onOpenResponse, onClose: onCloseResponse } = useDisclosure();
     const ref = useRef();
 
     // ------------------ Decrypt messages ------------------
@@ -127,7 +126,7 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
             auxTotalMsg.sort((a, b) => {
                 return a.transactionTimestamp - b.transactionTimestamp;
             });
-            
+
             setTotalMessages(auxTotalMsg);
         };
 
@@ -151,8 +150,9 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
 
     // ------------------------------------------------------------------
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
-    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const bgColor = '#d86471';
+    const borderColor = '#f39d54';
+    const filledColor = '#f79c27';
 
     const handleClose = () => {
         setIsValidPin(false);
@@ -184,7 +184,12 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                <AlertDialogContent
+                    bgColor={bgColor}
+                    border="1px"
+                    borderColor={borderColor}
+                    shadow="dark-lg"
+                    color="white">
                     <AlertDialogHeader>Messages</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
@@ -223,7 +228,6 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
                                 <HStack spacing={7}>
                                     <PinInput
                                         size="lg"
-                                        placeholder="🔒"
                                         onComplete={handleCompletePin}
                                         onChange={handleCompletePin}
                                         isInvalid={!isValidPin}
@@ -239,32 +243,41 @@ const DecryptMessage = ({ reference, isOpen, onClose, username, messages = [], s
                         )}
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button mx={2} ref={reference} onClick={handleClose}>
+                        <Button mx={2} ref={reference} onClick={handleClose} bgColor={filledColor} fontWeight={'black'}>
                             CLOSE
                         </Button>
                         {decryptedMessages.length !== 0 && (
-                            <Button ref={reference} onClick={onOpenResponse} isDisabled={!isValidPin} bgColor="orange.600" fontWeight="bold">
+                            <Button
+                                ref={reference}
+                                onClick={onOpenResponse}
+                                isDisabled={!isValidPin}
+                                fontWeight={'black'}
+                                bgColor={filledColor}>
                                 REPLY
                             </Button>
                         )}
                         {decryptedMessages.length === 0 && (
-                            <Button ref={reference} onClick={handleOk} isDisabled={!isValidPin}>
+                            <Button
+                                ref={reference}
+                                onClick={handleOk}
+                                isDisabled={!isValidPin}
+                                bgColor={filledColor}
+                                fontWeight={'black'}>
                                 SHOW MESSAGE
                             </Button>
                         )}
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-            <NewMessage reference={ref} isOpen={isOpenResponse} onClose={onCloseResponse} username={username} defaultRecipient={sender} />
+            <NewMessage
+                reference={ref}
+                isOpen={isOpenResponse}
+                onClose={onCloseResponse}
+                username={username}
+                defaultRecipient={sender}
+            />
         </>
     );
 };
 
 export default DecryptMessage;
-
-/*
-<FormControl variant="floatingGray" id="Message" my={4} mt={8}>
-                                <Textarea placeholder=" " value={text} isDisabled />
-                                <FormLabel>Message</FormLabel>
-                            </FormControl>
-                            */

@@ -1,4 +1,4 @@
-import { Button, ButtonGroup } from '@chakra-ui/react';
+import { Button, ButtonGroup, useColorModeValue } from '@chakra-ui/react';
 
 /**
  * @name SectionSwitch
@@ -14,9 +14,12 @@ const SectionSwitch = ({ option, setOption }) => {
     const fillColor = 'rgba(57,59,151,0.25)';
     const borderColor = 'rgba(57,59,151,1)';
 
+    const textColor = useColorModeValue('rgba(57,59,151,1)', "white")
+
     const ButtonSwitch = ({ isActive, onClick, text }) => {
         return (
             <Button
+                color={textColor}
                 isActive={isActive}
                 w="100%"
                 bgColor={fillColor}

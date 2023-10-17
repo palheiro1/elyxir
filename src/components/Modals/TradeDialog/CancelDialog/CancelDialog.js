@@ -87,7 +87,6 @@ const CancelDialog = ({ reference, isOpen, onClose, username, selectedOrder }) =
                                 <HStack spacing={4}>
                                     <PinInput
                                         size="lg"
-                                        placeholder="🔒"
                                         onComplete={handleCompletePin}
                                         onChange={handleCompletePin}
                                         isInvalid={!isValidPin}

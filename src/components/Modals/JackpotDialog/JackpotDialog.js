@@ -17,7 +17,6 @@ import {
     PinInputField,
     Stack,
     Text,
-    useColorModeValue,
     useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -52,8 +51,9 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
         }
     };
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
-    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const bgColor = '#d86471';
+    const borderColor = '#f39d54';
+    const filledColor = '#f79c27';
 
     return (
         <>
@@ -66,7 +66,12 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                <AlertDialogContent
+                    bgColor={bgColor}
+                    border="1px"
+                    borderColor={borderColor}
+                    shadow="dark-lg"
+                    color="white">
                     <AlertDialogHeader textAlign="center" fontWeight="bolder">
                         <Heading>Claim the Jackpot</Heading>
                     </AlertDialogHeader>
@@ -138,7 +143,7 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                                     </GridItem>
                                     <GridItem colSpan={7}>
                                         <Text>
-                                            Participate in the {' '}
+                                            Participate in the{' '}
                                             <strong>
                                                 <u>drawing of 9 lots</u>
                                             </strong>{' '}
@@ -153,7 +158,6 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                             <HStack spacing={7}>
                                 <PinInput
                                     size="lg"
-                                    placeholder="🔒"
                                     onComplete={handleCompletePin}
                                     onChange={handleCompletePin}
                                     isInvalid={!isValidPin}
@@ -170,11 +174,12 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                         <Center my={2}>
                             <Button
                                 isDisabled={!isValidPin || sendingTx}
-                                bgColor={isValidPin ? '#F18800' : null}
+                                bgColor={filledColor}
+                                fontWeight={'black'}
                                 onClick={handleSend}
                                 minW="90%"
                                 size="lg">
-                                Submit
+                                SUBMIT
                             </Button>
                         </Center>
                     </AlertDialogBody>

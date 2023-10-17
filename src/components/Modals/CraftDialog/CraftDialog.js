@@ -212,7 +212,6 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, gem }) => {
                             <HStack spacing={7}>
                                 <PinInput
                                     size="lg"
-                                    placeholder="🔒"
                                     onComplete={handleCompletePin}
                                     onChange={handleCompletePin}
                                     isInvalid={!isValidPin}
@@ -231,9 +230,12 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, gem }) => {
                             isDisabled={!isValidPin || sendingTx || gem < craftingCost}
                             bgColor={borderColor}
                             w="100%"
+                            color="white"
+                            fontWeight={'black'}
+                            _hover={{ filter: 'brightness(1.2)' }}
                             py={6}
                             onClick={handleCrafting}>
-                            Submit
+                            SUBMIT
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>

@@ -5,14 +5,14 @@ import Jackpot from '../../JackpotWidget/JackpotWidget';
 // import News from './News/News';
 
 const Overview = ({ blockchainStatus }) => {
-    const FlowItem = ({ title, button, number, color }) => {
+    const FlowItem = ({ title, subtitle, button, number, color }) => {
         return (
             <Stack color={color} maxW={'17rem'}>
                 <Heading textAlign={'center'} fontSize={'2xl'}>
                     {number}
                 </Heading>
-                <Text textAlign={'center'} fontWeight="bold">
-                    {title}
+                <Text textAlign={'center'} fontWeight="bold" maxW="150px">
+                    {title} <br /> {subtitle}
                 </Text>
                 <Center>{button}</Center>
             </Stack>
@@ -77,12 +77,13 @@ const Overview = ({ blockchainStatus }) => {
                     <Center>
                         <Stack
                             direction={{ base: 'column', lg: 'row' }}
-                            spacing={{ base: 4, md: 4, lg: 12 }}
+                            spacing={{ base: 4, md: 4, lg: 32 }}
                             mb={6}
                             align={'center'}>
                             <FlowItem
                                 number={1}
-                                title="Obtain cards by purchasing GIFTZ"
+                                title={`Obtain cards by`}
+                                subtitle={`purchasing GIFTZ`}
                                 color={textBuy}
                                 button={
                                     <MenuButton
@@ -97,7 +98,8 @@ const Overview = ({ blockchainStatus }) => {
                             />
                             <FlowItem
                                 number={2}
-                                title="Redeem packs for 3 random cards"
+                                title="Redeem packs for"
+                                subtitle={'3 random cards'}
                                 color={textOpen}
                                 button={
                                     <MenuButton
@@ -112,7 +114,8 @@ const Overview = ({ blockchainStatus }) => {
                             />
                             <FlowItem
                                 number={3}
-                                title="Watch your History"
+                                title="Check out"
+                                subtitle={'your history'}
                                 color={textHistory}
                                 button={
                                     <MenuButton
@@ -127,7 +130,8 @@ const Overview = ({ blockchainStatus }) => {
                             />
                             <FlowItem
                                 number={4}
-                                title="Investigate your inventory"
+                                title="Investigate"
+                                subtitle="your inventory"
                                 color={textInventory}
                                 button={
                                     <MenuButton
@@ -144,7 +148,7 @@ const Overview = ({ blockchainStatus }) => {
                     </Center>
 
                     <Stack
-                        gap={8}
+                        gap={16}
                         direction={{ base: 'column', lg: 'row' }}
                         align={{ base: 'center', lg: 'flex-end' }}
                         justify={'center'}>
@@ -165,7 +169,9 @@ const Overview = ({ blockchainStatus }) => {
                                 }
                             />
                         </Box>
-                        <Jackpot blockchainStatus={blockchainStatus} cStyle={1} />
+                        <Box pl={8}>
+                            <Jackpot blockchainStatus={blockchainStatus} cStyle={1} />
+                        </Box>
                     </Stack>
                 </Box>
 

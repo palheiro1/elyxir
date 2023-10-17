@@ -199,7 +199,6 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
                         <PinInput
                             isDisabled={selectedCards.length === 0 || !isValidAccount}
                             size="lg"
-                            placeholder="🔒"
                             onComplete={handleCompletePin}
                             onChange={handleCompletePin}
                             isInvalid={!isValidPin}

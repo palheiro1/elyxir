@@ -115,9 +115,12 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
         }
     };
 
-    const bgColor = '#122f34';
+    const bgColor = '#246773';
     const borderColor = '#2f8190';
     const isDisabled = !isValidPin || !isValidArdorAccount || input.value === 0;
+
+    // const bgColor = '#246773';
+    // const borderColor = '#2f8190';
 
     const cleanOnClose = () => {
         setArdorAccount('ARDOR-');
@@ -179,7 +182,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                             </Center>
                         </Box>
 
-                        <FormControl variant="floatingModal" id="Recipient" my={6}>
+                        <FormControl variant="floatingModalTransparent" id="Recipient" my={6}>
                             <InputGroup size="lg" border="2px" borderColor={borderColor} rounded="lg">
                                 <Input
                                     placeholder=" "
@@ -212,7 +215,6 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                             <HStack spacing={7}>
                                 <PinInput
                                     size="lg"
-                                    placeholder="🔒"
                                     onComplete={handleCompletePin}
                                     onChange={handleCompletePin}
                                     isInvalid={!isValidPin}
@@ -231,9 +233,12 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                             isDisabled={isDisabled || sendingTx}
                             bgColor={borderColor}
                             w="100%"
+                            _hover={{ filter: 'brightness(1.2)' }}
                             py={6}
+                            color="white"
+                            fontWeight={'black'}
                             onClick={handleSend}>
-                            Submit
+                            SUBMIT
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>

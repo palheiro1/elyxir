@@ -1,6 +1,14 @@
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useColorModeValue } from "@chakra-ui/react"
-import { dropUser, removeFromAllUsers } from "../../../utils/storage"
-
+import {
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogCloseButton,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogOverlay,
+    Button,
+} from '@chakra-ui/react';
+import { dropUser, removeFromAllUsers } from '../../../utils/storage';
 
 /**
  * @name ConfirmDialog
@@ -15,47 +23,50 @@ import { dropUser, removeFromAllUsers } from "../../../utils/storage"
  * @version 1.0
  */
 const ConfirmDialog = ({ reference, isOpen, onClose, setNeedReload, user }) => {
-
     const handleDelete = () => {
         dropUser(user);
         removeFromAllUsers(user);
         setNeedReload(true);
         onClose();
-    }
+    };
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
-    const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
-        
+    const bgColor = '#d86471';
+    const borderColor = '#f39d54';
+    const filledColor = '#f79c27';
 
     return (
         <>
             <AlertDialog
-                motionPreset='slideInBottom'
+                motionPreset="slideInBottom"
                 leastDestructiveRef={reference}
                 onClose={onClose}
                 isOpen={isOpen}
-                isCentered
-            >
+                isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                <AlertDialogContent
+                    bgColor={bgColor}
+                    border="1px"
+                    borderColor={borderColor}
+                    shadow="dark-lg"
+                    color="white">
                     <AlertDialogHeader>Delete wallet from this device?</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
                         Don't worry, you can restore it with your Ardor account and your seed phrase.
                     </AlertDialogBody>
                     <AlertDialogFooter>
-                        <Button ref={reference} onClick={onClose}>
+                        <Button ref={reference} onClick={onClose} bgColor={filledColor}>
                             No
                         </Button>
-                        <Button colorScheme='red' ml={3} onClick={handleDelete}>
+                        <Button colorScheme="red" ml={3} onClick={handleDelete} bgColor={filledColor}>
                             Yes
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
         </>
-    )
-}
+    );
+};
 
-export default ConfirmDialog
+export default ConfirmDialog;

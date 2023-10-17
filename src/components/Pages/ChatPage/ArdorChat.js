@@ -12,7 +12,7 @@ const ArdorChat = ({ infoAccount }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const ref = useRef();
 
-    const textColor = useColorModeValue("rgb(59,67,151)", "white");
+    const textColor = useColorModeValue('rgb(59,67,151)', 'white');
 
     useEffect(() => {
         const getMessages = async () => {
@@ -53,10 +53,17 @@ const ArdorChat = ({ infoAccount }) => {
                 <Warning />
                 <Stack direction={['column', 'row']} spacing={4} mt={4}>
                     <Center>
-                        <Heading fontSize="md" color={textColor}>Messages</Heading>
+                        <Heading fontSize="md" color={textColor}>
+                            Messages
+                        </Heading>
                     </Center>
                     <Spacer />
-                    <Button size="sm" onClick={handleNewMessage} bgColor={"rgba(59,67,151,0.5)"} color="white">
+                    <Button
+                        size="sm"
+                        onClick={handleNewMessage}
+                        bgColor={'rgba(59,67,151,1)'}
+                        color="white"
+                        _hover={{ bgColor: 'rgba(59,67,151,0.7)' }}>
                         New message
                     </Button>
                 </Stack>
