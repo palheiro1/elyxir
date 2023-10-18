@@ -254,7 +254,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                                 <Text fontWeight="bold" fontSize="xl">
                                                     {!isCurrency ? card.name : currencyName}
                                                 </Text>
-                                                <Text color="gray">
+                                                <Text>
                                                     {card.channel} / {card.rarity}
                                                 </Text>
                                             </>

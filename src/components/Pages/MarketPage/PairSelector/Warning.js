@@ -1,8 +1,7 @@
-import { Text, useColorModeValue } from "@chakra-ui/react";
+import { Text, useColorModeValue } from '@chakra-ui/react';
 
 const Warning = () => {
-
-    const textColor = useColorModeValue('rgba(57,59,151,1)', "white")
+    const textColor = useColorModeValue('#3b6497', 'white');
     return (
         <Text fontSize="xs" textAlign="center" mt={2} color={textColor}>
             <strong>Want to trade your cards or currencies for wETH, MATIC or DAI?</strong>

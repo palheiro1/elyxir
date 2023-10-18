@@ -165,7 +165,7 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg" color="white">
                     <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text>SEND {currency.name}</Text>

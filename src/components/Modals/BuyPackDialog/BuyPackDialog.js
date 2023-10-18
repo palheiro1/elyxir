@@ -375,6 +375,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
                                     <Box w="100%" mt={2}>
                                         <Button
+                                            color="white"
                                             isDisabled={isDisabled || sendingTx}
                                             bgColor={'#6b254d'}
                                             fontWeight={'black'}

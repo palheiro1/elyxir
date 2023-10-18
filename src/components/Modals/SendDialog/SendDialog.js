@@ -199,6 +199,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                                             bgColor="transparent"
                                             aria-label="Scan QR CODE"
                                             w="100%"
+                                            color="white"
                                             icon={<FaQrcode />}
                                             onClick={() => {
                                                 setReaderEnabled(!readerEnabled);

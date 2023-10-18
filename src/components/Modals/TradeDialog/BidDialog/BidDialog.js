@@ -271,7 +271,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                                 <Text fontWeight="bold" fontSize="xl">
                                                     {card.name}
                                                 </Text>
-                                                <Text color="gray">
+                                                <Text>
                                                     {card.channel} / {card.rarity}
                                                 </Text>
                                             </>

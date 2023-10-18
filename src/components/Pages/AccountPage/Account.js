@@ -9,6 +9,7 @@ import {
     PinInput,
     PinInputField,
     Text,
+    useColorModeValue,
     useDisclosure,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
@@ -71,6 +72,8 @@ const Account = ({ infoAccount }) => {
         setIsInvalidPinDelete(false);
     };
 
+    const textColor = useColorModeValue(borderColor, 'white');
+
     return (
         <>
             <Grid
@@ -90,7 +93,14 @@ const Account = ({ infoAccount }) => {
                     borderColor={borderColor}
                 />
                 <GridItem>
-                    <Box p={4} bgColor={bgColor} rounded="lg" mb={2} border="1px" borderColor={borderColor} color={borderColor}>
+                    <Box
+                        p={4}
+                        bgColor={bgColor}
+                        rounded="lg"
+                        mb={2}
+                        border="1px"
+                        borderColor={borderColor}
+                        color={textColor}>
                         <Heading fontSize="lg" pb={2}>
                             Backup your passphrase
                         </Heading>
@@ -125,16 +135,24 @@ const Account = ({ infoAccount }) => {
                                 mt={4}
                                 w="100%"
                                 bgColor={bgColor}
+                                fontWeight={'black'}
                                 _hover={{ bgColor: hoverColor }}
                                 isDisabled={isInvalidPinBackup}
                                 onClick={!isInvalidPinBackup ? onOpenBackup : undefined}>
-                                Export passphrase
+                                EXPORT PASSPHRASE
                             </Button>
                         </Box>
                     </Box>
                 </GridItem>
                 <GridItem>
-                    <Box p={4} bgColor={bgColor} rounded="lg" mb={2} border="1px" borderColor={borderColor} color={borderColor}>
+                    <Box
+                        p={4}
+                        bgColor={bgColor}
+                        rounded="lg"
+                        mb={2}
+                        border="1px"
+                        borderColor={borderColor}
+                        color={textColor}>
                         <Heading fontSize="lg" pb={2}>
                             Delete account from device
                         </Heading>
@@ -163,11 +181,12 @@ const Account = ({ infoAccount }) => {
                                 color="white"
                                 mt={4}
                                 w="100%"
+                                fontWeight={'black'}
                                 _hover={{ bgColor: hoverColor }}
                                 bgColor={bgColor}
                                 isDisabled={isInvalidPinDelete}
                                 onClick={!isInvalidPinDelete ? onOpenDelete : undefined}>
-                                Delete account
+                                DELETE ACCOUNT
                             </Button>
                         </Box>
                     </Box>

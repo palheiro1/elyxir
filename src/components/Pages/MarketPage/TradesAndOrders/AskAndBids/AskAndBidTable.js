@@ -37,7 +37,7 @@ const AskBidTable = ({
                     fontSize="lg"
                     borderBottom="2px"
                     fontWeight={'black'}
-                    borderColor={'#3b6497'}
+                    borderColor={!newStyle ? '#3b6497' : "#f79c27"}
                     color={newStyle ? (isAsk ? 'white' : '#29a992') : textColor}>
                     {type}
                 </Text>
@@ -97,7 +97,8 @@ const AskBidTable = ({
                     textAlign="center"
                     p={4}
                     fontSize="lg"
-                    borderTop="1px"
+                    borderTop="2px"
+                    borderColor={"#f79c27"}
                     color={isAsk ? '#eb6473' : 'white'}
                     fontWeight={'black'}>
                     {type}

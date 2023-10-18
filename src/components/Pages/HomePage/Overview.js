@@ -77,7 +77,7 @@ const Overview = ({ blockchainStatus }) => {
                     <Center>
                         <Stack
                             direction={{ base: 'column', lg: 'row' }}
-                            spacing={{ base: 4, md: 4, lg: 32 }}
+                            spacing={{ base: 4, md: 0, lg: 12, xl: 32 }}
                             mb={6}
                             align={'center'}>
                             <FlowItem
@@ -148,11 +148,11 @@ const Overview = ({ blockchainStatus }) => {
                     </Center>
 
                     <Stack
-                        gap={16}
+                        gap={{ base: 0, lg: 8, xl: 16 }}
                         direction={{ base: 'column', lg: 'row' }}
                         align={{ base: 'center', lg: 'flex-end' }}
                         justify={'center'}>
-                        <Box my={4} mr={{ base: 0, md: 4, lg: 8 }}>
+                        <Box my={4} pl={{ base: 6, xl: 0 }} mr={{ base: 0, xl: 8 }}>
                             <FlowItem
                                 number={5}
                                 title="The Jackpot: Your Ultimate Challenge Awaits!"
