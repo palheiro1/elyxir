@@ -37,7 +37,7 @@ const AskBidTable = ({
                     fontSize="lg"
                     borderBottom="2px"
                     fontWeight={'black'}
-                    borderColor={!newStyle ? '#3b6497' : "#f79c27"}
+                    borderColor={!newStyle ? '#3b6497' : '#f79c27'}
                     color={newStyle ? (isAsk ? 'white' : '#29a992') : textColor}>
                     {type}
                 </Text>
@@ -83,10 +83,14 @@ const AskBidTable = ({
                 </Tbody>
                 {newStyle && isAsk && (
                     <Tfoot bgColor="whiteAlpha.400">
-                        <Tr>
+                        <Tr color="white">
                             {!onlyOneAsset && <Th textAlign="center">Asset</Th>}
-                            <Th textAlign="center">Ignis</Th>
-                            <Th textAlign="center">Amount</Th>
+                            <Th textAlign="center" color="white" fontWeight={'black'}>
+                                Ignis
+                            </Th>
+                            <Th textAlign="center" color="white" fontWeight={'black'}>
+                                Amount
+                            </Th>
                         </Tr>
                     </Tfoot>
                 )}
@@ -98,7 +102,7 @@ const AskBidTable = ({
                     p={4}
                     fontSize="lg"
                     borderTop="2px"
-                    borderColor={"#f79c27"}
+                    borderColor={'#f79c27'}
                     color={isAsk ? '#eb6473' : 'white'}
                     fontWeight={'black'}>
                     {type}

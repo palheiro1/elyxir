@@ -284,6 +284,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                                     {...dec}
                                                     rounded="none"
                                                     borderLeftRadius="lg"
+                                                    color="white"
                                                     bgColor={filledColor}>
                                                     -
                                                 </Button>
@@ -297,6 +298,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                                 <Button
                                                     {...inc}
                                                     rounded="none"
+                                                    color="white"
                                                     borderRightRadius="lg"
                                                     bgColor={filledColor}>
                                                     +
@@ -368,6 +370,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                             bgColor={filledColor}
                                             fontWeight={'black'}
                                             w="100%"
+                                            color="white"
                                             py={6}
                                             onClick={handleSend}>
                                             BUY {isCurrency ? currencyName : card.name}

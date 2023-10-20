@@ -266,6 +266,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                                 <Button
                                                     {...dec}
                                                     rounded="none"
+                                                    color="white"
                                                     borderLeftRadius="lg"
                                                     bgColor={filledColor}>
                                                     -
@@ -282,6 +283,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                                 <Button
                                                     {...inc}
                                                     rounded="none"
+                                                    color="white"
                                                     borderRightRadius="lg"
                                                     bgColor={filledColor}>
                                                     +
@@ -357,6 +359,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                             bgColor={filledColor}
                                             fontWeight={'black'}
                                             w="100%"
+                                            color="white"
                                             py={6}
                                             onClick={handleSend}>
                                             SELL {isCurrency ? currencyName : card.name}
