@@ -206,7 +206,13 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 const card = allCards.find(card => card?.asset === attachment.asset);
                 if (card) {
                     auxDividends[index].card = card;
+                } else {
+                    // Delete from array
+                    auxDividends.splice(index, 1);
                 }
+            } else {
+                // Delete from array
+                auxDividends.splice(index, 1);
             }
         });
     };
