@@ -202,9 +202,11 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
         dividendsTxs.forEach((dividendTx, index) => {
             const { attachment } = dividendTx;
-            const card = allCards.find(card => card.asset === attachment.asset);
-            if (card) {
-                auxDividends[index].card = card;
+            if (attachment && attachment.asset) {
+                const card = allCards.find(card => card?.asset === attachment.asset);
+                if (card) {
+                    auxDividends[index].card = card;
+                }
             }
         });
     };
