@@ -74,7 +74,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
 
     const handleSwap = async () => {
         if (!isValidPin || !isValidAccount || giftzToSwap === 0) return;
-        infoToast('Swapping cards...', toast);
+        infoToast('Swapping giftz...', toast);
         setIsSwapping(true);
 
         const cardsToSwap = [

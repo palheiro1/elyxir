@@ -66,7 +66,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
 
     const handleSwap = async () => {
         if (!isValidPin || !isValidAccount) return;
-        infoToast('Swapping cards...', toast);
+        infoToast('Swapping wETH...', toast);
         setIsSwapping(true);
 
         const amountQnt = wEthToSwap * NQTDIVIDER;

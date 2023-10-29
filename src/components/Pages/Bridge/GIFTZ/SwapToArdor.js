@@ -47,7 +47,7 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
     return (
         <Stack direction="column" spacing={8} align="center">
             <Heading fontSize="3xl" fontWeight="light" mb={-8}>
-                1. Send the cards
+                1. Send the GIFTz
             </Heading>
             <Text fontWeight="light">to your deposit address</Text>
 
