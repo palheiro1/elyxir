@@ -48,7 +48,7 @@ import {
 import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 
 // Services
-import { fetchAllCards, fetchCurrencyAssets } from '../../utils/cardsUtils';
+import { fetchAllCards, fetchCurrencyAssets, isMBAsset } from '../../utils/cardsUtils';
 
 import { checkDataChange, getCurrentAskAndBids, getIGNISBalance, handleNotifications } from '../../utils/walletUtils';
 
@@ -197,22 +197,17 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Load all data from blockchain - Main flow
     // -----------------------------------------------------------------
     const updateDividendsWithCards = async (auxDividends, allCards) => {
+        auxDividends.filter(dividend => dividend.attachment && dividend.attachment.asset);
         const auxDividendsPromises = auxDividends.map(dividend => getTransaction(2, dividend.eventHash));
-        const dividendsTxs = await Promise.all(auxDividendsPromises);
+        const dividendsTxs = (await Promise.all(auxDividendsPromises))
 
         dividendsTxs.forEach((dividendTx, index) => {
             const { attachment } = dividendTx;
-            if (attachment && attachment.asset) {
+            if (attachment && attachment.asset && isMBAsset(attachment.asset)) {
                 const card = allCards.find(card => card?.asset === attachment.asset);
                 if (card) {
                     auxDividends[index].card = card;
-                } else {
-                    // Delete from array
-                    auxDividends.splice(index, 1);
                 }
-            } else {
-                // Delete from array
-                auxDividends.splice(index, 1);
             }
         });
     };

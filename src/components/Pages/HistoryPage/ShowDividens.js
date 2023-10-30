@@ -43,6 +43,7 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
                     {filteredDividends.length > 0 &&
                         filteredDividends.slice(0, visibleDividends).map((transaction, index) => {
                             const { card } = transaction;
+                            if(!card) return null;
                             const {
                                 cardImgUrl: image,
                                 name: title,
