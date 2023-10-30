@@ -294,10 +294,10 @@ export const cancelledOrder = (type, date, account) => {
 
 export const handleGEM = (type, amount, date, account) => {
     type = type.toLowerCase();
-    if (amount > 1000000) {
-        amount = amount / NQTDIVIDER;
-    }
-    amount = Number(amount);
+    // if (amount > 1000000) {
+    //     amount = amount / NQTDIVIDER;
+    // }
+    amount = Number(amount / NQTDIVIDER);
     const fixedAmount = Number.isInteger(amount) ? amount.toFixed(0) : amount.toFixed(2);
     const Component = () => {
         return (
