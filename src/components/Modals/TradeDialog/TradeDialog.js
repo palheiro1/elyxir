@@ -206,6 +206,7 @@ const TradeDialog = ({
                 onClose={onCloseAsk}
                 card={!currencyCards ? card : currencyCards}
                 username={username}
+                actualAmount={currencyCards ? currencyCards.quantityQNT : card.quantityQNT}
             />
             <BidDialog
                 reference={refBid}
@@ -214,6 +215,7 @@ const TradeDialog = ({
                 card={!currencyCards ? card : currencyCards}
                 username={username}
                 ignis={ignis}
+                actualAmount={currencyCards ? currencyCards.quantityQNT : card.quantityQNT}
             />
         </>
     );

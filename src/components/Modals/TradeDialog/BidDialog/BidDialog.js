@@ -47,7 +47,7 @@ import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/
  * @author Jesús Sánchez Fernández
  * @version 1.0.0
  */
-const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrders = [], bidOrders = [] }) => {
+const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrders = [], bidOrders = [], actualAmount = 0 }) => {
     const toast = useToast();
 
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
@@ -263,9 +263,12 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                             maxH="30rem"
                                         />
                                     </Center>
+                                    <Text fontSize="sm" textAlign="center" my={2}>
+                                        You have {actualAmount} {isCurrency ? currencyName : card.name}
+                                    </Text>
                                 </Box>
                                 <VStack spacing={4} w="100%">
-                                    <Box w="100%">
+                                    <Box w="100%" mb={2}>
                                         {!isCurrency && (
                                             <>
                                                 <Text fontWeight="bold" fontSize="xl">
@@ -274,6 +277,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                                 <Text>
                                                     {card.channel} / {card.rarity}
                                                 </Text>
+                                                <Text fontSize={"sm"}>Asset: {card.asset}</Text>
                                             </>
                                         )}
                                     </Box>
@@ -304,7 +308,9 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                                     +
                                                 </Button>
                                             </HStack>
-                                            <FormLabel>Amount of {!isCurrency ? 'cards' : currencyName}</FormLabel>
+                                            <FormLabel>
+                                                Amount of {!isCurrency ? 'cards' : currencyName}
+                                            </FormLabel>
                                         </FormControl>
                                     </Box>
                                     <Box py={2}>
@@ -380,7 +386,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                 <Box w="50%">
                                     <AskAndBidGrid
                                         columns={1}
-                                        askOrders={card.askOrders.slice(0, 3)}
+                                        askOrders={card.askOrders.slice(0, 3).reverse()}
                                         bidOrders={card.bidOrders.slice(0, 3)}
                                         onlyOneAsset={true}
                                         setSelectedItem={setSelectedItem}

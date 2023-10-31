@@ -90,7 +90,7 @@ export const handleType2AndSubtype1 = (tx, timestamp, infoAccount, collectionCar
         handler = handleGIFTZ(inOut, fixedAmount, timestamp, sender);
     } else if (asset === 'WETH') {
         handler = handleWETH(inOut, fixedAmount, timestamp, sender);
-    } else if(asset === "MANA") {
+    } else if (asset === 'MANA') {
         handler = handleMANA(inOut, tx.attachment.quantityQNT, timestamp, sender);
     } else {
         handler = handleCardTransfer(inOut, fixedAmount, timestamp, sender, asset);
@@ -186,7 +186,7 @@ export const handleIncomingGIFTZ = (amount, date) => {
     const Component = () => {
         return (
             <Tr
-            _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
+                _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
                 border={{ base: '2px', md: '0px' }}
                 rounded={{ base: 'md', md: 'unset' }}
                 m={{ base: 2, md: 0 }}>
@@ -294,10 +294,10 @@ export const cancelledOrder = (type, date, account) => {
 
 export const handleGEM = (type, amount, date, account) => {
     type = type.toLowerCase();
-    // if (amount > 1000000) {
-    //     amount = amount / NQTDIVIDER;
-    // }
-    amount = Number(amount / NQTDIVIDER);
+    if (amount > NQTDIVIDER) {
+        amount = amount / NQTDIVIDER;
+    }
+    amount = Number(amount);
     const fixedAmount = Number.isInteger(amount) ? amount.toFixed(0) : amount.toFixed(2);
     const Component = () => {
         return (
@@ -475,7 +475,7 @@ export const handleAssetExchange = (type, amount, date, asset) => {
                             {asset === 'GEM' && <GemCard />}
                             {asset === 'GIFTZ' && <GIFTZCard />}
                             {asset === 'WETH' && <WETHCard />}
-                            {asset === "MANA" && <ManaCard />}
+                            {asset === 'MANA' && <ManaCard />}
                         </>
                     ) : (
                         <TableCard

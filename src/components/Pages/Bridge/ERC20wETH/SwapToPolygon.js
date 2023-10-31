@@ -104,7 +104,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                 </Heading>
 
                 <Box>
-                    <NumberInput defaultValue={0} min={0.005} max={WETHBalance} precision={8} value={wEthToSwap} onChange={e => setWEthToSwap(e)}>
+                    <NumberInput defaultValue={0} min={0.00000001} max={WETHBalance} precision={8} value={wEthToSwap} onChange={e => setWEthToSwap(e)}>
                         <NumberInputField />
                     </NumberInput>
                     <Center>

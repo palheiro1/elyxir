@@ -47,7 +47,7 @@ import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/
  * @author Jesús Sánchez Fernández
  * @version 1.0.0
  */
-const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [], bidOrders = [] }) => {
+const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [], bidOrders = [], actualAmount = 0 }) => {
     const toast = useToast();
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
@@ -246,13 +246,16 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                             maxH="30rem"
                                         />
                                     </Center>
+                                    <Text fontSize="sm" textAlign="center" my={2}>
+                                        You have {actualAmount} {isCurrency ? currencyName : card.name}
+                                    </Text>
                                 </Box>
                                 <VStack spacing={4} w="100%">
                                     <Box w="100%">
                                         {!isCurrency && (
                                             <>
                                                 <Text fontWeight="bold" fontSize="xl">
-                                                    {!isCurrency ? card.name : currencyName}
+                                                    {card.name}
                                                 </Text>
                                                 <Text>
                                                     {card.channel} / {card.rarity}
@@ -369,7 +372,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                 <Box w="50%">
                                     <AskAndBidGrid
                                         columns={1}
-                                        askOrders={card.askOrders.slice(0, 3)}
+                                        askOrders={card.askOrders.slice(0, 3).reverse()}
                                         bidOrders={card.bidOrders.slice(0, 3)}
                                         onlyOneAsset={true}
                                         setSelectedItem={setSelectedItem}

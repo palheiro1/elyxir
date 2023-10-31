@@ -6,6 +6,7 @@ import {
     HStack,
     IconButton,
     Image,
+    Spacer,
     Stack,
     Text,
     useColorModeValue,
@@ -80,12 +81,18 @@ const CurrencyWidget = ({
             currencyCards.bidOmnoOrders.length > 0 ? currencyCards.askOmnoOrders.take.asset[WETHASSET] / NQTDIVIDER : 0;
     }
 
-    let confirmedBalance = Number(currencyCards.quantityQNT / NQTDIVIDER);
+    let confirmedBalance =
+        currencyCards.assetname === 'GIFTZ'
+            ? Number(currencyCards.quantityQNT)
+            : Number(currencyCards.quantityQNT / NQTDIVIDER);
     confirmedBalance = Number.isInteger(confirmedBalance)
         ? confirmedBalance.toFixed(0)
         : confirmedBalance.toFixed(decimals);
 
-    let unconfirmedBalance = Number(currencyCards.unconfirmedQuantityQNT / NQTDIVIDER);
+    let unconfirmedBalance =
+        currencyCards.assetname === 'GIFTZ'
+            ? Number(currencyCards.unconfirmedQuantityQNT)
+            : Number(currencyCards.unconfirmedQuantityQNT / NQTDIVIDER);
     unconfirmedBalance = Number.isInteger(unconfirmedBalance)
         ? unconfirmedBalance.toFixed(0)
         : unconfirmedBalance.toFixed(decimals);
@@ -121,10 +128,10 @@ const CurrencyWidget = ({
                                     size="xl"
                                     p={1}
                                     mr={2}
-                                    bg={"transparent"}
+                                    bg={'transparent'}
                                     color={textColor}
                                 />
-                                <VStack minW="md" align={{ base: 'center', xl: 'flex-start' }} spacing={2}>
+                                <VStack align={{ base: 'center', xl: 'flex-start' }} spacing={2}>
                                     <Text color={textColor} fontSize="2xl" fontWeight="bold" mb={-3}>
                                         {confirmedBalance} {currencyName}
                                     </Text>
@@ -132,6 +139,7 @@ const CurrencyWidget = ({
                                         ({unconfirmedBalance} unconfirmed)
                                     </Text>
                                 </VStack>
+                                <Spacer />
                                 <Center pl={4}>
                                     <HStack spacing={4} color="white">
                                         <Box p={2} bg={bgColor} rounded="lg" minW="90px">
