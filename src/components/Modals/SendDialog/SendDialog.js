@@ -27,7 +27,7 @@ import {
 import { useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
 import { transferAsset } from '../../../services/Ardor/ardorInterface';
-import { checkPin } from '../../../utils/walletUtils';
+import { checkPin, waitForRefresh } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { isArdorAccount } from '../../../utils/validators';
 import CardBadges from '../../Cards/CardBadges';
@@ -102,7 +102,11 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
             });
 
             if (response) {
+                // Wait REFRESH_TIME to close the modal
+                await waitForRefresh();
+
                 okToast('Card sent successfully', toast);
+                
                 cleanOnClose();
             } else {
                 errorToast('Error sending card', toast);
@@ -239,7 +243,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                             color="white"
                             fontWeight={'black'}
                             onClick={handleSend}>
-                            SUBMIT
+                            {sendingTx ? 'SENDING...' : 'SUBMIT'}
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>

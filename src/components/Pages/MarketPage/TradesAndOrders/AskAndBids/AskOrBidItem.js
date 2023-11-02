@@ -112,13 +112,14 @@ const AskOrBidItem = ({
 
     return (
         <Tr
+            w="100%"
             style={hover ? hoverStyle : normalStyle}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             onClick={canDelete ? handleDeleteOrder : handleSelectOrder}>
             {!onlyOneAsset && <Td textAlign="center">{name}</Td>}
-            <Td textAlign="center">{fixedIgnis}</Td>
-            <Td textAlign="center">{showAmount}</Td>
+            <Td textAlign="center" w="50%">{fixedIgnis}</Td>
+            <Td textAlign="center" w="50%">{showAmount}</Td>
         </Tr>
     );
 };

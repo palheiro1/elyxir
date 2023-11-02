@@ -168,7 +168,7 @@ const Card = ({
             borderColor={newBorderColor}
             bgColor={newBgColor}
             color="white"
-            fontSize={{ base: 'xs', md: 'sm', '2xl': 'md' }}
+            fontSize={{ base: 'xs', md: 'sm' }}
             leftIcon={icon}
             _hover={{ fontWeight: 'bold', shadow: 'xl', bgColor: newBorderColor }}
             onClick={onClick}
@@ -230,7 +230,7 @@ const Card = ({
                                         text="Send"
                                         onClick={onOpenSend}
                                         isDisabled={isBlocked}
-                                        icon={<Image src="/images/icons/send.png" w="20px" />}
+                                        icon={<Image src="/images/icons/send.png" w="15px" />}
                                     />
                                     {rarity !== 'Special' && (
                                         <>
@@ -238,13 +238,13 @@ const Card = ({
                                                 text="Craft"
                                                 onClick={onOpenCraft}
                                                 isDisabled={isBlockedCraft}
-                                                icon={<Image src="/images/icons/craft.png" w="20px" />}
+                                                icon={<Image src="/images/icons/craft.png" w="15px" />}
                                             />
                                             <CardButton
                                                 text="Morph"
                                                 onClick={onOpenMorph}
                                                 isDisabled={isBlocked}
-                                                icon={<Image src="/images/icons/morph.png" w="20px" />}
+                                                icon={<Image src="/images/icons/morph.png" w="15px" />}
                                             />
                                         </>
                                     )}
@@ -378,6 +378,7 @@ const Card = ({
                             username={username}
                             askOrders={askOrdersForThisCard}
                             bidOrders={bidOrdersForThisCard}
+                            actualAmount={quantity}
                         />
                     )}
 
@@ -391,6 +392,7 @@ const Card = ({
                             ignis={ignis}
                             askOrders={askOrdersForThisCard}
                             bidOrders={bidOrdersForThisCard}
+                            actualAmount={quantity}
                         />
                     )}
                 </>

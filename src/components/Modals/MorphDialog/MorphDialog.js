@@ -28,7 +28,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { MORPHINGCOMMON, MORPHINGEPIC, MORPHINGRARE } from '../../../data/CONSTANTS';
-import { checkPin, sendToMorph } from '../../../utils/walletUtils';
+import { checkPin, sendToMorph, waitForRefresh } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import CardBadges from '../../Cards/CardBadges';
 
@@ -99,6 +99,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username, gem }) => {
             });
 
             if (ok) {
+                await waitForRefresh();
                 okToast('Morphing successful', toast);
                 onClose();
             } else {
@@ -226,7 +227,7 @@ const MorphDialog = ({ reference, isOpen, onClose, card, username, gem }) => {
                             fontWeight={'black'}
                             py={6}
                             onClick={handleMorph}>
-                            SUBMIT
+                            {sendingTx ? 'MORPHING...' : 'SUBMIT'}
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>

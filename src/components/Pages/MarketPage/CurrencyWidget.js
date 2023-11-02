@@ -136,7 +136,7 @@ const CurrencyWidget = ({
                                         {confirmedBalance} {currencyName}
                                     </Text>
                                     <Text color={textColor} fontSize="md" textAlign={{ base: 'center', xl: 'left' }}>
-                                        ({unconfirmedBalance} unconfirmed)
+                                        ({unconfirmedBalance} available)
                                     </Text>
                                 </VStack>
                                 <Spacer />

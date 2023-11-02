@@ -46,7 +46,9 @@ const Book = ({ cards }) => {
     return (
         <Box overflow="hidden">
             <Text mb={2}>
-                Once you have completed the collection, you can download the e-book to read on your favorite device.
+                {haveAllCards
+                    ? 'Congratulations! You can now download the e-book to read on your favorite device!'
+                    : 'Once you have completed the collection, you can download the e-book to read on your favorite device.'}
             </Text>
             <Stack spacing={0} direction={{ base: 'column', xl: 'row' }} overflow="hidden" gap={2}>
                 <Stack
@@ -65,7 +67,7 @@ const Book = ({ cards }) => {
                         fontWeight="bolder"
                         color="white"
                         border="2px"
-                        borderColor={borderColor}
+                        borderColor={haveAllCards ? 'white' : borderColor}
                         onClick={haveAllCards ? downloadPDF : null}
                         _hover={{
                             cursor: haveAllCards ? 'pointer' : 'not-allowed',
@@ -75,7 +77,7 @@ const Book = ({ cards }) => {
                         p={2}
                         w="100%"
                         variant="outline">
-                        DOWNLOAD BOOK
+                        {haveAllCards ? 'DOWNLOAD BOOK' : "DON'T HAVE ALL CARDS"}
                     </Box>
                     {cards.map(card => {
                         const haveThisCard = card.quantityQNT > 0;

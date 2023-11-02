@@ -8,6 +8,7 @@ import {
     Box,
     Button,
     Center,
+    Collapse,
     FormControl,
     FormLabel,
     HStack,
@@ -47,7 +48,17 @@ import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/
  * @author Jesús Sánchez Fernández
  * @version 1.0.0
  */
-const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrders = [], bidOrders = [], actualAmount = 0 }) => {
+const BidDialog = ({
+    reference,
+    isOpen,
+    onClose,
+    card,
+    username,
+    ignis,
+    askOrders = [],
+    bidOrders = [],
+    actualAmount = 0,
+}) => {
     const toast = useToast();
 
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
@@ -227,6 +238,15 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
         onClose();
     };
 
+    let finalActualAmount = actualAmount;
+    if (isCurrency) {
+        if (currencyName === 'GIFTZ') {
+            finalActualAmount = actualAmount;
+        } else {
+            finalActualAmount = (actualAmount / NQTDIVIDER).toFixed(2);
+        }
+    }
+
     return (
         <>
             <AlertDialog
@@ -264,7 +284,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                         />
                                     </Center>
                                     <Text fontSize="sm" textAlign="center" my={2}>
-                                        You have {actualAmount} {isCurrency ? currencyName : card.name}
+                                        You have {finalActualAmount} {isCurrency ? currencyName : card.name}
                                     </Text>
                                 </Box>
                                 <VStack spacing={4} w="100%">
@@ -277,7 +297,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                                 <Text>
                                                     {card.channel} / {card.rarity}
                                                 </Text>
-                                                <Text fontSize={"sm"}>Asset: {card.asset}</Text>
+                                                <Text fontSize={'sm'}>Asset: {card.asset}</Text>
                                             </>
                                         )}
                                     </Box>
@@ -308,9 +328,7 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                                     +
                                                 </Button>
                                             </HStack>
-                                            <FormLabel>
-                                                Amount of {!isCurrency ? 'cards' : currencyName}
-                                            </FormLabel>
+                                            <FormLabel>Amount of {!isCurrency ? 'cards' : currencyName}</FormLabel>
                                         </FormControl>
                                     </Box>
                                     <Box py={2}>
@@ -339,6 +357,31 @@ const BidDialog = ({ reference, isOpen, onClose, card, username, ignis, askOrder
                                             </FormLabel>
                                         </FormControl>
                                     </Box>
+                                    <Collapse in={priceCard > 0 && input.value > 0}>
+                                        <Box pt={4}>
+                                            <FormControl variant="floatingModalTransparent" id="PricePerCard">
+                                                <InputGroup border="1px" borderColor={borderColor} rounded="lg">
+                                                    <NumberInput isReadOnly value={priceCard * input.value}>
+                                                        <NumberInputField
+                                                            rounded="none"
+                                                            border="none"
+                                                            textAlign="center"
+                                                            fontWeight="bold"
+                                                        />
+                                                    </NumberInput>
+                                                    <InputRightAddon
+                                                        fontSize="sm"
+                                                        border="none"
+                                                        children="IGNIS"
+                                                        bgColor="transparent"
+                                                        rounded="none"
+                                                        borderLeftRadius="lg"
+                                                    />
+                                                </InputGroup>
+                                                <FormLabel>Total amount</FormLabel>
+                                            </FormControl>
+                                        </Box>
+                                    </Collapse>
                                     <Box py={2}>
                                         <FormControl variant="floatingModalTransparent" id="SecurityPIN">
                                             <HStack spacing={4}>

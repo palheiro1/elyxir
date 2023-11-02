@@ -8,18 +8,18 @@
 export const NAV_ITEMS = [
     {
         label: 'About',
-        href: '#',
+        href: 'https://mythicalbeings.io/',
     },
     {
         label: 'How to play',
-        href: '#',
+        href: 'https://mythicalbeings.io/faq',
     },
     {
         label: 'Blog',
-        href: '#',
+        href: 'https://mythicalbeings.io/blog',
     },
     {
         label: 'Shop',
-        href: '#',
+        href: 'https://shop.mythicalbeings.io/',
     }
 ]

@@ -28,7 +28,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { CRAFTINGCOMMON, CRAFTINGRARE } from '../../../data/CONSTANTS';
-import { checkPin, sendToCraft } from '../../../utils/walletUtils';
+import { checkPin, sendToCraft, waitForRefresh } from '../../../utils/walletUtils';
 import { errorToast, okToast } from '../../../utils/alerts';
 import CardBadges from '../../Cards/CardBadges';
 
@@ -108,6 +108,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, gem }) => {
                 cost: craftingCost,
             });
             if (ok) {
+                await waitForRefresh();
                 okToast('Crafting request sent', toast);
                 onClose();
             } else {
@@ -235,7 +236,7 @@ const CraftDialog = ({ reference, isOpen, onClose, card, username, gem }) => {
                             _hover={{ filter: 'brightness(1.2)' }}
                             py={6}
                             onClick={handleCrafting}>
-                            SUBMIT
+                            {sendingTx ? 'CRAFTING...' : 'SUBMIT'}
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>

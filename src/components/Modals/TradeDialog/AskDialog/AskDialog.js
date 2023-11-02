@@ -47,7 +47,16 @@ import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/
  * @author Jesús Sánchez Fernández
  * @version 1.0.0
  */
-const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [], bidOrders = [], actualAmount = 0 }) => {
+const AskDialog = ({
+    reference,
+    isOpen,
+    onClose,
+    card,
+    username,
+    askOrders = [],
+    bidOrders = [],
+    actualAmount = 0,
+}) => {
     const toast = useToast();
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
@@ -210,6 +219,15 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
         onClose();
     };
 
+    let finalActualAmount = actualAmount;
+    if (isCurrency) {
+        if (currencyName === 'GIFTZ') {
+            finalActualAmount = actualAmount;
+        } else {
+            finalActualAmount = (actualAmount / NQTDIVIDER).toFixed(2);
+        }
+    }
+
     return (
         <>
             <AlertDialog
@@ -247,7 +265,7 @@ const AskDialog = ({ reference, isOpen, onClose, card, username, askOrders = [],
                                         />
                                     </Center>
                                     <Text fontSize="sm" textAlign="center" my={2}>
-                                        You have {actualAmount} {isCurrency ? currencyName : card.name}
+                                        You have {finalActualAmount} {isCurrency ? currencyName : card.name}
                                     </Text>
                                 </Box>
                                 <VStack spacing={4} w="100%">

@@ -114,7 +114,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                         <NumberInputField />
                     </NumberInput>
                     <Center>
-                        <Text color={textColor}>Max: {roundNumberWithMaxDecimals(GEMBalance, 8)}</Text>
+                        <Text color={textColor}>Maximum Available Balance to Transfer: {roundNumberWithMaxDecimals(GEMBalance, 8)}</Text>
                     </Center>
                 </Box>
 

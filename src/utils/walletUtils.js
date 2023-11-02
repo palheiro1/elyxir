@@ -8,6 +8,7 @@ import {
     JACKPOTACCOUNT,
     MANAASSET,
     NQTDIVIDER,
+    REFRESH_DATA_TIME,
     WETHASSET,
 } from '../data/CONSTANTS';
 import { decrypt, getUser } from './storage';
@@ -29,6 +30,10 @@ import {
 import { getAsset, isMBAsset } from './cardsUtils';
 import { handleConfirmateNotification, handleNewIncomingNotification, handleNewOutcomingNotification } from './alerts';
 import { generateHash } from './hash';
+
+export function waitForRefresh() {
+    return new Promise(resolve => setTimeout(resolve, REFRESH_DATA_TIME));
+}
 
 /**
  * @name checkDataChange
