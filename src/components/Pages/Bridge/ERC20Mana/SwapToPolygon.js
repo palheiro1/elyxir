@@ -32,7 +32,7 @@ import { MANAASSET, NQTDIVIDER } from '../../../../data/CONSTANTS';
  * @param {String} ardorAddress - Ardor address
  * @returns {JSX.Element} - JSX element
  */
-const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
+const SwapToPolygon = ({ infoAccount, ardorAddress, manaCards }) => {
     const toast = useToast();
 
     const [polygonAccount, setPolygonAccount] = useState('');
@@ -44,7 +44,8 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
     const [passphrase, setPassphrase] = useState('');
     const [wEthToSwap, setWEthToSwap] = useState(0);
 
-    const { MANABalance } = infoAccount;
+    // const { MANABalance } = infoAccount;
+    const availableBalance = parseFloat(manaCards.unconfirmedQuantityQNT/NQTDIVIDER);
 
     const handleInput = e => {
         e.preventDefault();
@@ -104,11 +105,11 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                 </Heading>
 
                 <Box>
-                    <NumberInput defaultValue={0} min={0.005} max={MANABalance} precision={8} value={wEthToSwap} onChange={e => setWEthToSwap(e)}>
+                    <NumberInput defaultValue={0} min={0.005} max={availableBalance} precision={8} value={wEthToSwap} onChange={e => setWEthToSwap(e)}>
                         <NumberInputField />
                     </NumberInput>
                     <Center>
-                        <Text color={textColor}>Max: {roundNumberWithMaxDecimals(MANABalance, 8)}</Text>
+                        <Text color={textColor}>Max: {roundNumberWithMaxDecimals(availableBalance, 8)}</Text>
                     </Center>
                 </Box>
 

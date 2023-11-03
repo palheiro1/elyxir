@@ -23,7 +23,7 @@ import BridgeERC20Mana from './ERC20Mana/BridgeERC20';
  * @param {Array} cards - Cards
  * @returns {JSX.Element} - JSX element
  */
-const Bridge = ({ infoAccount, cards }) => {
+const Bridge = ({ infoAccount, cards, gemCards, giftzCards, wethCards, manaCards }) => {
     const [swapAddresses, setSwapAddresses] = useState({
         OLD_BRIDGE: { eth: '' },
         ERC20: { eth: '', ardor: '' },
@@ -83,16 +83,20 @@ const Bridge = ({ infoAccount, cards }) => {
     return !isError ? (
         <Box>
             {!bridgeType && <BridgeSelector setBridgeType={setBridgeType} />}
-            {bridgeType === 'ERC20wETH' && <BridgeERC20 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} />}
-            {bridgeType === 'ERC20Mana' && <BridgeERC20Mana infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} />}
+            {bridgeType === 'ERC20wETH' && (
+                <BridgeERC20 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} wethCards={wethCards} />
+            )}
+            {bridgeType === 'ERC20Mana' && (
+                <BridgeERC20Mana infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} manaCards={manaCards} />
+            )}
             {bridgeType === 'ERC20GEM' && (
-                <BridgeERC20GEM infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} />
+                <BridgeERC20GEM infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC20} gemCards={gemCards} />
             )}
             {bridgeType === 'ERC1155' && (
                 <BridgeERC1155 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC1155} cards={cards} />
             )}
             {bridgeType === 'ERC1155GIFTZ' && (
-                <BridgeERC1155GIFTZ infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC1155} />
+                <BridgeERC1155GIFTZ infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC1155} giftzCards={giftzCards} />
             )}
             {bridgeType === 'OLD' && <OldBridge infoAccount={infoAccount} swapAddresses={swapAddresses?.OLD_BRIDGE} />}
         </Box>

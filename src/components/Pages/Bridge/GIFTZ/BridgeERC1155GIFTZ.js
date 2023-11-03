@@ -6,7 +6,7 @@ import SectionSwitch from './SectionSwitch';
 import SwapToPolygon from './SwapToPolygon';
 import SwapToArdor from './SwapToArdor';
 
-const BridgeERC1155GIFTZ = ({ infoAccount, swapAddresses }) => {
+const BridgeERC1155GIFTZ = ({ infoAccount, swapAddresses, giftzCards }) => {
     const [option, setOption] = useState(0);
 
     return (
@@ -15,7 +15,7 @@ const BridgeERC1155GIFTZ = ({ infoAccount, swapAddresses }) => {
 
             <Center>
                 <Box maxW="50%">
-                    {option === 0 && <SwapToPolygon infoAccount={infoAccount} ardorAddress={swapAddresses.ardor} />}
+                    {option === 0 && <SwapToPolygon infoAccount={infoAccount} ardorAddress={swapAddresses.ardor} giftzCards={giftzCards} />}
                     {option === 1 && <SwapToArdor infoAccount={infoAccount} ethAddress={swapAddresses.eth} />}
                 </Box>
             </Center>

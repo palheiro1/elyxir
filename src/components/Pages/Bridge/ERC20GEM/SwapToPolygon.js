@@ -32,7 +32,7 @@ import { GEMASSET, NQTDIVIDER } from '../../../../data/CONSTANTS';
  * @param {String} ardorAddress - Ardor address
  * @returns {JSX.Element} - JSX element
  */
-const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
+const SwapToPolygon = ({ infoAccount, ardorAddress, gemCards }) => {
     const toast = useToast();
 
     const [polygonAccount, setPolygonAccount] = useState('');
@@ -44,7 +44,8 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
     const [passphrase, setPassphrase] = useState('');
     const [gemToSwap, setGemToSwap] = useState(0);
 
-    const { GEMBalance } = infoAccount;
+    // const { GEMBalance } = infoAccount;
+    const availableBalance = parseFloat(gemCards.unconfirmedQuantityQNT/NQTDIVIDER);
 
     const handleInput = e => {
         e.preventDefault();
@@ -107,14 +108,14 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                     <NumberInput
                         defaultValue={0}
                         min={0.005}
-                        max={GEMBalance}
+                        max={availableBalance}
                         precision={8}
                         value={gemToSwap}
                         onChange={(value) => setGemToSwap(value)}>
                         <NumberInputField />
                     </NumberInput>
                     <Center>
-                        <Text color={textColor}>Maximum Available Balance to Transfer: {roundNumberWithMaxDecimals(GEMBalance, 8)}</Text>
+                        <Text color={textColor}>Maximum Available Balance to Transfer: {roundNumberWithMaxDecimals(availableBalance, 8)}</Text>
                     </Center>
                 </Box>
 

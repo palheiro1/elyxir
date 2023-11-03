@@ -199,7 +199,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const updateDividendsWithCards = async (auxDividends, allCards) => {
         auxDividends.filter(dividend => dividend.attachment && dividend.attachment.asset);
         const auxDividendsPromises = auxDividends.map(dividend => getTransaction(2, dividend.eventHash));
-        const dividendsTxs = (await Promise.all(auxDividendsPromises))
+        const dividendsTxs = await Promise.all(auxDividendsPromises);
 
         dividendsTxs.forEach((dividendTx, index) => {
             const { attachment } = dividendTx;
@@ -489,7 +489,14 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 wethCards={wethCards}
                 manaCards={manaCards}
             />,
-            <Bridge infoAccount={infoAccount} cards={cardsFiltered} />,
+            <Bridge
+                infoAccount={infoAccount}
+                cards={cardsFiltered}
+                gemCards={gemCards}
+                giftzCards={giftzCards}
+                wethCards={wethCards}
+                manaCards={manaCards}
+            />,
             <Jackpot infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />,
             <Account infoAccount={infoAccount} />,
             '', // Buy pack

@@ -39,7 +39,7 @@ import { GIFTZASSET } from '../../../../data/CONSTANTS';
  * @param {Array} cards - Cards
  * @returns {JSX.Element} - JSX element
  */
-const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
+const SwapToPolygon = ({ infoAccount, ardorAddress, giftzCards }) => {
     const toast = useToast();
 
     const [polygonAccount, setPolygonAccount] = useState('');
@@ -52,7 +52,8 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
     const [giftzToSwap, setGiftzToSwap] = useState(0);
     const handleChange = value => setGiftzToSwap(value);
 
-    const { GIFTZBalance } = infoAccount;
+    // const { GIFTZBalance } = infoAccount;
+    const availableBalance = parseFloat(giftzCards.unconfirmedQuantityQNT);
 
     const handleInput = e => {
         e.preventDefault();
@@ -114,7 +115,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                 </Box>
 
                 <Stack>
-                    <NumberInput w="100%" value={giftzToSwap} min={1} max={GIFTZBalance} onChange={handleChange}>
+                    <NumberInput w="100%" value={giftzToSwap} min={1} max={availableBalance} onChange={handleChange}>
                         <NumberInputField />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
@@ -126,7 +127,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress }) => {
                         focusThumbOnChange={false}
                         value={giftzToSwap}
                         min={1}
-                        max={GIFTZBalance}
+                        max={availableBalance}
                         onChange={handleChange}>
                         <SliderTrack>
                             <SliderFilledTrack />

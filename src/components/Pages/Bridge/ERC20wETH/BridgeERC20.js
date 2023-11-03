@@ -4,7 +4,7 @@ import SwapToArdor from './SwapToArdor';
 import SwapToPolygon from './SwapToPolygon';
 import { Box, Center } from '@chakra-ui/react';
 
-const BridgeERC20 = ({ infoAccount, swapAddresses }) => {
+const BridgeERC20 = ({ infoAccount, swapAddresses, wethCards }) => {
     const [option, setOption] = useState(0);
 
     return (
@@ -14,7 +14,7 @@ const BridgeERC20 = ({ infoAccount, swapAddresses }) => {
             <Center>
                 <Box maxW="50%">
                     {option === 0 && <SwapToArdor infoAccount={infoAccount} ethAddress={swapAddresses.eth} />}
-                    {option === 1 && <SwapToPolygon infoAccount={infoAccount} ardorAddress={swapAddresses.ardor} />}
+                    {option === 1 && <SwapToPolygon infoAccount={infoAccount} ardorAddress={swapAddresses.ardor} wethCards={wethCards} />}
                 </Box>
             </Center>
         </>
