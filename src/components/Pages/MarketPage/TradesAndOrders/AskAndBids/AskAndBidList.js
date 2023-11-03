@@ -1,13 +1,13 @@
-import { Box, Text, useDisclosure } from "@chakra-ui/react";
-import { Table } from "../../../../ResponsiveTable/table";
-import { Thead } from "../../../../ResponsiveTable/thead";
-import { Tr } from "../../../../ResponsiveTable/tr";
-import { Tbody } from "../../../../ResponsiveTable/tbody";
-import { Td } from "../../../../ResponsiveTable/td";
-import { NQTDIVIDER } from "../../../../../data/CONSTANTS";
-import CancelDialog from "../../../../Modals/TradeDialog/CancelDialog/CancelDialog";
-import { useRef, useState } from "react";
-import { MdDeleteForever } from "react-icons/md";
+import { Box, Text, useDisclosure } from '@chakra-ui/react';
+import { Table } from '../../../../ResponsiveTable/table';
+import { Thead } from '../../../../ResponsiveTable/thead';
+import { Tr } from '../../../../ResponsiveTable/tr';
+import { Tbody } from '../../../../ResponsiveTable/tbody';
+import { Td } from '../../../../ResponsiveTable/td';
+import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
+import CancelDialog from '../../../../Modals/TradeDialog/CancelDialog/CancelDialog';
+import { useRef, useState } from 'react';
+import { MdDeleteForever } from 'react-icons/md';
 
 /**
  * @name AskAndBidList
@@ -21,15 +21,14 @@ import { MdDeleteForever } from "react-icons/md";
  * @version 1.0.0
  */
 const AskAndBidList = ({ orders, name, username, canDelete = false }) => {
-
     const refCancel = useRef();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedOrder, setSelectedOrder] = useState();
 
-    const handleDelete = (value) => {
+    const handleDelete = value => {
         setSelectedOrder(value);
         onOpen();
-    }
+    };
 
     return (
         <>
@@ -38,51 +37,46 @@ const AskAndBidList = ({ orders, name, username, canDelete = false }) => {
                 <Table>
                     <Thead>
                         <Tr>
-                            <Td>
-                                Type
-                            </Td>
-                            <Td>
-                                Amount
-                            </Td>
-                            <Td>
-                                Price
-                            </Td>
-                            <Td>
-                                Cancel
-                            </Td>
+                            <Td>Type</Td>
+                            <Td>Amount</Td>
+                            <Td>Price</Td>
+                            <Td>Cancel</Td>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {orders && orders.length > 0 && orders.map((order, index) => {
-                            return (
-                                <Tr key={index}>
-                                    <Td style={{ color: order.type === "ask" ? "red" : "green" }}>
-                                        {order.type === "ask" ? "Sell" : "Buy"}
-                                    </Td>
-                                    <Td>
-                                        {order.quantityQNT}
-                                    </Td>
-                                    <Td>
-                                        {order.priceNQTPerShare / NQTDIVIDER}
-                                    </Td>
-                                    <Td>
-                                        <Box onClick={() => handleDelete({...order, isAsk: order.type === "ask"})} style={{ cursor: "pointer" }}>
-                                            <MdDeleteForever size={30} />
-                                        </Box>
-                                    </Td>
-                                </Tr>
-                            )
-                        })}
-                        {orders.length === 0 && <Tr>
-                            <Td colSpan="4" textAlign="center" fontWeight="bold">
-                                No orders
-                            </Td>
-                        </Tr>
-                        }
+                        {orders &&
+                            orders.length > 0 &&
+                            orders.map((order, index) => {
+                                return (
+                                    <Tr key={index} bgColor="whiteAlpha.200" _hover={{ bgColor: 'whiteAlpha.300' }}>
+                                        <Td
+                                            style={{ color: order.type === 'ask' ? 'red' : 'green' }}
+                                            fontWeight="black">
+                                            {order.type === 'ask' ? 'SELL' : 'BUY'}
+                                        </Td>
+                                        <Td>{order.quantityQNT}</Td>
+                                        <Td>{order.priceNQTPerShare / NQTDIVIDER}</Td>
+                                        <Td>
+                                            <Box
+                                                onClick={() => handleDelete({ ...order, isAsk: order.type === 'ask' })}
+                                                style={{ cursor: 'pointer' }}>
+                                                <MdDeleteForever size={30} />
+                                            </Box>
+                                        </Td>
+                                    </Tr>
+                                );
+                            })}
+                        {orders.length === 0 && (
+                            <Tr>
+                                <Td colSpan="4" textAlign="center" fontWeight="bold">
+                                    No orders
+                                </Td>
+                            </Tr>
+                        )}
                     </Tbody>
                 </Table>
             </Box>
-            {canDelete && selectedOrder &&
+            {canDelete && selectedOrder && (
                 <CancelDialog
                     reference={refCancel}
                     isOpen={isOpen}
@@ -90,9 +84,9 @@ const AskAndBidList = ({ orders, name, username, canDelete = false }) => {
                     username={username}
                     selectedOrder={selectedOrder}
                 />
-            }
+            )}
         </>
-    )
-}
+    );
+};
 
 export default AskAndBidList;

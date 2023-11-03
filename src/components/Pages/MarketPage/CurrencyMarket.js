@@ -20,6 +20,26 @@ const CurrencyMarket = ({ username, gemCards, giftzCards, wethCards, IGNISBalanc
     const bidWithoutCurrencies = accountBid.filter((bid) => Object.keys(CURRENCY_ASSETS).includes(bid.asset));
     const tradesWithoutCurrencies = trades.filter((trade) => Object.keys(CURRENCY_ASSETS).includes(trade.asset));
 
+    const myAskWethCards = wethCards.askOrders.filter((order) => order.accountRS === infoAccount.accountRs);
+    const myBidWethCards = wethCards.bidOrders.filter((order) => order.accountRS === infoAccount.accountRs);
+    wethCards.askOrders = myAskWethCards;
+    wethCards.bidOrders = myBidWethCards;
+
+    const myAskGiftzCards = giftzCards.askOrders.filter((order) => order.accountRS === infoAccount.accountRs);
+    const myBidGiftzCards = giftzCards.bidOrders.filter((order) => order.accountRS === infoAccount.accountRs);
+    giftzCards.askOrders = myAskGiftzCards;
+    giftzCards.bidOrders = myBidGiftzCards;
+
+    const myAskGemCards = gemCards.askOrders.filter((order) => order.accountRS === infoAccount.accountRs);
+    const myBidGemCards = gemCards.bidOrders.filter((order) => order.accountRS === infoAccount.accountRs);
+    gemCards.askOrders = myAskGemCards;
+    gemCards.bidOrders = myBidGemCards;
+
+    const myAskManaCards = manaCards.askOrders.filter((order) => order.accountRS === infoAccount.accountRs);
+    const myBidManaCards = manaCards.bidOrders.filter((order) => order.accountRS === infoAccount.accountRs);
+    manaCards.askOrders = myAskManaCards;
+    manaCards.bidOrders = myBidManaCards;
+
     const textGiftz = (
         <Box>
             GIFTZ are a sealed pack of cards. The are sold from a vending machine that is refilled every day.

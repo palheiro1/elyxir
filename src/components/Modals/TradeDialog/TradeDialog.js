@@ -207,6 +207,8 @@ const TradeDialog = ({
                 card={!currencyCards ? card : currencyCards}
                 username={username}
                 actualAmount={currencyCards ? currencyCards.quantityQNT : card.quantityQNT}
+                askOrders={card?.askOrders || currencyCards?.askOrders}
+                bidOrders={card?.bidOrders || currencyCards?.bidOrders}
             />
             <BidDialog
                 reference={refBid}
@@ -216,6 +218,8 @@ const TradeDialog = ({
                 username={username}
                 ignis={ignis}
                 actualAmount={currencyCards ? currencyCards.quantityQNT : card.quantityQNT}
+                askOrders={card?.askOrders || currencyCards?.askOrders}
+                bidOrders={card?.bidOrders || currencyCards?.bidOrders}
             />
         </>
     );
