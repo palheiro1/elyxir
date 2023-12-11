@@ -11,16 +11,16 @@ import { CIPHER_ALGORITHM, IV_LENGTH } from '../data/CONSTANTS';
  * @returns {object} user object
  * @description initialises the user information for localStorage
  */
-export const initUser = (name, accountRs, usePin, passPhrase="", pin="", firstTime = false) => {
+export const initUser = (name, accountRs, usePin, passPhrase = "", pin = "", firstTime = false) => {
     return {
-        name: name, 
+        name: name,
         accountRs: accountRs,
         usePin: usePin,
         token: (usePin) ? encrypt(passPhrase, pin) : "",
         timestamp: undefined,
         backupDone: false,
         firstTime: firstTime,
-    } 
+    }
 }
 
 /**
@@ -35,11 +35,11 @@ export const encrypt = (passPhrase, userPin) => {
     try {
         const iv = Crypto.randomBytes(IV_LENGTH);
         // userPin to AES-256-CBC key
-        const key = Crypto.createHash('sha256').update(String(userPin)).digest('base64').substr(0, 32);  
+        const key = Crypto.createHash('sha256').update(String(userPin)).digest('base64').substr(0, 32);
         // Create cipher      
         const cipher = Crypto.createCipheriv(CIPHER_ALGORITHM, key, iv);
         // Encrypt pass phrase
-        let encrypted = cipher.update(passPhrase);        
+        let encrypted = cipher.update(passPhrase);
         // Add the final block
         encrypted = Buffer.concat([encrypted, cipher.final()]);
         // Return the encrypted pass phrase
@@ -65,7 +65,7 @@ export const decrypt = (token, userPin) => {
         // Extract the encrypted text
         const encryptedText = Buffer.from(textParts.join(':'), 'hex');
         // userPin to AES-256-CBC key
-        const key = Crypto.createHash('sha256').update(String(userPin)).digest('base64').substr(0, 32);  
+        const key = Crypto.createHash('sha256').update(String(userPin)).digest('base64').substr(0, 32);
         // Create decipher
         const decipher = Crypto.createDecipheriv(CIPHER_ALGORITHM, Buffer.from(key), iv);
         // Decrypt the text
@@ -75,7 +75,7 @@ export const decrypt = (token, userPin) => {
         // Return the decrypted pass phrase
         return decrypted.toString();
     }
-    catch(exception) {
+    catch (exception) {
         return false;
     }
 }
@@ -102,8 +102,12 @@ export const dropUser = (name) => {
  * @description gets the user from localStorage
  */
 export const getUser = (name) => {
-    const item = localStorage.getItem(name);
-    return item !== null ? JSON.parse(item) : null;
+    try {
+        const item = localStorage.getItem(name);
+        return item !== null ? JSON.parse(item) : {};
+    } catch (exception) {
+        return {};
+    }
 }
 
 /**
@@ -111,8 +115,12 @@ export const getUser = (name) => {
  * @description gets the app version from localStorage
  */
 export const getVersion = () => {
-    const item = localStorage.getItem('APP_VERSION');
-    return item !== null ? JSON.parse(item) : null;
+    try {
+        const item = localStorage.getItem('APP_VERSION');
+        return item !== null ? JSON.parse(item) : {};
+    } catch (exception) {
+        return {};
+    }
 }
 
 /**
@@ -121,8 +129,12 @@ export const getVersion = () => {
  * @description this is used to check if the app has been updated
  */
 export const getAllUsers = () => {
-    const item = localStorage.getItem('users');
-    return item !== null ? JSON.parse(item) : [];
+    try {
+        const item = localStorage.getItem('users');
+        return item !== null ? JSON.parse(item) : [];
+    } catch (exception) {
+        return [];
+    }
 }
 
 /**
@@ -145,15 +157,15 @@ export const removeFromAllUsers = (user) => {
 
     let ix = users.findIndex((e) => (e === user));
 
-    if (ix !== -1){
-        if (ix === 0){
+    if (ix !== -1) {
+        if (ix === 0) {
             newUsers = users.slice(1);
-        } else if (ix === users.length-1){
-            newUsers = users.slice(0,ix);
+        } else if (ix === users.length - 1) {
+            newUsers = users.slice(0, ix);
         } else {
-            newUsers = users.slice(0,ix).concat(users.slice(ix+1,users.length));
+            newUsers = users.slice(0, ix).concat(users.slice(ix + 1, users.length));
         }
-        localStorage.setItem("users",JSON.stringify(newUsers));
+        localStorage.setItem("users", JSON.stringify(newUsers));
     }
 }
 
@@ -174,7 +186,7 @@ export const updateTimestamp = (name, timestamp) => {
  * @description gets the timestamp of the user
  */
 export const getTimestamp = (name) => {
-    if (name){
+    if (name) {
         let user = getUser(name);
         if (user) return user.timestamp;
     }

@@ -54,49 +54,57 @@ const UserLogin = ({ setInfoAccount }) => {
 
     useEffect(() => {
         const recoverUsers = () => {
-            setNeedReload(false);
-            const users = getAllUsers();
-            setAccounts(users);
-            if (users.length > 0) setUser(users[0]);
+            try {
+                setNeedReload(false);
+                const users = getAllUsers();
+                setAccounts(users);
+                if (users.length > 0) setUser(users[0]);
+            } catch (error) {
+                console.log(error);
+            }
         };
 
         needReload && recoverUsers();
     }, [needReload]);
 
     const handleLogin = pin => {
-        let account = checkPin(user, pin);
-        if (!account) {
-            setIsInvalidPin(true);
-            return;
-        }
+        try {
+            let account = checkPin(user, pin);
+            if (!account) {
+                setIsInvalidPin(true);
+                return;
+            }
 
-        account = {
-            accountRs: account.accountRs,
-            backupDone: account.backupDone,
-            firstTime: account.firstTime,
-            name: account.name,
-            token: account.token,
-            usePin: account.usePin,
-            publicKey: getArdorPublicKey(account.passphrase),
-            GEMBalance: 0,
-            IGNISBalance: 0,
-            GIFTZBalance: 0,
-            WETHBalance: 0,
-            MANABalance: 0,
-        };
+            account = {
+                accountRs: account.accountRs,
+                backupDone: account.backupDone,
+                firstTime: account.firstTime,
+                name: account.name,
+                token: account.token,
+                usePin: account.usePin,
+                publicKey: getArdorPublicKey(account.passphrase),
+                GEMBalance: 0,
+                IGNISBalance: 0,
+                GIFTZBalance: 0,
+                WETHBalance: 0,
+                MANABalance: 0,
+            };
 
-        setInfoAccount(account);
+            setInfoAccount(account);
 
-        navigate('/home');
-        // Alerta de backup
-        if (!account.backupDone && !activeToast) {
-            backupToast(toast);
-            activeToast = true;
-        }
+            navigate('/home');
+            // Alerta de backup
+            if (!account.backupDone && !activeToast) {
+                backupToast(toast);
+                activeToast = true;
+            }
 
-        if (account.firstTime) {
-            // navigate('/welcome');
-            setNotFirstTime(user);
+            if (account.firstTime) {
+                // navigate('/welcome');
+                setNotFirstTime(user);
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
 
