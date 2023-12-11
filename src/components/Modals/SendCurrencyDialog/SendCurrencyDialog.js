@@ -141,9 +141,9 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
         }
     };
 
-    const bgColor = '#d86471';
+    const bgColor = '#EBB2B9';
     const borderColor = '#f39d54';
-    const filledColor = '#f79c27';
+    const filledColor = '#F48794';
     const [isDisabled, setIsDisabled] = useState(true);
 
     useEffect(() => {
@@ -165,7 +165,7 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg" color="white">
+                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg" color="#202424">
                     <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text>SEND {currency.name}</Text>
