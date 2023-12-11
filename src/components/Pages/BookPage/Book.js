@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box, Stack, Text } from '@chakra-ui/react';
 import PDFReader from './PDFReader';
-import MB_Book from './pdfs/MB_50_Book.pdf';
+import MB_Book from './pdfs/TotalyBook-S06.pdf';
 
 const Book = ({ cards }) => {
     const [currentCard, setCurrentCard] = useState(cards[0]);
@@ -39,7 +39,7 @@ const Book = ({ cards }) => {
     const downloadPDF = () => {
         const link = document.createElement('a');
         link.href = MB_Book;
-        link.download = 'MB_Book.pdf';
+        link.download = 'MB_Book_with_S06.pdf';
         link.click();
     };
 
