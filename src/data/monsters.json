@@ -1162,5 +1162,127 @@
         ],
         "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1846.3732232374089!2d-7.4385264!3d43.6999611!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd32180660116c67%3A0x25193eee16ce1404!2s27890%20San%20Cibrao%2C%20Lugo!5e1!3m2!1sen!2ses!4v1665564924877!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
         "assetname": "mythical43"
+    },
+    {
+        "name": "Dybbuk",
+        "country": "Galiza",
+        "continent": "Asia",
+        "picture": "dibbuk.jpg",
+        "rarity": "Epic",
+        "creature": [
+            "There are several reasons why a person's soul, upon death, may be trapped in this world as a Dybbuk. It may be because his life had been so criminal that, for fear of God's punishment, he refuses to leave the earth, or it may simply be because the person had not finished fulfilling his destiny. In any case, the Dybbuk, which means 'bound spirit' in Yiddish, is a spirit that wanders the world in search of a body to possess and through which to fulfil the ends or desires that were not fulfilled in life.", 
+            "Women are favourite victims of the Dybbuk, even if they had arisen from the death of a male.",
+            "The dybbuk is believed to cause a variety of problems for the possessed person, from mental disorders to physical illness. The possessed may experience personality changes, erratic behaviour, and may even speak in unknown languages. Possession is believed to be released through exorcism, which is a ritual performed by a rabbi or spiritual leader to expel the evil spirit."
+        ],
+        "landscape": "jews.jpg",
+        "culture": [
+            "The Jewish people are one of the oldest in the world, with an identity that has continued for 3,500 years, with roots in the Middle East. Jews are an ethnic and religious group that originated in the region of Canaan, which became Israel in the first millennium BC. During this time, the Jews developed their religion and culture, and established an independent kingdom under leaders such as David and Solomon.",
+            "However, after the Roman conquest, the Jews were subjected to a series of exiles and persecutions, leading to the Jewish Diaspora, in which Jews settled in different parts of the world. Throughout history, Jews have been persecuted and marginalised, with frequent mass expulsions, and have been subjected to pogroms and the Holocaust during World War II. Despite these difficulties, Jews have contributed significantly to culture and society around the world. In Europe and the Americas, Jews have played an important role in economics, politics and the arts. They have been leaders in the sciences, humanities and arts, and have contributed to the creation of important cultural and social movements.",
+            "In the 19th century, a movement, Zionism, began that sought to rebuild the home of the Jews in their original land, historic Palestine, and encouraged the migration of millions of people to this territory. The process culminated in 1948 with the creation of the state of Israel, which today is home to just under half of the world's Jews, and was from the beginning embroiled in controversy, conflict and war with the Arab population there and in neighbouring countries.",
+            "Jewish culture is strongly determined by the sacred texts, the Talmud and the Torah, which distinguishes it from most ancient cultures, which tend to rely more on orality. More than any other nomadic people, religion became the main hallmark of the identity of communities scattered around the world, regulating not only beliefs but all community life. The study of these texts and the search for their hidden meaning occupied the imagination of the Jews for millennia, and it is from them that the fearsome creatures such as the Golem and the Dybbuk originate.",
+            "Current population: 14,000,000"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1846.3732232374089!2d-7.4385264!3d43.6999611!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd32180660116c67%3A0x25193eee16ce1404!2s27890%20San%20Cibrao%2C%20Lugo!5e1!3m2!1sen!2ses!4v1665564924877!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
+        "assetname": "mythical51"
+    },
+    {
+        "name": "Bunyip",
+        "country": "Galiza",
+        "continent": "Oceania",
+        "picture": "bunyip.jpg",
+        "rarity": "Rare",
+        "creature": [
+            "Countless Bunyips lurk in the lakes, rivers and marshes of south-east Australia, large and fearsome aquatic creatures that often trap and devour humans. Although it has been sighted on many occasions and even hunted in the 19th century, its description varies greatly. Undoubtedly, a blood-curdling scream that comes out of the water is attributed to him, as well as a large size and enormous strength, but there are discrepancies about his physiognomy. Most find it similar to a giant seal or dog, while others recall a being with a long neck and small head, and others point out a prehensile tail and even tentacles. The oldest surviving description, from 1845, suggests an oviparous animal (with huge eggs), deadly claws, powerful hind legs, a brightly colored chest, and a head similar to that of an emu. However, two years later the Koori captured a Bunyip and described its shape as 'a huge starfish'.",
+            "It is possible that this difficulty in describing bunyips is due to a voluntary capacity for transformation, or a natural process of metamorphosis.",
+            "In any case, it is considered a very dangerous being and representative of the wildest facet of nature, although for this very reason it can also have a protective role."
+        ],
+        "landscape": "koori.jpg",
+        "culture": [
+            "The Koori culture is the term used to describe the traditions, customs and art of the Australian indigenous peoples who inhabit the state of New South Wales and Victoria, although there is a great diversity of tribes and languages under this name.",
+            "Like all Australian natives, they come from the migrations that arrived on the continent some 60,000 years ago, coming from Asia, when there was a land connection between the two continents, and they were isolated from the rest of humanity for tens of thousands of years, evolving in a different way. completely independent. These are hunter-gatherer peoples, with a semi-nomadic life following the migrations of animals, but who also established semi-permanent villages near rivers and lakes.",
+            "The Koori culture is strongly linked to nature and is based on a deep respect and connection with the environment. The Koori have a great oral tradition and their tales and legends reproduce the worldview of the “Dream”, the immemorial sacred time when spiritual beings formed Creation.",
+            "The Koori were the first natives to be contacted by the British explorer James Cook in 1770, whom they rejected. They opposed the colonization of their land through various wars, but casualties in combat and disease decimated their population in just 20 years, with 80% of the natives dying.",
+            "Koori culture has been heavily influenced by changes and policies imposed by European settlers. Despite this, the Koori have managed to maintain their culture and identity, and today there are a large number of communities and organizations that work to preserve and promote Koori culture. Koori culture is a vital part of Australian history and culture and is valued and respected by all Australians."
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1846.3732232374089!2d-7.4385264!3d43.6999611!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd32180660116c67%3A0x25193eee16ce1404!2s27890%20San%20Cibrao%2C%20Lugo!5e1!3m2!1sen!2ses!4v1665564924877!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
+        "assetname": "mythical52"
+    },
+    {
+        "name": "Iya Hokshi",
+        "country": "Galiza",
+        "continent": "America",
+        "picture": "iyaHokshi.jpg",
+        "rarity": "Common",
+        "creature": [
+            "Stone Boy is the son of a Lakota Indian woman who accidentally swallowed a pebble, and instead of flesh his body is made of stone. He was raised by his mother, who cared for him and taught him to be brave and kind, and the older he grew, the stronger he became.",
+            "When he became an adult, his mother told him that she had four brothers, but that they had disappeared shortly before Stone Boy was born, and that a shaman had told her that they were imprisoned by a monster that only 'the stone' can defeat. So Stone Boy decided to rescue them, and before leaving, his mother called a big party to gather help. At this party, the guests presented Stone Boy with various magical objects that would help him in his quest and victory.",
+            "After much travelling, he came to a deserted valley where there was only a rock, a tree and a small brown hill with smoke rising from it. As he approached he saw that a bear was bringing captured Indians, which he carried up to a snake (the tree), which bit and paralysed them, so that the rock could crush them by turning over them. And he realised that the hill was actually a huge tepee made of crushed bodies. There began the great battle, in which Stone Boy destroyed them all, then faced the monster Iya, the mythical Lakota spirit of destruction that can only be defeated by living stone.",
+            "Stone Boy had to draw on all the magical items he had received and thus managed to defeat Iya. However, the monster managed to snatch one of these items, an invisibility cloak, which saved his life."
+        ],
+        "landscape": "lakota.jpg",
+        "culture": [
+            "The Lakota are one of the main tribes of the Sioux family of Native Americans, and have lived for thousands of years near the Great Lakes, where in addition to fishing, hunting and gathering, they also farmed. Conflicts with other tribes, however, pushed them to the Great Plains around the 17th century, where they adopted a nomadic lifestyle based on bison hunting. The history of the Lakota is recorded in their 'Winter Counts', pictorial calendars begun in 900 AD.",
+            "In their nomadic life, the Lakota quickly adopted the use of horses, taught by the Cheyenne, and adapted their culture to this new environment, which allowed them to dominate an immense expanse of territory, following the buffalo migrations. They lived in the famous tepees, lightweight dwellings made of long poles and buffalo hides, in small groups, called bands, made up of an extended family. This period was so prosperous that the Lakota were the only native tribe to gain population in the 19th century, despite wars with American settlers. They were divided into bands of democratic and assemblage organisation, disregarding private property, grouped into tribes which, together, formed a 'teton', and were coordinated by the so-called 'Council of Seven Fires'. The Lakota are famous for the bravery of their warriors, who fought the US Army with great efficiency (they, along with other neighbouring tribes, defeated Colonel Custer), and for their custom of scalping during battles.",
+            "Lakota culture corresponds to their way of life in the wilderness, with a worldview in which all things and living things have a spirit of their own and a sacred purpose. Harmony with nature is the basis of their way of life, valuing individual and collective responsibility and generosity towards others. They believe in a Great Spirit, Wakan Tanka, creator of the whole universe and of the original mythical beings, including Iya.",
+            "The colonisation of the West by Westerners in the 19th century was, however, an unstoppable movement to which the Lakota people succumbed. By the end of the century they had been confined to various reservations, their territory tiny compared to the vast plains they dominated, and their bison population decimated. Their way of life crumbled and they found it difficult to fit into the new situation, where they became strangers in their own land, under the tutelage of the USA. Alcoholism ravaged this proud people, who were forced to subsist on the charity of the 'paleface'.",
+            "Today there are 317 Indian reservations in the USA, of which the Lakota and other Sioux tribes occupy most of those in the states of North Dakota, South Dakota, Montana, and several smaller ones in the Canadian provinces of Manitoba and Saskatchewan.",
+            "Despite the difficulties, the Lakota retain their institutions and are, in a sense, independent of the federal government. In 2007, an independent Lakota Republic was even proclaimed, although it is not recognised by the US or the international community.",
+            "Current population: 115,000"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1846.3732232374089!2d-7.4385264!3d43.6999611!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd32180660116c67%3A0x25193eee16ce1404!2s27890%20San%20Cibrao%2C%20Lugo!5e1!3m2!1sen!2ses!4v1665564924877!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
+        "assetname": "mythical53"
+    },
+    {
+        "name": "Sengani",
+        "country": "Galiza",
+        "continent": "Africa",
+        "picture": "sengani.jpg",
+        "rarity": "Common",
+        "creature": [
+            "Giants are human-like beings, but of colossal size and strength. They are unpredictable and quite dangerous, being victims of murderous and unreasonable rages, and in addition to their own physical power they have the ability to control wild animals, such as lions. Some giants are also natural people-eaters, though others are limited to petty theft.",
+            "They are not invincible, however. They suffer from the same weaknesses as people, suffer from hunger and thirst, and can be tricked and poisoned, even killed.",
+            "They are closely related to the god Haine, to whom they are often the helpers and who sometimes gives them power over the Hadza, although Haine must often make amends for the misdeeds of his creatures, punishing the giants and bringing justice to the humans."
+        ],
+        "landscape": "hadza.jpg",
+        "culture": [
+            "The Hadza are an indigenous people of Tanzania, living around Lake Eyasi and on the Serengeti plateau. They are a small people, numbering less than 2,000, who have retained their hunter-gatherer way of life.",
+            "The origins of the Hadza are unknown, and neither genetics nor linguistics have found any links with any other people in the world, but they certainly predate the Bantu expansion and must have occupied this territory for many thousands of years.",
+            "The Hadza live in small groups of 20-30 individuals, with no significant stratification. There are no chiefs or religious authority figures, and decisions are made by consensus after discussion in an assembly. There are no status differences between men and women, although there is a certain sexual division of activities. Conflicts are resolved by one party moving to another group.",
+            "In general, men eat individually, during their own gathering or hunting activities, while women tend to eat in groups. The Hadza diet consists largely of honey from wild beehives, as well as tubers, baobab fruit and occasional meat. They hunt with bows and arrows, to the tips of which they add a paralysing poison, and live in itinerant villages. In the dry season they sleep outdoors under trees, and in the rainy season they build small, circular huts out of branches.",
+            "They have no formal religion and it is unclear whether they believe in an afterlife, but their mythology tells of a goddess, represented by the sun and called Ishoko, and her husband Haine, represented by the moon. In some tales they have divine attributes and are credited with creating animals and even humans.",
+            "Curiously enough, the Isanzu, a neighbouring real-world Bantu farming people with whom they have very good relations, feature prominently in their mythology. In these tales the Isanzu appear in the role of a mythological hero, helping the Hadza in their tribulations.",
+            "It was only in the 19th century that the Hadza came into regular contact with pastoralist and farming populations, such as the Maasai, with whom they had frequent conflicts over control of territory. In these conflicts the Hadza lost much of their population and became a marginalised people in their own land. It was not until after World War I that effective contact with the European colonisers took place. The British then tried to make the Hadza sedentary and agriculturalists, but all attempts failed throughout the 20th century, including those undertaken by the independent Tanzanian government, or by foreign Christian missionaries.",
+            "In 2007 the government leased part of the Hadza's territory to the royal family of the United Arab Emirates for 'personal safari games'. The Hadza's protests were severely repressed and some were imprisoned, but they succeeded and the lease was broken.",
+            "Current population: 1,300"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1846.3732232374089!2d-7.4385264!3d43.6999611!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd32180660116c67%3A0x25193eee16ce1404!2s27890%20San%20Cibrao%2C%20Lugo!5e1!3m2!1sen!2ses!4v1665564924877!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
+        "assetname": "mythical54"
+    },
+    {
+        "name": "Muló",
+        "country": "Galiza",
+        "continent": "Europe",
+        "picture": "mulo.jpg",
+        "rarity": "Common",
+        "creature": [
+            "A gypsy, upon death, can become a Mulo (if male) or Muli (if female) if he/she has died of unnatural causes, such as a crime or suicide, or if the funeral rites were inadequate. The Mulló are vampires, undead who dress in white, have long hair that they drag along the ground and reveal a physical strangeness that they did not have in life.",
+            "They are beings animated by hatred for the people they blame for their death, whom they persecute and harass mercilessly. They are accused of beating people, especially their own family members, of sucking their blood, causing abortions, sickening animals, wreaking havoc... They are also said to have an unbridled sexual desire, so they return to their wives or girlfriends, whom they may impregnate by a Dhampir.",
+            "They are said to reek of carrion and lack bones, so their body is flexible and can take any form, even that of an animal.",
+            "The way to prevent the deceased from becoming a Mulo or Muli, when their death is conducive to this metamorphosis, is to drive iron needles through the heart of the corpse, place pieces of metal in their mouth and over their eyes, or drive a stake through their legs.",
+            "To detect and destroy a Mulo, it is necessary to have the services of a Dhampir, who can sense its presence and deal with it."
+        ],
+        "landscape": "gypsies.png",
+        "culture": [
+            "Romani, also called Roma or Gypsies, are a people originating from the Indian subcontinent, from where they are believed to have migrated in the 11th century. Almost nothing is known about their origins and the causes of their exodus, as they are an ungrammatical people, who have left no records of their own history, and also peaceful, so their coexistence with other populations went unnoticed by historians. A thousand years later, the descendants of this population have spread throughout much of the world, with very significant (though still minority) communities in Europe, North Africa, Asia Minor and the Americas.",
+            "A Gypsy, upon death, can become a Mulo (if male) or Muli.",
+            "The traditional Romany language is Romani, from the Indo-European family, and related to Sanskrit. However, Roma communities tend to adopt and adapt the languages of the populations in which they settle, so most Roma are not currently Romani speakers. More than the language, the identity traits most esteemed by Roma refer to the way of life.",
+            "The Roma are a proudly nomadic people, valuing freedom over wealth and lacking attachment to a specific territory. Traditionally they lived in mobile camps and camped in the countryside, only entering cities to sell their products. They are famous blacksmiths and coppersmiths, and skilled traders and cattle dealers, as well as particularly talented musicians. The importance given in their culture to the extended family, and the sense of community that surrounds all their activities, is remarkable. The Gypsies, a stateless people hostile to political control, have developed and defended their own institutions, including forms of government and justice.",
+            "It is disputed whether nomadism is in the original idiosyncrasy of this people, or whether it was adopted in reaction to the persecutions they have suffered, which they have experienced relentlessly during their millennial exodus, being victims of genocide and discrimination by the local authorities and even by the majority population.",
+            "As in the language, the Roma have generally adopted the majority religion of the place where they have settled, so we can find followers of various Christian, Muslim, Hindu and even Buddhist churches. A traditional background remains, however, in the form of beliefs rooted in supernatural realities and practices such as palmistry, curses and amulets.",
+            "Today, Roma culture is still very much alive and their communities claim their way of life and their dignity. However, they remain possibly the most discriminated-against ethnic minority in most countries, with rates of incarceration, poverty and drug addiction far higher than those of the local population.",
+            "Current population: 20,000,000"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1846.3732232374089!2d-7.4385264!3d43.6999611!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd32180660116c67%3A0x25193eee16ce1404!2s27890%20San%20Cibrao%2C%20Lugo!5e1!3m2!1sen!2ses!4v1665564924877!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
+        "assetname": "mythical55"
     }
 ]
