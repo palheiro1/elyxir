@@ -276,31 +276,35 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 // -----------------------------------------------------------------
 
                 const auxDividends = dividends.entries;
-                await updateDividendsWithCards(auxDividends, loadCards);
+                updateDividendsWithCards(auxDividends, loadCards).then(() => {
 
-                // -----------------------------------------------------------------
-                // Rebuild infoAccount
-                // -----------------------------------------------------------------
 
-                const _auxInfo = {
-                    ...infoAccount,
-                    IGNISBalance: ignis,
-                    GIFTZBalance: giftzAsset.quantityQNT,
-                    GEMBalance: gems.quantityQNT / NQTDIVIDER,
-                    WETHBalance: weth.quantityQNT / NQTDIVIDER,
-                    MANABalance: mana.quantityQNT / NQTDIVIDER,
-                    transactions: txs.transactions,
-                    dividends: auxDividends,
-                    unconfirmedTxs: unconfirmedTxs,
-                    currentAsks: currentAskOrBids.askOrders,
-                    currentBids: currentAskOrBids.bidOrders,
-                    trades: trades.trades,
-                };
+                    // -----------------------------------------------------------------
+                    // Rebuild infoAccount
+                    // -----------------------------------------------------------------
 
-                // -----------------------------------------------------------------
-                // Get all hashes and compare
-                // -----------------------------------------------------------------
-                checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
+                    const _auxInfo = {
+                        ...infoAccount,
+                        IGNISBalance: ignis,
+                        GIFTZBalance: giftzAsset.quantityQNT,
+                        GEMBalance: gems.quantityQNT / NQTDIVIDER,
+                        WETHBalance: weth.quantityQNT / NQTDIVIDER,
+                        MANABalance: mana.quantityQNT / NQTDIVIDER,
+                        transactions: txs.transactions,
+                        dividends: auxDividends,
+                        unconfirmedTxs: unconfirmedTxs,
+                        currentAsks: currentAskOrBids.askOrders,
+                        currentBids: currentAskOrBids.bidOrders,
+                        trades: trades.trades,
+                    };
+
+                    // -----------------------------------------------------------------
+                    // Get all hashes and compare
+                    // -----------------------------------------------------------------
+                    checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
+
+                });
+
                 checkDataChange('Cards', cardsHash, setCards, setCardsHash, loadCards);
                 checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems);
                 checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset);
@@ -423,20 +427,22 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         try {
             const { accountRs } = infoAccount;
             // TODO: CHECK ALL BRIDGES
-            const [gemBridge, bridge1155, bridge20] = await Promise.all([
+            Promise.all([
                 processUnwrapsForGemBridge(accountRs),
                 processUnwrapsFor1155(accountRs),
                 processWrapsFor20(accountRs),
-            ]);
+            ]).then(([gemBridge, bridge1155, bridge20]) => {
 
-            if (bridge1155 && bridge1155.starts)
-                okToast('[ERC-1155] DETECTED UNWRAP: ' + bridge1155.starts + ' transfers started.', toast);
+                if (gemBridge && gemBridge.starts)
+                    okToast('[GEM BRIDGE] DETECTED UNWRAP: ' + gemBridge.starts + ' transfers started.', toast);
 
-            if (bridge20 && bridge20.starts)
-                okToast('[ERC-20] DETECTED WRAP: ' + bridge20.starts + ' transfers started.', toast);
+                if (bridge1155 && bridge1155.starts)
+                    okToast('[ERC-1155] DETECTED UNWRAP: ' + bridge1155.starts + ' transfers started.', toast);
 
-            if (gemBridge && gemBridge.starts)
-                okToast('[GEM BRIDGE] DETECTED UNWRAP: ' + gemBridge.starts + ' transfers started.', toast);
+                if (bridge20 && bridge20.starts)
+                    okToast('[ERC-20] DETECTED WRAP: ' + bridge20.starts + ' transfers started.', toast);
+
+            });
         } catch (error) {
             console.error('Mythical Beings: Error checking unwraps', error);
         }

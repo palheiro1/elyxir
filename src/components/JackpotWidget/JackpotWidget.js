@@ -69,7 +69,6 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
             const modulo = blockchainStatus.prev_height % FREQUENCY;
             const remainingBlocks = FREQUENCY - modulo;
             const remainingSecs = remainingBlocks * BLOCKTIME;
-            //const delta = Number(remainingSecs - (BLOCKTIME - blockchainStatus.timer));
             const delta = Number(remainingSecs - BLOCKTIME);
 
             const days = Math.floor(delta / (24 * 60 * 60));
