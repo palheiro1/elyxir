@@ -48,9 +48,6 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                                 <Text color={textColor} fontSize="2xl" fontWeight="bold" mb={-3}>
                                     9000 MANA
                                 </Text>
-                                <Text color={textColor} fontSize="md">
-                                    (SOON)
-                                </Text>
                             </VStack>
                         </HStack>
                     </Stack>
