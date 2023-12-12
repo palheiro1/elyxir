@@ -55,7 +55,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                         <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4} color={"white"}>
                             <Box p={2} bg={bgColor} rounded="lg" minW="100px">
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                                    {jackpotTimer?.days || "Unknown"}
+                                    {jackpotTimer?.days}
                                 </Text>
                                 <Text textAlign="center" fontSize="xs">
                                     days
@@ -64,7 +64,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
 
                             <Box p={2} bg={bgColor} rounded="lg" minW="100px">
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                                    {jackpotTimer?.hours || "Unknown"}
+                                    {jackpotTimer?.hours}
                                 </Text>
                                 <Text textAlign="center" fontSize="xs">
                                     hours
@@ -73,7 +73,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
 
                             <Box p={2} bg={bgColor} rounded="lg" minW="100px">
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                                    {jackpotTimer?.minutes || "Unknown"}
+                                    {jackpotTimer?.minutes}
                                 </Text>
                                 <Text textAlign="center" fontSize="xs">
                                     minutes
@@ -81,7 +81,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                             </Box>
                             <Box p={2} bg={bgColor} rounded="lg" minW="100px">
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                                    {numParticipants || "Unknown"}
+                                    {numParticipants}
                                 </Text>
                                 <Text textAlign="center" fontSize="xs">
                                     Total claims in this round
