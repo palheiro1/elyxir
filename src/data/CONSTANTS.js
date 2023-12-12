@@ -266,7 +266,7 @@ export const ASSETS_IDS = [
     GEMASSET,
     WETHASSET,
     GIFTZASSET,
-    MANAASSET,
+    MANAASSET
 ];
 
 export const CURRENCY_ASSETS = {
