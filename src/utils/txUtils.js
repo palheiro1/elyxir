@@ -78,6 +78,9 @@ export function parseSender(tx) {
                 case 'TarascaDaoOmno':
                     nameSuffix = ' Morph';
                     break;
+                case 'MBOmno':
+                    nameSuffix = ' Morph';
+                    break;
                 default:
                     break;
             }
@@ -117,6 +120,9 @@ export function parseRecipient(tx) {
                     nameSuffix = ' Creator';
                     break;
                 case 'TarascaDaoOmno':
+                    nameSuffix = ' Morph';
+                    break;
+                case 'MBOmno':
                     nameSuffix = ' Morph';
                     break;
                 default:
