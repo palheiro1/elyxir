@@ -242,7 +242,7 @@ export const getIGNISBalance = async account => {
  * @dev This function is used to get the message to send to morph
  */
 const getMorphMessage = (asset, noCards) => {
-    return JSON.stringify({ 
+    return JSON.stringify({
         contract: 'MBOmno', // TarascaDaoOmno
         operation: [
             {

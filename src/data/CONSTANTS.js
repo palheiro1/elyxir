@@ -97,7 +97,6 @@ export const CURRENTSEASON = 'season01';
 // ------------------- JACKPOT -----------------
 // ---------------------------------------------
 export const FREQUENCY = 5040;
-//export const FREQUENCY = 2880;
 export const JACKPOTHALF = true;
 export const BLOCKTIME = 60;
 export const LOWIGNIS = 65;
