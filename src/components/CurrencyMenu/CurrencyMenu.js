@@ -16,7 +16,6 @@ import {
 
 import { useRef, useState } from 'react';
 import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog';
-import BuyGiftzDialog from '../Modals/BuyGiftzDialog/BuyGiftzDialog';
 import { getIgnisFromFaucet } from '../../services/Faucet/faucet';
 import { errorToast, okToast } from '../../utils/alerts';
 
@@ -48,8 +47,6 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
 
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
-    const { isOpen: isOpenBuyGiftz, onClose: onCloseBuyGiftz, onOpen: onOpenBuyGiftz } = useDisclosure();
-    const referenceBuyGiftz = useRef();
     // ----------------------- SEND CURRENCY -----------------------
     const { isOpen: isOpenSendCurrency, onClose: onCloseSendCurrency, onOpen: onOpenSendCurrency } = useDisclosure();
     const reference = useRef();
@@ -65,7 +62,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
         GIFTZ: {
             name: 'GIFTZ',
             balance: GIFTZBalance,
-            handler: onOpenBuyGiftz,
+            handler: null,
         },
         GEM: {
             name: 'GEM',
@@ -331,14 +328,6 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     username={username}
                 />
             )}
-
-            <BuyGiftzDialog
-                isOpen={isOpenBuyGiftz}
-                onClose={onCloseBuyGiftz}
-                reference={referenceBuyGiftz}
-                name={username}
-                IGNISBalance={IGNISBalance}
-            />
         </>
     );
 };
