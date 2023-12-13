@@ -27,14 +27,15 @@ const Book = ({ cards }) => {
     const colorNotHaveCard = 'rgba(65,59,151,0.5)';
     const borderColor = 'rgba(65,59,151,1)';
 
-    let haveAllCards = false;
-    haveAllCards = cards.every(card => {
-        return (
-            Number(card.quantityQNT) !== 0 &&
-            (Number(card.quantityQNT) <= Number(card.unconfirmedQuantityQNT) ||
-                Number(card.unconfirmedQuantityQNT) !== 0)
-        );
-    });
+    const haveAllCards =
+        cards.length > 0 &&
+        cards.every(card => {
+            return (
+                Number(card.quantityQNT) !== 0 &&
+                (Number(card.quantityQNT) <= Number(card.unconfirmedQuantityQNT) ||
+                    Number(card.unconfirmedQuantityQNT) !== 0)
+            );
+        });
 
     const downloadPDF = () => {
         const link = document.createElement('a');
