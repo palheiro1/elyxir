@@ -77,7 +77,7 @@ const Card = ({
     const {
         name: username,
         IGNISBalance: ignis,
-        GEMBalance: gem,
+        GEMRealBalance: gem,
         currentAsks: askOrdersAccount,
         currentBids: bidOrdersAccount,
     } = infoAccount;
