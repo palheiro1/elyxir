@@ -14,6 +14,7 @@ import {
     Tooltip,
     useColorModeValue,
     useDisclosure,
+    useMediaQuery,
 } from '@chakra-ui/react';
 
 import { NQTDIVIDER, WETHASSET } from '../../data/CONSTANTS';
@@ -161,6 +162,9 @@ const Card = ({
     const isSingular = Number(lockedCards) === 1;
     // ------------------------------
 
+    // Check if "md" is the correct breakpoint
+    const [canUseIcon] = useMediaQuery('(min-width: 1200px)');
+
     const CardButton = ({ text, onClick, isDisabled = false, icon }) => (
         <Button
             fontWeight="medium"
@@ -169,7 +173,7 @@ const Card = ({
             bgColor={newBgColor}
             color="white"
             fontSize={{ base: 'xs', md: 'sm' }}
-            leftIcon={icon}
+            leftIcon={canUseIcon ? icon : null}
             _hover={{ fontWeight: 'bold', shadow: 'xl', bgColor: newBorderColor }}
             onClick={onClick}
             isDisabled={isDisabled}>
