@@ -50,7 +50,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, cards }) => {
     const [passphrase, setPassphrase] = useState('');
     const [selectedCards, setSelectedCards] = useState([]);
 
-    const myCards = cards.filter(card => card.quantityQNT > 0);
+    const myCards = cards.filter(card => parseInt(card.unconfirmedQuantityQNT) > 0);
     const notSelectedCards = myCards.filter(card => !selectedCards.includes(card));
 
     const handleInput = e => {

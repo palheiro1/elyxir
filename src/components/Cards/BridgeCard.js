@@ -16,7 +16,7 @@ import CardBadges from './CardBadges';
  * @version 1.0
  */
 const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdit }) => {
-    const { cardImgUrl: image, name: title, asset, channel: continent, rarity, quantityQNT: quantity } = card;
+    const { cardImgUrl: image, name: title, asset, channel: continent, rarity, unconfirmedQuantityQNT: quantity } = card;
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: 1,
