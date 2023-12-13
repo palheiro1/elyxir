@@ -7,7 +7,9 @@ import {
     GIFTZASSET,
     JACKPOTACCOUNT,
     MANAASSET,
+    MORPHING_ACCOUNT,
     NQTDIVIDER,
+    OMNO_CONTRACT,
     REFRESH_DATA_TIME,
     WETHASSET,
 } from '../data/CONSTANTS';
@@ -243,7 +245,7 @@ export const getIGNISBalance = async account => {
  */
 const getMorphMessage = (asset, noCards) => {
     return JSON.stringify({
-        contract: 'MBOmno', // TarascaDaoOmno
+        contract: OMNO_CONTRACT, // TarascaDaoOmno
         operation: [
             {
                 service: 'cardmorph',
@@ -277,7 +279,7 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
     const response_1 = await transferAsset({
         asset: asset,
         quantityQNT: noCards,
-        recipient: BUYPACKACCOUNT,
+        recipient: MORPHING_ACCOUNT,
         passPhrase,
         message,
         messagePrunable: true,
@@ -293,7 +295,7 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
     // ----------------------------------
     const response_2 = await transferGEM({
         quantityQNT: cost * NQTDIVIDER,
-        recipient: BUYPACKACCOUNT,
+        recipient: MORPHING_ACCOUNT,
         passPhrase,
         message,
         messagePrunable: true,

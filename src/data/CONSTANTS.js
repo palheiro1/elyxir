@@ -127,7 +127,7 @@ export const CRAFTINGRARE = 450;
 // ---------------------------------------------
 // ----------------- MORPHING ------------------
 // ---------------------------------------------
-export const MORPHING_ACCOUNT = 'ARDOR-J45A-8UPL-XYHR-DAUD8';
+export const MORPHING_ACCOUNT = OMNO_ACCOUNT;
 export const MORPHINGCOMMON = 50;
 export const MORPHINGRARE = 250;
 export const MORPHINGEPIC = 750;
