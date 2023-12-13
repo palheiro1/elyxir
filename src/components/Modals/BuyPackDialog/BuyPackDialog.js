@@ -51,7 +51,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
     const [needReload, setNeedReload] = useState(true);
 
-    const { name, WETHBalance, IGNISBalance } = infoAccount;
+    const { name, WETHRealBalance:WETHBalance, IGNISBalance } = infoAccount;
 
     const toast = useToast();
     const colorText = 'white';
