@@ -113,7 +113,7 @@ const UserDataItem = ({
                 <Heading fontSize="lg" pb={2}>
                     Faucet (IGNIS)
                 </Heading>
-                <Text fontSize="sm">
+                <Box fontSize="sm">
                     {parseFloat(IGNISBalance) <= 0.3 ? (
                         <>
                             <Button w="100%" bgColor={bgColor} borderColor={borderColor} onClick={handleClaim}>
@@ -127,7 +127,7 @@ const UserDataItem = ({
                     ) : (
                         <Text>You can only claim if you have less than 0.3 IGNIS.</Text>
                     )}
-                </Text>
+                </Box>
             </ContainerText>
         </GridItem>
     );
