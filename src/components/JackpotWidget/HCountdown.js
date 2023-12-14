@@ -18,7 +18,7 @@ import {
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBalanceUSD, cStyle }) => {
+const HCountdown = ({ jackpotTimer, numParticipants = 0, jackpotBalance = 0, jackpotBalanceUSD = 0, cStyle }) => {
     // const textColor = useColorModeValue('black', 'white');
     const selectedColor = cStyle === 0 ? '#2f9088' : '#3b5397';
     const textColor = useColorModeValue(selectedColor, 'white');
@@ -55,7 +55,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
                         <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4} color={"white"}>
                             <Box p={2} bg={bgColor} rounded="lg" minW="100px">
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                                    {jackpotTimer?.days}
+                                    {jackpotTimer?.days || 0}
                                 </Text>
                                 <Text textAlign="center" fontSize="xs">
                                     days
@@ -64,7 +64,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
 
                             <Box p={2} bg={bgColor} rounded="lg" minW="100px">
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                                    {jackpotTimer?.hours}
+                                    {jackpotTimer?.hours || 0}
                                 </Text>
                                 <Text textAlign="center" fontSize="xs">
                                     hours
@@ -73,7 +73,7 @@ const HCountdown = ({ jackpotTimer, numParticipants, jackpotBalance, jackpotBala
 
                             <Box p={2} bg={bgColor} rounded="lg" minW="100px">
                                 <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                                    {jackpotTimer?.minutes}
+                                    {jackpotTimer?.minutes || 0}
                                 </Text>
                                 <Text textAlign="center" fontSize="xs">
                                     minutes
