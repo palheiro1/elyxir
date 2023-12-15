@@ -104,7 +104,7 @@ export const dropUser = (name) => {
 export const getUser = (name) => {
     try {
         const item = localStorage.getItem(name);
-        return item !== null ? JSON.parse(item) : {};
+        return item !== null ? JSON.parse(item) : null;
     } catch (exception) {
         return {};
     }
@@ -117,7 +117,7 @@ export const getUser = (name) => {
 export const getVersion = () => {
     try {
         const item = localStorage.getItem('APP_VERSION');
-        return item !== null ? JSON.parse(item) : {};
+        return item !== null ? JSON.parse(item) : null;
     } catch (exception) {
         return {};
     }
