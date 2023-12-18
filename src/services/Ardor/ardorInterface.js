@@ -37,7 +37,7 @@ const URL_SEND_MESSAGE = `${NODEURL}?requestType=sendMessage`;
 //                   BASIC UTILS
 // -------------------------------------------------
 
-export const getAccountFromPhrase = async value => {
+export const getAccountFromPhrase = value => {
     if (!value || typeof value !== 'string') throw new Error('Invalid secret phrase');
     return ardorjs.secretPhraseToAccountId(value, false);
 };
@@ -54,6 +54,10 @@ export const fetchAssetCount = async asset => {
         return 0;
     }
 };
+
+export const addressToAccountId = address => {
+    return ardorjs.rsConvert(address).account;
+}
 
 // -------------------------------------------------
 //                  ARDOR REQUESTS
@@ -910,6 +914,42 @@ export const processWrapsFor20 = async accountRs => {
 // ----------------------------------------------
 // |            C H A T   M E S S A G E S       |
 // ----------------------------------------------
+
+export const sendMessage = async ({ recipient, passPhrase, message }) => {
+    if (!recipient || !passPhrase || !message) return false;
+
+    try {
+        const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
+
+        let query = {
+            chain: 2,
+            publicKey: publicKey,
+            recipient: recipient,
+            feeNQT: -1,
+            deadline: 15,
+            broadcast: false,
+            message: message,
+            messageIsPrunable: true,
+        };
+
+        const fee = await calculateFeeByRecipient(recipient, query, URL_SEND_MESSAGE);
+        query.feeNQT = fee;
+        query.broadcast = false;
+
+        const response = await axios.post(URL_SEND_MESSAGE, qs.stringify(query), config);
+        const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
+        const txData = { transactionBytes: signed };
+
+        txData.prunableAttachmentJSON = JSON.stringify(response.data.transactionJSON.attachment);
+
+        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
+        if (respuesta.errorCode) return false;
+        return respuesta.status === 200;
+    } catch (error) {
+        console.error('🚀 ~ file: ardorInterface.js:820 ~ sendDirectMessage ~ error', error);
+        return false;
+    }
+};
 
 export const sendDirectMessage = async ({ recipient, passPhrase, message }) => {
     if (!recipient || !passPhrase || !message) return false;

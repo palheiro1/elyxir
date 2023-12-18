@@ -68,6 +68,7 @@ import ArdorChat from '../../components/Pages/ChatPage/ArdorChat';
 import Book from '../../components/Pages/BookPage/Book';
 import { firstTimeToast, okToast } from '../../utils/alerts';
 import OpenPackDialog from '../../components/Modals/OpenPackDialog/OpenPackDialog';
+import { getOmnoGiftzBalance } from '../../services/Ardor/omnoInterface';
 
 /**
  * @name Home
@@ -225,26 +226,36 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 const { accountRs } = infoAccount;
 
                 // Fetch all info
-                const [loadCards, currencyAssets, ignis, txs, unconfirmed, currentAskOrBids, trades, dividends] =
-                    await Promise.all([
-                        fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, firstTime ? false : true),
-                        fetchCurrencyAssets(
-                            accountRs,
-                            [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT],
-                            true
-                        ),
-                        getIGNISBalance(accountRs),
-                        getBlockchainTransactions(2, accountRs, true),
-                        getUnconfirmedTransactions(2, accountRs),
-                        getCurrentAskAndBids(accountRs),
-                        getTrades(2, accountRs),
-                        getAccountLedger({
-                            accountRs: accountRs,
-                            firstIndex: 0,
-                            lastIndex: 99,
-                            eventType: 'ASSET_DIVIDEND_PAYMENT',
-                        }),
-                    ]);
+                const [
+                    loadCards,
+                    currencyAssets,
+                    ignis,
+                    txs,
+                    unconfirmed,
+                    currentAskOrBids,
+                    trades,
+                    dividends,
+                    giftzOmnoBalance,
+                ] = await Promise.all([
+                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, firstTime ? false : true),
+                    fetchCurrencyAssets(
+                        accountRs,
+                        [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT],
+                        true
+                    ),
+                    getIGNISBalance(accountRs),
+                    getBlockchainTransactions(2, accountRs, true),
+                    getUnconfirmedTransactions(2, accountRs),
+                    getCurrentAskAndBids(accountRs),
+                    getTrades(2, accountRs),
+                    getAccountLedger({
+                        accountRs: accountRs,
+                        firstIndex: 0,
+                        lastIndex: 99,
+                        eventType: 'ASSET_DIVIDEND_PAYMENT',
+                    }),
+                    getOmnoGiftzBalance(accountRs),
+                ]);
 
                 const gems = currencyAssets[0].find(asset => asset.asset === GEMASSET);
                 const weth = currencyAssets[1].find(asset => asset.asset === WETHASSET);
@@ -277,8 +288,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
                 const auxDividends = dividends.entries;
                 updateDividendsWithCards(auxDividends, loadCards).then(() => {
-
-
                     // -----------------------------------------------------------------
                     // Rebuild infoAccount
                     // -----------------------------------------------------------------
@@ -299,13 +308,13 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                         currentAsks: currentAskOrBids.askOrders,
                         currentBids: currentAskOrBids.bidOrders,
                         trades: trades.trades,
+                        stuckedGiftz: giftzOmnoBalance,
                     };
 
                     // -----------------------------------------------------------------
                     // Get all hashes and compare
                     // -----------------------------------------------------------------
                     checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
-
                 });
 
                 checkDataChange('Cards', cardsHash, setCards, setCardsHash, loadCards);
@@ -429,13 +438,13 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const checkUnwraps = useCallback(async () => {
         try {
             const { accountRs } = infoAccount;
+
             // TODO: CHECK ALL BRIDGES
             Promise.all([
                 processUnwrapsForGemBridge(accountRs),
                 processUnwrapsFor1155(accountRs),
                 processWrapsFor20(accountRs),
             ]).then(([gemBridge, bridge1155, bridge20]) => {
-
                 if (gemBridge && gemBridge.starts)
                     okToast('[GEM BRIDGE] DETECTED UNWRAP: ' + gemBridge.starts + ' transfers started.', toast);
 
@@ -444,7 +453,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
                 if (bridge20 && bridge20.starts)
                     okToast('[ERC-20] DETECTED WRAP: ' + bridge20.starts + ' transfers started.', toast);
-
             });
         } catch (error) {
             console.error('Mythical Beings: Error checking unwraps', error);

@@ -115,22 +115,6 @@ export const buyPackWithWETH = async (passphrase, noPacks, WETHBalance, selected
     const balance = WETHBalance * NQTDIVIDER;
     if (balance < priceInWETH) return false;
 
-    /*
-    const fee = await sendIgnis({
-        amountNQT: "50000000",
-        recipient: OMNO_ACCOUNT,
-        passPhrase: passphrase,
-        message: JSON.stringify({
-            contract: OMNO_CONTRACT,
-        }),
-    });
-
-    if (!fee) {
-        console.error('🚀 ~ file: cardsUtils.js ~ line 156 ~ buyPackWithWETH ~ ERROR SENDING FEE');
-        return false;
-    }
-    */
-
     const trades = selectedOffers.map(offer => {
         return {
             service: 'trade',

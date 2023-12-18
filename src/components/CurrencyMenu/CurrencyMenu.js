@@ -18,6 +18,7 @@ import { useRef, useState } from 'react';
 import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog';
 import { getIgnisFromFaucet } from '../../services/Faucet/faucet';
 import { errorToast, okToast } from '../../utils/alerts';
+import UnStuckGiftz from '../Modals/UnStuckGiftz/UnStuckGiftz';
 
 const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     const {
@@ -33,19 +34,31 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     const parseWETH = parseFloat(WETHBalance);
     const parseMANA = parseFloat(MANABalance);
 
+    const cleanDecimals = number => {
+        const aux = number.toString().split('.');
+        if (aux.length > 1) return aux[1].length || 0;
+        return 0;
+    };
+
     let wEthDecimals = 0;
     if (parseWETH) {
-        const aux = parseWETH.toString().split('.');
-        if (aux.length > 1) wEthDecimals = aux[1].length || 0;
+        // const aux = parseWETH.toString().split('.');
+        // if (aux.length > 1) wEthDecimals = aux[1].length || 0;
+        wEthDecimals = cleanDecimals(parseWETH);
     }
 
     let manaDecimals = 0;
     if (parseMANA) {
-        const aux = parseMANA.toString().split('.');
-        if (aux.length > 1) manaDecimals = aux[1].length || 0;
+        // const aux = parseMANA.toString().split('.');
+        // if (aux.length > 1) manaDecimals = aux[1].length || 0;
+        manaDecimals = cleanDecimals(parseMANA);
     }
 
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+
+    // --------------------- UNSTUCK GIFTZ ---------------------
+    const { isOpen: isOpenUnstuckGiftz, onClose: onCloseUnstuckGiftz, onOpen: onOpenUnstuckGiftz } = useDisclosure();
+    const unstuckReference = useRef();
 
     // ----------------------- SEND CURRENCY -----------------------
     const { isOpen: isOpenSendCurrency, onClose: onCloseSendCurrency, onOpen: onOpenSendCurrency } = useDisclosure();
@@ -178,7 +191,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
         }
     };
 
-    const bgColor = useColorModeValue("rgba(234, 234, 234, 0.5)", "rgba(234, 234, 234, 1)");
+    const bgColor = useColorModeValue('rgba(234, 234, 234, 0.5)', 'rgba(234, 234, 234, 1)');
 
     return (
         <>
@@ -230,6 +243,9 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                         <Portal>
                             <MenuList>
                                 <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
+                                {infoAccount.stuckedGiftz > 0 && (
+                                    <MenuItem onClick={() => onOpenUnstuckGiftz()}>Unstuck GIFTZ</MenuItem>
+                                )}
                             </MenuList>
                         </Portal>
                     </Menu>
@@ -325,6 +341,14 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     reference={reference}
                     currency={currency}
                     IGNISBalance={IGNISBalance}
+                    username={username}
+                />
+            )}
+            {isOpenUnstuckGiftz && (
+                <UnStuckGiftz
+                    isOpen={isOpenUnstuckGiftz}
+                    onClose={onCloseUnstuckGiftz}
+                    reference={unstuckReference}
                     username={username}
                 />
             )}

@@ -1,5 +1,9 @@
-import { WETHASSET } from '../../data/CONSTANTS';
+import axios from 'axios';
+import { GIFTZASSET, OMNO_ACCOUNT, OMNO_CONTRACT, WETHASSET } from '../../data/CONSTANTS';
 import { fetchOmnoMarket } from '../../utils/omno';
+import { addressToAccountId, getAccountFromPhrase, sendMessage } from './ardorInterface';
+
+const OMNO_API_URL = 'https://api.mythicalbeings.io/index.php?action=getOmnoUserState';
 
 const getOmnoAskOrders = (allOffers = [], asset) => {
     const selectedOffers = allOffers.filter(item => {
@@ -39,4 +43,62 @@ export const getOmnoMarketOrdesForAsset = async asset => {
     const askOrders = getOmnoAskOrders(allOffers, asset);
     const bidOrders = getOmnoBidOrders(allOffers, asset);
     return { askOrders, bidOrders };
+};
+
+export const getOmnoGiftzBalance = async address => {
+    try {
+        // Convert address to accountId
+        const accountId = addressToAccountId(address);
+
+        // Fetch balances from the Omno API
+        const response = await axios.get(OMNO_API_URL);
+        const userBalance = response.data.find(item => item.id === accountId);
+
+        if (userBalance && userBalance.balance?.asset?.[GIFTZASSET]) {
+            return userBalance.balance.asset[GIFTZASSET];
+        }
+
+        return 0; // Default value if balance is not found
+    } catch (error) {
+        console.error('Error fetching Omno giftz balance:', error.message);
+        throw error; // Re-throw the error for further handling, if necessary
+    }
+};
+
+export const withdrawAllGiftzFromOmno = async (passphrase) => {
+    const address = getAccountFromPhrase(passphrase);
+    const balance = await getOmnoGiftzBalance(address);
+
+    const message = JSON.stringify({
+        contract: OMNO_CONTRACT,
+        operation: [
+            {
+                service: 'platform',
+                request: 'failClear',
+            },
+            {
+                service: 'user',
+                request: 'withdraw',
+                parameter: {
+                    contractPaysWithdrawFee: true,
+                    value: {
+                        asset: {
+                            [GIFTZASSET]: balance.toString(),
+                        },
+                    },
+                    requireFailClear: true,
+                },
+            },
+            {
+                service: 'platform',
+                request: 'failClear',
+            },
+        ],
+    });
+
+    return await sendMessage({
+        recipient: OMNO_ACCOUNT,
+        passPhrase: passphrase,
+        message: message,
+    });
 };
