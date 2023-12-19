@@ -53,8 +53,8 @@ const TopBar = ({
                         w="100%"
                         border="2px"
                         borderColor="#367197"
-                        bgColor={isDividends ? '#3b7197' : "white"}
-                        color={isDividends ? 'white' : '#3b7197'}
+                        bgColor={isDividends && '#3b7197'}
+                        color={isDividends && 'white'}
                         _hover={{ color: '#3b7197' }}
                         onClick={() => setSection('dividends')}>
                         Dividends
