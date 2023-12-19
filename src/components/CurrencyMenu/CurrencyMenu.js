@@ -47,13 +47,6 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
         wEthDecimals = cleanDecimals(parseWETH);
     }
 
-    let manaDecimals = 0;
-    if (parseMANA) {
-        // const aux = parseMANA.toString().split('.');
-        // if (aux.length > 1) manaDecimals = aux[1].length || 0;
-        manaDecimals = cleanDecimals(parseMANA);
-    }
-
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     // --------------------- UNSTUCK GIFTZ ---------------------
@@ -319,7 +312,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                     mb={2}
                                 />
                                 <Text pr={6} w="100%" textAlign="center">
-                                    {parseMANA.toFixed(Math.max(0, manaDecimals <= 6 ? manaDecimals : 6))}
+                                    {parseMANA.toFixed(0)}
                                 </Text>
                             </Stack>
                         </MenuButton>
