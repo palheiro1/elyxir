@@ -71,6 +71,7 @@ const AskDialog = ({
         card.assetname === 'wETH' ||
         card.assetname === 'MANA';
     const currencyName = isCurrency ? card.assetname : '';
+
     let currencyImg;
     if (currencyName === 'GEM') {
         currencyImg = '/images/currency/gem.png';
@@ -380,7 +381,7 @@ const AskDialog = ({
                                                 sendingTx ||
                                                 value === 0 ||
                                                 priceCard === 0 ||
-                                                card.unconfirmedQuantityQNT < value
+                                                parseFloat(card.unconfirmedQuantityQNT) < parseFloat(value)
                                             }
                                             bgColor={filledColor}
                                             fontWeight={'black'}

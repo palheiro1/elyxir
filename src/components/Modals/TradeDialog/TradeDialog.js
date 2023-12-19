@@ -200,27 +200,32 @@ const TradeDialog = ({
                     </AlertDialogBody>
                 </AlertDialogContent>
             </AlertDialog>
-            <AskDialog
-                reference={refAsk}
-                isOpen={isOpenAsk}
-                onClose={onCloseAsk}
-                card={!currencyCards ? card : currencyCards}
-                username={username}
-                actualAmount={currencyCards ? currencyCards.quantityQNT : card.quantityQNT}
-                askOrders={card?.askOrders || currencyCards?.askOrders}
-                bidOrders={card?.bidOrders || currencyCards?.bidOrders}
-            />
-            <BidDialog
-                reference={refBid}
-                isOpen={isOpenBid}
-                onClose={onCloseBid}
-                card={!currencyCards ? card : currencyCards}
-                username={username}
-                ignis={ignis}
-                actualAmount={currencyCards ? currencyCards.quantityQNT : card.quantityQNT}
-                askOrders={card?.askOrders || currencyCards?.askOrders}
-                bidOrders={card?.bidOrders || currencyCards?.bidOrders}
-            />
+
+            {isOpenAsk && (
+                <AskDialog
+                    reference={refAsk}
+                    isOpen={isOpenAsk}
+                    onClose={onCloseAsk}
+                    card={!currencyCards ? card : currencyCards}
+                    username={username}
+                    actualAmount={currencyCards ? currencyCards.quantityQNT : card.quantityQNT}
+                    askOrders={card?.askOrders || currencyCards?.askOrders}
+                    bidOrders={card?.bidOrders || currencyCards?.bidOrders}
+                />
+            )}
+            {isOpenBid && (
+                <BidDialog
+                    reference={refBid}
+                    isOpen={isOpenBid}
+                    onClose={onCloseBid}
+                    card={!currencyCards ? card : currencyCards}
+                    username={username}
+                    ignis={ignis}
+                    actualAmount={currencyCards ? currencyCards.quantityQNT : card.quantityQNT}
+                    askOrders={card?.askOrders || currencyCards?.askOrders}
+                    bidOrders={card?.bidOrders || currencyCards?.bidOrders}
+                />
+            )}
         </>
     );
 };
