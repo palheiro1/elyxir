@@ -21,6 +21,12 @@ const AskBidTable = ({
     const borderRight = !isLeft ? 'lg' : 'none';
     const isAsk = type === 'Asks';
 
+    const MAX_ORDERS = 6;
+
+    if(orders.length > MAX_ORDERS) {
+        orders = orders.slice(0, MAX_ORDERS);
+    }
+
     return (
         <TableContainer
             rounded="lg"
