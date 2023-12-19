@@ -28,24 +28,30 @@ const HCountdown = ({ jackpotTimer, numParticipants = 0, jackpotBalance = 0, jac
         <Center>
             <Stack direction="column">
                 <Stack direction={{ base: 'column', md: 'column' }} spacing={4} align="center">
-                    <Stack direction={{ base: 'column', md: 'row' }} w="100%">
-                        <Center w="100%">
-                            <HStack w="100%">
-                                <Image src="/images/currency/weth.png" w="50px" mr={2} />
-                                <VStack align="flex-start">
-                                    <Text color={textColor} fontSize="2xl" fontWeight="bold" mb={-3}>
-                                        {jackpotBalance} WETH
-                                    </Text>
-                                    <Text color={textColor} fontSize="md">
-                                        ({Number(jackpotBalanceUSD).toFixed(2)} USD)
-                                    </Text>
-                                </VStack>
-                            </HStack>
-                        </Center>
-                        <HStack w="100%">
-                            <Image src="/images/currency/mana.png" w="55px" mr={2} mb={1} />
+                    <Stack direction={{ base: 'column', md: 'row' }} w="100%" gap={3}>
+                        <HStack>
+                            <Image src="/images/currency/weth.png" w="50px" />
                             <VStack align="flex-start">
                                 <Text color={textColor} fontSize="2xl" fontWeight="bold" mb={-3}>
+                                    {jackpotBalance} WETH
+                                </Text>
+                                <Text color={textColor} fontSize="md">
+                                    ({Number(jackpotBalanceUSD).toFixed(2)} USD)
+                                </Text>
+                            </VStack>
+                        </HStack>
+                        <HStack>
+                            <Image src="/images/currency/gem.png" w="50px" />
+                            <VStack align="flex-start">
+                                <Text color={textColor} fontSize="2xl" fontWeight="bold">
+                                    9000 GEM
+                                </Text>
+                            </VStack>
+                        </HStack>
+                        <HStack>
+                            <Image src="/images/currency/mana.png" w="50px" />
+                            <VStack align="flex-start">
+                                <Text color={textColor} fontSize="2xl" fontWeight="bold">
                                     9000 MANA
                                 </Text>
                             </VStack>
