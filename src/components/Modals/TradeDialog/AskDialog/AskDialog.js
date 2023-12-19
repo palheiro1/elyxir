@@ -33,6 +33,7 @@ import { errorToast, okToast } from '../../../../utils/alerts';
 import { checkPin, sendAskOrder } from '../../../../utils/walletUtils';
 import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
 import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidList';
+import { getUser } from '../../../../utils/storage';
 
 /**
  * @name AskDialog - Ask dialog component
@@ -62,6 +63,8 @@ const AskDialog = ({
     const [passphrase, setPassphrase] = useState('');
     const [sendingTx, setSendingTx] = useState(false);
 
+    const accountRS = getUser(username).accountRs;
+
     const isCurrency =
         card.assetname === 'GEM' ||
         card.assetname === 'GIFTZ' ||
@@ -86,7 +89,9 @@ const AskDialog = ({
     }
 
     // Mix ask with bid orders
-    const userOrders = [...askOrders, ...bidOrders];
+    let userOrders = [...askOrders, ...bidOrders];
+    // Filter only my orders
+    userOrders = userOrders.filter(order => order.accountRS === accountRS);
 
     const [selectedItem, setSelectedItem] = useState(''); // selected item in the grid
 

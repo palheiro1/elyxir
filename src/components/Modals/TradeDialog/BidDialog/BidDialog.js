@@ -33,6 +33,7 @@ import { errorToast, okToast } from '../../../../utils/alerts';
 import { checkPin, sendBidOrder } from '../../../../utils/walletUtils';
 import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
 import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidList';
+import { getUser } from '../../../../utils/storage';
 
 /**
  * @name BidDialog
@@ -70,6 +71,8 @@ const BidDialog = ({
     const [priceCard, setPriceCard] = useState(0);
     const [maxPrice, setMaxPrice] = useState(0);
 
+    const accountRS = getUser(username).accountRs;
+
     const isCurrency =
         card.assetname === 'GEM' ||
         card.assetname === 'GIFTZ' ||
@@ -88,7 +91,9 @@ const BidDialog = ({
     }
 
     // Mix ask with bid orders
-    const userOrders = [...askOrders, ...bidOrders];
+    let userOrders = [...askOrders, ...bidOrders];
+    // Filter only my orders
+    userOrders = userOrders.filter(order => order.accountRS === accountRS);
 
     const handlePriceCard = e => {
         e.preventDefault();
