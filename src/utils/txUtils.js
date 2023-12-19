@@ -79,7 +79,7 @@ export function parseSender(tx) {
                     nameSuffix = ' Morph';
                     break;
                 case 'MBOmno':
-                    nameSuffix = ' Morph';
+                    nameSuffix = ' Omno';
                     break;
                 default:
                     break;
@@ -123,7 +123,7 @@ export function parseRecipient(tx) {
                     nameSuffix = ' Morph';
                     break;
                 case 'MBOmno':
-                    nameSuffix = ' Morph';
+                    nameSuffix = ' Omno';
                     break;
                 default:
                     break;
