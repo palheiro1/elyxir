@@ -101,6 +101,7 @@ const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
                                     fontSize={'sm'}
                                     fontWeight={'bold'}
                                     color={linkColor}
+                                    isExternal
                                     _hover={{
                                         textDecoration: 'none',
                                         color: linkHoverColor,
@@ -190,7 +191,7 @@ const MobileNavItem = ({ label, children, href }) => {
                     align={'start'}>
                     {children &&
                         children.map(child => (
-                            <Link key={child.label} py={2} href={child.href}>
+                            <Link key={child.label} py={2} href={child.href} isExternal>
                                 {child.label}
                             </Link>
                         ))}
