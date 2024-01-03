@@ -12,7 +12,7 @@ export const NAV_ITEMS = [
     },
     {
         label: 'How to play',
-        href: 'https://mythicalbeings.io/faq',
+        href: 'https://mythicalbeings.io/how-to-play.html',
     },
     {
         label: 'Blog',
