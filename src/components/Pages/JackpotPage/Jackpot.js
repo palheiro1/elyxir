@@ -95,6 +95,7 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
                         rgbColor={"59, 83, 151"}
                     />
                     <RemainingCards
+                        infoAccount={infoAccount}
                         username={infoAccount.name}
                         totalCards={totalNoSpecialCards.length}
                         remainingCards={remainingCards}
