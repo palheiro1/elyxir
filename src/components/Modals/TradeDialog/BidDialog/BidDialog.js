@@ -121,7 +121,7 @@ const BidDialog = ({
                 inputPrecision = 0;
                 break;
             case 'wETH':
-                inputStep = 0.0001;
+                inputStep = 0.000001;
                 inputPrecision = 6;
                 break;
             case 'MANA':
@@ -139,7 +139,7 @@ const BidDialog = ({
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: inputStep,
         defaultValue: 0,
-        min: 1,
+        min: inputStep,
         max: isCurrency ? 999999 : 999,
         precision: inputPrecision,
         value,
