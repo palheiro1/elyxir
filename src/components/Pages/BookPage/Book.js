@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box, Stack, Text } from '@chakra-ui/react';
 import PDFReader from './PDFReader';
-import MB_Book from './pdfs/TotalyBook-S06.pdf';
+import MB_Book from './pdfs/FullBook.pdf';
 
 const Book = ({ cards }) => {
     const [currentCard, setCurrentCard] = useState(cards[0]);
