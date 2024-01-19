@@ -69,7 +69,7 @@ const BidDialog = ({
     const [selectedItem, setSelectedItem] = useState(''); // selected item in the grid
 
     const [priceCard, setPriceCard] = useState(0);
-    const [maxPrice, setMaxPrice] = useState(0);
+    //const [maxPrice, setMaxPrice] = useState(0);
 
     const accountRS = getUser(username).accountRs;
 
@@ -97,14 +97,7 @@ const BidDialog = ({
 
     const handlePriceCard = e => {
         e.preventDefault();
-
-        const readValue = Number(e.target.value);
-
-        if (readValue < maxPrice) {
-            setPriceCard(e.target.value);
-        } else {
-            setPriceCard(maxPrice);
-        }
+        setPriceCard(parseFloat(e.target.value));
     };
 
     let inputStep = 1,
@@ -150,20 +143,20 @@ const BidDialog = ({
     const dec = getDecrementButtonProps();
     const input = getInputProps();
 
-    useEffect(() => {
-        const checkNumbers = () => {
-            const max = parseFloat(Number(ignis / input.value).toFixed(2));
-            const actualPrice = parseFloat(Number(priceCard).toFixed(2));
-            if (max === maxPrice) return;
-            setMaxPrice(max);
+    // useEffect(() => {
+    //     const checkNumbers = () => {
+    //         const max = parseFloat(Number(ignis / input.value).toFixed(2));
+    //         const actualPrice = parseFloat(Number(priceCard).toFixed(2));
+    //         if (max === maxPrice) return;
+    //         setMaxPrice(max);
 
-            if (actualPrice > max) {
-                setPriceCard(max);
-            }
-        };
+    //         if (actualPrice > max) {
+    //             setPriceCard(max);
+    //         }
+    //     };
 
-        ignis && input.value && checkNumbers();
-    }, [priceCard, ignis, input.value, maxPrice]);
+    //     ignis && input.value && checkNumbers();
+    // }, [priceCard, ignis, input.value, maxPrice]);
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -225,7 +218,7 @@ const BidDialog = ({
 
     useEffect(() => {
         const checkChange = () => {
-            if (selectedItem && selectedItem.price < maxPrice) {
+            if (selectedItem) {
                 setPriceCard(selectedItem.price);
                 setValue(selectedItem.quantity);
                 setSelectedItem('');
@@ -233,7 +226,7 @@ const BidDialog = ({
         };
 
         checkChange();
-    }, [selectedItem, maxPrice]);
+    }, [selectedItem]);
 
     const handleClose = () => {
         setSelectedItem('');
@@ -357,9 +350,7 @@ const BidDialog = ({
                                                     borderLeftRadius="lg"
                                                 />
                                             </InputGroup>
-                                            <FormLabel>
-                                                Price per {!isCurrency ? 'cards' : currencyName} (Max: {maxPrice})
-                                            </FormLabel>
+                                            <FormLabel>Price per {!isCurrency ? 'cards' : currencyName}</FormLabel>
                                         </FormControl>
                                     </Box>
                                     <Collapse in={priceCard > 0 && input.value > 0}>
@@ -418,9 +409,17 @@ const BidDialog = ({
                                             <FormLabel>Security PIN</FormLabel>
                                         </FormControl>
                                     </Box>
+
+                                    <Collapse in={priceCard * input.value > ignis}>
+                                        <Text textAlign="center" fontWeight={'bold'}>
+                                            You don't have enough IGNIS to buy this amount of{' '}
+                                            {!isCurrency ? 'cards' : currencyName}
+                                        </Text>
+                                    </Collapse>
+
                                     <Box w="100%" mt={8}>
                                         <Button
-                                            isDisabled={!isValidPin || sendingTx}
+                                            isDisabled={!isValidPin || sendingTx || priceCard * input.value > ignis}
                                             bgColor={filledColor}
                                             fontWeight={'black'}
                                             w="100%"
