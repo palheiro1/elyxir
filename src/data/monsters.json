@@ -1284,5 +1284,34 @@
         ],
         "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d938.9901889693608!2d-2.285742476525282!3d37.22818699287384!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd7ab21e684f066b%3A0x403d278a575e320!2sTahal%2C%2004275%2C%20Almer%C3%ADa!5e1!3m2!1sen!2ses!4v1702227640461!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
         "assetname": "mythical55"
+    },
+    {
+        "name": "Sumangâ",
+        "country": "Sama-Bajau",
+        "continent": "Asia",
+        "picture": "sumanga.jpg",
+        "rarity": "Special",
+        "creature": [
+            "Among the myriad spirits that bring life to the oceanic world of the Bajau, the Sumangâ stand out as perhaps the most pivotal in their day-to-day existence.",
+            "This mythological entity embodies the spirit of the sailboat where families reside, fish, and embark on journeys; an ethereal connection permanently etched into the wooden vessel, shaping its fate.",
+            "The Sumangâ possesses the ability to enhance sea conditions and manipulate weather patterns, beckoning schools of fish to ensure bountiful catches.",
+            "Beyond its elemental influence, this mystical being serves as a wellspring of inspiration and ingenuity for the Bajau, aiding them in the construction of new vessels and the crafting of indispensable tools.",
+            "The Bajau entrust their maritime fortune to the Sumangâ, viewing it as a guardian with the power to repel any threat, including the menace of pirate attacks.",
+            "The potency of these creatures does not manifest through superhuman strength or magical prowess; rather, it is rooted in their symbiotic relationship with fortune.",
+            "Typically benevolent, Sumangâ diligently seeks the prosperity of those dwelling aboard its sailboat. However, should individuals neglect their traditional responsibilities or exploit the ocean's resources, such as overfishing, the Sumangâ may manifest its displeasure by transforming good fortune ('padalleang') into ill fate ('busong').",
+            "A cascade of unfavorable events then descends upon the crew. Despite this, Sumangâ is not characterized by vengefulness. People can seek absolution by amending their conduct and offering tangible demonstrations of remorse."
+        ],
+        "landscape": "bajau.jpg",
+        "culture": [
+            "The Sama-Bajau, hailing from the coastal regions of the Philippines, Malaysia, and Indonesia, embody an ethnic group often referred to as the 'sea gypsies' due to their distinctive maritime nomadic lifestyle.",
+            "Their existence is intricately interwoven with the ocean. Proficient fishermen and adept navigators, they craft wooden vessels called lepa, serving not only as modes of transportation but also as their buoyant abodes.",
+            "Fishing, marine product collection, and trade stand as foundational elements of their sustenance. Internationally acclaimed for their extraordinary diving prowess, they boast the capacity to endure breath-holding for up to 13 minutes and plunge to depths of 60 meters.",
+            "Although predominantly adherents of Islam in contemporary times, the Sama-Bajau's mythological tapestry echoes their animistic origins. Deities of paramount significance, such as Umboh Tuhan (also recognized as Umboh Dilaut, the 'Lord of the Sea') and his consort, Dayang Dayang Mangilai ('Lady of the Forest'), form the bedrock of their cosmological perspective.",
+            "This worldview delineates the realms of the physical and the spiritual, attributing umboh as ancestral spirits and saitans as spirits of nature. Religious observances encompass rituals designed to influence the outcomes of fishing endeavors, while annual festivities like pag-umboh and pagkanduli involve spirited celebrations, replete with dances, music, and entrancing spiritual rituals.",
+            "In the contemporary landscape, a majority of the Sama-Bajau have transitioned to terrestrial residences or established homes on coastal waters, with only a select few thousand steadfastly upholding their traditional, nomadic maritime way of life.",
+            "Current population: 1,300,000"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12194.314618008157!2d118.53980355594835!3d4.663203351818185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x323ff17b08cab0bd%3A0xe30a5e2484e50c3f!2sPulau%20Tatagan%20Tatagan!5e1!3m2!1sen!2ses!4v1706027868976!5m2!1sen!2ses' width='600' height='450' frameborder='0' style='border:0;' allowfullscreen/>",
+        "assetname": "mythical56"
     }
 ]
