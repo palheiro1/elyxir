@@ -96,11 +96,20 @@ const AskDialog = ({
 
     const [selectedItem, setSelectedItem] = useState(''); // selected item in the grid
 
+    // ------------------ Quantity ------------------
     const [priceCard, setPriceCard] = useState(0);
     const handlePriceCard = e => {
         e.preventDefault();
-        setPriceCard(e.target.value);
+        const value = parseFloat(e.target.value);
+
+        if (value <= 0 || isNaN(value)) {
+            setPriceCard(0);
+            return;
+        }
+
+        setPriceCard(value);
     };
+    // -----------------------------------------------
 
     const [value, setValue] = useState(0);
 
@@ -132,6 +141,18 @@ const AskDialog = ({
         }
     }
 
+    const handleChange = value => {
+        if (value > maxCards) {
+            setValue(maxCards);
+            return;
+        }
+        if (value < 0) {
+            setValue(0);
+            return;
+        }
+        setValue(value);
+    };
+
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: inputStep,
         defaultValue: 0,
@@ -139,8 +160,10 @@ const AskDialog = ({
         max: maxCards,
         precision: inputPrecision,
         value: value,
-        onChange: setValue,
+        onChange: handleChange,
     });
+
+
 
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
