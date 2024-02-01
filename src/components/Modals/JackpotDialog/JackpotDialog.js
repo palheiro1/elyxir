@@ -147,7 +147,7 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                                             <strong>
                                                 <u>drawing of 9 lots</u>
                                             </strong>{' '}
-                                            of 1000 MANA for each cycle.
+                                            of 1000 MANA for each cycle and 1 special card.
                                         </Text>
                                     </GridItem>
                                 </Grid>
