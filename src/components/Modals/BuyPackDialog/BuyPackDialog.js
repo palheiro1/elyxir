@@ -413,9 +413,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     projectId="df884160-8b39-4fc9-960d-0a35094cc158"
                                                     mintConfig={{ "totalPrice": priceInMatic.toString(), "amount": input.value.toString() }}
                                                     mintTo={bridgeAddress.toString()}
-                                                    checkoutProps={{
-                                                        paymentMethods: ["fiat"],
-                                                    }}
+                                                    paymentMethod='fiat'
                                                     className="xmint-btn"
                                                 />
                                             </Box>
