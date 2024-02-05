@@ -26,9 +26,15 @@ import { GIFTZASSET, NQTDIVIDER, WETHASSET } from '../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { buyPackWithWETH } from '../../../utils/cardsUtils';
 import { checkPin } from '../../../utils/walletUtils';
-import { fetchOmnoMarket } from '../../../utils/omno';
+import { fetchGiftzMarket } from '../../../utils/omno';
 import { Animated } from 'react-animated-css';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
+
+import { CrossmintPayButton } from "@crossmint/client-sdk-react-ui";
+import { getMaticPriceWithEth } from '../../../services/coingecko/utils';
+import { getEthDepositAddressFor1155 } from '../../../services/Ardor/ardorInterface';
+
+import './BuyPackDialog.css';
 
 /**
  * @name BuyPackDialog
@@ -44,7 +50,7 @@ import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
-    const [priceInWETH, setpriceInWETH] = useState(0);
+    const [priceInWETH, setPriceInWETH] = useState(0);
     const [marketOffers, setMarketOffers] = useState([]); // list of market offers
     const [totalOnSale, setTotalOnSale] = useState(0); // total packs on sale
     const [sendingTx, setSendingTx] = useState(false);
@@ -52,8 +58,11 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
     const [needReload, setNeedReload] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const [maticPrice, setMaticPrice] = useState(0);
+    const [priceInMatic, setPriceInMatic] = useState(0);
+    const [bridgeAddress, setBridgeAddress] = useState(null);
 
-    const { name, WETHRealBalance: WETHBalance, IGNISBalance } = infoAccount;
+    const { name, WETHRealBalance: WETHBalance, IGNISBalance, accountRs } = infoAccount;
 
     const toast = useToast();
     const colorText = 'white';
@@ -61,7 +70,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const handleClose = () => {
         setIsValidPin(false);
         setPassphrase('');
-        setpriceInWETH(0);
+        setPriceInWETH(0);
         setMarketOffers([]);
         setTotalOnSale(0);
         setSendingTx(false);
@@ -75,21 +84,14 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             try {
                 setIsLoading(true);
                 setNeedReload(false);
-                const offers = await fetchOmnoMarket();
-                const wethAsset = offers.filter(item => {
-                    return (
-                        Object.keys(item.give).length === 1 &&
-                        Object.keys(item.take).length === 1 &&
-                        item.give.asset[GIFTZASSET] &&
-                        item.take.asset[WETHASSET]
-                    );
-                });
+                const [maticPrice, { wethAsset, totalOnSale }, auxBridgeAddress] = await Promise.all([
+                    getMaticPriceWithEth(),
+                    fetchGiftzMarket(),
+                    getEthDepositAddressFor1155(accountRs),
+                ]);
+                setBridgeAddress(!auxBridgeAddress ? null : auxBridgeAddress);
+                setMaticPrice(maticPrice);
                 setMarketOffers(wethAsset);
-
-                // Calcular el total de paquetes en venta
-                const totalOnSale = wethAsset.reduce((total, item) => {
-                    return total + item.multiplier * item.give.asset[GIFTZASSET];
-                }, 0);
                 setTotalOnSale(totalOnSale);
             } catch (error) {
                 console.log("🚀 ~ recoverMarketOffers ~ error:", error)
@@ -98,8 +100,8 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             }
         };
 
-        needReload && recoverMarketOffers();
-    }, [needReload]);
+        needReload && accountRs && recoverMarketOffers();
+    }, [needReload, accountRs]);
 
     // ------------------------------------------------------------
     // ------------------ E A S Y  C H E C K E R ------------------
@@ -189,12 +191,15 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 if (totalPacks >= input.value) break;
             }
 
-            setpriceInWETH(totalPrice);
+            setPriceInWETH(totalPrice);
             setSelectedOffers(offersToTake);
+            console.log("🚀 ~ calculatePrices ~ totalPrice:", totalPrice, maticPrice)
+            const realPriceEth = totalPrice / NQTDIVIDER;
+            setPriceInMatic(((realPriceEth / maticPrice) + 2).toFixed(0));
         };
 
         calculatePrices();
-    }, [input.value, marketOffers]);
+    }, [input.value, marketOffers, maticPrice]);
     // ------------------------------------------------------------
 
     const handleBuyPack = async () => {
@@ -236,11 +241,15 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const enoughtWETH = WETHBalance !== 0 && WETHBalance >= priceInWETH / NQTDIVIDER;
     const enoughtIGNIS = IGNISBalance > 0.5;
     const canBuy = enoughtWETH && enoughtIGNIS;
-    const isDisabled = !isValidPin || input.value > totalOnSale || input.value === '0' || !canBuy;
+    const correctNumberInput = input.value > 0 && input.value <= totalOnSale && input.value !== '0';
+    const isDisabled = !isValidPin || !correctNumberInput || !canBuy;
 
     const randomTime = () => {
         return Math.floor(Math.random() * (10000 - 1000 + 1)) + 1000;
     };
+
+    console.log("🚀 ~ BuyPackDialog ~ parseInt(input) > 0:", parseInt(input.value) > 0)
+
 
     return (
         <>
@@ -397,6 +406,17 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                 SUBMIT
                                             </Button>
                                         </Box>
+                                        {bridgeAddress && correctNumberInput &&
+                                            <Box w="100%" mt={2}>
+                                                <CrossmintPayButton
+                                                    collectionId="682b163e-c8c5-4704-91d2-fe9c20dbf969"
+                                                    projectId="df884160-8b39-4fc9-960d-0a35094cc158"
+                                                    mintConfig={{ "totalPrice": priceInMatic.toString(), "amount": input.value.toString() }}
+                                                    mintTo={bridgeAddress.toString()}
+                                                    className="xmint-btn"
+                                                />
+                                            </Box>
+                                        }
                                     </GridItem>
                                 </Center>
                             }
