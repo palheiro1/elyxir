@@ -260,7 +260,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 <AlertDialogOverlay bgColor="blackAlpha.500" />
 
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor="#9f3772" shadow="dark-lg" color="white">
-                    <AlertDialogHeader textAlign="center">BUY A PACK OF CARDS</AlertDialogHeader>
+                    <AlertDialogHeader textAlign="center">BUY A CARD PACK</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>
                         <Grid templateColumns="repeat(2, 1fr)">
@@ -305,6 +305,11 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                         }}>Credit Card</option>
                                                     }
                                                 </Select>
+                                            </Center>
+                                            <Center>
+                                                <Text fontSize="xs" color={'whiteAlpha.600'}>
+                                                    Select between wETH or credit card.
+                                                </Text>
                                             </Center>
                                         </Box>
                                         <Box mt={6}>
