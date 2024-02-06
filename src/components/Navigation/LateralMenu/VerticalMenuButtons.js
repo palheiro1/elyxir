@@ -16,6 +16,13 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
     // ---------------------------------------------
     const buttons = [
         {
+            text: 'Battlegrounds',
+            onClick: () => setOption(12),
+            hoverBg: 'rgba(159, 55, 114, 0.75)',
+            bgColor: '#9f3772',
+            textColor: textColor(12),
+        },
+        {
             icon: '/images/icons/menu/BuyPack.png',
             text: 'Buy pack',
             onClick: () => setOption(7),
@@ -145,9 +152,11 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
                     textColor={textColor}
                     onClick={onClick}>
                     <Stack direction="row" align="center" w="100%">
-                        <Box minW={"2rem"} ml={isActive ? -1 : 0} mr={isActive ? 1 : 0}>
-                            <Image src={icon} w={isActive ? '30px' : '25px'} />
-                        </Box>
+                        {icon && (
+                            <Box minW={"2rem"} ml={isActive ? -1 : 0} mr={isActive ? 1 : 0}>
+                                <Image src={icon} w={isActive ? '30px' : '25px'} />
+                            </Box>
+                        )}
                         <Text fontSize="sm" fontWeight={fontWeight}>
                             {text}
                         </Text>

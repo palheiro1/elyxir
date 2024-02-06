@@ -69,6 +69,7 @@ import Book from '../../components/Pages/BookPage/Book';
 import { firstTimeToast, okToast } from '../../utils/alerts';
 import OpenPackDialog from '../../components/Modals/OpenPackDialog/OpenPackDialog';
 import { getOmnoGiftzBalance } from '../../services/Ardor/omnoInterface';
+import Battlegrounds from '../../components/Pages/BattlegroundsPage/Battlegrounds';
 
 /**
  * @name Home
@@ -521,6 +522,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             <ArdorChat infoAccount={infoAccount} />,
             <Book cards={cards} />,
             '',
+            <Battlegrounds />,
         ],
         [
             infoAccount,
