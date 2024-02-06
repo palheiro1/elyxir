@@ -15,7 +15,7 @@ import {
     Input,
     PinInput,
     PinInputField,
-    Stack,
+    Select,
     Text,
     useNumberInput,
     useToast,
@@ -61,6 +61,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [maticPrice, setMaticPrice] = useState(0);
     const [priceInMatic, setPriceInMatic] = useState(0);
     const [bridgeAddress, setBridgeAddress] = useState(null);
+    const [paymentMethod, setPaymentMethod] = useState('wETH');
 
     const { name, WETHRealBalance: WETHBalance, IGNISBalance, accountRs } = infoAccount;
 
@@ -193,7 +194,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
             setPriceInWETH(totalPrice);
             setSelectedOffers(offersToTake);
-            console.log("🚀 ~ calculatePrices ~ totalPrice:", totalPrice, maticPrice)
             const realPriceEth = totalPrice / NQTDIVIDER;
             setPriceInMatic(((realPriceEth / maticPrice) + 2).toFixed(0));
         };
@@ -248,9 +248,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
         return Math.floor(Math.random() * (10000 - 1000 + 1)) + 1000;
     };
 
-    console.log("🚀 ~ BuyPackDialog ~ parseInt(input) > 0:", parseInt(input.value) > 0)
-
-
     return (
         <>
             <AlertDialog
@@ -288,19 +285,26 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                 Payment method
                                             </Text>
                                             <Center w="100%">
-                                                <Stack direction="row" w="100%">
-                                                    <Box
-                                                        border="1px solid #9f3772"
-                                                        textAlign="center"
-                                                        w="100%"
-                                                        bgColor="blackAlpha.400"
-                                                        px={4}
-                                                        py={2}
-                                                        fontWeight="bold"
-                                                        rounded="lg">
-                                                        wETH
-                                                    </Box>
-                                                </Stack>
+                                                <Select
+                                                    border="1px solid #9f3772"
+                                                    textAlign="center"
+                                                    w="100%"
+                                                    bgColor="blackAlpha.400"
+                                                    fontWeight="bold"
+                                                    rounded="lg"
+                                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                                >
+                                                    <option value="wETH" style={{
+                                                        backgroundColor: '#6b254d',
+                                                        borderRadius: '1rem',
+                                                    }}>wETH</option>
+                                                    {bridgeAddress &&
+                                                        <option value="CreditCard" style={{
+                                                            backgroundColor: '#6b254d',
+                                                            borderRadius: '1rem',
+                                                        }}>Credit Card</option>
+                                                    }
+                                                </Select>
                                             </Center>
                                         </Box>
                                         <Box mt={6}>
@@ -337,78 +341,85 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     </Button>
                                                 </HStack>
                                             </Center>
-                                            <Center>
-                                                <Text fontSize="xs" color={'whiteAlpha.600'}>
-                                                    {totalOnSale} GIFTZ availables
-                                                </Text>
-                                            </Center>
+                                            {paymentMethod === 'wETH' && (
+                                                <Center>
+                                                    <Text fontSize="xs" color={'whiteAlpha.600'}>
+                                                        {totalOnSale} GIFTZ availables
+                                                    </Text>
+                                                </Center>
+                                            )}
                                         </Box>
+                                        {paymentMethod === 'wETH' && (
+                                            <>
+                                                <Box mt={6}>
+                                                    <Text textAlign="center" my={2}>
+                                                        Total price
+                                                    </Text>
+                                                    <Center>
+                                                        <Text fontWeight="bold" fontSize="2xl">
+                                                            {priceInWETH / NQTDIVIDER} wETH
+                                                        </Text>
+                                                    </Center>
+                                                </Box>
 
-                                        <Box mt={6}>
-                                            <Text textAlign="center" my={2}>
-                                                Total price
-                                            </Text>
-                                            <Center>
-                                                <Text fontWeight="bold" fontSize="2xl">
-                                                    {priceInWETH / NQTDIVIDER} wETH
-                                                </Text>
-                                            </Center>
-                                        </Box>
+                                                {totalOnSale === 0 && (
+                                                    <Text textAlign="center" color="#9f3772" fontWeight="bold">
+                                                        There are no GIFTZ left in the machine. You can wait for it to refill or buy
+                                                        them on the secondary market.
+                                                    </Text>
+                                                )}
 
-                                        {totalOnSale === 0 && (
-                                            <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                                There are no GIFTZ left in the machine. You can wait for it to refill or buy
-                                                them on the secondary market.
-                                            </Text>
+                                                {!enoughtWETH && (
+                                                    <Text textAlign="center" color="#9f3772" fontWeight="bold">
+                                                        You don't have enough wETH
+                                                    </Text>
+                                                )}
+
+                                                {!enoughtIGNIS && (
+                                                    <Text textAlign="center" color="#9f3772" fontWeight="bold">
+                                                        You don't have enough IGNIS (0.5 IGNIS)
+                                                    </Text>
+                                                )}
+
+                                                <Center>
+                                                    <Box py={2} mt={2}>
+                                                        <HStack spacing={4}>
+                                                            <PinInput
+                                                                size="lg"
+                                                                onComplete={handleCompletePin}
+                                                                onChange={handleCompletePin}
+                                                                isInvalid={!isValidPin}
+                                                                variant="filled"
+                                                                mask>
+                                                                <PinInputField bgColor={'#6b254d'} />
+                                                                <PinInputField bgColor={'#6b254d'} />
+                                                                <PinInputField bgColor={'#6b254d'} />
+                                                                <PinInputField bgColor={'#6b254d'} />
+                                                            </PinInput>
+                                                        </HStack>
+                                                    </Box>
+                                                </Center>
+
+                                                <Box w="100%" mt={2}>
+                                                    <Button
+                                                        color="white"
+                                                        isDisabled={isDisabled || sendingTx}
+                                                        bgColor={'#6b254d'}
+                                                        fontWeight={'black'}
+                                                        _hover={{ bgColor: '#9f3772' }}
+                                                        w="100%"
+                                                        py={6}
+                                                        onClick={handleBuyPack}>
+                                                        SUBMIT
+                                                    </Button>
+                                                </Box>
+                                            </>
                                         )}
 
-                                        {!enoughtWETH && (
-                                            <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                                You don't have enough wETH
-                                            </Text>
-                                        )}
-
-                                        {!enoughtIGNIS && (
-                                            <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                                You don't have enough IGNIS (0.5 IGNIS)
-                                            </Text>
-                                        )}
-
-                                        <Center>
-                                            <Box py={2} mt={2}>
-                                                <HStack spacing={4}>
-                                                    <PinInput
-                                                        size="lg"
-                                                        onComplete={handleCompletePin}
-                                                        onChange={handleCompletePin}
-                                                        isInvalid={!isValidPin}
-                                                        variant="filled"
-                                                        mask>
-                                                        <PinInputField bgColor={'#6b254d'} />
-                                                        <PinInputField bgColor={'#6b254d'} />
-                                                        <PinInputField bgColor={'#6b254d'} />
-                                                        <PinInputField bgColor={'#6b254d'} />
-                                                    </PinInput>
-                                                </HStack>
-                                            </Box>
-                                        </Center>
-
-                                        <Box w="100%" mt={2}>
-                                            <Button
-                                                color="white"
-                                                isDisabled={isDisabled || sendingTx}
-                                                bgColor={'#6b254d'}
-                                                fontWeight={'black'}
-                                                _hover={{ bgColor: '#9f3772' }}
-                                                w="100%"
-                                                py={6}
-                                                onClick={handleBuyPack}>
-                                                SUBMIT
-                                            </Button>
-                                        </Box>
-                                        {bridgeAddress && correctNumberInput &&
-                                            <Box w="100%" mt={2}>
+                                        {paymentMethod === 'CreditCard' &&
+                                            <Box w="100%" mt={8}>
                                                 <CrossmintPayButton
+                                                    disabled={!correctNumberInput}
                                                     collectionId="682b163e-c8c5-4704-91d2-fe9c20dbf969"
                                                     projectId="df884160-8b39-4fc9-960d-0a35094cc158"
                                                     mintConfig={{ "totalPrice": priceInMatic.toString(), "amount": input.value.toString() }}
