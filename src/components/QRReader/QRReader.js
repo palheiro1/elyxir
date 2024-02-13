@@ -5,13 +5,9 @@ const QRReader = ({ handleInput }) => {
         <QrReader
             constraints={{ facingMode: 'environment' }}
             style={{ width: '100%' }}
-            onResult={(result, error) => {
+            onResult={(result) => {
                 if (result) {
                     handleInput(result?.text);
-                }
-
-                if (error) {
-                    console.error('🚀 ~ file: QRReader.js:23 ~ QRReader ~ error:', error);
                 }
             }}
         />
