@@ -63,9 +63,14 @@ const Overview = ({ blockchainStatus }) => {
                     rounded="md"
                     p={4}
                     px={{ base: 2, lg: 12 }}>
-                    <Heading textAlign={'center'} fontWeight={'light'} fontSize={'6xl'} color="#2f9088">
-                        Welcome to Mythical Beings
-                    </Heading>
+                    <Center gap={2}>
+                        <Heading textAlign={'center'} fontWeight={'light'} fontSize={'6xl'} color="#2f9088">
+                            Welcome to
+                        </Heading>
+                        <Heading textAlign={'center'} fontWeight={'medium'} fontSize={'6xl'} color="#2f9088">
+                            Mythical Beings
+                        </Heading>
+                    </Center>
                     <Text my={2} color={textColor}>
                         Explore the rich tapestry of Mythical Beings, where every card is a treasure waiting to be
                         unearthed. Dive into the lore, uncover forgotten legends, and become a collector of mythical
@@ -144,18 +149,10 @@ const Overview = ({ blockchainStatus }) => {
                                     />
                                 }
                             />
-                        </Stack>
-                    </Center>
 
-                    <Stack
-                        gap={{ base: 0, lg: 8, xl: 16 }}
-                        direction={{ base: 'column', lg: 'row' }}
-                        align={{ base: 'center', lg: 'flex-end' }}
-                        justify={'center'}>
-                        <Box my={4} pl={{ base: 6, xl: 0 }} mr={{ base: 0, xl: 8 }}>
                             <FlowItem
                                 number={5}
-                                title="The Jackpot: Your Ultimate Challenge Awaits!"
+                                title="The Jackpot: Your Ultimate Challenge!"
                                 color={textJackpot}
                                 button={
                                     <MenuButton
@@ -168,6 +165,16 @@ const Overview = ({ blockchainStatus }) => {
                                     />
                                 }
                             />
+                        </Stack>
+                    </Center>
+
+                    <Stack
+                        gap={{ base: 0, lg: 8, xl: 16 }}
+                        direction={{ base: 'column', lg: 'row' }}
+                        align={{ base: 'center', lg: 'flex-end' }}
+                        justify={'center'}>
+                        <Box my={4} pl={{ base: 6, xl: 0 }} mr={{ base: 0, xl: 8 }}>
+
                         </Box>
                         <Box pl={8}>
                             <Jackpot blockchainStatus={blockchainStatus} cStyle={1} />
