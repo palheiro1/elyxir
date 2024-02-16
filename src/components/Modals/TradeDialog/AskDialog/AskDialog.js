@@ -9,6 +9,7 @@ import {
     Box,
     Button,
     Center,
+    Collapse,
     FormControl,
     FormLabel,
     HStack,
@@ -30,7 +31,7 @@ import {
 import { useEffect, useState } from 'react';
 import { NQTDIVIDER } from '../../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../../utils/alerts';
-import { checkPin, sendAskOrder } from '../../../../utils/walletUtils';
+import { checkPin, roundNumberWithMaxDecimals, sendAskOrder } from '../../../../utils/walletUtils';
 import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
 import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidList';
 import { getUser } from '../../../../utils/storage';
@@ -305,6 +306,7 @@ const AskDialog = ({
                                                     border="none"
                                                     textAlign="center"
                                                     fontWeight="bold"
+                                                    value={roundNumberWithMaxDecimals(parseFloat(input.value), 8)}
                                                 />
 
                                                 <Button
@@ -343,6 +345,31 @@ const AskDialog = ({
                                             <FormLabel>Price per {!isCurrency ? 'card' : currencyName}</FormLabel>
                                         </FormControl>
                                     </Box>
+                                    <Collapse in={priceCard > 0 && input.value > 0}>
+                                        <Box pt={4}>
+                                            <FormControl variant="floatingModalTransparent" id="PricePerCard">
+                                                <InputGroup border="1px" borderColor={borderColor} rounded="lg">
+                                                    <NumberInput isReadOnly value={roundNumberWithMaxDecimals(priceCard * input.value, 8)}>
+                                                        <NumberInputField
+                                                            rounded="none"
+                                                            border="none"
+                                                            textAlign="center"
+                                                            fontWeight="bold"
+                                                        />
+                                                    </NumberInput>
+                                                    <InputRightAddon
+                                                        fontSize="sm"
+                                                        border="none"
+                                                        children="IGNIS"
+                                                        bgColor="transparent"
+                                                        rounded="none"
+                                                        borderLeftRadius="lg"
+                                                    />
+                                                </InputGroup>
+                                                <FormLabel>Total amount</FormLabel>
+                                            </FormControl>
+                                        </Box>
+                                    </Collapse>
                                     <Box py={2}>
                                         <FormControl variant="floatingModalTransparent" id="SecurityPIN">
                                             <HStack spacing={4}>
