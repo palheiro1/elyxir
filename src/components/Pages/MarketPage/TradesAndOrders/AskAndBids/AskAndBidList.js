@@ -20,7 +20,7 @@ import { MdDeleteForever } from 'react-icons/md';
  * @author Jesús Sánchez Fernández
  * @version 1.0.0
  */
-const AskAndBidList = ({ orders, name, username, canDelete = false }) => {
+const AskAndBidList = ({ orders, name, username, canDelete = false, isCurrency = false }) => {
     const refCancel = useRef();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedOrder, setSelectedOrder] = useState();
@@ -54,7 +54,7 @@ const AskAndBidList = ({ orders, name, username, canDelete = false }) => {
                                             fontWeight="black">
                                             {order.type === 'ask' ? 'SELL' : 'BUY'}
                                         </Td>
-                                        <Td>{order.quantityQNT}</Td>
+                                        <Td>{isCurrency ? order.quantityQNT / NQTDIVIDER : order.quantityQNT}</Td>
                                         <Td>{order.priceNQTPerShare / NQTDIVIDER}</Td>
                                         <Td>
                                             <Box

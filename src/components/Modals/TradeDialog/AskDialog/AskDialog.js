@@ -436,6 +436,7 @@ const AskDialog = ({
                                     name={isCurrency ? currencyName : card.name}
                                     canDelete={true}
                                     username={username}
+                                    isCurrency={isCurrency}
                                 />
                             </Box>
                         </VStack>
