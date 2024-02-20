@@ -1,11 +1,14 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Center } from '@chakra-ui/react';
+import { Maps } from './Maps';
 
 const Battlegrounds = () => {
-    return(
+    return (
         <Box>
-            <h1>Battlegrounds</h1>
+            <Center>
+                <Maps />
+            </Center>
         </Box>
-    )
-}
+    );
+};
 
 export default Battlegrounds;

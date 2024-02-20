@@ -1,0 +1,7 @@
+.containerMap path{
+    cursor: pointer;
+    &:hover {
+        fill: black;
+        
+    }
+}
