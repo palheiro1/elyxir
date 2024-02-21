@@ -324,7 +324,7 @@ const AskDialog = ({
                                     <Box py={2}>
                                         <FormControl variant="floatingModalTransparent" id="PricePerCard">
                                             <InputGroup border="1px" borderColor={borderColor} rounded="lg">
-                                                <NumberInput value={priceCard}>
+                                                <NumberInput value={priceCard} precision={2}>
                                                     <NumberInputField
                                                         rounded="none"
                                                         border="none"
