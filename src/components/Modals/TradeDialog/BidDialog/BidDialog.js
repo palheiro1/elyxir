@@ -95,10 +95,19 @@ const BidDialog = ({
     // Filter only my orders
     userOrders = userOrders.filter(order => order.accountRS === accountRS);
 
+    // ------------------ Quantity ------------------
     const handlePriceCard = e => {
         e.preventDefault();
-        setPriceCard(parseFloat(e.target.value));
+        const value = parseFloat(e.target.value);
+
+        if (value <= 0 || isNaN(value)) {
+            setPriceCard(0);
+            return;
+        }
+
+        setPriceCard(value);
     };
+    // -----------------------------------------------
 
     let inputStep = 1,
         inputPrecision = 0;
@@ -129,6 +138,15 @@ const BidDialog = ({
     }
 
     const [value, setValue] = useState(0);
+
+    const handleChange = value => {
+        if (value < 0) {
+            setValue(0);
+            return;
+        }
+        setValue(value);
+    };
+
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: inputStep,
         defaultValue: 0,
@@ -136,7 +154,7 @@ const BidDialog = ({
         max: isCurrency ? 999999 : 999,
         precision: inputPrecision,
         value,
-        onChange: setValue,
+        onChange: handleChange,
     });
 
     const inc = getIncrementButtonProps();

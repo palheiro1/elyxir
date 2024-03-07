@@ -28,6 +28,7 @@ import { buyPackWithWETH } from '../../../utils/cardsUtils';
 import { checkPin } from '../../../utils/walletUtils';
 import { fetchOmnoMarket } from '../../../utils/omno';
 import { Animated } from 'react-animated-css';
+import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 
 /**
  * @name BuyPackDialog
@@ -50,8 +51,9 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [selectedOffers, setSelectedOffers] = useState([]); // selected offers
 
     const [needReload, setNeedReload] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const { name, WETHRealBalance:WETHBalance, IGNISBalance } = infoAccount;
+    const { name, WETHRealBalance: WETHBalance, IGNISBalance } = infoAccount;
 
     const toast = useToast();
     const colorText = 'white';
@@ -70,23 +72,30 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
     useEffect(() => {
         const recoverMarketOffers = async () => {
-            setNeedReload(false);
-            const offers = await fetchOmnoMarket();
-            const wethAsset = offers.filter(item => {
-                return (
-                    Object.keys(item.give).length === 1 &&
-                    Object.keys(item.take).length === 1 &&
-                    item.give.asset[GIFTZASSET] &&
-                    item.take.asset[WETHASSET]
-                );
-            });
-            setMarketOffers(wethAsset);
+            try {
+                setIsLoading(true);
+                setNeedReload(false);
+                const offers = await fetchOmnoMarket();
+                const wethAsset = offers.filter(item => {
+                    return (
+                        Object.keys(item.give).length === 1 &&
+                        Object.keys(item.take).length === 1 &&
+                        item.give.asset[GIFTZASSET] &&
+                        item.take.asset[WETHASSET]
+                    );
+                });
+                setMarketOffers(wethAsset);
 
-            // Calcular el total de paquetes en venta
-            const totalOnSale = wethAsset.reduce((total, item) => {
-                return total + item.multiplier * item.give.asset[GIFTZASSET];
-            }, 0);
-            setTotalOnSale(totalOnSale);
+                // Calcular el total de paquetes en venta
+                const totalOnSale = wethAsset.reduce((total, item) => {
+                    return total + item.multiplier * item.give.asset[GIFTZASSET];
+                }, 0);
+                setTotalOnSale(totalOnSale);
+            } catch (error) {
+                console.log("🚀 ~ recoverMarketOffers ~ error:", error)
+            } finally {
+                setIsLoading(false);
+            }
         };
 
         needReload && recoverMarketOffers();
@@ -261,133 +270,136 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                 </Center>
                             </GridItem>
 
-                            <Center>
-                                <GridItem>
-                                    <Box>
-                                        <Text textAlign="center" mb={2}>
-                                            Payment method
-                                        </Text>
-                                        <Center w="100%">
-                                            <Stack direction="row" w="100%">
-                                                <Box
-                                                    border="1px solid #9f3772"
-                                                    textAlign="center"
-                                                    w="100%"
-                                                    bgColor="blackAlpha.400"
-                                                    px={4}
-                                                    py={2}
-                                                    fontWeight="bold"
-                                                    rounded="lg">
-                                                    wETH
-                                                </Box>
-                                            </Stack>
-                                        </Center>
-                                    </Box>
-                                    <Box mt={6}>
-                                        <Text textAlign="center" my={2}>
-                                            Number of GIFTZ
-                                        </Text>
-                                        <Center>
-                                            <HStack spacing={0} border="1px" rounded="lg" borderColor="#9f3772">
-                                                <Button
-                                                    {...dec}
-                                                    rounded="none"
-                                                    borderLeftRadius="lg"
-                                                    color={colorText}
-                                                    _hover={{ bgColor: '#9f3772' }}
-                                                    bgColor={'#6b254d'}>
-                                                    -
-                                                </Button>
-                                                <Input
-                                                    {...input}
-                                                    rounded="none"
-                                                    border="none"
-                                                    textAlign="center"
-                                                    fontWeight="bold"
-                                                    disabled
-                                                />
-                                                <Button
-                                                    {...inc}
-                                                    bgColor={'#6b254d'}
-                                                    rounded="none"
-                                                    borderRightRadius="lg"
-                                                    _hover={{ bgColor: '#9f3772' }}
-                                                    color={colorText}>
-                                                    +
-                                                </Button>
-                                            </HStack>
-                                        </Center>
-                                        <Center>
-                                            <Text fontSize="xs" color={'whiteAlpha.600'}>
-                                                {totalOnSale} GIFTZ availables
+                            {isLoading ? <LoadingSpinner />
+                                :
+                                <Center>
+                                    <GridItem>
+                                        <Box>
+                                            <Text textAlign="center" mb={2}>
+                                                Payment method
                                             </Text>
-                                        </Center>
-                                    </Box>
-
-                                    <Box mt={6}>
-                                        <Text textAlign="center" my={2}>
-                                            Total price
-                                        </Text>
-                                        <Center>
-                                            <Text fontWeight="bold" fontSize="2xl">
-                                                {priceInWETH / NQTDIVIDER} wETH
-                                            </Text>
-                                        </Center>
-                                    </Box>
-
-                                    {totalOnSale === 0 && (
-                                        <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                            There are no GIFTZ left in the machine. You can wait for it to refill or buy
-                                            them on the secondary market.
-                                        </Text>
-                                    )}
-
-                                    {!enoughtWETH && (
-                                        <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                            You don't have enough wETH
-                                        </Text>
-                                    )}
-
-                                    {!enoughtIGNIS && (
-                                        <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                            You don't have enough IGNIS (0.5 IGNIS)
-                                        </Text>
-                                    )}
-
-                                    <Center>
-                                        <Box py={2} mt={2}>
-                                            <HStack spacing={4}>
-                                                <PinInput
-                                                    size="lg"
-                                                    onComplete={handleCompletePin}
-                                                    onChange={handleCompletePin}
-                                                    isInvalid={!isValidPin}
-                                                    variant="filled"
-                                                    mask>
-                                                    <PinInputField bgColor={'#6b254d'} />
-                                                    <PinInputField bgColor={'#6b254d'} />
-                                                    <PinInputField bgColor={'#6b254d'} />
-                                                    <PinInputField bgColor={'#6b254d'} />
-                                                </PinInput>
-                                            </HStack>
+                                            <Center w="100%">
+                                                <Stack direction="row" w="100%">
+                                                    <Box
+                                                        border="1px solid #9f3772"
+                                                        textAlign="center"
+                                                        w="100%"
+                                                        bgColor="blackAlpha.400"
+                                                        px={4}
+                                                        py={2}
+                                                        fontWeight="bold"
+                                                        rounded="lg">
+                                                        wETH
+                                                    </Box>
+                                                </Stack>
+                                            </Center>
                                         </Box>
-                                    </Center>
+                                        <Box mt={6}>
+                                            <Text textAlign="center" my={2}>
+                                                Number of GIFTZ
+                                            </Text>
+                                            <Center>
+                                                <HStack spacing={0} border="1px" rounded="lg" borderColor="#9f3772">
+                                                    <Button
+                                                        {...dec}
+                                                        rounded="none"
+                                                        borderLeftRadius="lg"
+                                                        color={colorText}
+                                                        _hover={{ bgColor: '#9f3772' }}
+                                                        bgColor={'#6b254d'}>
+                                                        -
+                                                    </Button>
+                                                    <Input
+                                                        {...input}
+                                                        rounded="none"
+                                                        border="none"
+                                                        textAlign="center"
+                                                        fontWeight="bold"
+                                                        disabled
+                                                    />
+                                                    <Button
+                                                        {...inc}
+                                                        bgColor={'#6b254d'}
+                                                        rounded="none"
+                                                        borderRightRadius="lg"
+                                                        _hover={{ bgColor: '#9f3772' }}
+                                                        color={colorText}>
+                                                        +
+                                                    </Button>
+                                                </HStack>
+                                            </Center>
+                                            <Center>
+                                                <Text fontSize="xs" color={'whiteAlpha.600'}>
+                                                    {totalOnSale} GIFTZ availables
+                                                </Text>
+                                            </Center>
+                                        </Box>
 
-                                    <Box w="100%" mt={2}>
-                                        <Button
-                                            color="white"
-                                            isDisabled={isDisabled || sendingTx}
-                                            bgColor={'#6b254d'}
-                                            fontWeight={'black'}
-                                            _hover={{ bgColor: '#9f3772' }}
-                                            w="100%"
-                                            py={6}
-                                            onClick={handleBuyPack}>
-                                            SUBMIT
-                                        </Button>
-                                    </Box>
-                                </GridItem>
-                            </Center>
+                                        <Box mt={6}>
+                                            <Text textAlign="center" my={2}>
+                                                Total price
+                                            </Text>
+                                            <Center>
+                                                <Text fontWeight="bold" fontSize="2xl">
+                                                    {priceInWETH / NQTDIVIDER} wETH
+                                                </Text>
+                                            </Center>
+                                        </Box>
+
+                                        {totalOnSale === 0 && (
+                                            <Text textAlign="center" color="#9f3772" fontWeight="bold">
+                                                There are no GIFTZ left in the machine. You can wait for it to refill or buy
+                                                them on the secondary market.
+                                            </Text>
+                                        )}
+
+                                        {!enoughtWETH && (
+                                            <Text textAlign="center" color="#9f3772" fontWeight="bold">
+                                                You don't have enough wETH
+                                            </Text>
+                                        )}
+
+                                        {!enoughtIGNIS && (
+                                            <Text textAlign="center" color="#9f3772" fontWeight="bold">
+                                                You don't have enough IGNIS (0.5 IGNIS)
+                                            </Text>
+                                        )}
+
+                                        <Center>
+                                            <Box py={2} mt={2}>
+                                                <HStack spacing={4}>
+                                                    <PinInput
+                                                        size="lg"
+                                                        onComplete={handleCompletePin}
+                                                        onChange={handleCompletePin}
+                                                        isInvalid={!isValidPin}
+                                                        variant="filled"
+                                                        mask>
+                                                        <PinInputField bgColor={'#6b254d'} />
+                                                        <PinInputField bgColor={'#6b254d'} />
+                                                        <PinInputField bgColor={'#6b254d'} />
+                                                        <PinInputField bgColor={'#6b254d'} />
+                                                    </PinInput>
+                                                </HStack>
+                                            </Box>
+                                        </Center>
+
+                                        <Box w="100%" mt={2}>
+                                            <Button
+                                                color="white"
+                                                isDisabled={isDisabled || sendingTx}
+                                                bgColor={'#6b254d'}
+                                                fontWeight={'black'}
+                                                _hover={{ bgColor: '#9f3772' }}
+                                                w="100%"
+                                                py={6}
+                                                onClick={handleBuyPack}>
+                                                SUBMIT
+                                            </Button>
+                                        </Box>
+                                    </GridItem>
+                                </Center>
+                            }
                         </Grid>
                     </AlertDialogBody>
                 </AlertDialogContent>
