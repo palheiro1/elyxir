@@ -24,6 +24,8 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
     const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
     const { accountRs: account, IGNISBalance } = infoAccount;
 
+    const IS_JACKPOT_ENABLED = false;
+
     useEffect(() => {
         // Get remaining cards
         const getRemainingCards = () => {
@@ -72,12 +74,11 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
     const textParticipations =
         findParticipation && (myParticipation === 1 ? 'once' : findParticipation.quantity + ' times');
 
+    const canClaimJackpot = IS_JACKPOT_ENABLED && cards.length > 0 && remainingCards.length === 0;
+
     return (
         <Box>
-            <JackpotWidget
-                cStyle={2}
-                blockchainStatus={blockchainStatus}
-            />
+            <JackpotWidget cStyle={2} blockchainStatus={blockchainStatus} />
 
             {imParticipant && (
                 <Text mt={4} fontSize="2xl" textAlign="center" fontWeight="bolder">
@@ -92,7 +93,7 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
                         setCardsFiltered={setCardsFiltered}
                         needSpecials={false}
                         needSorting={false}
-                        rgbColor={"59, 83, 151"}
+                        rgbColor={'59, 83, 151'}
                     />
                     <RemainingCards
                         infoAccount={infoAccount}
@@ -103,7 +104,8 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
                     />
                 </>
             )}
-            {cards.length > 0 && remainingCards.length === 0 && (
+
+            {canClaimJackpot && (
                 <ClaimJackpot
                     username={infoAccount.name}
                     cards={totalNoSpecialCards}
