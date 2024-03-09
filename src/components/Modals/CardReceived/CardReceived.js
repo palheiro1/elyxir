@@ -15,14 +15,15 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
-import Hover from 'react-3d-hover';
-
 import Crypto from 'crypto-browserify';
 import equals from 'fast-deep-equal';
 
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import CardBadges from '../../Cards/CardBadges';
+
+import HoverCard from "@darenft/react-3d-hover-card";
+import "@darenft/react-3d-hover-card/dist/style.css";
 
 const CardReceived = ({ reference, isOpen, onClose, cards }) => {
     const [currentCards, setCurrentCards] = useState(cards);
@@ -57,9 +58,9 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
                     shadow="lg"
                     borderColor="whiteAlpha.400">
                     <Center w="100%">
-                        <Hover scale={1.075} perspective={200}>
+                        <HoverCard scaleFactor={1.4}>
                             <Image src={asset.cardImgUrl} alt="Card Pack" maxH="25rem" />
-                        </Hover>
+                        </HoverCard>
                     </Center>
                     <SimpleGrid columns={1} mt={2}>
                         <Heading textAlign="center">{asset.name}</Heading>
