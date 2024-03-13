@@ -33,7 +33,7 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
     useEffect(() => {
         const filterCards = () => {
             setNeedReload(false);
-            let filteredCards = new Array(...cards);
+            let filteredCards = [...cards];
 
             if (rarity !== 'All') {
                 filteredCards = filteredCards.filter(card => card.rarity === rarity);

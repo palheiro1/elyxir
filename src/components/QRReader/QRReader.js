@@ -1,7 +1,7 @@
-import { QrReader } from 'react-qr-reader';
+//import { QrReader } from 'react-qr-reader';
 
 const QRReader = ({ handleInput }) => {
-    return (
+    return null;/*(
         <QrReader
             constraints={{ facingMode: 'environment' }}
             style={{ width: '100%' }}
@@ -11,7 +11,7 @@ const QRReader = ({ handleInput }) => {
                 }
             }}
         />
-    );
+    );*/
 };
 
 export default QRReader;

@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useClearCache } from 'react-clear-cache';
+//import { useClearCache } from 'react-clear-cache';
 
 import { theme } from './themes/theme';
 
@@ -26,6 +26,7 @@ import Redeem from './pages/Redeem/Redeem';
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
     const isLogged = infoAccount.token !== null && infoAccount.accountRs !== null;
+    /*
     const { isLatestVersion, emptyCacheStorage } = useClearCache();
 
     useEffect(() => {
@@ -41,6 +42,7 @@ function App() {
 
         !isLatestVersion && checkVersion();
     }, [emptyCacheStorage, isLatestVersion]);
+    */
 
     return (
         <ChakraProvider theme={theme}>

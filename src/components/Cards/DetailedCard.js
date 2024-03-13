@@ -14,13 +14,15 @@ import {
     Text,
     useColorModeValue,
 } from '@chakra-ui/react';
-import Hover from 'react-3d-hover';
 import { RARITY_COLORS } from '../../data/CONSTANTS';
 
 import monsters from '../../data/monsters.json';
 import CreatureTabs from './DetailedCardViewTabs/CreatureTabs';
 import CultureTabs from './DetailedCardViewTabs/CultureTabs';
 import LocationTabs from './DetailedCardViewTabs/LocationTabs';
+
+import HoverCard from "@darenft/react-3d-hover-card";
+import "@darenft/react-3d-hover-card/dist/style.css";
 
 /**
  * @name DetailedCard
@@ -55,9 +57,9 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                     borderColor="whiteAlpha.400">
                     <Stack direction="row">
                         <Box mt="6%">
-                            <Hover perspective={300}>
+                            <HoverCard scaleFactor={1.4}>
                                 <Image src={image} alt={name} maxH="42rem" rounded="lg" />
-                            </Hover>
+                            </HoverCard>
                         </Box>
 
                         <Stack direction="column" align="center" w="100%">
