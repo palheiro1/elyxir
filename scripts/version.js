@@ -16,7 +16,7 @@ async function processLineByLine() {
             outputs.push(line);
         }
     } catch (err) {
-        console.err(err);
+        console.error(err);
     }
     return outputs;
 }
