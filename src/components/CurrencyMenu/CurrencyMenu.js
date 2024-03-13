@@ -176,7 +176,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     errorToast("Couldn't add token to MetaMask", toast);
                 }
             } catch (error) {
-                console.error('🚀 ~ error:', error);
+                console.error("🚀 ~ addToMetamask ~ error:", error)
                 errorToast("Couldn't add token to MetaMask", toast);
             }
         } else {

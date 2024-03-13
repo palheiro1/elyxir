@@ -14,6 +14,33 @@ import { GiCutDiamond } from 'react-icons/gi';
  */
 const VCountdown = ({ jackpotTimer, jackpotBalance, jackpotBalanceUSD }) => {
 
+    const useEffect = (() => {
+        console.log("Estoy useffect")
+        const getGemPrice = async () => {
+            const test = await fetch("https://interface.gateway.uniswap.org/v2/quote", {
+                "credentials": "omit",
+                "headers": {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0",
+                    "Accept": "*/*",
+                    "Accept-Language": "es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3",
+                    "Content-Type": "text/plain;charset=UTF-8",
+                    "x-request-source": "uniswap-web",
+                    "Sec-Fetch-Dest": "empty",
+                    "Sec-Fetch-Mode": "cors",
+                    "Sec-Fetch-Site": "same-site"
+                },
+                "referrer": "https://app.uniswap.org/",
+                "body": "{\"tokenInChainId\":137,\"tokenIn\":\"0x5F790ffA0695967A2d711872EcB4c7553e24794D\",\"tokenOutChainId\":137,\"tokenOut\":\"0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619\",\"amount\":\"9000000000000000000000\",\"sendPortionEnabled\":true,\"type\":\"EXACT_INPUT\",\"intent\":\"quote\",\"configs\":[{\"protocols\":[\"V2\",\"V3\",\"MIXED\"],\"enableUniversalRouter\":true,\"routingType\":\"CLASSIC\",\"enableFeeOnTransferFeeFetching\":true}]}",
+                "method": "POST",
+                "mode": "cors"
+            });
+            console.log("🚀 ~ getGemPrice ~ test:", test)
+
+        }
+
+        getGemPrice();
+    }, []);
+
     return (
         <Box>
             <Center>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Center } from '@chakra-ui/react';
+import { AbsoluteCenter, Box, Center, Flex, Heading, Stack, Text } from '@chakra-ui/react';
 
 // Components
 import HCountdown from './HCountdown';
@@ -9,7 +9,8 @@ import { BLOCKTIME, FREQUENCY } from '../../data/CONSTANTS';
 
 // Services
 //import { getBlockchainStatus } from '../../services/Ardor/ardorInterface';
-import { getJackpotBalance, getJackpotBalanceUSD, getJackpotParticipants } from '../../services/Jackpot/utils';
+import { getJackpotBalance, swapPriceEthtoUSD, getJackpotParticipants } from '../../services/Jackpot/utils';
+import { getGemPrice, getManaPrice } from '../../services/Ardor/evmInterface';
 
 /**
  * @name JackpotWidget
@@ -31,20 +32,51 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
         remainingBlocks: 'loading',
     });
 
-    const [jackpotBalance, setJackpotBalance] = useState(0);
-    const [jackpotBalanceUSD, setJackpotBalanceUSD] = useState(0);
+    const [jackpotBalance, setJackpotBalance] = useState({
+        wETH: 0,
+        GEM: 0,
+        Mana: 0
+    });
+
+    const [jackpotBalanceUSD, setJackpotBalanceUSD] = useState({
+        wETH: 0,
+        GEM: 0,
+        Mana: 0,
+        Sumanga: 0,
+        Total: 0,
+    });
     const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
 
     useEffect(() => {
         const fetchJackpotBalance = async () => {
             try {
-                const [jackpotBalance, responseParticipants] = await Promise.all([
+                const [jackpotBalance, responseParticipants, gemPrice, manaPrice] = await Promise.all([
                     getJackpotBalance(),
                     getJackpotParticipants(),
+                    getGemPrice(),
+                    getManaPrice()
                 ]);
-                setJackpotBalance(jackpotBalance);
-                const jackpotBalanceUSD = await getJackpotBalanceUSD(jackpotBalance);
-                setJackpotBalanceUSD(jackpotBalanceUSD);
+
+                setJackpotBalance({
+                    wETH: jackpotBalance,
+                    GEM: 9000,
+                    Mana: 9000
+                });
+
+                // const wETHinUSD = await swapPriceEthtoUSD(jackpotBalance);
+                const [wethUsd, gemUsd, manaUsd, sumangaUsd] = await Promise.all([
+                    swapPriceEthtoUSD(jackpotBalance),
+                    swapPriceEthtoUSD(gemPrice),
+                    swapPriceEthtoUSD(manaPrice),
+                    swapPriceEthtoUSD(0.25)
+                ]);
+                setJackpotBalanceUSD({
+                    wETH: wethUsd,
+                    GEM: gemUsd,
+                    Mana: manaUsd,
+                    Sumanga: sumangaUsd,
+                    Total: Number(wethUsd) + Number(gemUsd) + Number(manaUsd) + Number(sumangaUsd)
+                });
 
                 let auxParticipants = [];
                 let numParticipants = 0;
@@ -86,15 +118,34 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
 
     return (
         <Center py={4}>
-            <Box p={4} border="1px" borderColor={borderColor} rounded="lg" bg="blackAlpha" direction="row" bgColor={bgColor}>
-                <HCountdown
-                    cStyle={cStyle}
-                    jackpotTimer={jackpotTimer}
-                    numParticipants={participants.numParticipants}
-                    jackpotBalance={jackpotBalance}
-                    jackpotBalanceUSD={jackpotBalanceUSD}
-                />
-            </Box>
+            <Stack direction={{ base: 'column', md: 'row' }} w="100%" gap={3}>
+                <Box p={6} border="1px" borderColor={borderColor} rounded="lg" bg="blackAlpha" direction="row" bgColor={bgColor}>
+                    <HCountdown
+                        cStyle={cStyle}
+                        jackpotTimer={jackpotTimer}
+                        numParticipants={participants.numParticipants}
+                        jackpotBalance={jackpotBalance}
+                        jackpotBalanceUSD={jackpotBalanceUSD}
+                    />
+                </Box>
+                <Box p={6} border="1px" borderColor={borderColor} rounded="lg" bg="blackAlpha" direction="row" bgColor={bgColor}>
+                    <Heading as="h3" size="lg" color="white">
+                        JACKPOT
+                    </Heading>
+                    <Box position={"relative"} w={"100%"} h={"100%"}>
+                        <AbsoluteCenter>
+                            <Flex align={"center"} gap={2}>
+                                <Text textAlign={"center"} h="100%" fontWeight={"bold"} fontSize={"3xl"}>
+                                    {(jackpotBalanceUSD.Total).toFixed(2)}
+                                </Text>
+                                <Text textAlign={"center"} fontSize={"xl"}>
+                                    USD
+                                </Text>
+                            </Flex>
+                        </AbsoluteCenter>
+                    </Box>
+                </Box>
+            </Stack>
         </Center>
     );
 };

@@ -21,6 +21,7 @@ import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
 
 // Styles
 import './App.css';
+import Redeem from './pages/Redeem/Redeem';
 
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
@@ -55,6 +56,8 @@ function App() {
                 <Route path="/register" element={<Register />} />
 
                 <Route path="/restore" element={<Restore />} />
+
+                <Route path="/redeem" element={<Redeem />} />
 
                 {/* HOME PAGE */}
                 <Route path="/home" element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />} />

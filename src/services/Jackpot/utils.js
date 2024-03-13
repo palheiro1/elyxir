@@ -12,7 +12,7 @@ export const getJackpotBalance = async () => {
     return (JACKPOTHALF ? balance / 2 : balance).toFixed(6);
 };
 
-export const getJackpotBalanceUSD = async jackpotBalance => {
+export const swapPriceEthtoUSD = async jackpotBalance => {
     // const ignisPrice = await getIgnisPrice();
     const ethPrice = await getEthPrice();
     return (jackpotBalance * ethPrice).toFixed(6);
