@@ -116,12 +116,24 @@ export const getUser = (name) => {
  */
 export const getVersion = () => {
     try {
-        const item = localStorage.getItem('APP_VERSION');
-        return item !== null ? JSON.parse(item) : null;
+        return localStorage.getItem('MythicalVersion');
     } catch (exception) {
-        return {};
+        console.error("🚀 ~ getVersion ~ exception:", exception)
+        return null;
     }
 }
+
+export const setVersion = (version) => {
+    localStorage.setItem('MythicalVersion', version);
+}
+
+export const clearCacheData = () => {
+    caches.keys().then((names) => {
+        names.forEach((name) => {
+            caches.delete(name);
+        });
+    });
+};
 
 /**
  * @param {string} version - app version
