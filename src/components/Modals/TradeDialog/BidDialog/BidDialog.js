@@ -30,7 +30,7 @@ import {
 import { useEffect, useState } from 'react';
 import { NQTDIVIDER } from '../../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../../utils/alerts';
-import { checkPin, sendBidOrder } from '../../../../utils/walletUtils';
+import { checkPin, roundNumberWithMaxDecimals, sendBidOrder } from '../../../../utils/walletUtils';
 import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
 import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidList';
 import { getUser } from '../../../../utils/storage';
@@ -334,6 +334,7 @@ const BidDialog = ({
                                                     border="none"
                                                     textAlign="center"
                                                     fontWeight="bold"
+                                                    value={roundNumberWithMaxDecimals(parseFloat(input.value), 8)}
                                                 />
                                                 <Button
                                                     {...inc}
@@ -350,7 +351,7 @@ const BidDialog = ({
                                     <Box py={2}>
                                         <FormControl variant="floatingModalTransparent" id="PricePerCard">
                                             <InputGroup border="1px" borderColor={borderColor} rounded="lg">
-                                                <NumberInput value={priceCard}>
+                                                <NumberInput value={priceCard} precision={2}>
                                                     <NumberInputField
                                                         rounded="none"
                                                         border="none"
@@ -375,7 +376,7 @@ const BidDialog = ({
                                         <Box pt={4}>
                                             <FormControl variant="floatingModalTransparent" id="PricePerCard">
                                                 <InputGroup border="1px" borderColor={borderColor} rounded="lg">
-                                                    <NumberInput isReadOnly value={priceCard * input.value}>
+                                                    <NumberInput isReadOnly value={roundNumberWithMaxDecimals(priceCard * input.value, 8)}>
                                                         <NumberInputField
                                                             rounded="none"
                                                             border="none"
