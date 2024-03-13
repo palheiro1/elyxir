@@ -29,13 +29,11 @@ function App() {
 
     useEffect(() => {
         const cachedVersion = getVersion();
-        console.log("🚀 ~ useEffect ~ cachedVersion:", cachedVersion)
         const currentVersion = process.env.REACT_APP_GIT_SHA;
-        console.log("🚀 ~ useEffect ~ currentVersion:", currentVersion)
 
         if (cachedVersion !== currentVersion) {
             clearCacheData();
-            localStorage.clear();
+            // localStorage.clear();
             setVersion(currentVersion);
             window.location.reload();
         }
