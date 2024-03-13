@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-//import { useClearCache } from 'react-clear-cache';
 
 import { theme } from './themes/theme';
 
@@ -22,27 +21,25 @@ import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
 // Styles
 import './App.css';
 import Redeem from './pages/Redeem/Redeem';
+import { clearCacheData, getVersion, setVersion } from './utils/storage';
 
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
     const isLogged = infoAccount.token !== null && infoAccount.accountRs !== null;
-    /*
-    const { isLatestVersion, emptyCacheStorage } = useClearCache();
 
     useEffect(() => {
-        const checkVersion = async () => {
-            try {
-                console.log('New version available! Cleaning cache and hard reloading...');
-                await emptyCacheStorage();
-                window.location.reload();
-            } catch (error) {
-                console.error('🚀 ~ file: App.js:50 ~ checkVersion ~ error:', error);
-            }
-        };
+        const cachedVersion = getVersion();
+        console.log("🚀 ~ useEffect ~ cachedVersion:", cachedVersion)
+        const currentVersion = process.env.REACT_APP_GIT_SHA;
+        console.log("🚀 ~ useEffect ~ currentVersion:", currentVersion)
 
-        !isLatestVersion && checkVersion();
-    }, [emptyCacheStorage, isLatestVersion]);
-    */
+        if (cachedVersion !== currentVersion) {
+            clearCacheData();
+            localStorage.clear();
+            setVersion(currentVersion);
+            window.location.reload();
+        }
+    }, []);
 
     return (
         <ChakraProvider theme={theme}>
