@@ -30,8 +30,8 @@ import { fetchGiftzMarket } from '../../../utils/omno';
 import { Animated } from 'react-animated-css';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 
-import { CrossmintPayButton } from "@crossmint/client-sdk-react-ui";
-import { getMaticPriceWithEth } from '../../../services/coingecko/utils';
+import { CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
+import { getEthPrice, getMaticPriceWithEth } from '../../../services/coingecko/utils';
 import { getEthDepositAddressFor1155 } from '../../../services/Ardor/ardorInterface';
 
 import './BuyPackDialog.css';
@@ -62,6 +62,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [priceInMatic, setPriceInMatic] = useState(0);
     const [bridgeAddress, setBridgeAddress] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState('wETH');
+    const [ethPrice, setEthPrice] = useState(0);
 
     const { name, WETHRealBalance: WETHBalance, IGNISBalance, accountRs } = infoAccount;
 
@@ -85,17 +86,32 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             try {
                 setIsLoading(true);
                 setNeedReload(false);
-                const [maticPrice, { wethAsset, totalOnSale }, auxBridgeAddress] = await Promise.all([
-                    getMaticPriceWithEth(),
+                const [{ wethAsset, totalOnSale }, auxBridgeAddress] = await Promise.all([
                     fetchGiftzMarket(),
                     getEthDepositAddressFor1155(accountRs),
                 ]);
                 setBridgeAddress(!auxBridgeAddress ? null : auxBridgeAddress);
-                setMaticPrice(maticPrice);
+
                 setMarketOffers(wethAsset);
                 setTotalOnSale(totalOnSale);
+
+                getMaticPriceWithEth()
+                    .then(maticPrice => {
+                        setMaticPrice(maticPrice);
+                    })
+                    .catch(error => {
+                        console.log('🚀 ~ recoverMarketOffers ~ getMaticPriceWithEth ~ error:', error);
+                    });
+
+                getEthPrice()
+                    .then(ethPrice => {
+                        setEthPrice(ethPrice);
+                    })
+                    .catch(error => {
+                        console.log('🚀 ~ recoverMarketOffers ~ getEthPrice ~ error:', error);
+                    });
             } catch (error) {
-                console.log("🚀 ~ recoverMarketOffers ~ error:", error)
+                console.log('🚀 ~ recoverMarketOffers ~ error:', error);
             } finally {
                 setIsLoading(false);
             }
@@ -195,7 +211,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             setPriceInWETH(totalPrice);
             setSelectedOffers(offersToTake);
             const realPriceEth = totalPrice / NQTDIVIDER;
-            setPriceInMatic(((realPriceEth / maticPrice) + 2).toFixed(0));
+            setPriceInMatic((realPriceEth / maticPrice + 2).toFixed(0));
         };
 
         calculatePrices();
@@ -276,8 +292,9 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                 </Center>
                             </GridItem>
 
-                            {isLoading ? <LoadingSpinner />
-                                :
+                            {isLoading ? (
+                                <LoadingSpinner />
+                            ) : (
                                 <Center>
                                     <GridItem>
                                         <Box>
@@ -292,18 +309,25 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     bgColor="blackAlpha.400"
                                                     fontWeight="bold"
                                                     rounded="lg"
-                                                    onChange={(e) => setPaymentMethod(e.target.value)}
-                                                >
-                                                    <option value="wETH" style={{
-                                                        backgroundColor: '#6b254d',
-                                                        borderRadius: '1rem',
-                                                    }}>wETH</option>
-                                                    {bridgeAddress &&
-                                                        <option value="CreditCard" style={{
+                                                    onChange={e => setPaymentMethod(e.target.value)}>
+                                                    <option
+                                                        value="wETH"
+                                                        style={{
                                                             backgroundColor: '#6b254d',
                                                             borderRadius: '1rem',
-                                                        }}>Credit Card</option>
-                                                    }
+                                                        }}>
+                                                        wETH
+                                                    </option>
+                                                    {bridgeAddress && (
+                                                        <option
+                                                            value="CreditCard"
+                                                            style={{
+                                                                backgroundColor: '#6b254d',
+                                                                borderRadius: '1rem',
+                                                            }}>
+                                                            Credit Card
+                                                        </option>
+                                                    )}
                                                 </Select>
                                             </Center>
                                             <Center>
@@ -362,15 +386,15 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     </Text>
                                                     <Center>
                                                         <Text fontWeight="bold" fontSize="2xl">
-                                                            {priceInWETH / NQTDIVIDER} wETH
+                                                            {priceInWETH / NQTDIVIDER} wETH ($ {ethPrice * (priceInWETH / NQTDIVIDER)})
                                                         </Text>
                                                     </Center>
                                                 </Box>
 
                                                 {totalOnSale === 0 && (
                                                     <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                                        There are no GIFTZ left in the machine. You can wait for it to refill or buy
-                                                        them on the secondary market.
+                                                        There are no GIFTZ left in the machine. You can wait for it to
+                                                        refill or buy them on the secondary market.
                                                     </Text>
                                                 )}
 
@@ -421,22 +445,25 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                             </>
                                         )}
 
-                                        {paymentMethod === 'CreditCard' &&
+                                        {paymentMethod === 'CreditCard' && (
                                             <Box w="100%" mt={8}>
                                                 <CrossmintPayButton
                                                     disabled={!correctNumberInput}
                                                     collectionId="682b163e-c8c5-4704-91d2-fe9c20dbf969"
                                                     projectId="df884160-8b39-4fc9-960d-0a35094cc158"
-                                                    mintConfig={{ "totalPrice": priceInMatic.toString(), "amount": input.value.toString() }}
+                                                    mintConfig={{
+                                                        totalPrice: priceInMatic.toString(),
+                                                        amount: input.value.toString(),
+                                                    }}
                                                     mintTo={bridgeAddress.toString()}
-                                                    paymentMethod='fiat'
+                                                    paymentMethod="fiat"
                                                     className="xmint-btn"
                                                 />
                                             </Box>
-                                        }
+                                        )}
                                     </GridItem>
                                 </Center>
-                            }
+                            )}
                         </Grid>
                     </AlertDialogBody>
                 </AlertDialogContent>

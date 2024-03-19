@@ -1,3 +1,6 @@
+import axios from 'axios';
+
+/*
 export const getIgnisPrice = async () => {
     const responseUSD = await fetch(
         'https://api.coingecko.com/api/v3/simple/price?ids=ignis&vs_currencies=usd'
@@ -21,3 +24,29 @@ export const getMaticPriceWithEth = async () => {
     const data = await response.json();
     return data['matic-network'].eth;
 }
+*/
+
+const getCurrencies = async () => {
+    try {
+        const response = await axios.get('https://faucet-api.mythicalbeings.io/currencies');
+        return response.data;
+    } catch (error) {
+        console.error('🚀 ~ getIgnisFromFaucet ~ error:', error);
+        throw error;
+    }
+};
+
+export const getIgnisPrice = async () => {
+    const response = await getCurrencies();
+    return response.ignis;
+};
+
+export const getEthPrice = async () => {
+    const response = await getCurrencies();
+    return response.eth;
+};
+
+export const getMaticPriceWithEth = async () => {
+    const response = await getCurrencies();
+    return response.maticEth;
+};
