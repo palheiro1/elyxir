@@ -29,7 +29,7 @@ export const getMaticPriceWithEth = async () => {
 export const getCurrencies = async () => {
     try {
         const response = await axios.get('https://faucet-api.mythicalbeings.io/currencies');
-        return response.data;
+        return response.data.message;
     } catch (error) {
         console.error('🚀 ~ getIgnisFromFaucet ~ error:', error);
         throw error;

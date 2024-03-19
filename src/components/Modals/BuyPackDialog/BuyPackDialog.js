@@ -386,7 +386,12 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     </Text>
                                                     <Center>
                                                         <Text fontWeight="bold" fontSize="2xl">
-                                                            {priceInWETH / NQTDIVIDER} wETH ($ {ethPrice * (priceInWETH / NQTDIVIDER)})
+                                                            {priceInWETH / NQTDIVIDER} wETH
+                                                        </Text>
+                                                    </Center>
+                                                    <Center>
+                                                        <Text fontSize="xs" color={'whiteAlpha.600'}>
+                                                            ($ {(ethPrice * (priceInWETH / NQTDIVIDER)).toFixed(2)})
                                                         </Text>
                                                     </Center>
                                                 </Box>
