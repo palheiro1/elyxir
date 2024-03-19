@@ -35,7 +35,7 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
     const [jackpotBalance, setJackpotBalance] = useState({
         wETH: 0,
         GEM: 0,
-        Mana: 0
+        Mana: 0,
     });
 
     const [jackpotBalanceUSD, setJackpotBalanceUSD] = useState({
@@ -54,13 +54,13 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
                     getJackpotBalance(),
                     getJackpotParticipants(),
                     getGemPrice(),
-                    getManaPrice()
+                    getManaPrice(),
                 ]);
 
                 setJackpotBalance({
                     wETH: jackpotBalance,
                     GEM: 9000,
-                    Mana: 9000
+                    Mana: 9000,
                 });
 
                 // const wETHinUSD = await swapPriceEthtoUSD(jackpotBalance);
@@ -68,14 +68,15 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
                     swapPriceEthtoUSD(jackpotBalance),
                     swapPriceEthtoUSD(gemPrice),
                     swapPriceEthtoUSD(manaPrice),
-                    swapPriceEthtoUSD(0.25)
+                    swapPriceEthtoUSD(0.25),
                 ]);
+
                 setJackpotBalanceUSD({
                     wETH: wethUsd,
                     GEM: gemUsd,
                     Mana: manaUsd,
                     Sumanga: sumangaUsd,
-                    Total: Number(wethUsd) + Number(gemUsd) + Number(manaUsd) + Number(sumangaUsd)
+                    Total: Number(wethUsd) + Number(gemUsd) + Number(manaUsd) + Number(sumangaUsd),
                 });
 
                 let auxParticipants = [];
@@ -119,7 +120,14 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
     return (
         <Center py={4}>
             <Stack direction={{ base: 'column', md: 'row' }} w="100%" gap={3}>
-                <Box p={6} border="1px" borderColor={borderColor} rounded="lg" bg="blackAlpha" direction="row" bgColor={bgColor}>
+                <Box
+                    p={6}
+                    border="1px"
+                    borderColor={borderColor}
+                    rounded="lg"
+                    bg="blackAlpha"
+                    direction="row"
+                    bgColor={bgColor}>
                     <HCountdown
                         cStyle={cStyle}
                         jackpotTimer={jackpotTimer}
@@ -128,17 +136,24 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
                         jackpotBalanceUSD={jackpotBalanceUSD}
                     />
                 </Box>
-                <Box p={6} border="1px" borderColor={borderColor} rounded="lg" bg="blackAlpha" direction="row" bgColor={bgColor}>
+                <Box
+                    p={6}
+                    border="1px"
+                    borderColor={borderColor}
+                    rounded="lg"
+                    bg="blackAlpha"
+                    direction="row"
+                    bgColor={bgColor}>
                     <Heading as="h3" size="lg" color="white">
                         JACKPOT
                     </Heading>
-                    <Box position={"relative"} w={"100%"} h={"100%"}>
+                    <Box position={'relative'} w={'100%'} h={'100%'}>
                         <AbsoluteCenter>
-                            <Flex align={"center"} gap={2}>
-                                <Text textAlign={"center"} h="100%" fontWeight={"bold"} fontSize={"3xl"}>
-                                    {(jackpotBalanceUSD.Total).toFixed(2)}
+                            <Flex align={'center'} gap={2}>
+                                <Text textAlign={'center'} h="100%" fontWeight={'bold'} fontSize={'3xl'}>
+                                    {jackpotBalanceUSD.Total.toFixed(2)}
                                 </Text>
-                                <Text textAlign={"center"} fontSize={"xl"}>
+                                <Text textAlign={'center'} fontSize={'xl'}>
                                     USD
                                 </Text>
                             </Flex>

@@ -26,7 +26,7 @@ export const getMaticPriceWithEth = async () => {
 }
 */
 
-const getCurrencies = async () => {
+export const getCurrencies = async () => {
     try {
         const response = await axios.get('https://faucet-api.mythicalbeings.io/currencies');
         return response.data;
@@ -50,3 +50,5 @@ export const getMaticPriceWithEth = async () => {
     const response = await getCurrencies();
     return response.maticEth;
 };
+
+
