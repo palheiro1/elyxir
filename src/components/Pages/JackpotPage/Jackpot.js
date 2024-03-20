@@ -24,7 +24,7 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
     const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
     const { accountRs: account, IGNISBalance } = infoAccount;
 
-    const IS_JACKPOT_ENABLED = false;
+    const IS_JACKPOT_ENABLED = true;
 
     useEffect(() => {
         // Get remaining cards
