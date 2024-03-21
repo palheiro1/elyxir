@@ -68,7 +68,7 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
                     swapPriceEthtoUSD(jackpotBalance),
                     swapPriceEthtoUSD(gemPrice),
                     swapPriceEthtoUSD(manaPrice),
-                    swapPriceEthtoUSD(0.25),
+                    swapPriceEthtoUSD(0.02),
                 ]);
 
                 setJackpotBalanceUSD({
