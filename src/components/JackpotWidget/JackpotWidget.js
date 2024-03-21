@@ -75,7 +75,7 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
                     wETH: wethUsd,
                     GEM: gemUsd,
                     Mana: manaUsd,
-                    Sumanga: sumangaUsd,
+                    Sumanga: (sumangaUsd) * 7, // 7 cartas
                     Total: Number(wethUsd) + Number(gemUsd) + Number(manaUsd) + Number(sumangaUsd),
                 });
 
