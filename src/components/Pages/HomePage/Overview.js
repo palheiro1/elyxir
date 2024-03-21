@@ -104,7 +104,7 @@ const Overview = ({ blockchainStatus }) => {
                             <FlowItem
                                 number={2}
                                 title="Redeem packs for"
-                                subtitle={'3 random cards'}
+                                subtitle={'5 random cards'}
                                 color={textOpen}
                                 button={
                                     <MenuButton
