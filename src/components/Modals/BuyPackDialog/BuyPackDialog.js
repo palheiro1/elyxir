@@ -64,6 +64,8 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [paymentMethod, setPaymentMethod] = useState('wETH');
     const [ethPrice, setEthPrice] = useState(0);
 
+    const OFFSET = 1.1;
+
     const { name, WETHRealBalance: WETHBalance, IGNISBalance, accountRs } = infoAccount;
 
     const toast = useToast();
@@ -97,7 +99,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
                 getMaticPriceWithEth()
                     .then(maticPrice => {
-                        setMaticPrice(maticPrice);
+                        setMaticPrice(maticPrice * OFFSET);
                     })
                     .catch(error => {
                         console.log('🚀 ~ recoverMarketOffers ~ getMaticPriceWithEth ~ error:', error);
@@ -211,7 +213,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             setPriceInWETH(totalPrice);
             setSelectedOffers(offersToTake);
             const realPriceEth = totalPrice / NQTDIVIDER;
-            setPriceInMatic((realPriceEth / maticPrice + 2).toFixed(0));
+            setPriceInMatic((realPriceEth / maticPrice).toFixed(0));
         };
 
         calculatePrices();
