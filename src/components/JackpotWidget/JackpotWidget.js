@@ -71,12 +71,14 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
                     swapPriceEthtoUSD(0.02),
                 ]);
 
+                const totalSumanga = sumangaUsd * 7;
+
                 setJackpotBalanceUSD({
                     wETH: wethUsd,
                     GEM: gemUsd,
                     Mana: manaUsd,
-                    Sumanga: (sumangaUsd) * 7, // 7 cartas
-                    Total: Number(wethUsd) + Number(gemUsd) + Number(manaUsd) + Number(sumangaUsd),
+                    Sumanga: totalSumanga, // 7 cartas
+                    Total: Number(wethUsd) + Number(gemUsd) + Number(manaUsd) + Number(totalSumanga),
                 });
 
                 let auxParticipants = [];
