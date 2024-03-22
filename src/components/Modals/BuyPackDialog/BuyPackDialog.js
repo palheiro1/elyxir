@@ -372,6 +372,21 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     </Button>
                                                 </HStack>
                                             </Center>
+                                            {paymentMethod === 'CreditCard' && (
+                                                <>
+                                                    <Text fontSize="xs" color={'whiteAlpha.600'} textAlign={'center'}>
+                                                        Fees are applied by our payment gateway.
+                                                    </Text>
+
+                                                    <Text fontSize="xs" color={'whiteAlpha.600'} textAlign={'center'}>
+                                                        A small purchase will incur higher fees.
+                                                    </Text>
+
+                                                    <Text fontSize="xs" color={'whiteAlpha.600'} textAlign={'center'}>
+                                                        Simulation: 1 GIFTZ, fee = 37% | 25 GIFTZ, fee = 5.5%
+                                                    </Text>
+                                                </>
+                                            )}
                                             {paymentMethod === 'wETH' && (
                                                 <Center>
                                                     <Text fontSize="xs" color={'whiteAlpha.600'}>
