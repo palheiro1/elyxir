@@ -64,7 +64,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [paymentMethod, setPaymentMethod] = useState('wETH');
     const [ethPrice, setEthPrice] = useState(0);
 
-    const OFFSET = 1.1;
+    const OFFSET = 1.25;
 
     const { name, WETHRealBalance: WETHBalance, IGNISBalance, accountRs } = infoAccount;
 
