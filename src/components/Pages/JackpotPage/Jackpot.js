@@ -1,4 +1,4 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Center, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getJackpotParticipants } from '../../../services/Jackpot/utils';
 import RemainingCards from '../../Cards/RemainingCards';
@@ -78,7 +78,9 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
 
     return (
         <Box>
-            <JackpotWidget cStyle={2} blockchainStatus={blockchainStatus} />
+            <Center>
+                <JackpotWidget cStyle={2} blockchainStatus={blockchainStatus} />
+            </Center>
 
             {imParticipant && (
                 <Text mt={4} fontSize="2xl" textAlign="center" fontWeight="bolder">
