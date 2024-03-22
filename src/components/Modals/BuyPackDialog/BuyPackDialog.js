@@ -211,7 +211,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             setPriceInWETH(totalPrice);
             setSelectedOffers(offersToTake);
             const realPriceEth = totalPrice / NQTDIVIDER;
-            setPriceInMatic(((realPriceEth / maticPrice) + 2).toFixed(0));
+            setPriceInMatic(((realPriceEth / maticPrice) + 1).toFixed(0));
         };
 
         calculatePrices();
