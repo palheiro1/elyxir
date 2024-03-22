@@ -101,9 +101,9 @@ const AskDialog = ({
     const [priceCard, setPriceCard] = useState(0);
     const handlePriceCard = e => {
         e.preventDefault();
-        const value = parseFloat(e.target.value);
+        const value = e.target.value; //parseFloat(e.target.value);
 
-        if (value <= 0 || isNaN(value)) {
+        if (value < 0 || isNaN(value)) {
             setPriceCard(0);
             return;
         }

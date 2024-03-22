@@ -98,9 +98,9 @@ const BidDialog = ({
     // ------------------ Quantity ------------------
     const handlePriceCard = e => {
         e.preventDefault();
-        const value = parseFloat(e.target.value);
+        const value = e.target.value; //parseFloat(e.target.value);
 
-        if (value <= 0 || isNaN(value)) {
+        if (value < 0 || isNaN(value)) {
             setPriceCard(0);
             return;
         }
