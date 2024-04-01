@@ -83,13 +83,15 @@ const ClaimJackpot = ({ username, cards, haveIgnis }) => {
                     </Button>
                 )}
             </Box>
-            <JackpotDialog
-                isOpen={isOpen}
-                onClose={onClose}
-                reference={reference}
-                username={username}
-                totalCards={cards}
-            />
+            {isOpen && (
+                <JackpotDialog
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    reference={reference}
+                    username={username}
+                    totalCards={cards}
+                />
+            )}
         </>
     );
 };

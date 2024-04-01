@@ -498,7 +498,12 @@ export const sendBidOrder = async ({ asset, price, quantity, passPhrase }) => {
  * @returns {Array} - Array of responses
  */
 export const sendToJackpot = async ({ cards, passPhrase }) => {
-    const isBlocked = cards.some(card => card.quantityQNT < card.unconfirmedQuantityQNT);
+    // const isBlocked = cards.some(card => card.quantityQNT < card.unconfirmedQuantityQNT);
+    const isBlocked = cards.some(
+        card =>
+            Number(card.quantityQNT) > Number(card.unconfirmedQuantityQNT) &&
+            Number(card.unconfirmedQuantityQNT) === 0
+    );
     if (isBlocked)
         return {
             response: false,
@@ -514,7 +519,7 @@ export const sendToJackpot = async ({ cards, passPhrase }) => {
             recipient: JACKPOTACCOUNT,
             message: message,
             messagePrunable: true,
-            deadline: 60,
+            deadline: 120,
             priority: 'HIGH',
         })
     );
