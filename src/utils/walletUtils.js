@@ -501,9 +501,9 @@ export const sendToJackpot = async ({ cards, passPhrase }) => {
     // const isBlocked = cards.some(card => card.quantityQNT < card.unconfirmedQuantityQNT);
     const isBlocked = cards.some(
         card =>
-            Number(card.quantityQNT) > Number(card.unconfirmedQuantityQNT) &&
-            Number(card.unconfirmedQuantityQNT) === 0
+            Number(card.quantityQNT) > Number(card.unconfirmedQuantityQNT) && Number(card.unconfirmedQuantityQNT) === 0
     );
+
     if (isBlocked)
         return {
             response: false,
