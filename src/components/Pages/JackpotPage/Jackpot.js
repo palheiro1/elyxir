@@ -22,6 +22,7 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
     const [remainingCards, setRemainingCards] = useState([]); // Cards without specials and with 0 quantity
     const [cardsFiltered, setCardsFiltered] = useState([]); // Cards filtered by search and rarity
     const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
+    const [missingCards, setMissingCards] = useState(false);
     const { accountRs: account, IGNISBalance } = infoAccount;
 
     const IS_JACKPOT_ENABLED = true;
@@ -56,6 +57,10 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
                     auxParticipants.push({ account: key, quantity: value });
                     numParticipants += value;
                 }
+
+                if (key === account && value === 0) {
+                    setMissingCards(true);
+                }
             });
             setParticipants({ numParticipants, participants: auxParticipants });
         };
@@ -86,6 +91,17 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
                 <Text mt={4} fontSize="2xl" textAlign="center" fontWeight="bolder">
                     ✅ You've participated {textParticipations} for this round!
                 </Text>
+            )}
+
+            {missingCards && (
+                <Box>
+                    <Text textAlign="center" fontWeight="bolder" color={'red'}>
+                        We have detected that you have played the Jackpot, but there are still cards to be sent.
+                    </Text>
+                    <Text pb={2} textTransform={"uppercase"} textAlign="center" fontWeight="bolder" color={'red'}>
+                        (your participation is not taken into account)
+                    </Text>
+                </Box>
             )}
 
             {remainingCards.length > 0 && (
