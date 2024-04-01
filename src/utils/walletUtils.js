@@ -499,25 +499,32 @@ export const sendBidOrder = async ({ asset, price, quantity, passPhrase }) => {
  */
 export const sendToJackpot = async ({ cards, passPhrase }) => {
     const isBlocked = cards.some(card => card.quantityQNT < card.unconfirmedQuantityQNT);
-    if (!isBlocked) {
-        const message = JSON.stringify({ contract: 'MBJackpotETH' });
-        const promises = cards.map(card =>
-            transferAsset({
-                asset: card.asset,
-                quantityQNT: 1,
-                passPhrase: passPhrase,
-                recipient: JACKPOTACCOUNT,
-                message: message,
-                messagePrunable: true,
-                deadline: 60,
-                priority: 'HIGH',
-            })
-        );
-        const responses = await Promise.allSettled(promises);
-        // Check all promises
-        const success = responses.every(response => response.status === 'fulfilled');
-        return success;
-    }
+    if (isBlocked)
+        return {
+            response: false,
+            message: 'Some cards are blocked',
+        };
+
+    const message = JSON.stringify({ contract: 'MBJackpotETH' });
+    const promises = cards.map(card =>
+        transferAsset({
+            asset: card.asset,
+            quantityQNT: 1,
+            passPhrase: passPhrase,
+            recipient: JACKPOTACCOUNT,
+            message: message,
+            messagePrunable: true,
+            deadline: 60,
+            priority: 'HIGH',
+        })
+    );
+    const responses = await Promise.allSettled(promises);
+    // Check all promises
+    const success = responses.every(response => response.status === 'fulfilled');
+    return {
+        response: success,
+        message: success ? 'Success' : 'Error sending cards to the jackpot',
+    };
 };
 
 /**
@@ -558,7 +565,6 @@ export const sendToPolygonBridge = async ({ cards, ardorAccount, ethAccount, pas
         return false;
     }
 };
-
 
 export function roundNumberWithMaxDecimals(number, maxDecimals) {
     const roundedNumber = parseFloat(number.toFixed(maxDecimals));

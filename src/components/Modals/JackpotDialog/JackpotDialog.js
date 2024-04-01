@@ -40,14 +40,17 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
     };
 
     const handleSend = async () => {
-        if (isValidPin) {
-            setSendingTx(true);
-            const response = await sendToJackpot({ cards: totalCards, passPhrase: passPhrase });
+        if (!isValidPin) return errorToast('Invalid pin', toast);
+        setSendingTx(true);
+        try {
+            const { response, message } = await sendToJackpot({ cards: totalCards, passPhrase: passPhrase });
             if (response) okToast('Jackpot participation registered', toast);
-            else errorToast('Error registering participation', toast);
-
-            onClose();
+            else errorToast(message, toast);
+        } catch (error) {
+            errorToast('An error occurred', toast);
+        } finally {
             setSendingTx(false);
+            onClose();
         }
     };
 
