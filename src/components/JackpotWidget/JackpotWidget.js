@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AbsoluteCenter, Box, Center, Flex, Heading, Stack, Text } from '@chakra-ui/react';
+import { AbsoluteCenter, Box, Center, Flex, Heading, Image, Stack, Text } from '@chakra-ui/react';
 
 // Components
 import HCountdown from './HCountdown';
@@ -146,21 +146,21 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
                     bg="blackAlpha"
                     direction="row"
                     bgColor={bgColor}>
-                    <Heading as="h3" size="lg" color="white">
-                        JACKPOT
+                    <Center>
+                        <Image src="/images/currency/multicurrency.png" w="100px" />
+                    </Center>
+                    <Heading size="md" color="white" textAlign={"center"}>
+                        BOUNTY
                     </Heading>
-                    <Box position={'relative'} w={'100%'} h={'100%'}>
-                        <AbsoluteCenter>
-                            <Flex align={'center'} gap={2}>
-                                <Text textAlign={'center'} h="100%" fontWeight={'bold'} fontSize={'3xl'}>
-                                    {jackpotBalanceUSD.Total.toFixed(2)}
-                                </Text>
-                                <Text textAlign={'center'} fontSize={'xl'}>
-                                    USD
-                                </Text>
-                            </Flex>
-                        </AbsoluteCenter>
-                    </Box>
+
+                    <Flex align={'center'} gap={2}>
+                        <Text textAlign={'center'} h="100%" fontWeight={'bold'} fontSize={'4xl'}>
+                            {jackpotBalanceUSD.Total.toFixed(2)}
+                        </Text>
+                        <Text textAlign={'center'} fontSize={'xl'}>
+                            USD
+                        </Text>
+                    </Flex>
                 </Box>
             </Stack>
         </Center>
