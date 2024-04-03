@@ -64,21 +64,21 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
                 });
 
                 // const wETHinUSD = await swapPriceEthtoUSD(jackpotBalance);
-                const [wethUsd, gemUsd, manaUsd, sumangaUsd] = await Promise.all([
+                const [wethUsd, sumangaUsd] = await Promise.all([
                     swapPriceEthtoUSD(jackpotBalance),
-                    swapPriceEthtoUSD(gemPrice),
-                    swapPriceEthtoUSD(manaPrice),
                     swapPriceEthtoUSD(0.02),
                 ]);
 
+                const totalGem = gemPrice * 9000;
+                const totalMana = manaPrice * 9000;
                 const totalSumanga = sumangaUsd * 7;
 
                 setJackpotBalanceUSD({
                     wETH: wethUsd,
-                    GEM: gemUsd,
-                    Mana: manaUsd,
+                    GEM: totalGem,
+                    Mana: totalMana,
                     Sumanga: totalSumanga, // 7 cartas
-                    Total: Number(wethUsd) + Number(gemUsd) + Number(manaUsd) + Number(totalSumanga),
+                    Total: Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalSumanga),
                 });
 
                 let auxParticipants = [];
