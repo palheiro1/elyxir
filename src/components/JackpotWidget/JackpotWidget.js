@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AbsoluteCenter, Box, Center, Flex, Heading, Image, Stack, Text } from '@chakra-ui/react';
+import { Box, Center, Flex, Heading, Image, Stack, Text } from '@chakra-ui/react';
 
 // Components
 import HCountdown from './HCountdown';
