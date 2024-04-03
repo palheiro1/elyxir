@@ -151,7 +151,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     // -----------------------------------------------------------------
     const [searchParams, setSearchParams] = useSearchParams();
-    const directSection = searchParams.get('goToSection') || false;
+    const directSection = parseInt(searchParams.get('goToSection')) || false;
     const [directSectionToRender, setDirectSectionToRender] = useState(directSection);
 
     // -----------------------------------------------------------------
@@ -495,9 +495,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     const components = useMemo(
         () => [
-            <Overview blockchainStatus={blockchainStatus} />,
-            <Inventory infoAccount={infoAccount} cards={cardsFiltered} />,
-            <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />,
+            <Overview blockchainStatus={blockchainStatus} />, // OPTION 0 - Overview
+            <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // OPTION 1 - Inventory
+            <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />, // OPTION 2 - History
             <Market
                 infoAccount={infoAccount}
                 cards={cardsFiltered}
@@ -505,7 +505,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 giftzCards={giftzCards}
                 wethCards={wethCards}
                 manaCards={manaCards}
-            />,
+            />, // OPTION 3 - Market
             <Bridge
                 infoAccount={infoAccount}
                 cards={cardsFiltered}
@@ -513,14 +513,14 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 giftzCards={giftzCards}
                 wethCards={wethCards}
                 manaCards={manaCards}
-            />,
-            <Jackpot infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />,
-            <Account infoAccount={infoAccount} />,
-            '', // Buy pack
-            <Exchange infoAccount={infoAccount} />,
-            <ArdorChat infoAccount={infoAccount} />,
-            <Book cards={cards} />,
-            '',
+            />, // OPTION 4 - Bridge
+            <Jackpot infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />, // OPTION 5 - Jackpot
+            <Account infoAccount={infoAccount} />, // OPTION 6 - Account
+            '', // OPTION 7 - Buy pack
+            <Exchange infoAccount={infoAccount} />, // OPTION 8 - Exchange
+            <ArdorChat infoAccount={infoAccount} />, // OPTION 9 - Chat
+            <Book cards={cards} />, // OPTION 10 - Book
+            '', // OPTION 11 - OPEN PACK
         ],
         [
             infoAccount,
@@ -549,18 +549,31 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         };
 
         loadComponent();
-    }, [option, components, onOpen, lastOption, onOpenOpenPack]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [option, lastOption]);
 
     useEffect(() => {
         const checkAndGo = () => {
             setLastOption(directSectionToRender);
             setOption(directSectionToRender);
             setDirectSectionToRender(false);
-            searchParams.delete('goToSection');
-            setSearchParams(searchParams);
         };
         directSectionToRender && checkAndGo();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [directSectionToRender, searchParams, setSearchParams]);
+
+    useEffect(() => {
+        if (directSection) {
+            if (directSection === 7) onOpen();
+            else if (directSection === 11) onOpenOpenPack();
+            else {
+                setDirectSectionToRender(directSection);
+            }
+            searchParams.delete('goToSection');
+            setSearchParams(searchParams);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [directSection]);
 
     const bgColor = useColorModeValue('white', 'whiteAlpha.100');
     const borderColor = MENU_OPTIONS_COLOR[option] || 'whiteAlpha.100';
