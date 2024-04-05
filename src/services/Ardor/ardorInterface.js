@@ -5,11 +5,11 @@ import ardorjs from 'ardorjs';
 
 // Constants
 import {
+    BOUNTYACCOUNT,
     BRIDGEAPIURL,
     CURRENCY,
     EXCHANGERATE,
     GEMASSET,
-    JACKPOTACCOUNT,
     NODEURL,
     NQTDIVIDER,
 } from '../../data/CONSTANTS';
@@ -45,7 +45,7 @@ export const getAccountFromPhrase = value => {
 export const fetchAssetCount = async asset => {
     try {
         const response = await fetch(
-            NODEURL + '?requestType=getAccountAssets&account=' + JACKPOTACCOUNT + '&asset=' + asset
+            NODEURL + '?requestType=getAccountAssets&account=' + BOUNTYACCOUNT + '&asset=' + asset
         );
         const result = await response.json();
         return result.quantityQNT ? result.quantityQNT : 0;
