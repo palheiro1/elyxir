@@ -21,9 +21,9 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { errorToast, okToast } from '../../../utils/alerts';
-import { checkPin, sendToJackpot } from '../../../utils/walletUtils';
+import { checkPin, sendToBounty } from '../../../utils/walletUtils';
 
-const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => {
+const BountyDialog = ({ reference, isOpen, onClose, username, totalCards }) => {
     const toast = useToast();
     const [passPhrase, setPassPhrase] = useState('');
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
@@ -43,8 +43,8 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
         if (!isValidPin) return errorToast('Invalid pin', toast);
         setSendingTx(true);
         try {
-            const { response, message } = await sendToJackpot({ cards: totalCards, passPhrase: passPhrase });
-            if (response) okToast('Jackpot participation registered', toast);
+            const { response, message } = await sendToBounty({ cards: totalCards, passPhrase: passPhrase });
+            if (response) okToast('Bounty participation registered', toast);
             else errorToast(message, toast);
         } catch (error) {
             errorToast('An error occurred', toast);
@@ -76,7 +76,7 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                     shadow="dark-lg"
                     color="white">
                     <AlertDialogHeader textAlign="center" fontWeight="bolder">
-                        <Heading>Claim the Jackpot</Heading>
+                        <Heading>Claim the Bounty</Heading>
                     </AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
@@ -131,7 +131,7 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
                                             <strong>
                                                 <u>share</u>
                                             </strong>{' '}
-                                            of the jackpot (1 participation = 1 share)
+                                            of the bounty (1 participation = 1 share)
                                         </Text>
                                     </GridItem>
                                 </Grid>
@@ -192,4 +192,4 @@ const JackpotDialog = ({ reference, isOpen, onClose, username, totalCards }) => 
     );
 };
 
-export default JackpotDialog;
+export default BountyDialog;

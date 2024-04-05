@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { Box, Button, Center, Heading, Text, useDisclosure } from '@chakra-ui/react';
-import JackpotDialog from '../../Modals/JackpotDialog/JackpotDialog';
+import BountyDialog from '../../Modals/BountyDialog/BountyDialog';
 import { IGNIS_REQUIRED } from '../../../data/CONSTANTS';
 
 /**
- * @name ClaimJackpot
- * @description Component to claim the jackpot
+ * @name ClaimBounty
+ * @description Component to claim the bounty
  * @param {String} username - String with the username
  * @param {Number} totalCards - Number with the total cards
  * @returns {JSX.Element} - JSX element
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const ClaimJackpot = ({ username, cards, haveIgnis }) => {
+const ClaimBounty = ({ username, cards, haveIgnis }) => {
     const [haveLockedCards, setHaveLockedCards] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const reference = useRef();
@@ -36,7 +36,7 @@ const ClaimJackpot = ({ username, cards, haveIgnis }) => {
                 <Heading>Congratulations!</Heading>
                 <Center>
                     <Box textAlign="center">
-                        <Text fontSize="xs">You can participate in the Jackpot, you have all the necessary cards.</Text>
+                        <Text fontSize="xs">You can participate in the Bounty, you have all the necessary cards.</Text>
                     </Box>
                 </Center>
 
@@ -64,7 +64,7 @@ const ClaimJackpot = ({ username, cards, haveIgnis }) => {
                             </Text>
                             <Text fontSize="xs" fontWeight="bold">
                                 At least <strong>{IGNIS_REQUIRED} IGNIS</strong> are required to participate in the
-                                Jackpot.
+                                Bounty.
                             </Text>
                         </Box>
                     </Center>
@@ -79,12 +79,12 @@ const ClaimJackpot = ({ username, cards, haveIgnis }) => {
                         size="lg"
                         onClick={onOpen}
                         isDisabled={!haveIgnis || haveLockedCards}>
-                        CLAIM JACKPOT
+                        CLAIM BOUNTY
                     </Button>
                 )}
             </Box>
             {isOpen && (
-                <JackpotDialog
+                <BountyDialog
                     isOpen={isOpen}
                     onClose={onClose}
                     reference={reference}
@@ -96,4 +96,4 @@ const ClaimJackpot = ({ username, cards, haveIgnis }) => {
     );
 };
 
-export default ClaimJackpot;
+export default ClaimBounty;

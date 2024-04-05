@@ -1,15 +1,15 @@
 import { Box, Center, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { getJackpotParticipants } from '../../../services/Jackpot/utils';
+import { getBountyParticipants } from '../../../services/Bounty/utils';
 import RemainingCards from '../../Cards/RemainingCards';
-import JackpotWidget from '../../JackpotWidget/JackpotWidget';
+import BountyWidget from '../../BountyWidget/BountyWidget';
 import SortAndFilterCards from '../../SortAndFilters/SortAndFilterCards';
-import ClaimJackpot from './ClaimJackpot';
-import { IGNIS_REQUIRED, REFRESH_JACKPOT_PARTICIPANTS } from '../../../data/CONSTANTS';
+import ClaimBounty from './ClaimBounty';
+import { IGNIS_REQUIRED, REFRESH_BOUNTY_PARTICIPANTS } from '../../../data/CONSTANTS';
 
 /**
- * @name Jackpot
- * @description Jackpot page
+ * @name Bounty
+ * @description Bounty page
  * @param {object} infoAccount - Account info
  * @param {array} cards - All cards
  * @param {object} blockchainStatus - Blockchain status
@@ -17,7 +17,7 @@ import { IGNIS_REQUIRED, REFRESH_JACKPOT_PARTICIPANTS } from '../../../data/CONS
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
+const Bounty = ({ infoAccount, cards = [], blockchainStatus }) => {
     const [totalNoSpecialCards, setTotalNoSpecialCards] = useState([]); // Cards without specials
     const [remainingCards, setRemainingCards] = useState([]); // Cards without specials and with 0 quantity
     const [cardsFiltered, setCardsFiltered] = useState([]); // Cards filtered by search and rarity
@@ -25,7 +25,7 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
     // const [missingCards, setMissingCards] = useState(false);
     const { accountRs: account, IGNISBalance } = infoAccount;
 
-    const IS_JACKPOT_ENABLED = true;
+    const IS_BOUNTY_ENABLED = true;
 
     useEffect(() => {
         // Get remaining cards
@@ -48,7 +48,7 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
     useEffect(() => {
         const getParticipants = async () => {
             // Get participants
-            const response = await getJackpotParticipants();
+            const response = await getBountyParticipants();
             let auxParticipants = [];
             let numParticipants = 0;
             Object.entries(response).forEach(entry => {
@@ -69,7 +69,7 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
 
         const interval = setInterval(() => {
             getParticipants();
-        }, REFRESH_JACKPOT_PARTICIPANTS);
+        }, REFRESH_BOUNTY_PARTICIPANTS);
         return () => clearInterval(interval);
     }, [account]);
 
@@ -79,12 +79,12 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
     const textParticipations =
         findParticipation && (myParticipation === 1 ? 'once' : findParticipation.quantity + ' times');
 
-    const canClaimJackpot = IS_JACKPOT_ENABLED && cards.length > 0 && remainingCards.length === 0;
+    const canClaimBounty = IS_BOUNTY_ENABLED && cards.length > 0 && remainingCards.length === 0;
 
     return (
         <Box>
             <Center>
-                <JackpotWidget cStyle={2} blockchainStatus={blockchainStatus} />
+                <BountyWidget cStyle={2} blockchainStatus={blockchainStatus} />
             </Center>
 
             {imParticipant && (
@@ -96,7 +96,7 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
             {/*missingCards && (
                 <Box>
                     <Text textAlign="center" fontWeight="bolder" color={'red'}>
-                        We have detected that you have played the Jackpot, but there are still cards to be sent.
+                        We have detected that you have played the Bounty, but there are still cards to be sent.
                     </Text>
                     <Text pb={2} textTransform={"uppercase"} textAlign="center" fontWeight="bolder" color={'red'}>
                         (your participation is not taken into account)
@@ -123,8 +123,8 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
                 </>
             )}
 
-            {canClaimJackpot && (
-                <ClaimJackpot
+            {canClaimBounty && (
+                <ClaimBounty
                     username={infoAccount.name}
                     cards={totalNoSpecialCards}
                     haveIgnis={IGNISBalance >= IGNIS_REQUIRED}
@@ -134,4 +134,4 @@ const Jackpot = ({ infoAccount, cards = [], blockchainStatus }) => {
     );
 };
 
-export default Jackpot;
+export default Bounty;

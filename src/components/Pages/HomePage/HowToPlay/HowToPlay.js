@@ -1,5 +1,5 @@
 import { Box, Stack } from '@chakra-ui/react';
-import JackpotWidget from '../../../JackpotWidget/JackpotWidget';
+import BountyWidget from '../../../BountyWidget/BountyWidget';
 import Buttons from './Buttons';
 
 const HowToPlay = ({ blockchainStatus }) => {
@@ -14,7 +14,7 @@ const HowToPlay = ({ blockchainStatus }) => {
                 justify={'center'}>
                 <Box my={4} pl={{ base: 6, xl: 0 }} mr={{ base: 0, xl: 8 }} />
                 <Box pl={8}>
-                    <JackpotWidget blockchainStatus={blockchainStatus} cStyle={1} />
+                    <BountyWidget blockchainStatus={blockchainStatus} cStyle={1} />
                 </Box>
             </Stack>
         </Box>

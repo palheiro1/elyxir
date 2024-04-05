@@ -13,7 +13,7 @@ import LateralMenu from '../../components/Navigation/LateralMenu/LateralMenu';
 import History from '../../components/Pages/HistoryPage/History';
 import Overview from '../../components/Pages/HomePage/Overview';
 import Inventory from '../../components/Pages/InventoryPage/Inventory';
-import Jackpot from '../../components/Pages/JackpotPage/Jackpot';
+import Bounty from '../../components/Pages/BountyPage/Bounty';
 import Market from '../../components/Pages/MarketPage/Market';
 import Account from '../../components/Pages/AccountPage/Account';
 
@@ -484,7 +484,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         '#3b7197', // History
         '#3b6497', // Market
         '#573b97', // Bridge
-        '#3b5397', // Jackpot
+        '#3b5397', // Bounty
         '#4e3b97', // Account
         '#9f3772', // Buy pack
         '#413b97', // Exchange
@@ -514,7 +514,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 wethCards={wethCards}
                 manaCards={manaCards}
             />, // OPTION 4 - Bridge
-            <Jackpot infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />, // OPTION 5 - Jackpot
+            <Bounty infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />, // OPTION 5 - Bounty
             <Account infoAccount={infoAccount} />, // OPTION 6 - Account
             '', // OPTION 7 - Buy pack
             <Exchange infoAccount={infoAccount} />, // OPTION 8 - Exchange

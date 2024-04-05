@@ -3,16 +3,16 @@ import { GiCutDiamond } from 'react-icons/gi';
 
 /**
  * @name VCountdown
- * @description Component that shows the Jackpot balance and the countdown to the next draw
- * @dev Used in JackpotWidget
- * @param {Object} jackpotTimer - Object with the Jackpot timer data
- * @param {Number} jackpotBalance - Jackpot balance in IGNIS
- * @param {Number} jackpotBalanceUSD - Jackpot balance in USD
+ * @description Component that shows the Bounty balance and the countdown to the next draw
+ * @dev Used in BountyWidget
+ * @param {Object} bountyTimer - Object with the Bounty timer data
+ * @param {Number} bountyBalance - Bounty balance in IGNIS
+ * @param {Number} bountyBalanceUSD - Bounty balance in USD
  * @returns {JSX.Element} - JSX Element with the component
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const VCountdown = ({ jackpotTimer, jackpotBalance, jackpotBalanceUSD }) => {
+const VCountdown = ({ bountyTimer, bountyBalance, bountyBalanceUSD }) => {
 
     const useEffect = (() => {
         console.log("Estoy useffect")
@@ -56,10 +56,10 @@ const VCountdown = ({ jackpotTimer, jackpotBalance, jackpotBalanceUSD }) => {
                     />
                     <VStack textAlign="center">
                         <Text color="white" fontSize="3xl" fontWeight="bold" mb={-3}>
-                            {jackpotBalance} WETH
+                            {bountyBalance} WETH
                         </Text>
                         <Text color="white" fontSize="md">
-                            ({jackpotBalanceUSD} USD)
+                            ({bountyBalanceUSD} USD)
                         </Text>
                     </VStack>
                 </Stack>
@@ -68,7 +68,7 @@ const VCountdown = ({ jackpotTimer, jackpotBalance, jackpotBalanceUSD }) => {
                 <Stack direction="row" spacing={4} align="center" color="white">
                     <Box p={2} bg="#121D31" rounded="lg" minW="90px">
                         <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                            {jackpotTimer.days}
+                            {bountyTimer.days}
                         </Text>
                         <Text textAlign="center" fontSize="xs">
                             days
@@ -77,7 +77,7 @@ const VCountdown = ({ jackpotTimer, jackpotBalance, jackpotBalanceUSD }) => {
 
                     <Box p={2} bg="#121D31" rounded="lg" minW="90px">
                         <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                            {jackpotTimer.hours}
+                            {bountyTimer.hours}
                         </Text>
                         <Text textAlign="center" fontSize="xs">
                             hours
@@ -86,7 +86,7 @@ const VCountdown = ({ jackpotTimer, jackpotBalance, jackpotBalanceUSD }) => {
 
                     <Box p={2} bg="#121D31" rounded="lg" minW="90px">
                         <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                            {jackpotTimer.minutes}
+                            {bountyTimer.minutes}
                         </Text>
                         <Text textAlign="center" fontSize="xs">
                             minutes

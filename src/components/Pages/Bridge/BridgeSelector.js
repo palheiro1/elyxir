@@ -90,7 +90,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                     textAlign="center"
                     color="white">
                     Take your cards to Polygon to sell them on the main NFT marketplaces, or bring them to Ardor to
-                    craft, morph, claim jackpots or access unlockable content.
+                    craft, morph, claim bountys or access unlockable content.
                 </Text>
             </Box>
         </>

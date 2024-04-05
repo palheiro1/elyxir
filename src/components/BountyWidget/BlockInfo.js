@@ -3,15 +3,15 @@ import { Center, Table, Tbody, Td, Tr, useColorModeValue } from '@chakra-ui/reac
 
 /**
  * @name BlockInfo
- * @description Component to show the block info of the jackpot
- * @param {Object} jackpotStatus - Jackpot status
- * @param {Object} jackpotTimer - Jackpot timer
+ * @description Component to show the block info of the bounty
+ * @param {Object} bountyStatus - Bounty status
+ * @param {Object} bountyTimer - Bounty timer
  * @param {Number} cStyle - Style of the component
  * @returns {JSX.Element} - JSX element
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
+const BlockInfo = ({ bountyStatus, bountyTimer, cStyle = 1 }) => {
 
     const pyStyle = 3;
     const _color = useColorModeValue("black", "white");
@@ -26,16 +26,16 @@ const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
                             Remaining blocks
                         </Td>
                         <Td py={pyStyle} borderBottom="0px" color="gray">
-                            {jackpotTimer.remainingBlocks}
+                            {bountyTimer.remainingBlocks}
                         </Td>
                     </Tr>
 
                     <Tr>
                         <Td py={pyStyle} borderBottom="0px">
-                            Jackpot block
+                            Bounty block
                         </Td>
                         <Td py={pyStyle} borderBottom="0px" color="gray">
-                            {jackpotStatus.prev_height + jackpotTimer.remainingBlocks}
+                            {bountyStatus.prev_height + bountyTimer.remainingBlocks}
                         </Td>
                     </Tr>
 
@@ -44,7 +44,7 @@ const BlockInfo = ({ jackpotStatus, jackpotTimer, cStyle = 1 }) => {
                             Current block
                         </Td>
                         <Td py={pyStyle} borderBottom="0px" color="gray">
-                            {jackpotStatus.prev_height}
+                            {bountyStatus.prev_height}
                         </Td>
                     </Tr>
                 </Tbody>

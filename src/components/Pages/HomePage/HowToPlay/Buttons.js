@@ -8,7 +8,7 @@ const Buttons = () => {
     const textOpen = useColorModeValue('#e094b3', 'white');
     const textHistory = useColorModeValue('#3b7197', 'white');
     const textInventory = useColorModeValue('#2f8190', 'white');
-    const textJackpot = useColorModeValue('#3b5397', 'white');
+    const textBounty = useColorModeValue('#3b5397', 'white');
 
     const navigate = useNavigate();
 
@@ -90,16 +90,16 @@ const Buttons = () => {
 
                 <FlowItem
                     number={5}
-                    title="The Jackpot: Your Ultimate Challenge!"
-                    color={textJackpot}
+                    title="The Bounty: Your Ultimate Challenge!"
+                    color={textBounty}
                     button={
                         <MenuButton
                             bgColor={'#3b5397'}
                             fontWeight={'bold'}
                             hoverBg={'rgba(59, 83, 151, 0.75)'}
-                            icon={'/images/icons/menu/blanco/jackpot.png'}
+                            icon={'/images/icons/menu/blanco/bounty.png'}
                             isActive={false}
-                            text={'Jackpot'}
+                            text={'Bounty'}
                             onClick={() => navigate('/home?goToSection=5')}
                         />
                     }

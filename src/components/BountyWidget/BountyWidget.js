@@ -9,36 +9,36 @@ import { BLOCKTIME, FREQUENCY } from '../../data/CONSTANTS';
 
 // Services
 //import { getBlockchainStatus } from '../../services/Ardor/ardorInterface';
-import { getJackpotBalance, swapPriceEthtoUSD, getJackpotParticipants } from '../../services/Jackpot/utils';
+import { getBountyBalance, swapPriceEthtoUSD, getBountyParticipants } from '../../services/Bounty/utils';
 import { getGemPrice, getManaPrice } from '../../services/Ardor/evmInterface';
 
 /**
- * @name JackpotWidget
- * @description This component is the jackpot widget
+ * @name BountyWidget
+ * @description This component is the bounty widget
  * @author Jesús Sánchez Fernández
  * @version 0.1
  * @param {Number} cStyle - Style of the component
- * @param {Number} numParticipants - Number of participants in the jackpot
+ * @param {Number} numParticipants - Number of participants in the bounty
  * @param {Object} blockchainStatus - Blockchain status
  * @returns {JSX.Element} - JSX element
- * @example <JackpotWidget cStyle={0} numParticipants={0} blockchainStatus={{}} /> --> Home page
- * @example <JackpotWidget cStyle={1} numParticipants={0} blockchainStatus={{}} /> --> Jackpot page
+ * @example <BountyWidget cStyle={0} numParticipants={0} blockchainStatus={{}} /> --> Home page
+ * @example <BountyWidget cStyle={1} numParticipants={0} blockchainStatus={{}} /> --> Bounty page
  */
-const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
-    const [jackpotTimer, setJackpotTimer] = useState({
+const BountyWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
+    const [bountyTimer, setBountyTimer] = useState({
         days: 0,
         hours: 0,
         minutes: 0,
         remainingBlocks: 'loading',
     });
 
-    const [jackpotBalance, setJackpotBalance] = useState({
+    const [bountyBalance, setBountyBalance] = useState({
         wETH: 0,
         GEM: 0,
         Mana: 0,
     });
 
-    const [jackpotBalanceUSD, setJackpotBalanceUSD] = useState({
+    const [bountyBalanceUSD, setBountyBalanceUSD] = useState({
         wETH: 0,
         GEM: 0,
         Mana: 0,
@@ -48,24 +48,24 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
     const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
 
     useEffect(() => {
-        const fetchJackpotBalance = async () => {
+        const fetchBountyBalance = async () => {
             try {
-                const [jackpotBalance, responseParticipants, gemPrice, manaPrice] = await Promise.all([
-                    getJackpotBalance(),
-                    getJackpotParticipants(),
+                const [bountyBalance, responseParticipants, gemPrice, manaPrice] = await Promise.all([
+                    getBountyBalance(),
+                    getBountyParticipants(),
                     getGemPrice(),
                     getManaPrice(),
                 ]);
 
-                setJackpotBalance({
-                    wETH: jackpotBalance,
+                setBountyBalance({
+                    wETH: bountyBalance,
                     GEM: 9000,
                     Mana: 9000,
                 });
 
-                // const wETHinUSD = await swapPriceEthtoUSD(jackpotBalance);
+                // const wETHinUSD = await swapPriceEthtoUSD(bountyBalance);
                 const [wethUsd, sumangaUsd] = await Promise.all([
-                    swapPriceEthtoUSD(jackpotBalance),
+                    swapPriceEthtoUSD(bountyBalance),
                     swapPriceEthtoUSD(0.02),
                 ]);
 
@@ -73,7 +73,7 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
                 const totalMana = manaPrice * 9000;
                 const totalSumanga = sumangaUsd * 7;
 
-                setJackpotBalanceUSD({
+                setBountyBalanceUSD({
                     wETH: wethUsd,
                     GEM: totalGem,
                     Mana: totalMana,
@@ -92,15 +92,15 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
                 });
                 setParticipants({ numParticipants, participants: auxParticipants });
             } catch (error) {
-                console.error('🚀 ~ file: JackpotWidget.js:47 ~ fetchJackpotBalance ~ error:', error);
+                console.error('🚀 ~ file: BountyWidget.js:47 ~ fetchBountyBalance ~ error:', error);
             }
         };
 
-        fetchJackpotBalance();
+        fetchBountyBalance();
     }, []);
 
     useEffect(() => {
-        const getJackpotTimer = () => {
+        const getBountyTimer = () => {
             const modulo = blockchainStatus.prev_height % FREQUENCY;
             const remainingBlocks = FREQUENCY - modulo;
             const remainingSecs = remainingBlocks * BLOCKTIME;
@@ -110,10 +110,10 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
             const hours = Math.floor((delta % (24 * 60 * 60)) / (60 * 60));
             const minutes = Math.floor((delta % (60 * 60)) / 60);
 
-            setJackpotTimer({ days, hours, minutes, remainingBlocks });
+            setBountyTimer({ days, hours, minutes, remainingBlocks });
         };
 
-        blockchainStatus && getJackpotTimer();
+        blockchainStatus && getBountyTimer();
     }, [blockchainStatus]);
 
     const borderColor = cStyle === 0 ? 'rgb(47,144,136)' : 'rgb(59,83,151)';
@@ -132,10 +132,10 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
                     bgColor={bgColor}>
                     <HCountdown
                         cStyle={cStyle}
-                        jackpotTimer={jackpotTimer}
+                        bountyTimer={bountyTimer}
                         numParticipants={participants.numParticipants}
-                        jackpotBalance={jackpotBalance}
-                        jackpotBalanceUSD={jackpotBalanceUSD}
+                        bountyBalance={bountyBalance}
+                        bountyBalanceUSD={bountyBalanceUSD}
                     />
                 </Box>
                 <Box
@@ -155,7 +155,7 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
 
                     <Flex align={'center'} gap={2}>
                         <Text textAlign={'center'} h="100%" fontWeight={'bold'} fontSize={'4xl'}>
-                            {jackpotBalanceUSD.Total.toFixed(2)}
+                            {bountyBalanceUSD.Total.toFixed(2)}
                         </Text>
                         <Text textAlign={'center'} fontSize={'xl'}>
                             USD
@@ -167,4 +167,4 @@ const JackpotWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
     );
 };
 
-export default JackpotWidget;
+export default BountyWidget;

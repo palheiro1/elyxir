@@ -5,7 +5,7 @@ import {
     CURRENCY,
     GEMASSET,
     GIFTZASSET,
-    JACKPOTACCOUNT,
+    BOUNTYACCOUNT,
     MANAASSET,
     NQTDIVIDER,
     REFRESH_DATA_TIME,
@@ -491,13 +491,13 @@ export const sendBidOrder = async ({ asset, price, quantity, passPhrase }) => {
 };
 
 /**
- * @name sendToJackpot
- * @description Send cards to the jackpot
+ * @name sendToBounty
+ * @description Send cards to the bounty
  * @param {Array} cards - Array of cards
  * @param {String} passPhrase - Passphrase
  * @returns {Array} - Array of responses
  */
-export const sendToJackpot = async ({ cards, passPhrase }) => {
+export const sendToBounty = async ({ cards, passPhrase }) => {
     // const isBlocked = cards.some(card => card.quantityQNT < card.unconfirmedQuantityQNT);
     const isBlocked = cards.some(
         card =>
@@ -516,7 +516,7 @@ export const sendToJackpot = async ({ cards, passPhrase }) => {
             asset: card.asset,
             quantityQNT: 1,
             passPhrase: passPhrase,
-            recipient: JACKPOTACCOUNT,
+            recipient: BOUNTYACCOUNT,
             message: message,
             messagePrunable: true,
             deadline: 120,
@@ -528,7 +528,7 @@ export const sendToJackpot = async ({ cards, passPhrase }) => {
     const success = responses.every(response => response.status === 'fulfilled');
     return {
         response: success,
-        message: success ? 'Success' : 'Error sending cards to the jackpot',
+        message: success ? 'Success' : 'Error sending cards to the bounty',
     };
 };
 
