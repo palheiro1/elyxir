@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, memo, useCallback, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { useDispatch } from 'react-redux';
+
 
 // -----------------------------------------------------------------
 // ------------------------- Components ----------------------------
@@ -22,6 +24,10 @@ import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
 import CardReceived from '../../components/Modals/CardReceived/CardReceived';
 import Bridge from '../../components/Pages/Bridge/Bridge';
 import { isNotLogged } from '../../utils/validators';
+
+// -----------------------------------------------------------------
+// ------------------------- Functions -----------------------------
+import { getBlockchainBlocks } from '../../redux/reducers/BlockchainReducer';
 
 // -----------------------------------------------------------------
 // ------------------------- Constants -----------------------------
@@ -54,7 +60,6 @@ import { checkDataChange, getCurrentAskAndBids, getIGNISBalance, handleNotificat
 
 import {
     getAccountLedger,
-    getBlockchainStatus,
     getBlockchainTransactions,
     getTrades,
     getTransaction,
@@ -82,6 +87,7 @@ import { getOmnoGiftzBalance } from '../../services/Ardor/omnoInterface';
  */
 const Home = memo(({ infoAccount, setInfoAccount }) => {
     const toast = useToast();
+    const dispatch = useDispatch();
 
     // Refs
     const newTransactionRef = useRef();
@@ -142,12 +148,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     // Component to render
     const [renderComponent, setRenderComponent] = useState(<Overview />);
-
-    // Blockchain status
-    const [blockchainStatus, setBlockchainStatus] = useState({
-        prev_height: 0,
-        epoch_beginning: Date.UTC(2018, 0, 1, 0, 0, 0),
-    });
 
     // -----------------------------------------------------------------
     const [searchParams, setSearchParams] = useSearchParams();
@@ -362,31 +362,13 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Check for new blocks
     // -----------------------------------------------------------------
 
-    const getStatus = useCallback(async () => {
-        try {
-            const {
-                data: { numberOfBlocks },
-            } = await getBlockchainStatus();
-
-            if (blockchainStatus.prev_height !== numberOfBlocks) {
-                console.log('Mythical Beings: New block detected!');
-                setBlockchainStatus(prevBlockchainStatus => ({
-                    ...prevBlockchainStatus,
-                    prev_height: numberOfBlocks,
-                }));
-            }
-        } catch (error) {
-            console.log('Mythical Beings: Error fetching blockchain status', error);
-        }
-    }, [blockchainStatus]);
-
     useEffect(() => {
         const intervalId = setInterval(() => {
-            getStatus();
+            dispatch(getBlockchainBlocks());
         }, REFRESH_BLOCK_TIME);
 
         return () => clearInterval(intervalId);
-    }, [getStatus]);
+    }, [dispatch]);
 
     // -----------------------------------------------------------------
     // Check for new cards notifications
@@ -495,7 +477,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     const components = useMemo(
         () => [
-            <Overview blockchainStatus={blockchainStatus} />, // OPTION 0 - Overview
+            <Overview />, // OPTION 0 - Overview
             <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // OPTION 1 - Inventory
             <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />, // OPTION 2 - History
             <Market
@@ -514,7 +496,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 wethCards={wethCards}
                 manaCards={manaCards}
             />, // OPTION 4 - Bridge
-            <Bounty infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />, // OPTION 5 - Bounty
+            <Bounty infoAccount={infoAccount} cards={cards} />, // OPTION 5 - Bounty
             <Account infoAccount={infoAccount} />, // OPTION 6 - Account
             '', // OPTION 7 - Buy pack
             <Exchange infoAccount={infoAccount} />, // OPTION 8 - Exchange
@@ -527,7 +509,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             cards,
             cardsFiltered,
             gemCards,
-            blockchainStatus,
             haveUnconfirmed,
             giftzCards,
             wethCards,
@@ -598,7 +579,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     showAllCards={showAllCards}
                     handleShowAllCards={handleShowAllCards}
                     goToSection={handleChangeOption}
-                    nextBlock={blockchainStatus.prev_height}
                 />
             </Box>
 

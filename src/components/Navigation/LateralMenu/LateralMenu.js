@@ -30,7 +30,6 @@ const LateralMenu = memo(
         infoAccount,
         handleLogout,
         goToSection,
-        nextBlock,
     }) => {
         const { isOpen, onToggle, onClose } = useDisclosure();
 
@@ -62,7 +61,6 @@ const LateralMenu = memo(
                         showAllCards={showAllCards}
                         handleShowAllCards={handleShowAllCards}
                         children={children}
-                        nextBlock={nextBlock}
                     />
                 </Flex>
                 <Collapse in={isOpen} animateOpacity>

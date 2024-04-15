@@ -8,9 +8,11 @@ import HCountdown from './HCountdown';
 import { BLOCKTIME, FREQUENCY } from '../../data/CONSTANTS';
 
 // Services
-//import { getBlockchainStatus } from '../../services/Ardor/ardorInterface';
 import { getBountyBalance, swapPriceEthtoUSD, getBountyParticipants } from '../../services/Bounty/utils';
 import { getGemPrice, getManaPrice } from '../../services/Ardor/evmInterface';
+
+import { useSelector } from 'react-redux';
+
 
 /**
  * @name BountyWidget
@@ -19,12 +21,10 @@ import { getGemPrice, getManaPrice } from '../../services/Ardor/evmInterface';
  * @version 0.1
  * @param {Number} cStyle - Style of the component
  * @param {Number} numParticipants - Number of participants in the bounty
- * @param {Object} blockchainStatus - Blockchain status
  * @returns {JSX.Element} - JSX element
- * @example <BountyWidget cStyle={0} numParticipants={0} blockchainStatus={{}} /> --> Home page
- * @example <BountyWidget cStyle={1} numParticipants={0} blockchainStatus={{}} /> --> Bounty page
  */
-const BountyWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
+const BountyWidget = ({ cStyle = 0 }) => {
+    const { prev_height } = useSelector(state => state.blockchain);
     const [bountyTimer, setBountyTimer] = useState({
         days: 0,
         hours: 0,
@@ -63,7 +63,6 @@ const BountyWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
                     Mana: 9000,
                 });
 
-                // const wETHinUSD = await swapPriceEthtoUSD(bountyBalance);
                 const [wethUsd, sumangaUsd] = await Promise.all([
                     swapPriceEthtoUSD(bountyBalance),
                     swapPriceEthtoUSD(0.02),
@@ -101,7 +100,7 @@ const BountyWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
 
     useEffect(() => {
         const getBountyTimer = () => {
-            const modulo = blockchainStatus.prev_height % FREQUENCY;
+            const modulo = prev_height % FREQUENCY;
             const remainingBlocks = FREQUENCY - modulo;
             const remainingSecs = remainingBlocks * BLOCKTIME;
             const delta = Number(remainingSecs - BLOCKTIME);
@@ -113,8 +112,8 @@ const BountyWidget = ({ blockchainStatus = {}, cStyle = 0 }) => {
             setBountyTimer({ days, hours, minutes, remainingBlocks });
         };
 
-        blockchainStatus && getBountyTimer();
-    }, [blockchainStatus]);
+        prev_height && getBountyTimer();
+    }, [prev_height]);
 
     const borderColor = cStyle === 0 ? 'rgb(47,144,136)' : 'rgb(59,83,151)';
     const bgColor = cStyle === 0 ? 'rgba(47, 144, 136 ,0.15)' : 'rgba(59, 83, 151, 0.15)';
