@@ -1,7 +1,7 @@
 import { Box, Center, Heading, Image, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import HowToPlay from './HowToPlay/HowToPlay';
 
-const Overview = ({ blockchainStatus }) => {
+const Overview = () => {
     const textColor = useColorModeValue('#2f9088', 'white');
 
     const borderColor = 'rgb(47,144,136)';
@@ -33,7 +33,7 @@ const Overview = ({ blockchainStatus }) => {
                     </Text>
                 </Box>
 
-                <HowToPlay blockchainStatus={blockchainStatus} />
+                <HowToPlay />
 
                 <Stack
                     py={8}

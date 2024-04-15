@@ -12,12 +12,11 @@ import { IGNIS_REQUIRED, REFRESH_BOUNTY_PARTICIPANTS } from '../../../data/CONST
  * @description Bounty page
  * @param {object} infoAccount - Account info
  * @param {array} cards - All cards
- * @param {object} blockchainStatus - Blockchain status
  * @returns {JSX.Element} - JSX to display
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const Bounty = ({ infoAccount, cards = [], blockchainStatus }) => {
+const Bounty = ({ infoAccount, cards = [] }) => {
     const [totalNoSpecialCards, setTotalNoSpecialCards] = useState([]); // Cards without specials
     const [remainingCards, setRemainingCards] = useState([]); // Cards without specials and with 0 quantity
     const [cardsFiltered, setCardsFiltered] = useState([]); // Cards filtered by search and rarity
@@ -84,7 +83,7 @@ const Bounty = ({ infoAccount, cards = [], blockchainStatus }) => {
     return (
         <Box>
             <Center>
-                <BountyWidget cStyle={2} blockchainStatus={blockchainStatus} />
+                <BountyWidget cStyle={2} />
             </Center>
 
             {imParticipant && (

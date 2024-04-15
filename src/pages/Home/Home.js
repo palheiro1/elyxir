@@ -149,12 +149,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Component to render
     const [renderComponent, setRenderComponent] = useState(<Overview />);
 
-    // Blockchain status
-    const [blockchainStatus, setBlockchainStatus] = useState({
-        prev_height: 0,
-        epoch_beginning: Date.UTC(2018, 0, 1, 0, 0, 0),
-    });
-
     // -----------------------------------------------------------------
     const [searchParams, setSearchParams] = useSearchParams();
     const directSection = parseInt(searchParams.get('goToSection')) || false;
@@ -368,25 +362,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Check for new blocks
     // -----------------------------------------------------------------
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    // const getStatus = async () => {
-    //     try {
-    //         const {
-    //             data: { numberOfBlocks },
-    //         } = await getBlockchainStatus();
-
-    //         if (blockchainStatus.prev_height !== numberOfBlocks) {
-    //             console.log('Mythical Beings: New block detected!');
-    //             setBlockchainStatus(prevBlockchainStatus => ({
-    //                 ...prevBlockchainStatus,
-    //                 prev_height: numberOfBlocks,
-    //             }));
-    //         }
-    //     } catch (error) {
-    //         console.log('Mythical Beings: Error fetching blockchain status', error);
-    //     }
-    // };
-
     useEffect(() => {
         const intervalId = setInterval(() => {
             dispatch(getBlockchainBlocks());
@@ -502,7 +477,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     const components = useMemo(
         () => [
-            <Overview blockchainStatus={blockchainStatus} />, // OPTION 0 - Overview
+            <Overview />, // OPTION 0 - Overview
             <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // OPTION 1 - Inventory
             <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />, // OPTION 2 - History
             <Market
@@ -521,7 +496,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 wethCards={wethCards}
                 manaCards={manaCards}
             />, // OPTION 4 - Bridge
-            <Bounty infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />, // OPTION 5 - Bounty
+            <Bounty infoAccount={infoAccount} cards={cards} />, // OPTION 5 - Bounty
             <Account infoAccount={infoAccount} />, // OPTION 6 - Account
             '', // OPTION 7 - Buy pack
             <Exchange infoAccount={infoAccount} />, // OPTION 8 - Exchange
@@ -534,7 +509,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             cards,
             cardsFiltered,
             gemCards,
-            blockchainStatus,
             haveUnconfirmed,
             giftzCards,
             wethCards,
@@ -605,7 +579,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     showAllCards={showAllCards}
                     handleShowAllCards={handleShowAllCards}
                     goToSection={handleChangeOption}
-                    nextBlock={blockchainStatus.prev_height}
                 />
             </Box>
 

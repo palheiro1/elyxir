@@ -8,7 +8,6 @@ import HCountdown from './HCountdown';
 import { BLOCKTIME, FREQUENCY } from '../../data/CONSTANTS';
 
 // Services
-//import { getBlockchainStatus } from '../../services/Ardor/ardorInterface';
 import { getBountyBalance, swapPriceEthtoUSD, getBountyParticipants } from '../../services/Bounty/utils';
 import { getGemPrice, getManaPrice } from '../../services/Ardor/evmInterface';
 
@@ -22,10 +21,7 @@ import { useSelector } from 'react-redux';
  * @version 0.1
  * @param {Number} cStyle - Style of the component
  * @param {Number} numParticipants - Number of participants in the bounty
- * @param {Object} blockchainStatus - Blockchain status
  * @returns {JSX.Element} - JSX element
- * @example <BountyWidget cStyle={0} numParticipants={0} blockchainStatus={{}} /> --> Home page
- * @example <BountyWidget cStyle={1} numParticipants={0} blockchainStatus={{}} /> --> Bounty page
  */
 const BountyWidget = ({ cStyle = 0 }) => {
     const { prev_height } = useSelector(state => state.blockchain);

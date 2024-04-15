@@ -2,26 +2,28 @@ import { memo, useMemo, useEffect, useState } from 'react';
 import { Box, Stack, Switch, Text } from '@chakra-ui/react';
 import VerticalMenuButtons from './VerticalMenuButtons';
 import { BLOCKTIME } from '../../../data/CONSTANTS';
+import { useSelector } from 'react-redux';
 
-const NormalMenu = memo(({ option, setOption, handleLogout, showAllCards, handleShowAllCards, nextBlock, children }) => {
+const NormalMenu = memo(({ option, setOption, handleLogout, showAllCards, handleShowAllCards, children }) => {
 
-    const [actualBlock, setActualBlock] = useState(nextBlock);
+    const { prev_height } = useSelector(state => state.blockchain);
+    const [actualBlock, setActualBlock] = useState(prev_height);
     const [timer, setTimer] = useState(BLOCKTIME);
     const timeText = timer === 0 ? 'SOON' : timer;
     const memoChildren = useMemo(() => children, [children]);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (actualBlock === nextBlock) {
+            if (actualBlock === prev_height) {
                 if (timer <= 0) return;
                 setTimer(timer - 1);
             } else {
-                setActualBlock(nextBlock);
+                setActualBlock(prev_height);
                 setTimer(BLOCKTIME);
             }
         }, 1000);
         return () => clearInterval(interval);
-    }, [timer, actualBlock, nextBlock]);
+    }, [timer, actualBlock, prev_height]);
 
     return (
         <Stack direction="row" pt={5}>
