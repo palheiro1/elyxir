@@ -23,3 +23,8 @@ export const getBountyParticipants = async () => {
     const response = await fetch('https://api.mythicalbeings.io/index.php?action=winners');
     return await response.json();
 };
+
+export const getBountyMissingCards = async () => {
+    const response = await fetch('https://api.mythicalbeings.io/index.php?action=participantsWithMissingCards');
+    return await response.json();
+};

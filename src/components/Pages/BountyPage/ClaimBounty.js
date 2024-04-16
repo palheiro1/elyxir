@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Box, Button, Center, Heading, Text, useDisclosure } from '@chakra-ui/react';
-import BountyDialog from '../../Modals/BountyDialog/BountyDialog';
+import BountyDialog from '../../Modals/BountyDialog/ClaimBountyDialog';
 import { IGNIS_REQUIRED } from '../../../data/CONSTANTS';
 
 /**
