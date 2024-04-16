@@ -1,11 +1,12 @@
-import { Box, Center, Text } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { getBountyParticipants } from '../../../services/Bounty/utils';
+import { Box, Button, Center, Text, useDisclosure } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
+import { getBountyMissingCards, getBountyParticipants } from '../../../services/Bounty/utils';
 import RemainingCards from '../../Cards/RemainingCards';
 import BountyWidget from '../../BountyWidget/BountyWidget';
 import SortAndFilterCards from '../../SortAndFilters/SortAndFilterCards';
 import ClaimBounty from './ClaimBounty';
 import { IGNIS_REQUIRED, REFRESH_BOUNTY_PARTICIPANTS } from '../../../data/CONSTANTS';
+import SendMissingCardDialog from '../../Modals/BountyDialog/SendMissingCardDialog';
 
 /**
  * @name Bounty
@@ -18,11 +19,15 @@ import { IGNIS_REQUIRED, REFRESH_BOUNTY_PARTICIPANTS } from '../../../data/CONST
  */
 const Bounty = ({ infoAccount, cards = [] }) => {
     const [totalNoSpecialCards, setTotalNoSpecialCards] = useState([]); // Cards without specials
+    console.log("🚀 ~ Bounty ~ totalNoSpecialCards:", totalNoSpecialCards)
     const [remainingCards, setRemainingCards] = useState([]); // Cards without specials and with 0 quantity
     const [cardsFiltered, setCardsFiltered] = useState([]); // Cards filtered by search and rarity
     const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
-    // const [missingCards, setMissingCards] = useState(false);
+    const [missingCards, setMissingCards] = useState([]);
+    const reference = useRef();
     const { accountRs: account, IGNISBalance } = infoAccount;
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const IS_BOUNTY_ENABLED = true;
 
@@ -56,12 +61,16 @@ const Bounty = ({ infoAccount, cards = [] }) => {
                     auxParticipants.push({ account: key, quantity: value });
                     numParticipants += value;
                 }
-
-                // if (key === account && value === 0) {
-                //     setMissingCards(true);
-                // }
             });
             setParticipants({ numParticipants, participants: auxParticipants });
+
+            getBountyMissingCards().then(response => {
+                const missingCardIds = response[account];
+                const missingCardWithData = missingCardIds.map(cardId => {
+                    return totalNoSpecialCards.find(card => card.asset === cardId);
+                });
+                setMissingCards(missingCardWithData);
+            });
         };
 
         getParticipants();
@@ -70,7 +79,7 @@ const Bounty = ({ infoAccount, cards = [] }) => {
             getParticipants();
         }, REFRESH_BOUNTY_PARTICIPANTS);
         return () => clearInterval(interval);
-    }, [account]);
+    }, [account, totalNoSpecialCards]);
 
     const findParticipation = participants.participants.find(participant => participant.account === account);
     const imParticipant = findParticipation !== undefined;
@@ -92,16 +101,19 @@ const Bounty = ({ infoAccount, cards = [] }) => {
                 </Text>
             )}
 
-            {/*missingCards && (
+            {missingCards.length > 0 && (
                 <Box>
                     <Text textAlign="center" fontWeight="bolder" color={'red'}>
                         We have detected that you have played the Bounty, but there are still cards to be sent.
                     </Text>
-                    <Text pb={2} textTransform={"uppercase"} textAlign="center" fontWeight="bolder" color={'red'}>
+                    <Text pb={2} textTransform={'uppercase'} textAlign="center" fontWeight="bolder" color={'red'}>
                         (your participation is not taken into account)
                     </Text>
+                    <Button onClick={onOpen} colorScheme="red" size={'sm'} mx="auto" display="block">
+                        SEND MISSING CARDS
+                    </Button>
                 </Box>
-            )*/}
+            )}
 
             {remainingCards.length > 0 && (
                 <>
@@ -120,6 +132,16 @@ const Bounty = ({ infoAccount, cards = [] }) => {
                         cards={cardsFiltered}
                     />
                 </>
+            )}
+
+            {isOpen && (
+                <SendMissingCardDialog
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    reference={reference}
+                    username={infoAccount.name}
+                    missingCards={missingCards}
+                />
             )}
 
             {canClaimBounty && (
