@@ -4,6 +4,7 @@ import {
     Image,
     Modal,
     ModalBody,
+    ModalCloseButton,
     ModalContent,
     ModalOverlay,
     Stack,
@@ -21,8 +22,8 @@ import CreatureTabs from './DetailedCardViewTabs/CreatureTabs';
 import CultureTabs from './DetailedCardViewTabs/CultureTabs';
 import LocationTabs from './DetailedCardViewTabs/LocationTabs';
 
-import HoverCard from "@darenft/react-3d-hover-card";
-import "@darenft/react-3d-hover-card/dist/style.css";
+import HoverCard from '@darenft/react-3d-hover-card';
+import '@darenft/react-3d-hover-card/dist/style.css';
 
 /**
  * @name DetailedCard
@@ -50,15 +51,16 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                 <ModalOverlay bgColor="blackAlpha.900" />
                 <ModalContent
                     p={2}
-                    px={12}
+                    px={{ base: 4, lg: 12 }}
                     bgColor="#1D1D1D"
                     shadow="dark-lg"
                     border="1px"
                     borderColor="whiteAlpha.400">
-                    <Stack direction="row">
+                    <ModalCloseButton color="white" />
+                    <Stack direction={{ base: 'column', lg: 'row' }}>
                         <Box mt="6%">
                             <HoverCard scaleFactor={1.4}>
-                                <Image src={image} alt={name} maxH="42rem" rounded="lg" />
+                                <Image src={image} alt={name} maxH={{ base: '21rem', lg: '42rem' }} rounded="lg" mx={"auto"} />
                             </HoverCard>
                         </Box>
 

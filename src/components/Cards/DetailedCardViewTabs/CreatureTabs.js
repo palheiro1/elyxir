@@ -1,4 +1,4 @@
-import { Box, Center, Image, TabPanel, Text } from "@chakra-ui/react";
+import { Box, Center, Image, TabPanel, Text } from '@chakra-ui/react';
 
 const CreatureTabs = ({ monster, name }) => {
     const monsterPicture = 'https://media.mythicalbeings.io/creatures/' + monster.picture;
@@ -6,7 +6,7 @@ const CreatureTabs = ({ monster, name }) => {
     return (
         <TabPanel>
             <Center mb={4}>
-                <Box maxW="50%">
+                <Box maxW={{ base: '90%', lg: '50%' }}>
                     <Image src={monsterPicture} alt={name} rounded="lg" align="center" />
                 </Box>
             </Center>

@@ -26,7 +26,7 @@ const HCountdown = ({ bountyTimer, numParticipants = 0, bountyBalance = 0, bount
     return (
         <Center>
             <Stack direction="column" spacing={4} align="center">
-                <Stack direction={{ base: 'column', md: 'row' }} w="100%" gap={6}>
+                <Stack direction={{ base: 'column', lg: 'row' }} w="100%" gap={6}>
                     <HStack>
                         <Image src="/images/currency/weth.png" w="50px" />
                         <VStack align="flex-start">

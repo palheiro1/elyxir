@@ -18,10 +18,10 @@ const Overview = () => {
                     p={4}
                     px={{ base: 2, lg: 12 }}>
                     <Center gap={2}>
-                        <Heading textAlign={'center'} fontWeight={'light'} fontSize={'6xl'} color="#2f9088">
+                        <Heading textAlign={'center'} fontWeight={'light'} fontSize={{ base: "2xl", lg: '6xl'}} color="#2f9088">
                             Welcome to
                         </Heading>
-                        <Heading textAlign={'center'} fontWeight={'medium'} fontSize={'6xl'} color="#2f9088">
+                        <Heading textAlign={'center'} fontWeight={'medium'} fontSize={{ base: "2xl", lg: '6xl'}} color="#2f9088">
                             Mythical Beings
                         </Heading>
                     </Center>
@@ -37,7 +37,7 @@ const Overview = () => {
 
                 <Stack
                     py={8}
-                    px={{ base: 0, md: 12 }}
+                    px={{ base: 2, md: 12 }}
                     spacing={6}
                     color={textColor}
                     border="1px"

@@ -15,7 +15,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                 border="1px"
                 borderColor={borderColor}
                 bgColor={lightBgColor}
-                p={8}
+                p={{ base: 1, lg: 8 }}
                 rounded="md"
                 shadow="md"
                 minH="5rem"

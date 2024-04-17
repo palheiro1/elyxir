@@ -25,7 +25,7 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
     };
 
     return (
-        <Box>
+        <Box maxW={"76vw"}>
             <TableContainer mt={4} bg="blackAlpha">
                 <Table>
                     <Thead>

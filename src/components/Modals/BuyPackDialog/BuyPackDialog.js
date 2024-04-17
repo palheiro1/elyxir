@@ -211,7 +211,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             setPriceInWETH(totalPrice);
             setSelectedOffers(offersToTake);
             const realPriceEth = totalPrice / NQTDIVIDER;
-            setPriceInMatic(((realPriceEth / maticPrice) + 1).toFixed(0));
+            setPriceInMatic((realPriceEth / maticPrice + 1).toFixed(0));
         };
 
         calculatePrices();
@@ -279,14 +279,14 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                     <AlertDialogHeader textAlign="center">BUY A CARD PACK</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>
-                        <Grid templateColumns="repeat(2, 1fr)">
+                        <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}>
                             <GridItem w="100%">
                                 <Center w="100%">
                                     <Animated animationIn="shake" animationInDelay={randomTime()} isVisible={true}>
                                         <Image
                                             src="/images/cardPacks/BuyPackExpendedora.png"
-                                            alt="Card Pack"
-                                            maxH="30rem"
+                                            alt="Vending Machine"
+                                            maxH={{ base: '15rem', md: '30rem' }}
                                         />
                                     </Animated>
                                 </Center>
