@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Center, Flex, Heading, Image, Stack, Text } from '@chakra-ui/react';
+import { Box, Center, Heading, Image, Stack, Text } from '@chakra-ui/react';
 
 // Components
 import HCountdown from './HCountdown';
@@ -120,7 +120,7 @@ const BountyWidget = ({ cStyle = 0 }) => {
 
     return (
         <Center py={4}>
-            <Stack direction={{ base: 'column', md: 'row' }} w="100%" gap={3}>
+            <Stack direction={{ base: 'column', lg: 'row' }} w="100%" gap={3}>
                 <Box
                     p={6}
                     border="1px"
@@ -152,14 +152,14 @@ const BountyWidget = ({ cStyle = 0 }) => {
                         BOUNTY
                     </Heading>
 
-                    <Flex align={'center'} gap={2}>
+                    <Center gap={2}>
                         <Text textAlign={'center'} h="100%" fontWeight={'bold'} fontSize={'4xl'}>
                             {bountyBalanceUSD.Total.toFixed(2)}
                         </Text>
                         <Text textAlign={'center'} fontSize={'xl'}>
                             USD
                         </Text>
-                    </Flex>
+                    </Center>
                 </Box>
             </Stack>
         </Center>

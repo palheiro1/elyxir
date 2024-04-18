@@ -139,11 +139,11 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                     <AlertDialogHeader textAlign="center">OPEN A PACK OF CARDS</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>
-                        <Grid templateColumns="repeat(2, 1fr)">
+                        <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}>
                             <GridItem w="100%">
                                 <Center w="100%">
                                     <HoverCard scaleFactor={1.4}>
-                                        <Image src="/images/cardPacks/cardPack.png" alt="Card Pack" maxH="25rem" />
+                                        <Image src="/images/cardPacks/cardPack.png" alt="Card Pack" maxH={{ base: '15rem', md: '30rem' }} />
                                     </HoverCard>
                                 </Center>
                             </GridItem>

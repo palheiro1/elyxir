@@ -23,7 +23,7 @@ const Market = ({ infoAccount, cards, gemCards, giftzCards, wethCards, manaCards
     const textColor = '#3b6497';
 
     return (
-        <Box maxW={{ base: '100%', md: '80%', lg: '70vw', xl: '77.5vw', '2xl': "100%" }}>
+        <Box maxW={{ base: '100%', lg: '70vw', xl: '77.5vw', '2xl': "100%" }}>
             <PairSelector marketCurrency={marketCurrency} setMarketCurrency={setMarketCurrency} textColor={textColor} />
 
             {marketCurrency === 'CARDS' && (

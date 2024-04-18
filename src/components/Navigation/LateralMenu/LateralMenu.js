@@ -21,16 +21,7 @@ import TopMenu from '../../../pages/Home/TopMenu';
  * @version 1.0
  */
 const LateralMenu = memo(
-    ({
-        option = 0,
-        setOption,
-        children,
-        showAllCards,
-        handleShowAllCards,
-        infoAccount,
-        handleLogout,
-        goToSection,
-    }) => {
+    ({ option = 0, setOption, children, showAllCards, handleShowAllCards, infoAccount, handleLogout, goToSection }) => {
         const { isOpen, onToggle, onClose } = useDisclosure();
 
         const handleSetOption = option => {

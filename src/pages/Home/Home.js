@@ -564,8 +564,8 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             {/* MAIN COMPONENT - LATERAL MENU & CHILDREN */}
             <Box
                 bg={bgColor}
-                m={{ base: 2, md: 12 }}
-                px={{ base: 2, md: 8 }}
+                m={{ base: 2, lg: 12 }}
+                px={{ base: 2, lg: 8 }}
                 py={4}
                 rounded="lg"
                 border="1px"
