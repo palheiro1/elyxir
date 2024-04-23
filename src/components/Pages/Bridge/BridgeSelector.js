@@ -57,7 +57,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                 <BridgeButton
                     bridgeType="ERC1155GIFTZ"
                     text="GIFTZ"
-                    description="Bring your GIFTZ to Ardor to open the 3 random NFT they contain."
+                    description="Bring your GIFTZ to Ardor to open the 5 random NFT they contain."
                 />
                 <BridgeButton
                     bridgeType="ERC20GEM"
