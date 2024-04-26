@@ -9,7 +9,7 @@ import TableCard from '../../Cards/TableCard';
 
 // Utils
 import { calculateFixedAmount, getReason, parseJson, parseRecipient, parseSender } from '../../../utils/txUtils';
-import { JACKPOTACCOUNT, NQTDIVIDER, OMNO_ACCOUNT } from '../../../data/CONSTANTS';
+import { BOUNTYACCOUNT, NQTDIVIDER, OMNO_ACCOUNT } from '../../../data/CONSTANTS';
 import { getAsset } from '../../../utils/cardsUtils';
 import GemCard from '../../Cards/GemCard';
 import IgnisCard from '../../Cards/IgnisCard';
@@ -37,10 +37,10 @@ export const handleType0AndSubtype0 = (tx, timestamp, infoAccount) => {
     const account = inOut === 'out' ? parseRecipient(tx) : parseSender(tx);
     if (!account) return;
 
-    const { jackpot, reason } = getJackpotAndReason(tx);
+    const { bounty, reason } = getBountyAndReason(tx);
     if (inOut === 'out' && account === OMNO_ACCOUNT) return;
 
-    return handleMoneyTransfer(inOut, tx.amountNQT / NQTDIVIDER, timestamp, account, jackpot, reason);
+    return handleMoneyTransfer(inOut, tx.amountNQT / NQTDIVIDER, timestamp, account, bounty, reason);
 };
 
 /**
@@ -50,10 +50,10 @@ export const handleType0AndSubtype0 = (tx, timestamp, infoAccount) => {
  * @param {object} infoAccount - account info
  */
 export const handleType1AndSubtype0 = (tx, timestamp, infoAccount) => {
-    if (tx.recipientRS === infoAccount.accountRs && tx.senderRS === JACKPOTACCOUNT) {
+    if (tx.recipientRS === infoAccount.accountRs && tx.senderRS === BOUNTYACCOUNT) {
         const msg = parseJson(tx.attachment.message);
         if (msg.reason === 'confirmParticipation') {
-            return handleMessage('Participation', 'Our Jackpot contract confirmed your participation.', timestamp);
+            return handleMessage('Participation', 'Our Bounty contract confirmed your participation.', timestamp);
         } else if (msg.submittedBy === 'TarascaDAOCardCraft') {
             return;
         } else if (msg.submittedBy === 'CardCraftGEM') {
@@ -167,17 +167,17 @@ const getInOut = (tx, infoAccount) => {
     return null;
 };
 
-const getJackpotAndReason = tx => {
-    let jackpot = tx.senderRS === JACKPOTACCOUNT;
+const getBountyAndReason = tx => {
+    let bounty = tx.senderRS === BOUNTYACCOUNT;
     let reason = null;
     if (tx.attachment.message) {
         const msg = parseJson(tx.attachment.message);
         reason = getReason(msg);
-        if (msg.submittedBy !== 'Jackpot' || msg.source !== 'BLOCK') {
-            jackpot = false;
+        if (msg.submittedBy !== 'Bounty' || msg.source !== 'BLOCK') {
+            bounty = false;
         }
     }
-    return { jackpot, reason };
+    return { bounty, reason };
 };
 
 // NOT WORKING - FLOW IS NOT CORRECT
@@ -528,7 +528,7 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
     };
 };
 
-export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reason = '') => {
+export const handleMoneyTransfer = (type, amount, date, account, isBounty, reason = '') => {
     if (reason !== null && reason !== undefined && reason !== '') {
         console.log('🚀 ~ file: TableHandlers.js:396 ~ handleMoneyTransfer ~ reason', reason);
     }
@@ -552,10 +552,10 @@ export const handleMoneyTransfer = (type, amount, date, account, isJackpot, reas
                         <Box>
                             <IgnisCard />
                         </Box>
-                        {isJackpot && (
+                        {isBounty && (
                             <Box>
                                 <Text fontSize="xl" fontWeight="bold">
-                                    Jackpot
+                                    Bounty
                                 </Text>
                             </Box>
                         )}

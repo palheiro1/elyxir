@@ -29,6 +29,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             hoverBg: 'rgba(159, 55, 114, 0.75)',
             bgColor: '#9f3772',
             textColor: textColor(7),
+            isDisabled: false,
         },
         {
             icon: '/images/icons/menu/OpenPack.png',
@@ -79,8 +80,8 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             isActive: isActive(3),
         },
         {
-            icon: !isActive(5) ? '/images/icons/menu/blanco/jackpot.png' : '/images/icons/menu/color/jackpot.jpg',
-            text: 'Jackpot',
+            icon: !isActive(5) ? '/images/icons/menu/blanco/bounty.png' : '/images/icons/menu/color/bounty.jpg',
+            text: 'Bounty',
             onClick: () => setOption(5),
             bgColor: isActive(5) ? 'white' : '#3b5397',
             hoverBg: 'rgba(59, 83, 151, 0.75)',
@@ -142,8 +143,8 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
 
     return (
         <VStack align="flex-start" spacing={2} width={widthBotones}>
-            {buttons.map(({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive }) => (
-                <Button
+            {buttons.map(({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive, isDisabled }) => (
+                !isDisabled && (<Button
                     key={text}
                     minW={widthBotones}
                     minH="50px"
@@ -161,7 +162,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
                             {text}
                         </Text>
                     </Stack>
-                </Button>
+                </Button>)
             ))}
         </VStack>
     );

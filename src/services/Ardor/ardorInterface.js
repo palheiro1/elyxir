@@ -5,11 +5,11 @@ import ardorjs from 'ardorjs';
 
 // Constants
 import {
+    BOUNTYACCOUNT,
     BRIDGEAPIURL,
     CURRENCY,
     EXCHANGERATE,
     GEMASSET,
-    JACKPOTACCOUNT,
     NODEURL,
     NQTDIVIDER,
 } from '../../data/CONSTANTS';
@@ -45,7 +45,7 @@ export const getAccountFromPhrase = value => {
 export const fetchAssetCount = async asset => {
     try {
         const response = await fetch(
-            NODEURL + '?requestType=getAccountAssets&account=' + JACKPOTACCOUNT + '&asset=' + asset
+            NODEURL + '?requestType=getAccountAssets&account=' + BOUNTYACCOUNT + '&asset=' + asset
         );
         const result = await response.json();
         return result.quantityQNT ? result.quantityQNT : 0;
@@ -226,7 +226,10 @@ const calculateFeeByRecipient = async (recipient, query, URL_TO_CALL) => {
 
 const calculateFee = async (query, URL_TO_CALL) => {
     const { data: sendMoneyData } = await axios.post(URL_TO_CALL, qs.stringify(query), config);
-    return Math.ceil(sendMoneyData.minimumFeeFQT * sendMoneyData.bundlerRateNQTPerFXT * 0.00000001);
+    console.log("🚀 ~ calculateFee ~ sendMoneyData:", sendMoneyData)
+    const total = Math.ceil(sendMoneyData.minimumFeeFQT * sendMoneyData.bundlerRateNQTPerFXT * 0.00000001);
+    console.log("🚀 ~ calculateFee ~ total:", total)
+    return total;
 };
 
 // ----------------------------------------------
@@ -621,6 +624,7 @@ const transferAsset = async ({
 
     try {
         query.feeNQT = await calculateFee(query, URL_TRANSFER_ASSET);
+        console.log("🚀 ~ query:", query)
         query.broadcast = false;
 
         const response = await axios.post(URL_TRANSFER_ASSET, qs.stringify(query), config);

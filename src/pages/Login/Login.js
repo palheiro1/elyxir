@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Box, Heading, Image, Stack, Center } from '@chakra-ui/react';
+import { Box, Heading, Image, Stack, Center, Button } from '@chakra-ui/react';
 
 import LoginButtons from '../../components/Pages/LoginPage/LoginButtons/LoginButtons';
 import UserLogin from '../../components/Pages/LoginPage/UserLogin/UserLogin';
 import SigBroLogin from '../../components/Pages/LoginPage/UserLogin/SigBroLogin';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * This component is used to render the login page
@@ -15,6 +16,7 @@ import SigBroLogin from '../../components/Pages/LoginPage/UserLogin/SigBroLogin'
  */
 const Login = ({ setInfoAccount }) => {
     const [loginType, setLoginType] = useState('normal');
+    const navigate = useNavigate();
 
     return (
         <Box px={8}>
@@ -35,6 +37,10 @@ const Login = ({ setInfoAccount }) => {
 
                         {loginType === 'normal' && <UserLogin setInfoAccount={setInfoAccount} />}
                         {loginType === 'sigbro' && <SigBroLogin setInfoAccount={setInfoAccount} />}
+
+                        <Button w="100%" mt={4} onClick={() => navigate('/redeem')} bgColor={"#EBB2B9"} _hover={{ bgColor: "#E8A5B3" }}>
+                            Claim voucher
+                        </Button>
                     </Box>
 
                     <Image src="images/criatures/login.png" w="50%" p={4} />

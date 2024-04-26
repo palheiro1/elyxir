@@ -15,7 +15,7 @@ import {
     Input,
     PinInput,
     PinInputField,
-    Stack,
+    Select,
     Text,
     useNumberInput,
     useToast,
@@ -26,9 +26,15 @@ import { GIFTZASSET, NQTDIVIDER, WETHASSET } from '../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { buyPackWithWETH } from '../../../utils/cardsUtils';
 import { checkPin } from '../../../utils/walletUtils';
-import { fetchOmnoMarket } from '../../../utils/omno';
+import { fetchGiftzMarket } from '../../../utils/omno';
 import { Animated } from 'react-animated-css';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
+
+import { CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
+import { getEthPrice, getMaticPriceWithEth } from '../../../services/coingecko/utils';
+import { getEthDepositAddressFor1155 } from '../../../services/Ardor/ardorInterface';
+
+import './BuyPackDialog.css';
 
 /**
  * @name BuyPackDialog
@@ -44,7 +50,7 @@ import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
-    const [priceInWETH, setpriceInWETH] = useState(0);
+    const [priceInWETH, setPriceInWETH] = useState(0);
     const [marketOffers, setMarketOffers] = useState([]); // list of market offers
     const [totalOnSale, setTotalOnSale] = useState(0); // total packs on sale
     const [sendingTx, setSendingTx] = useState(false);
@@ -52,8 +58,13 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
     const [needReload, setNeedReload] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const [maticPrice, setMaticPrice] = useState(0);
+    const [priceInMatic, setPriceInMatic] = useState(0);
+    const [bridgeAddress, setBridgeAddress] = useState(null);
+    const [paymentMethod, setPaymentMethod] = useState('wETH');
+    const [ethPrice, setEthPrice] = useState(0);
 
-    const { name, WETHRealBalance: WETHBalance, IGNISBalance } = infoAccount;
+    const { name, WETHRealBalance: WETHBalance, IGNISBalance, accountRs } = infoAccount;
 
     const toast = useToast();
     const colorText = 'white';
@@ -61,7 +72,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const handleClose = () => {
         setIsValidPin(false);
         setPassphrase('');
-        setpriceInWETH(0);
+        setPriceInWETH(0);
         setMarketOffers([]);
         setTotalOnSale(0);
         setSendingTx(false);
@@ -75,31 +86,39 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             try {
                 setIsLoading(true);
                 setNeedReload(false);
-                const offers = await fetchOmnoMarket();
-                const wethAsset = offers.filter(item => {
-                    return (
-                        Object.keys(item.give).length === 1 &&
-                        Object.keys(item.take).length === 1 &&
-                        item.give.asset[GIFTZASSET] &&
-                        item.take.asset[WETHASSET]
-                    );
-                });
-                setMarketOffers(wethAsset);
+                const [{ wethAsset, totalOnSale }, auxBridgeAddress] = await Promise.all([
+                    fetchGiftzMarket(),
+                    getEthDepositAddressFor1155(accountRs),
+                ]);
+                setBridgeAddress(!auxBridgeAddress ? null : auxBridgeAddress);
 
-                // Calcular el total de paquetes en venta
-                const totalOnSale = wethAsset.reduce((total, item) => {
-                    return total + item.multiplier * item.give.asset[GIFTZASSET];
-                }, 0);
+                setMarketOffers(wethAsset);
                 setTotalOnSale(totalOnSale);
+
+                getMaticPriceWithEth()
+                    .then(maticPrice => {
+                        setMaticPrice(maticPrice);
+                    })
+                    .catch(error => {
+                        console.log('🚀 ~ recoverMarketOffers ~ getMaticPriceWithEth ~ error:', error);
+                    });
+
+                getEthPrice()
+                    .then(ethPrice => {
+                        setEthPrice(ethPrice);
+                    })
+                    .catch(error => {
+                        console.log('🚀 ~ recoverMarketOffers ~ getEthPrice ~ error:', error);
+                    });
             } catch (error) {
-                console.log("🚀 ~ recoverMarketOffers ~ error:", error)
+                console.log('🚀 ~ recoverMarketOffers ~ error:', error);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        needReload && recoverMarketOffers();
-    }, [needReload]);
+        needReload && accountRs && recoverMarketOffers();
+    }, [needReload, accountRs]);
 
     // ------------------------------------------------------------
     // ------------------ E A S Y  C H E C K E R ------------------
@@ -189,12 +208,14 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 if (totalPacks >= input.value) break;
             }
 
-            setpriceInWETH(totalPrice);
+            setPriceInWETH(totalPrice);
             setSelectedOffers(offersToTake);
+            const realPriceEth = totalPrice / NQTDIVIDER;
+            setPriceInMatic((realPriceEth / maticPrice + 1).toFixed(0));
         };
 
         calculatePrices();
-    }, [input.value, marketOffers]);
+    }, [input.value, marketOffers, maticPrice]);
     // ------------------------------------------------------------
 
     const handleBuyPack = async () => {
@@ -236,7 +257,8 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const enoughtWETH = WETHBalance !== 0 && WETHBalance >= priceInWETH / NQTDIVIDER;
     const enoughtIGNIS = IGNISBalance > 0.5;
     const canBuy = enoughtWETH && enoughtIGNIS;
-    const isDisabled = !isValidPin || input.value > totalOnSale || input.value === '0' || !canBuy;
+    const correctNumberInput = input.value > 0 && input.value <= totalOnSale && input.value !== '0';
+    const isDisabled = !isValidPin || !correctNumberInput || !canBuy;
 
     const randomTime = () => {
         return Math.floor(Math.random() * (10000 - 1000 + 1)) + 1000;
@@ -254,24 +276,25 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                 <AlertDialogOverlay bgColor="blackAlpha.500" />
 
                 <AlertDialogContent bgColor={bgColor} border="1px" borderColor="#9f3772" shadow="dark-lg" color="white">
-                    <AlertDialogHeader textAlign="center">BUY A PACK OF CARDS</AlertDialogHeader>
+                    <AlertDialogHeader textAlign="center">BUY A CARD PACK</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>
-                        <Grid templateColumns="repeat(2, 1fr)">
+                        <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}>
                             <GridItem w="100%">
                                 <Center w="100%">
                                     <Animated animationIn="shake" animationInDelay={randomTime()} isVisible={true}>
                                         <Image
                                             src="/images/cardPacks/BuyPackExpendedora.png"
-                                            alt="Card Pack"
-                                            maxH="30rem"
+                                            alt="Vending Machine"
+                                            maxH={{ base: '15rem', md: '30rem' }}
                                         />
                                     </Animated>
                                 </Center>
                             </GridItem>
 
-                            {isLoading ? <LoadingSpinner />
-                                :
+                            {isLoading ? (
+                                <LoadingSpinner />
+                            ) : (
                                 <Center>
                                     <GridItem>
                                         <Box>
@@ -279,19 +302,38 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                 Payment method
                                             </Text>
                                             <Center w="100%">
-                                                <Stack direction="row" w="100%">
-                                                    <Box
-                                                        border="1px solid #9f3772"
-                                                        textAlign="center"
-                                                        w="100%"
-                                                        bgColor="blackAlpha.400"
-                                                        px={4}
-                                                        py={2}
-                                                        fontWeight="bold"
-                                                        rounded="lg">
+                                                <Select
+                                                    border="1px solid #9f3772"
+                                                    textAlign="center"
+                                                    w="100%"
+                                                    bgColor="blackAlpha.400"
+                                                    fontWeight="bold"
+                                                    rounded="lg"
+                                                    onChange={e => setPaymentMethod(e.target.value)}>
+                                                    <option
+                                                        value="wETH"
+                                                        style={{
+                                                            backgroundColor: '#6b254d',
+                                                            borderRadius: '1rem',
+                                                        }}>
                                                         wETH
-                                                    </Box>
-                                                </Stack>
+                                                    </option>
+                                                    {bridgeAddress && (
+                                                        <option
+                                                            value="CreditCard"
+                                                            style={{
+                                                                backgroundColor: '#6b254d',
+                                                                borderRadius: '1rem',
+                                                            }}>
+                                                            Credit Card
+                                                        </option>
+                                                    )}
+                                                </Select>
+                                            </Center>
+                                            <Center>
+                                                <Text fontSize="xs" color={'whiteAlpha.600'}>
+                                                    Select between wETH or credit card.
+                                                </Text>
                                             </Center>
                                         </Box>
                                         <Box mt={6}>
@@ -328,78 +370,120 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     </Button>
                                                 </HStack>
                                             </Center>
-                                            <Center>
-                                                <Text fontSize="xs" color={'whiteAlpha.600'}>
-                                                    {totalOnSale} GIFTZ availables
-                                                </Text>
-                                            </Center>
+                                            {paymentMethod === 'CreditCard' && (
+                                                <>
+                                                    <Text fontSize="xs" color={'whiteAlpha.600'} textAlign={'center'}>
+                                                        Fees are applied by our payment gateway.
+                                                    </Text>
+
+                                                    <Text fontSize="xs" color={'whiteAlpha.600'} textAlign={'center'}>
+                                                        A small purchase will incur higher fees.
+                                                    </Text>
+
+                                                    <Text fontSize="xs" color={'whiteAlpha.600'} textAlign={'center'}>
+                                                        Simulation: 1 GIFTZ, fee = 37% | 25 GIFTZ, fee = 5.5%
+                                                    </Text>
+                                                </>
+                                            )}
+                                            {paymentMethod === 'wETH' && (
+                                                <Center>
+                                                    <Text fontSize="xs" color={'whiteAlpha.600'}>
+                                                        {totalOnSale} GIFTZ availables
+                                                    </Text>
+                                                </Center>
+                                            )}
                                         </Box>
+                                        {paymentMethod === 'wETH' && (
+                                            <>
+                                                <Box mt={6}>
+                                                    <Text textAlign="center" my={2}>
+                                                        Total price
+                                                    </Text>
+                                                    <Center>
+                                                        <Text fontWeight="bold" fontSize="2xl">
+                                                            {priceInWETH / NQTDIVIDER} wETH
+                                                        </Text>
+                                                    </Center>
+                                                    <Center>
+                                                        <Text fontSize="xs" color={'whiteAlpha.600'}>
+                                                            ($ {(ethPrice * (priceInWETH / NQTDIVIDER)).toFixed(2)})
+                                                        </Text>
+                                                    </Center>
+                                                </Box>
 
-                                        <Box mt={6}>
-                                            <Text textAlign="center" my={2}>
-                                                Total price
-                                            </Text>
-                                            <Center>
-                                                <Text fontWeight="bold" fontSize="2xl">
-                                                    {priceInWETH / NQTDIVIDER} wETH
-                                                </Text>
-                                            </Center>
-                                        </Box>
+                                                {totalOnSale === 0 && (
+                                                    <Text textAlign="center" color="#9f3772" fontWeight="bold">
+                                                        There are no GIFTZ left in the machine. You can wait for it to
+                                                        refill or buy them on the secondary market.
+                                                    </Text>
+                                                )}
 
-                                        {totalOnSale === 0 && (
-                                            <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                                There are no GIFTZ left in the machine. You can wait for it to refill or buy
-                                                them on the secondary market.
-                                            </Text>
+                                                {!enoughtWETH && (
+                                                    <Text textAlign="center" color="#9f3772" fontWeight="bold">
+                                                        You don't have enough wETH
+                                                    </Text>
+                                                )}
+
+                                                {!enoughtIGNIS && (
+                                                    <Text textAlign="center" color="#9f3772" fontWeight="bold">
+                                                        You don't have enough IGNIS (0.5 IGNIS)
+                                                    </Text>
+                                                )}
+
+                                                <Center>
+                                                    <Box py={2} mt={2}>
+                                                        <HStack spacing={4}>
+                                                            <PinInput
+                                                                size="lg"
+                                                                onComplete={handleCompletePin}
+                                                                onChange={handleCompletePin}
+                                                                isInvalid={!isValidPin}
+                                                                variant="filled"
+                                                                mask>
+                                                                <PinInputField bgColor={'#6b254d'} />
+                                                                <PinInputField bgColor={'#6b254d'} />
+                                                                <PinInputField bgColor={'#6b254d'} />
+                                                                <PinInputField bgColor={'#6b254d'} />
+                                                            </PinInput>
+                                                        </HStack>
+                                                    </Box>
+                                                </Center>
+
+                                                <Box w="100%" mt={2}>
+                                                    <Button
+                                                        color="white"
+                                                        isDisabled={isDisabled || sendingTx}
+                                                        bgColor={'#6b254d'}
+                                                        fontWeight={'black'}
+                                                        _hover={{ bgColor: '#9f3772' }}
+                                                        w="100%"
+                                                        py={6}
+                                                        onClick={handleBuyPack}>
+                                                        SUBMIT
+                                                    </Button>
+                                                </Box>
+                                            </>
                                         )}
 
-                                        {!enoughtWETH && (
-                                            <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                                You don't have enough wETH
-                                            </Text>
-                                        )}
-
-                                        {!enoughtIGNIS && (
-                                            <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                                You don't have enough IGNIS (0.5 IGNIS)
-                                            </Text>
-                                        )}
-
-                                        <Center>
-                                            <Box py={2} mt={2}>
-                                                <HStack spacing={4}>
-                                                    <PinInput
-                                                        size="lg"
-                                                        onComplete={handleCompletePin}
-                                                        onChange={handleCompletePin}
-                                                        isInvalid={!isValidPin}
-                                                        variant="filled"
-                                                        mask>
-                                                        <PinInputField bgColor={'#6b254d'} />
-                                                        <PinInputField bgColor={'#6b254d'} />
-                                                        <PinInputField bgColor={'#6b254d'} />
-                                                        <PinInputField bgColor={'#6b254d'} />
-                                                    </PinInput>
-                                                </HStack>
+                                        {paymentMethod === 'CreditCard' && (
+                                            <Box w="100%" mt={8}>
+                                                <CrossmintPayButton
+                                                    disabled={!correctNumberInput}
+                                                    collectionId="682b163e-c8c5-4704-91d2-fe9c20dbf969"
+                                                    projectId="df884160-8b39-4fc9-960d-0a35094cc158"
+                                                    mintConfig={{
+                                                        totalPrice: priceInMatic.toString(),
+                                                        amount: input.value.toString(),
+                                                    }}
+                                                    mintTo={bridgeAddress.toString()}
+                                                    paymentMethod="fiat"
+                                                    className="xmint-btn"
+                                                />
                                             </Box>
-                                        </Center>
-
-                                        <Box w="100%" mt={2}>
-                                            <Button
-                                                color="white"
-                                                isDisabled={isDisabled || sendingTx}
-                                                bgColor={'#6b254d'}
-                                                fontWeight={'black'}
-                                                _hover={{ bgColor: '#9f3772' }}
-                                                w="100%"
-                                                py={6}
-                                                onClick={handleBuyPack}>
-                                                SUBMIT
-                                            </Button>
-                                        </Box>
+                                        )}
                                     </GridItem>
                                 </Center>
-                            }
+                            )}
                         </Grid>
                     </AlertDialogBody>
                 </AlertDialogContent>

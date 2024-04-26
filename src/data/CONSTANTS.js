@@ -11,7 +11,7 @@
 export const REFRESH_DATA_TIME = 6 * 1000; // 5 seconds
 export const REFRESH_BLOCK_TIME = 2.5 * 1000; // 10 seconds
 export const REFRESH_UNWRAP_TIME = 30 * 1000; // 30 seconds
-export const REFRESH_JACKPOT_PARTICIPANTS = 22 * 1000; // 30 seconds
+export const REFRESH_BOUNTY_PARTICIPANTS = 22 * 1000; // 30 seconds
 
 export const RARITY_COLORS = {
     Common: 'linear-gradient(45deg, #8e9eab, #eef2f3) 1',
@@ -47,7 +47,7 @@ export const CATOBLEPASASSETWRONG = '16992402711643280652';
 // ---------------------------------------------
 export const CURRENCYSELLER = 'ARDOR-TU3S-47Y5-6GSM-8ZSJ8';
 export const COLLECTIONACCOUNT = 'ARDOR-4V3B-TVQA-Q6LF-GMH3T';
-export const JACKPOTACCOUNT = 'ARDOR-4V3B-TVQA-Q6LF-GMH3T';
+export const BOUNTYACCOUNT = 'ARDOR-4V3B-TVQA-Q6LF-GMH3T';
 export const BUYPACKACCOUNT = 'ARDOR-4V3B-TVQA-Q6LF-GMH3T';
 export const TARASCACARDACCOUNT = 'ARDOR-5NCL-DRBZ-XBWF-DDN5T';
 export const BRIDGEACCOUNT = 'ARDOR-3YEX-JZFZ-UATF-EKGLN';
@@ -94,10 +94,10 @@ export const SEASON1TIMESTAMP = 105800000;
 export const CURRENTSEASON = 'season01';
 
 // ---------------------------------------------
-// ------------------- JACKPOT -----------------
+// ------------------- BOUNTY -----------------
 // ---------------------------------------------
 export const FREQUENCY = 5040;
-export const JACKPOTHALF = true;
+export const BOUNTYHALF = true;
 export const BLOCKTIME = 60;
 export const LOWIGNIS = 65;
 export const IGNIS_REQUIRED = 100;
@@ -144,7 +144,7 @@ export const DEFAULT_CONTACTS = [
     { accountRs: BUYPACKACCOUNT, name: 'Mythical Beings' },
     { accountRs: TARASCACARDACCOUNT, name: 'Mythical Beings' },
     { accountRs: GEMASSETACCOUNT, name: 'Mythical Beings' },
-    { accountRs: JACKPOTACCOUNT, name: 'Mythical Beings' },
+    { accountRs: BOUNTYACCOUNT, name: 'Mythical Beings' },
     { accountRs: MANAACCOUNT, name: 'Mythical Beings' },
     { accountRs: OMNO_ACCOUNT, name: 'Mythical Beings' },
     { accountRs: GIFTZ_OPEN_MACHINE, name: 'Mythical Beings' },
@@ -168,7 +168,7 @@ export const ALL_ACCOUNTS = [
     BUYPACKACCOUNT,
     TARASCACARDACCOUNT,
     GEMASSETACCOUNT,
-    JACKPOTACCOUNT,
+    BOUNTYACCOUNT,
     MORPHING_ACCOUNT,
     CURRENCYSELLER,
     BURNACCOUNT,

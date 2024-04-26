@@ -1,21 +1,17 @@
-import { QrReader } from 'react-qr-reader';
+//import { QrReader } from 'react-qr-reader';
 
 const QRReader = ({ handleInput }) => {
-    return (
+    return null;/*(
         <QrReader
             constraints={{ facingMode: 'environment' }}
             style={{ width: '100%' }}
-            onResult={(result, error) => {
+            onResult={(result) => {
                 if (result) {
                     handleInput(result?.text);
                 }
-
-                if (error) {
-                    console.error('🚀 ~ file: QRReader.js:23 ~ QRReader ~ error:', error);
-                }
             }}
         />
-    );
+    );*/
 };
 
 export default QRReader;

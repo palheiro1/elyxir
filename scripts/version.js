@@ -16,7 +16,7 @@ async function processLineByLine() {
             outputs.push(line);
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
     return outputs;
 }
@@ -24,13 +24,14 @@ async function processLineByLine() {
 function writeToEnv(key = '', value = '') {
     const empty = key === '' && value === '';
     if (empty) {
-        fs.writeFile('.env', '', () => {});
+        fs.writeFile('.env', '', () => { });
     } else {
         fs.appendFile('.env', `${key}='${value.trim()}'\n`, err => {
             if (err) console.log(err);
         });
     }
 }
+
 (async () => {
     const results = await processLineByLine();
     writeToEnv();

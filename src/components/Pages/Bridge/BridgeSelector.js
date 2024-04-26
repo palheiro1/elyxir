@@ -15,7 +15,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                 border="1px"
                 borderColor={borderColor}
                 bgColor={lightBgColor}
-                p={8}
+                p={{ base: 1, lg: 8 }}
                 rounded="md"
                 shadow="md"
                 minH="5rem"
@@ -57,7 +57,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                 <BridgeButton
                     bridgeType="ERC1155GIFTZ"
                     text="GIFTZ"
-                    description="Bring your GIFTZ to Ardor to open the 3 random NFT they contain."
+                    description="Bring your GIFTZ to Ardor to open the 5 random NFT they contain."
                 />
                 <BridgeButton
                     bridgeType="ERC20GEM"
@@ -90,7 +90,7 @@ const BridgeSelector = ({ setBridgeType }) => {
                     textAlign="center"
                     color="white">
                     Take your cards to Polygon to sell them on the main NFT marketplaces, or bring them to Ardor to
-                    craft, morph, claim jackpots or access unlockable content.
+                    craft, morph, claim bountys or access unlockable content.
                 </Text>
             </Box>
         </>

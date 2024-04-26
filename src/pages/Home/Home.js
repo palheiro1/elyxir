@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, memo, useCallback, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { useDispatch } from 'react-redux';
+
 
 // -----------------------------------------------------------------
 // ------------------------- Components ----------------------------
@@ -13,7 +15,7 @@ import LateralMenu from '../../components/Navigation/LateralMenu/LateralMenu';
 import History from '../../components/Pages/HistoryPage/History';
 import Overview from '../../components/Pages/HomePage/Overview';
 import Inventory from '../../components/Pages/InventoryPage/Inventory';
-import Jackpot from '../../components/Pages/JackpotPage/Jackpot';
+import Bounty from '../../components/Pages/BountyPage/Bounty';
 import Market from '../../components/Pages/MarketPage/Market';
 import Account from '../../components/Pages/AccountPage/Account';
 
@@ -22,6 +24,10 @@ import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
 import CardReceived from '../../components/Modals/CardReceived/CardReceived';
 import Bridge from '../../components/Pages/Bridge/Bridge';
 import { isNotLogged } from '../../utils/validators';
+
+// -----------------------------------------------------------------
+// ------------------------- Functions -----------------------------
+import { getBlockchainBlocks } from '../../redux/reducers/BlockchainReducer';
 
 // -----------------------------------------------------------------
 // ------------------------- Constants -----------------------------
@@ -54,7 +60,6 @@ import { checkDataChange, getCurrentAskAndBids, getIGNISBalance, handleNotificat
 
 import {
     getAccountLedger,
-    getBlockchainStatus,
     getBlockchainTransactions,
     getTrades,
     getTransaction,
@@ -83,6 +88,7 @@ import Battlegrounds from '../../components/Pages/BattlegroundsPage/Battleground
  */
 const Home = memo(({ infoAccount, setInfoAccount }) => {
     const toast = useToast();
+    const dispatch = useDispatch();
 
     // Refs
     const newTransactionRef = useRef();
@@ -144,15 +150,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Component to render
     const [renderComponent, setRenderComponent] = useState(<Overview />);
 
-    // Blockchain status
-    const [blockchainStatus, setBlockchainStatus] = useState({
-        prev_height: 0,
-        epoch_beginning: Date.UTC(2018, 0, 1, 0, 0, 0),
-    });
-
     // -----------------------------------------------------------------
     const [searchParams, setSearchParams] = useSearchParams();
-    const directSection = searchParams.get('goToSection') || false;
+    const directSection = parseInt(searchParams.get('goToSection')) || false;
     const [directSectionToRender, setDirectSectionToRender] = useState(directSection);
 
     // -----------------------------------------------------------------
@@ -363,31 +363,13 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Check for new blocks
     // -----------------------------------------------------------------
 
-    const getStatus = useCallback(async () => {
-        try {
-            const {
-                data: { numberOfBlocks },
-            } = await getBlockchainStatus();
-
-            if (blockchainStatus.prev_height !== numberOfBlocks) {
-                console.log('Mythical Beings: New block detected!');
-                setBlockchainStatus(prevBlockchainStatus => ({
-                    ...prevBlockchainStatus,
-                    prev_height: numberOfBlocks,
-                }));
-            }
-        } catch (error) {
-            console.log('Mythical Beings: Error fetching blockchain status', error);
-        }
-    }, [blockchainStatus]);
-
     useEffect(() => {
         const intervalId = setInterval(() => {
-            getStatus();
+            dispatch(getBlockchainBlocks());
         }, REFRESH_BLOCK_TIME);
 
         return () => clearInterval(intervalId);
-    }, [getStatus]);
+    }, [dispatch]);
 
     // -----------------------------------------------------------------
     // Check for new cards notifications
@@ -485,7 +467,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         '#3b7197', // History
         '#3b6497', // Market
         '#573b97', // Bridge
-        '#3b5397', // Jackpot
+        '#3b5397', // Bounty
         '#4e3b97', // Account
         '#9f3772', // Buy pack
         '#413b97', // Exchange
@@ -496,9 +478,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     const components = useMemo(
         () => [
-            <Overview blockchainStatus={blockchainStatus} />,
-            <Inventory infoAccount={infoAccount} cards={cardsFiltered} />,
-            <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />,
+            <Overview />, // OPTION 0 - Overview
+            <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // OPTION 1 - Inventory
+            <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />, // OPTION 2 - History
             <Market
                 infoAccount={infoAccount}
                 cards={cardsFiltered}
@@ -506,7 +488,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 giftzCards={giftzCards}
                 wethCards={wethCards}
                 manaCards={manaCards}
-            />,
+            />, // OPTION 3 - Market
             <Bridge
                 infoAccount={infoAccount}
                 cards={cardsFiltered}
@@ -514,14 +496,14 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 giftzCards={giftzCards}
                 wethCards={wethCards}
                 manaCards={manaCards}
-            />,
-            <Jackpot infoAccount={infoAccount} cards={cards} blockchainStatus={blockchainStatus} />,
-            <Account infoAccount={infoAccount} />,
-            '', // Buy pack
-            <Exchange infoAccount={infoAccount} />,
-            <ArdorChat infoAccount={infoAccount} />,
-            <Book cards={cards} />,
-            '',
+            />, // OPTION 4 - Bridge
+            <Bounty infoAccount={infoAccount} cards={cards} />, // OPTION 5 - Bounty
+            <Account infoAccount={infoAccount} />, // OPTION 6 - Account
+            '', // OPTION 7 - Buy pack
+            <Exchange infoAccount={infoAccount} />, // OPTION 8 - Exchange
+            <ArdorChat infoAccount={infoAccount} />, // OPTION 9 - Chat
+            <Book cards={cards} />, // OPTION 10 - Book
+            '', // OPTION 11 - OPEN PACK
             <Battlegrounds />,
         ],
         [
@@ -529,7 +511,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             cards,
             cardsFiltered,
             gemCards,
-            blockchainStatus,
             haveUnconfirmed,
             giftzCards,
             wethCards,
@@ -551,18 +532,31 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         };
 
         loadComponent();
-    }, [option, components, onOpen, lastOption, onOpenOpenPack]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [option, lastOption]);
 
     useEffect(() => {
         const checkAndGo = () => {
             setLastOption(directSectionToRender);
             setOption(directSectionToRender);
             setDirectSectionToRender(false);
-            searchParams.delete('goToSection');
-            setSearchParams(searchParams);
         };
         directSectionToRender && checkAndGo();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [directSectionToRender, searchParams, setSearchParams]);
+
+    useEffect(() => {
+        if (directSection) {
+            if (directSection === 7) onOpen();
+            else if (directSection === 11) onOpenOpenPack();
+            else {
+                setDirectSectionToRender(directSection);
+            }
+            searchParams.delete('goToSection');
+            setSearchParams(searchParams);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [directSection]);
 
     const bgColor = useColorModeValue('white', 'whiteAlpha.100');
     const borderColor = MENU_OPTIONS_COLOR[option] || 'whiteAlpha.100';
@@ -572,8 +566,8 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             {/* MAIN COMPONENT - LATERAL MENU & CHILDREN */}
             <Box
                 bg={bgColor}
-                m={{ base: 2, md: 12 }}
-                px={{ base: 2, md: 8 }}
+                m={{ base: 2, lg: 12 }}
+                px={{ base: 2, lg: 8 }}
                 py={4}
                 rounded="lg"
                 border="1px"
@@ -587,7 +581,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     showAllCards={showAllCards}
                     handleShowAllCards={handleShowAllCards}
                     goToSection={handleChangeOption}
-                    nextBlock={blockchainStatus.prev_height}
                 />
             </Box>
 

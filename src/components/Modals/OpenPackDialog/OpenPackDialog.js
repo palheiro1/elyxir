@@ -20,13 +20,14 @@ import {
     useToast,
 } from '@chakra-ui/react';
 
-import Hover from 'react-3d-hover';
-
 import { useEffect, useState } from 'react';
 import { PACKPRICE } from '../../../data/CONSTANTS';
 import { errorToast, okToast } from '../../../utils/alerts';
 import { checkPin } from '../../../utils/walletUtils';
 import { openPackWithGiftz } from '../../../utils/cardsUtils';
+
+import HoverCard from "@darenft/react-3d-hover-card";
+import "@darenft/react-3d-hover-card/dist/style.css";
 
 const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [value, setValue] = useState('1');
@@ -138,12 +139,12 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                     <AlertDialogHeader textAlign="center">OPEN A PACK OF CARDS</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody mb={4}>
-                        <Grid templateColumns="repeat(2, 1fr)">
+                        <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}>
                             <GridItem w="100%">
                                 <Center w="100%">
-                                    <Hover scale={1.15} perspective={200}>
-                                        <Image src="/images/cardPacks/cardPack.png" alt="Card Pack" maxH="25rem" />
-                                    </Hover>
+                                    <HoverCard scaleFactor={1.4}>
+                                        <Image src="/images/cardPacks/cardPack.png" alt="Card Pack" maxH={{ base: '15rem', md: '30rem' }} />
+                                    </HoverCard>
                                 </Center>
                             </GridItem>
 

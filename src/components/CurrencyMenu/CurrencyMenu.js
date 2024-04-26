@@ -68,7 +68,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
         GIFTZ: {
             name: 'GIFTZ',
             balance: GIFTZBalance,
-            handler: null,
+            handler: () => goToSection(7),
         },
         GEM: {
             name: 'GEM',
@@ -176,7 +176,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     errorToast("Couldn't add token to MetaMask", toast);
                 }
             } catch (error) {
-                console.error('🚀 ~ error:', error);
+                console.error("🚀 ~ addToMetamask ~ error:", error)
                 errorToast("Couldn't add token to MetaMask", toast);
             }
         } else {
@@ -236,6 +236,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                         <Portal>
                             <MenuList>
                                 <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
+                                <MenuItem onClick={() => handleOpenGetMoreCurrency('GIFTZ')}>Get GIFTZ</MenuItem>
                                 {infoAccount.stuckedGiftz > 0 && (
                                     <MenuItem onClick={() => onOpenUnstuckGiftz()}>Unstuck GIFTZ</MenuItem>
                                 )}

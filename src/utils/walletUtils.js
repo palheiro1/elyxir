@@ -5,7 +5,7 @@ import {
     CURRENCY,
     GEMASSET,
     GIFTZASSET,
-    JACKPOTACCOUNT,
+    BOUNTYACCOUNT,
     MANAASSET,
     NQTDIVIDER,
     REFRESH_DATA_TIME,
@@ -491,33 +491,45 @@ export const sendBidOrder = async ({ asset, price, quantity, passPhrase }) => {
 };
 
 /**
- * @name sendToJackpot
- * @description Send cards to the jackpot
+ * @name sendToBounty
+ * @description Send cards to the bounty
  * @param {Array} cards - Array of cards
  * @param {String} passPhrase - Passphrase
  * @returns {Array} - Array of responses
  */
-export const sendToJackpot = async ({ cards, passPhrase }) => {
-    const isBlocked = cards.some(card => card.quantityQNT < card.unconfirmedQuantityQNT);
-    if (!isBlocked) {
-        const message = JSON.stringify({ contract: 'MBJackpotETH' });
-        const promises = cards.map(card =>
-            transferAsset({
-                asset: card.asset,
-                quantityQNT: 1,
-                passPhrase: passPhrase,
-                recipient: JACKPOTACCOUNT,
-                message: message,
-                messagePrunable: true,
-                deadline: 60,
-                priority: 'HIGH',
-            })
-        );
-        const responses = await Promise.allSettled(promises);
-        // Check all promises
-        const success = responses.every(response => response.status === 'fulfilled');
-        return success;
-    }
+export const sendToBounty = async ({ cards, passPhrase }) => {
+    // const isBlocked = cards.some(card => card.quantityQNT < card.unconfirmedQuantityQNT);
+    const isBlocked = cards.some(
+        card =>
+            Number(card.quantityQNT) > Number(card.unconfirmedQuantityQNT) && Number(card.unconfirmedQuantityQNT) === 0
+    );
+
+    if (isBlocked)
+        return {
+            response: false,
+            message: 'Some cards are blocked',
+        };
+
+    const message = JSON.stringify({ contract: 'MBJackpotETH' });
+    const promises = cards.map(card =>
+        transferAsset({
+            asset: card.asset,
+            quantityQNT: 1,
+            passPhrase: passPhrase,
+            recipient: BOUNTYACCOUNT,
+            message: message,
+            messagePrunable: true,
+            deadline: 120,
+            priority: 'HIGH',
+        })
+    );
+    const responses = await Promise.allSettled(promises);
+    // Check all promises
+    const success = responses.every(response => response.status === 'fulfilled');
+    return {
+        response: success,
+        message: success ? 'Success' : 'Error sending cards to the bounty',
+    };
 };
 
 /**
@@ -559,21 +571,6 @@ export const sendToPolygonBridge = async ({ cards, ardorAccount, ethAccount, pas
     }
 };
 
-// export function roundNumberWithMaxDecimals(number, maxDecimals) {
-//     const roundedNumber = Number(Math.round(number + `e${maxDecimals}`) + `e-${maxDecimals}`);
-//     const roundedString = roundedNumber.toString();
-//     const decimalIndex = roundedString.indexOf('.');
-
-//     if (decimalIndex !== -1) {
-//         const decimalPart = roundedString.substr(decimalIndex + 1);
-
-//         if (decimalPart.length > 0 && decimalPart.length <= maxDecimals) {
-//             return roundedString;
-//         }
-//     }
-
-//     return roundedNumber.toFixed(0);
-// }
 export function roundNumberWithMaxDecimals(number, maxDecimals) {
     const roundedNumber = parseFloat(number.toFixed(maxDecimals));
     return isNaN(roundedNumber) ? 0 : roundedNumber;
