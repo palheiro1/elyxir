@@ -5,7 +5,7 @@
             "service": "platform",
             "request": "configure",
             "parameter": {
-                "version": 1,
+                "version": 0,
                 "incomeAccount": "8827069720377389395",
                 "operationFee": { "chain": { "2": "0" } }
             }
