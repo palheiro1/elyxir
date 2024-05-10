@@ -5,6 +5,7 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.15",
     "@chakra-ui/react": "^2.4.6",
+    "@cmdnio/react-qr-reader": "^3.0.2",
     "@crossmint/client-sdk-react-ui": "^1.1.3",
     "@darenft/react-3d-hover-card": "^1.0.9",
     "@emotion/react": "^11.10.5",
