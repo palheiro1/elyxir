@@ -49,7 +49,7 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
                                 name: title,
                                 channel: continent,
                                 rarity,
-                                unconfirmedQuantityQNT,
+                                quantityQNT,
                             } = card;
                             const timestamp = getTxTimestamp(transaction, epoch_beginning);
                             const currency = transaction.holdingInfo?.name ? transaction.holdingInfo.name : 'IGNIS';
@@ -74,7 +74,7 @@ const ShowDividends = ({ filteredDividends, visibleDividends, setVisibleDividend
                                     <Td>
                                         <TableCard image={image} title={title} continent={continent} rarity={rarity} />
                                     </Td>
-                                    <Td>{unconfirmedQuantityQNT}</Td>
+                                    <Td>{quantityQNT}</Td>
                                     <Td>{timestamp}</Td>
                                     <Td>{balance}</Td>
                                     <Td>
