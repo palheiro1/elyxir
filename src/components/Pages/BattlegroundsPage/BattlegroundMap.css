@@ -1,7 +1,39 @@
-.containerMap path{
+.containerMap circle {
     cursor: pointer;
     &:hover {
         fill: black;
-        
     }
+}
+
+.btn-menu {
+    /* Frame 3 */
+
+    padding-top: 4px;
+    text-align: center;
+
+    width: 130px;
+    height: 40px;
+
+    /* Gradien 1 */
+    background: linear-gradient(224.72deg, #7fc0be 12.32%, #56689f 87.76%);
+    box-shadow: 0px 0.245572px 0.245572px rgba(0, 0, 0, 0.25);
+    border-radius: 30.6965px;
+
+    border: 1.23px solid;
+    border-image-source: linear-gradient(46.32deg, #7FC0BE 4.42%, #56689F 93.73%);
+    
+    ;
+    /* Scoreboard */
+
+    font-family: 'Chelsea Market';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 29px;
+    /* identical to box height, or 224% */
+    letter-spacing: 0.05em;
+
+    color: #ffffff;
+
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
