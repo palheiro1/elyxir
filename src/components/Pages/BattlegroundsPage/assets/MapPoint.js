@@ -35,11 +35,14 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
                         />
                     </PopoverTrigger>
                     <Portal>
-                        <PopoverContent>
-                            <PopoverArrow />
-                            <PopoverHeader>¿Quieres conquistar {name}?</PopoverHeader>
+                        <PopoverContent backgroundColor={'#EBB2B9'}>
+                            <PopoverArrow backgroundColor={'#EBB2B9'} />
+                            <PopoverHeader fontFamily={'Chelsea Market, system-ui'}>
+                                ¿Quieres conquistar {name}?
+                            </PopoverHeader>
                             <PopoverCloseButton />
                             <PopoverBody
+                                fontFamily={'Chelsea Market, system-ui'}
                                 display={'flex'}
                                 justifyContent={'center'}
                                 flexDir={'column'}
@@ -50,17 +53,25 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
                                 ) : (
                                     <>
                                         <Text>Defensor del territorio: {arenaInfo.defender.account}</Text>
-                                        <Box>Cartas del defensor: 
-                                            {arenaInfo.defender.asset.map((card) => {<Card card={card}/>})} {/* Llamar al componente para renderizar una card */}
+                                        <Box>
+                                            Cartas del defensor:
+                                            {arenaInfo.defender.asset.map(card => {
+                                                <Card card={card} />;
+                                            })}{' '}
+                                            {/* Llamar al componente para renderizar una card */}
                                         </Box>
                                     </>
                                 )}
-                    
-                                <ButtonGroup>
-                                    <Button colorScheme="blue" onClick={clickButton}>
+
+                                <ButtonGroup mx={'auto'}>
+                                    <Button
+                                        backgroundColor={'#484848'}
+                                        border={'2px solid #D597B2'}
+                                        borderRadius={'30px'}
+                                        color={'#FFF'}
+                                        onClick={clickButton}>
                                         Si
                                     </Button>
-                                    <Button colorScheme="red">No</Button>
                                 </ButtonGroup>
                             </PopoverBody>
                         </PopoverContent>

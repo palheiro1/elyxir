@@ -20,7 +20,7 @@ export const Maps = ({ handleSelectArena }) => {
 
     const handleClick = id => {
         console.log('ARENA ID', id);
-        handleSelectArena(id);
+        handleSelectArena(arenasInfo.arena[id - 1]);
         console.log(arenasInfo.arena[id - 1]);
     };
     return (

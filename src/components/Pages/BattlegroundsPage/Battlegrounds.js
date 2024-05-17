@@ -6,14 +6,18 @@ import { ScrollLock } from './assets/ScrollLock';
 import logo from './assets/image.png';
 import './BattlegroundMap.css';
 import { AdvertModal } from './assets/AdvertModal';
+import { BattleWindow } from './assets/BattleWindow';
 
 const Battlegrounds = () => {
     /* Intro pop up managing */
     const [visible, setVisible] = useState(true);
     const [page, setPage] = useState(1);
     const [isScrollLocked, setIsScrollLocked] = useState(true);
+
     const [selectedArena, setSelectedArena] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [openBattle, setOpenBattle] = useState(false);
+
     const handleNext = () => {
         setPage(2);
     };
@@ -42,22 +46,28 @@ const Battlegrounds = () => {
 
     const handleStartBattle = () => {
         if (selectedArena) {
-            console.log("SELECTED", selectedArena);
-        } else { 
+            console.log('SELECTED', selectedArena);
+            setOpenBattle(true);
+            setIsScrollLocked(true)
+        } else {
             setIsModalOpen(true);
         }
     };
 
-    const handleSelectArena = (id) => {
-        setSelectedArena(id)
-    }
+    const handleSelectArena = arena => {
+        setSelectedArena(arena);
+    };
+
     const closeModal = () => {
         setIsModalOpen(false);
+        setIsScrollLocked(false)
     };
 
     return (
         <Box>
+            {openBattle && <BattleWindow arenaInfo={selectedArena} />}
             <Popup visible={visible} page={page} handleClose={handleClose} handleNext={handleNext} />
+
             <AdvertModal isOpen={isModalOpen} onClose={closeModal} />
             <ScrollLock isLocked={isScrollLocked} />
             <Box position={'absolute'} ml={6} mt={5}>
@@ -96,14 +106,15 @@ const Battlegrounds = () => {
                         color={'#FFF'}
                         fontWeight={'100'}
                         borderRadius={'40px'}
+                        zIndex={99}
                         fontFamily={'Chelsea Market, system-ui'}
                         onClick={handleStartBattle}>
                         Start battle
                     </Button>
                 </HStack>
             </Box>
-            <Center >
-                <Maps handleSelectArena={handleSelectArena}/>
+            <Center>
+                <Maps handleSelectArena={handleSelectArena} />
             </Center>
         </Box>
     );

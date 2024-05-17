@@ -118,7 +118,7 @@ const PageTwo = ({ handleClose }) => {
     );
 };
 
-const Overlay = ({ isVisible, handleClose }) => {
+export const Overlay = ({ isVisible, handleClose }) => {
     return (
         isVisible && (
             <Box
