@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './BattlegroundMap.css';
 import { Box } from '@chakra-ui/react';
 import { MapImage } from './assets/MapImage';
-import { MapPoint } from './assets/MapPoint';
+import { MapPoint } from './Components/MapPoint';
 import locations from './assets/LocationsEnum';
 import { getArenas } from '../../../services/Battlegrounds/Battlegrounds';
 

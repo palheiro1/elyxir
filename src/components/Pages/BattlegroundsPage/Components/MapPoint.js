@@ -13,6 +13,8 @@ import {
     Portal,
     Text,
 } from '@chakra-ui/react';
+import "@fontsource/chelsea-market"; 
+import "@fontsource/inter"
 import Card from '../../../Cards/Card';
 export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
     const clickButton = () => {
@@ -28,17 +30,17 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
                         <circle
                             cx={x}
                             cy={y}
-                            r={7} // Adjust the radius as needed
-                            fill="#0056F5" // Adjust the fill color as needed
+                            r={7} 
+                            fill="#0056F5" 
                             stroke="white"
-                            strokeWidth={1.5} /* #0056F5 */
+                            strokeWidth={1.5} 
                         />
                     </PopoverTrigger>
                     <Portal>
                         <PopoverContent backgroundColor={'#EBB2B9'}>
                             <PopoverArrow backgroundColor={'#EBB2B9'} />
                             <PopoverHeader fontFamily={'Chelsea Market, system-ui'}>
-                                ¿Quieres conquistar {name}?
+                                Want to conquer {name}?
                             </PopoverHeader>
                             <PopoverCloseButton />
                             <PopoverBody
@@ -49,12 +51,12 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
                                 gap={5}
                                 mx={'auto'}>
                                 {arenaInfo.defender.account === '0' ? (
-                                    <Text>El territorio no tiene defensor</Text>
+                                    <Text>The territory has no defender</Text>
                                 ) : (
                                     <>
-                                        <Text>Defensor del territorio: {arenaInfo.defender.account}</Text>
+                                        <Text>Defender of the land: {arenaInfo.defender.account}</Text>
                                         <Box>
-                                            Cartas del defensor:
+                                            Defender's letter:
                                             {arenaInfo.defender.asset.map(card => {
                                                 <Card card={card} />;
                                             })}{' '}
@@ -70,7 +72,7 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
                                         borderRadius={'30px'}
                                         color={'#FFF'}
                                         onClick={clickButton}>
-                                        Si
+                                        Yes
                                     </Button>
                                 </ButtonGroup>
                             </PopoverBody>

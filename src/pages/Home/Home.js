@@ -174,7 +174,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Check if user is logged
     // -----------------------------------------------------------------
     useEffect(() => {
-        if (isNotLogged(infoAccount)) navigate('/login');
+        // if (isNotLogged(infoAccount)) navigate('/login');
     }, [infoAccount, navigate]);
 
     // -----------------------------------------------------------------

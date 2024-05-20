@@ -4,18 +4,20 @@ import {
     Modal,
     ModalOverlay,
     ModalContent,
-    ModalHeader,
     ModalCloseButton,
     ModalBody,
     ModalFooter,
     Button,
 } from '@chakra-ui/react';
+import "@fontsource/chelsea-market"; 
+import "@fontsource/inter"
 
 export const AdvertModal = ({ isOpen, onClose }) => {
     useEffect(() => {
         if (isOpen) {
             onOpen();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen]);
 
     const handleClose = () => {

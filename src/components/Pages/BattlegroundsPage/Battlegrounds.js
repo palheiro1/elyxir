@@ -1,12 +1,14 @@
-import { Box, Button, Center, HStack, Img, Spacer, Text, VStack, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Center, HStack, Img, Text } from '@chakra-ui/react';
 import { Maps } from './Maps';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Popup } from './assets/Popup';
 import { ScrollLock } from './assets/ScrollLock';
 import logo from './assets/image.png';
 import './BattlegroundMap.css';
 import { AdvertModal } from './assets/AdvertModal';
 import { BattleWindow } from './assets/BattleWindow';
+import "@fontsource/chelsea-market"; 
+import "@fontsource/inter";
 
 const Battlegrounds = () => {
     /* Intro pop up managing */
