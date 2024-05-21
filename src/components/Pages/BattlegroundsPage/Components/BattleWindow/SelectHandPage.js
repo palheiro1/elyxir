@@ -34,14 +34,16 @@ export const SelectHandPage = ({ arenaInfo, handleOpenInventory }) => {
 
     return (
         <Box display={'flex'} flexDir={'column'}>
-            <Stack direction={'row'}>
+            <Stack direction={'column'} mx={'auto'}>
                 <Heading color={'#FFF'} fontFamily={'Chelsea Market, system-ui'} mt={2}>
                     {' '}
                     CONQUER <span style={{ color: '#D08FB0' }}>{locations[arenaInfo.id - 1].name}</span>
                 </Heading>
-                <Text color={'#FFF'}>CHOOSE YOU HAND</Text>
+                <Text color={'#FFF'} textAlign={'center'}>
+                    CHOOSE YOU HAND
+                </Text>
             </Stack>
-            <Stack direction={'column'} mx={'auto'} mt={3}>
+            <Stack direction={'row'} mx={'auto'} mt={3}>
                 {handBattleCards.map((card, index) =>
                     card === '' ? (
                         <Box
@@ -61,9 +63,9 @@ export const SelectHandPage = ({ arenaInfo, handleOpenInventory }) => {
                     )
                 )}
             </Stack>
-            <Stack direction={'column'} mx={'auto'} mt={4} fontSize={'small'}>
+            <Stack direction={'row'} mx={'auto'} mt={4} fontSize={'small'}>
                 {statistics.map((item, index) => (
-                    <Stack direction={'row'} key={index}>
+                    <Stack direction={'column'} key={index} textAlign={'center'}>
                         <Text color={'#FFF'} fontFamily={'Chelsea Market, system-ui'}>
                             {item.name}
                         </Text>
@@ -94,19 +96,19 @@ export const SelectHandPage = ({ arenaInfo, handleOpenInventory }) => {
                 ))}
             </Stack>
             <Stack
-                direction={'column'}
+                direction={'row'}
                 mx={'auto'}
                 mt={4}
                 fontFamily={'Chelsea Market, system-ui'}
                 fontSize={'small'}
                 fontWeight={100}
                 gap={10}>
-                <Stack direction={'column'}>
-                    <Text color={'#D597B2'}>BONUS</Text>
+                <Stack direction={'row'}>
+                    <Text color={'#D597B2'} my={"auto"}>BONUS</Text>
                     <Text color={'#FFF'}>+2 AQUATIC {<br></br>}+1 EUROPE</Text>
                 </Stack>
-                <Stack direction={'column'}>
-                    <Text color={'#D597B2'}>TRIBUTE</Text>
+                <Stack direction={'row'}>
+                    <Text color={'#D597B2'} my={"auto"}>TRIBUTE</Text>
                     <Text color={'#FFF'}>{arenaInfo.battleCost.asset[0]}</Text>
                 </Stack>
             </Stack>

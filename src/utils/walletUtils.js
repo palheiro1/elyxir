@@ -10,6 +10,8 @@ import {
     NQTDIVIDER,
     REFRESH_DATA_TIME,
     WETHASSET,
+    OMNO_ACCOUNT,
+    OMNO_CONTRACT,
 } from '../data/CONSTANTS';
 import { decrypt, getUser } from './storage';
 import {
@@ -575,3 +577,34 @@ export function roundNumberWithMaxDecimals(number, maxDecimals) {
     const roundedNumber = parseFloat(number.toFixed(maxDecimals));
     return isNaN(roundedNumber) ? 0 : roundedNumber;
 }
+
+export const sendCardsToOmno = async ({ cards, passPhrase }) => {
+    const message = JSON.stringify({ contract: OMNO_CONTRACT });
+
+    const promises = cards.map(card =>
+        transferAsset({
+            asset: card.asset,
+            quantityQNT: card.quantity,
+            recipient: OMNO_ACCOUNT,
+            passPhrase: passPhrase,
+            message: message,
+            messagePrunable: true,
+            deadline: 361,
+            priority: 'HIGH',
+        })
+    );
+
+    try {
+        const results = await Promise.all(promises);
+        const success = results.every(result => result.status === 200 || true);
+        if (success) {
+            return true;
+        } else {
+            console.error('Error transferring assets: Not all promises resolved successfully');
+            return false;
+        }
+    } catch (error) {
+        console.error(`Error transferring assets: ${error.message}`);
+        return false;
+    }
+};

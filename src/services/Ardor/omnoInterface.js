@@ -65,7 +65,7 @@ export const getOmnoGiftzBalance = async address => {
     }
 };
 
-export const withdrawAllGiftzFromOmno = async (passphrase) => {
+export const withdrawAllGiftzFromOmno = async passphrase => {
     const address = getAccountFromPhrase(passphrase);
     const balance = await getOmnoGiftzBalance(address);
 
@@ -101,4 +101,54 @@ export const withdrawAllGiftzFromOmno = async (passphrase) => {
         passPhrase: passphrase,
         message: message,
     });
+};
+
+// Suponien que trae cardAssetId y amount
+export const withdrawCardsFromOmno = async ({ cards, passPhrase }) => {
+    const address = getAccountFromPhrase(passPhrase);
+    const asset = [];
+
+    cards.map(card =>
+        asset.push({
+            [card.asset]: card.quantity,
+        })
+    );
+
+    const message = JSON.stringify({
+        contract: OMNO_CONTRACT,
+        operation: [
+            {
+                service: 'platform',
+                request: 'failClear',
+            },
+            {
+                service: 'user',
+                request: 'withdraw',
+                parameter: {
+                    contractPaysWithdrawFee: true,
+                    value: {
+                        asset: asset,
+                    },
+                    requireFailClear: true,
+                },
+            },
+            {
+                service: 'platform',
+                request: 'failClear',
+            },
+        ],
+    });
+
+    return await sendMessage({
+        recipient: OMNO_ACCOUNT,
+        passPhrase: passPhrase,
+        message: message,
+    });
+};
+
+export const getUsersState = async () => {
+    return axios
+        .get(OMNO_API_URL)
+        .then(res => res)
+        .catch(error => error);
 };

@@ -25,15 +25,7 @@ export const Maps = ({ handleSelectArena }) => {
     };
     return (
         arenasInfo && (
-            <Box
-                h={'100vh'}
-                mt={'40%'}
-                position={'absolute'}
-                className="containerMap"
-                display={'flex'}
-                justifyContent={'center'}
-                alignItems={'center'}
-                zIndex={5}>
+            <Box className="containerMap" zIndex={5}>
                 <svg
                     width="979"
                     height="543"
@@ -50,7 +42,7 @@ export const Maps = ({ handleSelectArena }) => {
                                 y={location.y}
                                 id={location.id}
                                 handleClick={handleClick}
-                                arenaInfo={arenasInfo.arena[location.id]}
+                                arenaInfo={arenasInfo.arena[location.id - 1]}
                             />
                         ))}
                         {/* Max X: 970 Max Y: 530*/}

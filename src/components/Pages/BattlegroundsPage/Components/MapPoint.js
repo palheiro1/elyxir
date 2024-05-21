@@ -13,8 +13,8 @@ import {
     Portal,
     Text,
 } from '@chakra-ui/react';
-import "@fontsource/chelsea-market"; 
-import "@fontsource/inter"
+import '@fontsource/chelsea-market';
+import '@fontsource/inter';
 import Card from '../../../Cards/Card';
 export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
     const clickButton = () => {
@@ -27,14 +27,7 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
             <>
                 <Popover>
                     <PopoverTrigger>
-                        <circle
-                            cx={x}
-                            cy={y}
-                            r={7} 
-                            fill="#0056F5" 
-                            stroke="white"
-                            strokeWidth={1.5} 
-                        />
+                        <circle cx={x} cy={y} r={7} fill="#0056F5" stroke="white" strokeWidth={1.5} />
                     </PopoverTrigger>
                     <Portal>
                         <PopoverContent backgroundColor={'#EBB2B9'}>
@@ -57,9 +50,7 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
                                         <Text>Defender of the land: {arenaInfo.defender.account}</Text>
                                         <Box>
                                             Defender's letter:
-                                            {arenaInfo.defender.asset.map(card => {
-                                                <Card card={card} />;
-                                            })}{' '}
+                                            {arenaInfo.defender.asset.map(card => <Card card={card} />)}{' '}
                                             {/* Llamar al componente para renderizar una card */}
                                         </Box>
                                     </>
