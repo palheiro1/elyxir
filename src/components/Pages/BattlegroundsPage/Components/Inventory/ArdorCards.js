@@ -107,7 +107,7 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
 
     return (
         <Center color={'#FFF'}>
-            <Stack direction="column" spacing={8}>
+            <Stack direction="column" spacing={8} w={'30rem'}>
                 <Heading fontSize="xl" fontWeight="light" textAlign="center">
                     1. Select cards to send to Ardor
                 </Heading>
@@ -152,7 +152,8 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
                             px={6}
                             rounded="lg"
                             maxH="20rem"
-                            overflowY="auto">
+                            className="custom-scrollbar"
+                            overflowX={'scroll'}>
                             {selectedCards.map(card => (
                                 <BridgeCard
                                     key={card.asset}

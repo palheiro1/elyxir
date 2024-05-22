@@ -32,11 +32,10 @@ import { errorToast, infoToast, okToast } from '../../../../../utils/alerts';
  * @author Jesús Sánchez Fernández
  * @version 0.1
  * @param {Object} infoAccount - Account info
- * @param {String} ardorAddress - Ardor address
  * @param {Array} cards - Cards
  * @returns {JSX.Element} - JSX element
  */
-const OmnoCards = ({ infoAccount, ardorAddress, cards }) => {
+const OmnoCards = ({ infoAccount, cards }) => {
     const toast = useToast();
 
     // const [isValidAccount, setIsValidAccount] = useState(false);
@@ -50,8 +49,6 @@ const OmnoCards = ({ infoAccount, ardorAddress, cards }) => {
     const myCards = cards.filter(card => parseInt(card.unconfirmedQuantityQNT) > 0);
     const notSelectedCards = myCards.filter(card => !selectedCards.includes(card));
 
-
-
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
 
@@ -64,7 +61,7 @@ const OmnoCards = ({ infoAccount, ardorAddress, cards }) => {
     };
 
     const handleDeleteSelectedCard = card => {
-        console.log(infoAccount)
+        console.log(infoAccount);
         const newSelectedCards = selectedCards.filter(selectedCard => selectedCard.asset !== card);
         setSelectedCards(newSelectedCards);
     };
@@ -103,11 +100,11 @@ const OmnoCards = ({ infoAccount, ardorAddress, cards }) => {
         }
     };
 
-    const bgColor = useColorModeValue("blackAlpha.100", "whiteAlpha.100");
+    const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
 
     return (
-        <Center color={"#FFF"}>
-            <Stack direction="column" spacing={8}>
+        <Center color={'#FFF'}>
+            <Stack direction="column" spacing={8} w={'30rem'}>
                 <Heading fontSize="xl" fontWeight="light" textAlign="center">
                     1. Select cards to send to Army
                 </Heading>
@@ -152,7 +149,8 @@ const OmnoCards = ({ infoAccount, ardorAddress, cards }) => {
                             px={6}
                             rounded="lg"
                             maxH="20rem"
-                            overflowY="auto">
+                            className="custom-scrollbar"
+                            overflowX={'scroll'}>
                             {selectedCards.map(card => (
                                 <BridgeCard
                                     key={card.asset}
@@ -166,8 +164,6 @@ const OmnoCards = ({ infoAccount, ardorAddress, cards }) => {
                     </Box>
                 )}
 
-                
-
                 <Divider bgColor="#393b97" />
                 <Heading fontSize="xl" fontWeight="light" textAlign="center">
                     2. Sign and send
@@ -176,7 +172,7 @@ const OmnoCards = ({ infoAccount, ardorAddress, cards }) => {
                 <Center>
                     <HStack spacing={7}>
                         <PinInput
-                            isDisabled={selectedCards.length === 0 } 
+                            isDisabled={selectedCards.length === 0}
                             size="lg"
                             onComplete={handleCompletePin}
                             onChange={handleCompletePin}
@@ -194,7 +190,7 @@ const OmnoCards = ({ infoAccount, ardorAddress, cards }) => {
                 <Button
                     w="100%"
                     variant="bridge"
-                    disabled={ !isValidPin || selectedCards.length === 0 || isSwapping} 
+                    disabled={!isValidPin || selectedCards.length === 0 || isSwapping}
                     onClick={handleSwap}
                     letterSpacing="widest">
                     SEND
