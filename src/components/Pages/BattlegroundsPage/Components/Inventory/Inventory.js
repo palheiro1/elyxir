@@ -1,16 +1,13 @@
 import { Box, Heading, IconButton, Stack, Text, Select } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { CloseIcon } from '@chakra-ui/icons';
 import OmnoCards from './OmnoCards';
 import GridCards from '../../../../Cards/GridCards';
-import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface';
-import { getUsersState } from '../../../../../services/Ardor/omnoInterface';
 import '@fontsource/chelsea-market';
 import ArdorCards from './ArdorCards';
 import '../../BattlegroundMap.css';
 const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards }) => {
-    
     const [selectedOption, setSelectedOption] = useState('battlegrounds');
 
     const handleSelectChange = event => {
@@ -20,8 +17,6 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards }) 
     const closeInvetory = () => {
         handleCloseInventory();
     };
-
-    
 
     return (
         <>
@@ -38,8 +33,7 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards }) 
                 p={4}
                 display={'flex'}
                 flexDir={'column'}
-                maxH={'650px'}
-                minH={'650px'}
+                h={'90%'}
                 borderRadius={'25px'}>
                 <IconButton
                     background={'transparent'}
@@ -62,7 +56,7 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards }) 
                     value={selectedOption}
                     onChange={handleSelectChange}>
                     <option value="battlegrounds">Battlegrounds</option>
-                    <option value="ardor">Ardor</option>
+                    <option value="ardor">Inventory</option>
                 </Select>
                 {selectedOption === 'battlegrounds' && (
                     <OmnoPage filteredCards={filteredCards} infoAccount={infoAccount} cards={cards} />
@@ -84,14 +78,14 @@ const OmnoPage = ({ filteredCards, infoAccount, cards }) => {
                 </Heading>
                 <Text>In order to play you will have to import your cards to battlegrounds</Text>
             </Stack>
-            <Stack direction={'row'} pt={2} padding={5} height={'550px'}>
+            <Stack direction={'row'} pt={2} padding={5} height={'90%'}>
                 <Box
                     mb={2}
                     backgroundColor={'#0F0F0F'}
                     borderRadius={'20px'}
                     p={4}
-                    minW={'65%'}
-                    maxW={'65%'}
+                    minW={'70%'}
+                    maxW={'70%'}
                     overflowY={'scroll'}
                     className="custom-scrollbar">
                     <GridCards
@@ -100,9 +94,18 @@ const OmnoPage = ({ filteredCards, infoAccount, cards }) => {
                         isOnlyBuy={false}
                         rgbColor="0, 0, 0"
                         isDisabledButtons={true}
+                        columns={4}
+                        gap={1}
+                        textColor="rgb(225,255,255)"
                     />
                 </Box>
-                <Box  maxW={'60%'} backgroundColor={'#0F0F0F'} borderRadius={'20px'} p={4} className='custom-scrollbar' overflowX={"scroll"}>
+                <Box
+                    maxW={'60%'}
+                    backgroundColor={'#0F0F0F'}
+                    borderRadius={'20px'}
+                    p={4}
+                    className="custom-scrollbar"
+                    overflowX={'scroll'}>
                     <OmnoCards infoAccount={infoAccount} cards={cards} />
                 </Box>
             </Stack>
@@ -119,16 +122,16 @@ const ArdorPage = ({ cards, filteredCards, infoAccount }) => {
                 <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
                     INVERTORY
                 </Heading>
-                <Text>Here you can withdraw your cards from the army to your Ardor Wallet</Text>
+                <Text>Here you can withdraw your cards from the army to your inventory</Text>
             </Stack>
-            <Stack direction={'row'} pt={2} padding={5} height={'550px'}>
+            <Stack direction={'row'} pt={2} padding={5} height={'90%'}>
                 <Box
                     mb={2}
                     backgroundColor={'#0F0F0F'}
                     borderRadius={'20px'}
                     p={4}
-                    minW={'65%'}
-                    maxW={'65%'}
+                    minW={'70%'}
+                    maxW={'70%'}
                     overflowY={'scroll'}
                     className="custom-scrollbar">
                     <GridCards
@@ -137,10 +140,16 @@ const ArdorPage = ({ cards, filteredCards, infoAccount }) => {
                         isDisabledButtons={true}
                         columns={4}
                         gap={1}
-                        textColor='rgb(225,255,255)'
+                        textColor="rgb(225,255,255)"
                     />
                 </Box>
-                <Box maxW={'60%'} backgroundColor={'#0F0F0F'} borderRadius={'20px'} p={4}>
+                <Box
+                    maxW={'60%'}
+                    backgroundColor={'#0F0F0F'}
+                    borderRadius={'20px'}
+                    p={4}
+                    className="custom-scrollbar"
+                    overflowX={'scroll'}>
                     <ArdorCards infoAccount={infoAccount} cards={filteredCards} />
                 </Box>
             </Stack>

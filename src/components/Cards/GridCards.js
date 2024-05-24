@@ -21,7 +21,7 @@ const GridCards = ({
     cards,
     isMarket = false,
     onlyBuy = false,
-    infoAccount = {},
+    infoAccount,
     market = 'IGNIS',
     rgbColor = '59, 100, 151',
     isDisabledButtons = false,

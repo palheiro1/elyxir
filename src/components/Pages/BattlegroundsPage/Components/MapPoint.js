@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Box,
     Button,
     ButtonGroup,
+    Img,
     Popover,
     PopoverArrow,
     PopoverBody,
@@ -11,23 +12,48 @@ import {
     PopoverHeader,
     PopoverTrigger,
     Portal,
+    Stack,
     Text,
 } from '@chakra-ui/react';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import Card from '../../../Cards/Card';
-export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
+import { getAccount } from '../../../../services/Ardor/ardorInterface';
+export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo, selectedArena, cards }) => {
+    const [defenderInfo, setDefenderInfo] = useState(null);
+    const [defenderCards, setDefenderCards] = useState(null);
     const clickButton = () => {
         handleClick(id);
         console.log('INFO ARENA', arenaInfo);
+        console.log('🚀 ~ MapPoint ~ cards:', cards);
     };
 
+    useEffect(() => {
+        const getDefenderInfo = async () => {
+            await getAccount(arenaInfo.defender.account).then(res => {
+                setDefenderInfo(res);
+                const defenderAssets = new Set(arenaInfo.defender.asset);
+                const matchingObjects = cards.filter(obj => defenderAssets.has(obj.asset));
+                setDefenderCards(matchingObjects);
+            });
+        };
+        getDefenderInfo();
+    }, [arenaInfo, cards]);
+
     return (
-        arenaInfo && (
+        arenaInfo &&
+        defenderInfo && (
             <>
                 <Popover>
                     <PopoverTrigger>
-                        <circle cx={x} cy={y} r={7} fill="#0056F5" stroke="white" strokeWidth={1.5} />
+                        <circle
+                            cx={x}
+                            cy={y}
+                            r={7}
+                            fill={selectedArena !== id ? '#0056F5' : '#7FC0BE'}
+                            stroke="white"
+                            strokeWidth={1.5}
+                        />
                     </PopoverTrigger>
                     <Portal>
                         <PopoverContent backgroundColor={'#EBB2B9'}>
@@ -47,10 +73,14 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
                                     <Text>The territory has no defender</Text>
                                 ) : (
                                     <>
-                                        <Text>Defender of the land: {arenaInfo.defender.account}</Text>
+                                        <Text>Defender of the land: {defenderInfo.name}</Text>
                                         <Box>
-                                            Defender's letter:
-                                            {arenaInfo.defender.asset.map(card => <Card card={card} />)}{' '}
+                                            Defender's cards:
+                                            <Stack direction={"row"}>
+                                                {defenderCards.map(card => (
+                                                    <Img w={"50px"} src={card.cardThumbUrl} />
+                                                ))}
+                                            </Stack>
                                             {/* Llamar al componente para renderizar una card */}
                                         </Box>
                                     </>

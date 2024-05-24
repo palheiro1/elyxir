@@ -109,7 +109,7 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
         <Center color={'#FFF'}>
             <Stack direction="column" spacing={8} w={'30rem'}>
                 <Heading fontSize="xl" fontWeight="light" textAlign="center">
-                    1. Select cards to send to Ardor
+                    1. Select cards to send to Inventory
                 </Heading>
 
                 <Menu w="100%">

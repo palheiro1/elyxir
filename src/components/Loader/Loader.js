@@ -1,8 +1,8 @@
 import { FaSpinner } from "react-icons/fa";
 
-const Loader = () => {
+const Loader = (color) => {
     return (
-        <FaSpinner className="loader" />
+        <FaSpinner className="loader" color={color}/>
     );
 }
 

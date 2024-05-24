@@ -166,7 +166,7 @@ const OmnoCards = ({ infoAccount, cards }) => {
 
                 <Divider bgColor="#393b97" />
                 <Heading fontSize="xl" fontWeight="light" textAlign="center">
-                    2. Sign and send
+                    2. Sign and recruit
                 </Heading>
 
                 <Center>
@@ -193,7 +193,7 @@ const OmnoCards = ({ infoAccount, cards }) => {
                     disabled={!isValidPin || selectedCards.length === 0 || isSwapping}
                     onClick={handleSwap}
                     letterSpacing="widest">
-                    SEND
+                    RECRUIT
                 </Button>
             </Stack>
         </Center>

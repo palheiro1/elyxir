@@ -106,8 +106,6 @@ export const withdrawAllGiftzFromOmno = async passphrase => {
 // Suponien que trae cardAssetId y amount
 export const withdrawCardsFromOmno = async ({ cards, passPhrase }) => {
     console.log('🚀 ~ withdrawCardsFromOmno ~ cards:', cards);
-    //const address = getAccountFromPhrase(passPhrase);
-    // const asset = [];
 
     const assets = {};
 
@@ -115,7 +113,7 @@ export const withdrawCardsFromOmno = async ({ cards, passPhrase }) => {
         const card = cards[index];
         console.log('🚀 ~ withdrawCardsFromOmno ~ card:', card);
 
-        assets[card.asset] = (card.quantity).toString();
+        assets[card.asset] = card.quantity.toString();
     }
 
     const message = JSON.stringify({
@@ -156,4 +154,39 @@ export const getUsersState = async () => {
         .get(OMNO_API_URL)
         .then(res => res)
         .catch(error => error);
+};
+
+export const sendCardsToBattle = async ({ cards, passPhrase, arenaId }) => {
+    const assets = [];
+
+    for (let index = 0; index < cards.length; index++) {
+        const card = cards[index];
+        console.log('🚀 ~ withdrawCardsFromOmno ~ card:', card);
+
+        assets.push(card.asset);
+    }
+
+    const message = JSON.stringify({
+        contract: 'MBOmno',
+
+        operation: [
+            {
+                service: 'rgame',
+                request: 'formArmy',
+
+                parameter: {
+                    arena: arenaId,
+                    asset: assets,
+                },
+            },
+        ],
+    });
+    console.log("🚀 ~ sendCardsToBattle ~ message:", message)
+
+
+    return await sendMessage({
+        recipient: OMNO_ACCOUNT,
+        passPhrase: passPhrase,
+        message: message,
+    });
 };

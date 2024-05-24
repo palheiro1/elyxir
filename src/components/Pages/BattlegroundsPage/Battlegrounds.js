@@ -145,7 +145,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 </Box>
                             ))}
                         </Box>
-                        <Maps handleSelectArena={handleSelectArena} />
+                        <Maps handleSelectArena={handleSelectArena} infoAccount={infoAccount} cards={cards}/>
                     </Stack>
                     <Stack direction={'row'} mt={6}>
                         <Stack

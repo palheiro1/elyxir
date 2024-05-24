@@ -6,14 +6,16 @@ import { MapPoint } from './Components/MapPoint';
 import locations from './assets/LocationsEnum';
 import { getArenas } from '../../../services/Battlegrounds/Battlegrounds';
 
-export const Maps = ({ handleSelectArena }) => {
+export const Maps = ({ handleSelectArena, infoAccount, cards}) => {
     const [arenasInfo, setArenasInfo] = useState();
+    const [selectedArena, setSelectedArena] = useState()
     useEffect(() => {
         const getData = async () => {
             await getArenas().then(res => {
                 console.log(res);
                 setArenasInfo(res);
             });
+            
         };
         getData();
     }, []);
@@ -21,6 +23,7 @@ export const Maps = ({ handleSelectArena }) => {
     const handleClick = id => {
         console.log('ARENA ID', id);
         handleSelectArena(arenasInfo.arena[id - 1]);
+        setSelectedArena(id)
         console.log(arenasInfo.arena[id - 1]);
     };
     return (
@@ -43,6 +46,8 @@ export const Maps = ({ handleSelectArena }) => {
                                 id={location.id}
                                 handleClick={handleClick}
                                 arenaInfo={arenasInfo.arena[location.id - 1]}
+                                selectedArena={selectedArena}
+                                cards={cards}
                             />
                         ))}
                         {/* Max X: 970 Max Y: 530*/}
