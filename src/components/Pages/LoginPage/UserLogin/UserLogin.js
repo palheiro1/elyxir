@@ -123,12 +123,7 @@ const UserLogin = ({ setInfoAccount }) => {
                 </HStack>
 
                 <Center gap={12} w="100%">
-                    <PinInput
-                        size="lg"
-                        onChange={handleCompletePin}
-                        isInvalid={isInvalidPin}
-                        variant="filled"
-                        mask>
+                    <PinInput size="lg" onChange={handleCompletePin} isInvalid={isInvalidPin} variant="filled" mask>
                         <PinInputField />
                         <PinInputField />
                         <PinInputField />
@@ -140,13 +135,15 @@ const UserLogin = ({ setInfoAccount }) => {
                     Enter PIN to Login
                 </Text>
             </Stack>
-            <ConfirmDialog
-                reference={reference}
-                isOpen={isOpen}
-                onClose={onClose}
-                setNeedReload={setNeedReload}
-                user={user}
-            />
+            {isOpen && (
+                <ConfirmDialog
+                    reference={reference}
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    setNeedReload={setNeedReload}
+                    user={user}
+                />
+            )}
         </>
     );
 };
