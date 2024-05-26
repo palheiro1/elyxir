@@ -38,14 +38,14 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
             <Flex
                 display={{ md: 'flex' }}
                 color={useColorModeValue('gray.600', 'white')}
-                minH={'60px'}
+                minH={{ base: "0px", lg: '60px' }}
                 py={{ base: isHeader ? 2 : 0 }}
                 pt={{ base: isHeader ? 0 : 8 }}
                 borderBottom={isHeader ? 1 : 0}
                 borderStyle={'solid'}
                 borderColor={useColorModeValue('gray.200', 'gray.900')}
                 align={'center'}>
-                {isHeader && (
+                {isHeader && !isLogged && (
                     <Flex flex={{ base: 1, md: 'auto' }} display={{ base: 'flex', md: 'none' }}>
                         <IconButton
                             onClick={onToggle}
