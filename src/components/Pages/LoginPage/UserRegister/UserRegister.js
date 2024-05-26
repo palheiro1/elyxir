@@ -134,36 +134,38 @@ const UserRegister = () => {
                     <FormLabel>Passphrase</FormLabel>
                 </FormControl>
 
-                <Stack direction={'row'}>
+                <Stack direction={{ base: 'column', lg: 'column' }}>
                     <FormControl variant="floating" id="name">
                         <Input placeholder=" " value={name} size="lg" onChange={handleChangeName} />
                         <FormLabel>Name</FormLabel>
                         <FormHelperText textAlign="center">Used to identify you on this device</FormHelperText>
                     </FormControl>
 
-                    <FormControl variant="floating" id="pin">
-                        <HStack spacing={4}>
-                            <PinInput size="lg" onComplete={handleChangePin} manageFocus={true}>
-                                <PinInputField />
-                                <PinInputField />
-                                <PinInputField />
-                                <PinInputField />
-                            </PinInput>
-                        </HStack>
-                        <FormLabel mx={16}>PIN</FormLabel>
-                        <FormHelperText textAlign="center">Used to access easily.</FormHelperText>
-                    </FormControl>
+                    <Stack direction={'row'}>
+                        <FormControl variant="floating" id="pin">
+                            <HStack spacing={2}>
+                                <PinInput size="lg" onComplete={handleChangePin} manageFocus={true}>
+                                    <PinInputField />
+                                    <PinInputField />
+                                    <PinInputField />
+                                    <PinInputField />
+                                </PinInput>
+                            </HStack>
+                            <FormLabel mx={16}>PIN</FormLabel>
+                            <FormHelperText textAlign="center">Used to access easily.</FormHelperText>
+                        </FormControl>
+                        <Button
+                            w="100%"
+                            size={'lg'}
+                            p={4}
+                            bgColor="blue"
+                            textColor="white"
+                            fontWeight="bold"
+                            onClick={handleSaveWallet}>
+                            SAVE
+                        </Button>
+                    </Stack>
                 </Stack>
-                <Button
-                    w="100%"
-                    p={4}
-                    mt={6}
-                    bgColor="blue"
-                    textColor="white"
-                    fontWeight="bold"
-                    onClick={handleSaveWallet}>
-                    Save account
-                </Button>
             </Box>
         </Box>
     );

@@ -36,7 +36,7 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
     return (
         <Box mt={needTarascaLogo ? 24 : 4}>
             <Flex
-                display={{ base: 'none', md: 'flex' }}
+                display={{ md: 'flex' }}
                 color={useColorModeValue('gray.600', 'white')}
                 minH={'60px'}
                 py={{ base: isHeader ? 2 : 0 }}
@@ -46,13 +46,14 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
                 borderColor={useColorModeValue('gray.200', 'gray.900')}
                 align={'center'}>
                 {isHeader && (
-                    <Flex flex={{ base: 1, md: 'auto' }} ml={{ base: -2 }} display={{ base: 'flex', md: 'none' }}>
+                    <Flex flex={{ base: 1, md: 'auto' }} display={{ base: 'flex', md: 'none' }}>
                         <IconButton
                             onClick={onToggle}
                             icon={isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />}
                             variant={'ghost'}
                             aria-label={'Toggle Navigation'}
                         />
+                        {needChangeColor && <ColorModeSwitcher position="absolute" right="2.5%" />}
                     </Flex>
                 )}
 
@@ -62,13 +63,27 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
                     </Center>
                 </Flex>
 
-                {needChangeColor && <ColorModeSwitcher position="absolute" right="2.5%" />}
+                {needChangeColor && (
+                    <ColorModeSwitcher position="absolute" right="2.5%" display={{ base: 'none', md: 'flex' }} />
+                )}
             </Flex>
 
             {isHeader && (
                 <Collapse in={isOpen} animateOpacity>
                     <MobileNav />
                 </Collapse>
+            )}
+
+            {!isHeader && needTarascaLogo && (
+                <Center w="100%" display={{ base: 'flex', md: 'none' }}>
+                    <Stack direction={'row'} spacing={24} align="center">
+                        <Text textAlign="center" fontSize="small" textColor="gray.600" py={2} w="100%">
+                            © 2022 Tarasca GmbH. All Rights Reserved.
+                            <br />
+                            Build: {process.env.REACT_APP_GIT_SHA}
+                        </Text>
+                    </Stack>
+                </Center>
             )}
         </Box>
     );
@@ -117,7 +132,7 @@ const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
                 <Stack direction={'column'} w="100%">
                     <Center>
                         <Stack direction={'row'} spacing={24} align="center">
-                            <Box px={8}></Box>
+                            <Box px={8} />
                             <Text textAlign="center" fontSize="small" textColor="gray.600" py={2} w="100%">
                                 © 2022 Tarasca GmbH. All Rights Reserved.
                                 <br />

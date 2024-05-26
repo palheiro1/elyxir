@@ -8,21 +8,21 @@ import { FaMoon, FaSun } from 'react-icons/fa';
  * @dev This component is used to change the color mode between light and dark
  * @author Jesús Sánchez Fernández
  */
-export const ColorModeSwitcher = (props) => {
-  const { toggleColorMode } = useColorMode();
-  const text = useColorModeValue('dark', 'light');
-  const SwitchIcon = useColorModeValue(FaMoon, FaSun);
+export const ColorModeSwitcher = props => {
+    const { toggleColorMode } = useColorMode();
+    const text = useColorModeValue('dark', 'light');
+    const SwitchIcon = useColorModeValue(FaMoon, FaSun);
 
-  return (
-    <IconButton
-      size="md"
-      fontSize="lg"
-      aria-label={`Switch to ${text} mode`}
-      variant="ghost"
-      color="current"
-      onClick={toggleColorMode}
-      icon={<SwitchIcon />}
-      {...props}
-    />
-  );
+    return (
+        <IconButton
+            size="md"
+            fontSize="lg"
+            aria-label={`Switch to ${text} mode`}
+            variant="ghost"
+            color="current"
+            onClick={toggleColorMode}
+            icon={<SwitchIcon />}
+            {...props}
+        />
+    );
 };

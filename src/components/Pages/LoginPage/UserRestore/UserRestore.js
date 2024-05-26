@@ -31,7 +31,7 @@ const UserRestore = ({ isRedeem = false }) => {
     const toast = useToast();
     const navigate = useNavigate();
 
-    const [name, setName] = useState(isRedeem ? "GIFTZ Pack" : '');
+    const [name, setName] = useState(isRedeem ? 'GIFTZ Pack' : '');
     const [account, setAccount] = useState('');
     const [passphrase, setPassphrase] = useState('');
     const [isValidPassphrase, setIsValidPassphrase] = useState(false);
@@ -90,18 +90,18 @@ const UserRestore = ({ isRedeem = false }) => {
 
     // ---------------- QR Reader ----------------
 
-    const handleScan = (scanPhrase) => {
+    const handleScan = scanPhrase => {
         if (readerEnabled) setReaderEnabled(false);
 
         const account = getAccountFromPhrase(scanPhrase);
         setPassphrase(scanPhrase);
         setAccount(account);
-    }
+    };
 
     const handleSubmit = () => {
         if (needScanQR) setReaderEnabled(true);
         else handleRestoreWallet();
-    }
+    };
 
     // -------------------------------------------
 
@@ -146,7 +146,7 @@ const UserRestore = ({ isRedeem = false }) => {
 
                 <Stack direction={'row'}>
                     <FormControl variant="floating" id="pin">
-                        <HStack spacing={4}>
+                        <HStack spacing={2}>
                             <PinInput size="lg" onComplete={handleChangePin} manageFocus={true}>
                                 <PinInputField />
                                 <PinInputField />
@@ -171,8 +171,8 @@ const UserRestore = ({ isRedeem = false }) => {
                 </Stack>
             </Box>
             {readerEnabled && (
-                <Modal isOpen={readerEnabled} onClose={() => setReaderEnabled(false)} isCentered size={"3xl"}>
-                    <ModalOverlay bgColor={"blackAlpha.800"} />
+                <Modal isOpen={readerEnabled} onClose={() => setReaderEnabled(false)} isCentered size={'3xl'}>
+                    <ModalOverlay bgColor={'blackAlpha.800'} />
                     <ModalContent>
                         <ModalHeader>Scan QR</ModalHeader>
                         <ModalCloseButton />

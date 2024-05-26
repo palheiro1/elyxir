@@ -21,8 +21,8 @@ const Login = ({ setInfoAccount }) => {
     return (
         <Box px={8}>
             <Center>
-                <Stack direction={'row'} spacing={4} pt={12} align="center">
-                    <Box w={['100%', '100%', '60%', '60%']} p={4}>
+                <Stack direction={{ base: 'column', lg: 'row' }} spacing={12} pt={8} align="center">
+                    <Box w={{ base: '100%', lg: '60%' }}>
                         <LoginButtons
                             showNewUser={true}
                             showRestore={true}
@@ -30,20 +30,26 @@ const Login = ({ setInfoAccount }) => {
                             setLoginType={setLoginType}
                         />
 
-                        <Heading my={6}>
+                        <Heading>
                             Welcome to <br />
-                            Mythical Beings
+                            <strong>Mythical Beings</strong>
                         </Heading>
 
                         {loginType === 'normal' && <UserLogin setInfoAccount={setInfoAccount} />}
                         {loginType === 'sigbro' && <SigBroLogin setInfoAccount={setInfoAccount} />}
 
-                        <Button w="100%" mt={4} onClick={() => navigate('/redeem')} bgColor={"#EBB2B9"} _hover={{ bgColor: "#E8A5B3" }}>
+                        <Button
+                            w="100%"
+                            mt={4}
+                            onClick={() => navigate('/redeem')}
+                            bgColor={'#EBB2B9'}
+                            _hover={{ bgColor: '#E8A5B3' }}
+                            color="black">
                             Claim voucher
                         </Button>
                     </Box>
 
-                    <Image src="images/criatures/login.png" w="50%" p={4} />
+                    <Image src="images/criatures/login.png" w={{ base: '100%', lg: '50%' }} />
                 </Stack>
             </Center>
         </Box>
