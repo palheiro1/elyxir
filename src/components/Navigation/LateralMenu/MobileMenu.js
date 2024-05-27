@@ -23,8 +23,9 @@ const MobileMenu = ({
                         {account}
                     </Text>
                 </Stack>
+                
 
-                {infoAccount.GEMBalance && (
+                {infoAccount && (
                     <Center my={2}>
                         <CurrencyMenu infoAccount={infoAccount} goToSection={goToSection} />
                     </Center>

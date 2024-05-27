@@ -176,7 +176,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     errorToast("Couldn't add token to MetaMask", toast);
                 }
             } catch (error) {
-                console.error("🚀 ~ addToMetamask ~ error:", error)
+                console.error('🚀 ~ addToMetamask ~ error:', error);
                 errorToast("Couldn't add token to MetaMask", toast);
             }
         } else {
@@ -188,9 +188,13 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
 
     return (
         <>
-            <Stack direction={{ base: 'column', md: 'row' }} gap={4} align="flex-end">
+            <Stack direction={{ base: 'column', md: 'row' }} gap={4} align="flex-end" w="80%">
                 <Spacer />
-                <SimpleGrid columns={{ base: 2, md: 3, lg: 5 }} spacing={{ base: 4, lg: 6 }} w="100%">
+                <SimpleGrid
+                    columns={{ base: 2, md: 3, lg: 5 }}
+                    spacing={{ base: 4, lg: 6 }}
+                    pb={{ base: 4, lg: 0 }}
+                    w="100%">
                     <Menu>
                         <MenuButton
                             color={'black'}
