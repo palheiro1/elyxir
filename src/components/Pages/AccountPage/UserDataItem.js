@@ -1,8 +1,10 @@
-import { Box, Button, Grid, GridItem, Heading, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Grid, GridItem, Heading, Text, useDisclosure, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import { FaQrcode } from 'react-icons/fa';
 import { getIgnisPrice } from '../../../services/coingecko/utils';
 import { getIgnisFromFaucet } from '../../../services/Faucet/faucet';
 import { errorToast, okToast } from '../../../utils/alerts';
+import ShowQR from '../../ShowQR/ShowQR';
 
 const UserDataItem = ({
     accountRs,
@@ -18,6 +20,7 @@ const UserDataItem = ({
 }) => {
     const [IGNISUSDBalance, setIGNISUSDBalance] = useState(0);
     const toast = useToast();
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     useEffect(() => {
         const calculateUSD = async () => {
@@ -50,86 +53,98 @@ const UserDataItem = ({
     );
 
     return (
-        <GridItem>
-            <ContainerText>
-                <Heading fontSize="lg" pb={2}>
-                    Your Ardor account
-                </Heading>
-                <Text>{accountRs}</Text>
-            </ContainerText>
-            <ContainerText>
-                <Heading fontSize="lg" pb={2}>
-                    User
-                </Heading>
-                <Text>{name}</Text>
-            </ContainerText>
-            <ContainerText>
-                <Grid templateColumns="repeat(3, 1fr)" gap={2}>
-                    <GridItem>
-                        <Box bgColor={bgColor} rounded="lg" p={4}>
-                            <Heading fontSize="lg" pb={2}>
-                                IGNIS
-                            </Heading>
-                            <Text fontSize="sm">
-                                {IGNISBalance} ({IGNISUSDBalance} USD)
-                            </Text>
-                        </Box>
-                    </GridItem>
-                    <GridItem>
-                        <Box bgColor={bgColor} rounded="lg" p={4}>
-                            <Heading fontSize="lg" pb={2}>
-                                GIFTZ
-                            </Heading>
-                            <Text fontSize="sm">{GIFTZBalance}</Text>
-                        </Box>
-                    </GridItem>
-                    <GridItem>
-                        <Box bgColor={bgColor} rounded="lg" p={4}>
-                            <Heading fontSize="lg" pb={2}>
-                                GEM
-                            </Heading>
-                            <Text fontSize="sm">{GEMBalance}</Text>
-                        </Box>
-                    </GridItem>
-                    <GridItem>
-                        <Box bgColor={bgColor} rounded="lg" p={4}>
-                            <Heading fontSize="lg" pb={2}>
-                                wETH
-                            </Heading>
-                            <Text fontSize="sm">{WETHBalance}</Text>
-                        </Box>
-                    </GridItem>
-                    <GridItem>
-                        <Box bgColor={bgColor} rounded="lg" p={4}>
-                            <Heading fontSize="lg" pb={2}>
-                                MANA
-                            </Heading>
-                            <Text fontSize="sm">{MANABalance}</Text>
-                        </Box>
-                    </GridItem>
-                </Grid>
-            </ContainerText>
-            <ContainerText>
-                <Heading fontSize="lg" pb={2}>
-                    Faucet (IGNIS)
-                </Heading>
-                <Box fontSize="sm">
-                    {parseFloat(IGNISBalance) <= 0.3 ? (
-                        <>
-                            <Button w="100%" bgColor={bgColor} borderColor={borderColor} onClick={handleClaim}>
-                                Claim
-                            </Button>
-                            <Text fontSize={'xs'} mt={2}>
-                                Use this transfer to get more ignis for your operations, selling currencies or cards in
-                                the Market
-                            </Text>
-                        </>
-                    ) : (
-                        <Text>You can only claim if you have less than 0.3 IGNIS.</Text>
-                    )}
-                </Box>
-            </ContainerText>
-        </GridItem>
+        <>
+            <GridItem>
+                <ContainerText>
+                    <Heading fontSize="lg" pb={2}>
+                        Your ARDOR account
+                    </Heading>
+                    <Text>{accountRs}</Text>
+                    <Button
+                        w="100%"
+                        mt={6}
+                        bgColor={bgColor}
+                        borderColor={borderColor}
+                        leftIcon={<FaQrcode />}
+                        onClick={onOpen}>
+                        Show QR
+                    </Button>
+                </ContainerText>
+                <ContainerText>
+                    <Heading fontSize="lg" pb={2}>
+                        User
+                    </Heading>
+                    <Text>{name}</Text>
+                </ContainerText>
+                <ContainerText>
+                    <Grid templateColumns="repeat(3, 1fr)" gap={2}>
+                        <GridItem>
+                            <Box bgColor={bgColor} rounded="lg" p={4}>
+                                <Heading fontSize="lg" pb={2}>
+                                    IGNIS
+                                </Heading>
+                                <Text fontSize="sm">
+                                    {IGNISBalance} ({IGNISUSDBalance} USD)
+                                </Text>
+                            </Box>
+                        </GridItem>
+                        <GridItem>
+                            <Box bgColor={bgColor} rounded="lg" p={4}>
+                                <Heading fontSize="lg" pb={2}>
+                                    GIFTZ
+                                </Heading>
+                                <Text fontSize="sm">{GIFTZBalance}</Text>
+                            </Box>
+                        </GridItem>
+                        <GridItem>
+                            <Box bgColor={bgColor} rounded="lg" p={4}>
+                                <Heading fontSize="lg" pb={2}>
+                                    GEM
+                                </Heading>
+                                <Text fontSize="sm">{GEMBalance}</Text>
+                            </Box>
+                        </GridItem>
+                        <GridItem>
+                            <Box bgColor={bgColor} rounded="lg" p={4}>
+                                <Heading fontSize="lg" pb={2}>
+                                    wETH
+                                </Heading>
+                                <Text fontSize="sm">{WETHBalance}</Text>
+                            </Box>
+                        </GridItem>
+                        <GridItem>
+                            <Box bgColor={bgColor} rounded="lg" p={4}>
+                                <Heading fontSize="lg" pb={2}>
+                                    MANA
+                                </Heading>
+                                <Text fontSize="sm">{MANABalance}</Text>
+                            </Box>
+                        </GridItem>
+                    </Grid>
+                </ContainerText>
+                <ContainerText>
+                    <Heading fontSize="lg" pb={2}>
+                        Faucet (IGNIS)
+                    </Heading>
+                    <Box fontSize="sm">
+                        {parseFloat(IGNISBalance) <= 0.3 ? (
+                            <>
+                                <Button w="100%" bgColor={bgColor} borderColor={borderColor} onClick={handleClaim}>
+                                    Claim
+                                </Button>
+                                <Text fontSize={'xs'} mt={2}>
+                                    Use this transfer to get more ignis for your operations, selling currencies or cards
+                                    in the Market
+                                </Text>
+                            </>
+                        ) : (
+                            <Text>You can only claim if you have less than 0.3 IGNIS.</Text>
+                        )}
+                    </Box>
+                </ContainerText>
+            </GridItem>
+            {isOpen && <ShowQR isOpen={isOpen} onClose={onClose} account={accountRs} />}
+        </>
     );
 };
 
