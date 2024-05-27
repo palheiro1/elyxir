@@ -6,7 +6,7 @@ const FlowItem = ({ title, subtitle, button, number, color }) => {
             <Heading textAlign={'center'} fontSize={'2xl'}>
                 {number}
             </Heading>
-            <Text textAlign={'center'} fontWeight="bold" maxW="150px">
+            <Text textAlign={'center'} fontWeight="bold" maxW="180px">
                 {title} <br /> {subtitle}
             </Text>
             <Center>{button}</Center>

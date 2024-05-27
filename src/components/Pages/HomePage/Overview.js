@@ -18,10 +18,18 @@ const Overview = () => {
                     p={4}
                     px={{ base: 2, lg: 12 }}>
                     <Center gap={2}>
-                        <Heading textAlign={'center'} fontWeight={'light'} fontSize={{ base: "2xl", lg: '6xl'}} color="#2f9088">
+                        <Heading
+                            textAlign={'center'}
+                            fontWeight={'light'}
+                            fontSize={{ base: 'xl', lg: '2xl', xl: '6xl' }}
+                            color="#2f9088">
                             Welcome to
                         </Heading>
-                        <Heading textAlign={'center'} fontWeight={'medium'} fontSize={{ base: "2xl", lg: '6xl'}} color="#2f9088">
+                        <Heading
+                            textAlign={'center'}
+                            fontWeight={'medium'}
+                            fontSize={{ base: 'xl', lg: '2xl', xl: '6xl' }}
+                            color="#2f9088">
                             Mythical Beings
                         </Heading>
                     </Center>

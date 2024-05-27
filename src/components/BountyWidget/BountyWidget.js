@@ -120,9 +120,9 @@ const BountyWidget = ({ cStyle = 0 }) => {
 
     return (
         <Center py={4}>
-            <Stack direction={{ base: 'column', lg: 'row' }} w="100%" gap={3}>
+            <Stack direction={{ base: 'column', xl: 'row' }} w="100%" gap={3}>
                 <Box
-                    p={6}
+                    p={4}
                     border="1px"
                     borderColor={borderColor}
                     rounded="lg"
@@ -138,7 +138,7 @@ const BountyWidget = ({ cStyle = 0 }) => {
                     />
                 </Box>
                 <Box
-                    p={6}
+                    p={4}
                     border="1px"
                     borderColor={borderColor}
                     rounded="lg"
