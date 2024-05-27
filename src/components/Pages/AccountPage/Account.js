@@ -77,7 +77,7 @@ const Account = ({ infoAccount }) => {
     return (
         <>
             <Grid
-                templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
+                templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(2, 1fr)', xl: 'repeat(3, 1fr)' }}
                 gap={4}
                 color="white">
                 <UserDataItem

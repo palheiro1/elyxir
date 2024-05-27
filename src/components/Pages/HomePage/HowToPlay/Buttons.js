@@ -1,4 +1,4 @@
-import { Center, Stack, useColorModeValue } from '@chakra-ui/react';
+import { Center, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
 import FlowItem from './FlowItem';
 import MenuButton from './MenuButton';
 import { useNavigate } from 'react-router-dom';
@@ -14,11 +14,14 @@ const Buttons = () => {
 
     return (
         <Center>
+            <SimpleGrid columns={{ base: 1, md: 3, xl: 4, '2xl': 5 }} spacing={4} p={4}>
+                {/*
             <Stack
                 direction={{ base: 'column', lg: 'row' }}
-                spacing={{ base: 4, md: 0, lg: 12, xl: 32 }}
+                spacing={{ base: 2, md: 0, lg: 6, xl: 12, '2xl': 32 }}
                 mb={6}
                 align={'center'}>
+            */}
                 <FlowItem
                     number={1}
                     title={`Obtain cards by`}
@@ -104,7 +107,10 @@ const Buttons = () => {
                         />
                     }
                 />
+            </SimpleGrid>
+            {/*
             </Stack>
+            */}
         </Center>
     );
 };
