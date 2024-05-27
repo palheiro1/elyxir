@@ -608,3 +608,30 @@ export const sendCardsToOmno = async ({ cards, passPhrase }) => {
         return false;
     }
 };
+
+export const sendGEMSToOmno = async ({ quantity, passPhrase }) => {
+    const message = JSON.stringify({ contract: OMNO_CONTRACT });
+    try {
+        const res = await transferAsset({
+            asset: GEMASSET,
+            quantityQNT: quantity * NQTDIVIDER,
+            recipient: OMNO_ACCOUNT,
+            passPhrase: passPhrase,
+            message: message,
+            messagePrunable: true,
+            deadline: 361,
+            priority: 'HIGH',
+        });
+
+        const success = res.status === 200 || true;
+        if (success) {
+            return true;
+        } else {
+            console.error('Error transferring GEMs');
+            return false;
+        }
+    } catch (error) {
+        console.error(`Error transferring GEMs: ${error.message}`);
+        return false;
+    }
+};

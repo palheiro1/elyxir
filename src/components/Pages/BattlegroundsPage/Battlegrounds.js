@@ -1,6 +1,35 @@
-import { Box, Button, Img, Stack, Text } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Image,
+    Img,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    Portal,
+    Stack,
+    Text,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useColorModeValue,
+    useDisclosure,
+    Center,
+    HStack,
+    PinInput,
+    PinInputField,
+    Input,
+    useToast,
+    FormControl,
+    FormLabel,
+} from '@chakra-ui/react';
 import { Maps } from './Maps';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollLock } from './Components/ScrollLock';
 import { BattlegroundsIntro } from './Components/BattlegroundsIntro/BattlegroundsIntro';
 import logo from './assets/image.png';
@@ -12,9 +41,23 @@ import '@fontsource/inter';
 import Inventory from './Components/Inventory/Inventory';
 import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
 import { getUsersState } from '../../../services/Ardor/omnoInterface';
+import { GEMASSET, NQTDIVIDER, WETHASSET } from '../../../data/CONSTANTS';
+import { checkPin, sendGEMSToOmno } from '../../../utils/walletUtils';
+import { errorToast } from '../../../utils/alerts';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
     /* Intro pop up managing */
+    const {
+        IGNISBalance,
+        GIFTZBalance,
+        GEMBalance,
+        WETHBalance,
+        MANABalance,
+        name: username,
+        accountRs,
+        publicKey,
+    } = infoAccount;
+
     const [visible, setVisible] = useState(true);
     const [page, setPage] = useState(1);
     const [isScrollLocked, setIsScrollLocked] = useState(true);
@@ -24,6 +67,8 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [openBattle, setOpenBattle] = useState(false);
     const [openInventory, setOpenInventory] = useState(false);
 
+    const toast = useToast();
+
     const handleNext = () => {
         setPage(2);
     };
@@ -32,6 +77,9 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         setVisible(false);
         setIsScrollLocked(false);
     };
+
+    const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
+    const bgColor = useColorModeValue('rgba(234, 234, 234, 0.5)', 'rgba(234, 234, 234, 1)');
 
     /* Buttons menu list */
     const buttons = [
@@ -86,14 +134,38 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         setIsScrollLocked(false);
     };
 
-    const { accountRs } = infoAccount;
+    let wEthDecimals = 0;
+
     // const [userInfo, setUserInfo] = useState();
     const [filteredCards, setFilteredCards] = useState([]);
+    const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
+    const [omnoUserInfo, setOmnoUserInfo] = useState();
+    const [passphrase, setPassphrase] = useState('');
+    const [omnoGEMsBalance, setOmnoGEMsBalance] = useState(null);
+    const [OmnoWethBalance, setOmnoWethBalance] = useState(null);
+
+    const handleCompletePin = pin => {
+        isValidPin && setIsValidPin(false); // reset invalid pin flag
+
+        const { name } = infoAccount;
+        const account = checkPin(name, pin);
+        if (account) {
+            setIsValidPin(true);
+            setPassphrase(account.passphrase);
+        }
+    };
+
+    const parseWETH = parseFloat(OmnoWethBalance);
+
     useEffect(() => {
         const filterCards = async () => {
             const userInfo = await getUserState();
+            setOmnoUserInfo(userInfo);
             if (userInfo.balance) {
                 const assetIds = Object.keys(userInfo.balance.asset);
+                setOmnoGEMsBalance(userInfo.balance.asset[GEMASSET] || 0);
+                setOmnoWethBalance(userInfo.balance.asset[WETHASSET] || 0);
+
                 const matchingCards = cards.filter(card => assetIds.includes(card.asset));
                 // console.log(matchingCards);
                 setFilteredCards(matchingCards);
@@ -111,10 +183,114 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         });
         return res;
     };
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const [amount, setAmount] = useState(0);
+    const maxAmount = 1400;
+
+    const increment = () => {
+        if (amount < maxAmount) {
+            setAmount(amount + 1);
+        }
+    };
+
+    const decrement = () => {
+        if (amount > 0) {
+            setAmount(amount - 1);
+        }
+    };
+
+    const handleChange = event => {
+        const value = parseInt(event.target.value, 10);
+        if (!isNaN(value) && value >= 0 && value <= maxAmount) {
+            setAmount(value);
+        }
+    };
+
+    const handleSendSGEMS = async () => {
+        if (!isValidPin) {
+            return errorToast('The pin is invalid', toast);
+        }
+        console.log('🚀 ~ handleSendSGEMS ~ amount:', amount);
+
+        await sendGEMSToOmno({ quantity: amount, passPhrase: passphrase });
+    };
 
     return (
         <>
             <Box className="landscape-only">
+                <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Send GEM</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody display={'flex'}>
+                            <Stack direction={'column'} mx={'auto'}>
+                                <Center>
+                                    <FormControl variant="floatingModalTransparent" id="Amount" my={4}>
+                                        <HStack spacing={0} border="1px" rounded="lg" borderColor={'gray.300'}>
+                                            <Button
+                                                onClick={decrement}
+                                                rounded="none"
+                                                borderLeftRadius="lg"
+                                                size="lg"
+                                                color="white"
+                                                bgColor={'#F48794'}>
+                                                -
+                                            </Button>
+                                            <Input
+                                                value={amount}
+                                                onChange={handleChange}
+                                                rounded="none"
+                                                border="none"
+                                                color="black"
+                                                textAlign="center"
+                                                fontWeight="bold"
+                                                size="lg"
+                                                type="number"
+                                                min="0"
+                                                max={maxAmount}
+                                            />
+                                            <Button
+                                                onClick={increment}
+                                                rounded="none"
+                                                borderRightRadius="lg"
+                                                color="white"
+                                                size="lg"
+                                                bgColor={'#F48794'}>
+                                                +
+                                            </Button>
+                                        </HStack>
+                                        <FormLabel>
+                                            {' '}
+                                            <Text color={'#000'}>Amount to send (max: 1400)</Text>
+                                        </FormLabel>
+                                    </FormControl>
+                                </Center>
+                                <Stack direction={'row'} spacing={7}>
+                                    <PinInput
+                                        size="lg"
+                                        onComplete={handleCompletePin}
+                                        onChange={handleCompletePin}
+                                        isInvalid={!isValidPin}
+                                        variant="filled"
+                                        mask>
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                    </PinInput>
+                                </Stack>
+                            </Stack>
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <Button colorScheme="blue" mr={3} onClick={handleSendSGEMS}>
+                                Submit
+                            </Button>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
                 {openBattle && (
                     <BattleWindow
                         arenaInfo={selectedArena}
@@ -137,15 +313,81 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                 <ScrollLock isLocked={isScrollLocked} />
                 <Box position={'relative'} ml={6} mt={5}>
                     <Img src={logo} color={'#FFF'} />
-                    <Stack direction={'row'}>
-                        <Box mt={4} padding={'30px'}>
+                    <Stack direction={'row'} gap={4}>
+                        <Stack direction={'column'} gap={4} ml={'80px'} mt={'10px'}>
+                            <Text color={'black'} fontFamily={'Chelsea Market, system-ui'}>
+                                CURRENCIES
+                            </Text>
+                            <Menu>
+                                <MenuButton
+                                    color={'black'}
+                                    bgColor={bgColor}
+                                    borderColor={borderColor}
+                                    rounded="lg"
+                                    w="5rem"
+                                    maxH={'2.2rem'}
+                                    // _hover={{ bg: hoverColor }}
+                                >
+                                    <Stack direction="row" align="center">
+                                        <Image
+                                            ml={-5}
+                                            src="images/currency/gem.png"
+                                            alt="GEM Icon"
+                                            w="50 px"
+                                            h="50px"
+                                        />
+                                        <Text>{omnoGEMsBalance / NQTDIVIDER}</Text>
+                                    </Stack>
+                                </MenuButton>
+                                <Portal>
+                                    <MenuList>
+                                        <MenuItem onClick={onOpen}>Add GEM to Game</MenuItem>
+                                        <MenuItem>Send GEM to Wallet</MenuItem>
+                                    </MenuList>
+                                </Portal>
+                            </Menu>
+                            <Menu>
+                                <MenuButton
+                                    color={'black'}
+                                    bgColor={bgColor}
+                                    borderColor={borderColor}
+                                    rounded="lg"
+                                    w="5rem"
+                                    maxH={'2.2rem'}
+                                    // _hover={{ bg: hoverColor }}
+                                >
+                                    <Stack direction="row" align="center">
+                                        <Image
+                                            ml={-5}
+                                            src="images/currency/weth.png"
+                                            alt="wETH Icon"
+                                            w="50px"
+                                            h="50px"
+                                        />
+                                        <Text>
+                                            {parseWETH.toFixed(Math.max(0, wEthDecimals <= 6 ? wEthDecimals : 6))}
+                                        </Text>
+                                    </Stack>
+                                </MenuButton>
+
+                                <Portal>
+                                    <MenuList>
+                                        <MenuItem>Add WETH to Game</MenuItem>
+                                        <MenuItem>Send WETH to Wallet</MenuItem>
+                                    </MenuList>
+                                </Portal>
+                            </Menu>
+                        </Stack>
+                        <Box mt={8} padding={'30px'} pos={'absolute'} top={'12rem'}>
                             {buttons.map(btn => (
                                 <Box className="btn-menu" m={5} key={btn.i} onClick={btn.onclick}>
                                     {btn.name}
                                 </Box>
                             ))}
                         </Box>
-                        <Maps handleSelectArena={handleSelectArena} infoAccount={infoAccount} cards={cards}/>
+                        <Box ml={'80px'}>
+                            <Maps handleSelectArena={handleSelectArena} infoAccount={infoAccount} cards={cards} />
+                        </Box>
                     </Stack>
                     <Stack direction={'row'} mt={6}>
                         <Stack
