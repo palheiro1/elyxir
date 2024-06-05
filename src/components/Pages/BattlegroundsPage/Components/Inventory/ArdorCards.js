@@ -48,7 +48,6 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
     const [selectedCards, setSelectedCards] = useState([]);
 
     const myCards = cards;
-    console.log('🚀 ~ ArdorCards ~ cards:', cards);
     const notSelectedCards = myCards.filter(card => !selectedCards.includes(card));
 
     const handleCompletePin = pin => {
@@ -63,7 +62,6 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
     };
 
     const handleDeleteSelectedCard = card => {
-        console.log(infoAccount);
         const newSelectedCards = selectedCards.filter(selectedCard => selectedCard.asset !== card);
         setSelectedCards(newSelectedCards);
     };
@@ -87,8 +85,7 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
             asset: card.asset,
             quantity: card.selectQuantity || 1,
         }));
-        console.log('🚀 ~ cardsToSwap ~ cardsToSwap:', cardsToSwap);
-
+    
         const success = withdrawCardsFromOmno({
             cards: cardsToSwap,
             passPhrase: passphrase,

@@ -25,7 +25,7 @@ import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import { CloseIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
-import { getAccountPublicKey, getAsset } from '../../../../../services/Ardor/ardorInterface';
+import { getAsset } from '../../../../../services/Ardor/ardorInterface';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { sendCardsToBattle } from '../../../../../services/Ardor/omnoInterface';
 import { errorToast } from '../../../../../utils/alerts';
@@ -105,7 +105,6 @@ export const SelectHandPage = ({
         }
         await sendCardsToBattle({ cards: handBattleCards, passPhrase: passphrase, arenaId: arenaInfo.id });
         onClose();
-    
     };
 
     const handleCompletePin = pin => {
@@ -273,16 +272,3 @@ export const SelectHandPage = ({
         </>
     );
 };
-
-/* 
-const handleCompletePin = pin => {
-        isValidPin && setIsValidPin(false); // reset invalid pin flag
-
-        const { name } = infoAccount;
-        const account = checkPin(name, pin);
-        if (account) {
-            setIsValidPin(true);
-            setPassphrase(account.passphrase);
-        }
-    };
- */

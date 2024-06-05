@@ -1,9 +1,9 @@
-import { Box, Button, IconButton, useToast } from '@chakra-ui/react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Box, IconButton, Img, SimpleGrid, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { ChevronLeftIcon, CloseIcon } from '@chakra-ui/icons';
 import { SelectHandPage } from './SelectHandPage';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
-import GridCards from '../../../../Cards/GridCards';
 import { getAccount } from '../../../../../services/Ardor/ardorInterface';
 import { getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 import Loader from '../../../../Loader/Loader';
@@ -14,6 +14,7 @@ export const BattleWindow = ({ arenaInfo, handleCloseBattle, infoAccount, cards,
     const [index, setIndex] = useState('');
     const [defenderInfo, setDefenderInfo] = useState(null);
     const [handBattleCards, setHandBattleCards] = useState(['', '', '', '', '']);
+    // eslint-disable-next-line no-unused-vars
     const [defenderCards, setDefenderCards] = useState(null);
     const [soldiers, setSoldiers] = useState(null);
     const [mediumBonus, setMediumBonus] = useState(0);
@@ -23,7 +24,6 @@ export const BattleWindow = ({ arenaInfo, handleCloseBattle, infoAccount, cards,
     const toast = useToast();
 
     const handleOpenInventory = index => {
-        console.log('Index clicked:', index);
         setIndex(index);
         setOpenIventory(true);
     };
@@ -37,7 +37,6 @@ export const BattleWindow = ({ arenaInfo, handleCloseBattle, infoAccount, cards,
                 setDefenderCards(matchingObjects);
             });
             await getSoldiers().then(res => {
-                console.log('🚀 ~ getDefenderInfo ~ res:', res); //array.find(item => item.arenaId === arenaId);
                 setSoldiers(res);
             });
         };
@@ -48,18 +47,12 @@ export const BattleWindow = ({ arenaInfo, handleCloseBattle, infoAccount, cards,
         if (soldiers) calculateBonus();
     }, [handBattleCards]);
 
-    console.log('🚀 ~ BattleWindow ~ handBattleCards:', handBattleCards);
+
 
     const calculateBonus = () => {
         const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
         if (handBattleCards[index] !== '') {
-            console.log('🚀 ~ calculateBonus ~ arenaSoldier:', arenaSoldier);
-
             const cardInfo = soldiers.soldier.find(item => item.asset === handBattleCards[index].asset);
-
-            console.log('🚀 ~ calculateBonus ~ cardInfo:', cardInfo);
-            console.log('🚀 ~ BattleWindow ~ arenaInfo:', arenaInfo);
-
             if (cardInfo.mediumId === arenaInfo.mediumId) {
                 setMediumBonus(mediumBonus + 1);
             }
@@ -68,17 +61,15 @@ export const BattleWindow = ({ arenaInfo, handleCloseBattle, infoAccount, cards,
             }
         }
         setDomainName(cards.find(card => card.asset === arenaSoldier.asset).channel);
-
-        console.log('🚀 ~ calculateBonus ~ mediumBons:', mediumBonus);
     };
 
     const handleClose = () => {
         handleCloseBattle();
     };
 
-    const updateCard = newValue => {
+    const updateCard = (newValue, index) => {
         setHandBattleCards(prevCards => {
-            const assetExists = prevCards.some(card => card.asset === newValue.asset);
+            const assetExists = prevCards.some(card => card && card.asset === newValue.asset);
             if (assetExists) {
                 errorToast('You cannot send repeated cards to battle', toast);
                 return prevCards;
@@ -148,17 +139,26 @@ export const BattleWindow = ({ arenaInfo, handleCloseBattle, infoAccount, cards,
                                     onClick={() => setOpenIventory(false)}>
                                     Go back
                                 </IconButton>
-                                <GridCards
-                                    cards={filteredCards}
-                                    infoAccount={infoAccount}
-                                    isOnlyBuy={false}
-                                    rgbColor="0, 0, 0"
-                                    textColor="rgb(255,255,255)"
-                                    isDisabledButtons={true}
-                                    isBattleInventory={true}
-                                    updateCard={updateCard}
-                                    selectedIndex={index}
-                                />
+                                <SimpleGrid
+                                    columns={[1, 2, 4]} // Ajuste responsive: 1 columna en pantallas pequeñas, 2 en medianas, 3 en grandes
+                                    spacing={5}
+                                    overflowY={'auto'}
+                                    className="custom-scrollbar"
+                                    p={5} // Añade algo de padding
+                                    overflow={'scroll'}
+                                    h={'750px'}>
+                                    {filteredCards.map((card, cardIndex) => (
+                                        <Box
+                                            key={cardIndex}
+                                            w={'350px'}
+                                            h={'450px'}
+                                            onClick={() => updateCard(card, cardIndex)}
+                                            bg={'white'}
+                                            borderRadius={'10px'}>
+                                            <Img src={card.cardImgUrl} w={'100%'} h={'100%'} />
+                                        </Box>
+                                    ))}
+                                </SimpleGrid>{' '}
                             </>
                         )}
                     </>

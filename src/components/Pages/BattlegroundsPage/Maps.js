@@ -6,25 +6,21 @@ import { MapPoint } from './Components/MapPoint';
 import locations from './assets/LocationsEnum';
 import { getArenas } from '../../../services/Battlegrounds/Battlegrounds';
 
-export const Maps = ({ handleSelectArena, infoAccount, cards}) => {
+export const Maps = ({ handleSelectArena, infoAccount, cards }) => {
     const [arenasInfo, setArenasInfo] = useState();
-    const [selectedArena, setSelectedArena] = useState()
+    const [selectedArena, setSelectedArena] = useState();
     useEffect(() => {
         const getData = async () => {
             await getArenas().then(res => {
-                console.log(res);
                 setArenasInfo(res);
             });
-            
         };
         getData();
     }, []);
 
     const handleClick = id => {
-        console.log('ARENA ID', id);
         handleSelectArena(arenasInfo.arena[id - 1]);
-        setSelectedArena(id)
-        console.log(arenasInfo.arena[id - 1]);
+        setSelectedArena(id);
     };
     return (
         arenasInfo && (

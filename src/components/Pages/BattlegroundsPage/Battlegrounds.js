@@ -10,23 +10,9 @@ import {
     Portal,
     Stack,
     Text,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
     useColorModeValue,
     useDisclosure,
-    Center,
-    HStack,
-    PinInput,
-    PinInputField,
-    Input,
     useToast,
-    FormControl,
-    FormLabel,
 } from '@chakra-ui/react';
 import { Maps } from './Maps';
 import React, { useEffect, useState } from 'react';
@@ -42,21 +28,20 @@ import Inventory from './Components/Inventory/Inventory';
 import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
 import { getUsersState } from '../../../services/Ardor/omnoInterface';
 import { GEMASSET, NQTDIVIDER, WETHASSET } from '../../../data/CONSTANTS';
-import { checkPin, sendGEMSToOmno } from '../../../utils/walletUtils';
+import {
+    checkPin,
+    sendGEMSToOmno,
+    sendWETHToOmno,
+    withdrawGEMsFromOmno,
+    withdrawWETHFromOmno,
+} from '../../../utils/walletUtils';
 import { errorToast } from '../../../utils/alerts';
+import SendGEMsToOmno from './Components/SendGEMsToOmno';
+import SendWethToOmno from './Components/SendWethToOmno';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
     /* Intro pop up managing */
-    const {
-        IGNISBalance,
-        GIFTZBalance,
-        GEMBalance,
-        WETHBalance,
-        MANABalance,
-        name: username,
-        accountRs,
-        publicKey,
-    } = infoAccount;
+    const { accountRs, GEMRealBalance } = infoAccount;
 
     const [visible, setVisible] = useState(true);
     const [page, setPage] = useState(1);
@@ -107,7 +92,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
 
     const handleStartBattle = () => {
         if (selectedArena) {
-            console.log('SELECTED', selectedArena);
+            
             setOpenBattle(true);
             setIsScrollLocked(true);
         } else {
@@ -143,6 +128,9 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [passphrase, setPassphrase] = useState('');
     const [omnoGEMsBalance, setOmnoGEMsBalance] = useState(null);
     const [OmnoWethBalance, setOmnoWethBalance] = useState(null);
+    const [amount, setAmount] = useState(0);
+    const [gemsModalMode, setGemsModalMode] = useState(null); // True send , false withdraw
+    const [wethModalMode, setWethModalMode] = useState(null); // True send , false withdraw
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -167,7 +155,6 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                 setOmnoWethBalance(userInfo.balance.asset[WETHASSET] || 0);
 
                 const matchingCards = cards.filter(card => assetIds.includes(card.asset));
-                // console.log(matchingCards);
                 setFilteredCards(matchingCards);
             }
         };
@@ -177,16 +164,15 @@ const Battlegrounds = ({ infoAccount, cards }) => {
 
     const getUserState = async () => {
         const accountId = addressToAccountId(accountRs);
-        console.log('🚀 ~ getUserState ~ accountId:', accountId);
         let res = await getUsersState().then(res => {
             return res.data.find(item => item.id === accountId);
         });
         return res;
     };
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isOpenGems, onOpen: onOpenGems, onClose: onCloseGems } = useDisclosure();
+    const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
 
-    const [amount, setAmount] = useState(0);
-    const maxAmount = 1400;
+    const maxAmount = GEMRealBalance;
 
     const increment = () => {
         if (amount < maxAmount) {
@@ -211,86 +197,71 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         if (!isValidPin) {
             return errorToast('The pin is invalid', toast);
         }
-        console.log('🚀 ~ handleSendSGEMS ~ amount:', amount);
 
         await sendGEMSToOmno({ quantity: amount, passPhrase: passphrase });
+        setAmount(0);
+        onCloseGems();
+    };
+    const handleWithdrawGems = async () => {
+        if (!isValidPin) {
+            return errorToast('The pin is invalid', toast);
+        }
+
+        await withdrawGEMsFromOmno({ quantity: amount, passPhrase: passphrase });
+        setAmount(0);
+        onCloseGems();
+    };
+    const handleSendWeth = async () => {
+        if (!isValidPin) {
+            return errorToast('The pin is invalid', toast);
+        }
+        
+
+        await sendWETHToOmno({ quantity: amount, passPhrase: passphrase });
+        setAmount(0);
+        onCloseWeth();
+    };
+    const handleWithdrawWeth = async () => {
+        if (!isValidPin) {
+            return errorToast('The pin is invalid', toast);
+        }
+
+        await withdrawWETHFromOmno({ quantity: amount, passPhrase: passphrase });
+        setAmount(0);
+        onCloseWeth();
     };
 
     return (
         <>
             <Box className="landscape-only">
-                <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader>Send GEM</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody display={'flex'}>
-                            <Stack direction={'column'} mx={'auto'}>
-                                <Center>
-                                    <FormControl variant="floatingModalTransparent" id="Amount" my={4}>
-                                        <HStack spacing={0} border="1px" rounded="lg" borderColor={'gray.300'}>
-                                            <Button
-                                                onClick={decrement}
-                                                rounded="none"
-                                                borderLeftRadius="lg"
-                                                size="lg"
-                                                color="white"
-                                                bgColor={'#F48794'}>
-                                                -
-                                            </Button>
-                                            <Input
-                                                value={amount}
-                                                onChange={handleChange}
-                                                rounded="none"
-                                                border="none"
-                                                color="black"
-                                                textAlign="center"
-                                                fontWeight="bold"
-                                                size="lg"
-                                                type="number"
-                                                min="0"
-                                                max={maxAmount}
-                                            />
-                                            <Button
-                                                onClick={increment}
-                                                rounded="none"
-                                                borderRightRadius="lg"
-                                                color="white"
-                                                size="lg"
-                                                bgColor={'#F48794'}>
-                                                +
-                                            </Button>
-                                        </HStack>
-                                        <FormLabel>
-                                            {' '}
-                                            <Text color={'#000'}>Amount to send (max: 1400)</Text>
-                                        </FormLabel>
-                                    </FormControl>
-                                </Center>
-                                <Stack direction={'row'} spacing={7}>
-                                    <PinInput
-                                        size="lg"
-                                        onComplete={handleCompletePin}
-                                        onChange={handleCompletePin}
-                                        isInvalid={!isValidPin}
-                                        variant="filled"
-                                        mask>
-                                        <PinInputField />
-                                        <PinInputField />
-                                        <PinInputField />
-                                        <PinInputField />
-                                    </PinInput>
-                                </Stack>
-                            </Stack>
-                        </ModalBody>
-
-                        <ModalFooter>
-                            <Button colorScheme="blue" mr={3} onClick={handleSendSGEMS}>
-                                Submit
-                            </Button>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
+                <SendGEMsToOmno
+                    isOpen={isOpenGems}
+                    onClose={onCloseGems}
+                    decrement={decrement}
+                    amount={amount}
+                    handleChange={handleChange}
+                    maxAmount={maxAmount}
+                    increment={increment}
+                    handleCompletePin={handleCompletePin}
+                    isValidPin={isValidPin}
+                    handleSendSGEMS={handleSendSGEMS}
+                    handleWithdrawGems={handleWithdrawGems}
+                    gemsModalMode={gemsModalMode}
+                />
+                <SendWethToOmno
+                    isOpen={isOpenWeth}
+                    onClose={onCloseWeth}
+                    decrement={decrement}
+                    amount={amount}
+                    handleChange={handleChange}
+                    maxAmount={maxAmount}
+                    increment={increment}
+                    handleCompletePin={handleCompletePin}
+                    isValidPin={isValidPin}
+                    handleSendWeth={handleSendWeth}
+                    handleWithdrawWeth={handleWithdrawWeth}
+                    wethModalMode={wethModalMode}
+                />
                 {openBattle && (
                     <BattleWindow
                         arenaInfo={selectedArena}
@@ -314,8 +285,8 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                 <Box position={'relative'} ml={6} mt={5}>
                     <Img src={logo} color={'#FFF'} />
                     <Stack direction={'row'} gap={4}>
-                        <Stack direction={'column'} gap={4} ml={'80px'} mt={'10px'}>
-                            <Text color={'black'} fontFamily={'Chelsea Market, system-ui'}>
+                        <Stack direction={'column'} gap={4} ml={'80px'} mt={'15px'}>
+                            <Text color={'black'} fontSize={'sm'} ml={-2} fontFamily={'Chelsea Market, system-ui'}>
                                 CURRENCIES
                             </Text>
                             <Menu>
@@ -341,8 +312,20 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 </MenuButton>
                                 <Portal>
                                     <MenuList>
-                                        <MenuItem onClick={onOpen}>Add GEM to Game</MenuItem>
-                                        <MenuItem>Send GEM to Wallet</MenuItem>
+                                        <MenuItem
+                                            onClick={() => {
+                                                setGemsModalMode(true);
+                                                onOpenGems();
+                                            }}>
+                                            Add GEM to Game
+                                        </MenuItem>
+                                        <MenuItem
+                                            onClick={() => {
+                                                setGemsModalMode(false);
+                                                onOpenGems();
+                                            }}>
+                                            Send GEM to Wallet
+                                        </MenuItem>
                                     </MenuList>
                                 </Portal>
                             </Menu>
@@ -372,8 +355,20 @@ const Battlegrounds = ({ infoAccount, cards }) => {
 
                                 <Portal>
                                     <MenuList>
-                                        <MenuItem>Add WETH to Game</MenuItem>
-                                        <MenuItem>Send WETH to Wallet</MenuItem>
+                                        <MenuItem
+                                            onClick={() => {
+                                                setWethModalMode(true);
+                                                onOpenWeth();
+                                            }}>
+                                            Add WETH to Game
+                                        </MenuItem>
+                                        <MenuItem
+                                            onClick={() => {
+                                                setWethModalMode(false);
+                                                onOpenWeth();
+                                            }}>
+                                            Send WETH to Wallet
+                                        </MenuItem>
                                     </MenuList>
                                 </Portal>
                             </Menu>
@@ -410,7 +405,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
                                 border: '3px solid #EBB2B9',
                             }}
-                            padding={5}
+                            padding={6}
                             textTransform={'uppercase'}
                             color={'#FFF'}
                             fontWeight={'100'}

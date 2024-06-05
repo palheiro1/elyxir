@@ -17,8 +17,8 @@ import {
 } from '@chakra-ui/react';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
-import Card from '../../../Cards/Card';
 import { getAccount } from '../../../../services/Ardor/ardorInterface';
+
 export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo, selectedArena, cards }) => {
     const [defenderInfo, setDefenderInfo] = useState(null);
     const [defenderCards, setDefenderCards] = useState(null);

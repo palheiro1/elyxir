@@ -61,7 +61,6 @@ const OmnoCards = ({ infoAccount, cards }) => {
     };
 
     const handleDeleteSelectedCard = card => {
-        console.log(infoAccount);
         const newSelectedCards = selectedCards.filter(selectedCard => selectedCard.asset !== card);
         setSelectedCards(newSelectedCards);
     };
