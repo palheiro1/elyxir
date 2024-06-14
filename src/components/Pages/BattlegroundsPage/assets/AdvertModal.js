@@ -1,28 +1,19 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
-import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalCloseButton,
-    ModalBody,
-    ModalFooter,
-    Button,
-} from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalCloseButton, ModalBody, ModalFooter, Button } from '@chakra-ui/react';
 
 export const AdvertModal = ({ isOpen, onClose }) => {
-    useEffect(() => {
-        if (isOpen) {
-            onOpen();
-        }
-    }, [isOpen]);
-
     const handleClose = () => {
         onClose();
     };
 
     const { onOpen } = useDisclosure();
+
+    useEffect(() => {
+        if (isOpen) {
+            onOpen();
+        }
+    }, [isOpen, onOpen]);
 
     return (
         <>

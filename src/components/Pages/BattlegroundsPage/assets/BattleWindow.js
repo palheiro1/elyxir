@@ -10,13 +10,13 @@ import { addressToAccountId } from '../../../../services/Ardor/ardorInterface';
 const SelectHandPage = ({ arenaInfo, handleOpenInventory }) => {
     const [handBattleCards, setHandBattleCards] = useState(['hoala', '', '', '', '']);
 
-    const updateCard = (index, newValue) => {
-        setHandBattleCards(prevCards => {
-            const newCards = [...prevCards];
-            newCards[index] = newValue;
-            return newCards;
-        });
-    };
+    // const updateCard = (index, newValue) => {
+    //     setHandBattleCards(prevCards => {
+    //         const newCards = [...prevCards];
+    //         newCards[index] = newValue;
+    //         return newCards;
+    //     });
+    // };
 
     const openInventory = index => {
         handleOpenInventory(index);
