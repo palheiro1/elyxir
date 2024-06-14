@@ -1,6 +1,6 @@
-import { Box, Button, Center, HStack, Img, Spacer, Text, VStack, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Center, HStack, Img, Text } from '@chakra-ui/react';
 import { Maps } from './Maps';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Popup } from './assets/Popup';
 import { ScrollLock } from './assets/ScrollLock';
 import logo from './assets/image.png';
