@@ -164,8 +164,6 @@ const AskDialog = ({
         onChange: handleChange,
     });
 
-
-
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
     const input = getInputProps();
@@ -195,11 +193,15 @@ const AskDialog = ({
                 quantity = value;
             }
 
+
+            const parser = parseFloat(priceCard);
+            const finalPrice = (parser * NQTDIVIDER).toFixed(0);
+
             // const quantity = !isCurrency ? value : value * NQTDIVIDER;
             const response = await sendAskOrder({
                 asset: card.asset,
                 quantity: quantity,
-                price: priceCard * NQTDIVIDER,
+                price: finalPrice,
                 passPhrase: passphrase,
             });
 
@@ -372,7 +374,9 @@ const AskDialog = ({
                                         <Box pt={4}>
                                             <FormControl variant="floatingModalTransparent" id="PricePerCard">
                                                 <InputGroup border="1px" borderColor={borderColor} rounded="lg">
-                                                    <NumberInput isReadOnly value={roundNumberWithMaxDecimals(priceCard * input.value, 8)}>
+                                                    <NumberInput
+                                                        isReadOnly
+                                                        value={roundNumberWithMaxDecimals(priceCard * input.value, 8)}>
                                                         <NumberInputField
                                                             rounded="none"
                                                             border="none"
