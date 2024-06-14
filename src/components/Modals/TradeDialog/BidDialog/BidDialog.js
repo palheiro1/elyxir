@@ -200,11 +200,14 @@ const BidDialog = ({
             } else {
                 quantity = value;
             }
-            // const quantity = !isCurrency ? value : value * NQTDIVIDER;
+            
+            const parser = parseFloat(priceCard);
+            const finalPrice = (parser * NQTDIVIDER).toFixed(0);
+
             const response = await sendBidOrder({
                 asset: card.asset,
                 quantity: quantity,
-                price: priceCard * NQTDIVIDER,
+                price: finalPrice,
                 passPhrase: passphrase,
             });
 
