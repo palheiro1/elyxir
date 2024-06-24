@@ -1,4 +1,5 @@
 import { Box, Button, Image, Stack, Text, VStack } from '@chakra-ui/react';
+import { IS_BOUNTY_ENABLED } from '../../../data/CONSTANTS';
 
 const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) => {
     // ---------------------------------------------
@@ -22,7 +23,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             hoverBg: 'rgba(159, 55, 114, 0.75)',
             bgColor: '#9f3772',
             textColor: textColor(7),
-            isDisabled: true,
+            isDisabled: !IS_BOUNTY_ENABLED,
         },
         {
             icon: '/images/icons/menu/OpenPack.png',
@@ -81,6 +82,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             textColor: isActive(5) ? '#3b5397' : 'white',
             fontWeight: isActive(5) ? 'bolder' : 'normal',
             isActive: isActive(5),
+            isDisabled: !IS_BOUNTY_ENABLED,
         },
         {
             icon: !isActive(9) ? '/images/icons/menu/blanco/messages.png' : '/images/icons/menu/color/messages.jpg',
