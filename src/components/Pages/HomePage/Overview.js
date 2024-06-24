@@ -1,5 +1,6 @@
 import { Box, Center, Heading, Image, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import HowToPlay from './HowToPlay/HowToPlay';
+import { ACTUAL_SEASON, IS_BOUNTY_ENABLED } from '../../../data/CONSTANTS';
 
 const Overview = () => {
     const textColor = useColorModeValue('#2f9088', 'white');
@@ -42,6 +43,34 @@ const Overview = () => {
                 </Box>
 
                 <HowToPlay />
+
+                {!IS_BOUNTY_ENABLED && (
+                    <Stack
+                        direction={'column'}
+                        py={8}
+                        spacing={2}
+                        color={textColor}
+                        border="1px"
+                        borderColor={borderColor}
+                        bgColor={bgColor}
+                        rounded="md">
+                        <Text fontSize={{ base: 'md', lg: 'lg', xl: '2xl' }} fontWeight={'bolder'} textAlign={'center'}>
+                            Season {ACTUAL_SEASON} has come to an end, but don't worry — Season {ACTUAL_SEASON + 1} is
+                            just around the corner.
+                        </Text>
+                        <Text textAlign={'center'}>
+                            Stay tuned to our{' '}
+                            <a href="https://x.com/BeingsMythical" target="_blank" rel="noreferrer">
+                                <strong>Twitter</strong>
+                            </a>{' '}
+                            or{' '}
+                            <a href="https://discord.gg/JyPugMEC5y" target="_blank" rel="noreferrer">
+                                <strong>Discord</strong>
+                            </a>{' '}
+                            channel!
+                        </Text>
+                    </Stack>
+                )}
 
                 <Stack
                     py={8}
