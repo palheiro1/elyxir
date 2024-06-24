@@ -17,7 +17,7 @@ const Book = ({ cards }) => {
             setTotalNoSpecialCards(auxNoSpecialCards);
         };
 
-        getRemainingCards();
+        cards.length > 0 && getRemainingCards();
     }, [cards]);
 
     const handleChangeCard = card => {
