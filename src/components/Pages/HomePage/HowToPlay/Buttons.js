@@ -30,7 +30,6 @@ const Buttons = () => {
                             isActive={false}
                             text={'Buy Pack'}
                             onClick={() => navigate('/home?goToSection=7')}
-                            isDisabled={!IS_BOUNTY_ENABLED}
                         />
                     }
                 />

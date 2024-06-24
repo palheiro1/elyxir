@@ -23,7 +23,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             hoverBg: 'rgba(159, 55, 114, 0.75)',
             bgColor: '#9f3772',
             textColor: textColor(7),
-            isDisabled: !IS_BOUNTY_ENABLED,
+            isDisabled: false,
         },
         {
             icon: '/images/icons/menu/OpenPack.png',
