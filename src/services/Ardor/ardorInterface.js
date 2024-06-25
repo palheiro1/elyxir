@@ -226,9 +226,7 @@ const calculateFeeByRecipient = async (recipient, query, URL_TO_CALL) => {
 
 const calculateFee = async (query, URL_TO_CALL) => {
     const { data: sendMoneyData } = await axios.post(URL_TO_CALL, qs.stringify(query), config);
-    console.log("🚀 ~ calculateFee ~ sendMoneyData:", sendMoneyData)
     const total = Math.ceil(sendMoneyData.minimumFeeFQT * sendMoneyData.bundlerRateNQTPerFXT * 0.00000001);
-    console.log("🚀 ~ calculateFee ~ total:", total)
     return total;
 };
 
@@ -624,7 +622,6 @@ const transferAsset = async ({
 
     try {
         query.feeNQT = await calculateFee(query, URL_TRANSFER_ASSET);
-        console.log("🚀 ~ query:", query)
         query.broadcast = false;
 
         const response = await axios.post(URL_TRANSFER_ASSET, qs.stringify(query), config);
