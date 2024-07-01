@@ -78,7 +78,7 @@ const SendWethToOmno = ({
                                 </HStack>
                                 <FormLabel>
                                     {' '}
-                                    <Text color={'#000'}>Amount to send (max: 1400)</Text>
+                                    <Text color={'#000'}>Amount to send (max: {maxAmount})</Text>
                                 </FormLabel>
                             </FormControl>
                         </Center>

@@ -41,7 +41,7 @@ import SendWethToOmno from './Components/SendWethToOmno';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
     /* Intro pop up managing */
-    const { accountRs, GEMRealBalance } = infoAccount;
+    const { accountRs, GEMRealBalance, WETHRealBalance } = infoAccount;
 
     const [visible, setVisible] = useState(true);
     const [page, setPage] = useState(1);
@@ -116,10 +116,8 @@ const Battlegrounds = ({ infoAccount, cards }) => {
 
     let wEthDecimals = 0;
 
-    // const [userInfo, setUserInfo] = useState();
     const [filteredCards, setFilteredCards] = useState([]);
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
-    // const [omnoUserInfo, setOmnoUserInfo] = useState();
     const [passphrase, setPassphrase] = useState('');
     const [omnoGEMsBalance, setOmnoGEMsBalance] = useState(null);
     const [omnoWethBalance, setOmnoWethBalance] = useState(null);
@@ -143,7 +141,6 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     useEffect(() => {
         const filterCards = async () => {
             const userInfo = await getUserState();
-            // setOmnoUserInfo(userInfo);
             if (userInfo.balance) {
                 const assetIds = Object.keys(userInfo.balance.asset);
                 setOmnoGEMsBalance(userInfo.balance.asset[GEMASSET] || 0);
@@ -164,13 +161,15 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         });
         return res;
     };
+
     const { isOpen: isOpenGems, onOpen: onOpenGems, onClose: onCloseGems } = useDisclosure();
     const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
 
-    const maxAmount = GEMRealBalance;
+    const maxAmountGems = GEMRealBalance;
+    const maxAmountWeth = WETHRealBalance;
 
     const increment = () => {
-        if (amount < maxAmount) {
+        if (amount < maxAmountGems) {
             setAmount(amount + 1);
         }
     };
@@ -180,10 +179,21 @@ const Battlegrounds = ({ infoAccount, cards }) => {
             setAmount(amount - 1);
         }
     };
+    const incrementWeth = () => {
+        if (amount < maxAmountWeth) {
+            setAmount(amount + 0.001);
+        }
+    };
+
+    const decrementWeth = () => {
+        if (amount > 0) {
+            setAmount(amount - 0.001);
+        }
+    };
 
     const handleChange = event => {
         const value = parseInt(event.target.value, 10);
-        if (!isNaN(value) && value >= 0 && value <= maxAmount) {
+        if (!isNaN(value) && value >= 0 && value <= maxAmountGems) {
             setAmount(value);
         }
     };
@@ -234,7 +244,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                     decrement={decrement}
                     amount={amount}
                     handleChange={handleChange}
-                    maxAmount={maxAmount}
+                    maxAmount={maxAmountGems}
                     increment={increment}
                     handleCompletePin={handleCompletePin}
                     isValidPin={isValidPin}
@@ -245,11 +255,11 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                 <SendWethToOmno
                     isOpen={isOpenWeth}
                     onClose={onCloseWeth}
-                    decrement={decrement}
+                    decrement={decrementWeth}
                     amount={amount}
                     handleChange={handleChange}
-                    maxAmount={maxAmount}
-                    increment={increment}
+                    maxAmount={maxAmountWeth}
+                    increment={incrementWeth}
                     handleCompletePin={handleCompletePin}
                     isValidPin={isValidPin}
                     handleSendWeth={handleSendWeth}
@@ -292,9 +302,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                     borderColor={borderColor}
                                     rounded="lg"
                                     w="5rem"
-                                    maxH={'2.2rem'}
-                                    // _hover={{ bg: hoverColor }}
-                                >
+                                    maxH={'2.2rem'}>
                                     <Stack direction="row" align="center">
                                         <Image
                                             ml={-5}

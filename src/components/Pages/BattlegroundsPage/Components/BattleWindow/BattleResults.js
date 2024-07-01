@@ -38,7 +38,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName,
             setArenaName(locations[arenaInfo.id - 1].name);
             const accountId = addressToAccountId(infoAccount.accountRs);
             const res = await getLastUserBattle(accountId, currentTime);
-            console.log('🚀 ~ getLastBattle ~ res:', res);
             if (res && res !== 'pending') {
                 const capturedCard = cards.filter(obj => Object.keys(res.captured.asset).includes(obj.asset))[0];
                 setCapturedCard(capturedCard);
@@ -145,7 +144,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName,
             textAlign={'center'}>
             {battleInfo === 'pending' ? (
                 <Box position={'absolute'} left={'50%'} top={'50%'} transform={'translate(-50%, -50%)'}>
-                    Pending result...
+                    Battle in progress...
                 </Box>
             ) : (
                 <Stack direction={'column'} h={'20%'} mx={'auto'}>

@@ -45,13 +45,11 @@ export const BattleWindow = ({
                 setDefenderInfo(res);
             });
             const soldiers = await getSoldiers().then(res => {
-                console.log('🚀 ~ soldiers ~ res:', res);
                 setSoldiers(res);
                 return res;
             });
             const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
             setDomainName(cards.find(card => card.asset === arenaSoldier.asset).channel);
-            console.log('🚀 ~ getDefenderInfo ~ cards:', cards);
         };
         getDefenderInfo();
     }, [arenaInfo, cards]);
@@ -106,19 +104,16 @@ export const BattleWindow = ({
             newCards[index] = newValue;
             return newCards;
         });
-        console.log('🚀 ~ updateCard ~ arenaInfo:', arenaInfo);
     };
 
     const deleteCard = index => {
         setHandBattleCards(prevCards => {
             const newCards = [...prevCards];
             const soldier = soldiers.soldier.find(item => item.asset === newCards[index].asset);
-            console.log('🚀 ~ deleteCard ~ soldier:', soldier);
 
             if (soldier.rank === 0) {
                 setRank0Count(rank0Count - 1);
             } else if (soldier.rank === 1) {
-                console.log('🚀 ~ deleteCard ~ rank1Count:', rank1Count);
                 setRank1Count(rank1Count - 1);
             }
 

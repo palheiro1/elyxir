@@ -73,7 +73,7 @@ const OmnoPage = ({ filteredCards, infoAccount, cards }) => {
         <>
             <Stack direction={'column'} color={'#FFF'} mb={5} mx={'auto'} textAlign={'center'} maxH={'90%'}>
                 <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
-                    INVERTORY
+                    INVENTORY
                 </Heading>
                 <Text>In order to play you will have to import your cards to battlegrounds</Text>
             </Stack>

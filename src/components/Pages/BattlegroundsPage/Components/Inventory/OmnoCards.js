@@ -91,7 +91,7 @@ const OmnoCards = ({ infoAccount, cards }) => {
         });
 
         if (success) {
-            okToast('Swap completed successfully', toast);
+            okToast('Swap completed successfully. Wait to the next block and refresh the page.', toast);
             setSelectedCards([]);
             setIsSwapping(false);
         } else {

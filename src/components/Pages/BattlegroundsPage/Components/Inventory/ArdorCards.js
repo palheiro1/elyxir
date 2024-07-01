@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Box,
     Button,
@@ -25,7 +25,8 @@ import BridgeCard from '../../../../Cards/BridgeCard';
 // Utils
 import { checkPin } from '../../../../../utils/walletUtils';
 import { errorToast, infoToast, okToast } from '../../../../../utils/alerts';
-import { withdrawCardsFromOmno } from '../../../../../services/Ardor/omnoInterface';
+import { getUsersState, withdrawCardsFromOmno } from '../../../../../services/Ardor/omnoInterface';
+import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface';
 
 /**
  * @name SwapToPolygon
@@ -39,15 +40,16 @@ import { withdrawCardsFromOmno } from '../../../../../services/Ardor/omnoInterfa
  */
 const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
     const toast = useToast();
-
+    const { accountRs } = infoAccount;
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
+    const [filteredCards, setFilteredCards] = useState([]);
 
     const [isSwapping, setIsSwapping] = useState(false);
 
     const [passphrase, setPassphrase] = useState('');
     const [selectedCards, setSelectedCards] = useState([]);
 
-    const myCards = cards;
+    const myCards = filteredCards;
     const notSelectedCards = myCards.filter(card => !selectedCards.includes(card));
 
     const handleCompletePin = pin => {
@@ -85,7 +87,7 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
             asset: card.asset,
             quantity: card.selectQuantity || 1,
         }));
-    
+
         const success = withdrawCardsFromOmno({
             cards: cardsToSwap,
             passPhrase: passphrase,
@@ -101,6 +103,34 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
     };
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+
+    useEffect(() => {
+        const filterCards = async () => {
+            const userInfo = await getUserState();
+            if (userInfo.balance) {
+                const assetIds = Object.keys(userInfo.balance.asset);
+
+                const matchingCards = cards
+                    .filter(card => assetIds.includes(card.asset))
+                    .map(card => ({
+                        ...card,
+                        omnoQuantity: userInfo.balance.asset[card.asset],
+                    }));
+
+                setFilteredCards(matchingCards);
+            }
+        };
+        filterCards();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cards, infoAccount]);
+
+    const getUserState = async () => {
+        const accountId = addressToAccountId(accountRs);
+        let res = await getUsersState().then(res => {
+            return res.data.find(item => item.id === accountId);
+        });
+        return res;
+    };
 
     return (
         <Center color={'#FFF'}>
@@ -129,7 +159,7 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
                                 minW="100%"
                                 key={card.asset}
                                 onClick={() => setSelectedCards([...selectedCards, card])}>
-                                <BridgeCard card={card} />
+                                <BridgeCard card={card} omnoQuantity={card.omnoQuantity} />
                             </MenuItem>
                         ))}
                     </MenuList>
@@ -158,6 +188,7 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
                                     canEdit={true}
                                     handleDeleteSelectedCard={handleDeleteSelectedCard}
                                     handleEdit={handleEdit}
+                                    omnoQuantity={card.omnoQuantity}
                                 />
                             ))}
                         </Stack>
