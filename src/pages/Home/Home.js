@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 
-
 // -----------------------------------------------------------------
 // ------------------------- Components ----------------------------
 // -----------------------------------------------------------------
@@ -74,6 +73,7 @@ import Book from '../../components/Pages/BookPage/Book';
 import { firstTimeToast, okToast } from '../../utils/alerts';
 import OpenPackDialog from '../../components/Modals/OpenPackDialog/OpenPackDialog';
 import { getOmnoGiftzBalance } from '../../services/Ardor/omnoInterface';
+import Battlegrounds from '../../components/Pages/BattlegroundsPage/Battlegrounds';
 
 /**
  * @name Home
@@ -503,17 +503,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             <ArdorChat infoAccount={infoAccount} />, // OPTION 9 - Chat
             <Book cards={cards} />, // OPTION 10 - Book
             '', // OPTION 11 - OPEN PACK
+            <Battlegrounds infoAccount={infoAccount} cards={cards}/>,
         ],
-        [
-            infoAccount,
-            cards,
-            cardsFiltered,
-            gemCards,
-            haveUnconfirmed,
-            giftzCards,
-            wethCards,
-            manaCards,
-        ]
+        [infoAccount, cards, cardsFiltered, gemCards, haveUnconfirmed, giftzCards, wethCards, manaCards]
     );
 
     useEffect(() => {
