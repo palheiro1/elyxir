@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Box,
     Button,
     ButtonGroup,
+    Img,
     Popover,
     PopoverArrow,
     PopoverBody,
@@ -11,34 +12,53 @@ import {
     PopoverHeader,
     PopoverTrigger,
     Portal,
+    Stack,
     Text,
 } from '@chakra-ui/react';
-import Card from '../../../Cards/Card';
-export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
+import '@fontsource/chelsea-market';
+import '@fontsource/inter';
+import { getAccount } from '../../../../services/Ardor/ardorInterface';
+
+export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo, selectedArena, cards, handleStartBattle }) => {
+    const [defenderInfo, setDefenderInfo] = useState(null);
+    const [defenderCards, setDefenderCards] = useState(null);
     const clickButton = () => {
         handleClick(id);
-        console.log('INFO ARENA', arenaInfo);
+        handleStartBattle();
     };
 
+    useEffect(() => {
+        const getDefenderInfo = async () => {
+            await getAccount(arenaInfo.defender.account).then(res => {
+                setDefenderInfo(res);
+                const defenderAssets = new Set(arenaInfo.defender.asset);
+                const matchingObjects = cards.filter(obj => defenderAssets.has(obj.asset));
+                setDefenderCards(matchingObjects);
+            });
+        };
+        getDefenderInfo();
+    }, [arenaInfo, cards]);
+
     return (
-        arenaInfo && (
+        arenaInfo &&
+        defenderInfo && (
             <>
                 <Popover>
                     <PopoverTrigger>
                         <circle
                             cx={x}
                             cy={y}
-                            r={7} // Adjust the radius as needed
-                            fill="#0056F5" // Adjust the fill color as needed
+                            r={7}
+                            fill={selectedArena !== id ? '#0056F5' : '#7FC0BE'}
                             stroke="white"
-                            strokeWidth={1.5} /* #0056F5 */
+                            strokeWidth={1.5}
                         />
                     </PopoverTrigger>
                     <Portal>
                         <PopoverContent backgroundColor={'#EBB2B9'}>
                             <PopoverArrow backgroundColor={'#EBB2B9'} />
                             <PopoverHeader fontFamily={'Chelsea Market, system-ui'}>
-                                ¿Quieres conquistar {name}?
+                                Want to conquer {name}?
                             </PopoverHeader>
                             <PopoverCloseButton />
                             <PopoverBody
@@ -48,20 +68,17 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
                                 flexDir={'column'}
                                 gap={5}
                                 mx={'auto'}>
-                                {arenaInfo.defender.account === '0' ? (
-                                    <Text>El territorio no tiene defensor</Text>
-                                ) : (
-                                    <>
-                                        <Text>Defensor del territorio: {arenaInfo.defender.account}</Text>
-                                        <Box>
-                                            Cartas del defensor:
-                                            {arenaInfo.defender.asset.map(card => {
-                                                <Card card={card} />;
-                                            })}{' '}
-                                            {/* Llamar al componente para renderizar una card */}
-                                        </Box>
-                                    </>
-                                )}
+                                <>
+                                    <Text>Defender of the land: {defenderInfo.name || 'Unknown'}</Text>
+                                    <Box>
+                                        Defender's cards:
+                                        <Stack direction={'row'}>
+                                            {defenderCards.map(card => (
+                                                <Img w={'50px'} key={card.asset} src={card.cardThumbUrl} />
+                                            ))}
+                                        </Stack>
+                                    </Box>
+                                </>
 
                                 <ButtonGroup mx={'auto'}>
                                     <Button
@@ -70,7 +87,7 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo }) => {
                                         borderRadius={'30px'}
                                         color={'#FFF'}
                                         onClick={clickButton}>
-                                        Si
+                                        Start battle
                                     </Button>
                                 </ButtonGroup>
                             </PopoverBody>

@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 
-
 // -----------------------------------------------------------------
 // ------------------------- Components ----------------------------
 // -----------------------------------------------------------------
@@ -504,18 +503,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             <ArdorChat infoAccount={infoAccount} />, // OPTION 9 - Chat
             <Book cards={cards} />, // OPTION 10 - Book
             '', // OPTION 11 - OPEN PACK
-            <Battlegrounds />,
+            <Battlegrounds infoAccount={infoAccount} cards={cards}/>,
         ],
-        [
-            infoAccount,
-            cards,
-            cardsFiltered,
-            gemCards,
-            haveUnconfirmed,
-            giftzCards,
-            wethCards,
-            manaCards,
-        ]
+        [infoAccount, cards, cardsFiltered, gemCards, haveUnconfirmed, giftzCards, wethCards, manaCards]
     );
 
     useEffect(() => {
