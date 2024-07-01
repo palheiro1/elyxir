@@ -6,7 +6,7 @@ import { MapPoint } from './Components/MapPoint';
 import locations from './assets/LocationsEnum';
 import { getArenas } from '../../../services/Battlegrounds/Battlegrounds';
 
-export const Maps = ({ handleSelectArena, infoAccount, cards }) => {
+export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle }) => {
     const [arenasInfo, setArenasInfo] = useState();
     const [selectedArena, setSelectedArena] = useState();
     useEffect(() => {
@@ -32,10 +32,11 @@ export const Maps = ({ handleSelectArena, infoAccount, cards }) => {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                     xlink="http://www.w3.org/1999/xlink">
-                    <g clip-path="url(#clip0_3079_4498)">
+                    <g clipPath="url(#clip0_3079_4498)">
                         <rect width="979" height="542.802" fill="url(#pattern0)" />
                         {locations.map(location => (
                             <MapPoint
+                                key={location.id}
                                 name={location.name}
                                 x={location.x}
                                 y={location.y}
@@ -44,6 +45,7 @@ export const Maps = ({ handleSelectArena, infoAccount, cards }) => {
                                 arenaInfo={arenasInfo.arena[location.id - 1]}
                                 selectedArena={selectedArena}
                                 cards={cards}
+                                handleStartBattle={handleStartBattle}
                             />
                         ))}
                         {/* Max X: 970 Max Y: 530*/}

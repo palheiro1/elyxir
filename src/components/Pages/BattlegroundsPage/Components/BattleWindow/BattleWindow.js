@@ -1,25 +1,36 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, IconButton, Img, SimpleGrid, useToast } from '@chakra-ui/react';
+import { Box, IconButton, Img, SimpleGrid, Spinner, Stack, Text, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { ChevronLeftIcon, CloseIcon } from '@chakra-ui/icons';
 import { SelectHandPage } from './SelectHandPage';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { getAccount } from '../../../../../services/Ardor/ardorInterface';
 import { getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
-import Loader from '../../../../Loader/Loader';
 import { errorToast } from '../../../../../utils/alerts';
+import BattleResults from './BattleResults';
+import '@fontsource/chelsea-market';
 
-export const BattleWindow = ({ arenaInfo, handleCloseBattle, infoAccount, cards, filteredCards }) => {
+export const BattleWindow = ({
+    arenaInfo,
+    handleCloseBattle,
+    infoAccount,
+    cards,
+    filteredCards,
+    omnoGEMsBalance,
+    omnoWethBalance,
+}) => {
     const [openIventory, setOpenIventory] = useState(false);
     const [index, setIndex] = useState('');
     const [defenderInfo, setDefenderInfo] = useState(null);
     const [handBattleCards, setHandBattleCards] = useState(['', '', '', '', '']);
-    // eslint-disable-next-line no-unused-vars
-    const [defenderCards, setDefenderCards] = useState(null);
     const [soldiers, setSoldiers] = useState(null);
     const [mediumBonus, setMediumBonus] = useState(0);
     const [domainBonus, setDomainBonus] = useState(0);
     const [domainName, setDomainName] = useState();
+    const [showResults, setShowResults] = useState(false);
+    const [currentTime, setCurrentTime] = useState();
+    const [rank0Count, setRank0Count] = useState(0);
+    const [rank1Count, setRank1Count] = useState(1);
 
     const toast = useToast();
 
@@ -32,13 +43,15 @@ export const BattleWindow = ({ arenaInfo, handleCloseBattle, infoAccount, cards,
         const getDefenderInfo = async () => {
             await getAccount(arenaInfo.defender.account).then(res => {
                 setDefenderInfo(res);
-                const defenderAssets = new Set(arenaInfo.defender.asset);
-                const matchingObjects = cards.filter(obj => defenderAssets.has(obj.asset));
-                setDefenderCards(matchingObjects);
             });
-            await getSoldiers().then(res => {
+            const soldiers = await getSoldiers().then(res => {
+                console.log('🚀 ~ soldiers ~ res:', res);
                 setSoldiers(res);
+                return res;
             });
+            const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
+            setDomainName(cards.find(card => card.asset === arenaSoldier.asset).channel);
+            console.log('🚀 ~ getDefenderInfo ~ cards:', cards);
         };
         getDefenderInfo();
     }, [arenaInfo, cards]);
@@ -46,8 +59,6 @@ export const BattleWindow = ({ arenaInfo, handleCloseBattle, infoAccount, cards,
     useEffect(() => {
         if (soldiers) calculateBonus();
     }, [handBattleCards]);
-
-
 
     const calculateBonus = () => {
         const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
@@ -60,29 +71,67 @@ export const BattleWindow = ({ arenaInfo, handleCloseBattle, infoAccount, cards,
                 setDomainBonus(domainBonus + 1);
             }
         }
-        setDomainName(cards.find(card => card.asset === arenaSoldier.asset).channel);
     };
 
     const handleClose = () => {
         handleCloseBattle();
     };
 
-    const updateCard = (newValue, index) => {
+    const updateCard = newValue => {
         setHandBattleCards(prevCards => {
             const assetExists = prevCards.some(card => card && card.asset === newValue.asset);
+            const soldier = soldiers.soldier.find(item => item.asset === newValue.asset);
+
             if (assetExists) {
                 errorToast('You cannot send repeated cards to battle', toast);
                 return prevCards;
             }
+
+            if (soldier.rank === 0 && rank0Count > arenaInfo.armyRankMinimum[1]) {
+                errorToast(`You cannot have more than ${arenaInfo.armyRankMinimum[1]} special/epic in battle`, toast);
+                return prevCards;
+            }
+            if (soldier.rank === 1 && rank1Count > arenaInfo.armyRankMaximum[0]) {
+                errorToast(`You cannot have more than ${arenaInfo.armyRankMaximum[0]} common cards in battle`, toast);
+                return prevCards;
+            }
+
+            if (soldier.rank === 0) {
+                setRank0Count(rank0Count + 1);
+            } else if (soldier.rank === 1) {
+                setRank1Count(rank1Count + 1);
+            }
+
             const newCards = [...prevCards];
             newCards[index] = newValue;
             return newCards;
         });
+        console.log('🚀 ~ updateCard ~ arenaInfo:', arenaInfo);
     };
 
     const deleteCard = index => {
         setHandBattleCards(prevCards => {
             const newCards = [...prevCards];
+            const soldier = soldiers.soldier.find(item => item.asset === newCards[index].asset);
+            console.log('🚀 ~ deleteCard ~ soldier:', soldier);
+
+            if (soldier.rank === 0) {
+                setRank0Count(rank0Count - 1);
+            } else if (soldier.rank === 1) {
+                console.log('🚀 ~ deleteCard ~ rank1Count:', rank1Count);
+                setRank1Count(rank1Count - 1);
+            }
+
+            const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
+
+            const cardInfo = soldiers.soldier.find(item => item.asset === newCards[index].asset);
+            if (cardInfo.mediumId === arenaInfo.mediumId) {
+                setMediumBonus(mediumBonus - 1);
+            }
+            if (cardInfo.domainId === arenaSoldier.domainId) {
+                setDomainBonus(domainBonus - 1);
+            }
+
             newCards[index] = '';
             return newCards;
         });
@@ -110,12 +159,26 @@ export const BattleWindow = ({ arenaInfo, handleCloseBattle, infoAccount, cards,
                     position="absolute"
                     top={2}
                     right={2}
+                    zIndex={999}
                     onClick={handleClose}
                 />
-                {!soldiers && <Loader color={'#FFF'} />}
+                {!soldiers && (
+                    <Box
+                        h={'100%'}
+                        position={'absolute'}
+                        color={'#FFF'}
+                        alignContent={'center'}
+                        top={'50%'}
+                        left={'50%'}
+                        w={'100%'}
+                        textAlign={'center'}
+                        transform={'translate(-50%, -50%)'}>
+                        <Spinner color="#FFF" w={20} h={20} />
+                    </Box>
+                )}
                 {soldiers && (
                     <>
-                        {!openIventory && defenderInfo && (
+                        {!openIventory && !showResults && defenderInfo && (
                             <SelectHandPage
                                 arenaInfo={arenaInfo}
                                 handleOpenInventory={handleOpenInventory}
@@ -127,39 +190,79 @@ export const BattleWindow = ({ arenaInfo, handleCloseBattle, infoAccount, cards,
                                 mediumBonus={mediumBonus}
                                 domainName={domainName}
                                 infoAccount={infoAccount}
+                                omnoGEMsBalance={omnoGEMsBalance}
+                                omnoWethBalance={omnoWethBalance}
+                                setShowResults={setShowResults}
+                                setCurrentTime={setCurrentTime}
                             />
                         )}
                         {openIventory && (
                             <>
                                 <IconButton
                                     icon={<ChevronLeftIcon boxSize={8} />}
+                                    mt={3}
+                                    p={5}
                                     bg={'transparent'}
                                     color={'#FFF'}
                                     _hover={{ bg: 'transparent' }}
                                     onClick={() => setOpenIventory(false)}>
                                     Go back
                                 </IconButton>
-                                <SimpleGrid
-                                    columns={[1, 2, 4]} // Ajuste responsive: 1 columna en pantallas pequeñas, 2 en medianas, 3 en grandes
-                                    spacing={5}
-                                    overflowY={'auto'}
-                                    className="custom-scrollbar"
-                                    p={5} // Añade algo de padding
-                                    overflow={'scroll'}
-                                    h={'750px'}>
-                                    {filteredCards.map((card, cardIndex) => (
-                                        <Box
-                                            key={cardIndex}
-                                            w={'350px'}
-                                            h={'450px'}
-                                            onClick={() => updateCard(card, cardIndex)}
-                                            bg={'white'}
-                                            borderRadius={'10px'}>
-                                            <Img src={card.cardImgUrl} w={'100%'} h={'100%'} />
-                                        </Box>
-                                    ))}
-                                </SimpleGrid>{' '}
+                                <Stack direction={'row'} pt={2} padding={5} height={'90%'}>
+                                    <Box
+                                        mb={2}
+                                        borderRadius={'20px'}
+                                        p={4}
+                                        w={'90%'}
+                                        mx={'auto'}
+                                        overflowY={'scroll'}
+                                        className="custom-scrollbar">
+                                        <SimpleGrid
+                                            columns={[1, 2, 4]}
+                                            spacing={5}
+                                            overflowY={'auto'}
+                                            className="custom-scrollbar"
+                                            p={5}
+                                            overflow={'scroll'}
+                                            h={'750px'}>
+                                            {filteredCards.map((card, cardIndex) => {
+                                                return card.asset.length <= 19 ? (
+                                                    <Box
+                                                        key={cardIndex}
+                                                        w={'250px'}
+                                                        h={'350px'}
+                                                        onClick={() => {
+                                                            setOpenIventory(false);
+                                                            updateCard(card);
+                                                        }}
+                                                        bg={'white'}
+                                                        borderRadius={'10px'}>
+                                                        <Img src={card.cardImgUrl} w={'100%'} h={'100%'} />
+                                                    </Box>
+                                                ) : null;
+                                            })}
+                                        </SimpleGrid>
+                                    </Box>
+                                    <Text
+                                        color={'red'}
+                                        position={'absolute'}
+                                        fontFamily={'Chelsea Market, system-ui'}
+                                        bottom={2}>
+                                        * Some cards don't appear to play battles with them, because of code problems.
+                                        We are working to solve it
+                                    </Text>
+                                </Stack>
                             </>
+                        )}
+                        {showResults && (
+                            <BattleResults
+                                infoAccount={infoAccount}
+                                currentTime={currentTime}
+                                cards={cards}
+                                arenaInfo={arenaInfo}
+                                domainName={domainName}
+                                defenderInfo={defenderInfo}
+                            />
                         )}
                     </>
                 )}

@@ -1,9 +1,8 @@
-import { Box, Heading, IconButton, Stack, Text, Select } from '@chakra-ui/react';
+import { Box, Heading, IconButton, Stack, Text, Select, SimpleGrid, Img } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { CloseIcon } from '@chakra-ui/icons';
 import OmnoCards from './OmnoCards';
-import GridCards from '../../../../Cards/GridCards';
 import '@fontsource/chelsea-market';
 import ArdorCards from './ArdorCards';
 import '../../BattlegroundMap.css';
@@ -88,16 +87,20 @@ const OmnoPage = ({ filteredCards, infoAccount, cards }) => {
                     maxW={'70%'}
                     overflowY={'scroll'}
                     className="custom-scrollbar">
-                    <GridCards
-                        cards={filteredCards}
-                        infoAccount={infoAccount}
-                        isOnlyBuy={false}
-                        rgbColor="0, 0, 0"
-                        isDisabledButtons={true}
-                        columns={4}
-                        gap={1}
-                        textColor="rgb(225,255,255)"
-                    />
+                    <SimpleGrid
+                        columns={[1, 2, 4]}
+                        spacing={5}
+                        overflowY={'auto'}
+                        className="custom-scrollbar"
+                        p={5}
+                        overflow={'scroll'}
+                        h={'750px'}>
+                        {filteredCards.map((card, cardIndex) => (
+                            <Box key={cardIndex} w={'200px'} h={'300px'} bg={'white'} borderRadius={'10px'}>
+                                <Img src={card.cardImgUrl} w={'100%'} h={'100%'} />
+                            </Box>
+                        ))}
+                    </SimpleGrid>
                 </Box>
                 <Box
                     maxW={'60%'}
@@ -134,14 +137,20 @@ const ArdorPage = ({ cards, filteredCards, infoAccount }) => {
                     maxW={'70%'}
                     overflowY={'scroll'}
                     className="custom-scrollbar">
-                    <GridCards
-                        cards={userCards}
-                        infoAccount={infoAccount}
-                        isDisabledButtons={true}
-                        columns={4}
-                        gap={1}
-                        textColor="rgb(225,255,255)"
-                    />
+                    <SimpleGrid
+                        columns={[1, 2, 4]}
+                        spacing={5}
+                        overflowY={'auto'}
+                        className="custom-scrollbar"
+                        p={5}
+                        overflow={'scroll'}
+                        h={'750px'}>
+                        {userCards.map((card, cardIndex) => (
+                            <Box key={cardIndex} w={'200px'} h={'300px'} bg={'white'} borderRadius={'10px'}>
+                                <Img src={card.cardImgUrl} w={'100%'} h={'100%'} />
+                            </Box>
+                        ))}
+                    </SimpleGrid>
                 </Box>
                 <Box
                     maxW={'60%'}

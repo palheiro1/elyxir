@@ -19,13 +19,12 @@ import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import { getAccount } from '../../../../services/Ardor/ardorInterface';
 
-export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo, selectedArena, cards }) => {
+export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo, selectedArena, cards, handleStartBattle }) => {
     const [defenderInfo, setDefenderInfo] = useState(null);
     const [defenderCards, setDefenderCards] = useState(null);
     const clickButton = () => {
         handleClick(id);
-        console.log('INFO ARENA', arenaInfo);
-        console.log('🚀 ~ MapPoint ~ cards:', cards);
+        handleStartBattle();
     };
 
     useEffect(() => {
@@ -69,22 +68,17 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo, selectedArena
                                 flexDir={'column'}
                                 gap={5}
                                 mx={'auto'}>
-                                {arenaInfo.defender.account === '0' ? (
-                                    <Text>The territory has no defender</Text>
-                                ) : (
-                                    <>
-                                        <Text>Defender of the land: {defenderInfo.name}</Text>
-                                        <Box>
-                                            Defender's cards:
-                                            <Stack direction={"row"}>
-                                                {defenderCards.map(card => (
-                                                    <Img w={"50px"} src={card.cardThumbUrl} />
-                                                ))}
-                                            </Stack>
-                                            {/* Llamar al componente para renderizar una card */}
-                                        </Box>
-                                    </>
-                                )}
+                                <>
+                                    <Text>Defender of the land: {defenderInfo.name || 'Unknown'}</Text>
+                                    <Box>
+                                        Defender's cards:
+                                        <Stack direction={'row'}>
+                                            {defenderCards.map(card => (
+                                                <Img w={'50px'} key={card.asset} src={card.cardThumbUrl} />
+                                            ))}
+                                        </Stack>
+                                    </Box>
+                                </>
 
                                 <ButtonGroup mx={'auto'}>
                                     <Button
@@ -93,7 +87,7 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo, selectedArena
                                         borderRadius={'30px'}
                                         color={'#FFF'}
                                         onClick={clickButton}>
-                                        Yes
+                                        Start battle
                                     </Button>
                                 </ButtonGroup>
                             </PopoverBody>

@@ -41,23 +41,26 @@ export const SelectHandPage = ({
     domainBonus,
     mediumBonus,
     domainName,
+    omnoGEMsBalance,
+    omnoWethBalance,
+    setShowResults,
+    setCurrentTime,
 }) => {
     const statistics = [
         { name: 'Level', value: 'Epic' },
         { name: 'Medium', value: arenaInfo.mediumId },
         { name: 'Team size', value: 5 },
-        { name: 'Defender', value: defenderInfo.name },
+        { name: 'Defender', value: defenderInfo.name || 'Unknown' },
     ];
     /* mediums: 
-        1 -> aerial
-        2 -> terrestial 
+        1 -> terrestial 
+        2 -> aerial
         3 -> acuatic
     */
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [battleCost, setBattleCost] = useState([]);
     const [medium, setMedium] = useState();
-
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
 
@@ -83,10 +86,10 @@ export const SelectHandPage = ({
             (() => {
                 switch (arenaInfo.mediumId) {
                     case 1:
-                        setMedium('Aerial');
+                        setMedium('Terrestrial');
                         break;
                     case 2:
-                        setMedium('Terrestrial');
+                        setMedium('Aerial');
                         break;
                     case 3:
                         setMedium('Aquatic');
@@ -99,12 +102,27 @@ export const SelectHandPage = ({
     }, [arenaInfo]);
 
     const handleStartBattle = async () => {
-        console.log(infoAccount);
-        for (let i = 0; i < handBattleCards.length; i++) {
-            if (handBattleCards[i] === '') return errorToast('Select all cards to start a battle', toast);
+        if (!isValidPin || !passphrase) return errorToast('The pin is not correct', toast);
+
+        const gemBalance = omnoGEMsBalance / NQTDIVIDER;
+        const wethBalance = omnoWethBalance / NQTDIVIDER;
+        const battleCostGems = battleCost[0].price / NQTDIVIDER;
+        const battleCostWeth = battleCost.length > 1 ? battleCost[1].price / NQTDIVIDER : 0;
+
+        if (battleCost.length > 1) {
+            if (battleCostGems > gemBalance || battleCostWeth > wethBalance) {
+                return errorToast('Insuficient balance', toast);
+            }
         }
+
+        if (battleCostGems > gemBalance) {
+            return errorToast('Insuficient balance', toast);
+        }
+
         await sendCardsToBattle({ cards: handBattleCards, passPhrase: passphrase, arenaId: arenaInfo.id });
         onClose();
+        setCurrentTime(new Date().toISOString());
+        setShowResults(true);
     };
 
     const handleCompletePin = pin => {
@@ -212,8 +230,8 @@ export const SelectHandPage = ({
                         </Text>
                         <Stack direction={'column'} my={'auto'} ml={2}>
                             {battleCost &&
-                                battleCost.map(item => (
-                                    <Text color={'#FFF'}>
+                                battleCost.map((item, index) => (
+                                    <Text key={index} color={'#FFF'}>
                                         {item.price / NQTDIVIDER} {item.name}
                                     </Text>
                                 ))}
@@ -241,7 +259,7 @@ export const SelectHandPage = ({
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>insert you pin</ModalHeader>
+                    <ModalHeader>Insert your pin</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Center>

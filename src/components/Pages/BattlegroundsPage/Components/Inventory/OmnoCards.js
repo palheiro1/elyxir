@@ -123,14 +123,16 @@ const OmnoCards = ({ infoAccount, cards }) => {
                         Select cards <ChevronDownIcon />
                     </MenuButton>
                     <MenuList minW="100%" maxH="30rem" overflowY="auto" overflowX="hidden">
-                        {notSelectedCards.map(card => (
-                            <MenuItem
-                                minW="100%"
-                                key={card.asset}
-                                onClick={() => setSelectedCards([...selectedCards, card])}>
-                                <BridgeCard card={card} />
-                            </MenuItem>
-                        ))}
+                        {notSelectedCards.map(card =>
+                            card.asset.length <= 19 ? (
+                                <MenuItem
+                                    minW="100%"
+                                    key={card.asset}
+                                    onClick={() => setSelectedCards([...selectedCards, card])}>
+                                    <BridgeCard card={card} />
+                                </MenuItem>
+                            ) : null
+                        )}
                     </MenuList>
                 </Menu>
 
