@@ -17,13 +17,6 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
     // ---------------------------------------------
     const buttons = [
         {
-            text: 'Battlegrounds',
-            onClick: () => setOption(12),
-            hoverBg: 'rgba(159, 55, 114, 0.75)',
-            bgColor: '#9f3772',
-            textColor: textColor(12),
-        },
-        {
             icon: '/images/icons/menu/BuyPack.png',
             text: 'Buy pack',
             onClick: () => setOption(7),
@@ -145,27 +138,28 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
 
     return (
         <VStack align="flex-start" spacing={2} width={widthBotones}>
-            {buttons.map(({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive, isDisabled }) => (
-                !isDisabled && (<Button
-                    key={text}
-                    minW={widthBotones}
-                    minH="50px"
-                    _hover={{ background: isActive ? bgColor : hoverBg, color: isActive ? undefined : 'white' }}
-                    bgColor={bgColor}
-                    textColor={textColor}
-                    onClick={onClick}>
-                    <Stack direction="row" align="center" w="100%">
-                        {icon && (
-                            <Box minW={"2rem"} ml={isActive ? -1 : 0} mr={isActive ? 1 : 0}>
-                                <Image src={icon} w={isActive ? '30px' : '25px'} />
-                            </Box>
-                        )}
-                        <Text fontSize="sm" fontWeight={fontWeight}>
-                            {text}
-                        </Text>
-                    </Stack>
-                </Button>)
-            ))}
+            {buttons.map(
+                ({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive, isDisabled }) =>
+                    !isDisabled && (
+                        <Button
+                            key={text}
+                            minW={widthBotones}
+                            minH="50px"
+                            _hover={{ background: isActive ? bgColor : hoverBg, color: isActive ? undefined : 'white' }}
+                            bgColor={bgColor}
+                            textColor={textColor}
+                            onClick={onClick}>
+                            <Stack direction="row" align="center" w="100%">
+                                <Box minW={'2rem'} ml={isActive ? -1 : 0} mr={isActive ? 1 : 0}>
+                                    <Image src={icon} w={isActive ? '30px' : '25px'} />
+                                </Box>
+                                <Text fontSize="sm" fontWeight={fontWeight}>
+                                    {text}
+                                </Text>
+                            </Stack>
+                        </Button>
+                    )
+            )}
         </VStack>
     );
 };
