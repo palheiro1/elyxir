@@ -221,7 +221,7 @@ export const BattleWindow = ({
                                             overflow={'scroll'}
                                             h={'750px'}>
                                             {filteredCards.map((card, cardIndex) => {
-                                                return card.asset.length <= 19 ? (
+                                                return card.asset.length <= 19 && !handBattleCards.find(item => item.asset === card.asset) ? (
                                                     <Box
                                                         key={cardIndex}
                                                         w={'250px'}
