@@ -57,7 +57,7 @@ export const fetchAssetCount = async asset => {
 
 export const addressToAccountId = address => {
     return ardorjs.rsConvert(address).account;
-}
+};
 
 // -------------------------------------------------
 //                  ARDOR REQUESTS
@@ -818,7 +818,7 @@ export const processUnwrapsForGemBridge = async accountRs => {
         });
         return response.data;
     } catch (error) {
-        console.error("🚀 ~ file: ardorInterface.js:808 ~ processUnwrapsForGemBridge ~ error:", error)
+        console.error('🚀 ~ file: ardorInterface.js:808 ~ processUnwrapsForGemBridge ~ error:', error);
     }
 };
 
