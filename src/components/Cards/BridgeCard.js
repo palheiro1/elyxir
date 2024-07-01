@@ -15,21 +15,14 @@ import CardBadges from './CardBadges';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdit, omnoQuantity }) => {
-    const {
-        cardImgUrl: image,
-        name: title,
-        asset,
-        channel: continent,
-        rarity,
-        unconfirmedQuantityQNT: quantity,
-    } = card;
+const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdit }) => {
+    const { cardImgUrl: image, name: title, asset, channel: continent, rarity, unconfirmedQuantityQNT: quantity } = card;
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: 1,
         defaultValue: 1,
         min: 1,
-        max: omnoQuantity || quantity,
+        max: quantity,
     });
 
     const inc = getIncrementButtonProps();
@@ -48,7 +41,7 @@ const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdi
 
                     <CardBadges continent={continent} rarity={rarity} />
 
-                    <Text color="grey">Available: {omnoQuantity || quantity}</Text>
+                    <Text color="grey">Available: {quantity}</Text>
                 </Box>
             </Stack>
 

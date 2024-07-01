@@ -10,8 +10,6 @@ import {
     NQTDIVIDER,
     REFRESH_DATA_TIME,
     WETHASSET,
-    OMNO_ACCOUNT,
-    OMNO_CONTRACT,
 } from '../data/CONSTANTS';
 import { decrypt, getUser } from './storage';
 import {
@@ -24,7 +22,6 @@ import {
     getAskOrders,
     getBidOrders,
     getIgnisBalance,
-    sendMessage,
     transferAsset,
     transferCurrency,
     transferCurrencyZeroFee,
@@ -578,157 +575,3 @@ export function roundNumberWithMaxDecimals(number, maxDecimals) {
     const roundedNumber = parseFloat(number.toFixed(maxDecimals));
     return isNaN(roundedNumber) ? 0 : roundedNumber;
 }
-
-export const sendCardsToOmno = async ({ cards, passPhrase }) => {
-    const message = JSON.stringify({ contract: OMNO_CONTRACT });
-
-    const promises = cards.map(card =>
-        transferAsset({
-            asset: card.asset,
-            quantityQNT: card.quantity,
-            recipient: OMNO_ACCOUNT,
-            passPhrase: passPhrase,
-            message: message,
-            messagePrunable: true,
-            deadline: 361,
-            priority: 'HIGH',
-        })
-    );
-
-    try {
-        const results = await Promise.all(promises);
-        const success = results.every(result => result.status === 200 || true);
-        if (success) {
-            return true;
-        } else {
-            console.error('Error transferring assets: Not all promises resolved successfully');
-            return false;
-        }
-    } catch (error) {
-        console.error(`Error transferring assets: ${error.message}`);
-        return false;
-    }
-};
-
-export const sendGEMSToOmno = async ({ quantity, passPhrase }) => {
-    const message = JSON.stringify({ contract: OMNO_CONTRACT });
-    try {
-        const res = await transferAsset({
-            asset: GEMASSET,
-            quantityQNT: quantity * NQTDIVIDER,
-            recipient: OMNO_ACCOUNT,
-            passPhrase: passPhrase,
-            message: message,
-            messagePrunable: true,
-            deadline: 361,
-            priority: 'HIGH',
-        });
-
-        const success = res.status === 200 || true;
-        if (success) {
-            return true;
-        } else {
-            console.error('Error transferring GEMs');
-            return false;
-        }
-    } catch (error) {
-        console.error(`Error transferring GEMs: ${error.message}`);
-        return false;
-    }
-};
-
-export const withdrawGEMsFromOmno = async ({ quantity, passPhrase }) => {
-    const message = JSON.stringify({
-        contract: OMNO_CONTRACT,
-        operation: [
-            {
-                service: 'platform',
-                request: 'failClear',
-            },
-            {
-                service: 'user',
-                request: 'withdraw',
-                parameter: {
-                    contractPaysWithdrawFee: true,
-                    value: {
-                        asset: {
-                            [GEMASSET]: (quantity * NQTDIVIDER).toString(),
-                        },
-                    },
-                    requireFailClear: true,
-                },
-            },
-            {
-                service: 'platform',
-                request: 'failClear',
-            },
-        ],
-    });
-
-    return await sendMessage({
-        recipient: OMNO_ACCOUNT,
-        passPhrase: passPhrase,
-        message: message,
-    });
-};
-export const sendWETHToOmno = async ({ quantity, passPhrase }) => {
-    const message = JSON.stringify({ contract: OMNO_CONTRACT });
-    try {
-        const res = await transferAsset({
-            asset: WETHASSET,
-            quantityQNT: quantity * NQTDIVIDER,
-            recipient: OMNO_ACCOUNT,
-            passPhrase: passPhrase,
-            message: message,
-            messagePrunable: true,
-            deadline: 361,
-            priority: 'HIGH',
-        });
-
-        const success = res.status === 200 || true;
-        if (success) {
-            return true;
-        } else {
-            console.error('Error transferring GEMs');
-            return false;
-        }
-    } catch (error) {
-        console.error(`Error transferring GEMs: ${error.message}`);
-        return false;
-    }
-};
-
-export const withdrawWETHFromOmno = async ({ quantity, passPhrase }) => {
-    const message = JSON.stringify({
-        contract: OMNO_CONTRACT,
-        operation: [
-            {
-                service: 'platform',
-                request: 'failClear',
-            },
-            {
-                service: 'user',
-                request: 'withdraw',
-                parameter: {
-                    contractPaysWithdrawFee: true,
-                    value: {
-                        asset: {
-                            [WETHASSET]: (quantity * NQTDIVIDER).toString(),
-                        },
-                    },
-                    requireFailClear: true,
-                },
-            },
-            {
-                service: 'platform',
-                request: 'failClear',
-            },
-        ],
-    });
-
-    return await sendMessage({
-        recipient: OMNO_ACCOUNT,
-        passPhrase: passPhrase,
-        message: message,
-    });
-};

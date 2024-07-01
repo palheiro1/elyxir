@@ -17,21 +17,7 @@ import DetailedCard from './DetailedCard';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const GridCards = ({
-    cards,
-    isMarket = false,
-    onlyBuy = false,
-    infoAccount,
-    market = 'IGNIS',
-    rgbColor = '59, 100, 151',
-    isDisabledButtons = false,
-    columns = { base: 1, md: 2, lg: 3, xl: 4, '2xl': 5 },
-    gap = { base: 1, md: 4 },
-    textColor,
-    isBattleInventory = false,
-    updateCard,
-    index,
-}) => {
+const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {}, market = 'IGNIS', rgbColor="59, 100, 151" }) => {
     const [actualCards, setActualCards] = useState(cards);
 
     // Card clicked
@@ -111,7 +97,7 @@ const GridCards = ({
 
     return (
         <>
-            <SimpleGrid columns={columns} my={4} gap={gap}>
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4, '2xl': 5 }} my={4} gap={{ base: 1, md: 4 }}>
                 {loadedCards.map((card, index) => {
                     const delay = cardsDelay[index % 10];
                     return (
@@ -130,11 +116,6 @@ const GridCards = ({
                                 infoAccount={infoAccount}
                                 market={market}
                                 rgbColor={rgbColor}
-                                isDisabledButtons={isDisabledButtons}
-                                textColor={textColor}
-                                isBattleInventory={isBattleInventory}
-                                updateCard={updateCard}
-                                index={index}
                             />
                         </Animated>
                     );

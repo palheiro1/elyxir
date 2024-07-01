@@ -51,11 +51,6 @@ const Card = ({
     infoAccount,
     market = 'WETH',
     rgbColor = '59, 100, 151',
-    isDisabledButtons = false,
-    textColor = 'rgb(26,32,44)',
-    isBattleInventory,
-    updateCard,
-    index,
 }) => {
     const separatorColor = `rgba(${rgbColor}, 1)`;
     const newBgColor = 'rgba(47, 129, 144, 0.6)';
@@ -116,12 +111,6 @@ const Card = ({
     const handleClick = ({ card }) => {
         setCardClicked(card);
         onOpen();
-    };
-
-    const handleSetBattleHand = ({ card }) => {
-        console.log('🚀 ~ handleSetBattleHand ~ card:', card);
-        updateCard(card, index)
-        setCardClicked(card);
     };
 
     // ------------------------------
@@ -207,13 +196,7 @@ const Card = ({
                         src={image}
                         alt={name}
                         rounded="lg"
-                        onClick={() =>
-                            isBattleInventory
-                                ? handleSetBattleHand({ card: card })
-                                : haveThisCard
-                                ? handleClick({ card: card })
-                                : null
-                        }
+                        onClick={() => (haveThisCard ? handleClick({ card: card }) : null)}
                         style={hover ? hoverStyle : initialStyle}
                         onMouseEnter={() => (haveThisCard ? setHover(true) : null)}
                         onMouseLeave={() => (haveThisCard ? setHover(false) : null)}
@@ -221,11 +204,7 @@ const Card = ({
                     />
                     <Stack direction={{ base: 'column', lg: 'row' }} spacing={0}>
                         <Stack direction="column" spacing={0} align={{ base: 'center', lg: 'start' }}>
-                            <Text
-                                fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }}
-                                noOfLines={1}
-                                fontWeight="bold"
-                                color={textColor}>
+                            <Text fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }} noOfLines={1} fontWeight="bold">
                                 {name}
                             </Text>
                             <CardBadges rarity={rarity} continent={continent} size="sm" />
@@ -245,121 +224,116 @@ const Card = ({
                             </Tooltip>
                         </Center>
                     </Stack>
-                    {!isDisabledButtons && (
-                        <>
-                            {!isMarket && !fixOnlyBuy && (
-                                <Box
-                                    onMouseEnter={() => isBlocked && setHoverButton(true)}
-                                    onMouseLeave={() => isBlocked && setHoverButton(false)}>
-                                    {!hoverButton && (
-                                        <SimpleGrid columns={rarity === 'Special' ? 1 : 3} gap={1}>
+                    {!isMarket && !fixOnlyBuy && (
+                        <Box
+                            onMouseEnter={() => isBlocked && setHoverButton(true)}
+                            onMouseLeave={() => isBlocked && setHoverButton(false)}>
+                            {!hoverButton && (
+                                <SimpleGrid columns={rarity === 'Special' ? 1 : 3} gap={1}>
+                                    <CardButton
+                                        text="Send"
+                                        onClick={onOpenSend}
+                                        isDisabled={isBlocked}
+                                        icon={<Image src="/images/icons/send.png" w="15px" />}
+                                    />
+                                    {rarity !== 'Special' && (
+                                        <>
                                             <CardButton
-                                                text="Send"
-                                                onClick={onOpenSend}
-                                                isDisabled={isBlocked}
-                                                icon={<Image src="/images/icons/send.png" w="15px" />}
+                                                text="Craft"
+                                                onClick={onOpenCraft}
+                                                isDisabled={isBlockedCraft}
+                                                icon={<Image src="/images/icons/craft.png" w="15px" />}
                                             />
-                                            {rarity !== 'Special' && (
-                                                <>
-                                                    <CardButton
-                                                        text="Craft"
-                                                        onClick={onOpenCraft}
-                                                        isDisabled={isBlockedCraft}
-                                                        icon={<Image src="/images/icons/craft.png" w="15px" />}
-                                                    />
-                                                    <CardButton
-                                                        text="Morph"
-                                                        onClick={onOpenMorph}
-                                                        isDisabled={isBlocked}
-                                                        icon={<Image src="/images/icons/morph.png" w="15px" />}
-                                                    />
-                                                </>
-                                            )}
-                                        </SimpleGrid>
-                                    )}
-                                    {hoverButton && (
-                                        <Center w="100%" bgColor={borderColor} rounded="lg" h="100%">
-                                            <Text textAlign="center" fontSize="xs">
-                                                <strong>{lockedCards} card(s) locked for all actions.</strong>
-                                                <br /> Check for open Ask orders to unlock.
-                                            </Text>
-                                        </Center>
-                                    )}
-                                </Box>
-                            )}
-
-                            {isMarket && (
-                                <Center>
-                                    <Stack direction="column" w="100%">
-                                        <Stack direction="row" w="100%">
-                                            <Button
-                                                onClick={onOpenBid}
-                                                size="lg"
-                                                bgColor="#29a992"
-                                                w="100%"
-                                                color="white"
-                                                fontWeight={'black'}
-                                                _hover={{ shadow: 'lg' }}>
-                                                BUY
-                                            </Button>
-                                            <Button
-                                                onClick={onOpenAsk}
-                                                size="lg"
-                                                w="100%"
-                                                color="white"
-                                                bgColor="#eb6473"
+                                            <CardButton
+                                                text="Morph"
+                                                onClick={onOpenMorph}
                                                 isDisabled={isBlocked}
-                                                fontWeight={'black'}
-                                                _hover={{ shadow: 'lg' }}>
-                                                SELL
-                                            </Button>
-                                        </Stack>
-                                        <Box borderTop="1px" borderTopColor={separatorColor} pt={4}>
-                                            <SimpleGrid columns={3} spacing={4}>
-                                                <Box>
-                                                    <Text fontSize="sm" color="gray" textAlign="center">
-                                                        Lowest ask
-                                                    </Text>
-                                                    <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                                        {lowedAskOrders === '' ? <Spinner size="md" /> : lowedAskOrders}
-                                                    </Text>
-                                                </Box>
-                                                <Box>
-                                                    <Text fontSize="sm" color="gray" textAlign="center">
-                                                        Highest bid
-                                                    </Text>
-                                                    <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                                        {highBidOrders === '' ? <Spinner size="md" /> : highBidOrders}
-                                                    </Text>
-                                                </Box>
-                                                <Box>
-                                                    <Text fontSize="sm" color="gray" textAlign="center">
-                                                        Latest price
-                                                    </Text>
-                                                    <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                                        {lastPrice === '' ? <Spinner size="md" /> : lastPrice}
-                                                    </Text>
-                                                </Box>
-                                            </SimpleGrid>
-                                        </Box>
-                                    </Stack>
+                                                icon={<Image src="/images/icons/morph.png" w="15px" />}
+                                            />
+                                        </>
+                                    )}
+                                </SimpleGrid>
+                            )}
+                            {hoverButton && (
+                                <Center w="100%" bgColor={borderColor} rounded="lg" h="100%">
+                                    <Text textAlign="center" fontSize="xs">
+                                        <strong>{lockedCards} card(s) locked for all actions.</strong>
+                                        <br /> Check for open Ask orders to unlock.
+                                    </Text>
                                 </Center>
                             )}
-                            {fixOnlyBuy && (
-                                <Box>
+                        </Box>
+                    )}
+                    {isMarket && (
+                        <Center>
+                            <Stack direction="column" w="100%">
+                                <Stack direction="row" w="100%">
                                     <Button
+                                        onClick={onOpenBid}
+                                        size="lg"
+                                        bgColor="#29a992"
                                         w="100%"
                                         color="white"
                                         fontWeight={'black'}
-                                        variant="solid"
-                                        bgColor="#9f3772"
-                                        _hover={{ fontWeight: 'bold', shadow: 'xl' }}
-                                        onClick={onOpenBid}>
+                                        _hover={{ shadow: 'lg' }}>
                                         BUY
                                     </Button>
+                                    <Button
+                                        onClick={onOpenAsk}
+                                        size="lg"
+                                        w="100%"
+                                        color="white"
+                                        bgColor="#eb6473"
+                                        isDisabled={isBlocked}
+                                        fontWeight={'black'}
+                                        _hover={{ shadow: 'lg' }}>
+                                        SELL
+                                    </Button>
+                                </Stack>
+                                <Box borderTop="1px" borderTopColor={separatorColor} pt={4}>
+                                    <SimpleGrid columns={3} spacing={4}>
+                                        <Box>
+                                            <Text fontSize="sm" color="gray" textAlign="center">
+                                                Lowest ask
+                                            </Text>
+                                            <Text fontWeight="bold" fontSize="lg" textAlign="center">
+                                                {lowedAskOrders === '' ? <Spinner size="md" /> : lowedAskOrders}
+                                            </Text>
+                                        </Box>
+                                        <Box>
+                                            <Text fontSize="sm" color="gray" textAlign="center">
+                                                Highest bid
+                                            </Text>
+                                            <Text fontWeight="bold" fontSize="lg" textAlign="center">
+                                                {highBidOrders === '' ? <Spinner size="md" /> : highBidOrders}
+                                            </Text>
+                                        </Box>
+                                        <Box>
+                                            <Text fontSize="sm" color="gray" textAlign="center">
+                                                Latest price
+                                            </Text>
+                                            <Text fontWeight="bold" fontSize="lg" textAlign="center">
+                                                {lastPrice === '' ? <Spinner size="md" /> : lastPrice}
+                                            </Text>
+                                        </Box>
+                                    </SimpleGrid>
                                 </Box>
-                            )}
-                        </>
+                            </Stack>
+                        </Center>
+                    )}
+                    {fixOnlyBuy && (
+                        <Box>
+                            <Button
+                                w="100%"
+                                color="white"
+                                fontWeight={'black'}
+                                variant="solid"
+                                bgColor="#9f3772"
+                                _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                                onClick={onOpenBid}>
+                                BUY
+                            </Button>
+                        </Box>
                     )}
                 </SimpleGrid>
             </Center>
