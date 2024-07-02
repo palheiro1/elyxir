@@ -153,7 +153,7 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
                         _focus={{ boxShadow: 'outline' }}>
                         Select cards <ChevronDownIcon />
                     </MenuButton>
-                    <MenuList minW="100%" maxH="30rem" overflowY="auto" overflowX="hidden">
+                    <MenuList minW="100%" maxH="25rem" overflowY="auto" overflowX="hidden">
                         {notSelectedCards.map(card => (
                             <MenuItem
                                 minW="100%"

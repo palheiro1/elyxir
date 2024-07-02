@@ -335,12 +335,12 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName,
                             })}
                     </Stack>
 
-                    {battleInfo.isDefenderWin ? (
-                        <Stack direction={'column'} align={'center'}>
-                            <Text fontSize={'medium'}>Captured card:</Text>
-                            <Img w={'8%'} src={capturedCard.cardImgUrl} mb={3} />
-                        </Stack>
-                    ) : null}
+                    <Stack direction={'column'} align={'center'}>
+                        <Text fontSize={'medium'}>
+                            {battleInfo.isDefenderWin ? 'Captured card: ' : 'Obtained card:'}
+                        </Text>
+                        <Img w={'8%'} src={capturedCard.cardImgUrl} mb={3} />
+                    </Stack>
                 </Stack>
             )}
         </Box>

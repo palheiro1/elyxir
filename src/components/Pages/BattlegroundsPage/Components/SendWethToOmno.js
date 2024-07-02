@@ -29,15 +29,15 @@ const SendWethToOmno = ({
     increment,
     handleCompletePin,
     isValidPin,
-    handleSendSGEMS,
-    handleWithdrawGems,
-    gemsModalMode,
+    handleSendWeth,
+    handleWithdrawWeth,
+    wethModalMode,
 }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>{gemsModalMode ? 'Send' : 'Withdraw'} WETH</ModalHeader>
+            <ModalContent bgColor={'#ebb2b9'}>
+                <ModalHeader>{wethModalMode ? 'Send' : 'Withdraw'} WETH</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody display={'flex'}>
                     <Stack direction={'column'} mx={'auto'}>
@@ -82,7 +82,7 @@ const SendWethToOmno = ({
                                 </FormLabel>
                             </FormControl>
                         </Center>
-                        <Stack direction={'row'} spacing={7}>
+                        <Stack direction={'row'} spacing={7} mx={'auto'}>
                             <PinInput
                                 size="lg"
                                 onComplete={handleCompletePin}
@@ -100,7 +100,13 @@ const SendWethToOmno = ({
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={gemsModalMode ? handleSendSGEMS : handleWithdrawGems}>
+                    <Button
+                        color={'#fff'}
+                        bgColor="#F48794"
+                        mr={3}
+                        mx={'auto'}
+                        w={'80%'}
+                        onClick={wethModalMode ? handleSendWeth : handleWithdrawWeth}>
                         Submit
                     </Button>
                 </ModalFooter>

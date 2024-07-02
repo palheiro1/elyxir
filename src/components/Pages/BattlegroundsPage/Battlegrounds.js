@@ -38,19 +38,34 @@ import {
 import { errorToast } from '../../../utils/alerts';
 import SendGEMsToOmno from './Components/SendGEMsToOmno';
 import SendWethToOmno from './Components/SendWethToOmno';
+import BattleList from './Components/BattleRecord/BattleList';
+import { getBattleCount } from '../../../services/Battlegrounds/Battlegrounds';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
     /* Intro pop up managing */
-    const { accountRs, GEMRealBalance, WETHRealBalance } = infoAccount;
+    const { accountRs, GEMBalance, WETHBalance } = infoAccount;
 
     const [visible, setVisible] = useState(true);
     const [page, setPage] = useState(1);
     const [isScrollLocked, setIsScrollLocked] = useState(true);
-
+    const [filteredCards, setFilteredCards] = useState([]);
+    const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
+    const [passphrase, setPassphrase] = useState('');
+    const [omnoGEMsBalance, setOmnoGEMsBalance] = useState(null);
+    const [omnoWethBalance, setOmnoWethBalance] = useState(null);
+    const [amount, setAmount] = useState(0);
+    const [gemsModalMode, setGemsModalMode] = useState(null); // True send , false withdraw
+    const [wethModalMode, setWethModalMode] = useState(null); // True send , false withdraw
     const [selectedArena, setSelectedArena] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [openBattle, setOpenBattle] = useState(false);
     const [openInventory, setOpenInventory] = useState(false);
+    const [openBattleRecord, setOpenBattleRecord] = useState(false);
+    const [battleCount, setbattleCount] = useState(null);
+    const [parseWETH, setParseWETH] = useState(null);
+
+    const { isOpen: isOpenGems, onOpen: onOpenGems, onClose: onCloseGems } = useDisclosure();
+    const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
 
     const toast = useToast();
 
@@ -75,16 +90,22 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                 setIsScrollLocked(true);
             },
         },
+        {
+            name: 'Battle record',
+            onclick: () => {
+                setOpenBattleRecord(true);
+                setIsScrollLocked(true);
+            },
+        },
         { name: 'Scoreboard', tooltip: 'Coming soon', opacity: '30%' },
         { name: 'Elixir', tooltip: 'Coming soon', opacity: '30%' },
         { name: 'Earnings', tooltip: 'Coming soon', opacity: '30%' },
-        { name: 'Battle record', tooltip: 'Coming soon', opacity: '30%' },
         { name: 'FAQ', tooltip: 'Coming soon', opacity: '30%' },
     ];
 
     const statistics = [
         { name: 'Active player', value: 3 },
-        { name: 'Battles disputed', value: 24 },
+        { name: 'Battles disputed', value: battleCount || 0 },
         // { name: 'GEM Rewards', value: '245k' },
         // { name: 'General ranking', value: 7 },
         // { name: 'Time remaining', value: '14 weeks' },
@@ -113,17 +134,12 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         setOpenBattle(false);
         setIsScrollLocked(false);
     };
+    const handleCloseBattleRecord = () => {
+        setOpenBattleRecord(false);
+        setIsScrollLocked(false);
+    };
 
-    let wEthDecimals = 0;
-
-    const [filteredCards, setFilteredCards] = useState([]);
-    const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
-    const [passphrase, setPassphrase] = useState('');
-    const [omnoGEMsBalance, setOmnoGEMsBalance] = useState(null);
-    const [omnoWethBalance, setOmnoWethBalance] = useState(null);
-    const [amount, setAmount] = useState(0);
-    const [gemsModalMode, setGemsModalMode] = useState(null); // True send , false withdraw
-    const [wethModalMode, setWethModalMode] = useState(null); // True send , false withdraw
+    let wEthDecimals = 3;
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -136,17 +152,25 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         }
     };
 
-    const parseWETH = parseFloat(omnoWethBalance);
-
     useEffect(() => {
         const filterCards = async () => {
+            let battleCount = await getBattleCount();
+            setbattleCount(battleCount);
+
             const userInfo = await getUserState();
             if (userInfo.balance) {
                 const assetIds = Object.keys(userInfo.balance.asset);
                 setOmnoGEMsBalance(userInfo.balance.asset[GEMASSET] || 0);
                 setOmnoWethBalance(userInfo.balance.asset[WETHASSET] || 0);
+                setParseWETH(parseFloat(userInfo.balance.asset[WETHASSET] || 0));
 
-                const matchingCards = cards.filter(card => assetIds.includes(card.asset));
+                const matchingCards = cards
+                    .filter(card => assetIds.includes(card.asset))
+                    .map(card => ({
+                        ...card,
+                        omnoQuantity: userInfo.balance.asset[card.asset],
+                    }));
+
                 setFilteredCards(matchingCards);
             }
         };
@@ -162,11 +186,8 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         return res;
     };
 
-    const { isOpen: isOpenGems, onOpen: onOpenGems, onClose: onCloseGems } = useDisclosure();
-    const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
-
-    const maxAmountGems = GEMRealBalance;
-    const maxAmountWeth = WETHRealBalance;
+    const maxAmountGems = GEMBalance;
+    const maxAmountWeth = WETHBalance;
 
     const increment = () => {
         if (amount < maxAmountGems) {
@@ -181,13 +202,13 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     };
     const incrementWeth = () => {
         if (amount < maxAmountWeth) {
-            setAmount(amount + 0.001);
+            setAmount(amount + 0.0001);
         }
     };
 
     const decrementWeth = () => {
         if (amount > 0) {
-            setAmount(amount - 0.001);
+            setAmount(amount - 0.0001);
         }
     };
 
@@ -285,6 +306,9 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                         filteredCards={filteredCards}
                     />
                 )}
+                {openBattleRecord && (
+                    <BattleList handleClose={handleCloseBattleRecord} infoAccount={infoAccount} cards={cards} />
+                )}
                 <BattlegroundsIntro visible={visible} page={page} handleClose={handleClose} handleNext={handleNext} />
                 <AdvertModal isOpen={isModalOpen} onClose={closeModal} />
                 <ScrollLock isLocked={isScrollLocked} />
@@ -350,7 +374,10 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                             h="50px"
                                         />
                                         <Text>
-                                            {parseWETH.toFixed(Math.max(0, wEthDecimals <= 6 ? wEthDecimals : 6))}
+                                            {parseWETH &&
+                                                (parseWETH / NQTDIVIDER).toFixed(
+                                                    Math.max(0, wEthDecimals <= 6 ? wEthDecimals : 6)
+                                                )}
                                         </Text>
                                     </Stack>
                                 </MenuButton>
@@ -376,58 +403,58 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                             </Menu>
                         </Stack>
                         <Box mt={8} padding={'30px'} pos={'absolute'} top={'12rem'}>
-                            {buttons.map(btn => (
+                            {buttons.map((btn, index) => (
                                 <Box
                                     className="btn-menu"
                                     m={5}
-                                    key={btn.i}
+                                    key={index}
                                     onClick={btn.onclick}
                                     opacity={btn.opacity}
+                                    cursor={'default'}
                                     title={btn.tooltip}>
                                     {btn.name}
                                 </Box>
                             ))}
                         </Box>
-                        <Box ml={'80px'}>
+                        <Stack ml={'80px'}>
                             <Maps
                                 handleSelectArena={handleSelectArena}
                                 infoAccount={infoAccount}
                                 cards={cards}
                                 handleStartBattle={handleStartBattle}
                             />
-                        </Box>
-                    </Stack>
-                    <Stack direction={'row'} mt={6}>
-                        <Stack
-                            direction={'row'}
-                            backgroundColor={'#484848'}
-                            border={'2px solid #D597B2'}
-                            ml={'100px'}
-                            borderRadius={'30px'}
-                            w={'fit-content'}
-                            fontFamily={'Chelsea Market, system-ui'}>
-                            {statistics.map(item => (
-                                <Stack direction={'row'} m={3} key={item.i}>
-                                    <Text color={'#FFF'}>{item.name}:</Text>
-                                    <Text color={'#D597B2'}>{item.value}</Text>
+                            <Stack direction={'row'} mt={3} mx={'auto'}>
+                                <Stack
+                                    direction={'row'}
+                                    backgroundColor={'#484848'}
+                                    border={'2px solid #D597B2'}
+                                    borderRadius={'30px'}
+                                    w={'fit-content'}
+                                    fontFamily={'Chelsea Market, system-ui'}>
+                                    {statistics.map((item, index) => (
+                                        <Stack direction={'row'} m={3} key={index} cursor={'default'}>
+                                            <Text color={'#FFF'}>{item.name}:</Text>
+                                            <Text color={'#D597B2'}>{item.value}</Text>
+                                        </Stack>
+                                    ))}
                                 </Stack>
-                            ))}
+                                <Button
+                                    style={{
+                                        background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
+                                        border: '3px solid #EBB2B9',
+                                    }}
+                                    padding={6}
+                                    textTransform={'uppercase'}
+                                    color={'#FFF'}
+                                    fontWeight={'100'}
+                                    borderRadius={'40px'}
+                                    zIndex={5}
+                                    fontFamily={'Chelsea Market, system-ui'}
+                                    onClick={() => setIsModalOpen(true)}>
+                                    Start battle
+                                </Button>
+                            </Stack>
                         </Stack>
-                        <Button
-                            style={{
-                                background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
-                                border: '3px solid #EBB2B9',
-                            }}
-                            padding={6}
-                            textTransform={'uppercase'}
-                            color={'#FFF'}
-                            fontWeight={'100'}
-                            borderRadius={'40px'}
-                            zIndex={5}
-                            fontFamily={'Chelsea Market, system-ui'}
-                            onClick={() => setIsModalOpen(true)}>
-                            Start battle
-                        </Button>
                     </Stack>
                 </Box>
             </Box>

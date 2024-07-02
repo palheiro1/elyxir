@@ -1,5 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, IconButton, Img, SimpleGrid, Spinner, Stack, Text, useToast } from '@chakra-ui/react';
+import {
+    Box,
+    Center,
+    Flex,
+    IconButton,
+    Img,
+    SimpleGrid,
+    Spacer,
+    Spinner,
+    Stack,
+    Text,
+    Tooltip,
+    useToast,
+} from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { ChevronLeftIcon, CloseIcon } from '@chakra-ui/icons';
 import { SelectHandPage } from './SelectHandPage';
@@ -9,6 +22,7 @@ import { getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds
 import { errorToast } from '../../../../../utils/alerts';
 import BattleResults from './BattleResults';
 import '@fontsource/chelsea-market';
+import CardBadges from '../../../../Cards/CardBadges';
 
 export const BattleWindow = ({
     arenaInfo,
@@ -221,19 +235,60 @@ export const BattleWindow = ({
                                             overflow={'scroll'}
                                             h={'750px'}>
                                             {filteredCards.map((card, cardIndex) => {
-                                                return card.asset.length <= 19 && !handBattleCards.find(item => item.asset === card.asset) ? (
-                                                    <Box
-                                                        key={cardIndex}
-                                                        w={'250px'}
-                                                        h={'350px'}
-                                                        onClick={() => {
-                                                            setOpenIventory(false);
-                                                            updateCard(card);
-                                                        }}
-                                                        bg={'white'}
-                                                        borderRadius={'10px'}>
-                                                        <Img src={card.cardImgUrl} w={'100%'} h={'100%'} />
-                                                    </Box>
+                                                return card.asset.length <= 19 &&
+                                                    !handBattleCards.find(item => item.asset === card.asset) ? (
+                                                    <>
+                                                        <Box
+                                                            key={cardIndex}
+                                                            w={'225px'}
+                                                            h={'350px'}
+                                                            bg={'white'}
+                                                            onClick={() => {
+                                                                setOpenIventory(false);
+                                                                updateCard(card);
+                                                            }}
+                                                            borderRadius={'10px'}>
+                                                            <Center>
+                                                                <Img src={card.cardImgUrl} w={'90%'} h={'75%'} />
+                                                            </Center>
+                                                            <Stack
+                                                                direction={{ base: 'column', lg: 'row' }}
+                                                                spacing={0}
+                                                                mx={2}>
+                                                                <Stack
+                                                                    direction="column"
+                                                                    spacing={0}
+                                                                    align={{ base: 'center', lg: 'start' }}>
+                                                                    <Text
+                                                                        fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }}
+                                                                        noOfLines={1}
+                                                                        fontWeight="bold"
+                                                                        color={'#FFF'}>
+                                                                        {card.name}
+                                                                    </Text>
+                                                                    <CardBadges
+                                                                        rarity={card.rarity}
+                                                                        continent={card.channel}
+                                                                        size="sm"
+                                                                    />
+                                                                </Stack>
+                                                                <Spacer display={{ base: 'none', lg: 'block' }} />
+                                                                <Center minHeight={{ base: 'auto', lg: '100%' }}>
+                                                                    <Tooltip display={'flex'} placement="bottom">
+                                                                        <Flex w={{ base: 'auto', lg: '100%' }}>
+                                                                            <Text
+                                                                                textAlign="end"
+                                                                                minH={{ base: '100%', lg: 'auto' }}
+                                                                                color={'#000'}>
+                                                                                <small>Quantity:</small>{' '}
+                                                                                {card.omnoQuantity}
+                                                                            </Text>
+                                                                        </Flex>
+                                                                    </Tooltip>
+                                                                </Center>
+                                                            </Stack>
+                                                        </Box>
+                                                    </>
                                                 ) : null;
                                             })}
                                         </SimpleGrid>

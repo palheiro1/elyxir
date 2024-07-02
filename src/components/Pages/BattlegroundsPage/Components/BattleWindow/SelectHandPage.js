@@ -103,7 +103,18 @@ export const SelectHandPage = ({
 
     const handleStartBattle = async () => {
         if (!isValidPin || !passphrase) return errorToast('The pin is not correct', toast);
+        let allEmpty = true;
 
+        for (let i = 0; i < handBattleCards.length; i++) {
+            if (handBattleCards[i] !== '') {
+                allEmpty = false;
+                break;
+            }
+        }
+
+        if (allEmpty) {
+            return errorToast('Select at least one card to start a battle', toast);
+        }
         const gemBalance = omnoGEMsBalance / NQTDIVIDER;
         const wethBalance = omnoWethBalance / NQTDIVIDER;
         const battleCostGems = battleCost[0].price / NQTDIVIDER;
@@ -145,7 +156,7 @@ export const SelectHandPage = ({
                         CONQUER <span style={{ color: '#D08FB0' }}>{locations[arenaInfo.id - 1].name}</span>
                     </Heading>
                     <Text color={'#FFF'} textAlign={'center'} fontSize={'large'}>
-                        CHOOSE YOU HAND
+                        SELECT YOUR ARMY
                     </Text>
                 </Stack>
                 <Stack direction={'row'} mx={'auto'} mt={3}>

@@ -1,4 +1,17 @@
-import { Box, Heading, IconButton, Stack, Text, Select, SimpleGrid, Img } from '@chakra-ui/react';
+import {
+    Box,
+    Heading,
+    IconButton,
+    Stack,
+    Text,
+    Select,
+    SimpleGrid,
+    Img,
+    Flex,
+    Tooltip,
+    Center,
+    Spacer,
+} from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { CloseIcon } from '@chakra-ui/icons';
@@ -6,6 +19,7 @@ import OmnoCards from './OmnoCards';
 import '@fontsource/chelsea-market';
 import ArdorCards from './ArdorCards';
 import '../../BattlegroundMap.css';
+import CardBadges from '../../../../Cards/CardBadges';
 const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards }) => {
     const [selectedOption, setSelectedOption] = useState('battlegrounds');
 
@@ -50,12 +64,17 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards }) 
                     left={8}
                     w={'fit-content'}
                     bg={'#FFF'}
+                    color={'#000'}
                     fontFamily={'Chelsea Market, System'}
                     fontWeight={100}
                     value={selectedOption}
                     onChange={handleSelectChange}>
-                    <option value="battlegrounds">Battlegrounds</option>
-                    <option value="ardor">Inventory</option>
+                    <option value="battlegrounds" style={{ backgroundColor: '#FFF' }}>
+                        Battlegrounds
+                    </option>
+                    <option value="ardor" style={{ backgroundColor: '#FFF' }}>
+                        Inventory
+                    </option>
                 </Select>
                 {selectedOption === 'battlegrounds' && (
                     <OmnoPage filteredCards={filteredCards} infoAccount={infoAccount} cards={cards} />
@@ -79,7 +98,7 @@ const OmnoPage = ({ filteredCards, infoAccount, cards }) => {
             </Stack>
             <Stack direction={'row'} pt={2} padding={5} height={'90%'}>
                 <Box
-                    mb={2}
+                    mb={4}
                     backgroundColor={'#0F0F0F'}
                     borderRadius={'20px'}
                     p={4}
@@ -96,13 +115,41 @@ const OmnoPage = ({ filteredCards, infoAccount, cards }) => {
                         overflow={'scroll'}
                         h={'750px'}>
                         {filteredCards.map((card, cardIndex) => (
-                            <Box key={cardIndex} w={'200px'} h={'300px'} bg={'white'} borderRadius={'10px'}>
-                                <Img src={card.cardImgUrl} w={'100%'} h={'100%'} />
+                            <Box key={cardIndex} w={'225px'} h={'350px'} bg={'white'} borderRadius={'10px'}>
+                                <Center>
+                                    <Img src={card.cardImgUrl} w={'90%'} h={'75%'} />
+                                </Center>
+                                <Stack direction={{ base: 'column', lg: 'row' }} spacing={0} mx={2}>
+                                    <Stack direction="column" spacing={0} align={{ base: 'center', lg: 'start' }}>
+                                        <Text
+                                            fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }}
+                                            noOfLines={1}
+                                            fontWeight="bold"
+                                            color={'#000'}>
+                                            {card.name}
+                                        </Text>
+                                        <CardBadges rarity={card.rarity} continent={card.channel} size="sm" />
+                                    </Stack>
+                                    <Spacer display={{ base: 'none', lg: 'block' }} />
+                                    <Center minHeight={{ base: 'auto', lg: '100%' }}>
+                                        <Tooltip display={'flex'} placement="bottom">
+                                            <Flex w={{ base: 'auto', lg: '100%' }}>
+                                                <Text
+                                                    textAlign="end"
+                                                    minH={{ base: '100%', lg: 'auto' }}
+                                                    color={'#000'}>
+                                                    <small>Quantity:</small> {card.omnoQuantity}
+                                                </Text>
+                                            </Flex>
+                                        </Tooltip>
+                                    </Center>
+                                </Stack>
                             </Box>
                         ))}
                     </SimpleGrid>
                 </Box>
                 <Box
+                    mb={4}
                     maxW={'60%'}
                     backgroundColor={'#0F0F0F'}
                     borderRadius={'20px'}
@@ -123,13 +170,13 @@ const ArdorPage = ({ cards, filteredCards, infoAccount }) => {
         <>
             <Stack direction={'column'} color={'#FFF'} mb={5} mx={'auto'} textAlign={'center'} maxH={'90%'}>
                 <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
-                    INVERTORY
+                    INVENTORY
                 </Heading>
                 <Text>Here you can withdraw your cards from the army to your inventory</Text>
             </Stack>
             <Stack direction={'row'} pt={2} padding={5} height={'90%'}>
                 <Box
-                    mb={2}
+                    mb={4}
                     backgroundColor={'#0F0F0F'}
                     borderRadius={'20px'}
                     p={4}
@@ -146,13 +193,41 @@ const ArdorPage = ({ cards, filteredCards, infoAccount }) => {
                         overflow={'scroll'}
                         h={'750px'}>
                         {userCards.map((card, cardIndex) => (
-                            <Box key={cardIndex} w={'200px'} h={'300px'} bg={'white'} borderRadius={'10px'}>
-                                <Img src={card.cardImgUrl} w={'100%'} h={'100%'} />
+                            <Box key={cardIndex} w={'225px'} h={'350px'} bg={'white'} borderRadius={'10px'}>
+                                <Center>
+                                    <Img src={card.cardImgUrl} w={'90%'} h={'75%'} />
+                                </Center>
+                                <Stack direction={{ base: 'column', lg: 'row' }} spacing={0} mx={2}>
+                                    <Stack direction="column" spacing={0} align={{ base: 'center', lg: 'start' }}>
+                                        <Text
+                                            fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }}
+                                            noOfLines={1}
+                                            fontWeight="bold"
+                                            color={'#000'}>
+                                            {card.name}
+                                        </Text>
+                                        <CardBadges rarity={card.rarity} continent={card.channel} size="sm" />
+                                    </Stack>
+                                    <Spacer display={{ base: 'none', lg: 'block' }} />
+                                    <Center minHeight={{ base: 'auto', lg: '100%' }}>
+                                        <Tooltip display={'flex'} placement="bottom">
+                                            <Flex w={{ base: 'auto', lg: '100%' }}>
+                                                <Text
+                                                    textAlign="end"
+                                                    minH={{ base: '100%', lg: 'auto' }}
+                                                    color={'#000'}>
+                                                    <small>Quantity:</small> {card.quantityQNT}
+                                                </Text>
+                                            </Flex>
+                                        </Tooltip>
+                                    </Center>
+                                </Stack>
                             </Box>
                         ))}
                     </SimpleGrid>
                 </Box>
                 <Box
+                    mb={4}
                     maxW={'60%'}
                     backgroundColor={'#0F0F0F'}
                     borderRadius={'20px'}

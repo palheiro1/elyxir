@@ -1,4 +1,16 @@
-import { Box, Button, Center, HStack, IconButton, Image, Input, Stack, Text, useNumberInput } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Center,
+    HStack,
+    IconButton,
+    Image,
+    Input,
+    Stack,
+    Text,
+    useColorModeValue,
+    useNumberInput,
+} from '@chakra-ui/react';
 
 import { AiFillDelete } from 'react-icons/ai';
 import CardBadges from './CardBadges';
@@ -35,6 +47,7 @@ const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdi
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
     const input = getInputProps();
+    const textColor = useColorModeValue('black', 'white');
 
     return (
         <Stack direction={'row'} minWidth="375px" spacing={4}>
@@ -42,7 +55,7 @@ const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdi
 
             <Stack direction={'row'} align="center" minW="35%">
                 <Box>
-                    <Text fontWeight="bold" fontSize="2xl">
+                    <Text fontWeight="bold" fontSize="2xl" textColor={textColor}>
                         {title}
                     </Text>
 
