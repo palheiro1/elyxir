@@ -145,6 +145,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName,
             {battleInfo === 'pending' ? (
                 <Box position={'absolute'} left={'50%'} top={'50%'} transform={'translate(-50%, -50%)'}>
                     Battle in progress...
+                    <br></br>Results appears after the next block
                 </Box>
             ) : (
                 <Stack direction={'column'} h={'20%'} mx={'auto'}>

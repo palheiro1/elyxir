@@ -24,7 +24,7 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle 
     };
     return (
         arenasInfo && (
-            <Box className="containerMap" zIndex={5}>
+            <Box className="containerMap" zIndex={0}>
                 <svg
                     width="979"
                     height="543"
@@ -46,6 +46,7 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle 
                                 selectedArena={selectedArena}
                                 cards={cards}
                                 handleStartBattle={handleStartBattle}
+                                infoAccount={infoAccount}
                             />
                         ))}
                         {/* Max X: 970 Max Y: 530*/}

@@ -14,14 +14,28 @@ import {
     Portal,
     Stack,
     Text,
+    Tooltip,
 } from '@chakra-ui/react';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
-import { getAccount } from '../../../../services/Ardor/ardorInterface';
+import { addressToAccountId, getAccount } from '../../../../services/Ardor/ardorInterface';
 
-export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo, selectedArena, cards, handleStartBattle }) => {
+export const MapPoint = ({
+    name,
+    x,
+    y,
+    handleClick,
+    id,
+    arenaInfo,
+    selectedArena,
+    cards,
+    handleStartBattle,
+    infoAccount,
+}) => {
     const [defenderInfo, setDefenderInfo] = useState(null);
     const [defenderCards, setDefenderCards] = useState(null);
+    const [myArena, setMyArena] = useState(false);
+
     const clickButton = () => {
         handleClick(id);
         handleStartBattle();
@@ -29,7 +43,11 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo, selectedArena
 
     useEffect(() => {
         const getDefenderInfo = async () => {
+            const accountId = addressToAccountId(infoAccount.accountRs);
             await getAccount(arenaInfo.defender.account).then(res => {
+                if (arenaInfo.defender.account === accountId) {
+                    setMyArena(true);
+                }
                 setDefenderInfo(res);
                 const defenderAssets = new Set(arenaInfo.defender.asset);
                 const matchingObjects = cards.filter(obj => defenderAssets.has(obj.asset));
@@ -37,7 +55,7 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo, selectedArena
             });
         };
         getDefenderInfo();
-    }, [arenaInfo, cards]);
+    }, [arenaInfo, cards, infoAccount.accountRs]);
 
     return (
         arenaInfo &&
@@ -49,7 +67,7 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo, selectedArena
                             cx={x}
                             cy={y}
                             r={7}
-                            fill={selectedArena !== id ? '#0056F5' : '#7FC0BE'}
+                            fill={myArena ? 'red' : selectedArena !== id ? '#0056F5' : '#7FC0BE'}
                             stroke="white"
                             strokeWidth={1.5}
                         />
@@ -81,14 +99,20 @@ export const MapPoint = ({ name, x, y, handleClick, id, arenaInfo, selectedArena
                                 </>
 
                                 <ButtonGroup mx={'auto'}>
-                                    <Button
-                                        backgroundColor={'#484848'}
-                                        border={'2px solid #D597B2'}
-                                        borderRadius={'30px'}
-                                        color={'#FFF'}
-                                        onClick={clickButton}>
-                                        Start battle
-                                    </Button>
+                                    <Tooltip
+                                        hasArrow
+                                        label={myArena ? `You can't fight against yourself` : null}
+                                        placement="right">
+                                        <Button
+                                            backgroundColor={'#484848'}
+                                            border={'2px solid #D597B2'}
+                                            borderRadius={'30px'}
+                                            color={'#FFF'}
+                                            isDisabled={myArena}
+                                            onClick={clickButton}>
+                                            Start battle
+                                        </Button>
+                                    </Tooltip>
                                 </ButtonGroup>
                             </PopoverBody>
                         </PopoverContent>

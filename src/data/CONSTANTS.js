@@ -98,7 +98,8 @@ export const CURRENTSEASON = 'season01';
 // ---------------------------------------------
 export const FREQUENCY = 5040;
 export const BOUNTYHALF = true;
-export const BLOCKTIME = 60;
+export const BLOCKTIME = 120;
+// export const BLOCKTIME = 60;
 export const LOWIGNIS = 65;
 export const IGNIS_REQUIRED = 100;
 

@@ -12,7 +12,6 @@ import {
     Text,
     useColorModeValue,
     useDisclosure,
-    useToast,
 } from '@chakra-ui/react';
 import { Maps } from './Maps';
 import React, { useEffect, useState } from 'react';
@@ -28,14 +27,6 @@ import Inventory from './Components/Inventory/Inventory';
 import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
 import { getUsersState } from '../../../services/Ardor/omnoInterface';
 import { GEMASSET, NQTDIVIDER, WETHASSET } from '../../../data/CONSTANTS';
-import {
-    checkPin,
-    sendGEMSToOmno,
-    sendWETHToOmno,
-    withdrawGEMsFromOmno,
-    withdrawWETHFromOmno,
-} from '../../../utils/walletUtils';
-import { errorToast } from '../../../utils/alerts';
 import SendGEMsToOmno from './Components/SendGEMsToOmno';
 import SendWethToOmno from './Components/SendWethToOmno';
 import BattleList from './Components/BattleRecord/BattleList';
@@ -43,17 +34,14 @@ import { getBattleCount } from '../../../services/Battlegrounds/Battlegrounds';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
     /* Intro pop up managing */
-    const { accountRs, GEMBalance, WETHBalance } = infoAccount;
+    const { accountRs } = infoAccount;
 
     const [visible, setVisible] = useState(true);
     const [page, setPage] = useState(1);
     const [isScrollLocked, setIsScrollLocked] = useState(true);
     const [filteredCards, setFilteredCards] = useState([]);
-    const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
-    const [passphrase, setPassphrase] = useState('');
     const [omnoGEMsBalance, setOmnoGEMsBalance] = useState(null);
     const [omnoWethBalance, setOmnoWethBalance] = useState(null);
-    const [amount, setAmount] = useState(0);
     const [gemsModalMode, setGemsModalMode] = useState(null); // True send , false withdraw
     const [wethModalMode, setWethModalMode] = useState(null); // True send , false withdraw
     const [selectedArena, setSelectedArena] = useState('');
@@ -61,13 +49,11 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [openBattle, setOpenBattle] = useState(false);
     const [openInventory, setOpenInventory] = useState(false);
     const [openBattleRecord, setOpenBattleRecord] = useState(false);
-    const [battleCount, setbattleCount] = useState(null);
-    const [parseWETH, setParseWETH] = useState(null);
+    const [battleCount, setBattleCount] = useState(null);
+    const [parseWETH, setParseWETH] = useState(0);
 
-    const { isOpen: isOpenGems, onOpen: onOpenGems, onClose: onCloseGems } = useDisclosure();
     const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
-
-    const toast = useToast();
+    const { isOpen: isOpenGems, onOpen: onOpenGems, onClose: onCloseGems } = useDisclosure();
 
     const handleNext = () => {
         setPage(2);
@@ -97,10 +83,10 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                 setIsScrollLocked(true);
             },
         },
-        { name: 'Scoreboard', tooltip: 'Coming soon', opacity: '30%' },
-        { name: 'Elixir', tooltip: 'Coming soon', opacity: '30%' },
-        { name: 'Earnings', tooltip: 'Coming soon', opacity: '30%' },
-        { name: 'FAQ', tooltip: 'Coming soon', opacity: '30%' },
+        { name: 'Scoreboard', disabled: true },
+        { name: 'Elixir', disabled: true },
+        { name: 'Earnings', disabled: true },
+        { name: 'FAQ', disabled: true },
     ];
 
     const statistics = [
@@ -141,21 +127,10 @@ const Battlegrounds = ({ infoAccount, cards }) => {
 
     let wEthDecimals = 3;
 
-    const handleCompletePin = pin => {
-        isValidPin && setIsValidPin(false); // reset invalid pin flag
-
-        const { name } = infoAccount;
-        const account = checkPin(name, pin);
-        if (account) {
-            setIsValidPin(true);
-            setPassphrase(account.passphrase);
-        }
-    };
-
     useEffect(() => {
         const filterCards = async () => {
             let battleCount = await getBattleCount();
-            setbattleCount(battleCount);
+            setBattleCount(battleCount);
 
             const userInfo = await getUserState();
             if (userInfo.balance) {
@@ -186,106 +161,20 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         return res;
     };
 
-    const maxAmountGems = GEMBalance;
-    const maxAmountWeth = WETHBalance;
-
-    const increment = () => {
-        if (amount < maxAmountGems) {
-            setAmount(amount + 1);
-        }
-    };
-
-    const decrement = () => {
-        if (amount > 0) {
-            setAmount(amount - 1);
-        }
-    };
-    const incrementWeth = () => {
-        if (amount < maxAmountWeth) {
-            setAmount(amount + 0.0001);
-        }
-    };
-
-    const decrementWeth = () => {
-        if (amount > 0) {
-            setAmount(amount - 0.0001);
-        }
-    };
-
-    const handleChange = event => {
-        const value = parseInt(event.target.value, 10);
-        if (!isNaN(value) && value >= 0 && value <= maxAmountGems) {
-            setAmount(value);
-        }
-    };
-
-    const handleSendSGEMS = async () => {
-        if (!isValidPin) {
-            return errorToast('The pin is invalid', toast);
-        }
-
-        await sendGEMSToOmno({ quantity: amount, passPhrase: passphrase });
-        setAmount(0);
-        onCloseGems();
-    };
-    const handleWithdrawGems = async () => {
-        if (!isValidPin) {
-            return errorToast('The pin is invalid', toast);
-        }
-
-        await withdrawGEMsFromOmno({ quantity: amount, passPhrase: passphrase });
-        setAmount(0);
-        onCloseGems();
-    };
-    const handleSendWeth = async () => {
-        if (!isValidPin) {
-            return errorToast('The pin is invalid', toast);
-        }
-
-        await sendWETHToOmno({ quantity: amount, passPhrase: passphrase });
-        setAmount(0);
-        onCloseWeth();
-    };
-    const handleWithdrawWeth = async () => {
-        if (!isValidPin) {
-            return errorToast('The pin is invalid', toast);
-        }
-
-        await withdrawWETHFromOmno({ quantity: amount, passPhrase: passphrase });
-        setAmount(0);
-        onCloseWeth();
-    };
-
     return (
         <>
             <Box className="landscape-only">
                 <SendGEMsToOmno
+                    gemsModalMode={gemsModalMode}
+                    infoAccount={infoAccount}
                     isOpen={isOpenGems}
                     onClose={onCloseGems}
-                    decrement={decrement}
-                    amount={amount}
-                    handleChange={handleChange}
-                    maxAmount={maxAmountGems}
-                    increment={increment}
-                    handleCompletePin={handleCompletePin}
-                    isValidPin={isValidPin}
-                    handleSendSGEMS={handleSendSGEMS}
-                    handleWithdrawGems={handleWithdrawGems}
-                    gemsModalMode={gemsModalMode}
                 />
                 <SendWethToOmno
+                    wethModalMode={wethModalMode}
+                    infoAccount={infoAccount}
                     isOpen={isOpenWeth}
                     onClose={onCloseWeth}
-                    decrement={decrementWeth}
-                    amount={amount}
-                    handleChange={handleChange}
-                    maxAmount={maxAmountWeth}
-                    increment={incrementWeth}
-                    handleCompletePin={handleCompletePin}
-                    isValidPin={isValidPin}
-                    handleSendWeth={handleSendWeth}
-                    handleWithdrawWeth={handleWithdrawWeth}
-                    wethModalMode={wethModalMode}
                 />
                 {openBattle && (
                     <BattleWindow
@@ -314,8 +203,8 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                 <ScrollLock isLocked={isScrollLocked} />
                 <Box position={'relative'} ml={6} mt={5}>
                     <Img src={logo} color={'#FFF'} />
-                    <Stack direction={'row'} gap={4}>
-                        <Stack direction={'column'} gap={4} ml={'80px'} mt={'15px'}>
+                    <Stack direction={'row'}>
+                        <Stack direction={'column'} ml={'80px'} mt={'15px'}>
                             <Text color={'black'} fontSize={'sm'} ml={-2} fontFamily={'Chelsea Market, system-ui'}>
                                 CURRENCIES
                             </Text>
@@ -359,6 +248,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                             </Menu>
                             <Menu>
                                 <MenuButton
+                                    mt={1}
                                     color={'black'}
                                     bgColor={bgColor}
                                     borderColor={borderColor}
@@ -409,9 +299,9 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                     m={5}
                                     key={index}
                                     onClick={btn.onclick}
-                                    opacity={btn.opacity}
-                                    cursor={'default'}
-                                    title={btn.tooltip}>
+                                    opacity={btn.disabled ? '30%' : null}
+                                    cursor={btn.disabled ? 'default' : 'pointer'}
+                                    title={btn.disabled ? 'Coming soon...' : null}>
                                     {btn.name}
                                 </Box>
                             ))}

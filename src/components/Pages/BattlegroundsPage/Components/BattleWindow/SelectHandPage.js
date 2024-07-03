@@ -153,7 +153,10 @@ export const SelectHandPage = ({
                 <Stack direction={'column'} mx={'auto'} mt={8}>
                     <Heading color={'#FFF'} size={'xl'} fontFamily={'Chelsea Market, system-ui'}>
                         {' '}
-                        CONQUER <span style={{ color: '#D08FB0' }}>{locations[arenaInfo.id - 1].name}</span>
+                        CONQUER{' '}
+                        <span style={{ color: '#D08FB0' }}>
+                            {locations[arenaInfo.id - 1].name}, {domainName}
+                        </span>{' '}
                     </Heading>
                     <Text color={'#FFF'} textAlign={'center'} fontSize={'large'}>
                         SELECT YOUR ARMY
@@ -168,7 +171,7 @@ export const SelectHandPage = ({
                                     zIndex={9}
                                     position="absolute"
                                     top="0"
-                                    left="0"
+                                    right="0"
                                     backgroundColor={'#D08FB0'}
                                     borderRadius={'full'}
                                     onClick={() => deleteCard(index)}
@@ -180,11 +183,19 @@ export const SelectHandPage = ({
                         ) : (
                             <Box
                                 key={index}
-                                backgroundColor={'#465A5A'}
-                                w={'150px'}
-                                h={'200px'}
-                                gap={'15px'}
-                                display={'flex'}
+                                backgroundColor="#465A5A"
+                                w="150px"
+                                h="200px"
+                                position="relative"
+                                gap="15px"
+                                display="flex"
+                                sx={{
+                                    border: index === 0 ? '2px solid #D08FB0' : 'none',
+                                    borderImage:
+                                        index === 0
+                                            ? `linear-gradient(90deg, rgba(163,161,81,1) 0%, rgba(219,227,82,1) 35%, rgba(244,135,148,1) 100%) 1`
+                                            : 'none',
+                                }}
                                 onClick={() => openInventory(index)}>
                                 <Text
                                     fontFamily={'Chelsea Market, system-ui'}
@@ -193,6 +204,16 @@ export const SelectHandPage = ({
                                     m={'auto'}>
                                     +
                                 </Text>
+                                {index === 0 ? (
+                                    <Text
+                                        pos={'absolute'}
+                                        bottom={0}
+                                        left={1}
+                                        fontFamily={'Chelsea Market, system-ui'}
+                                        color={'#fff'}>
+                                        Hero slot{' '}
+                                    </Text>
+                                ) : null}
                             </Box>
                         )
                     )}
@@ -267,10 +288,10 @@ export const SelectHandPage = ({
                     Start battle
                 </Button>
             </Box>
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={onClose} isCentered>
                 <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Insert your pin</ModalHeader>
+                <ModalContent bgColor={'#ebb2b9'} border={'2px solid #F48794'}>
+                    <ModalHeader mx={'auto'}>Insert your pin</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Center>
@@ -292,7 +313,7 @@ export const SelectHandPage = ({
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={handleStartBattle}>
+                        <Button color={'#fff'} bgColor="#F48794" mx={'auto'} w={'80%'} onClick={handleStartBattle}>
                             Play
                         </Button>
                     </ModalFooter>

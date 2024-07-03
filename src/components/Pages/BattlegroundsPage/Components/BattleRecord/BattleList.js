@@ -56,7 +56,10 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
 
     const formatDate = timestamp => {
         const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
-        const battleStamp = new Date(eb.getTime() + timestamp * 1000);
+        let battleStamp = new Date(eb.getTime() + timestamp * 1000);
+
+        // Adding to hours to balance the ARDOR timestamp to GMT+2
+        battleStamp = new Date(battleStamp.getTime() + 7200000);
 
         const hours = battleStamp.getUTCHours().toString().padStart(2, '0');
         const minutes = battleStamp.getUTCMinutes().toString().padStart(2, '0');
@@ -95,7 +98,6 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
     return (
         <>
             <Overlay isVisible={true} handleClose={handleClose} />
-
             <Box
                 pos={'fixed'}
                 bgColor={'#1F2323'}
@@ -114,7 +116,7 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                     icon={<CloseIcon />}
                     _hover={{ background: 'transparent' }}
                     position="absolute"
-                    toh="100%"
+                    top={2}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"

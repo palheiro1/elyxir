@@ -47,7 +47,7 @@ const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdi
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
     const input = getInputProps();
-    const textColor = useColorModeValue('black', 'white');
+    const textColor = useColorModeValue(!canEdit ? 'black' : 'white', canEdit ? 'white' : 'white');
 
     return (
         <Stack direction={'row'} minWidth="375px" spacing={4}>
@@ -76,6 +76,7 @@ const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdi
                                 rounded="none"
                                 border="none"
                                 textAlign="center"
+                                disabled={true}
                                 {...input}
                                 onChange={() => handleEdit(card.asset, input.value)}
                             />
