@@ -15,11 +15,13 @@ import {
     Stack,
     Text,
     Tooltip,
+    useToast,
 } from '@chakra-ui/react';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import { addressToAccountId, getAccount } from '../../../../services/Ardor/ardorInterface';
 import { formatAddress } from '../../../../services/Battlegrounds/Battlegrounds';
+import { copyToast } from '../../../../utils/alerts';
 
 export const MapPoint = ({
     name,
@@ -37,9 +39,16 @@ export const MapPoint = ({
     const [defenderCards, setDefenderCards] = useState(null);
     const [myArena, setMyArena] = useState(false);
 
+    const toast = useToast();
+
     const clickButton = () => {
         handleClick(id);
         handleStartBattle();
+    };
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(infoAccount.accountRs);
+        copyToast('ARDOR address', toast);
     };
 
     useEffect(() => {
@@ -88,8 +97,8 @@ export const MapPoint = ({
                                 gap={5}
                                 mx={'auto'}>
                                 <>
-                                    <Tooltip label={defenderInfo.accountRS} hasArrow placement="right">
-                                        <Text>
+                                    <Tooltip label={`Copy: ${defenderInfo.accountRS}`} hasArrow placement="right">
+                                        <Text onClick={copyToClipboard}>
                                             Defender of the land:{' '}
                                             {defenderInfo.name || formatAddress(defenderInfo.accountRS)}
                                         </Text>

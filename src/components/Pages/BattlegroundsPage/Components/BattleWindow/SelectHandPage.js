@@ -30,6 +30,7 @@ import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { sendCardsToBattle } from '../../../../../services/Ardor/omnoInterface';
 import { errorToast } from '../../../../../utils/alerts';
 import { checkPin } from '../../../../../utils/walletUtils';
+import { formatAddress } from '../../../../../services/Battlegrounds/Battlegrounds';
 
 export const SelectHandPage = ({
     arenaInfo,
@@ -50,7 +51,7 @@ export const SelectHandPage = ({
         { name: 'Level', value: 'Epic' },
         { name: 'Medium', value: arenaInfo.mediumId },
         { name: 'Team size', value: 5 },
-        { name: 'Defender', value: defenderInfo.name || 'Unknown' },
+        { name: 'Defender', value: defenderInfo.name || formatAddress(defenderInfo.accountRS) },
     ];
     /* mediums: 
         1 -> terrestial 

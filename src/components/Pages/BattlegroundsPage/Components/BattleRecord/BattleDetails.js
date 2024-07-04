@@ -203,7 +203,7 @@ const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack,
                         <span style={{ color: '#FFF' }}> {defenderInfo.name || defenderInfo.accountRS} </span>
                     </Text>
                 </Stack>
-                <Stack direction={'column'} ml={'22%'}>
+                <Stack direction={'column'}>
                     {battleResults &&
                         battleResults.battleResult.map((item, index) => {
                             let attackerCard = cards.find(card => {
@@ -215,7 +215,13 @@ const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack,
                             });
 
                             return (
-                                <Stack direction={'row'} key={index} display={'flex'} alignItems={'center'} spacing={4}>
+                                <Stack
+                                    direction={'row'}
+                                    key={index}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                    alignItems={'center'}
+                                    spacing={4}>
                                     <Stack fontSize={'xs'} align={'flex-start'}>
                                         <Text>{attackerCard.name}</Text>
                                         <Text>
@@ -255,7 +261,7 @@ const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack,
                                             {item.attackerRoll}
                                         </Text>
                                     </Box>
-                                    <Box position="relative" width="10%">
+                                    <Box position="relative" width="8%">
                                         <Img src={attackerCard.cardImgUrl} width="100%" />
                                         {item.defenderValue >= item.attackerValue && (
                                             <Box
@@ -275,7 +281,7 @@ const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack,
                                         )}
                                     </Box>
                                     <Text> vs </Text>
-                                    <Box position="relative" width="10%">
+                                    <Box position="relative" width="8%">
                                         <Img src={defenderCard.cardImgUrl} width="100%" />
                                         {item.defenderValue <= item.attackerValue && (
                                             <Box
