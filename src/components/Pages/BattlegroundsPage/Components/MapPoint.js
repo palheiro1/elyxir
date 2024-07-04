@@ -34,7 +34,6 @@ export const MapPoint = ({
     infoAccount,
 }) => {
     const [defenderInfo, setDefenderInfo] = useState(null);
-    console.log('🚀 ~ defenderInfo:', defenderInfo);
     const [defenderCards, setDefenderCards] = useState(null);
     const [myArena, setMyArena] = useState(false);
 
