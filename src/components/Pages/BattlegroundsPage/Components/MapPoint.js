@@ -19,6 +19,7 @@ import {
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import { addressToAccountId, getAccount } from '../../../../services/Ardor/ardorInterface';
+import { formatAddress } from '../../../../services/Battlegrounds/Battlegrounds';
 
 export const MapPoint = ({
     name,
@@ -33,6 +34,7 @@ export const MapPoint = ({
     infoAccount,
 }) => {
     const [defenderInfo, setDefenderInfo] = useState(null);
+    console.log('🚀 ~ defenderInfo:', defenderInfo);
     const [defenderCards, setDefenderCards] = useState(null);
     const [myArena, setMyArena] = useState(false);
 
@@ -87,7 +89,12 @@ export const MapPoint = ({
                                 gap={5}
                                 mx={'auto'}>
                                 <>
-                                    <Text>Defender of the land: {defenderInfo.name || 'Unknown'}</Text>
+                                    <Tooltip label={defenderInfo.accountRS} hasArrow placement="right">
+                                        <Text>
+                                            Defender of the land:{' '}
+                                            {defenderInfo.name || formatAddress(defenderInfo.accountRS)}
+                                        </Text>
+                                    </Tooltip>
                                     <Box>
                                         Defender's cards:
                                         <Stack direction={'row'}>

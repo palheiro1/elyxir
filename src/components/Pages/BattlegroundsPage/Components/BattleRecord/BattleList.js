@@ -24,7 +24,20 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
 
             const accountId = await addressToAccountId(accountRs);
             let battles = await getUserBattles(accountId);
-            battles = battles.filter(battle => battle.battleResult !== undefined);
+            battles = battles
+                .filter(battle => battle.battleResult !== undefined)
+                .map(battle => {
+                    if (battle.defenderArmy.account === accountId) {
+                        return {
+                            ...battle,
+                            isUserDefending: true,
+                        };
+                    }
+                    return {
+                        ...battle,
+                        isUserDefending: false,
+                    };
+                });
 
             setUserBattles(battles.reverse());
         };
@@ -37,12 +50,17 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
             if (userBattles && arenasInfo) {
                 const details = await Promise.all(
                     userBattles.map(async battle => {
-                        const arenaInfo = await getArenaInfo(battle.arenaId, battle.defenderArmy.account);
+                        const arenaInfo = await getArenaInfo(
+                            battle.arenaId,
+                            battle.defenderArmy.account,
+                            battle.attackerArmy.account
+                        );
                         return {
                             ...battle,
                             date: formatDate(battle.economicCluster.timestamp),
                             arenaName: arenaInfo.arena.name,
                             defenderDetails: arenaInfo.defender,
+                            attackerDetails: arenaInfo.attacker,
                         };
                     })
                 );
@@ -69,13 +87,15 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
         return `${hours}:${minutes} ${day}/${month}`;
     };
 
-    const getArenaInfo = async (arenaId, defenderAccount) => {
+    const getArenaInfo = async (arenaId, defenderAccount, attackerAccount) => {
         if (arenasInfo) {
             let arena = arenasInfo.find(arena => arena.id === arenaId);
             let defender = await getAccount(defenderAccount);
+            let attacker = await getAccount(attackerAccount);
             let name = locations.find(item => item.id === arenaId);
             return {
                 defender: defender,
+                attacker: attacker,
                 arena: { ...name, ...arena },
             };
         }
@@ -161,6 +181,13 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                                             color={'#FFF'}
                                             fontSize={'lg'}
                                             textAlign={'center'}>
+                                            Position
+                                        </Th>
+                                        <Th
+                                            fontFamily={'Chelsea Market, System'}
+                                            color={'#FFF'}
+                                            fontSize={'lg'}
+                                            textAlign={'center'}>
                                             Result
                                         </Th>
                                     </Tr>
@@ -195,7 +222,11 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                                                         display="flex"
                                                         alignItems="center"
                                                         justifyContent="center">
-                                                        {item.defenderDetails.name || 'Unknown'}
+                                                        {item.isUserDefending
+                                                            ? item.attackerDetails.name ||
+                                                              item.attackerDetails.accountRS
+                                                            : item.defenderDetails.name ||
+                                                              item.defenderDetails.accountRS}
                                                     </Box>
                                                 </Td>
                                                 <Td textAlign={'center'} p={2}>
@@ -212,14 +243,30 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                                                 </Td>
                                                 <Td textAlign={'center'} p={2}>
                                                     <Box
+                                                        bgColor={bgColor}
+                                                        p={3}
+                                                        fontFamily={'Chelsea Market, System'}
+                                                        h="100%"
+                                                        display="flex"
+                                                        alignItems="center"
+                                                        justifyContent="center">
+                                                        {item.isUserDefending ? 'DEFENDER' : 'ATTACKER'}
+                                                    </Box>
+                                                </Td>
+                                                <Td textAlign={'center'} p={2}>
+                                                    <Box
                                                         h="100%"
                                                         display="flex"
                                                         p={3}
                                                         alignItems="center"
                                                         justifyContent="center"
-                                                        bgColor={item.isDefenderWin ? '#FF6058' : '#66FA7C'}
+                                                        bgColor={
+                                                            item.isUserDefending === item.isDefenderWin
+                                                                ? '#66FA7C'
+                                                                : '#FF6058'
+                                                        }
                                                         fontFamily={'Chelsea Market, System'}>
-                                                        {item.isDefenderWin ? 'LOST' : 'WON'}
+                                                        {item.isUserDefending === item.isDefenderWin ? 'WON' : 'LOST'}
                                                     </Box>
                                                 </Td>
                                             </Tr>
@@ -250,6 +297,8 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                         arenaInfo={selectedArena}
                         infoAccount={infoAccount}
                         defenderInfo={battleDetails.find(battle => battle.id === selectedBattle).defenderDetails}
+                        attackerInfo={battleDetails.find(battle => battle.id === selectedBattle).attackerDetails}
+                        isUserDefending={battleDetails.find(battle => battle.id === selectedBattle).isUserDefending}
                         handleGoBack={handleGoBack}
                     />
                 )}

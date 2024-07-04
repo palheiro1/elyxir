@@ -1,11 +1,11 @@
 import { Box, IconButton, Img, Spinner, Stack, Text } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { getBattleById, getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
+import { formatAddress, getBattleById, getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 import '@fontsource/chelsea-market';
 import locations from '../../assets/LocationsEnum';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 
-const BattleDetails = ({ infoAccount, cards, arenaInfo, defenderInfo, battleId, handleGoBack }) => {
+const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack, attackerInfo }) => {
     const [battleInfo, setBattleInfo] = useState(null);
     const [capturedCard, setCapturedCard] = useState(null);
     const [medium, setMedium] = useState();
@@ -166,7 +166,10 @@ const BattleDetails = ({ infoAccount, cards, arenaInfo, defenderInfo, battleId, 
                 <Stack direction={'row'} spacing={10} mx={'auto'} justifyContent={'center'} w={'60%'}>
                     <Text color={battleInfo.isDefenderWin ? '#E14942' : '#EDBA2B'}>
                         {battleInfo.isDefenderWin ? 'LOSER: ' : 'WINNER: '}{' '}
-                        <span style={{ color: '#FFF' }}> {infoAccount.name}</span>
+                        <span style={{ color: '#FFF' }}>
+                            {' '}
+                            {attackerInfo.name || formatAddress(attackerInfo.accountRS)}
+                        </span>
                     </Text>
 
                     <Stack direction={'row'} alignItems={'center'} justifyContent={'center'}>
@@ -197,7 +200,7 @@ const BattleDetails = ({ infoAccount, cards, arenaInfo, defenderInfo, battleId, 
 
                     <Text color={battleInfo.isDefenderWin ? '#EDBA2B' : '#E14942'}>
                         {battleInfo.isDefenderWin ? 'WINNER: ' : 'LOSER: '}{' '}
-                        <span style={{ color: '#FFF' }}> {defenderInfo.name || 'Unknown'} </span>
+                        <span style={{ color: '#FFF' }}> {defenderInfo.name || defenderInfo.accountRS} </span>
                     </Text>
                 </Stack>
                 <Stack direction={'column'} ml={'22%'}>
