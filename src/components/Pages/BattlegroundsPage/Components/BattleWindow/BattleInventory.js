@@ -36,8 +36,8 @@ const BattleInventory = ({ setOpenIventory, filteredCards, index, handBattleCard
                         {filteredCards
                             .filter(
                                 card =>
-                                    (index === 0 && card.rarity !== 'Common') ||
-                                    (index !== 0 && card.rarity === 'Common')
+                                    (index === 0 && (card.rarity === 'Epic' || card.rarity === 'Special')) ||
+                                    (index !== 0 && (card.rarity === 'Common' || card.rarity === 'Rare'))
                             )
                             .map((card, i) => {
                                 return card.asset.length <= 19 &&

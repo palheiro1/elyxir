@@ -12,6 +12,7 @@ import {
     Text,
     useColorModeValue,
     useDisclosure,
+    useForceUpdate,
 } from '@chakra-ui/react';
 import { Maps } from './Maps';
 import React, { useEffect, useState } from 'react';
@@ -51,6 +52,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [openBattleRecord, setOpenBattleRecord] = useState(false);
     const [battleCount, setBattleCount] = useState(null);
     const [parseWETH, setParseWETH] = useState(0);
+    const [updateState, setUpdateState] = useState(false);
 
     const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
     const { isOpen: isOpenGems, onOpen: onOpenGems, onClose: onCloseGems } = useDisclosure();
@@ -119,7 +121,9 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const handleCloseBattle = () => {
         setOpenBattle(false);
         setIsScrollLocked(false);
+        setUpdateState(prevState => !prevState);
     };
+    
     const handleCloseBattleRecord = () => {
         setOpenBattleRecord(false);
         setIsScrollLocked(false);
@@ -225,7 +229,11 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                     <Img src={logo} color={'#FFF'} />
                     <Stack direction={'row'}>
                         <Stack direction={'column'} ml={'80px'} mt={'15px'}>
-                            <Text color={'black'} fontSize={'sm'} ml={-2} fontFamily={'Chelsea Market, system-ui'}>
+                            <Text
+                                color={useColorModeValue('black', 'white')}
+                                fontSize={'sm'}
+                                ml={-2}
+                                fontFamily={'Chelsea Market, system-ui'}>
                                 CURRENCIES
                             </Text>
                             <Menu>
@@ -249,9 +257,11 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 </MenuButton>
                                 <Portal>
                                     <MenuList>
-                                        <MenuItem onClick={() => handleOpenGemsModal('Send')}>Add GEM to Game</MenuItem>
+                                        <MenuItem onClick={() => handleOpenGemsModal('Send')}>
+                                            Send GEM to Battlegrounds
+                                        </MenuItem>
                                         <MenuItem onClick={() => handleOpenGemsModal('Withdraw')}>
-                                            Send GEM to Wallet
+                                            Withdraw GEM from Battlegrounds
                                         </MenuItem>
                                     </MenuList>
                                 </Portal>
@@ -285,10 +295,10 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 <Portal>
                                     <MenuList>
                                         <MenuItem onClick={() => handleOpenWethModal('Send')}>
-                                            Add WETH to Game
+                                            Send WETH to Battlegrounds
                                         </MenuItem>
                                         <MenuItem onClick={() => handleOpenWethModal('Withdraw')}>
-                                            Send WETH to Wallet
+                                            Withdraw WETH from Battlegrounds
                                         </MenuItem>
                                     </MenuList>
                                 </Portal>

@@ -115,12 +115,14 @@ const SendWethToOmno = ({ isOpen, onClose, infoAccount, wethModalMode }) => {
         <Modal isOpen={isOpen} onClose={handleClose}>
             <ModalOverlay onClose={handleClose} />
             <ModalContent bgColor={'#ebb2b9'} border={'2px solid #F48794'}>
-                <ModalHeader mx={'auto'}>{wethModalMode ? 'SEND' : 'WITHDRAW'} WETH</ModalHeader>
+                <ModalHeader mx={'auto'} color={'#000'}>
+                    {wethModalMode ? 'SEND' : 'WITHDRAW'} WETH
+                </ModalHeader>
                 <ModalCloseButton onClick={handleClose} />
                 <ModalBody display={'flex'}>
                     <Stack direction={'column'} mx={'auto'}>
                         <Center>
-                            <FormControl variant="floatingModalTransparent" id="Amount" my={4} >
+                            <FormControl variant="floatingModalTransparent" id="Amount" my={4}>
                                 <HStack spacing={0} border="1px" rounded="lg" borderColor={'#F48794'}>
                                     <Button
                                         onClick={decrementWeth}
@@ -136,7 +138,7 @@ const SendWethToOmno = ({ isOpen, onClose, infoAccount, wethModalMode }) => {
                                         onChange={handleChange}
                                         rounded="none"
                                         border="none"
-                                        color="black"
+                                        color="#FFF"
                                         textAlign="center"
                                         fontWeight="bold"
                                         size="lg"
@@ -156,7 +158,7 @@ const SendWethToOmno = ({ isOpen, onClose, infoAccount, wethModalMode }) => {
                                 </HStack>
                                 <FormLabel>
                                     {' '}
-                                    <Text color={'#000'}>Amount to send (max: {maxAmount})</Text>
+                                    <Text color={'#FFF'}>Amount to send (max: {maxAmount})</Text>
                                 </FormLabel>
                             </FormControl>
                         </Center>

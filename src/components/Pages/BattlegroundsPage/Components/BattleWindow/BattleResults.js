@@ -4,6 +4,8 @@ import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface
 import { getLastUserBattle, getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 import '@fontsource/chelsea-market';
 import locations from '../../assets/LocationsEnum';
+import Lottie from 'react-lottie';
+import animationData from '../../assets/Animation-1720173159051.json';
 
 const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName, defenderInfo }) => {
     const [battleInfo, setBattleInfo] = useState(null);
@@ -125,6 +127,15 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName,
         }
     }, [battleResults, calculateBonus, cards]);
 
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice',
+        },
+    };
+
     return battleInfo ? (
         <Box
             display={'flex'}
@@ -144,8 +155,9 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName,
             textAlign={'center'}>
             {battleInfo === 'pending' ? (
                 <Box position={'absolute'} left={'50%'} top={'50%'} transform={'translate(-50%, -50%)'}>
+                    <Lottie options={defaultOptions} height={150} width={150} />
                     Battle in progress...
-                    <br></br>Results appears after the next block
+                    <br></br>Results appear after the next block
                 </Box>
             ) : (
                 <Stack direction={'column'} h={'20%'} mx={'auto'}>
