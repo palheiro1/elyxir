@@ -57,7 +57,7 @@ const HCountdown = ({ bountyTimer, numParticipants = 0, bountyBalance = 0, bount
                         </VStack>
                     </Stack>
                     <Stack direction={{ base: 'column', xl: 'row' }}>
-                        <Image src="/images/criatures/bahana.png" w="80px" />
+                        <Image src="/images/criatures/bahana.png" w="100px" />
                         <VStack align="flex-start">
                             <Text color={textColor} fontSize={{ base: 'xl', xl: '2xl' }} fontWeight="bold" mb={-3}>
                                 7 Bahana
