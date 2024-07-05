@@ -30,7 +30,7 @@ import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { sendCardsToBattle } from '../../../../../services/Ardor/omnoInterface';
 import { errorToast } from '../../../../../utils/alerts';
 import { checkPin } from '../../../../../utils/walletUtils';
-import { formatAddress } from '../../../../../services/Battlegrounds/Battlegrounds';
+import { formatAddress } from '../../Utils/BattlegroundsUtils';
 
 export const SelectHandPage = ({
     arenaInfo,

@@ -73,9 +73,3 @@ export const getLastUserBattle = async (accountId, currentTime) => {
         })
         .catch(error => error);
 };
-
-export function formatAddress(address) {
-    let firstPart = address.slice(0, 3);
-    let lastPart = address.slice(-5);
-    return `${firstPart}...${lastPart}`;
-}

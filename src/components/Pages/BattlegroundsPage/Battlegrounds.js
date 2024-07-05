@@ -161,6 +161,26 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         return res;
     };
 
+    const GemMode = {
+        Withdraw: false,
+        Send: true,
+    };
+
+    const WethMode = {
+        Withdraw: false,
+        Send: true,
+    };
+
+    const handleOpenGemsModal = mode => {
+        setGemsModalMode(GemMode[mode]);
+        onOpenGems();
+    };
+
+    const handleOpenWethModal = mode => {
+        setWethModalMode(WethMode[mode]);
+        onOpenWeth();
+    };
+
     return (
         <>
             <Box className="landscape-only">
@@ -229,18 +249,8 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 </MenuButton>
                                 <Portal>
                                     <MenuList>
-                                        <MenuItem
-                                            onClick={() => {
-                                                setGemsModalMode(true);
-                                                onOpenGems();
-                                            }}>
-                                            Add GEM to Game
-                                        </MenuItem>
-                                        <MenuItem
-                                            onClick={() => {
-                                                setGemsModalMode(false);
-                                                onOpenGems();
-                                            }}>
+                                        <MenuItem onClick={() => handleOpenGemsModal('Send')}>Add GEM to Game</MenuItem>
+                                        <MenuItem onClick={() => handleOpenGemsModal('Withdraw')}>
                                             Send GEM to Wallet
                                         </MenuItem>
                                     </MenuList>
@@ -274,18 +284,10 @@ const Battlegrounds = ({ infoAccount, cards }) => {
 
                                 <Portal>
                                     <MenuList>
-                                        <MenuItem
-                                            onClick={() => {
-                                                setWethModalMode(true);
-                                                onOpenWeth();
-                                            }}>
+                                        <MenuItem onClick={() => handleOpenWethModal('Send')}>
                                             Add WETH to Game
                                         </MenuItem>
-                                        <MenuItem
-                                            onClick={() => {
-                                                setWethModalMode(false);
-                                                onOpenWeth();
-                                            }}>
+                                        <MenuItem onClick={() => handleOpenWethModal('Withdraw')}>
                                             Send WETH to Wallet
                                         </MenuItem>
                                     </MenuList>

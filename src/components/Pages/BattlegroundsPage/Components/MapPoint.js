@@ -20,8 +20,8 @@ import {
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import { addressToAccountId, getAccount } from '../../../../services/Ardor/ardorInterface';
-import { formatAddress } from '../../../../services/Battlegrounds/Battlegrounds';
 import { copyToast } from '../../../../utils/alerts';
+import { formatAddress } from '../Utils/BattlegroundsUtils';
 
 export const MapPoint = ({
     name,

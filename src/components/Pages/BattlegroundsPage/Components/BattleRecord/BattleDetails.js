@@ -1,9 +1,10 @@
 import { Box, IconButton, Img, Spinner, Stack, Text } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { formatAddress, getBattleById, getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
+import { getBattleById, getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 import '@fontsource/chelsea-market';
 import locations from '../../assets/LocationsEnum';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
+import { formatAddress } from '../../Utils/BattlegroundsUtils';
 
 const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack, attackerInfo }) => {
     const [battleInfo, setBattleInfo] = useState(null);
