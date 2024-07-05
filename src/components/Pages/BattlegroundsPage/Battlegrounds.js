@@ -12,7 +12,6 @@ import {
     Text,
     useColorModeValue,
     useDisclosure,
-    useForceUpdate,
 } from '@chakra-ui/react';
 import { Maps } from './Maps';
 import React, { useEffect, useState } from 'react';
@@ -123,7 +122,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         setIsScrollLocked(false);
         setUpdateState(prevState => !prevState);
     };
-    
+
     const handleCloseBattleRecord = () => {
         setOpenBattleRecord(false);
         setIsScrollLocked(false);
