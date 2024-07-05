@@ -57,13 +57,13 @@ const HCountdown = ({ bountyTimer, numParticipants = 0, bountyBalance = 0, bount
                         </VStack>
                     </Stack>
                     <Stack direction={{ base: 'column', xl: 'row' }}>
-                        <Image src="/images/criatures/sumanga.png" w="80px" />
+                        <Image src="/images/criatures/bahana.png" w="80px" />
                         <VStack align="flex-start">
                             <Text color={textColor} fontSize={{ base: 'xl', xl: '2xl' }} fontWeight="bold" mb={-3}>
-                                7 Sumangâ
+                                7 Bahana
                             </Text>
                             <Text color={textColor} fontSize="md">
-                                ({Number(bountyBalanceUSD.Sumanga).toFixed(2)} USD)
+                                ({Number(bountyBalanceUSD.SpecialCard).toFixed(2)} USD)
                             </Text>
                         </VStack>
                     </Stack>
