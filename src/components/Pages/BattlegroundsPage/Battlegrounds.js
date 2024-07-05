@@ -110,6 +110,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const handleCloseInventory = () => {
         setOpenInventory(false);
         setIsScrollLocked(false);
+        setUpdateState(!updateState);
     };
 
     const closeModal = () => {
@@ -120,7 +121,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const handleCloseBattle = () => {
         setOpenBattle(false);
         setIsScrollLocked(false);
-        setUpdateState(prevState => !prevState);
+        setUpdateState(!updateState);
     };
 
     const handleCloseBattleRecord = () => {
@@ -154,7 +155,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         };
         filterCards();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cards, infoAccount]);
+    }, [cards, infoAccount, updateState]);
 
     const getUserState = async () => {
         const accountId = addressToAccountId(accountRs);
