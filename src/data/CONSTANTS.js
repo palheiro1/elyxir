@@ -69,8 +69,8 @@ export const NQTDIVIDER = 100000000;
 
 // ---------------------------------------------
 
-export const ACTUAL_SEASON = 6;
-export const IS_BOUNTY_ENABLED = false;
+export const ACTUAL_SEASON = 7;
+export const IS_BOUNTY_ENABLED = true;
 
 // ---------------------------------------------
 // ---------- NEW ECONOMICS WITH OMNO ----------
