@@ -124,9 +124,6 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                     _hover={{ background: 'transparent' }}
                     position="absolute"
                     top={2}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
                     right={2}
                     zIndex={999}
                     onClick={handleClose}

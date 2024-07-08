@@ -15,7 +15,7 @@ const locations = [
     { id: 14, name: 'Tahiti', x: 924, y: 291 },
     { id: 15, name: 'Timor', x: 786, y: 320 },
     { id: 16, name: 'Kiribati', x: 887, y: 259 },
-    { id: 17, name: 'Palawa', x: 757, y: 523 },
+    { id: 17, name: 'Palawa', x: 757, y: 521 },
     { id: 18, name: 'Salomon', x: 895, y: 340 },
     { id: 19, name: 'Maori', x: 828, y: 485 },
     { id: 20, name: 'Noongar', x: 592, y: 413 },

@@ -318,7 +318,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 </Box>
                             ))}
                         </Box>
-                        <Stack ml={'80px'}>
+                        <Stack ml={'50px'}>
                             <Maps
                                 handleSelectArena={handleSelectArena}
                                 infoAccount={infoAccount}
