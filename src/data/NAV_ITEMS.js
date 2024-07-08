@@ -6,12 +6,12 @@
  * @author Jesús Sánchez Fernández
  */
 export const NAV_ITEMS = [
+    // {
+    //     label: 'About',
+    //     href: 'https://mythicalbeings.io/',
+    // },
     {
-        label: 'About',
-        href: 'https://mythicalbeings.io/',
-    },
-    {
-        label: 'How to play',
+        label: 'How to play?',
         href: 'https://mythicalbeings.io/how-to-play.html',
     },
     {
