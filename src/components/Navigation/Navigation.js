@@ -96,9 +96,9 @@ const FooterCentrado = () => {
             <Stack direction={'column'} w="100%">
                 <Center>
                     <Stack direction={'column'} align="center">
-                        <Logo key="logo" isLogoGame={false} m={1} />
+                        <Logo key="logo" isLogoGame={false} w="4rem" mt={1} />
 
-                        <Text textAlign="center" fontSize="xs" textColor="#FFF" pb={2} w="100%">
+                        <Text textAlign="center" fontSize="2xs" textColor="#FFF" pb={2} w="100%">
                             © 2022 Tarasca GmbH. All Rights Reserved.
                             <br />
                             Build: {process.env.REACT_APP_GIT_SHA}
