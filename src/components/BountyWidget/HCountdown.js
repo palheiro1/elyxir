@@ -13,101 +13,109 @@ const HCountdown = ({ bountyTimer, numParticipants = 0, bountyBalance = 0, bount
     const textColor = useColorModeValue(selectedColor, 'white');
     const bgColor = cStyle === 0 ? 'rgba(47, 144, 136 ,0.35)' : 'rgba(59, 83, 151, 0.35)';
 
+    const CurrencyBounty = ({ currencyName, specialCard }) => {
+        if (currencyName && !specialCard) {
+            const currencyLower = currencyName.toLowerCase();
+            return (
+                <Stack direction={{ base: 'column', xl: 'row' }} margin={{ base: 'auto', lg: 'unset' }}>
+                    <Image
+                        src={`/images/currency/${currencyLower}.png`}
+                        w="80px"
+                        margin={{ base: 'auto', lg: 'unset' }}
+                    />
+                    <VStack align="flex-start">
+                        <Text color={textColor} fontSize={{ base: 'xl', xl: '2xl' }} fontWeight="bold" mb={-3}>
+                            {bountyBalance[currencyName]} {currencyName.toUpperCase()}
+                        </Text>
+                        <Text color={textColor} fontSize="md" margin={{ base: 'auto', lg: 'unset' }}>
+                            ({Number(bountyBalanceUSD[currencyName]).toFixed(2)} USD)
+                        </Text>
+                    </VStack>
+                </Stack>
+            );
+        }
+
+        const specialCardLower = specialCard.toLowerCase();
+
+        return (
+            <Stack direction={{ base: 'column', xl: 'row' }} margin={{ base: 'auto', lg: 'unset' }}>
+                <Image
+                    src={`/images/criatures/${specialCardLower}.png`}
+                    w="100px"
+                    margin={{ base: 'auto', lg: 'unset' }}
+                />
+                <VStack align="flex-start">
+                    <Text color={textColor} fontSize={{ base: 'xl', xl: '2xl' }} fontWeight="bold" mb={-3}>
+                        7 {specialCard.toUpperCase()}
+                    </Text>
+                    <Text color={textColor} fontSize="md" margin={{ base: 'auto', lg: 'unset' }}>
+                        ({Number(bountyBalanceUSD.SpecialCard).toFixed(2)} USD)
+                    </Text>
+                </VStack>
+            </Stack>
+        );
+    };
+
+    const Countdown = () => {
+        return (
+            <Center w="100%">
+                <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4} color={'white'} w="100%">
+                    <Box p={2} bg={bgColor} rounded="lg" minW="100px">
+                        <Text textAlign="center" fontSize="xl" fontWeight="bold">
+                            {bountyTimer?.days || 0}
+                        </Text>
+                        <Text textAlign="center" fontSize="xs">
+                            days
+                        </Text>
+                    </Box>
+
+                    <Box p={2} bg={bgColor} rounded="lg" minW="100px">
+                        <Text textAlign="center" fontSize="xl" fontWeight="bold">
+                            {bountyTimer?.hours || 0}
+                        </Text>
+                        <Text textAlign="center" fontSize="xs">
+                            hours
+                        </Text>
+                    </Box>
+
+                    <Box p={2} bg={bgColor} rounded="lg" minW="100px">
+                        <Text textAlign="center" fontSize="xl" fontWeight="bold">
+                            {bountyTimer?.minutes || 0}
+                        </Text>
+                        <Text textAlign="center" fontSize="xs">
+                            minutes
+                        </Text>
+                    </Box>
+                    <Box p={2} bg={bgColor} rounded="lg" minW="100px">
+                        <Text textAlign="center" fontSize="xl" fontWeight="bold">
+                            {numParticipants}
+                        </Text>
+                        <Text textAlign="center" fontSize="xs">
+                            Total claims in this round
+                        </Text>
+                    </Box>
+                </SimpleGrid>
+            </Center>
+        );
+    };
+
     return (
         <Center>
             <Stack direction="column" spacing={4} align="center" w="100%">
-                {/*<Stack direction={{ base: 'column', lg: 'row' }} w="100%" gap={12} align={"center"}> */}
                 <SimpleGrid
                     columns={{ base: 1, md: 2, lg: 4 }}
                     spacing={{ base: 4, lg: 8, xl: 12 }}
                     p={{ base: 2, lg: 4, xl: 8 }}
                     color={'white'}
                     w="100%">
-                    <Stack direction={{ base: 'column', xl: 'row' }}>
-                        <Image src="/images/currency/weth.png" w="80px" />
-                        <VStack align="flex-start">
-                            <Text color={textColor} fontSize={{ base: 'xl', xl: '2xl' }} fontWeight="bold" mb={-3}>
-                                {bountyBalance.wETH} WETH
-                            </Text>
-                            <Text color={textColor} fontSize="md">
-                                ({Number(bountyBalanceUSD.wETH).toFixed(2)} USD)
-                            </Text>
-                        </VStack>
-                    </Stack>
-                    <Stack direction={{ base: 'column', xl: 'row' }}>
-                        <Image src="/images/currency/gem.png" w="80px" />
-                        <VStack align="flex-start">
-                            <Text color={textColor} fontSize={{ base: 'xl', xl: '2xl' }} fontWeight="bold" mb={-3}>
-                                9000 GEM
-                            </Text>
-                            <Text color={textColor} fontSize="md">
-                                ({Number(bountyBalanceUSD.GEM).toFixed(2)} USD)
-                            </Text>
-                        </VStack>
-                    </Stack>
-                    <Stack direction={{ base: 'column', xl: 'row' }}>
-                        <Image src="/images/currency/mana.png" w="80px" />
-                        <VStack align="flex-start">
-                            <Text color={textColor} fontSize={{ base: 'xl', xl: '2xl' }} fontWeight="bold" mb={-3}>
-                                9000 MANA
-                            </Text>
-                            <Text color={textColor} fontSize="md">
-                                ({Number(bountyBalanceUSD.Mana).toFixed(2)} USD)
-                            </Text>
-                        </VStack>
-                    </Stack>
-                    <Stack direction={{ base: 'column', xl: 'row' }}>
-                        <Image src="/images/criatures/bahana.png" w="100px" />
-                        <VStack align="flex-start">
-                            <Text color={textColor} fontSize={{ base: 'xl', xl: '2xl' }} fontWeight="bold" mb={-3}>
-                                7 Bahana
-                            </Text>
-                            <Text color={textColor} fontSize="md">
-                                ({Number(bountyBalanceUSD.SpecialCard).toFixed(2)} USD)
-                            </Text>
-                        </VStack>
-                    </Stack>
+                    <CurrencyBounty currencyName={'wETH'} />
+                    <CurrencyBounty currencyName={'GEM'} />
+                    <CurrencyBounty currencyName={'Mana'} />
+                    <CurrencyBounty specialCard={'Bahana'} />
                 </SimpleGrid>
-                {/*</Stack> */}
-                <Center w="100%">
-                    <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4} color={'white'} w="100%">
-                        <Box p={2} bg={bgColor} rounded="lg" minW="100px">
-                            <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                                {bountyTimer?.days || 0}
-                            </Text>
-                            <Text textAlign="center" fontSize="xs">
-                                days
-                            </Text>
-                        </Box>
 
-                        <Box p={2} bg={bgColor} rounded="lg" minW="100px">
-                            <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                                {bountyTimer?.hours || 0}
-                            </Text>
-                            <Text textAlign="center" fontSize="xs">
-                                hours
-                            </Text>
-                        </Box>
-
-                        <Box p={2} bg={bgColor} rounded="lg" minW="100px">
-                            <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                                {bountyTimer?.minutes || 0}
-                            </Text>
-                            <Text textAlign="center" fontSize="xs">
-                                minutes
-                            </Text>
-                        </Box>
-                        <Box p={2} bg={bgColor} rounded="lg" minW="100px">
-                            <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                                {numParticipants}
-                            </Text>
-                            <Text textAlign="center" fontSize="xs">
-                                Total claims in this round
-                            </Text>
-                        </Box>
-                    </SimpleGrid>
-                </Center>
-                <Text fontSize={'sm'}>The prices of the Tokens and NFT are approximate values</Text>
+                <Countdown />
+                <Text fontSize={'xs'}>The prices listed are approximate.</Text>
             </Stack>
         </Center>
     );

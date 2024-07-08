@@ -13,7 +13,6 @@ import { getGemPrice, getManaPrice } from '../../services/Ardor/evmInterface';
 
 import { useSelector } from 'react-redux';
 
-
 /**
  * @name BountyWidget
  * @description This component is the bounty widget
@@ -149,19 +148,28 @@ const BountyWidget = ({ cStyle = 0 }) => {
                     direction="row"
                     bgColor={bgColor}>
                     <Center>
-                        <Image src="/images/currency/multicurrency.png" w="100px" />
-                    </Center>
-                    <Heading size="md" color={textColor} textAlign={"center"}>
-                        BOUNTY
-                    </Heading>
+                        <Box h="100%">
+                            <Center>
+                                <Image src="/images/currency/multicurrency.png" w="150px" />
+                            </Center>
+                            <Heading size="md" color={textColor} textAlign={'center'}>
+                                BOUNTY
+                            </Heading>
 
-                    <Center gap={2}>
-                        <Text textAlign={'center'} h="100%" fontWeight={'bold'} fontSize={'4xl'} color={textColor}>
-                            {bountyBalanceUSD.Total.toFixed(2)}
-                        </Text>
-                        <Text textAlign={'center'} fontSize={'xl'} color={textColor}>
-                            USD
-                        </Text>
+                            <Center gap={2}>
+                                <Text
+                                    textAlign={'center'}
+                                    h="100%"
+                                    fontWeight={'bold'}
+                                    fontSize={'4xl'}
+                                    color={textColor}>
+                                    {bountyBalanceUSD.Total.toFixed(2)}
+                                </Text>
+                                <Text textAlign={'center'} fontSize={'xl'} color={textColor}>
+                                    USD
+                                </Text>
+                            </Center>
+                        </Box>
                     </Center>
                 </Box>
             </Stack>
