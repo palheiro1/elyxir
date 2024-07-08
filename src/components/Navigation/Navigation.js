@@ -84,34 +84,45 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
 
 export default Navigation;
 
-/**
- * This component is used to render the navigation bar
- * @param {boolean} needTarascaLogo - This parameter is used to render the logo of the game or the logo of the team
- * @returns {JSX.Element} Desktop navigation component
- * @dev With "needTarascaLogo" parameter we can calculate logos
- */
-const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
+const FooterCentrado = () => {
+    return (
+        <Stack
+            direction={'column'}
+            w={'100%'}
+            position={'absolute'}
+            bottom={0}
+            bgColor={'rgb(98,46,120)'}
+            background={'linear-gradient(225deg, rgba(98,46,120,1) 0%, rgba(10,22,49,1) 100%)'}>
+            <Stack direction={'column'} w="100%">
+                <Center>
+                    <Stack direction={'column'} align="center">
+                        <Logo key="logo" isLogoGame={false} m={1} />
+
+                        <Text textAlign="center" fontSize="xs" textColor="#FFF" pb={2} w="100%">
+                            © 2022 Tarasca GmbH. All Rights Reserved.
+                            <br />
+                            Build: {process.env.REACT_APP_GIT_SHA}
+                        </Text>
+                    </Stack>
+                </Center>
+            </Stack>
+        </Stack>
+    );
+};
+
+const Header = () => {
     const linkColor = useColorModeValue('gray.200', 'gray.200');
     const linkHoverColor = useColorModeValue('white', 'white');
-    // const laMitad = Math.round(NAV_ITEMS.length / 2);
 
     return (
         <Stack
             direction={'column'}
             w={'100%'}
-            position={needTarascaLogo ? 'absolute' : null}
             bottom={0}
             bgColor={'rgb(98,46,120)'}
             background={'linear-gradient(225deg, rgba(98,46,120,1) 0%, rgba(10,22,49,1) 100%)'}>
-            <Stack direction={'row'} spacing={12} align="center" my={'auto'} w={needTarascaLogo ? '95%' : '100%'}>
-                <Logo
-                    key="logo"
-                    width={!needTarascaLogo ? '10%' : null}
-                    p={3}
-                    mr={!needTarascaLogo ? -5 : null}
-                    isLogoGame={!needTarascaLogo}
-                    ml={7}
-                />
+            <Stack direction={'row'} spacing={12} align="center" my={'auto'} w={'100%'}>
+                <Logo key="logo" width={'10%'} p={3} mr={-5} isLogoGame={true} ml={7} />
                 {NAV_ITEMS.map((navItem, index) => (
                     <Fragment key={index}>
                         <Box key={navItem.label}>
@@ -132,41 +143,35 @@ const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
                     </Fragment>
                 ))}
                 <Box flexGrow={0.7} />
-                {!needTarascaLogo && (
-                    <Stack py={1} direction={'row'}>
-                        <Box w={'400px'} textAlign={'center'} h={'fit-content'} my={'auto'}>
-                            <Text
-                                fontFamily="'Aagaz', sans-serif"
-                                fontSize="4xl"
-                                color="#F4931A"
-                                letterSpacing="widest"
-                                w={'fit-content'}>
-                                AT THE GATES OF PROPHECY
-                            </Text>
-                            <Text fontFamily="'Alatsi', sans-serif" fontSize="sm" color="#F4931A">
-                                SEASON 7
-                            </Text>
-                        </Box>
-                        <Image mr={0} src={'/images/logos/new/seasonLogo.svg'} w={'20%'} />
-                    </Stack>
-                )}
-            </Stack>
-            {needTarascaLogo && (
-                <Stack direction={'column'} w="100%">
-                    <Center>
-                        <Stack direction={'row'} align="center">
-                            <Text textAlign="center" fontSize="small" textColor="#FFF" py={2} w="100%">
-                                © 2022 Tarasca GmbH. All Rights Reserved.
-                                <br />
-                                Build: {process.env.REACT_APP_GIT_SHA}
-                            </Text>
-                            <Box></Box>
-                        </Stack>
-                    </Center>
+                <Stack py={1} direction={'row'}>
+                    <Box w={'400px'} textAlign={'center'} h={'fit-content'} my={'auto'}>
+                        <Text
+                            fontFamily="'Aagaz', sans-serif"
+                            fontSize="4xl"
+                            color="#F4931A"
+                            letterSpacing="widest"
+                            w={'fit-content'}>
+                            AT THE GATES OF PROPHECY
+                        </Text>
+                        <Text fontFamily="'Alatsi', sans-serif" fontSize="sm" color="#F4931A">
+                            SEASON 7
+                        </Text>
+                    </Box>
+                    <Image mr={0} src={'/images/logos/new/seasonLogo.svg'} w={'20%'} />
                 </Stack>
-            )}
+            </Stack>
         </Stack>
     );
+};
+
+/**
+ * This component is used to render the navigation bar
+ * @param {boolean} needTarascaLogo - This parameter is used to render the logo of the game or the logo of the team
+ * @returns {JSX.Element} Desktop navigation component
+ * @dev With "needTarascaLogo" parameter we can calculate logos
+ */
+const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
+    return needTarascaLogo ? <FooterCentrado /> : <Header />;
 };
 
 /**
