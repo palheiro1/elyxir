@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Center, Heading, Image, Stack, Text } from '@chakra-ui/react';
+import { Box, Center, Heading, Image, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 
 // Components
 import HCountdown from './HCountdown';
@@ -12,7 +12,6 @@ import { getBountyBalance, swapPriceEthtoUSD, getBountyParticipants } from '../.
 import { getGemPrice, getManaPrice } from '../../services/Ardor/evmInterface';
 
 import { useSelector } from 'react-redux';
-
 
 /**
  * @name BountyWidget
@@ -47,6 +46,9 @@ const BountyWidget = ({ cStyle = 0 }) => {
     });
     const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
 
+    const selectedColor = cStyle === 0 ? '#2f9088' : '#3b5397';
+    const textColor = useColorModeValue(selectedColor, 'white');
+
     useEffect(() => {
         const fetchBountyBalance = async () => {
             try {
@@ -63,21 +65,21 @@ const BountyWidget = ({ cStyle = 0 }) => {
                     Mana: 9000,
                 });
 
-                const [wethUsd, sumangaUsd] = await Promise.all([
+                const [wethUsd, cardUsd] = await Promise.all([
                     swapPriceEthtoUSD(bountyBalance),
                     swapPriceEthtoUSD(0.02),
                 ]);
 
                 const totalGem = gemPrice * 9000;
                 const totalMana = manaPrice * 9000;
-                const totalSumanga = sumangaUsd * 7;
+                const totalCard = cardUsd * 7;
 
                 setBountyBalanceUSD({
                     wETH: wethUsd,
                     GEM: totalGem,
                     Mana: totalMana,
-                    Sumanga: totalSumanga, // 7 cartas
-                    Total: Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalSumanga),
+                    SpecialCard: totalCard, // 7 cartas
+                    Total: Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalCard),
                 });
 
                 let auxParticipants = [];
@@ -146,19 +148,28 @@ const BountyWidget = ({ cStyle = 0 }) => {
                     direction="row"
                     bgColor={bgColor}>
                     <Center>
-                        <Image src="/images/currency/multicurrency.png" w="100px" />
-                    </Center>
-                    <Heading size="md" color="white" textAlign={"center"}>
-                        BOUNTY
-                    </Heading>
+                        <Box h="100%">
+                            <Center>
+                                <Image src="/images/currency/multicurrency.png" w="150px" />
+                            </Center>
+                            <Heading size="md" color={textColor} textAlign={'center'}>
+                                BOUNTY
+                            </Heading>
 
-                    <Center gap={2}>
-                        <Text textAlign={'center'} h="100%" fontWeight={'bold'} fontSize={'4xl'}>
-                            {bountyBalanceUSD.Total.toFixed(2)}
-                        </Text>
-                        <Text textAlign={'center'} fontSize={'xl'}>
-                            USD
-                        </Text>
+                            <Center gap={2}>
+                                <Text
+                                    textAlign={'center'}
+                                    h="100%"
+                                    fontWeight={'bold'}
+                                    fontSize={'4xl'}
+                                    color={textColor}>
+                                    {bountyBalanceUSD.Total.toFixed(2)}
+                                </Text>
+                                <Text textAlign={'center'} fontSize={'xl'} color={textColor}>
+                                    USD
+                                </Text>
+                            </Center>
+                        </Box>
                     </Center>
                 </Box>
             </Stack>

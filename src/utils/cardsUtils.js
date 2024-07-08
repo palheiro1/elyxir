@@ -43,6 +43,7 @@ export const isJSON = str => {
     try {
         return str && JSON.parse(str);
     } catch (e) {
+        // console.error('🚀 ~ isJSON ~ e:', e);
         return false;
     }
 };
@@ -240,13 +241,21 @@ const RARITY_MAP = {
 
 const getTruncatedName = name => (name === 'Kăk-whăn’-û-ghăt Kǐg-û-lu’-nǐk' ? 'Kăk-whăn’ ...' : name);
 
-export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders = false) => {
-    const new_description = asset.description.replace(/\bNaN\b/g, 'null').replace(/\t/g, 'null');
+function cleanJSON(jsonString) {
+    return jsonString
+        .replace(/\bNaN\b/g, 'null')  // Reemplaza NaN por null
+        .replace(/\t/g, 'null')  // Reemplaza tabulaciones por null
+        .replace(/[\n\r]/g, '')  // Elimina nuevas líneas y retornos de carro
+        .replace(/\\n/g, '')  // Elimina las secuencias de escape de nuevas líneas
+        .replace(/\\r/g, '');  // Elimina las secuencias de escape de retornos de carro
+}
 
-    if (new_description) {
-        let cardDetails = new_description;
-        if (isJSON(new_description)) {
-            cardDetails = JSON.parse(new_description.replace(/\bNaN\b/g, 'null').replace(/\t/g, 'null'));
+export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders = false) => {
+    let cardDetails = cleanJSON(asset.description)
+
+    if (cardDetails) {
+        if (isJSON(cardDetails)) {
+            cardDetails = JSON.parse(cardDetails);
         }
 
         let askOrders = [];

@@ -9,6 +9,7 @@ import {
     Link,
     useColorModeValue,
     useDisclosure,
+    Image,
     Center,
 } from '@chakra-ui/react';
 
@@ -18,6 +19,7 @@ import { ColorModeSwitcher } from '../ColorModeSwitch/ColorModeSwitcher';
 import { NAV_ITEMS } from '../../data/NAV_ITEMS';
 import Logo from '../Logo/Logo';
 import { Fragment } from 'react';
+import '@fontsource/abeezee';
 /**
  * This component is used to render the navigation bar
  * @param {boolean} isHeader - By default its true - This parameter is used to render the navigation bar or the footer
@@ -34,17 +36,14 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
     const needChangeColor = isHeader ? true : false;
 
     return (
-        <Box mt={needTarascaLogo ? 24 : 4}>
+        <Box mt={needTarascaLogo ? 24 : 0} w={'100%'}>
             <Flex
                 display={{ md: 'flex' }}
                 color={useColorModeValue('gray.600', 'white')}
-                minH={{ base: "0px", lg: '60px' }}
+                minH={{ base: '0px', lg: '60px' }}
                 py={{ base: isHeader ? 2 : 0 }}
                 pt={{ base: isHeader ? 0 : 8 }}
-                borderBottom={isHeader ? 1 : 0}
-                borderStyle={'solid'}
-                borderColor={useColorModeValue('gray.200', 'gray.900')}
-                align={'center'}>
+                borderColor={useColorModeValue('gray.200', 'gray.900')}>
                 {isHeader && !isLogged && (
                     <Flex flex={{ base: 1, md: 'auto' }} display={{ base: 'flex', md: 'none' }}>
                         <IconButton
@@ -57,14 +56,20 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
                     </Flex>
                 )}
 
-                <Flex flex={1} justify={'center'}>
-                    <Center display={{ base: 'none', md: 'flex' }}>
+                <Flex flex={1} mx={0}>
+                    <Stack display={{ base: 'none', md: 'flex' }} w={'100%'}>
                         <DesktopNav needTarascaLogo={needTarascaLogo} isLogged={isLogged} />
-                    </Center>
+                    </Stack>
                 </Flex>
 
                 {needChangeColor && (
-                    <ColorModeSwitcher position="absolute" right="2.5%" display={{ base: 'none', md: 'flex' }} />
+                    <ColorModeSwitcher
+                        position="absolute"
+                        my={'7'}
+                        right="2%"
+                        color={'#FFF'}
+                        display={{ base: 'none', md: 'flex' }}
+                    />
                 )}
             </Flex>
 
@@ -73,23 +78,91 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
                     <MobileNav />
                 </Collapse>
             )}
+        </Box>
+    );
+};
 
-            {!isHeader && needTarascaLogo && (
-                <Center w="100%" display={{ base: 'flex', md: 'none' }}>
-                    <Stack direction={'row'} spacing={24} align="center">
-                        <Text textAlign="center" fontSize="small" textColor="gray.600" py={2} w="100%">
+export default Navigation;
+
+const FooterCentrado = () => {
+    return (
+        <Stack
+            direction={'column'}
+            w={'100%'}
+            position={'absolute'}
+            bottom={0}
+            bgColor={'rgb(98,46,120)'}
+            background={'linear-gradient(225deg, rgba(98,46,120,1) 0%, rgba(10,22,49,1) 100%)'}>
+            <Stack direction={'column'} w="100%">
+                <Center>
+                    <Stack direction={'column'} align="center">
+                        <Logo key="logo" isLogoGame={false} w="4rem" mt={1} />
+
+                        <Text textAlign="center" fontSize="2xs" textColor="#FFF" pb={2} w="100%">
                             © 2022 Tarasca GmbH. All Rights Reserved.
                             <br />
                             Build: {process.env.REACT_APP_GIT_SHA}
                         </Text>
                     </Stack>
                 </Center>
-            )}
-        </Box>
+            </Stack>
+        </Stack>
     );
 };
 
-export default Navigation;
+const Header = () => {
+    const linkColor = useColorModeValue('gray.200', 'gray.200');
+    const linkHoverColor = useColorModeValue('white', 'white');
+
+    return (
+        <Stack
+            direction={'column'}
+            w={'100%'}
+            bottom={0}
+            bgColor={'rgb(98,46,120)'}
+            background={'linear-gradient(225deg, rgba(98,46,120,1) 0%, rgba(10,22,49,1) 100%)'}>
+            <Stack direction={'row'} spacing={12} align="center" my={'auto'} w={'100%'}>
+                <Logo key="logo" width={'10%'} p={3} mr={-5} isLogoGame={true} ml={7} />
+                {NAV_ITEMS.map((navItem, index) => (
+                    <Fragment key={index}>
+                        <Box key={navItem.label}>
+                            <Link
+                                p={2}
+                                href={navItem.href ?? '#'}
+                                fontSize={'sm'}
+                                color={linkColor}
+                                isExternal
+                                fontFamily={'ABeeZee'}
+                                _hover={{
+                                    textDecoration: 'none',
+                                    color: linkHoverColor,
+                                }}>
+                                {navItem.label}
+                            </Link>
+                        </Box>
+                    </Fragment>
+                ))}
+                <Box flexGrow={0.7} />
+                <Stack py={1} direction={'row'}>
+                    <Box w={'400px'} textAlign={'center'} h={'fit-content'} my={'auto'}>
+                        <Text
+                            fontFamily="'Aagaz', sans-serif"
+                            fontSize="4xl"
+                            color="#F4931A"
+                            letterSpacing="widest"
+                            w={'fit-content'}>
+                            AT THE GATES OF PROPHECY
+                        </Text>
+                        <Text fontFamily="'Alatsi', sans-serif" fontSize="sm" color="#F4931A">
+                            SEASON 7
+                        </Text>
+                    </Box>
+                    <Image mr={0} src={'/images/logos/new/seasonLogo.svg'} w={'20%'} />
+                </Stack>
+            </Stack>
+        </Stack>
+    );
+};
 
 /**
  * This component is used to render the navigation bar
@@ -98,53 +171,7 @@ export default Navigation;
  * @dev With "needTarascaLogo" parameter we can calculate logos
  */
 const DesktopNav = ({ needTarascaLogo, isLogged = false }) => {
-    const linkColor = useColorModeValue('gray.600', 'gray.200');
-    const linkHoverColor = useColorModeValue('gray.800', 'white');
-    const laMitad = Math.round(NAV_ITEMS.length / 2);
-
-    return (
-        <Stack direction={'column'} w="100%" position={needTarascaLogo ? 'absolute' : null} bottom={0}>
-            <Center>
-                <Stack direction={'row'} spacing={24} align="center">
-                    {NAV_ITEMS.map((navItem, index) => (
-                        <Fragment key={index}>
-                            {laMitad === index && <Logo key="logo" isLogoGame={!needTarascaLogo} />}
-                            <Box key={navItem.label}>
-                                <Link
-                                    p={2}
-                                    href={navItem.href ?? '#'}
-                                    fontSize={'sm'}
-                                    fontWeight={'bold'}
-                                    color={linkColor}
-                                    isExternal
-                                    _hover={{
-                                        textDecoration: 'none',
-                                        color: linkHoverColor,
-                                    }}>
-                                    {navItem.label}
-                                </Link>
-                            </Box>
-                        </Fragment>
-                    ))}
-                </Stack>
-            </Center>
-            {needTarascaLogo && (
-                <Stack direction={'column'} w="100%">
-                    <Center>
-                        <Stack direction={'row'} spacing={24} align="center">
-                            <Box px={8} />
-                            <Text textAlign="center" fontSize="small" textColor="gray.600" py={2} w="100%">
-                                © 2022 Tarasca GmbH. All Rights Reserved.
-                                <br />
-                                Build: {process.env.REACT_APP_GIT_SHA}
-                            </Text>
-                            <Box></Box>
-                        </Stack>
-                    </Center>
-                </Stack>
-            )}
-        </Stack>
-    );
+    return needTarascaLogo ? <FooterCentrado /> : <Header />;
 };
 
 /**

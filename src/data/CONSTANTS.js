@@ -69,8 +69,8 @@ export const NQTDIVIDER = 100000000;
 
 // ---------------------------------------------
 
-export const ACTUAL_SEASON = 6;
-export const IS_BOUNTY_ENABLED = false;
+export const ACTUAL_SEASON = 7;
+export const IS_BOUNTY_ENABLED = true;
 
 // ---------------------------------------------
 // ---------- NEW ECONOMICS WITH OMNO ----------
@@ -268,6 +268,12 @@ export const ASSETS_IDS = [
     '1479526493428793943',
     '10229749181769297696',
     '15052794016100653835',
+    '465570788961452184',
+    '7657449004415200937',
+    '13446501052073878899',
+    '16991089534084699344',
+    '2603114092541070832',
+    '18428491578408295076',
     GEMASSET,
     WETHASSET,
     GIFTZASSET,

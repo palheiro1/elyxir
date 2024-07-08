@@ -23,9 +23,9 @@ const Buttons = () => {
                     color={textBuy}
                     button={
                         <MenuButton
-                            bgColor={'#9f3772'}
+                            bgColor={'#B60DC4'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(159, 55, 114, 0.75)'}
+                            hoverBg={'rgba(182, 13, 196, 0.75)'}
                             icon={'/images/icons/menu/BuyPack.png'}
                             isActive={false}
                             text={'Buy Pack'}
@@ -40,9 +40,9 @@ const Buttons = () => {
                     color={textOpen}
                     button={
                         <MenuButton
-                            bgColor={'#e094b3'}
+                            bgColor={'#8E059A'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(224, 148, 179, 0.75)'}
+                            hoverBg={'rgba(142, 5, 154, 0.75)'}
                             icon={'/images/icons/menu/OpenPack.png'}
                             isActive={false}
                             text={'Open pack'}
@@ -57,9 +57,9 @@ const Buttons = () => {
                     color={textHistory}
                     button={
                         <MenuButton
-                            bgColor={'#3b7197'}
+                            bgColor={'#E25339'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(59, 113, 151, 0.75)'}
+                            hoverBg={'rgba(226, 83, 57, 0.75)'}
                             icon={'/images/icons/menu/blanco/history.png'}
                             isActive={false}
                             text={'History'}
@@ -74,9 +74,9 @@ const Buttons = () => {
                     color={textInventory}
                     button={
                         <MenuButton
-                            bgColor={'#2f8190'}
+                            bgColor={'#E1632C'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(47, 129, 144, 0.75)'}
+                            hoverBg={'rgba(225, 99, 44, 0.75)'}
                             icon={'/images/icons/menu/blanco/inventory.png'}
                             isActive={false}
                             text={'Inventory'}
@@ -91,9 +91,9 @@ const Buttons = () => {
                     color={textBounty}
                     button={
                         <MenuButton
-                            bgColor={'#3b5397'}
+                            bgColor={'#E53055'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(59, 83, 151, 0.75)'}
+                            hoverBg={'rgba(229, 48, 85, 0.75)'}
                             icon={'/images/icons/menu/blanco/bounty.png'}
                             isActive={false}
                             text={'Bounty'}
