@@ -16,11 +16,15 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
     // ---------------------------------------------
     const buttons = [
         {
-            text: 'Battlegrounds',
+            icon: !isActive(12)
+                ? '/images/icons/menu/blanco/battlegrounds.svg'
+                : '/images/icons/menu/color/battlegrounds.svg',
             onClick: () => setOption(12),
-            hoverBg: 'rgba(159, 55, 114, 0.75)',
-            bgColor: '#9f3772',
-            textColor: textColor(12),
+            hoverBg: 'rgba(220, 48, 235, 0.75)',
+            bgColor: isActive(12) ? 'white' : '#DC30EB',
+            textColor: isActive(12) ? '#DC30EB' : 'white',
+            fontWeight: isActive(12) ? 'bolder' : 'normal',
+            isActive: isActive(12),
         },
         {
             icon: '/images/icons/menu/BuyPack.png',
@@ -143,27 +147,38 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
 
     return (
         <VStack align="flex-start" spacing={2} width={widthBotones}>
-            {buttons.map(({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive, isDisabled }) => (
-                !isDisabled && (<Button
-                    key={text}
-                    minW={widthBotones}
-                    minH="50px"
-                    _hover={{ background: isActive ? bgColor : hoverBg, color: isActive ? undefined : 'white' }}
-                    bgColor={bgColor}
-                    textColor={textColor}
-                    onClick={onClick}>
-                    <Stack direction="row" align="center" w="100%">
-                        {icon && (
-                            <Box minW={"2rem"} ml={isActive ? -1 : 0} mr={isActive ? 1 : 0}>
-                                <Image src={icon} w={isActive ? '30px' : '25px'} />
-                            </Box>
-                        )}
-                        <Text fontSize="sm" fontWeight={fontWeight}>
-                            {text}
-                        </Text>
-                    </Stack>
-                </Button>)
-            ))}
+            {buttons.map(
+                ({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive, isDisabled }) =>
+                    !isDisabled && (
+                        <Button
+                            key={text}
+                            minW={widthBotones}
+                            minH="50px"
+                            _hover={{ background: isActive ? bgColor : hoverBg, color: isActive ? undefined : 'white' }}
+                            bgColor={bgColor}
+                            textColor={textColor}
+                            onClick={onClick}>
+                            <Stack direction="row" align="center" w="100%">
+                                {icon && text ? (
+                                    <>
+                                        <Box minW={'2rem'} ml={isActive ? -1 : 0} mr={isActive ? 1 : 0}>
+                                            <Image src={icon} w={isActive ? '30px' : '25px'} />
+                                        </Box>
+                                        <Text fontSize="sm" fontWeight={fontWeight}>
+                                            {text}
+                                        </Text>
+                                    </>
+                                ) : (
+                                    !text && (
+                                        <Box mx={'auto'}>
+                                            <Image src={icon} w={'75px'} />
+                                        </Box>
+                                    )
+                                )}
+                            </Stack>
+                        </Button>
+                    )
+            )}
         </VStack>
     );
 };

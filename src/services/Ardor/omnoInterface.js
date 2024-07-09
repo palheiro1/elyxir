@@ -161,8 +161,6 @@ export const sendCardsToBattle = async ({ cards, passPhrase, arenaId }) => {
 
     for (let index = 0; index < cards.length; index++) {
         const card = cards[index];
-        console.log('🚀 ~ withdrawCardsFromOmno ~ card:', card);
-
         if (cards[index] !== '') assets.push(card.asset);
     }
 
@@ -181,7 +179,6 @@ export const sendCardsToBattle = async ({ cards, passPhrase, arenaId }) => {
             },
         ],
     });
-    console.log('🚀 ~ sendCardsToBattle ~ message:', message);
 
     return await sendMessage({
         recipient: OMNO_ACCOUNT,

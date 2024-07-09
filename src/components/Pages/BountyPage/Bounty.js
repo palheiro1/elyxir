@@ -19,7 +19,6 @@ import SendMissingCardDialog from '../../Modals/BountyDialog/SendMissingCardDial
  */
 const Bounty = ({ infoAccount, cards = [] }) => {
     const [totalNoSpecialCards, setTotalNoSpecialCards] = useState([]); // Cards without specials
-    console.log("🚀 ~ Bounty ~ totalNoSpecialCards:", totalNoSpecialCards)
     const [remainingCards, setRemainingCards] = useState([]); // Cards without specials and with 0 quantity
     const [cardsFiltered, setCardsFiltered] = useState([]); // Cards filtered by search and rarity
     const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
@@ -66,10 +65,12 @@ const Bounty = ({ infoAccount, cards = [] }) => {
 
             getBountyMissingCards().then(response => {
                 const missingCardIds = response[account];
-                const missingCardWithData = missingCardIds.map(cardId => {
-                    return totalNoSpecialCards.find(card => card.asset === cardId);
-                });
-                setMissingCards(missingCardWithData);
+                if (missingCardIds) {
+                    const missingCardWithData = missingCardIds.map(cardId => {
+                        return totalNoSpecialCards.find(card => card.asset === cardId);
+                    });
+                    setMissingCards(missingCardWithData);
+                }
             });
         };
 

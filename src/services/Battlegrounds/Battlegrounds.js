@@ -20,10 +20,24 @@ export const getPendingArmies = async () => {
         .catch(error => error);
 };
 
+export const getBattleById = async battleId => {
+    return axios
+        .get(`${OMNO_API}/index.php?action=getOmnoGameBattle&id=${battleId}`)
+        .then(res => res.data.battle)
+        .catch(error => error);
+};
+
 export const getUserBattles = async accountId => {
     return axios
         .get(`${OMNO_API}/index.php?action=getUserBattles&account=${accountId}`)
-        .then(res => res.battle)
+        .then(res => res.data.accountBattle.battle)
+        .catch(error => error);
+};
+
+export const getBattleCount = async () => {
+    return axios
+        .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
+        .then(res => res.data.state.arena.battleCount)
         .catch(error => error);
 };
 
@@ -51,7 +65,7 @@ export const getLastUserBattle = async (accountId, currentTime) => {
             const currentTimestamp = new Date(currentTime);
 
             // // Comparar las fechas
-            if (battleStamp < currentTimestamp) {                
+            if (battleStamp < currentTimestamp) {
                 return 'pending';
             }
 

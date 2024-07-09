@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, IconButton, Img, SimpleGrid, Spinner, Stack, Text, useToast } from '@chakra-ui/react';
+import { Box, IconButton, Spinner, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { ChevronLeftIcon, CloseIcon } from '@chakra-ui/icons';
+import { CloseIcon } from '@chakra-ui/icons';
 import { SelectHandPage } from './SelectHandPage';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { getAccount } from '../../../../../services/Ardor/ardorInterface';
@@ -9,6 +9,7 @@ import { getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds
 import { errorToast } from '../../../../../utils/alerts';
 import BattleResults from './BattleResults';
 import '@fontsource/chelsea-market';
+import BattleInventory from './BattleInventory';
 
 export const BattleWindow = ({
     arenaInfo,
@@ -140,7 +141,7 @@ export const BattleWindow = ({
                 pos={'fixed'}
                 bgColor={'#1F2323'}
                 zIndex={99}
-                w={'90%'}
+                w={'80%'}
                 h={'90%'}
                 borderRadius={'25px'}
                 top={'50%'}
@@ -192,62 +193,13 @@ export const BattleWindow = ({
                             />
                         )}
                         {openIventory && (
-                            <>
-                                <IconButton
-                                    icon={<ChevronLeftIcon boxSize={8} />}
-                                    mt={3}
-                                    p={5}
-                                    bg={'transparent'}
-                                    color={'#FFF'}
-                                    _hover={{ bg: 'transparent' }}
-                                    onClick={() => setOpenIventory(false)}>
-                                    Go back
-                                </IconButton>
-                                <Stack direction={'row'} pt={2} padding={5} height={'90%'}>
-                                    <Box
-                                        mb={2}
-                                        borderRadius={'20px'}
-                                        p={4}
-                                        w={'90%'}
-                                        mx={'auto'}
-                                        overflowY={'scroll'}
-                                        className="custom-scrollbar">
-                                        <SimpleGrid
-                                            columns={[1, 2, 4]}
-                                            spacing={5}
-                                            overflowY={'auto'}
-                                            className="custom-scrollbar"
-                                            p={5}
-                                            overflow={'scroll'}
-                                            h={'750px'}>
-                                            {filteredCards.map((card, cardIndex) => {
-                                                return card.asset.length <= 19 ? (
-                                                    <Box
-                                                        key={cardIndex}
-                                                        w={'250px'}
-                                                        h={'350px'}
-                                                        onClick={() => {
-                                                            setOpenIventory(false);
-                                                            updateCard(card);
-                                                        }}
-                                                        bg={'white'}
-                                                        borderRadius={'10px'}>
-                                                        <Img src={card.cardImgUrl} w={'100%'} h={'100%'} />
-                                                    </Box>
-                                                ) : null;
-                                            })}
-                                        </SimpleGrid>
-                                    </Box>
-                                    <Text
-                                        color={'red'}
-                                        position={'absolute'}
-                                        fontFamily={'Chelsea Market, system-ui'}
-                                        bottom={2}>
-                                        * Some cards don't appear to play battles with them, because of code problems.
-                                        We are working to solve it
-                                    </Text>
-                                </Stack>
-                            </>
+                            <BattleInventory
+                                setOpenIventory={setOpenIventory}
+                                filteredCards={filteredCards}
+                                index={index}
+                                handBattleCards={handBattleCards}
+                                updateCard={updateCard}
+                            />
                         )}
                         {showResults && (
                             <BattleResults
