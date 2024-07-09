@@ -5,9 +5,20 @@ import MB_Book from './pdfs/FullBook.pdf';
 
 const Book = ({ cards }) => {
     const [currentCard, setCurrentCard] = useState(cards[0]);
+    const [totalNoSpecialCards, setTotalNoSpecialCards] = useState([]); // Cards without specials
     // PDF route
     const routeFiles = './pdfs/';
     const [pdf, setPdf] = useState(null);
+
+    useEffect(() => {
+        // Get remaining cards
+        const getRemainingCards = () => {
+            const auxNoSpecialCards = cards.filter(card => card.rarity !== 'Special');
+            setTotalNoSpecialCards(auxNoSpecialCards);
+        };
+
+        cards.length > 0 && getRemainingCards();
+    }, [cards]);
 
     const handleChangeCard = card => {
         const cardIndex = cards.findIndex(cardAc => cardAc.assetname === card.assetname);
@@ -29,7 +40,7 @@ const Book = ({ cards }) => {
 
     const haveAllCards =
         cards.length > 0 &&
-        cards.every(card => {
+        totalNoSpecialCards.every(card => {
             return (
                 Number(card.quantityQNT) !== 0 &&
                 (Number(card.quantityQNT) <= Number(card.unconfirmedQuantityQNT) ||

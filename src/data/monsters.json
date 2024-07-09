@@ -1170,7 +1170,7 @@
         "picture": "dybbuk.jpeg",
         "rarity": "Epic",
         "creature": [
-            "There are several reasons why a person's soul, upon death, may be trapped in this world as a Dybbuk. It may be because his life had been so criminal that, for fear of God's punishment, he refuses to leave the earth, or it may simply be because the person had not finished fulfilling his destiny. In any case, the Dybbuk, which means 'bound spirit' in Yiddish, is a spirit that wanders the world in search of a body to possess and through which to fulfil the ends or desires that were not fulfilled in life.", 
+            "There are several reasons why a person's soul, upon death, may be trapped in this world as a Dybbuk. It may be because his life had been so criminal that, for fear of God's punishment, he refuses to leave the earth, or it may simply be because the person had not finished fulfilling his destiny. In any case, the Dybbuk, which means 'bound spirit' in Yiddish, is a spirit that wanders the world in search of a body to possess and through which to fulfil the ends or desires that were not fulfilled in life.",
             "Women are favourite victims of the Dybbuk, even if they had arisen from the death of a male.",
             "The dybbuk is believed to cause a variety of problems for the possessed person, from mental disorders to physical illness. The possessed may experience personality changes, erratic behaviour, and may even speak in unknown languages. Possession is believed to be released through exorcism, which is a ritual performed by a rabbi or spiritual leader to expel the evil spirit."
         ],
@@ -1313,5 +1313,143 @@
         ],
         "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12194.314618008157!2d118.53980355594835!3d4.663203351818185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x323ff17b08cab0bd%3A0xe30a5e2484e50c3f!2sPulau%20Tatagan%20Tatagan!5e1!3m2!1sen!2ses!4v1706027868976!5m2!1sen!2ses' width='600' height='450' frameborder='0' style='border:0;' allowfullscreen/>",
         "assetname": "mythical56"
+    },
+    {
+        "name": "Tecelán",
+        "country": "Galiza",
+        "continent": "Europe",
+        "picture": "tecelan.jpg",
+        "rarity": "Common",
+        "creature": [
+            "Entombed beneath a five-thousand-year-old megalithic mound rest the remains of the Tecelán (“Weaver”) of Carballás, a mythological figure who safeguards ancient wisdom and occasionally rises in spectral form to visit the homes of the village. On these rare occasions, the Tecelán, appearing as a bearded old man cloaked in a heavy robe and leaning on a staff, arrives unannounced. He hangs his cloak on the last ray of the setting sun, settles by the warmth of the hearth, and, stroking his beard, begins to ponder aloud the mysteries of past and future times.",
+            "The Tecelán is a well-known figure in the villages of Terra de Montes. In one of these villages, Barro (Cerdedo), the residents believe themselves to be the direct descendants of this enigmatic sage. Revered as a benevolent spirit, the Tecelán endeavors to caution the villagers about the perils of unchecked progress, using his prophetic powers to deliver his warnings.",
+            "According to the revelations he repeats during his visits, the end of the world will be heralded by a series of events: people will travel through the air, cars will move without horses, and Mount Seixo (the local mountain) will be crisscrossed by roads. When these signs come to pass, 'there will be no father for the son nor son for the father' and 'the end of the world will soon arrive.'",
+            "The Tecelán's presence is considered a blessing, a reminder of the deep connection between the villagers and their ancestral past. His stories, woven with threads of history and foresight, serve to guide the community, helping them navigate the delicate balance between tradition and modernity. "
+        ],
+        "landscape": "galiza.jpg",
+        "culture": [
+            "Galicia is a people rooted in the northwest of the Iberian Peninsula, which has maintained a strong identity since the first millennium BC, with a very marked Celtic population and culture and with much communication with the other Celtic peoples of Western Europe. Although successive invasions have erased many traces of this origin, especially the language, they live on in elements of popular culture such as mythology and music.",
+            "The country's mountainous terrain and widely dispersed population made it difficult for foreign empires to conquer. The Roman Empire, for example, overcame local resistance only very late, in 23 B.C., and although it managed to replace the local language with Latin, the way of life of the predominantly rural population did not change significantly. A few centuries later, the empire disintegrated and two Germanic peoples settled in the Gallaecia region: first the Suebi, who established an independent kingdom, and later the Visigoths, who ruled the entire peninsula until the destruction of their empire by the Islamic invasion. However, the Muslims were unable to subjugate Galicia, which remained independent and unruled until the formation of the first medieval kingdoms.",
+            "During the Middle Ages, the Kingdom of Galicia participated in the wars to expel the Muslims from the peninsula, but did not extend its dominion, remaining subject to the neighboring Kingdom of Castile, which subjugated all the kingdoms of the peninsula except Portugal and led the creation of the Kingdom of Spain at the beginning of the modern era.",
+            "Apart from these power struggles, the Galician people developed their own culture and language, Portuguese Galician. It is a very rural people, preferring to spread throughout the territory rather than concentrate in large cities, historically devoted to agriculture and livestock, but also with a great fondness for the sea, being one of the most important fishing powers in the world. The region, which is not very industrialized, has experienced great waves of migration throughout the world since the 19th century, so that today a large part of the population is scattered throughout South America and Europe.",
+            "Although Galicians converted to Christianity at a very early age, they have blended it with their traditional pagan beliefs, which live on in the form of a vibrant folk mythology and even mix with Christian festivals.",
+            "Current population: 2.695.645"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2942.8525961964274!2d-8.380559766717793!3d42.473423614198744!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd2f9be4c02334f7%3A0x661a3be31cc06073!2sMarco%20do%20Vento!5e0!3m2!1sen!2ses!4v1719935879764!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
+        "assetname": "mythical57"
+    },
+    {
+        "name": "Mahakali",
+        "country": "Nepal",
+        "continent": "Asia",
+        "picture": "mahakali.jpg",
+        "rarity": "Rare",
+        "creature": [
+            "Mahakali, a fearsome manifestation of the goddess Kali, is revered as the embodiment of primal feminine energy and the destructive force inherent in the passage of time. This deity, originating from Parvati, the consort of the supreme deity Shiva, holds sway over creation with unmatched power.",
+            "Depicted with ebony-hued skin symbolizing the primordial void from which all existence emanates, Mahakali is often portrayed with an array of arms, numbering ten or more, each bearing symbolic implements such as weapons, severed heads, tridents, or drums. Her striking appearance is accentuated by a lengthy, crimson tongue and eyes ablaze with intensity. Adorning her form are accessories that further reinforce her formidable presence, including a necklace of human heads and a skirt adorned with severed arms.",
+            "Despite her terrifying countenance, Mahakali is not malevolent but rather a benevolent force, directing her wrath towards demons and malevolent entities to uphold dharma, the cosmic order, by purging it of corruption.",
+            "In the cosmic drama of Hindu mythology, Mahakali plays a crucial role in the Kali Yuga, the present epoch characterized by discord and moral decadence. This era commenced 5,000 years ago and is predicted to span another 426,000 years. Mahakali emerges as the preeminent force destined to confront and overcome the prevailing darkness of this age, paving the way for its eventual transcendence and the restoration of balance and harmony in the universe.",
+            "Current population: 30.000.000"
+        ],
+        "landscape": "nepal.jpg",
+        "culture": [
+            "Situated in the world's highest mountain range, the populations that migrated from Africa and spread across Asia and Europe were undeterred by the heights of these lands or their extreme mountainous climate. Despite the challenging geography, it would be a mistake to imagine these people as isolated from the rest of the world. On the contrary, they were part of larger civilizations and contributed to their cultural development, as evidenced by ancient Hindu texts. The unification of the small kingdoms and villages did not occur until the 18th century with the founding of a kingdom that managed to maintain independence against the European colonial powers that conquered nearly all of Asia. In the 20th century, Nepal became a parliamentary monarchy, and in the 21st century, it transitioned into a republic.",
+            "Most of the population lives in rural areas, engaged in subsistence agriculture, cultivating cereals on terraces carved into the steep slopes of the Himalayas. People are organized into extended families, with multiple generations living under one roof and forming a single economic unit. These families are further organized into villages, or 'tol,' which govern local life and manage common resources. Mutual aid between families, known as 'parma', is a fundamental pillar of community life.",
+            "Hinduism is the official and predominant religion of the country, although Buddhism is also deeply rooted. Among the wide variety of Hindu practices, the worship of Kali, the goddess of destruction and renewal, is particularly notable in Nepal. The famous Dashain festival is consecrated to her, reflecting the rich spiritual tapestry that permeates the life of the Nepalese people.",
+            "Current population: 2.695.645"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d226021.650279252!2d85.11554341314816!3d27.729995499254404!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb220da85aac07%3A0x8cbf7308b183b4a8!2sIchangu%20Narayan%20Temple!5e0!3m2!1sen!2ses!4v1719936181611!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
+        "assetname": "mythical58"
+    },
+    {
+        "name": "Fenrir",
+        "country": "Denmark",
+        "continent": "Europe",
+        "picture": "fenrir.jpg",
+        "rarity": "Common",
+        "creature": [
+            "Son of the god Loki and the giantess Angrboða, Fenrir looms as a wolf of colossal proportions, his might eclipsing even the gods themselves. Possessed by an unstoppable ferocity, he relentlessly seeks to lay waste to all in his path. Yet, he harbors one weakness, susceptible to capture by the enchanted chain Gleipnir, wrought by the cunning hands of dwarves.",
+            "Fenrir, from his very infancy, exuded a fearsome aura that prompted the gods to seek his containment early on. Initially housed within Asgard under vigilant watch, his burgeoning power and size soon outpaced their control. Ultimately, trickery prevailed as they ensnared him, though twice he effortlessly shattered his bonds. In a bid to secure him for the third time, the god Tyr boldly placed his hand within Fenrir's maw, only to suffer its loss when the wolf discovered the deceit.",
+            "Prophesied to break free during the cataclysmic events of Ragnarok, Fenrir shall unleash his wrath upon the realm, partaking in the climactic clash between gods and giants. It is foretold that he will confront Odin himself, consuming the Allfather in a symbolic act of cosmic upheaval. Thus, Fenrir emerges as the harbinger of the apocalypse, heralding the return to primordial chaos."
+        ],
+        "landscape": "denmark.jpg",
+        "culture": [
+            "Danish history and culture are intimately linked to its Nordic heritage. Populated by Germanic peoples who occupied Denmark, Norway, and Sweden in the 1st century BC, the Norse became skilled sailors who mastered the seas for trade, exploration, and raids. During the Viking Age, their expeditions made them famous across Europe, reaching as far as Russia, Istanbul, the Iberian Peninsula, the British Isles, and even America, five centuries before Christopher Columbus. The conversion to Christianity, completed in the 11th century, marked the end of the Viking Age and integrated them into Christian Europe.",
+            "Beyond Viking raids, the traditional way of life of these populations was shaped by their geography. Coastal lands dotted with inhabited islands and a very cold winter climate made them heavily reliant on fishing, trade, agriculture, and livestock. Danish identity was forged from the 11th century onward with the formation of a stable kingdom that differentiated itself from Sweden and Norway.",
+            "The traditional Norse worldview was polytheistic, with the universe divided into various planes or worlds, including Asgard, home to the countless gods of their pantheon ruled by Odin. According to the Norse, gods and humans shared destiny and interacted frequently. The most valued virtues, reflective of their warrior society, were courage, loyalty, and prowess in battle.",
+            "Today, Denmark is a modern and prosperous nation with an advanced economy and high quality of life. It is renowned for its welfare state model, high-quality education, and environmental sustainability. Copenhagen, the capital, is a vibrant cultural and economic center known for its innovative design and commitment to urban sustainability.",
+            "Curret population: 6.000.000"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d85109.41746491258!2d9.423090002448104!3d57.002972199935456!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2ses!4v1719935798505!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
+        "assetname": "mythical59"
+    },
+    {
+        "name": "Dragon",
+        "country": "Coptic people",
+        "continent": "Africa",
+        "picture": "dragon.jpg",
+        "rarity": "Epic",
+        "creature": [
+            "The biblical Dragon is an incarnation of Satan, the primeval evil force. It has wings, ten horns, and seven heads, each with a crown. It has multiple powers, including the ability to spew water from its mouth to create actual rivers, or to sweep away with its tail a third of the stars in the sky and hurl them to the earth. It gathers under its command armies of evil beings. It also directs two powerful beasts, one emerging from the sea and the other from the depths of the earth.",
+            "The Dragon appears in the narrative of the Christian apocalypse at the moment when the Messiah is about to be born, with the purpose of devouring him. However, the archangel Michael manages to defeat him and expel him from heaven. Then the dragon pursues the mother of the Messiah, but he fails to kill her as she is protected by the earth.",
+            "The Dragon will continue to take part in the events of the apocalypse through the beasts in its service, which will deceive most humans for many years. After the defeat of these beasts, the dragon will be chained in hell for a period of a thousand years, after which it will escape and, gathering two powerful armies, will wage the final battle by besieging the camp of the followers of the Messiah. A rain of sulfur from the sky will conclude this battle, annihilating the forces of evil forever, and the Dragon will be imprisoned in hell for all eternity."
+        ],
+        "landscape": "coptic.jpg",
+        "culture": [
+            "The Copts are an ethno-religious Egyptian group, formed through the evangelization of the natives by Saint Mark in the 1st century AD. They are descendants of the great civilization of the Pharaohs, and their language retained many of its characteristics, including domotic writing. For centuries, the majority of the Egyptian population was Coptic, meaning Christian and Coptic-speaking, and the country became one of the most vibrant intellectual centers of the emerging Christian civilization. With the expansion of Islam in the 7th century, most Egyptians converted, and over time, the Coptic language declined in favor of Arabic and was relegated to purely liturgical uses.",
+            "One of the most distinctive elements of the Coptic worldview is its monastic mysticism. The Copts founded the movement of 'abandonment of the world' promoted by hermits from the 3rd century, which later became the origin of the monasteries and convents that proliferated throughout Christendom. This tendency toward mysticism, a life dedicated to contemplation and union with God, radiates from the hermits and monks and permeates the entire Coptic way of life.",
+            "Copts currently make up about 15% of the Egyptian population and live predominantly in cities, where the Church provides important community services. Although Copts are found in all social classes, including the wealthiest, the group is often associated with the 'zabbaleen,' the garbage collectors of Cairo, whose recycling system surpasses the efficiency of many modern Western systems.",
+            "The coexistence between Sunni Muslims and Copts has experienced various ups and downs throughout history, combining long periods of peace and tolerance with others of persecution and massacres. Today, they are the largest Christian community in the Middle East.",
+            "Current population: 10.000.000"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d28394.715518028668!2d31.14544956849681!3d27.177066344355264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14450be607cb7bcd%3A0xba699162bfc01112!2sAsyut%2C%20Al%20Hamraa%20Ath%20Thaneyah%2C%20El%20Fateh%2C%20Assiut%20Governorate%2C%20Egypt!5e0!3m2!1sen!2ses!4v1719936091482!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
+        "assetname": "mythical60"
+    },
+    {
+        "name": "Kukulkan",
+        "country": "Maya",
+        "continent": "America",
+        "picture": "kukulkan.jpg",
+        "rarity": "Common",
+        "creature": [
+            "Kukulkan is often depicted as a serpentine deity adorned with resplendent feathers, his majestic form evoking both awe and reverence. With a long, truncated nose and the ability to traverse water with ease, he commands the elements, wielding blazing torches as he sits upon the cross-shaped tree of the four winds.",
+            "His visage, a harmonious blend of serpent and avian features, is adorned with luminous plumage that catches the light with a mesmerizing sheen. His dominion over the natural world is unmistakable, as he exerts his influence through seismic events like earthquakes and earth movements.",
+            "Born as a serpentine child and nurtured in the depths of a cave by his sister, Kukulkan's journey from mortal to divine is marked by his profound connection to the earth and its forces. Each year, he signals his continued existence with tremors that reverberate through the land, a testament to his enduring power.",
+            "Kukulkan embodies the liminal space between humanity and divinity, symbolizing the intricate dance between the earthly and the celestial realms. His presence heralds renewal and transformation, serving as a bridge between mortal beings and the primordial forces of nature.",
+            "According to the prophetic texts of the Chilam Balam, Kukulkan's return signifies the culmination of a sacred epoch, ushering in an era of upheaval and change. As he reemerges from the depths of myth and legend, his appearance coincides with the conclusion of a cosmic cycle in the Mayan calendar, signaling profound shifts in the fabric of existence.",
+            "In his return, Kukulkan marks not just the end of an era, but the beginning of a new chapter in Maya cosmology and history, a pivotal moment that shapes the destiny of the universe itself."
+        ],
+        "landscape": "mayans.jpg",
+        "culture": [
+            "The Mayan culture began to develop in Central America around 2600 BC, with the formation of the first villages. At that time they already practiced agriculture with Mayan diet foods: corn, beans and pumpkins. Their way of life was a path and they had also mastered pottery.",
+            " Although they were traditionally a rural culture, between 250 and 900 AD a network of cities developed, independent of each other, with a high technological and constructive level. This urbanization brought to their culture innumerable discoveries of a scientific and artistic nature, and also caused the division of the population into classes. That society collapsed in the 10th century, possibly due to the exhaustion of natural resources, and the Mayans left the cities to return to the countryside, although new cities and new rulers would push them into constant wars between them.",
+            " The Mayan religion is polytheistic and believes in a supernatural world inhabited by powerful deities whose favor must be won through sacrifices and rituals. Ancestors and shamans play an essential role in the relationship with these gods. Although during the most urban periods a caste of priests was formed who codified all the rituals creating a State religion, among the plebeians and peasants their most shamanistic form was maintained, which recovered when the political power collapsed.",
+            " The conquest of this small area of America would cost Spain almost two hundred years, until the last city, Nojpetén, was defeated. However, the distribution of the population in areas of very difficult access allowed the Mayas to preserve their culture, language and religion, in spite of the great efforts of the Catholic missionaries to change their customs. The Mayas are today the second largest native ethnic group in Mexico, and have a strong presence in Belize, Guatemala, El Salvador and Honduras.",
+            "Current population: 4.951.431"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d84444.06777522631!2d-88.55347129989944!3d20.712821667141718!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f5138b9a098f833%3A0xf70a67530750d45!2s97751%20Chich%C3%A9n-Itz%C3%A1%2C%20Yucatan%2C%20Mexico!5e0!3m2!1sen!2ses!4v1719935514239!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
+        "assetname": "mythical61"
+    },
+    {
+        "name": "Bahana",
+        "country": "Hopi",
+        "continent": "America",
+        "picture": "bahana.jpg",
+        "rarity": "Special",
+        "creature": [
+            "Bahana is a central figure in Hopi eschatology. This esoteric being, capable of taking human form, possesses supernatural powers and has the mission of restoring order and virtue to the Earth.",
+            "According to Hopi tradition, humanity has passed through three stages, each marked by corruption and a departure from the teachings of the Great Spirit. As a result, humanity has been almost completely annihilated by natural catastrophes, leaving only a few virtuous survivors. In the most recent purification episode, the survivors were guided by a Great Chief who carved Sacred Stone Tablets containing revelations, laws, and prophecies.",
+            "The Great Chief had two sons, the Younger Brother and the Elder Brother, named Bahana. The Younger Brother would remain in the lands of the Great Spirit in the East, while Bahana was to travel in search of him. Together, they would bring about the next Day of Purification when this stage of humanity also becomes corrupt. Thus, they would establish true justice and peace on Earth.",
+            "Bahana will appear as an all-powerful being, dressed in a Red Cloak, and will belong to no known religion. He will be accompanied by two very powerful beings, identified by solar symbols. His arrival will precede the Day of Purification, during which the Earth will tremble and calamities will ensue. Bahana will then seek the Sacred Stone Tablets to fulfill his mission. If he succeeds and some Hopi remain faithful to the Great Spirit, the Great Spirit will manifest and establish a new era of peace and eternal life."
+        ],
+        "landscape": "hopi.jpg",
+        "culture": [
+            "The Hopi Indians, belonging to the Pueblo group, have a rich history that dates back over a thousand years in northeastern Arizona. Sedentary and peaceful, they developed an advanced agricultural culture with irrigation systems and terraces. Despite the arrival of the Spaniards in the 16th century, they managed to preserve much of their cultural heritage.",
+            "The life of the Hopi is deeply connected to the land and agriculture, cultivating corn, beans, and squash. Their villages on rocky mesas provide protection and strategic views. The society is matrilineal, with women owning the land and homes, while men handle religious ceremonies and community affairs. A ceremonial calendar dictates agricultural activities and festivities.",
+            "Today, the Hopi face significant challenges. Modernity and external influence have changed their way of life, affecting their environment through mining and water and land conservation issues. Additionally, they struggle to preserve their language and ancestral knowledge. The Hopi Reservation, located in northeastern Arizona and surrounded by the Navajo Nation, is the current home of most of the Hopi population. Despite these challenges, they remain resilient, working to maintain their cultural and spiritual identity.",
+            "Current population: 12.000"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d63323.92091438508!2d-110.57021625013174!3d35.865915371611266!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2ses!4v1719935743626!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
+        "assetname": "mythical62"
     }
 ]

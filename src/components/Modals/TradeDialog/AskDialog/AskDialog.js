@@ -193,11 +193,9 @@ const AskDialog = ({
                 quantity = value;
             }
 
-
             const parser = parseFloat(priceCard);
             const finalPrice = (parser * NQTDIVIDER).toFixed(0);
 
-            // const quantity = !isCurrency ? value : value * NQTDIVIDER;
             const response = await sendAskOrder({
                 asset: card.asset,
                 quantity: quantity,

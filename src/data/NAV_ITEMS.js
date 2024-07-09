@@ -11,7 +11,7 @@ export const NAV_ITEMS = [
         href: 'https://mythicalbeings.io/',
     },
     {
-        label: 'How to play',
+        label: 'How to play?',
         href: 'https://mythicalbeings.io/how-to-play.html',
     },
     {
@@ -21,5 +21,5 @@ export const NAV_ITEMS = [
     {
         label: 'Shop',
         href: 'https://shop.mythicalbeings.io/',
-    }
-]
+    },
+];

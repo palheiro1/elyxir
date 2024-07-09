@@ -5,7 +5,7 @@ import RemainingCards from '../../Cards/RemainingCards';
 import BountyWidget from '../../BountyWidget/BountyWidget';
 import SortAndFilterCards from '../../SortAndFilters/SortAndFilterCards';
 import ClaimBounty from './ClaimBounty';
-import { IGNIS_REQUIRED, REFRESH_BOUNTY_PARTICIPANTS } from '../../../data/CONSTANTS';
+import { IGNIS_REQUIRED, IS_BOUNTY_ENABLED, REFRESH_BOUNTY_PARTICIPANTS } from '../../../data/CONSTANTS';
 import SendMissingCardDialog from '../../Modals/BountyDialog/SendMissingCardDialog';
 
 /**
@@ -27,8 +27,6 @@ const Bounty = ({ infoAccount, cards = [] }) => {
     const { accountRs: account, IGNISBalance } = infoAccount;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
-
-    const IS_BOUNTY_ENABLED = true;
 
     useEffect(() => {
         // Get remaining cards

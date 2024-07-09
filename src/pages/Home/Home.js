@@ -503,7 +503,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             <ArdorChat infoAccount={infoAccount} />, // OPTION 9 - Chat
             <Book cards={cards} />, // OPTION 10 - Book
             '', // OPTION 11 - OPEN PACK
-            <Battlegrounds infoAccount={infoAccount} cards={cards}/>,
+            <Battlegrounds infoAccount={infoAccount} cards={cards} />,
         ],
         [infoAccount, cards, cardsFiltered, gemCards, haveUnconfirmed, giftzCards, wethCards, manaCards]
     );
