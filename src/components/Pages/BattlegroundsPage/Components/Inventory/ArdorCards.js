@@ -107,14 +107,14 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
     useEffect(() => {
         const filterCards = async () => {
             const userInfo = await getUserState();
-            if (userInfo.balance) {
-                const assetIds = Object.keys(userInfo.balance.asset);
+            if (userInfo?.balance) {
+                const assetIds = Object.keys(userInfo?.balance?.asset);
 
                 const matchingCards = cards
                     .filter(card => assetIds.includes(card.asset))
                     .map(card => ({
                         ...card,
-                        omnoQuantity: userInfo.balance.asset[card.asset],
+                        omnoQuantity: userInfo?.balance?.asset[card.asset],
                     }));
 
                 setFilteredCards(matchingCards);

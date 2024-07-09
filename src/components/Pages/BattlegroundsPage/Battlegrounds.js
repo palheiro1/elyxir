@@ -137,17 +137,17 @@ const Battlegrounds = ({ infoAccount, cards }) => {
             setBattleCount(battleCount);
 
             const userInfo = await getUserState();
-            if (userInfo.balance) {
-                const assetIds = Object.keys(userInfo.balance.asset);
-                setOmnoGEMsBalance(userInfo.balance.asset[GEMASSET] || 0);
-                setOmnoWethBalance(userInfo.balance.asset[WETHASSET] || 0);
-                setParseWETH(parseFloat(userInfo.balance.asset[WETHASSET] || 0));
+            if (userInfo?.balance) {
+                const assetIds = Object.keys(userInfo?.balance?.asset);
+                setOmnoGEMsBalance(userInfo?.balance?.asset[GEMASSET] || 0);
+                setOmnoWethBalance(userInfo?.balance?.asset[WETHASSET] || 0);
+                setParseWETH(parseFloat(userInfo?.balance?.asset[WETHASSET] || 0));
 
                 const matchingCards = cards
                     .filter(card => assetIds.includes(card.asset))
                     .map(card => ({
                         ...card,
-                        omnoQuantity: userInfo.balance.asset[card.asset],
+                        omnoQuantity: userInfo?.balance?.asset[card.asset],
                     }));
 
                 setFilteredCards(matchingCards);

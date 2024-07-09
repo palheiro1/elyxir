@@ -38,8 +38,8 @@ const SendWethToOmno = ({ isOpen, onClose, infoAccount, wethModalMode }) => {
     useEffect(() => {
         const getOmnoWETHBalance = async () => {
             const userInfo = await getUserState();
-            if (userInfo.balance) {
-                setOmnoWETHBalance(userInfo.balance.asset[WETHASSET] / NQTDIVIDER || 0);
+            if (userInfo?.balance) {
+                setOmnoWETHBalance(userInfo.balance?.asset[WETHASSET] / NQTDIVIDER || 0);
             }
         };
         getOmnoWETHBalance();

@@ -38,8 +38,8 @@ const SendGEMsToOmno = ({ infoAccount, gemsModalMode, isOpen, onClose }) => {
     useEffect(() => {
         const getOmnoGemsBalance = async () => {
             const userInfo = await getUserState();
-            if (userInfo.balance) {
-                setOmnoGEMsBalance(userInfo.balance.asset[GEMASSET] / NQTDIVIDER || 0);
+            if (userInfo?.balance) {
+                setOmnoGEMsBalance(userInfo?.balance?.asset[GEMASSET] / NQTDIVIDER || 0);
             }
         };
         getOmnoGemsBalance();
@@ -160,7 +160,7 @@ const SendGEMsToOmno = ({ infoAccount, gemsModalMode, isOpen, onClose }) => {
                                 </FormLabel>
                             </FormControl>
                         </Center>
-                        <Stack direction={'row'} spacing={7}>
+                        <Stack direction={'row'} spacing={7} mx={'auto'}>
                             <PinInput
                                 size="lg"
                                 onComplete={handleCompletePin}
