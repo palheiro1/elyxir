@@ -159,9 +159,7 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                         cards={cards}
                         arenaInfo={selectedArena}
                         infoAccount={infoAccount}
-                        defenderInfo={battleDetails.find(battle => battle.id === selectedBattle).defenderDetails}
-                        attackerInfo={battleDetails.find(battle => battle.id === selectedBattle).attackerDetails}
-                        isUserDefending={battleDetails.find(battle => battle.id === selectedBattle).isUserDefending}
+                        battleDetails={battleDetails.find(battle => battle.id === selectedBattle)}
                         handleGoBack={handleGoBack}
                     />
                 )}

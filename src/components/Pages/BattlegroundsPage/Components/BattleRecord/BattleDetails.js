@@ -1,12 +1,15 @@
-import { Box, IconButton, Img, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Box, Divider, IconButton, Img, Spinner, Stack, Text, useToast } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { getBattleById, getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 import '@fontsource/chelsea-market';
 import locations from '../../assets/LocationsEnum';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { formatAddress } from '../../Utils/BattlegroundsUtils';
+import { errorToast } from '../../../../../utils/alerts';
 
-const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack, attackerInfo }) => {
+const BattleDetails = ({ cards, arenaInfo, battleId, handleGoBack, battleDetails }) => {
+    const { attackerDetails: attackerInfo, defenderDetails: defenderInfo, isUserDefending } = battleDetails;
+
     const [battleInfo, setBattleInfo] = useState(null);
     const [capturedCard, setCapturedCard] = useState(null);
     const [medium, setMedium] = useState();
@@ -17,6 +20,8 @@ const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack,
     const [defenderBonus, setDefenderBonus] = useState([]);
     const [battleResults, setBattleResults] = useState(null);
     const [domainName, setDomainName] = useState(null);
+    const [attackerHero, setAttackerHero] = useState(null);
+    const [defenderHero, setDefenderHero] = useState(null);
 
     const getLastBattle = useCallback(async () => {
         if (arenaInfo) {
@@ -38,12 +43,18 @@ const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack,
         setArenaName(locations[arenaInfo.id - 1].name);
         const res = await getBattleById(battleId);
         const capturedCard = cards.filter(obj => Object.keys(res.captured.asset).includes(obj.asset))[0];
+
+        const attackerHero = cards.find(card => card.asset === battleDetails.attackerArmy.heroAsset);
+        setAttackerHero(attackerHero);
+
+        const defenderHero = cards.find(card => card.asset === battleDetails.defenderArmy.heroAsset);
+        setDefenderHero(defenderHero);
         setCapturedCard(capturedCard);
 
         setBattleResults(res);
 
         setBattleInfo(res);
-    }, [arenaInfo, battleId, cards]);
+    }, [arenaInfo, battleDetails.attackerArmy.heroAsset, battleDetails.defenderArmy.heroAsset, battleId, cards]);
 
     const calculateBonus = useCallback(
         async card => {
@@ -53,7 +64,9 @@ const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack,
             };
 
             const soldiers = await getSoldiers();
+
             const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
+
             setDomainName(cards.find(card => card.asset === arenaSoldier.asset).channel);
             const cardInfo = soldiers.soldier.find(item => item.asset === card.asset);
             if (cardInfo.mediumId === arenaSoldier.mediumId) {
@@ -84,6 +97,9 @@ const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack,
                     const attackerCard = cards.find(card => String(card.asset) === String(item.attackerAsset));
                     const defenderCard = cards.find(card => String(card.asset) === String(item.defenderAsset));
 
+                    let attackerSoldier = battleDetails.attacker.find(soldier => soldier.asset === item.attackerAsset);
+                    let defenderSoldier = battleDetails.defender.find(soldier => soldier.asset === item.defenderAsset);
+
                     if (attackerCard && defenderCard) {
                         const attackerBonuses = (await calculateBonus(attackerCard)) || {
                             mediumBonus: 0,
@@ -97,8 +113,17 @@ const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack,
                         attackerResults.push(attackerBonuses);
                         defenderResults.push(defenderBonuses);
 
-                        pointsA += item.attackerValue;
-                        pointsD += item.defenderValue;
+                        pointsA +=
+                            attackerBonuses.mediumBonus +
+                            attackerBonuses.domainBonus +
+                            attackerSoldier.power +
+                            item.attackerRoll;
+
+                        pointsD +=
+                            defenderBonuses.mediumBonus +
+                            defenderBonuses.domainBonus +
+                            defenderSoldier.power +
+                            item.defenderRoll;
                     }
                 })
             );
@@ -109,12 +134,18 @@ const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack,
             setDefenderBonus(defenderResults);
         };
 
-        if (battleResults && cards && calculateBonus) {
+        if (battleResults && cards && cards.length > 0 && calculateBonus) {
             calculateAllBonusesAndPoints();
         }
-    }, [battleResults, calculateBonus, cards]);
+    }, [battleDetails.attacker, battleDetails.defender, battleResults, calculateBonus, cards]);
 
-    return battleInfo ? (
+    const toast = useToast();
+    if (!cards || cards.length <= 0) {
+        errorToast('Cards are not loaded. Please refresh the battlegrounds page', toast);
+        handleGoBack();
+    }
+
+    return cards && cards.length > 0 && battleInfo ? (
         <Box
             display={'flex'}
             h={'100%'}
@@ -177,8 +208,8 @@ const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack,
                         <Box
                             border={'2px solid #7FC0BE'}
                             borderRadius={5}
-                            w={8}
-                            h={8}
+                            w={9}
+                            h={9}
                             display="flex"
                             alignItems="center"
                             justifyContent="center">
@@ -190,8 +221,8 @@ const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack,
                         <Box
                             border={'2px solid #7FC0BE'}
                             borderRadius={5}
-                            w={8}
-                            h={8}
+                            w={9}
+                            h={9}
                             display="flex"
                             alignItems="center"
                             justifyContent="center">
@@ -215,139 +246,210 @@ const BattleDetails = ({ cards, arenaInfo, defenderInfo, battleId, handleGoBack,
                                 return card.asset === String(item.defenderAsset);
                             });
 
-                            return (
-                                <Stack
-                                    direction={'row'}
-                                    key={index}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                    alignItems={'center'}
-                                    spacing={4}>
-                                    <Stack fontSize={'xs'} align={'flex-start'}>
-                                        <Text>{attackerCard.name}</Text>
-                                        <Text>
-                                            <span style={{ color: '#D597B2' }}>DOMAIN:</span>{' '}
-                                            {attackerBonus[index]?.domainBonus ?? 0}
-                                        </Text>
-                                        <Text>
-                                            <span style={{ color: '#D597B2' }}>MEDIUM:</span>{' '}
-                                            {attackerBonus[index]?.mediumBonus ?? 0}
-                                        </Text>
-                                        <Text>
-                                            <span style={{ color: '#D597B2' }}>DICE:</span> {item.attackerRoll}
-                                        </Text>
-                                        <Text>Round points: {item.attackerValue}</Text>
-                                    </Stack>
-                                    <Box
-                                        width="8"
-                                        height="8"
-                                        bg={item.attackerRoll <= item.defenderRoll ? 'transparent' : '#FFF'}
-                                        display="flex"
-                                        alignItems="center"
-                                        justifyContent="center"
-                                        position="relative"
-                                        border="2px solid #D597B2"
-                                        borderRadius={5}
-                                        transform="rotate(45deg)"
-                                        _after={{
-                                            content: '""',
-                                            display: 'block',
-                                            paddingBottom: '100%',
-                                        }}>
-                                        <Text
-                                            color={item.attackerRoll <= item.defenderRoll ? '#D597B2' : '#000'}
-                                            fontSize="xl"
-                                            transform="rotate(-45deg)"
-                                            position="absolute">
-                                            {item.attackerRoll}
-                                        </Text>
-                                    </Box>
-                                    <Box position="relative" width="8%">
-                                        <Img src={attackerCard.cardImgUrl} width="100%" />
-                                        {item.defenderValue >= item.attackerValue && (
-                                            <Box
-                                                position="absolute"
-                                                top="0"
-                                                left="0"
-                                                width="100%"
-                                                height="100%"
-                                                display="flex"
-                                                alignItems="center"
-                                                justifyContent="center"
-                                                bg="rgba(0, 0, 0, 0.3)">
-                                                <Text fontSize="130px" color="black" opacity="0.7">
-                                                    X
-                                                </Text>
-                                            </Box>
-                                        )}
-                                    </Box>
-                                    <Text> vs </Text>
-                                    <Box position="relative" width="8%">
-                                        <Img src={defenderCard.cardImgUrl} width="100%" />
-                                        {item.defenderValue <= item.attackerValue && (
-                                            <Box
-                                                position="absolute"
-                                                top="0"
-                                                left="0"
-                                                width="100%"
-                                                height="100%"
-                                                display="flex"
-                                                alignItems="center"
-                                                justifyContent="center"
-                                                bg="rgba(0, 0, 0, 0.3)">
-                                                <Text fontSize="130px" color="black" opacity="0.7">
-                                                    X
-                                                </Text>
-                                            </Box>
-                                        )}
-                                    </Box>
-                                    <Box
-                                        width="8"
-                                        height="8"
-                                        bg={item.attackerRoll >= item.defenderRoll ? 'transparent' : '#FFF'}
-                                        display="flex"
-                                        alignItems="center"
-                                        justifyContent="center"
-                                        position="relative"
-                                        border="2px solid #D597B2"
-                                        borderRadius={5}
-                                        transform="rotate(45deg)"
-                                        _after={{
-                                            content: '""',
-                                            display: 'block',
-                                            paddingBottom: '100%',
-                                        }}>
-                                        <Text
-                                            color={item.attackerRoll >= item.defenderRoll ? '#D597B2' : '#000'}
-                                            fontSize="xl"
-                                            transform="rotate(-45deg)"
-                                            position="absolute">
-                                            {item.defenderRoll}
-                                        </Text>
-                                    </Box>
+                            let attackerSoldier = battleDetails.attacker.find(
+                                soldier => soldier.asset === item.attackerAsset
+                            );
+                            let defenderSoldier = battleDetails.defender.find(
+                                soldier => soldier.asset === item.defenderAsset
+                            );
 
-                                    <Stack fontSize={'xs'} align={'flex-end'}>
-                                        <Text>{defenderCard.name}</Text>
-                                        <Text>
-                                            <span style={{ color: '#D597B2' }}>DOMAIN:</span>{' '}
-                                            {defenderBonus[index]?.domainBonus ?? 0}
-                                        </Text>
-                                        <Text>
-                                            <span style={{ color: '#D597B2' }}>MEDIUM:</span>{' '}
-                                            {defenderBonus[index]?.mediumBonus ?? 0}
-                                        </Text>
-                                        <Text>
-                                            <span style={{ color: '#D597B2' }}>DICE:</span> {item.defenderRoll}
-                                        </Text>
-                                        <Text>Round points: {item.defenderValue}</Text>
+                            let attackerRoundPoints =
+                                attackerBonus[index]?.mediumBonus +
+                                attackerBonus[index]?.domainBonus +
+                                attackerSoldier.power +
+                                item.attackerRoll;
+
+                            let defenderRoundPoints =
+                                defenderBonus[index]?.mediumBonus +
+                                defenderBonus[index]?.domainBonus +
+                                defenderSoldier.power +
+                                item.defenderRoll;
+
+                            return (
+                                <>
+                                    <Stack
+                                        direction={'row'}
+                                        key={index}
+                                        display={'flex'}
+                                        justifyContent={'center'}
+                                        alignItems={'center'}
+                                        spacing={4}>
+                                        <Stack fontSize={'xs'} align={'flex-start'}>
+                                            <Text>
+                                                {attackerCard.name}{' '}
+                                                {attackerHero.asset === attackerCard.asset ? '(Hero)' : null}
+                                            </Text>
+                                            <Text>
+                                                <span style={{ color: '#D597B2' }}>DOMAIN:</span>{' '}
+                                                {attackerBonus[index]?.domainBonus ?? 0}
+                                            </Text>
+                                            <Text>
+                                                <span style={{ color: '#D597B2' }}>MEDIUM:</span>{' '}
+                                                {attackerBonus[index]?.mediumBonus ?? 0}
+                                            </Text>
+                                            <Text>
+                                                <span style={{ color: '#D597B2' }}>DICE:</span> {item.attackerRoll}
+                                            </Text>
+                                            <Text>
+                                                <span style={{ color: '#D597B2' }}>POWER:</span> {attackerSoldier.power}
+                                            </Text>
+
+                                            <Text>
+                                                Round points: {isNaN(attackerRoundPoints) ? 0 : attackerRoundPoints}
+                                            </Text>
+                                        </Stack>
+                                        <Box
+                                            width="8"
+                                            height="8"
+                                            bg={item.attackerRoll <= item.defenderRoll ? 'transparent' : '#FFF'}
+                                            display="flex"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                            position="relative"
+                                            border="2px solid #D597B2"
+                                            borderRadius={5}
+                                            transform="rotate(45deg)"
+                                            _after={{
+                                                content: '""',
+                                                display: 'block',
+                                                paddingBottom: '100%',
+                                            }}>
+                                            <Text
+                                                color={item.attackerRoll <= item.defenderRoll ? '#D597B2' : '#000'}
+                                                fontSize="xl"
+                                                transform="rotate(-45deg)"
+                                                position="absolute">
+                                                {item.attackerRoll}
+                                            </Text>
+                                        </Box>
+                                        <Box
+                                            position="relative"
+                                            width="9%"
+                                            sx={{
+                                                border:
+                                                    attackerHero.asset === attackerCard.asset
+                                                        ? '3px solid #D08FB0'
+                                                        : 'none',
+                                                borderImage:
+                                                    attackerHero.asset === attackerCard.asset
+                                                        ? `linear-gradient(90deg, rgba(163,161,81,1) 0%, rgba(219,227,82,1) 35%, rgba(244,135,148,1) 100%) 1`
+                                                        : 'none',
+                                            }}>
+                                            <Img src={attackerCard.cardImgUrl} width="100%" />
+                                            {defenderRoundPoints >= attackerRoundPoints && (
+                                                <Box
+                                                    position="absolute"
+                                                    top="0"
+                                                    left="0"
+                                                    width="100%"
+                                                    height="100%"
+                                                    display="flex"
+                                                    alignItems="center"
+                                                    justifyContent="center"
+                                                    bg="rgba(0, 0, 0, 0.3)">
+                                                    <Text fontSize="130px" color="black" opacity="0.7">
+                                                        X
+                                                    </Text>
+                                                </Box>
+                                            )}
+                                        </Box>
+                                        <Text> vs </Text>
+                                        <Box
+                                            position="relative"
+                                            width="9%"
+                                            sx={{
+                                                border:
+                                                    defenderHero.asset === defenderCard.asset
+                                                        ? '3px solid #D08FB0'
+                                                        : 'none',
+                                                borderImage:
+                                                    defenderHero.asset === defenderCard.asset
+                                                        ? `linear-gradient(90deg, rgba(163,161,81,1) 0%, rgba(219,227,82,1) 35%, rgba(244,135,148,1) 100%) 1`
+                                                        : 'none',
+                                            }}>
+                                            <Img src={defenderCard.cardImgUrl} width="100%" />
+                                            {defenderRoundPoints <= attackerRoundPoints && (
+                                                <Box
+                                                    position="absolute"
+                                                    top="0"
+                                                    left="0"
+                                                    width="100%"
+                                                    height="100%"
+                                                    display="flex"
+                                                    alignItems="center"
+                                                    justifyContent="center"
+                                                    bg="rgba(0, 0, 0, 0.3)">
+                                                    <Text fontSize="130px" color="black" opacity="0.7">
+                                                        X
+                                                    </Text>
+                                                </Box>
+                                            )}
+                                        </Box>
+                                        <Box
+                                            width="8"
+                                            height="8"
+                                            bg={item.attackerRoll >= item.defenderRoll ? 'transparent' : '#FFF'}
+                                            display="flex"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                            position="relative"
+                                            border="2px solid #D597B2"
+                                            borderRadius={5}
+                                            transform="rotate(45deg)"
+                                            _after={{
+                                                content: '""',
+                                                display: 'block',
+                                                paddingBottom: '100%',
+                                            }}>
+                                            <Text
+                                                color={item.attackerRoll >= item.defenderRoll ? '#D597B2' : '#000'}
+                                                fontSize="xl"
+                                                transform="rotate(-45deg)"
+                                                position="absolute">
+                                                {item.defenderRoll}
+                                            </Text>
+                                        </Box>
+
+                                        <Stack fontSize={'xs'} align={'flex-end'}>
+                                            <Text>
+                                                {defenderCard.name}{' '}
+                                                {defenderHero.asset === defenderCard.asset ? '(Hero)' : null}{' '}
+                                            </Text>
+                                            <Text>
+                                                <span style={{ color: '#D597B2' }}>DOMAIN:</span>{' '}
+                                                {defenderBonus[index]?.domainBonus ?? 0}
+                                            </Text>
+                                            <Text>
+                                                <span style={{ color: '#D597B2' }}>MEDIUM:</span>{' '}
+                                                {defenderBonus[index]?.mediumBonus ?? 0}
+                                            </Text>
+                                            <Text>
+                                                <span style={{ color: '#D597B2' }}>DICE:</span> {item.defenderRoll}
+                                            </Text>
+                                            <Text>
+                                                <span style={{ color: '#D597B2' }}>POWER:</span> {defenderSoldier.power}
+                                            </Text>
+                                            <Text>
+                                                Round points: {isNaN(defenderRoundPoints) ? 0 : defenderRoundPoints}
+                                            </Text>
+                                        </Stack>
                                     </Stack>
-                                </Stack>
+                                    <Divider />
+                                </>
                             );
                         })}
                 </Stack>
 
                 <Stack direction={'column'} align={'center'}>
-                    <Text fontSize={'medium'}>{battleInfo.isDefenderWin ? 'Captured card: ' : 'Obtained card:'}</Text>
+                    <Text fontSize={'medium'}>
+                        {isUserDefending
+                            ? battleInfo.isDefenderWin
+                                ? 'Obtained card:'
+                                : 'Captured card: '
+                            : battleInfo.isDefenderWin
+                            ? 'Captured card:'
+                            : 'Obtained card: '}
+                    </Text>
                     <Img w={'10%'} src={capturedCard.cardImgUrl} mb={3} />
                 </Stack>
             </Stack>

@@ -153,7 +153,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
                 ({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive, isDisabled }) =>
                     !isDisabled && (
                         <Button
-                            key={text}
+                            key={text || 1}
                             minW={widthBotones}
                             minH="50px"
                             _hover={{ background: isActive ? bgColor : hoverBg, color: isActive ? undefined : 'white' }}

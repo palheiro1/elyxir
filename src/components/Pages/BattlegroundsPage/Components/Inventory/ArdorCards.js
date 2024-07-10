@@ -13,6 +13,7 @@ import {
     PinInput,
     PinInputField,
     Stack,
+    Text,
     useColorModeValue,
     useToast,
 } from '@chakra-ui/react';
@@ -154,14 +155,20 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
                         Select cards <ChevronDownIcon />
                     </MenuButton>
                     <MenuList minW="100%" maxH="25rem" overflowY="auto" overflowX="hidden">
-                        {notSelectedCards.map(card => (
-                            <MenuItem
-                                minW="100%"
-                                key={card.asset}
-                                onClick={() => setSelectedCards([...selectedCards, card])}>
-                                <BridgeCard card={card} omnoQuantity={card.omnoQuantity} />
+                        {notSelectedCards.length > 0 ? (
+                            notSelectedCards.map(card => (
+                                <MenuItem
+                                    minW="100%"
+                                    key={card.asset}
+                                    onClick={() => setSelectedCards([...selectedCards, card])}>
+                                    <BridgeCard card={card} omnoQuantity={card.omnoQuantity} />
+                                </MenuItem>
+                            ))
+                        ) : (
+                            <MenuItem minW="100%">
+                                <Text>You dont have more cards</Text>
                             </MenuItem>
-                        ))}
+                        )}
                     </MenuList>
                 </Menu>
 
@@ -176,7 +183,7 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
                             spacing={4}
                             bgColor={bgColor}
                             py={4}
-                            px={6}
+                            px={4}
                             rounded="lg"
                             maxH="20rem"
                             className="custom-scrollbar"
