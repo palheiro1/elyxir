@@ -33,69 +33,82 @@ const BattleInventory = ({ setOpenIventory, filteredCards, index, handBattleCard
                         p={5}
                         overflow={'scroll'}
                         h={'750px'}>
-                        {filteredCards
-                            .filter(
-                                card =>
-                                    (index === 0 && (card.rarity === 'Epic' || card.rarity === 'Special')) ||
-                                    (index !== 0 && (card.rarity === 'Common' || card.rarity === 'Rare'))
-                            )
-                            .map((card, i) => {
-                                return card.asset.length <= 19 &&
-                                    !handBattleCards.find(item => item.asset === card.asset) ? (
-                                    <>
-                                        <Box
-                                            key={i}
-                                            w={'225px'}
-                                            h={'350px'}
-                                            bg={'white'}
-                                            onClick={() => {
-                                                setOpenIventory(false);
-                                                updateCard(card);
-                                            }}
-                                            borderRadius={'10px'}>
-                                            <Center>
-                                                <Img src={card.cardImgUrl} w={'90%'} h={'75%'} />
-                                            </Center>
-                                            <Stack direction={{ base: 'column', lg: 'row' }} spacing={0} mx={2}>
-                                                <Stack
-                                                    direction="column"
-                                                    spacing={0}
-                                                    align={{ base: 'center', lg: 'start' }}>
-                                                    <Text
-                                                        fontSize={{
-                                                            base: 'sm',
-                                                            md: 'md',
-                                                            '2xl': 'xl',
-                                                        }}
-                                                        noOfLines={1}
-                                                        fontWeight="bold"
-                                                        color={'#FFF'}>
-                                                        {card.name}
-                                                    </Text>
-                                                    <CardBadges
-                                                        rarity={card.rarity}
-                                                        continent={card.channel}
-                                                        size="sm"
-                                                    />
-                                                </Stack>
-                                                <Spacer display={{ base: 'none', lg: 'block' }} />
-                                                <Center minHeight={{ base: 'auto', lg: '100%' }}>
-                                                    <Tooltip display={'flex'} placement="bottom">
-                                                        <Flex w={{ base: 'auto', lg: '100%' }}>
-                                                            <Text
-                                                                textAlign="end"
-                                                                minH={{ base: '100%', lg: 'auto' }}
-                                                                color={'#000'}>
-                                                                <small>Quantity:</small> {card.omnoQuantity}
-                                                            </Text>
-                                                        </Flex>
-                                                    </Tooltip>
+                        {filteredCards.length > 0 ? (
+                            filteredCards
+                                .filter(
+                                    card =>
+                                        (index === 0 && (card.rarity === 'Epic' || card.rarity === 'Special')) ||
+                                        (index !== 0 && (card.rarity === 'Common' || card.rarity === 'Rare'))
+                                )
+                                .map((card, i) => {
+                                    return card.asset.length <= 19 &&
+                                        !handBattleCards.find(item => item.asset === card.asset) ? (
+                                        <>
+                                            <Box
+                                                key={i}
+                                                w={'225px'}
+                                                h={'350px'}
+                                                bg={'white'}
+                                                onClick={() => {
+                                                    setOpenIventory(false);
+                                                    updateCard(card);
+                                                }}
+                                                borderRadius={'10px'}>
+                                                <Center>
+                                                    <Img src={card.cardImgUrl} w={'90%'} h={'75%'} />
                                                 </Center>
-                                            </Stack>
-                                        </Box>
-                                    </>
-                                ) : null;
-                            })}
+                                                <Stack direction={{ base: 'column', lg: 'row' }} spacing={0} mx={2}>
+                                                    <Stack
+                                                        direction="column"
+                                                        spacing={0}
+                                                        align={{ base: 'center', lg: 'start' }}>
+                                                        <Text
+                                                            fontSize={{
+                                                                base: 'sm',
+                                                                md: 'md',
+                                                                '2xl': 'xl',
+                                                            }}
+                                                            noOfLines={1}
+                                                            fontWeight="bold"
+                                                            color={'#FFF'}>
+                                                            {card.name}
+                                                        </Text>
+                                                        <CardBadges
+                                                            rarity={card.rarity}
+                                                            continent={card.channel}
+                                                            size="sm"
+                                                        />
+                                                    </Stack>
+                                                    <Spacer display={{ base: 'none', lg: 'block' }} />
+                                                    <Center minHeight={{ base: 'auto', lg: '100%' }}>
+                                                        <Tooltip display={'flex'} placement="bottom">
+                                                            <Flex w={{ base: 'auto', lg: '100%' }}>
+                                                                <Text
+                                                                    textAlign="end"
+                                                                    minH={{ base: '100%', lg: 'auto' }}
+                                                                    color={'#000'}>
+                                                                    <small>Quantity:</small> {card.omnoQuantity}
+                                                                </Text>
+                                                            </Flex>
+                                                        </Tooltip>
+                                                    </Center>
+                                                </Stack>
+                                            </Box>
+                                        </>
+                                    ) : null;
+                                })
+                        ) : (
+                            <Text
+                                position={'absolute'}
+                                fontFamily={'Chelsea Market, system-ui'}
+                                color={'#FFF'}
+                                fontSize={'large'}
+                                top={'50%'}
+                                left={'50%'}
+                                transform={'translate(-50%, -50%)'}>
+                                No cards left
+                            </Text>
+                        )}
                     </SimpleGrid>
                 </Box>
                 <Text color={'red'} position={'absolute'} fontFamily={'Chelsea Market, system-ui'} bottom={2}>

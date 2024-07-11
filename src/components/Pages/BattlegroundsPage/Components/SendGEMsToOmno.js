@@ -20,7 +20,7 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import { checkPin, sendGEMSToOmno, withdrawGEMsFromOmno } from '../../../../utils/walletUtils';
-import { errorToast } from '../../../../utils/alerts';
+import { errorToast, okToast } from '../../../../utils/alerts';
 import { GEMASSET, NQTDIVIDER } from '../../../../data/CONSTANTS';
 import { getUsersState } from '../../../../services/Ardor/omnoInterface';
 import { addressToAccountId } from '../../../../services/Ardor/ardorInterface';
@@ -87,19 +87,35 @@ const SendGEMsToOmno = ({ infoAccount, gemsModalMode, isOpen, onClose }) => {
         if (!isValidPin) {
             return errorToast('The pin is invalid', toast);
         }
+        if (amount <= 0) {
+            return errorToast('The quantity to send must be greater than 0', toast);
+        }
 
-        await sendGEMSToOmno({ quantity: amount, passPhrase: passphrase });
+        let res = await sendGEMSToOmno({ quantity: amount, passPhrase: passphrase });
+
+        if (!res) {
+            return errorToast("You don't have enough IGNIS to transact");
+        }
         setAmount(0);
         onClose();
+        return okToast('GEMs have been sent correctly', toast);
     };
     const handleWithdrawGems = async () => {
         if (!isValidPin) {
             return errorToast('The pin is invalid', toast);
         }
 
-        await withdrawGEMsFromOmno({ quantity: amount, passPhrase: passphrase });
+        if (amount <= 0) {
+            return errorToast('The quantity to withdraw must be greater than 0', toast);
+        }
+
+        let res = await withdrawGEMsFromOmno({ quantity: amount, passPhrase: passphrase });
+        if (!res) {
+            return errorToast("You don't have enough IGNIS to transact");
+        }
         setAmount(0);
         onClose();
+        return okToast('GEMs have been withdrawn correctly', toast);
     };
 
     const handleClose = () => {

@@ -150,10 +150,10 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
     return (
         <VStack align="flex-start" spacing={2} width={widthBotones}>
             {buttons.map(
-                ({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive, isDisabled }) =>
+                ({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive, isDisabled }, index) =>
                     !isDisabled && (
                         <Button
-                            key={text}
+                            key={index}
                             minW={widthBotones}
                             minH="50px"
                             _hover={{ background: isActive ? bgColor : hoverBg, color: isActive ? undefined : 'white' }}

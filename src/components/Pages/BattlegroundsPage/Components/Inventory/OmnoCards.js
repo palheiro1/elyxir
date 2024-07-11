@@ -13,6 +13,7 @@ import {
     PinInput,
     PinInputField,
     Stack,
+    Text,
     useColorModeValue,
     useToast,
 } from '@chakra-ui/react';
@@ -123,15 +124,21 @@ const OmnoCards = ({ infoAccount, cards }) => {
                         Select cards <ChevronDownIcon />
                     </MenuButton>
                     <MenuList minW="100%" maxH="25rem" overflowY="auto" overflowX="hidden">
-                        {notSelectedCards.map(card =>
-                            card.asset.length <= 19 ? (
-                                <MenuItem
-                                    minW="100%"
-                                    key={card.asset}
-                                    onClick={() => setSelectedCards([...selectedCards, card])}>
-                                    <BridgeCard card={card} />
-                                </MenuItem>
-                            ) : null
+                        {notSelectedCards.length > 0 ? (
+                            notSelectedCards.map(card =>
+                                card.asset.length <= 19 ? (
+                                    <MenuItem
+                                        minW="100%"
+                                        key={card.asset}
+                                        onClick={() => setSelectedCards([...selectedCards, card])}>
+                                        <BridgeCard card={card} />
+                                    </MenuItem>
+                                ) : null
+                            )
+                        ) : (
+                            <MenuItem minW="100%">
+                                <Text>You dont have more cards</Text>
+                            </MenuItem>
                         )}
                     </MenuList>
                 </Menu>
@@ -147,7 +154,7 @@ const OmnoCards = ({ infoAccount, cards }) => {
                             spacing={4}
                             bgColor={bgColor}
                             py={4}
-                            px={6}
+                            px={4}
                             rounded="lg"
                             maxH="20rem"
                             className="custom-scrollbar"

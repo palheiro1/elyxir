@@ -20,7 +20,7 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import { checkPin, sendWETHToOmno, withdrawWETHFromOmno } from '../../../../utils/walletUtils';
-import { errorToast } from '../../../../utils/alerts';
+import { errorToast, okToast } from '../../../../utils/alerts';
 import { addressToAccountId } from '../../../../services/Ardor/ardorInterface';
 import { getUsersState } from '../../../../services/Ardor/omnoInterface';
 import { NQTDIVIDER, WETHASSET } from '../../../../data/CONSTANTS';
@@ -33,13 +33,13 @@ const SendWethToOmno = ({ isOpen, onClose, infoAccount, wethModalMode }) => {
     const [amount, setAmount] = useState(0);
     const [passphrase, setPassphrase] = useState('');
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
-    const [omnoWETHBalance, setOmnoWETHBalance] = useState(null);
+    const [omnoWETHBalance, setOmnoWETHBalance] = useState(0);
 
     useEffect(() => {
         const getOmnoWETHBalance = async () => {
             const userInfo = await getUserState();
             if (userInfo?.balance) {
-                setOmnoWETHBalance(userInfo.balance?.asset[WETHASSET] / NQTDIVIDER || 0);
+                setOmnoWETHBalance(userInfo.balance?.asset[WETHASSET] / NQTDIVIDER);
             }
         };
         getOmnoWETHBalance();
@@ -89,9 +89,17 @@ const SendWethToOmno = ({ isOpen, onClose, infoAccount, wethModalMode }) => {
             return errorToast('The pin is invalid', toast);
         }
 
-        await sendWETHToOmno({ quantity: amount, passPhrase: passphrase });
+        if (amount <= 0) {
+            return errorToast(`The quantity to send must be greater than 0`, toast);
+        }
+
+        let res = await sendWETHToOmno({ quantity: amount, passPhrase: passphrase });
+        if (!res) {
+            return errorToast("You don't have enough IGNIS to transact");
+        }
         setAmount(0);
         onClose();
+        return okToast('WETH have been sent correctly', toast);
     };
 
     const handleWithdrawWeth = async () => {
@@ -99,9 +107,17 @@ const SendWethToOmno = ({ isOpen, onClose, infoAccount, wethModalMode }) => {
             return errorToast('The pin is invalid', toast);
         }
 
-        await withdrawWETHFromOmno({ quantity: amount, passPhrase: passphrase });
+        if (amount <= 0) {
+            return errorToast('The quantity to withdraw must be greater than 0', toast);
+        }
+
+        let res = await withdrawWETHFromOmno({ quantity: amount, passPhrase: passphrase });
+        if (!res) {
+            return errorToast("You don't have enough IGNIS to transact");
+        }
         setAmount(0);
         onClose();
+        return okToast('WETH have been withdrawn correctly', toast);
     };
 
     const handleClose = () => {
