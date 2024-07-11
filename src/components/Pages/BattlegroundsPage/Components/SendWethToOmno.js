@@ -33,13 +33,13 @@ const SendWethToOmno = ({ isOpen, onClose, infoAccount, wethModalMode }) => {
     const [amount, setAmount] = useState(0);
     const [passphrase, setPassphrase] = useState('');
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
-    const [omnoWETHBalance, setOmnoWETHBalance] = useState(null);
+    const [omnoWETHBalance, setOmnoWETHBalance] = useState(0);
 
     useEffect(() => {
         const getOmnoWETHBalance = async () => {
             const userInfo = await getUserState();
             if (userInfo?.balance) {
-                setOmnoWETHBalance(userInfo.balance?.asset[WETHASSET] / NQTDIVIDER || 0);
+                setOmnoWETHBalance(userInfo.balance?.asset[WETHASSET] / NQTDIVIDER);
             }
         };
         getOmnoWETHBalance();
