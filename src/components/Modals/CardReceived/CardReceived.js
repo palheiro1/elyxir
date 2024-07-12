@@ -39,7 +39,7 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
         check();
     }, [cards, currentCards]);
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
+    const bgColor = useColorModeValue('#FFF', '#1D1D1D');
     const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
 
     if (currentCards.length === 0) return null;

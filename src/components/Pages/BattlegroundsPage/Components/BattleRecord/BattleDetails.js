@@ -434,7 +434,7 @@ const BattleDetails = ({ cards, arenaInfo, battleId, handleGoBack, battleDetails
                                             </Text>
                                         </Stack>
                                     </Stack>
-                                    <Divider />
+                                    <Divider w={'70%'} mx={'auto'} />
                                 </>
                             );
                         })}

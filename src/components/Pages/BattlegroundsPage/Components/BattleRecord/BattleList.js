@@ -136,7 +136,12 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                             </Heading>
                         </Stack>
                         {battleDetails ? (
-                            <BattleListTable handleViewDetails={handleViewDetails} battleDetails={battleDetails} />
+                            <BattleListTable
+                                arenasInfo={arenasInfo}
+                                handleViewDetails={handleViewDetails}
+                                battleDetails={battleDetails}
+                                cards={cards}
+                            />
                         ) : (
                             <Box
                                 h={'100%'}
