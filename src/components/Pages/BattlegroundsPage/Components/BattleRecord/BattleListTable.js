@@ -2,6 +2,7 @@ import { Box, Image, Table, Tbody, Td, Text, Th, Thead, Tooltip, Tr } from '@cha
 import React, { useEffect, useState } from 'react';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getAsset } from '../../../../../utils/cardsUtils';
+import { formatAddress } from '../../Utils/BattlegroundsUtils';
 
 const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }) => {
     const [battleRewards, setBattleRewards] = useState({});
@@ -96,8 +97,9 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
                                         alignItems="center"
                                         justifyContent="center">
                                         {item.isUserDefending
-                                            ? item.attackerDetails.name || item.attackerDetails.accountRS
-                                            : item.defenderDetails.name || item.defenderDetails.accountRS}
+                                            ? item.attackerDetails.name || formatAddress(item.attackerDetails.accountRS)
+                                            : item.defenderDetails.name ||
+                                              formatAddress(item.defenderDetails.accountRS)}
                                     </Box>
                                 </Td>
                                 <Td textAlign={'center'} p={2}>
