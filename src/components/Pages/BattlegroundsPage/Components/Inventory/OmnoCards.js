@@ -101,6 +101,7 @@ const OmnoCards = ({ infoAccount, cards }) => {
     };
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+    const textColor = useColorModeValue('black', 'white');
 
     return (
         <Center color={'#FFF'}>
@@ -137,7 +138,7 @@ const OmnoCards = ({ infoAccount, cards }) => {
                             )
                         ) : (
                             <MenuItem minW="100%">
-                                <Text>You dont have more cards</Text>
+                                <Text color={textColor}>You dont have more cards</Text>
                             </MenuItem>
                         )}
                     </MenuList>

@@ -104,6 +104,7 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
     };
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+    const textColor = useColorModeValue('black', 'white');
 
     useEffect(() => {
         const filterCards = async () => {
@@ -166,7 +167,7 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
                             ))
                         ) : (
                             <MenuItem minW="100%">
-                                <Text>You dont have more cards</Text>
+                                <Text color={textColor}>You dont have more cards</Text>
                             </MenuItem>
                         )}
                     </MenuList>

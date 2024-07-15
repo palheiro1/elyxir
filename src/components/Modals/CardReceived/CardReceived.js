@@ -8,6 +8,7 @@ import {
     Button,
     Center,
     Heading,
+    IconButton,
     Image,
     SimpleGrid,
     Text,
@@ -21,9 +22,9 @@ import equals from 'fast-deep-equal';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import CardBadges from '../../Cards/CardBadges';
-
-import HoverCard from "@darenft/react-3d-hover-card";
-import "@darenft/react-3d-hover-card/dist/style.css";
+import HoverCard from '@darenft/react-3d-hover-card';
+import '@darenft/react-3d-hover-card/dist/style.css';
+import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 
 const CardReceived = ({ reference, isOpen, onClose, cards }) => {
     const [currentCards, setCurrentCards] = useState(cards);
@@ -39,8 +40,9 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
         check();
     }, [cards, currentCards]);
 
-    const bgColor = useColorModeValue('', '#1D1D1D');
+    const bgColor = useColorModeValue('#FFF', '#1D1D1D');
     const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
+    const arrowColor = useColorModeValue('black', 'white');
 
     if (currentCards.length === 0) return null;
 
@@ -101,7 +103,39 @@ const CardReceived = ({ reference, isOpen, onClose, cards }) => {
                             centerMode={true}
                             showIndicators={false}
                             showThumbs={false}
-                            showStatus={false}>
+                            showStatus={false}
+                            renderArrowPrev={(onClickHandler, hasPrev, label) =>
+                                hasPrev && (
+                                    <IconButton
+                                        icon={<ArrowBackIcon />}
+                                        onClick={onClickHandler}
+                                        aria-label={label}
+                                        position="absolute"
+                                        left="10px"
+                                        top="50%"
+                                        transform="translateY(-50%)"
+                                        backgroundColor="transparent"
+                                        color={arrowColor}
+                                        _hover={{ backgroundColor: 'blackAlpha.400' }}
+                                    />
+                                )
+                            }
+                            renderArrowNext={(onClickHandler, hasNext, label) =>
+                                hasNext && (
+                                    <IconButton
+                                        icon={<ArrowForwardIcon />}
+                                        onClick={onClickHandler}
+                                        aria-label={label}
+                                        position="absolute"
+                                        right="10px"
+                                        top="50%"
+                                        transform="translateY(-50%)"
+                                        backgroundColor="transparent"
+                                        color={arrowColor}
+                                        _hover={{ backgroundColor: 'blackAlpha.400' }}
+                                    />
+                                )
+                            }>
                             {cards.map((card, index) => (
                                 <RenderCard key={index} card={card} />
                             ))}

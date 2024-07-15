@@ -46,8 +46,8 @@ export const MapPoint = ({
         handleStartBattle();
     };
 
-    const copyToClipboard = () => {
-        navigator.clipboard.writeText(infoAccount.accountRs);
+    const copyToClipboard = address => {
+        navigator.clipboard.writeText(address);
         copyToast('ARDOR address', toast);
     };
 
@@ -98,7 +98,7 @@ export const MapPoint = ({
                                 mx={'auto'}>
                                 <>
                                     <Tooltip label={`Copy: ${defenderInfo.accountRS}`} hasArrow placement="right">
-                                        <Text onClick={copyToClipboard}>
+                                        <Text onClick={() => copyToClipboard(defenderInfo.accountRS)}>
                                             Defender of the land:{' '}
                                             {defenderInfo.name || formatAddress(defenderInfo.accountRS)}
                                         </Text>

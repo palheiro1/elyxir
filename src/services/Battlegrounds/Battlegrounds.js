@@ -64,7 +64,7 @@ export const getLastUserBattle = async (accountId, currentTime) => {
             // Fecha y hora actual en formato UTC
             const currentTimestamp = new Date(currentTime);
 
-            // // Comparar las fechas
+            // Comparar las fechas
             if (battleStamp < currentTimestamp) {
                 return 'pending';
             }
