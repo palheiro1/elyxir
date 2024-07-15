@@ -14,7 +14,6 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
         const results = await Promise.all(
             assets.map(async ([asset, price]) => {
                 const assetDetails = await getAsset(asset);
-                console.log('🚀 ~ assets.map ~ assetDetails:', assetDetails);
                 return { name: assetDetails, price: price * rewardFraction };
             })
         );
@@ -88,19 +87,29 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
                                     </Box>
                                 </Td>
                                 <Td textAlign={'center'} p={2}>
-                                    <Box
-                                        bgColor={bgColor}
-                                        fontFamily={'Chelsea Market, System'}
-                                        p={3}
-                                        h="100%"
-                                        display="flex"
-                                        alignItems="center"
-                                        justifyContent="center">
-                                        {item.isUserDefending
-                                            ? item.attackerDetails.name || formatAddress(item.attackerDetails.accountRS)
-                                            : item.defenderDetails.name ||
-                                              formatAddress(item.defenderDetails.accountRS)}
-                                    </Box>
+                                    <Tooltip
+                                        label={
+                                            item.isUserDefending
+                                                ? item.attackerDetails.accountRS
+                                                : item.defenderDetails.accountRS
+                                        }
+                                        hasArrow
+                                        placement="bottom">
+                                        <Box
+                                            bgColor={bgColor}
+                                            fontFamily={'Chelsea Market, System'}
+                                            p={3}
+                                            h="100%"
+                                            display="flex"
+                                            alignItems="center"
+                                            justifyContent="center">
+                                            {item.isUserDefending
+                                                ? item.attackerDetails.name ||
+                                                  formatAddress(item.attackerDetails.accountRS)
+                                                : item.defenderDetails.name ||
+                                                  formatAddress(item.defenderDetails.accountRS)}
+                                        </Box>
+                                    </Tooltip>
                                 </Td>
                                 <Td textAlign={'center'} p={2}>
                                     <Box

@@ -1,4 +1,4 @@
-import { Box, Divider, IconButton, Img, Spinner, Stack, Text, useToast } from '@chakra-ui/react';
+import { Box, Divider, IconButton, Img, Spinner, Stack, Text, Tooltip, useToast } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { getBattleById, getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 import '@fontsource/chelsea-market';
@@ -9,7 +9,6 @@ import { errorToast } from '../../../../../utils/alerts';
 
 const BattleDetails = ({ cards, arenaInfo, battleId, handleGoBack, battleDetails }) => {
     const { attackerDetails: attackerInfo, defenderDetails: defenderInfo, isUserDefending } = battleDetails;
-
     const [battleInfo, setBattleInfo] = useState(null);
     const [capturedCard, setCapturedCard] = useState(null);
     const [medium, setMedium] = useState();
@@ -196,12 +195,14 @@ const BattleDetails = ({ cards, arenaInfo, battleId, handleGoBack, battleDetails
                 </Stack>
 
                 <Stack direction={'row'} spacing={10} mx={'auto'} justifyContent={'center'} w={'60%'}>
-                    <Text color={battleInfo.isDefenderWin ? '#E14942' : '#EDBA2B'}>
+                    <Text color={battleInfo.isDefenderWin ? '#E14942' : '#EDBA2B'} my={'auto'}>
                         {battleInfo.isDefenderWin ? 'LOSER: ' : 'WINNER: '}{' '}
+                        <Tooltip label={attackerInfo.accountRS} hasArrow>
                         <span style={{ color: '#FFF' }}>
                             {' '}
                             {attackerInfo.name || formatAddress(attackerInfo.accountRS)}
                         </span>
+                        </Tooltip>
                     </Text>
 
                     <Stack direction={'row'} alignItems={'center'} justifyContent={'center'}>
@@ -226,14 +227,23 @@ const BattleDetails = ({ cards, arenaInfo, battleId, handleGoBack, battleDetails
                             display="flex"
                             alignItems="center"
                             justifyContent="center">
-                            {defenderPoints}
+                            {isNaN(defenderPoints) ? defenderPoints : defenderPoints + 2}
                         </Box>
                     </Stack>
-
-                    <Text color={battleInfo.isDefenderWin ? '#EDBA2B' : '#E14942'}>
-                        {battleInfo.isDefenderWin ? 'WINNER: ' : 'LOSER: '}{' '}
-                        <span style={{ color: '#FFF' }}> {defenderInfo.name || defenderInfo.accountRS} </span>
-                    </Text>
+                    <Stack direction={'column'}>
+                        <Text color={battleInfo.isDefenderWin ? '#EDBA2B' : '#E14942'}>
+                            {battleInfo.isDefenderWin ? 'WINNER: ' : 'LOSER: '}{' '}
+                            <Tooltip label={defenderInfo.accountRS} hasArrow>
+                                <span style={{ color: '#FFF' }}>
+                                    {' '}
+                                    {defenderInfo.name || formatAddress(defenderInfo.accountRS)}{' '}
+                                </span>
+                            </Tooltip>
+                        </Text>
+                        <Text color={'#FFF'} mx={'auto'}>
+                            Defender bonus: +2
+                        </Text>
+                    </Stack>
                 </Stack>
                 <Stack direction={'column'}>
                     {battleResults &&
@@ -266,10 +276,9 @@ const BattleDetails = ({ cards, arenaInfo, battleId, handleGoBack, battleDetails
                                 item.defenderRoll;
 
                             return (
-                                <>
+                                <Box key={index}>
                                     <Stack
                                         direction={'row'}
-                                        key={index}
                                         display={'flex'}
                                         justifyContent={'center'}
                                         alignItems={'center'}
@@ -434,8 +443,8 @@ const BattleDetails = ({ cards, arenaInfo, battleId, handleGoBack, battleDetails
                                             </Text>
                                         </Stack>
                                     </Stack>
-                                    <Divider w={'70%'} mx={'auto'} />
-                                </>
+                                    <Divider w={'70%'} mx={'auto'} mt={2} />
+                                </Box>
                             );
                         })}
                 </Stack>
