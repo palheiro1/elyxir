@@ -166,7 +166,7 @@ export const SelectHandPage = ({
                 <Stack direction={'row'} mx={'auto'} mt={3}>
                     {handBattleCards.map((card, index) =>
                         card !== '' ? (
-                            <Box key={index} position="relative">
+                            <Box key={index} position="relative" >
                                 <IconButton
                                     icon={<CloseIcon boxSize={3} />}
                                     zIndex={9}
@@ -185,6 +185,7 @@ export const SelectHandPage = ({
                             <Box
                                 key={index}
                                 backgroundColor="#465A5A"
+                                cursor={'pointer'}
                                 w="150px"
                                 h="200px"
                                 position="relative"

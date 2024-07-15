@@ -47,6 +47,7 @@ const BattleInventory = ({ setOpenIventory, filteredCards, index, handBattleCard
                                             key={i}
                                             w={'225px'}
                                             h={'350px'}
+                                            cursor={'pointer'}
                                             bg={'white'}
                                             onClick={() => {
                                                 setOpenIventory(false);
