@@ -48,7 +48,7 @@ export const SelectHandPage = ({
     setCurrentTime,
 }) => {
     const statistics = [
-        { name: 'Level', value: 'Epic' },
+        { name: 'Level', value: locations[arenaInfo.id - 1].rarity },
         { name: 'Medium', value: arenaInfo.mediumId },
         { name: 'Team size', value: 5 },
         { name: 'Defender', value: defenderInfo.name || formatAddress(defenderInfo.accountRS) },
@@ -166,7 +166,7 @@ export const SelectHandPage = ({
                 <Stack direction={'row'} mx={'auto'} mt={3}>
                     {handBattleCards.map((card, index) =>
                         card !== '' ? (
-                            <Box key={index} position="relative" >
+                            <Box key={index} position="relative">
                                 <IconButton
                                     icon={<CloseIcon boxSize={3} />}
                                     zIndex={9}

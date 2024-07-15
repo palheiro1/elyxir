@@ -473,6 +473,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         '#3b4397', // Chat
         '#413b97', // Book
         '#e094b3', // Open pack
+        '#DC30EB', // Battlegrounds
     ];
 
     const components = useMemo(
