@@ -105,14 +105,10 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                     let defenderSoldier = battleResults.defender.find(soldier => soldier.asset === item.defenderAsset);
 
                     if (attackerCard && defenderCard) {
-                        const attackerBonuses = (await calculateBonus(attackerCard)) || {
-                            mediumBonus: 0,
-                            domainBonus: 0,
-                        };
-                        const defenderBonuses = (await calculateBonus(defenderCard)) || {
-                            mediumBonus: 0,
-                            domainBonus: 0,
-                        };
+                        const [attackerBonuses, defenderBonuses] = await Promise.all([
+                            calculateBonus(attackerCard).then(result => result || { mediumBonus: 0, domainBonus: 0 }),
+                            calculateBonus(defenderCard).then(result => result || { mediumBonus: 0, domainBonus: 0 }),
+                        ]);
 
                         attackerResults.push(attackerBonuses);
                         defenderResults.push(defenderBonuses);

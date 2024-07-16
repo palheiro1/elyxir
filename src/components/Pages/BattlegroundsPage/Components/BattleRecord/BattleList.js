@@ -27,20 +27,13 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
             const accountId = await addressToAccountId(accountRs);
             let battles = await getUserBattles(accountId);
             battles = battles
-                .map(battle => {
-                    if (battle.defenderAccount === accountId) {
-                        return {
-                            ...battle,
-                            isUserDefending: true,
-                        };
-                    }
-                    return {
-                        ...battle,
-                        isUserDefending: false,
-                    };
-                });
+                .map(battle => ({
+                    ...battle,
+                    isUserDefending: battle.defenderAccount === accountId,
+                }))
+                .reverse();
 
-            setUserBattles(battles.reverse());
+            setUserBattles(battles);
         };
 
         accountRs && fetchArenasAndUserBattles();

@@ -52,21 +52,21 @@ export const getLastUserBattle = async (accountId, currentTime) => {
             }
 
             const latestBattle = battles.reduce((latest, current) => {
-                return new Date(current.economicCluster.timestamp) > new Date(latest.economicCluster.timestamp)
+                return new Date(current.timestamp) > new Date(latest.timestamp)
                     ? current
                     : latest;
             }, battles[0]);
 
             // Timestamp del último combate en formato UTC
             const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
-            const battleStamp = new Date(eb.getTime() + 20000 + latestBattle.economicCluster.timestamp * 1000);
+            const battleStamp = new Date(eb.getTime() + 20000 + latestBattle.timestamp * 1000);
 
             // Fecha y hora actual en formato UTC
             const currentTimestamp = new Date(currentTime);
 
             // Comparar las fechas
             if (battleStamp < currentTimestamp) {
-                return 'pending';
+                return null;
             }
 
             return latestBattle;
@@ -76,10 +76,17 @@ export const getLastUserBattle = async (accountId, currentTime) => {
 
 export const getActivePlayers = async () => {
     return axios
-        .get(`${OMNO_API}/index.php?action=getOmnoUserState`)
+        .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
         .then(res => {
-            let activePlayers = res.data[res.data.length - 1];
+            let activePlayers = res.data.state.activePlayers;
             return activePlayers;
         })
+        .catch(error => error);
+};
+
+export const getLandLords = async () => {
+    return axios
+        .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
+        .then(res => res.data.state.landLords)
         .catch(error => error);
 };
