@@ -7,7 +7,7 @@ import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { formatAddress } from '../../Utils/BattlegroundsUtils';
 import { errorToast } from '../../../../../utils/alerts';
 
-const BattleDetails = ({ cards, arenaInfo, battleId, handleGoBack, battleDetails }) => {
+const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId }) => {
     const { attackerDetails: attackerInfo, defenderDetails: defenderInfo, isUserDefending } = battleDetails;
     const [battleInfo, setBattleInfo] = useState(null);
     const [capturedCard, setCapturedCard] = useState(null);
@@ -41,19 +41,24 @@ const BattleDetails = ({ cards, arenaInfo, battleId, handleGoBack, battleDetails
 
         setArenaName(locations[arenaInfo.id - 1].name);
         const res = await getBattleById(battleId);
+        if (res.battleResult === null || !res.battleResult) {
+            errorToast("Old version battle. Can not access to it's results.", toast);
+            handleGoBack();
+        }
         const capturedCard = cards.filter(obj => Object.keys(res.captured.asset).includes(obj.asset))[0];
 
-        const attackerHero = cards.find(card => card.asset === battleDetails.attackerArmy.heroAsset);
+        const attackerHero = cards.find(card => card.asset === res.attackerArmy.heroAsset);
         setAttackerHero(attackerHero);
 
-        const defenderHero = cards.find(card => card.asset === battleDetails.defenderArmy.heroAsset);
+        const defenderHero = cards.find(card => card.asset === res.defenderArmy.heroAsset);
         setDefenderHero(defenderHero);
         setCapturedCard(capturedCard);
 
         setBattleResults(res);
 
         setBattleInfo(res);
-    }, [arenaInfo, battleDetails.attackerArmy.heroAsset, battleDetails.defenderArmy.heroAsset, battleId, cards]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [arenaInfo, battleId, cards]);
 
     const calculateBonus = useCallback(
         async card => {
@@ -96,8 +101,8 @@ const BattleDetails = ({ cards, arenaInfo, battleId, handleGoBack, battleDetails
                     const attackerCard = cards.find(card => String(card.asset) === String(item.attackerAsset));
                     const defenderCard = cards.find(card => String(card.asset) === String(item.defenderAsset));
 
-                    let attackerSoldier = battleDetails.attacker.find(soldier => soldier.asset === item.attackerAsset);
-                    let defenderSoldier = battleDetails.defender.find(soldier => soldier.asset === item.defenderAsset);
+                    let attackerSoldier = battleResults.attacker.find(soldier => soldier.asset === item.attackerAsset);
+                    let defenderSoldier = battleResults.defender.find(soldier => soldier.asset === item.defenderAsset);
 
                     if (attackerCard && defenderCard) {
                         const attackerBonuses = (await calculateBonus(attackerCard)) || {
@@ -198,10 +203,10 @@ const BattleDetails = ({ cards, arenaInfo, battleId, handleGoBack, battleDetails
                     <Text color={battleInfo.isDefenderWin ? '#E14942' : '#EDBA2B'} my={'auto'}>
                         {battleInfo.isDefenderWin ? 'LOSER: ' : 'WINNER: '}{' '}
                         <Tooltip label={attackerInfo.accountRS} hasArrow>
-                        <span style={{ color: '#FFF' }}>
-                            {' '}
-                            {attackerInfo.name || formatAddress(attackerInfo.accountRS)}
-                        </span>
+                            <span style={{ color: '#FFF' }}>
+                                {' '}
+                                {attackerInfo.name || formatAddress(attackerInfo.accountRS)}
+                            </span>
                         </Tooltip>
                     </Text>
 
@@ -256,10 +261,10 @@ const BattleDetails = ({ cards, arenaInfo, battleId, handleGoBack, battleDetails
                                 return card.asset === String(item.defenderAsset);
                             });
 
-                            let attackerSoldier = battleDetails.attacker.find(
+                            let attackerSoldier = battleResults.attacker.find(
                                 soldier => soldier.asset === item.attackerAsset
                             );
-                            let defenderSoldier = battleDetails.defender.find(
+                            let defenderSoldier = battleResults.defender.find(
                                 soldier => soldier.asset === item.defenderAsset
                             );
 

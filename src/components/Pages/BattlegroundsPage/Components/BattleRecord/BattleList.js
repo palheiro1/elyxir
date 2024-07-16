@@ -26,10 +26,10 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
 
             const accountId = await addressToAccountId(accountRs);
             let battles = await getUserBattles(accountId);
+            console.log('🚀 ~ fetchArenasAndUserBattles ~ battles:', battles);
             battles = battles
-                .filter(battle => battle.battleResult !== undefined)
                 .map(battle => {
-                    if (battle.defenderArmy.account === accountId) {
+                    if (battle.defenderAccount === accountId) {
                         return {
                             ...battle,
                             isUserDefending: true,
@@ -54,12 +54,12 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                     userBattles.map(async battle => {
                         const arenaInfo = await getArenaInfo(
                             battle.arenaId,
-                            battle.defenderArmy.account,
-                            battle.attackerArmy.account
+                            battle.defenderAccount,
+                            battle.attackerAccount
                         );
                         return {
                             ...battle,
-                            date: formatDate(battle.economicCluster.timestamp),
+                            date: formatDate(battle.timestamp),
                             arenaName: arenaInfo.arena.name,
                             defenderDetails: arenaInfo.defender,
                             attackerDetails: arenaInfo.attacker,
@@ -77,8 +77,8 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
     const getArenaInfo = async (arenaId, defenderAccount, attackerAccount) => {
         if (arenasInfo) {
             let arena = arenasInfo.find(arena => arena.id === arenaId);
-            let defender = await getAccount(defenderAccount);
-            let attacker = await getAccount(attackerAccount);
+
+            const [defender, attacker] = await Promise.all([getAccount(defenderAccount), getAccount(attackerAccount)]);
             let name = locations.find(item => item.id === arenaId);
             return {
                 defender: defender,
@@ -91,7 +91,7 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
     const handleViewDetails = battleId => {
         setSelectedBattle(battleId);
 
-        let arenaId = battleDetails.find(battle => battle.id === battleId).arenaId;
+        let arenaId = battleDetails.find(battle => battle.battleId === battleId).arenaId;
         let arena = arenasInfo.find(arena => arena.id === arenaId);
         setSelectedArena(arena);
         setViewDetails(true);
@@ -164,7 +164,7 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                         cards={cards}
                         arenaInfo={selectedArena}
                         infoAccount={infoAccount}
-                        battleDetails={battleDetails.find(battle => battle.id === selectedBattle)}
+                        battleDetails={battleDetails.find(battle => battle.battleId === selectedBattle)}
                         handleGoBack={handleGoBack}
                     />
                 )}

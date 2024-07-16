@@ -73,3 +73,13 @@ export const getLastUserBattle = async (accountId, currentTime) => {
         })
         .catch(error => error);
 };
+
+export const getActivePlayers = async () => {
+    return axios
+        .get(`${OMNO_API}/index.php?action=getOmnoUserState`)
+        .then(res => {
+            let activePlayers = res.data[res.data.length - 1];
+            return activePlayers;
+        })
+        .catch(error => error);
+};

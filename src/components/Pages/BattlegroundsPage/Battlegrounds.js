@@ -30,7 +30,7 @@ import { GEMASSET, NQTDIVIDER, WETHASSET } from '../../../data/CONSTANTS';
 import SendGEMsToOmno from './Components/SendGEMsToOmno';
 import SendWethToOmno from './Components/SendWethToOmno';
 import BattleList from './Components/BattleRecord/BattleList';
-import { getBattleCount } from '../../../services/Battlegrounds/Battlegrounds';
+import { getActivePlayers, getBattleCount } from '../../../services/Battlegrounds/Battlegrounds';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
     /* Intro pop up managing */
@@ -49,7 +49,8 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [openBattle, setOpenBattle] = useState(false);
     const [openInventory, setOpenInventory] = useState(false);
     const [openBattleRecord, setOpenBattleRecord] = useState(false);
-    const [battleCount, setBattleCount] = useState(null);
+    const [battleCount, setBattleCount] = useState(0);
+    const [activePlayers, setActivePlayers] = useState(0);
     const [parseWETH, setParseWETH] = useState(0);
     const [updateState, setUpdateState] = useState(false);
 
@@ -91,8 +92,8 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     ];
 
     const statistics = [
-        { name: 'Active player', value: 3 },
-        { name: 'Battles disputed', value: battleCount || 0 },
+        { name: 'Active player', value: activePlayers },
+        { name: 'Battles disputed', value: battleCount },
         // { name: 'GEM Rewards', value: '245k' },
         // { name: 'General ranking', value: 7 },
         // { name: 'Time remaining', value: '14 weeks' },
@@ -134,7 +135,9 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     useEffect(() => {
         const filterCards = async () => {
             let battleCount = await getBattleCount();
+            let activePlayers = await getActivePlayers();
             setBattleCount(battleCount);
+            setActivePlayers(activePlayers);
 
             const userInfo = await getUserState();
             if (userInfo?.balance) {

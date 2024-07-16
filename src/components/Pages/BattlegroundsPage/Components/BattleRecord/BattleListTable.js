@@ -28,7 +28,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
                 const arena = arenasInfo.find(arena => arena.id === item.arenaId);
                 if (arena) {
                     const reward = await getBattleReward(arena, item);
-                    rewards[item.id] = reward;
+                    rewards[item.battleId] = reward;
                 }
             }
             setBattleRewards(rewards);
@@ -64,14 +64,15 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
             <Tbody>
                 {battleDetails.length > 0 ? (
                     battleDetails.map((item, index) => {
+                        console.log("🚀 ~ battleDetails.map ~ item:", item)
                         let bgColor = index % 2 === 0 ? '#DB78AA' : '#D08FB0';
-                        let captured = cards.find(obj => Object.keys(item.captured.asset).includes(obj.asset));
-                        let battleReward = battleRewards[item.id] || [];
+                        let captured = cards.find(obj => Object.keys(item.capturedAsset).includes(obj.asset));
+                        let battleReward = battleRewards[item.battleId] || [];
 
                         return (
                             <Tr
                                 key={index}
-                                onClick={() => handleViewDetails(item.id)}
+                                onClick={() => handleViewDetails(item.battleId)}
                                 cursor={'pointer'}
                                 _hover={{ backgroundColor: 'whiteAlpha.300' }}>
                                 <Td textAlign={'center'} p={2}>
