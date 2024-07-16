@@ -124,6 +124,11 @@ export const MapPoint = ({
                                             borderRadius={'30px'}
                                             color={'#FFF'}
                                             isDisabled={myArena}
+                                            sx={{
+                                                _hover: myArena
+                                                    ? { backgroundColor: '#484848' }
+                                                    : { backgroundColor: 'whiteAlpha.100' },
+                                            }}
                                             onClick={clickButton}>
                                             Start battle
                                         </Button>
