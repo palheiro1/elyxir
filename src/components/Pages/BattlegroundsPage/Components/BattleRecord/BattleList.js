@@ -26,7 +26,6 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
 
             const accountId = await addressToAccountId(accountRs);
             let battles = await getUserBattles(accountId);
-            console.log('🚀 ~ fetchArenasAndUserBattles ~ battles:', battles);
             battles = battles
                 .map(battle => {
                     if (battle.defenderAccount === accountId) {
