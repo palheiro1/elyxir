@@ -33,7 +33,7 @@ const BattleInventory = ({ setOpenIventory, filteredCards, index, handBattleCard
                         p={5}
                         overflow={'scroll'}
                         h={'750px'}>
-                        {filteredCards.length > 0 ? ( 
+                        {filteredCards.length > 0 ? (
                             filteredCards
                                 .filter(
                                     card =>
@@ -41,8 +41,7 @@ const BattleInventory = ({ setOpenIventory, filteredCards, index, handBattleCard
                                         (index !== 0 && (card.rarity === 'Common' || card.rarity === 'Rare'))
                                 )
                                 .map((card, i) => {
-                                    return card.asset.length <= 19 &&
-                                        !handBattleCards.find(item => item.asset === card.asset) ? (
+                                    return !handBattleCards.find(item => item.asset === card.asset) ? (
                                         <Box
                                             key={i}
                                             w={'225px'}

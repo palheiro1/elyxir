@@ -30,16 +30,15 @@ import { getUsersState, withdrawCardsFromOmno } from '../../../../../services/Ar
 import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface';
 
 /**
- * @name SwapToPolygon
- * @description This component is used to swap cards to Polygon
- * @author Jesús Sánchez Fernández
+ * @name ArdorCards
+ * @description This component is used to withdraw cards from the OMNO inventory
+ * @author Darío Maza Berdugo 
  * @version 0.1
  * @param {Object} infoAccount - Account info
- * @param {String} ardorAddress - Ardor address
  * @param {Array} cards - Cards
  * @returns {JSX.Element} - JSX element
  */
-const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
+const ArdorCards = ({ infoAccount, cards }) => {
     const toast = useToast();
     const { accountRs } = infoAccount;
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag

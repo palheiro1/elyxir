@@ -58,6 +58,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
                             h="100%"
                             p={3}
                             display="flex"
+                            maxH={'45px'}
                             alignItems="center"
                             justifyContent="center">
                             {item.date}
@@ -88,6 +89,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
                         <Box
                             bgColor={bgColor}
                             p={3}
+                            maxH={'45px'}
                             fontFamily={'Chelsea Market, System'}
                             h="100%"
                             display="flex"
@@ -138,6 +140,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
                                     h="100%"
                                     display="flex"
                                     alignItems="center"
+                                    maxH={'45px'}
                                     justifyContent="center"
                                     cursor="pointer">
                                     <Text>{captured?.name}</Text>

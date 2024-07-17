@@ -119,6 +119,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const closeModal = () => {
         setIsModalOpen(false);
         setIsScrollLocked(false);
+        setUpdateState(!updateState);
     };
 
     const handleCloseBattle = () => {
@@ -130,6 +131,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const handleCloseBattleRecord = () => {
         setOpenBattleRecord(false);
         setIsScrollLocked(false);
+        setUpdateState(!updateState);
     };
 
     let wEthDecimals = 3;
@@ -163,8 +165,8 @@ const Battlegrounds = ({ infoAccount, cards }) => {
             }
         };
         filterCards();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cards, infoAccount, updateState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cards, infoAccount]);
 
     const getUserState = async () => {
         const accountId = addressToAccountId(accountRs);

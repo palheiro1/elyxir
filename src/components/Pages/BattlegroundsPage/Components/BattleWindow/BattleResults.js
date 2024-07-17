@@ -51,7 +51,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             setArenaName(locations[arenaInfo.id - 1].name);
             const accountId = addressToAccountId(infoAccount.accountRs);
             const res = await getLastUserBattle(accountId, currentTime);
-            if (res && res !== 'pending') {
+            if (res) {
                 if (intervalRef.current) {
                     clearInterval(intervalRef.current);
                 }

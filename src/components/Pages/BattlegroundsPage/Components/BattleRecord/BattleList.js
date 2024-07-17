@@ -7,7 +7,7 @@ import { getArenas, getUserBattles } from '../../../../../services/Battlegrounds
 import locations from '../../assets/LocationsEnum';
 import BattleDetails from './BattleDetails';
 import BattleListTable from './BattleListTable';
-import { formatDate } from '../../Utils/BattlegroundsUtils';
+import { formatTimeStamp } from '../../Utils/BattlegroundsUtils';
 
 const BattleList = ({ handleClose, infoAccount, cards }) => {
     const { accountRs } = infoAccount;
@@ -41,43 +41,39 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
 
     useEffect(() => {
         const fetchBattleDetails = async () => {
-            if (userBattles && arenasInfo) {
-                const details = await Promise.all(
-                    userBattles.map(async battle => {
-                        const arenaInfo = await getArenaInfo(
-                            battle.arenaId,
-                            battle.defenderAccount,
-                            battle.attackerAccount
-                        );
-                        return {
-                            ...battle,
-                            date: formatDate(battle.timestamp),
-                            arenaName: arenaInfo.arena.name,
-                            defenderDetails: arenaInfo.defender,
-                            attackerDetails: arenaInfo.attacker,
-                        };
-                    })
-                );
-                setBattleDetails(details);
-            }
+            const details = await Promise.all(
+                userBattles.map(async battle => {
+                    const arenaInfo = await getArenaInfo(
+                        battle.arenaId,
+                        battle.defenderAccount,
+                        battle.attackerAccount
+                    );
+                    return {
+                        ...battle,
+                        date: formatTimeStamp(battle.timestamp),
+                        arenaName: arenaInfo.arena.name,
+                        defenderDetails: arenaInfo.defender,
+                        attackerDetails: arenaInfo.attacker,
+                    };
+                })
+            );
+            setBattleDetails(details);
         };
 
-        fetchBattleDetails();
+        userBattles && arenasInfo && fetchBattleDetails();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userBattles, arenasInfo]);
 
     const getArenaInfo = async (arenaId, defenderAccount, attackerAccount) => {
-        if (arenasInfo) {
-            let arena = arenasInfo.find(arena => arena.id === arenaId);
+        let arena = arenasInfo.find(arena => arena.id === arenaId);
 
-            const [defender, attacker] = await Promise.all([getAccount(defenderAccount), getAccount(attackerAccount)]);
-            let name = locations.find(item => item.id === arenaId);
-            return {
-                defender: defender,
-                attacker: attacker,
-                arena: { ...name, ...arena },
-            };
-        }
+        const [defender, attacker] = await Promise.all([getAccount(defenderAccount), getAccount(attackerAccount)]);
+        let name = locations.find(item => item.id === arenaId);
+        return {
+            defender: defender,
+            attacker: attacker,
+            arena: { ...name, ...arena },
+        };
     };
 
     const handleViewDetails = battleId => {

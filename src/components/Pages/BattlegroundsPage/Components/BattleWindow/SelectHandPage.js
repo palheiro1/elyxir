@@ -47,12 +47,6 @@ export const SelectHandPage = ({
     setShowResults,
     setCurrentTime,
 }) => {
-    const statistics = [
-        { name: 'Level', value: locations[arenaInfo.id - 1].rarity },
-        { name: 'Medium', value: arenaInfo.mediumId },
-        { name: 'Team size', value: 5 },
-        { name: 'Defender', value: defenderInfo.name || formatAddress(defenderInfo.accountRS) },
-    ];
     /* mediums: 
         1 -> terrestial 
         2 -> aerial
@@ -64,6 +58,13 @@ export const SelectHandPage = ({
     const [medium, setMedium] = useState();
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
+
+    const statistics = [
+        { name: 'Level', value: locations[arenaInfo.id - 1].rarity },
+        { name: 'Medium', value: medium },
+        { name: 'Team size', value: 5 },
+        { name: 'Defender', value: defenderInfo.name || formatAddress(defenderInfo.accountRS) },
+    ];
 
     useEffect(() => {
         const getBattleCost = async () => {
@@ -236,7 +237,7 @@ export const SelectHandPage = ({
                                 textAlign={'center'}
                                 fontFamily={'Chelsea Market, system-ui'}
                                 p={2}>
-                                {item.name === 'Medium' ? medium : item.value}
+                                {item.value}
                             </Text>
                         </Stack>
                     ))}

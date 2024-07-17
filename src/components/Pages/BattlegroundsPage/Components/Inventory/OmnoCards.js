@@ -28,9 +28,9 @@ import { checkPin, sendCardsToOmno } from '../../../../../utils/walletUtils';
 import { errorToast, infoToast, okToast } from '../../../../../utils/alerts';
 
 /**
- * @name SwapToPolygon
- * @description This component is used to swap cards to Polygon
- * @author Jesús Sánchez Fernández
+ * @name OmnoCards
+ * @description This component is used to send cards to the OMNO inventory
+ * @author Darío Maza Berdugo
  * @version 0.1
  * @param {Object} infoAccount - Account info
  * @param {Array} cards - Cards
@@ -39,7 +39,6 @@ import { errorToast, infoToast, okToast } from '../../../../../utils/alerts';
 const OmnoCards = ({ infoAccount, cards }) => {
     const toast = useToast();
 
-    // const [isValidAccount, setIsValidAccount] = useState(false);
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
 
     const [isSwapping, setIsSwapping] = useState(false);
@@ -126,16 +125,14 @@ const OmnoCards = ({ infoAccount, cards }) => {
                     </MenuButton>
                     <MenuList minW="100%" maxH="25rem" overflowY="auto" overflowX="hidden">
                         {notSelectedCards.length > 0 ? (
-                            notSelectedCards.map(card =>
-                                card.asset.length <= 19 ? (
-                                    <MenuItem
-                                        minW="100%"
-                                        key={card.asset}
-                                        onClick={() => setSelectedCards([...selectedCards, card])}>
-                                        <BridgeCard card={card} />
-                                    </MenuItem>
-                                ) : null
-                            )
+                            notSelectedCards.map(card => (
+                                <MenuItem
+                                    minW="100%"
+                                    key={card.asset}
+                                    onClick={() => setSelectedCards([...selectedCards, card])}>
+                                    <BridgeCard card={card} />
+                                </MenuItem>
+                            ))
                         ) : (
                             <MenuItem minW="100%">
                                 <Text color={textColor}>You dont have more cards</Text>

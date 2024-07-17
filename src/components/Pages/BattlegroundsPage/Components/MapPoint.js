@@ -21,7 +21,7 @@ import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import { addressToAccountId, getAccount } from '../../../../services/Ardor/ardorInterface';
 import { copyToast } from '../../../../utils/alerts';
-import { formatAddress } from '../Utils/BattlegroundsUtils';
+import { formatAddress, getTimeDifference } from '../Utils/BattlegroundsUtils';
 
 export const MapPoint = ({
     name,
@@ -96,22 +96,29 @@ export const MapPoint = ({
                                 flexDir={'column'}
                                 gap={5}
                                 mx={'auto'}>
-                                <>
+                                <Stack spacing={4}>
                                     <Tooltip label={`Copy: ${defenderInfo.accountRS}`} hasArrow placement="right">
                                         <Text onClick={() => copyToClipboard(defenderInfo.accountRS)}>
                                             Defender of the land:{' '}
                                             {defenderInfo.name || formatAddress(defenderInfo.accountRS)}
                                         </Text>
                                     </Tooltip>
+                                    {arenaInfo.conquestEconomicCluster.timestamp &&
+                                    arenaInfo.conquestEconomicCluster.timestamp !== 0 ? (
+                                        <Text mt={0}>
+                                            Conquered{' '}
+                                            {getTimeDifference(arenaInfo.conquestEconomicCluster.timestamp)} ago. 
+                                        </Text>
+                                    ) : null}
                                     <Box>
                                         Defender's cards:
-                                        <Stack direction={'row'}>
+                                        <Stack direction={'row'} mt={0}>
                                             {defenderCards.map(card => (
                                                 <Img w={'50px'} key={card.asset} src={card.cardThumbUrl} />
                                             ))}
                                         </Stack>
                                     </Box>
-                                </>
+                                </Stack>
 
                                 <ButtonGroup mx={'auto'}>
                                     <Tooltip
