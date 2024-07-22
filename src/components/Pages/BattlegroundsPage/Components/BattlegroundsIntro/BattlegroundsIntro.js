@@ -11,12 +11,14 @@ export const BattlegroundsIntro = ({ visible, page, handleClose, handleNext }) =
             <Box
                 visibility={visible ? 'visible' : 'hidden'}
                 backgroundColor={'#1F2323'}
-                mx={'20%'}
                 borderRadius={'30px'}
                 w={'600px'}
                 h={'350px'}
-                position={'absolute'}
-                zIndex={10}>
+                pos={'fixed'}
+                top={'50%'}
+                left={'50%'}
+                transform={'translate(-50%, -50%)'}
+                zIndex={11}>
                 <IconButton
                     background={'transparent'}
                     color={'#FFF'}

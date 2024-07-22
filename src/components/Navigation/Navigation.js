@@ -11,6 +11,7 @@ import {
     useDisclosure,
     Image,
     Center,
+    useMediaQuery,
 } from '@chakra-ui/react';
 
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
@@ -113,6 +114,7 @@ const FooterCentrado = () => {
 const Header = () => {
     const linkColor = useColorModeValue('gray.200', 'gray.200');
     const linkHoverColor = useColorModeValue('white', 'white');
+    const [isMobile] = useMediaQuery('(max-width: 980px)');
 
     return (
         <Stack
@@ -142,9 +144,9 @@ const Header = () => {
                         </Box>
                     </Fragment>
                 ))}
-                <Box flexGrow={0.7} />
+                <Box flexGrow={isMobile ? 0.5 : 0.7} />
                 <Stack py={1} direction={'row'}>
-                    <Box w={'400px'} textAlign={'center'} h={'fit-content'} my={'auto'}>
+                    <Box w={'400px'} textAlign={'center'} h={'fit-content'} my={'auto'} ml={isMobile && -20}>
                         <Text
                             fontFamily="'Aagaz', sans-serif"
                             fontSize="4xl"
@@ -157,7 +159,7 @@ const Header = () => {
                             SEASON 7
                         </Text>
                     </Box>
-                    <Image mr={0} src={'/images/logos/new/seasonLogo.svg'} w={'20%'} />
+                    <Image mr={0} src={'/images/logos/new/seasonLogo.svg'} w={isMobile ? '50%' : '20%'} />
                 </Stack>
             </Stack>
         </Stack>

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchAllCards } from '../../services/cardsService';  // Asegúrate de apuntar al archivo correcto
+import { fetchAllCards } from '../../utils/cardsUtils';
+
 
 const initialState = {
     cards: [],

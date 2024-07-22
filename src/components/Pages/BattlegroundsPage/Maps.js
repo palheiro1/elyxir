@@ -6,7 +6,7 @@ import { MapPoint } from './Components/MapPoint';
 import locations from './assets/LocationsEnum';
 import { getArenas } from '../../../services/Battlegrounds/Battlegrounds';
 
-export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle }) => {
+export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle, w }) => {
     const [arenasInfo, setArenasInfo] = useState();
     const [selectedArena, setSelectedArena] = useState();
     useEffect(() => {
@@ -26,9 +26,9 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle 
         arenasInfo && (
             <Box className="containerMap" zIndex={0}>
                 <svg
-                    width="979"
+                    width={w}
                     height="543"
-                    viewBox="0 0 979 543"
+                    viewBox="0 0 973 543"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                     xlink="http://www.w3.org/1999/xlink">

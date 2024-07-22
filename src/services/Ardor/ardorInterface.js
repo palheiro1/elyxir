@@ -1045,6 +1045,30 @@ export const getAccountPublicKey = async accountRs => {
     }
 };
 
+const changeAccountName = async (accountRs, passPhrase, newName) => {
+    try {
+        let publicKey = getAccountPublicKey(accountRs);
+        let query = {
+            requestType: 'setAccountInfo',
+            secretPhrase: passPhrase,
+            name: newName,
+            chain: 2,
+            publicKey: publicKey,
+            feeNQT: -1,
+            deadline: 10,
+            broadcast: true,
+            messageIsPrunable: true,
+        };
+        const fee = await calculateFee(query, NODEURL);
+        query.feeNQT = fee;
+        return await axios.post(NODEURL, null, {
+            params: query,
+        });
+    } catch (error) {
+        console.error('Error al enviar la solicitud:', error.message);
+    }
+};
+
 /*
 
             deadline: 30,
@@ -1062,4 +1086,5 @@ export {
     getBlockchainStatus,
     getBlockchainTransactions,
     getUnconfirmedTransactions,
+    changeAccountName,
 };

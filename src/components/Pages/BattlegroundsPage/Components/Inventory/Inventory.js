@@ -6,7 +6,7 @@ import '@fontsource/chelsea-market';
 import '../../BattlegroundMap.css';
 import OmnoPage from './OmnoPage';
 import ArdorPage from './ArdorPage';
-const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards }) => {
+const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards, isMobile }) => {
     const [selectedOption, setSelectedOption] = useState('battlegrounds');
 
     const handleSelectChange = event => {
@@ -28,11 +28,11 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards }) 
                 transform={'translate(-50%, -50%)'}
                 bgColor={'#1F2323'}
                 zIndex={99}
-                w={'98%'}
+                w={isMobile ? '90%' : '98%'}
                 p={4}
                 display={'flex'}
                 flexDir={'column'}
-                h={'90%'}
+                h={isMobile ? '85%' : '90%'}
                 borderRadius={'25px'}>
                 <IconButton
                     background={'transparent'}
@@ -63,10 +63,20 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards }) 
                     </option>
                 </Select>
                 {selectedOption === 'battlegrounds' && (
-                    <OmnoPage filteredCards={filteredCards} infoAccount={infoAccount} cards={cards} />
+                    <OmnoPage
+                        filteredCards={filteredCards}
+                        infoAccount={infoAccount}
+                        cards={cards}
+                        isMobile={isMobile}
+                    />
                 )}
                 {selectedOption === 'ardor' && (
-                    <ArdorPage filteredCards={filteredCards} infoAccount={infoAccount} cards={cards} />
+                    <ArdorPage
+                        filteredCards={filteredCards}
+                        infoAccount={infoAccount}
+                        cards={cards}
+                        isMobile={isMobile}
+                    />
                 )}
             </Box>
         </>

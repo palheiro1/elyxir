@@ -9,7 +9,7 @@ import BattleDetails from './BattleDetails';
 import BattleListTable from './BattleListTable';
 import { formatTimeStamp } from '../../Utils/BattlegroundsUtils';
 
-const BattleList = ({ handleClose, infoAccount, cards }) => {
+const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
     const { accountRs } = infoAccount;
 
     const [arenasInfo, setArenasInfo] = useState(null);
@@ -97,7 +97,7 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                 pos={'fixed'}
                 bgColor={'#1F2323'}
                 zIndex={99}
-                w={'70%'}
+                w={isMobile ? '80%' : '70%'}
                 h={'90%'}
                 borderRadius={'25px'}
                 overflowY={'scroll'}
@@ -129,6 +129,7 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                                 handleViewDetails={handleViewDetails}
                                 battleDetails={battleDetails}
                                 cards={cards}
+                                isMobile={isMobile}
                             />
                         ) : (
                             <Box

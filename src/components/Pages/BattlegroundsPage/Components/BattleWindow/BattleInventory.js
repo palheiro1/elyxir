@@ -3,7 +3,7 @@ import React from 'react';
 import CardBadges from '../../../../Cards/CardBadges';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 
-const BattleInventory = ({ setOpenIventory, filteredCards, index, handBattleCards, updateCard }) => {
+const BattleInventory = ({ setOpenIventory, filteredCards, index, handBattleCards, updateCard, isMobile }) => {
     return (
         <>
             <IconButton
@@ -26,7 +26,7 @@ const BattleInventory = ({ setOpenIventory, filteredCards, index, handBattleCard
                     overflowY={'scroll'}
                     className="custom-scrollbar">
                     <SimpleGrid
-                        columns={[1, 2, 4]}
+                        columns={isMobile ? 2 : 4}
                         spacing={5}
                         overflowY={'auto'}
                         className="custom-scrollbar"
@@ -69,7 +69,7 @@ const BattleInventory = ({ setOpenIventory, filteredCards, index, handBattleCard
                                                         }}
                                                         noOfLines={1}
                                                         fontWeight="bold"
-                                                        color={'#FFF'}>
+                                                        color={'#000'}>
                                                         {card.name}
                                                     </Text>
                                                     <CardBadges
@@ -85,6 +85,7 @@ const BattleInventory = ({ setOpenIventory, filteredCards, index, handBattleCard
                                                             <Text
                                                                 textAlign="end"
                                                                 minH={{ base: '100%', lg: 'auto' }}
+                                                                mb={isMobile && 3}
                                                                 color={'#000'}>
                                                                 <small>Quantity:</small> {card.omnoQuantity}
                                                             </Text>
@@ -109,10 +110,6 @@ const BattleInventory = ({ setOpenIventory, filteredCards, index, handBattleCard
                         )}
                     </SimpleGrid>
                 </Box>
-                <Text color={'red'} position={'absolute'} fontFamily={'Chelsea Market, system-ui'} bottom={2}>
-                    * Some cards don't appear to play battles with them, because of code problems. We are working to
-                    solve it
-                </Text>
             </Stack>
         </>
     );

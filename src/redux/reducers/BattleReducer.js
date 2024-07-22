@@ -1,8 +1,8 @@
 // battleSlice.js
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { addressToAccountId, getAccount } from '../../../../../services/Ardor/ardorInterface';
-import { getArenas, getUserBattles } from '../../../../../services/Battlegrounds/Battlegrounds';
-import { formatTimeStamp } from '../../Utils/BattlegroundsUtils';
+import { getArenas, getUserBattles } from '../../services/Battlegrounds/Battlegrounds';
+import { formatTimeStamp } from '../../components/Pages/BattlegroundsPage/Utils/BattlegroundsUtils';
+import { addressToAccountId, getAccount } from '../../services/Ardor/ardorInterface';
 
 export const fetchArenasAndUserBattles = createAsyncThunk(
     'battle/fetchArenasAndUserBattles',

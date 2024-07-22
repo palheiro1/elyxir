@@ -2,7 +2,7 @@ import { Box, Center, Flex, Heading, Img, SimpleGrid, Spacer, Stack, Text, Toolt
 import CardBadges from '../../../../Cards/CardBadges';
 import ArdorCards from './ArdorCards';
 
-const ArdorPage = ({ cards, filteredCards, infoAccount }) => {
+const ArdorPage = ({ cards, filteredCards, infoAccount, isMobile }) => {
     const userCards = cards.filter(card => card.unconfirmedQuantityQNT >= 1);
 
     return (
@@ -19,14 +19,14 @@ const ArdorPage = ({ cards, filteredCards, infoAccount }) => {
                     backgroundColor={'#0F0F0F'}
                     borderRadius={'20px'}
                     p={2}
-                    w={'65%'}
+                    w={isMobile ? '45%' : '65%'}
                     overflowY={'scroll'}
                     className="custom-scrollbar"
                     mx="auto"
                     display="flex"
                     justifyContent="center">
                     <SimpleGrid
-                        columns={[1, 2, 3]}
+                        columns={isMobile ? 1 : 3}
                         spacing={4}
                         overflowY={'auto'}
                         className="custom-scrollbar"
@@ -69,7 +69,7 @@ const ArdorPage = ({ cards, filteredCards, infoAccount }) => {
                 </Box>
                 <Box
                     mb={4}
-                    maxW={'60%'}
+                    maxW={isMobile ? '80%' : '60%'}
                     backgroundColor={'#0F0F0F'}
                     borderRadius={'20px'}
                     p={4}

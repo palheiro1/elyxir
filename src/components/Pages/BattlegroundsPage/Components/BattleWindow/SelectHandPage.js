@@ -46,6 +46,7 @@ export const SelectHandPage = ({
     omnoWethBalance,
     setShowResults,
     setCurrentTime,
+    isMobile,
 }) => {
     /* mediums: 
         1 -> terrestial 
@@ -152,15 +153,15 @@ export const SelectHandPage = ({
     return (
         <>
             <Box display={'flex'} flexDir={'column'}>
-                <Stack direction={'column'} mx={'auto'} mt={8}>
-                    <Heading color={'#FFF'} size={'xl'} fontFamily={'Chelsea Market, system-ui'}>
+                <Stack direction={'column'} mx={'auto'} mt={isMobile ? 4 : 8}>
+                    <Heading color={'#FFF'} size={isMobile ? 'md' : 'xl'} fontFamily={'Chelsea Market, system-ui'}>
                         {' '}
                         CONQUER{' '}
                         <span style={{ color: '#D08FB0' }}>
                             {locations[arenaInfo.id - 1].name}, {domainName}
                         </span>{' '}
                     </Heading>
-                    <Text color={'#FFF'} textAlign={'center'} fontSize={'large'}>
+                    <Text color={'#FFF'} textAlign={'center'} fontSize={isMobile ? 'md' : 'large'}>
                         SELECT YOUR ARMY
                     </Text>
                 </Stack>
@@ -178,7 +179,12 @@ export const SelectHandPage = ({
                                     borderRadius={'full'}
                                     onClick={() => deleteCard(index)}
                                 />
-                                <Box backgroundColor={'#465A5A'} w={'150px'} h={'200px'} gap={'15px'} display={'flex'}>
+                                <Box
+                                    backgroundColor={'#465A5A'}
+                                    w={isMobile ? '100px' : '150px'}
+                                    h={isMobile ? '135px' : '200px'}
+                                    gap={'15px'}
+                                    display={'flex'}>
                                     <Image src={card.cardImgUrl} w={'100%'} />
                                 </Box>
                             </Box>
@@ -187,8 +193,8 @@ export const SelectHandPage = ({
                                 key={index}
                                 backgroundColor="#465A5A"
                                 cursor={'pointer'}
-                                w="150px"
-                                h="200px"
+                                w={isMobile ? '100px' : '150px'}
+                                h={isMobile ? '135px' : '200px'}
                                 position="relative"
                                 gap="15px"
                                 display="flex"
@@ -209,6 +215,7 @@ export const SelectHandPage = ({
                                 </Text>
                                 {index === 0 ? (
                                     <Text
+                                        fontSize={isMobile && 'small'}
                                         pos={'absolute'}
                                         bottom={0}
                                         left={1}
@@ -221,10 +228,13 @@ export const SelectHandPage = ({
                         )
                     )}
                 </Stack>
-                <Stack direction={'row'} mx={'auto'} mt={4} fontSize={'md'}>
+                <Stack direction={'row'} mx={'auto'} mt={isMobile ? 2 : 4} fontSize={'md'}>
                     {statistics.map((item, index) => (
                         <Stack direction={'column'} key={index} textAlign={'center'} m={2}>
-                            <Text color={'#FFF'} fontFamily={'Chelsea Market, system-ui'} fontSize={'lg'}>
+                            <Text
+                                color={'#FFF'}
+                                fontFamily={'Chelsea Market, system-ui'}
+                                fontSize={isMobile ? 'sm' : 'lg'}>
                                 {item.name}
                             </Text>
                             <Text
@@ -232,11 +242,11 @@ export const SelectHandPage = ({
                                 border={'2px solid #D597B2'}
                                 borderRadius={'40px'}
                                 color={'#FFF'}
-                                w={'120px'}
-                                fontSize={'md'}
+                                w={isMobile ? '80px' : '120px'}
+                                fontSize={isMobile ? 'xs' : 'md'}
                                 textAlign={'center'}
                                 fontFamily={'Chelsea Market, system-ui'}
-                                p={2}>
+                                p={isMobile ? 0 : 2}>
                                 {item.value}
                             </Text>
                         </Stack>
@@ -245,9 +255,9 @@ export const SelectHandPage = ({
                 <Stack
                     direction={'row'}
                     mx={'auto'}
-                    mt={4}
+                    mt={isMobile ? 2 : 4}
                     fontFamily={'Chelsea Market, system-ui'}
-                    fontSize={'md'}
+                    fontSize={isMobile ? 'xs' : 'md'}
                     fontWeight={100}
                     gap={10}>
                     <Stack direction={'row'} marginRight={2}>
@@ -279,13 +289,13 @@ export const SelectHandPage = ({
                         background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
                         border: '3px solid #EBB2B9',
                     }}
-                    padding={7}
+                    padding={isMobile ? 5 : 7}
                     textTransform={'uppercase'}
                     color={'#FFF'}
                     fontWeight={'100'}
                     borderRadius={'30px'}
-                    mt={6}
-                    fontSize={'x-large'}
+                    mt={isMobile ? 3 : 6}
+                    fontSize={isMobile ? 'md' : 'x-large'}
                     fontFamily={'Chelsea Market, system-ui'}
                     onClick={onOpen}>
                     Start battle

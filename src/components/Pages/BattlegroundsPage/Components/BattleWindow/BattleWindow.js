@@ -19,6 +19,7 @@ export const BattleWindow = ({
     filteredCards,
     omnoGEMsBalance,
     omnoWethBalance,
+    isMobile,
 }) => {
     const [openIventory, setOpenIventory] = useState(false);
     const [index, setIndex] = useState('');
@@ -190,6 +191,7 @@ export const BattleWindow = ({
                                 omnoWethBalance={omnoWethBalance}
                                 setShowResults={setShowResults}
                                 setCurrentTime={setCurrentTime}
+                                isMobile={isMobile}
                             />
                         )}
                         {openIventory && (
@@ -199,6 +201,7 @@ export const BattleWindow = ({
                                 index={index}
                                 handBattleCards={handBattleCards}
                                 updateCard={updateCard}
+                                isMobile={isMobile}
                             />
                         )}
                         {showResults && (

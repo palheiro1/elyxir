@@ -4,7 +4,7 @@ import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getAsset } from '../../../../../utils/cardsUtils';
 import { formatAddress } from '../../Utils/BattlegroundsUtils';
 
-const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }) => {
+const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, isMobile }) => {
     const [battleRewards, setBattleRewards] = useState({});
 
     const getBattleReward = useCallback(async (arenaInfo, battle) => {
@@ -59,6 +59,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
                             p={3}
                             display="flex"
                             maxH={'45px'}
+                            fontSize={isMobile ? 'xs' : 'md'}
                             alignItems="center"
                             justifyContent="center">
                             {item.date}
@@ -75,6 +76,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
                                 bgColor={bgColor}
                                 fontFamily={'Chelsea Market, System'}
                                 p={3}
+                                fontSize={isMobile ? 'xs' : 'md'}
                                 h="100%"
                                 display="flex"
                                 alignItems="center"
@@ -92,6 +94,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
                             maxH={'45px'}
                             fontFamily={'Chelsea Market, System'}
                             h="100%"
+                            fontSize={isMobile ? 'xs' : 'md'}
                             display="flex"
                             alignItems="center"
                             justifyContent="center">
@@ -106,6 +109,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
                             h="100%"
                             display="flex"
                             alignItems="center"
+                            fontSize={isMobile ? 'xs' : 'md'}
                             justifyContent="center">
                             {item.isUserDefending ? 'DEFENDER' : 'ATTACKER'}
                         </Box>
@@ -114,6 +118,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
                         <Box
                             h="100%"
                             display="flex"
+                            fontSize={isMobile ? 'xs' : 'md'}
                             p={3}
                             alignItems="center"
                             justifyContent="center"
@@ -139,6 +144,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
                                     fontFamily={'Chelsea Market, System'}
                                     h="100%"
                                     display="flex"
+                                    fontSize={isMobile ? 'xs' : 'md'}
                                     alignItems="center"
                                     maxH={'45px'}
                                     justifyContent="center"
@@ -158,7 +164,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
                 </Tr>
             );
         },
-        [cards, battleRewards, handleViewDetails]
+        [cards, battleRewards, isMobile, handleViewDetails]
     );
 
     const tableRows = useMemo(() => battleDetails.map(renderBattleRow), [battleDetails, renderBattleRow]);
@@ -167,23 +173,47 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo }
         <Table variant={'unstyled'} textColor={'#FFF'} w={'85%'} mx={'auto'}>
             <Thead>
                 <Tr>
-                    <Th fontFamily={'Chelsea Market, System'} color={'#FFF'} fontSize={'lg'} textAlign={'center'}>
+                    <Th
+                        fontFamily={'Chelsea Market, System'}
+                        color={'#FFF'}
+                        fontSize={isMobile ? 'sm' : 'lg'}
+                        textAlign={'center'}>
                         Date
                     </Th>
-                    <Th fontFamily={'Chelsea Market, System'} color={'#FFF'} fontSize={'lg'} textAlign={'center'}>
+                    <Th
+                        fontFamily={'Chelsea Market, System'}
+                        color={'#FFF'}
+                        fontSize={isMobile ? 'sm' : 'lg'}
+                        textAlign={'center'}>
                         Opponent
                     </Th>
-                    <Th fontFamily={'Chelsea Market, System'} color={'#FFF'} fontSize={'lg'} textAlign={'center'}>
+                    <Th
+                        fontFamily={'Chelsea Market, System'}
+                        color={'#FFF'}
+                        fontSize={isMobile ? 'sm' : 'lg'}
+                        textAlign={'center'}>
                         Arena
                     </Th>
-                    <Th fontFamily={'Chelsea Market, System'} color={'#FFF'} fontSize={'lg'} textAlign={'center'}>
+                    <Th
+                        fontFamily={'Chelsea Market, System'}
+                        color={'#FFF'}
+                        fontSize={isMobile ? 'sm' : 'lg'}
+                        textAlign={'center'}>
                         Position
                     </Th>
-                    <Th fontFamily={'Chelsea Market, System'} color={'#FFF'} fontSize={'lg'} textAlign={'center'}>
+                    <Th
+                        fontFamily={'Chelsea Market, System'}
+                        color={'#FFF'}
+                        fontSize={isMobile ? 'sm' : 'lg'}
+                        textAlign={'center'}>
                         Result
                     </Th>
                     {cards && cards.length > 0 && (
-                        <Th fontFamily={'Chelsea Market, System'} color={'#FFF'} fontSize={'lg'} textAlign={'center'}>
+                        <Th
+                            fontFamily={'Chelsea Market, System'}
+                            color={'#FFF'}
+                            fontSize={isMobile ? 'sm' : 'lg'}
+                            textAlign={'center'}>
                             Rewards/ Losses
                         </Th>
                     )}
