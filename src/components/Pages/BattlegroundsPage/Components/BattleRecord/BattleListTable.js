@@ -149,14 +149,14 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                                     maxH={'45px'}
                                     justifyContent="center"
                                     cursor="pointer">
-                                    <Text>{captured?.name}</Text>
-                                    {item.isUserDefending === item.isDefenderWin &&
-                                        battleReward.length > 0 &&
-                                        battleReward.map((reward, rewardIndex) => (
-                                            <Text key={rewardIndex} color={'#FFF'} ml={rewardIndex === 0 ? 2 : 0}>
-                                                {`+ ${reward.price / NQTDIVIDER} ${reward.name}`}
-                                            </Text>
-                                        ))}
+                                    <Text color={'#FFF'}>
+                                        {captured?.name}
+                                        {item.isUserDefending === item.isDefenderWin &&
+                                            battleReward.length > 0 &&
+                                            battleReward.map(
+                                                reward => ` + ${reward.price / NQTDIVIDER} ${reward.name}`
+                                            )}
+                                    </Text>
                                 </Box>
                             </Tooltip>
                         </Td>

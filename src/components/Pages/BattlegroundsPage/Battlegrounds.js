@@ -14,13 +14,13 @@ import {
     useDisclosure,
     useMediaQuery,
 } from '@chakra-ui/react';
-import { Maps } from './Maps';
+import { Maps } from './Components/Maps';
 import React, { useEffect, useState } from 'react';
-import { ScrollLock } from './Components/ScrollLock';
+import { ScrollLock } from './assets/ScrollLock';
 import { BattlegroundsIntro } from './Components/BattlegroundsIntro/BattlegroundsIntro';
 import logo from './assets/image.png';
 import './BattlegroundMap.css';
-import { AdvertModal } from './Components/AdvertModal';
+import { AdvertModal } from './Components/Modals/AdvertModal';
 import { BattleWindow } from './Components/BattleWindow/BattleWindow';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
@@ -28,11 +28,11 @@ import Inventory from './Components/Inventory/Inventory';
 import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
 import { getUsersState } from '../../../services/Ardor/omnoInterface';
 import { GEMASSET, NQTDIVIDER, WETHASSET } from '../../../data/CONSTANTS';
-import SendGEMsToOmno from './Components/SendGEMsToOmno';
-import SendWethToOmno from './Components/SendWethToOmno';
+import SendGEMsToOmno from './Components/Modals/SendGEMsToOmno';
+import SendWethToOmno from './Components/Modals/SendWethToOmno';
 import BattleList from './Components/BattleRecord/BattleList';
 import { getActivePlayers, getBattleCount, getLandLords } from '../../../services/Battlegrounds/Battlegrounds';
-import ChangeName from './Components/ChangeName';
+import ChangeName from './Components/Modals/ChangeName';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
     /* Intro pop up managing */
@@ -204,7 +204,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         onOpenWeth();
     };
 
-    const [isMobile] = useMediaQuery('(max-width: 950px)');
+    const [isMobile] = useMediaQuery('(max-width: 1190px)');
 
     return (
         <>
@@ -257,12 +257,12 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                 <Box position={'relative'} ml={6} mt={5}>
                     <Stack direction={'row'}>
                         <Stack direction={isMobile ? 'row' : 'column'}>
-                            <Img src={logo} color={'#FFF'} h={'15%'} ml={isMobile && 6} />
+                            <Img src={logo} color={'#FFF'} h={'15%'} ml={isMobile && 7} />
                             <Stack
                                 direction={isMobile ? 'row' : 'column'}
                                 position={isMobile && 'absolute'}
-                                ml={isMobile ? '190px' : '80px'}
-                                mt={isMobile ? '0px' : '15px'}>
+                                ml={isMobile ? '220px' : '60px'}
+                                mt={isMobile ? '30px' : '15px'}>
                                 <Text
                                     color={useColorModeValue('black', 'white')}
                                     fontSize={'sm'}
@@ -306,11 +306,11 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 </Menu>
                                 <Menu>
                                     <MenuButton
-                                        mt={1}
                                         zIndex={5}
                                         color={'black'}
-                                        my={'auto'}
+                                        my={isMobile && 'auto'}
                                         bgColor={bgColor}
+                                        mt={!isMobile && 2}
                                         borderColor={borderColor}
                                         rounded="lg"
                                         w="5rem"
@@ -346,16 +346,18 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 </Menu>
                             </Stack>
 
-                            <Box
-                                mt={isMobile ? '-150px' : 8}
+                            <Stack
+                                direction={isMobile ? 'row' : 'column'}
+                                flexWrap={'wrap'}
+                                mt={isMobile ? '-120px' : 8}
                                 padding={'30px'}
                                 pos={'absolute'}
                                 top={'12rem'}
-                                ml={isMobile && -6}>
+                                ml={isMobile ? -2 : -1}>
                                 {buttons.map((btn, index) => (
                                     <Box
                                         className="btn-menu"
-                                        m={5}
+                                        m={1}
                                         key={index}
                                         onClick={btn.onclick}
                                         opacity={btn.disabled ? '30%' : null}
@@ -364,9 +366,9 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                         {btn.name}
                                     </Box>
                                 ))}
-                            </Box>
+                            </Stack>
                         </Stack>
-                        <Stack ml={'50px'} mt={isMobile && '-70px'}>
+                        <Stack mt={isMobile && '130px'} w={isMobile ? '200%' : '100%'} ml={isMobile && -24}>
                             <Maps
                                 handleSelectArena={handleSelectArena}
                                 infoAccount={infoAccount}
@@ -374,7 +376,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 handleStartBattle={handleStartBattle}
                                 w={'100%'}
                             />
-                            <Stack direction={'row'} mt={isMobile ? '-120px' : 3} mx={'auto'}>
+                            <Stack direction={'row'} mt={isMobile ? '-90px' : 3} mx={'auto'}>
                                 <Stack
                                     direction={'row'}
                                     backgroundColor={'#484848'}

@@ -18,6 +18,7 @@ import {
     Stack,
     Text,
     useDisclosure,
+    useMediaQuery,
     useToast,
 } from '@chakra-ui/react';
 import locations from '../../assets/LocationsEnum';
@@ -150,6 +151,8 @@ export const SelectHandPage = ({
         }
     };
 
+    const [isLowHeight] = useMediaQuery('(max-height: 420px)');
+
     return (
         <>
             <Box display={'flex'} flexDir={'column'}>
@@ -181,8 +184,8 @@ export const SelectHandPage = ({
                                 />
                                 <Box
                                     backgroundColor={'#465A5A'}
-                                    w={isMobile ? '100px' : '150px'}
-                                    h={isMobile ? '135px' : '200px'}
+                                    w={isMobile ? '90px' : '150px'}
+                                    h={isMobile ? '122px' : '200px'}
                                     gap={'15px'}
                                     display={'flex'}>
                                     <Image src={card.cardImgUrl} w={'100%'} />
@@ -193,8 +196,8 @@ export const SelectHandPage = ({
                                 key={index}
                                 backgroundColor="#465A5A"
                                 cursor={'pointer'}
-                                w={isMobile ? '100px' : '150px'}
-                                h={isMobile ? '135px' : '200px'}
+                                w={isMobile ? '90px' : '150px'}
+                                h={isMobile ? '122px' : '200px'}
                                 position="relative"
                                 gap="15px"
                                 display="flex"
@@ -228,7 +231,7 @@ export const SelectHandPage = ({
                         )
                     )}
                 </Stack>
-                <Stack direction={'row'} mx={'auto'} mt={isMobile ? 2 : 4} fontSize={'md'}>
+                <Stack direction={'row'} mx={'auto'} mt={isMobile ? 1 : 4} fontSize={'md'}>
                     {statistics.map((item, index) => (
                         <Stack direction={'column'} key={index} textAlign={'center'} m={2}>
                             <Text
@@ -255,7 +258,7 @@ export const SelectHandPage = ({
                 <Stack
                     direction={'row'}
                     mx={'auto'}
-                    mt={isMobile ? 2 : 4}
+                    mt={isMobile ? 1 : 4}
                     fontFamily={'Chelsea Market, system-ui'}
                     fontSize={isMobile ? 'xs' : 'md'}
                     fontWeight={100}
@@ -297,6 +300,9 @@ export const SelectHandPage = ({
                     mt={isMobile ? 3 : 6}
                     fontSize={isMobile ? 'md' : 'x-large'}
                     fontFamily={'Chelsea Market, system-ui'}
+                    position={isLowHeight && 'absolute'}
+                    bottom={isLowHeight && 2}
+                    right={isLowHeight && 2}
                     onClick={onOpen}>
                     Start battle
                 </Button>

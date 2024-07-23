@@ -5,13 +5,20 @@ import OmnoCards from './OmnoCards';
 const OmnoPage = ({ filteredCards, infoAccount, cards, isMobile }) => {
     return (
         <>
-            <Stack direction={'column'} color={'#FFF'} mb={5} mx={'auto'} textAlign={'center'} maxH={'90%'}>
+            <Stack
+                direction={'column'}
+                color={'#FFF'}
+                mb={isMobile ? 3 : 5}
+                mt={isMobile && 2}
+                mx={'auto'}
+                textAlign={'center'}
+                maxH={'90%'}>
                 <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
                     INVENTORY
                 </Heading>
                 <Text>In order to play you will have to import your cards to battlegrounds</Text>
             </Stack>
-            <Stack direction={'row'} pt={2} padding={5} height={'90%'}>
+            <Stack direction={'row'} pt={2} padding={5} height={isMobile ? '85%' : '90%'}>
                 <Box
                     mb={4}
                     backgroundColor={'#0F0F0F'}
@@ -74,7 +81,7 @@ const OmnoPage = ({ filteredCards, infoAccount, cards, isMobile }) => {
                     p={4}
                     className="custom-scrollbar"
                     overflowX={'scroll'}>
-                    <OmnoCards infoAccount={infoAccount} cards={cards} />
+                    <OmnoCards infoAccount={infoAccount} cards={cards} isMobile={isMobile} />
                 </Box>
             </Stack>
         </>

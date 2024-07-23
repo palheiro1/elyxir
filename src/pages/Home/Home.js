@@ -74,6 +74,8 @@ import { firstTimeToast, okToast } from '../../utils/alerts';
 import OpenPackDialog from '../../components/Modals/OpenPackDialog/OpenPackDialog';
 import { getOmnoGiftzBalance } from '../../services/Ardor/omnoInterface';
 import Battlegrounds from '../../components/Pages/BattlegroundsPage/Battlegrounds';
+import { fetchUserBattles } from '../../redux/reducers/BattleReducer';
+import { fetchArenasInfo } from '../../redux/reducers/ArenasReducer';
 
 /**
  * @name Home
@@ -412,6 +414,15 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         const intervalId = setInterval(resetTransactionRefs, REFRESH_DATA_TIME * 4);
         return () => clearInterval(intervalId);
     }, []);
+
+    // -----------------------------------------------------------------
+    // Load battlegrounds data
+    // -----------------------------------------------------------------
+
+    useEffect(() => {
+        dispatch(fetchArenasInfo());
+        infoAccount && dispatch(fetchUserBattles(infoAccount.accountRs));
+    }, [dispatch, infoAccount]);
 
     // -----------------------------------------------------------------
     // Check for new unwraps

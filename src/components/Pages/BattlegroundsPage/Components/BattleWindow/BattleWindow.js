@@ -111,22 +111,25 @@ export const BattleWindow = ({
     const deleteCard = index => {
         setHandBattleCards(prevCards => {
             const newCards = [...prevCards];
-            const soldier = soldiers.soldier.find(item => item.asset === newCards[index].asset);
+            const cardToDelete = newCards[index];
 
-            if (soldier.rank === 0) {
-                setRank0Count(rank0Count - 1);
-            } else if (soldier.rank === 1) {
-                setRank1Count(rank1Count - 1);
-            }
+            const soldier = soldiers.soldier.find(item => item.asset === cardToDelete.asset);
 
-            const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
+            if (soldier) {
+                if (soldier.rank === 0) {
+                    setRank0Count(prevCount => prevCount - 1);
+                } else if (soldier.rank === 1) {
+                    setRank1Count(prevCount => prevCount - 1);
+                }
 
-            const cardInfo = soldiers.soldier.find(item => item.asset === newCards[index].asset);
-            if (cardInfo.mediumId === arenaInfo.mediumId) {
-                setMediumBonus(mediumBonus - 1);
-            }
-            if (cardInfo.domainId === arenaSoldier.domainId) {
-                setDomainBonus(domainBonus - 1);
+                const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
+
+                if (soldier.mediumId === arenaInfo.mediumId) {
+                    setMediumBonus(prevBonus => prevBonus - 1);
+                }
+                if (arenaSoldier && soldier.domainId === arenaSoldier.domainId) {
+                    setDomainBonus(prevBonus => prevBonus - 1);
+                }
             }
 
             newCards[index] = '';

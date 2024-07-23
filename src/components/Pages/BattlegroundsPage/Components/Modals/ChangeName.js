@@ -18,9 +18,9 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { checkPin } from '../../../../utils/walletUtils';
-import { changeAccountName } from '../../../../services/Ardor/ardorInterface';
-import { errorToast, okToast } from '../../../../utils/alerts';
+import { checkPin } from '../../../../../utils/walletUtils';
+import { changeAccountName } from '../../../../../services/Ardor/ardorInterface';
+import { errorToast, okToast } from '../../../../../utils/alerts';
 
 const ChangeName = ({ isOpen, onClose, infoAccount }) => {
     const [newName, setNewName] = useState('');

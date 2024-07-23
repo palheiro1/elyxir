@@ -7,13 +7,20 @@ const ArdorPage = ({ cards, filteredCards, infoAccount, isMobile }) => {
 
     return (
         <>
-            <Stack direction={'column'} color={'#FFF'} mb={5} mx={'auto'} textAlign={'center'} maxH={'90%'}>
+            <Stack
+                direction={'column'}
+                color={'#FFF'}
+                mb={isMobile ? 3 : 5}
+                mt={isMobile && 2}
+                mx={'auto'}
+                textAlign={'center'}
+                maxH={'90%'}>
                 <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
                     INVENTORY
                 </Heading>
                 <Text>Here you can withdraw your cards from the army to your inventory</Text>
             </Stack>
-            <Stack direction={'row'} pt={2} padding={5} height={'90%'}>
+            <Stack direction={'row'} pt={2} padding={5} height={isMobile ? '85%' : '90%'}>
                 <Box
                     mb={4}
                     backgroundColor={'#0F0F0F'}
@@ -75,7 +82,7 @@ const ArdorPage = ({ cards, filteredCards, infoAccount, isMobile }) => {
                     p={4}
                     className="custom-scrollbar"
                     overflowX={'scroll'}>
-                    <ArdorCards infoAccount={infoAccount} cards={filteredCards} />
+                    <ArdorCards infoAccount={infoAccount} cards={filteredCards} isMobile={isMobile} />
                 </Box>
             </Stack>
         </>

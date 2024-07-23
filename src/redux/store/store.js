@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import BlockchainReducer from '../reducers/BlockchainReducer';
 import CardsReducer from '../reducers/CardsReducer';
 import BattleReducer from '../reducers/BattleReducer';
+import ArenasReducer from '../reducers/ArenasReducer';
 
 /**
  *
@@ -14,6 +15,7 @@ export const store = configureStore({
     reducer: {
         blockchain: BlockchainReducer,
         cards: CardsReducer,
-		battle: BattleReducer,
+        battle: BattleReducer,
+        arenas: ArenasReducer,
     },
 });

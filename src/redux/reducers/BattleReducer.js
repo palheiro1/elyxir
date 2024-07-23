@@ -3,53 +3,54 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getArenas, getUserBattles } from '../../services/Battlegrounds/Battlegrounds';
 import { formatTimeStamp } from '../../components/Pages/BattlegroundsPage/Utils/BattlegroundsUtils';
 import { addressToAccountId, getAccount } from '../../services/Ardor/ardorInterface';
+import locations from '../../components/Pages/BattlegroundsPage/assets/LocationsEnum';
 
-export const fetchArenasAndUserBattles = createAsyncThunk(
-    'battle/fetchArenasAndUserBattles',
-    async (accountRs, { rejectWithValue }) => {
-        try {
-            const arenas = await getArenas();
-            const accountId = await addressToAccountId(accountRs);
-            const battles = (await getUserBattles(accountId))
-                .map(battle => ({
+export const fetchUserBattles = createAsyncThunk('battle/fetchUserBattles', async (accountRs, { rejectWithValue }) => {
+    try {
+        const arenas = await getArenas();
+        const accountId = await addressToAccountId(accountRs);
+        const userBattles = (await getUserBattles(accountId))
+            .map(battle => ({
+                ...battle,
+                isUserDefending: battle.defenderAccount === accountId,
+            }))
+            .reverse();
+
+        const details = await Promise.all(
+            userBattles.map(async battle => {
+                const arenaInfo = await getArenaInfo(
+                    battle.arenaId,
+                    battle.defenderAccount,
+                    battle.attackerAccount,
+                    arenas.arena
+                );
+
+                return {
                     ...battle,
-                    isUserDefending: battle.defenderAccount === accountId,
-                }))
-                .reverse();
+                    date: formatTimeStamp(battle.timestamp),
+                    arenaName: arenaInfo.arena.name,
+                    defenderDetails: arenaInfo.defender,
+                    attackerDetails: arenaInfo.attacker,
+                };
+            })
+        );
 
-            return { arenas: arenas.arena, battles, accountId };
-        } catch (error) {
-            return rejectWithValue(error.response.data.message);
-        }
+        return { arenas: arenas.arena, details, accountId };
+    } catch (error) {
+        return rejectWithValue(error.response.data.message);
     }
-);
+});
 
-export const fetchBattleDetails = createAsyncThunk(
-    'battle/fetchBattleDetails',
-    async ({ battles, arenasInfo }, { rejectWithValue }) => {
-        try {
-            const details = await Promise.all(
-                battles.map(async battle => {
-                    const arena = arenasInfo.find(a => a.id === battle.arenaId);
-                    const [defender, attacker] = await Promise.all([
-                        getAccount(battle.defenderAccount),
-                        getAccount(battle.attackerAccount),
-                    ]);
-                    return {
-                        ...battle,
-                        date: formatTimeStamp(battle.timestamp),
-                        arenaName: arena.name,
-                        defenderDetails: defender,
-                        attackerDetails: attacker,
-                    };
-                })
-            );
-            return details;
-        } catch (error) {
-            return rejectWithValue(error.response.data.message);
-        }
-    }
-);
+const getArenaInfo = async (arenaId, defenderAccount, attackerAccount, arenasInfo) => {
+    let arena = arenasInfo.find(arena => arena.id === arenaId);
+    const [defender, attacker] = await Promise.all([getAccount(defenderAccount), getAccount(attackerAccount)]);
+    let name = locations.find(item => item.id === arenaId);
+    return {
+        defender: defender,
+        attacker: attacker,
+        arena: { ...name, ...arena },
+    };
+};
 
 const battleSlice = createSlice({
     name: 'battle',
@@ -65,30 +66,22 @@ const battleSlice = createSlice({
             state.arenasInfo = null;
             state.userBattles = null;
             state.battleDetails = null;
+            state.loading = false;
+            state.error = null;
         },
     },
     extraReducers: builder => {
         builder
-            .addCase(fetchArenasAndUserBattles.pending, state => {
+            .addCase(fetchUserBattles.pending, state => {
                 state.loading = true;
             })
-            .addCase(fetchArenasAndUserBattles.fulfilled, (state, action) => {
+            .addCase(fetchUserBattles.fulfilled, (state, action) => {
                 state.loading = false;
                 state.arenasInfo = action.payload.arenas;
-                state.userBattles = action.payload.battles;
+                state.userBattles = action.payload.details;
+                state.battleDetails = action.payload.details;
             })
-            .addCase(fetchArenasAndUserBattles.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
-            .addCase(fetchBattleDetails.pending, state => {
-                state.loading = true;
-            })
-            .addCase(fetchBattleDetails.fulfilled, (state, action) => {
-                state.loading = false;
-                state.battleDetails = action.payload;
-            })
-            .addCase(fetchBattleDetails.rejected, (state, action) => {
+            .addCase(fetchUserBattles.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });

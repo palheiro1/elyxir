@@ -23,22 +23,12 @@ import { addressToAccountId, getAccount } from '../../../../services/Ardor/ardor
 import { copyToast } from '../../../../utils/alerts';
 import { formatAddress, getTimeDifference } from '../Utils/BattlegroundsUtils';
 
-export const MapPoint = ({
-    name,
-    x,
-    y,
-    handleClick,
-    id,
-    arenaInfo,
-    selectedArena,
-    cards,
-    handleStartBattle,
-    infoAccount,
-}) => {
+export const MapPoint = ({ handleClick, arena, selectedArena, cards, handleStartBattle, infoAccount }) => {
     const [defenderInfo, setDefenderInfo] = useState(null);
     const [defenderCards, setDefenderCards] = useState(null);
     const [myArena, setMyArena] = useState(false);
 
+    const { id, x, y, name } = arena;
     const toast = useToast();
 
     const clickButton = () => {
@@ -54,21 +44,21 @@ export const MapPoint = ({
     useEffect(() => {
         const getDefenderInfo = async () => {
             const accountId = addressToAccountId(infoAccount.accountRs);
-            await getAccount(arenaInfo.defender.account).then(res => {
-                if (arenaInfo.defender.account === accountId) {
+            await getAccount(arena.defender.account).then(res => {
+                if (arena.defender.account === accountId) {
                     setMyArena(true);
                 }
                 setDefenderInfo(res);
-                const defenderAssets = new Set(arenaInfo.defender.asset);
+                const defenderAssets = new Set(arena.defender.asset);
                 const matchingObjects = cards.filter(obj => defenderAssets.has(obj.asset));
                 setDefenderCards(matchingObjects);
             });
         };
         getDefenderInfo();
-    }, [arenaInfo, cards, infoAccount.accountRs]);
+    }, [arena, cards, infoAccount.accountRs]);
 
     return (
-        arenaInfo &&
+        arena &&
         defenderInfo && (
             <>
                 <Popover>
@@ -103,11 +93,10 @@ export const MapPoint = ({
                                             {defenderInfo.name || formatAddress(defenderInfo.accountRS)}
                                         </Text>
                                     </Tooltip>
-                                    {arenaInfo.conquestEconomicCluster.timestamp &&
-                                    arenaInfo.conquestEconomicCluster.timestamp !== 0 ? (
+                                    {arena.conquestEconomicCluster.timestamp &&
+                                    arena.conquestEconomicCluster.timestamp !== 0 ? (
                                         <Text mt={0}>
-                                            Conquered{' '}
-                                            {getTimeDifference(arenaInfo.conquestEconomicCluster.timestamp)} ago. 
+                                            Conquered {getTimeDifference(arena.conquestEconomicCluster.timestamp)} ago.
                                         </Text>
                                     ) : null}
                                     <Box>

@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import './BattlegroundMap.css';
+import '../BattlegroundMap.css';
 import { Box } from '@chakra-ui/react';
-import { MapImage } from './assets/MapImage';
-import { MapPoint } from './Components/MapPoint';
-import locations from './assets/LocationsEnum';
-import { getArenas } from '../../../services/Battlegrounds/Battlegrounds';
+import { MapImage } from '../assets/MapImage';
+import { MapPoint } from './MapPoint';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchArenasInfo } from '../../../../redux/reducers/ArenasReducer';
 
 export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle, w }) => {
-    const [arenasInfo, setArenasInfo] = useState();
     const [selectedArena, setSelectedArena] = useState();
+    const { arenasInfo } = useSelector(state => state.arenas);
+
+    const dispatch = useDispatch();
     useEffect(() => {
-        const getData = async () => {
-            await getArenas().then(res => {
-                setArenasInfo(res);
-            });
-        };
-        getData();
-    }, []);
+        dispatch(fetchArenasInfo());
+    }, [dispatch]);
 
     const handleClick = id => {
-        handleSelectArena(arenasInfo.arena[id - 1]);
+        handleSelectArena(arenasInfo[id - 1]);
         setSelectedArena(id);
     };
     return (
@@ -34,15 +31,11 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
                     xlink="http://www.w3.org/1999/xlink">
                     <g clipPath="url(#clip0_3079_4498)">
                         <rect width="979" height="542.802" fill="url(#pattern0)" />
-                        {locations.map(location => (
+                        {arenasInfo.map(arena => (
                             <MapPoint
-                                key={location.id}
-                                name={location.name}
-                                x={location.x}
-                                y={location.y}
-                                id={location.id}
+                                key={arena.id}
+                                arena={arena}
                                 handleClick={handleClick}
-                                arenaInfo={arenasInfo.arena[location.id - 1]}
                                 selectedArena={selectedArena}
                                 cards={cards}
                                 handleStartBattle={handleStartBattle}
