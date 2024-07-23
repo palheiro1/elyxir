@@ -32,7 +32,7 @@ import SendGEMsToOmno from './Components/SendGEMsToOmno';
 import SendWethToOmno from './Components/SendWethToOmno';
 import BattleList from './Components/BattleRecord/BattleList';
 import { getActivePlayers, getBattleCount, getLandLords } from '../../../services/Battlegrounds/Battlegrounds';
-import ChangeName from './ChangeName';
+import ChangeName from './Components/ChangeName';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
     /* Intro pop up managing */
