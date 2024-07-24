@@ -1,4 +1,4 @@
-import { Box, Img, Stack, Text, Divider, Tooltip } from '@chakra-ui/react';
+import { Box, Img, Stack, Text, Divider, Tooltip, Spinner } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { addressToAccountId, getAccount } from '../../../../../services/Ardor/ardorInterface';
 import {
@@ -19,8 +19,8 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     const [medium, setMedium] = useState();
     const [arenaName, setArenaName] = useState(null);
     const intervalRef = useRef(null);
-    const [attackerPoints, setAttackerPoints] = useState(0);
-    const [defenderPoints, setDefenderPoints] = useState(0);
+    const [attackerPoints, setAttackerPoints] = useState(<Spinner/>);
+    const [defenderPoints, setDefenderPoints] = useState(<Spinner/>);
     const [attackerBonus, setAttackerBonus] = useState([]);
     const [defenderBonus, setDefenderBonus] = useState([]);
     const [battleResults, setBattleResults] = useState(null);

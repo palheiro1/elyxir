@@ -2,7 +2,7 @@ import { Box, Center, Flex, Heading, Img, SimpleGrid, Spacer, Stack, Text, Toolt
 import CardBadges from '../../../../Cards/CardBadges';
 import ArdorCards from './ArdorCards';
 
-const ArdorPage = ({ cards, filteredCards, infoAccount, isMobile }) => {
+const ArdorPage = ({ cards, filteredCards, infoAccount, isMobile, gridColumns }) => {
     const userCards = cards.filter(card => card.unconfirmedQuantityQNT >= 1);
 
     return (
@@ -33,15 +33,16 @@ const ArdorPage = ({ cards, filteredCards, infoAccount, isMobile }) => {
                     display="flex"
                     justifyContent="center">
                     <SimpleGrid
-                        columns={isMobile ? 1 : 3}
-                        spacing={4}
+                        columns={gridColumns()}
+                        spacing={3}
                         overflowY={'auto'}
                         className="custom-scrollbar"
+                        w={'100%'}
                         p={4}
                         overflow={'scroll'}
                         h={'750px'}>
                         {userCards.map((card, cardIndex) => (
-                            <Box key={cardIndex} w={'225px'} h={'350px'} bg={'white'} borderRadius={'10px'}>
+                            <Box key={cardIndex} w={'225px'} h={'350px'} bg={'white'} borderRadius={'10px'} mx={'auto'}>
                                 <Center>
                                     <Img src={card.cardImgUrl} w={'90%'} h={'75%'} />
                                 </Center>
@@ -64,7 +65,7 @@ const ArdorPage = ({ cards, filteredCards, infoAccount, isMobile }) => {
                                                     textAlign="end"
                                                     minH={{ base: '100%', lg: 'auto' }}
                                                     color={'#000'}>
-                                                    <small>Quantity:</small> {card.quantityQNT}
+                                                    <small>Quantity: {card.quantityQNT}</small>
                                                 </Text>
                                             </Flex>
                                         </Tooltip>

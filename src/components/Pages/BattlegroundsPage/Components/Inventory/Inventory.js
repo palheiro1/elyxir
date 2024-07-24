@@ -1,9 +1,8 @@
-import { Box, IconButton, Select } from '@chakra-ui/react';
+import { Box, IconButton, Select, useMediaQuery } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { CloseIcon } from '@chakra-ui/icons';
 import '@fontsource/chelsea-market';
-import '../../BattlegroundMap.css';
 import OmnoPage from './OmnoPage';
 import ArdorPage from './ArdorPage';
 const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards, isMobile }) => {
@@ -17,10 +16,16 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards, is
         handleCloseInventory();
     };
 
+    const [isMediumScreen] = useMediaQuery('(min-width: 1191px) and (max-width: 1500px)');
+    const getColumns = () => {
+        if (isMobile) return 1;
+        if (isMediumScreen) return 3;
+        return 4;
+    };
+
     return (
         <>
             <Overlay isVisible={true} handleClose={handleCloseInventory} />
-
             <Box
                 pos={'fixed'}
                 top={'50%'}
@@ -67,6 +72,7 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards, is
                         filteredCards={filteredCards}
                         infoAccount={infoAccount}
                         cards={cards}
+                        gridColumns={getColumns}
                         isMobile={isMobile}
                     />
                 )}
@@ -76,6 +82,7 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards, is
                         infoAccount={infoAccount}
                         cards={cards}
                         isMobile={isMobile}
+                        gridColumns={getColumns}
                     />
                 )}
             </Box>

@@ -3,6 +3,7 @@ import BlockchainReducer from '../reducers/BlockchainReducer';
 import CardsReducer from '../reducers/CardsReducer';
 import BattleReducer from '../reducers/BattleReducer';
 import ArenasReducer from '../reducers/ArenasReducer';
+import BattlegroundsReducer from '../reducers/BattlegroundsReducer';
 
 /**
  *
@@ -17,5 +18,6 @@ export const store = configureStore({
         cards: CardsReducer,
         battle: BattleReducer,
         arenas: ArenasReducer,
+        battlegrounds: BattlegroundsReducer,
     },
 });

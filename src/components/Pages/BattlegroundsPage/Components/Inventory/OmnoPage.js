@@ -2,7 +2,7 @@ import { Box, Center, Flex, Heading, Img, SimpleGrid, Spacer, Stack, Text, Toolt
 import CardBadges from '../../../../Cards/CardBadges';
 import OmnoCards from './OmnoCards';
 
-const OmnoPage = ({ filteredCards, infoAccount, cards, isMobile }) => {
+const OmnoPage = ({ filteredCards, infoAccount, cards, isMobile, gridColumns }) => {
     return (
         <>
             <Stack
@@ -31,11 +31,12 @@ const OmnoPage = ({ filteredCards, infoAccount, cards, isMobile }) => {
                     display="flex"
                     justifyContent="center">
                     <SimpleGrid
-                        columns={isMobile ? 1 : 3}
+                        columns={gridColumns()}
                         spacing={4}
                         align={'center'}
                         overflowY={'auto'}
                         className="custom-scrollbar"
+                        w={'100%'}
                         p={4}
                         overflow={'scroll'}
                         h={'750px'}>
@@ -63,7 +64,7 @@ const OmnoPage = ({ filteredCards, infoAccount, cards, isMobile }) => {
                                                     textAlign="end"
                                                     minH={{ base: '100%', lg: 'auto' }}
                                                     color={'#000'}>
-                                                    <small>Quantity:</small> {card.omnoQuantity}
+                                                    <small>Quantity: {card.omnoQuantity}</small>
                                                 </Text>
                                             </Flex>
                                         </Tooltip>

@@ -25,14 +25,13 @@ import { BattleWindow } from './Components/BattleWindow/BattleWindow';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import Inventory from './Components/Inventory/Inventory';
-import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
-import { getUsersState } from '../../../services/Ardor/omnoInterface';
-import { GEMASSET, NQTDIVIDER, WETHASSET } from '../../../data/CONSTANTS';
+import { NQTDIVIDER } from '../../../data/CONSTANTS';
 import SendGEMsToOmno from './Components/Modals/SendGEMsToOmno';
 import SendWethToOmno from './Components/Modals/SendWethToOmno';
 import BattleList from './Components/BattleRecord/BattleList';
-import { getActivePlayers, getBattleCount, getLandLords } from '../../../services/Battlegrounds/Battlegrounds';
 import ChangeName from './Components/Modals/ChangeName';
+import { fetchBattleData } from '../../../redux/reducers/BattlegroundsReducer';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
     /* Intro pop up managing */
@@ -41,9 +40,6 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [visible, setVisible] = useState(true);
     const [page, setPage] = useState(1);
     const [isScrollLocked, setIsScrollLocked] = useState(true);
-    const [filteredCards, setFilteredCards] = useState([]);
-    const [omnoGEMsBalance, setOmnoGEMsBalance] = useState(0);
-    const [omnoWethBalance, setOmnoWethBalance] = useState(0);
     const [gemsModalMode, setGemsModalMode] = useState(null); // True send , false withdraw
     const [wethModalMode, setWethModalMode] = useState(null); // True send , false withdraw
     const [selectedArena, setSelectedArena] = useState('');
@@ -51,15 +47,19 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [openBattle, setOpenBattle] = useState(false);
     const [openInventory, setOpenInventory] = useState(false);
     const [openBattleRecord, setOpenBattleRecord] = useState(false);
-    const [battleCount, setBattleCount] = useState(0);
-    const [activePlayers, setActivePlayers] = useState(0);
-    const [parseWETH, setParseWETH] = useState(0);
     const [updateState, setUpdateState] = useState(false);
-    const [landLords, setLandLords] = useState(0);
 
     const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
     const { isOpen: isOpenGems, onOpen: onOpenGems, onClose: onCloseGems } = useDisclosure();
     const { isOpen: isOpenName, onOpen: onOpenName, onClose: onCloseName } = useDisclosure();
+
+    const dispatch = useDispatch();
+    const { battleCount, activePlayers, landLords, omnoGEMsBalance, omnoWethBalance, parseWETH, filteredCards } =
+        useSelector(state => state.battlegrounds);
+
+    useEffect(() => {
+        cards && accountRs && dispatch(fetchBattleData({ accountRs, cards }));
+    }, [dispatch, accountRs, cards]);
 
     const handleNext = () => {
         setPage(2);
@@ -100,15 +100,6 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         { name: 'FAQ', disabled: true },
     ];
 
-    const statistics = [
-        { name: 'Land lords', value: landLords },
-        { name: 'Active player', value: activePlayers },
-        { name: 'Battles disputed', value: battleCount },
-        // { name: 'GEM Rewards', value: '245k' },
-        // { name: 'General ranking', value: 7 },
-        // { name: 'Time remaining', value: '14 weeks' },
-    ];
-
     const handleStartBattle = () => {
         setOpenBattle(true);
         setIsScrollLocked(true);
@@ -144,46 +135,14 @@ const Battlegrounds = ({ infoAccount, cards }) => {
 
     let wEthDecimals = 3;
 
-    useEffect(() => {
-        const filterCards = async () => {
-            let [battleCount, activePlayers, landLords] = await Promise.all([
-                getBattleCount(),
-                getActivePlayers(),
-                getLandLords(),
-            ]);
-            setBattleCount(battleCount);
-            setActivePlayers(activePlayers);
-            setLandLords(landLords);
-
-            const userInfo = await getUserState();
-            if (userInfo?.balance) {
-                const assetIds = Object.keys(userInfo?.balance?.asset);
-                setOmnoGEMsBalance(userInfo?.balance?.asset[GEMASSET] || 0);
-                setOmnoWethBalance(userInfo?.balance?.asset[WETHASSET] || 0);
-                setParseWETH(parseFloat(userInfo?.balance?.asset[WETHASSET] || 0));
-
-                const matchingCards = cards
-                    .filter(card => assetIds.includes(card.asset))
-                    .map(card => ({
-                        ...card,
-                        omnoQuantity: userInfo?.balance?.asset[card.asset],
-                    }));
-
-                setFilteredCards(matchingCards);
-            }
-        };
-        filterCards();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cards, infoAccount]);
-
-    const getUserState = async () => {
-        const accountId = addressToAccountId(accountRs);
-        let res = await getUsersState().then(res => {
-            return res.data.find(item => item.id === accountId);
-        });
-        return res;
-    };
-
+    const statistics = [
+        { name: 'Land lords', value: landLords },
+        { name: 'Active player', value: activePlayers },
+        { name: 'Battles disputed', value: battleCount },
+        // { name: 'GEM Rewards', value: '245k' },
+        // { name: 'General ranking', value: 7 },
+        // { name: 'Time remaining', value: '14 weeks' },
+    ];
     const GemMode = {
         Withdraw: false,
         Send: true,
