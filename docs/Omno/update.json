@@ -19,11 +19,7 @@
             "armyRequireUnique": true,
             "rewardChainFraction": "0.9",
             "rewardChainFractionIfEqualOrStronger": "0.8",
-            "battleCost": {
-              "asset": {
-                "10230963490193589789": "10000000000"
-              }
-            },
+            "battleCost": {},
             "rewardCostIsChainTokenOnly": true,
             "cardWinQuantity": 1,
             "diceRollSize": 6
@@ -48,7 +44,11 @@
               "domainId": 1,
               "mediumId": 1,
               "level": 2,
-              "battleCost": {},
+              "battleCost": {
+                "asset": {
+                  "10230963490193589789": "10000000000"
+                }
+              },
               "armyRankMaximum": [
                 5,
                 1
@@ -64,7 +64,11 @@
               "domainId": 1,
               "mediumId": 1,
               "level": 2,
-              "battleCost": {},
+              "battleCost": {
+                "asset": {
+                  "10230963490193589789": "10000000000"
+                }
+              },
               "armyRankMaximum": [
                 5,
                 1
@@ -142,7 +146,11 @@
               "domainId": 2,
               "mediumId": 2,
               "level": 2,
-              "battleCost": {},
+              "battleCost": {
+                "asset": {
+                  "10230963490193589789": "10000000000"
+                }
+              },
               "armyRankMaximum": [
                 5,
                 1
@@ -158,7 +166,11 @@
               "domainId": 2,
               "mediumId": 2,
               "level": 2,
-              "battleCost": {},
+              "battleCost": {
+                "asset": {
+                  "10230963490193589789": "10000000000"
+                }
+              },
               "armyRankMaximum": [
                 5,
                 1
@@ -214,16 +226,6 @@
                   "10230963490193589789": "100000000000",
                   "935701767940516955": "500000"
                 }
-              },
-              "defender": {
-                "account": "8827069720377389395",
-                "asset": [
-                  "4367881087678870632",
-                  "65767141008711421",
-                  "3607141736374727634",
-                  "2795734210888256790",
-                  "609721796834652174"
-                ]
               }
             },
             {
@@ -252,7 +254,11 @@
               "domainId": 3,
               "mediumId": 3,
               "level": 2,
-              "battleCost": {},
+              "battleCost": {
+                "asset": {
+                  "10230963490193589789": "10000000000"
+                }
+              },
               "armyRankMaximum": [
                 5,
                 1
@@ -268,7 +274,11 @@
               "domainId": 3,
               "mediumId": 3,
               "level": 2,
-              "battleCost": {},
+              "battleCost": {
+                "asset": {
+                  "10230963490193589789": "10000000000"
+                }
+              },
               "armyRankMaximum": [
                 5,
                 1
@@ -303,34 +313,14 @@
               "arenaName": "Guarani",
               "domainId": 3,
               "mediumId": 1,
-              "level": 1,
-              "defender": {
-                "account": "8827069720377389395",
-                "asset": [
-                  "4367881087678870632",
-                  "65767141008711421",
-                  "3607141736374727634",
-                  "2795734210888256790",
-                  "609721796834652174"
-                ]
-              }
+              "level": 1
             },
             {
               "id": 27,
               "arenaName": "Inuit",
               "domainId": 3,
               "mediumId": 1,
-              "level": 1,
-              "defender": {
-                "account": "8827069720377389395",
-                "asset": [
-                  "4367881087678870632",
-                  "65767141008711421",
-                  "3607141736374727634",
-                  "2795734210888256790",
-                  "609721796834652174"
-                ]
-              }
+              "level": 1
             },
             {
               "id": 28,
@@ -385,7 +375,11 @@
               "domainId": 4,
               "mediumId": 3,
               "level": 2,
-              "battleCost": {},
+              "battleCost": {
+                "asset": {
+                  "10230963490193589789": "10000000000"
+                }
+              },
               "armyRankMaximum": [
                 5,
                 1
@@ -401,7 +395,11 @@
               "domainId": 4,
               "mediumId": 1,
               "level": 2,
-              "battleCost": {},
+              "battleCost": {
+                "asset": {
+                  "10230963490193589789": "10000000000"
+                }
+              },
               "armyRankMaximum": [
                 5,
                 1
@@ -472,7 +470,11 @@
               "domainId": 5,
               "mediumId": 3,
               "level": 2,
-              "battleCost": {},
+              "battleCost": {
+                "asset": {
+                  "10230963490193589789": "10000000000"
+                }
+              },
               "armyRankMaximum": [
                 5,
                 1
@@ -508,7 +510,11 @@
               "domainId": 5,
               "mediumId": 1,
               "level": 2,
-              "battleCost": {},
+              "battleCost": {
+                "asset": {
+                  "10230963490193589789": "10000000000"
+                }
+              },
               "armyRankMaximum": [
                 5,
                 1
@@ -578,7 +584,11 @@
               "domainId": 2,
               "mediumId": 3,
               "level": 2,
-              "battleCost": {},
+              "battleCost": {
+                "asset": {
+                  "10230963490193589789": "10000000000"
+                }
+              },
               "armyRankMaximum": [
                 5,
                 1
