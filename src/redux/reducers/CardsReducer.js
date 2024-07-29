@@ -1,58 +1,47 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchAllCards } from '../../utils/cardsUtils';
 
-
-const initialState = {
-    cards: [],
-    isLoading: false,
-    isSuccess: false,
-    isError: false,
-    message: '',
-};
-
-/**
- *
- * @name fetchCards
- *
- */
-export const fetchCards = createAsyncThunk('cards/fetchAll', async ({ accountRs, collectionRs, specialRs, firstTime }, thunkAPI) => {
-    try {
-        const cards = await fetchAllCards(accountRs, collectionRs, specialRs, firstTime ? false : true);
-        return cards;
-    } catch (error) {
-        return thunkAPI.rejectWithValue(error.response ? error.response.data.message : error.message);
+export const fetchCards = createAsyncThunk(
+    'cards/fetchCards',
+    async ({ accountRs, collectionRs, specialRs }, { rejectWithValue }) => {
+        try {
+            const cardsData = await fetchAllCards(accountRs, collectionRs, specialRs, false);
+            return cardsData;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || error.message);
+        }
     }
-});
+);
 
-/**
- *
- * @name cardsSlice
- * @description The cards slice
- * @version 1.0.0
- *
- */
-export const cardsSlice = createSlice({
+const cardsSlice = createSlice({
     name: 'cards',
-    initialState,
+    initialState: {
+        cards: [],
+        loading: false,
+        error: null,
+    },
     reducers: {
-        reset: () => initialState,
+        resetCardsState: state => {
+            state.cards = [];
+            state.loading = false;
+            state.error = null;
+        },
     },
     extraReducers: builder => {
-        builder.addCase(fetchCards.pending, state => {
-            state.isLoading = true;
-        });
-        builder.addCase(fetchCards.fulfilled, (state, action) => {
-            state.isLoading = false;
-            state.isSuccess = true;
-            state.cards = action.payload;
-        });
-        builder.addCase(fetchCards.rejected, (state, action) => {
-            state.isLoading = false;
-            state.isError = true;
-            state.message = action.payload;
-        });
+        builder
+            .addCase(fetchCards.pending, state => {
+                state.loading = true;
+            })
+            .addCase(fetchCards.fulfilled, (state, action) => {
+                state.loading = false;
+                state.cards = action.payload;
+            })
+            .addCase(fetchCards.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            });
     },
 });
 
-export const { reset } = cardsSlice.actions;
+export const { resetCardsState } = cardsSlice.actions;
 export default cardsSlice.reducer;

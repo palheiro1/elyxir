@@ -34,7 +34,6 @@ import { fetchBattleData } from '../../../redux/reducers/BattlegroundsReducer';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
-    /* Intro pop up managing */
     const { accountRs } = infoAccount;
 
     const [visible, setVisible] = useState(true);
@@ -47,6 +46,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [openBattle, setOpenBattle] = useState(false);
     const [openInventory, setOpenInventory] = useState(false);
     const [openBattleRecord, setOpenBattleRecord] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     const [updateState, setUpdateState] = useState(false);
 
     const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
@@ -112,25 +112,25 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const handleCloseInventory = () => {
         setOpenInventory(false);
         setIsScrollLocked(false);
-        setUpdateState(!updateState);
+        setUpdateState(prevState => !prevState);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
         setIsScrollLocked(false);
-        setUpdateState(!updateState);
+        setUpdateState(prevState => !prevState);
     };
 
     const handleCloseBattle = () => {
         setOpenBattle(false);
         setIsScrollLocked(false);
-        setUpdateState(!updateState);
+        setUpdateState(prevState => !prevState);
     };
 
     const handleCloseBattleRecord = () => {
         setOpenBattleRecord(false);
         setIsScrollLocked(false);
-        setUpdateState(!updateState);
+        setUpdateState(prevState => !prevState);
     };
 
     let wEthDecimals = 3;
@@ -232,7 +232,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 </Text>
                                 <Menu>
                                     <MenuButton
-                                        zIndex={5}
+                                        zIndex={1}
                                         my={'auto'}
                                         color={'black'}
                                         bgColor={bgColor}
@@ -265,7 +265,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 </Menu>
                                 <Menu>
                                     <MenuButton
-                                        zIndex={5}
+                                        zIndex={1}
                                         color={'black'}
                                         my={isMobile && 'auto'}
                                         bgColor={bgColor}

@@ -1,7 +1,7 @@
-import { Box, Button, Image, Stack, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Image, Spinner, Stack, Text, VStack } from '@chakra-ui/react';
 import { IS_BOUNTY_ENABLED } from '../../../data/CONSTANTS';
 
-const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) => {
+const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, cardsLoaded }) => {
     // ---------------------------------------------
     // ------------------ COLORS ------------------
     // ---------------------------------------------
@@ -26,6 +26,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
             textColor: isActive(12) ? '#DC30EB' : 'white',
             fontWeight: isActive(12) ? 'bolder' : 'normal',
             isActive: isActive(12),
+            isLoading: !cardsLoaded,
         },
         {
             icon: '/images/icons/menu/BuyPack.png',
@@ -150,7 +151,10 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
     return (
         <VStack align="flex-start" spacing={2} width={widthBotones}>
             {buttons.map(
-                ({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive, isDisabled }, index) =>
+                (
+                    { icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive, isDisabled, isLoading },
+                    index
+                ) =>
                     !isDisabled && (
                         <Button
                             key={index}
@@ -159,7 +163,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
                             _hover={{ background: isActive ? bgColor : hoverBg, color: isActive ? undefined : 'white' }}
                             bgColor={bgColor}
                             textColor={textColor}
-                            onClick={onClick}>
+                            onClick={isLoading ? null : onClick}>
                             <Stack direction="row" align="center" w="100%">
                                 {icon && text ? (
                                     <>
@@ -173,7 +177,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones }) 
                                 ) : (
                                     !text && (
                                         <Box mx={'auto'}>
-                                            <Image src={icon} w={'75px'} />
+                                            {isLoading ? <Spinner /> : <Image src={icon} w={'75px'} />}
                                         </Box>
                                     )
                                 )}

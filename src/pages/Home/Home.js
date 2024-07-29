@@ -586,6 +586,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     showAllCards={showAllCards}
                     handleShowAllCards={handleShowAllCards}
                     goToSection={handleChangeOption}
+                    cardsLoaded={cards.length > 0 ? true : false}
                 />
             </Box>
 
