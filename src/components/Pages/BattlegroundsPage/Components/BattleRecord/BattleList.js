@@ -2,88 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { Box, Heading, IconButton, Spinner, Stack } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
-import { addressToAccountId, getAccount } from '../../../../../services/Ardor/ardorInterface';
-import { getArenas, getUserBattles } from '../../../../../services/Battlegrounds/Battlegrounds';
-import locations from '../../assets/LocationsEnum';
 import BattleDetails from './BattleDetails';
 import BattleListTable from './BattleListTable';
-import { formatDate } from '../../Utils/BattlegroundsUtils';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserBattles } from '../../../../../redux/reducers/BattleReducer';
 
-const BattleList = ({ handleClose, infoAccount, cards }) => {
+const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
     const { accountRs } = infoAccount;
 
-    const [arenasInfo, setArenasInfo] = useState(null);
-    const [userBattles, setUserBattles] = useState(null);
-    const [battleDetails, setBattleDetails] = useState(null);
+    const { arenasInfo, userBattles } = useSelector(state => state.battle);
+
     const [viewDetails, setViewDetails] = useState(false);
     const [selectedBattle, setSelectedBattle] = useState(null);
     const [selectedArena, setSelectedArena] = useState(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        const fetchArenasAndUserBattles = async () => {
-            const arenas = await getArenas();
-            setArenasInfo(arenas.arena);
-
-            const accountId = await addressToAccountId(accountRs);
-            let battles = await getUserBattles(accountId);
-            battles = battles
-                .map(battle => ({
-                    ...battle,
-                    isUserDefending: battle.defenderAccount === accountId,
-                }))
-                .reverse();
-
-            setUserBattles(battles);
-        };
-
-        accountRs && fetchArenasAndUserBattles();
-    }, [accountRs]);
-
-    useEffect(() => {
-        const fetchBattleDetails = async () => {
-            if (userBattles && arenasInfo) {
-                const details = await Promise.all(
-                    userBattles.map(async battle => {
-                        const arenaInfo = await getArenaInfo(
-                            battle.arenaId,
-                            battle.defenderAccount,
-                            battle.attackerAccount
-                        );
-                        return {
-                            ...battle,
-                            date: formatDate(battle.timestamp),
-                            arenaName: arenaInfo.arena.name,
-                            defenderDetails: arenaInfo.defender,
-                            attackerDetails: arenaInfo.attacker,
-                        };
-                    })
-                );
-                setBattleDetails(details);
-            }
-        };
-
-        fetchBattleDetails();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userBattles, arenasInfo]);
-
-    const getArenaInfo = async (arenaId, defenderAccount, attackerAccount) => {
-        if (arenasInfo) {
-            let arena = arenasInfo.find(arena => arena.id === arenaId);
-
-            const [defender, attacker] = await Promise.all([getAccount(defenderAccount), getAccount(attackerAccount)]);
-            let name = locations.find(item => item.id === arenaId);
-            return {
-                defender: defender,
-                attacker: attacker,
-                arena: { ...name, ...arena },
-            };
-        }
-    };
+        accountRs && dispatch(fetchUserBattles(accountRs));
+    }, [accountRs, dispatch]);
 
     const handleViewDetails = battleId => {
         setSelectedBattle(battleId);
 
-        let arenaId = battleDetails.find(battle => battle.battleId === battleId).arenaId;
+        let arenaId = userBattles.find(battle => battle.battleId === battleId).arenaId;
         let arena = arenasInfo.find(arena => arena.id === arenaId);
         setSelectedArena(arena);
         setViewDetails(true);
@@ -101,7 +42,7 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                 pos={'fixed'}
                 bgColor={'#1F2323'}
                 zIndex={99}
-                w={'70%'}
+                w={isMobile ? '80%' : '70%'}
                 h={'90%'}
                 borderRadius={'25px'}
                 overflowY={'scroll'}
@@ -127,12 +68,13 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                                 BATTLE RECORD
                             </Heading>
                         </Stack>
-                        {battleDetails ? (
+                        {userBattles ? (
                             <BattleListTable
                                 arenasInfo={arenasInfo}
                                 handleViewDetails={handleViewDetails}
-                                battleDetails={battleDetails}
+                                battleDetails={userBattles}
                                 cards={cards}
+                                isMobile={isMobile}
                             />
                         ) : (
                             <Box
@@ -156,7 +98,7 @@ const BattleList = ({ handleClose, infoAccount, cards }) => {
                         cards={cards}
                         arenaInfo={selectedArena}
                         infoAccount={infoAccount}
-                        battleDetails={battleDetails.find(battle => battle.battleId === selectedBattle)}
+                        battleDetails={userBattles.find(battle => battle.battleId === selectedBattle)}
                         handleGoBack={handleGoBack}
                     />
                 )}

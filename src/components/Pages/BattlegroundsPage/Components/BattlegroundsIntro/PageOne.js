@@ -1,7 +1,8 @@
 import { Box, Button, Heading, Img, Text } from '@chakra-ui/react';
 import logo from '../../assets/image.png';
-import "@fontsource/chelsea-market"; 
-import "@fontsource/inter";
+import '@fontsource/chelsea-market';
+import '@fontsource/inter';
+import locations from '../../assets/LocationsEnum';
 
 export const PageOne = ({ handleNext }) => {
     return (
@@ -44,9 +45,9 @@ export const PageOne = ({ handleNext }) => {
                     mt={6}
                     w={'500px'}
                     textAlign={'justify'}>
-                    <strong>Battlegrounds</strong> is the playground for Mythical Beings NFTs. The world is divided into
-                    55 territories, each of which can be conquered and defended by a battalion of mythological
-                    creatures.
+                    <strong>Battlegrounds</strong> is the playground for Mythical Beings NFTs. The world is divided into{' '}
+                    {locations.length} territories, each of which can be conquered and defended by a battalion of
+                    mythological creatures.
                 </Text>
             </Box>
 

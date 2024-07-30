@@ -19,11 +19,11 @@ import {
     FormLabel,
     useToast,
 } from '@chakra-ui/react';
-import { checkPin, sendGEMSToOmno, withdrawGEMsFromOmno } from '../../../../utils/walletUtils';
-import { errorToast, okToast } from '../../../../utils/alerts';
-import { GEMASSET, NQTDIVIDER } from '../../../../data/CONSTANTS';
-import { getUsersState } from '../../../../services/Ardor/omnoInterface';
-import { addressToAccountId } from '../../../../services/Ardor/ardorInterface';
+import { checkPin, sendGEMSToOmno, withdrawGEMsFromOmno } from '../../../../../utils/walletUtils';
+import { errorToast, okToast } from '../../../../../utils/alerts';
+import { GEMASSET, NQTDIVIDER } from '../../../../../data/CONSTANTS';
+import { getUsersState } from '../../../../../services/Ardor/omnoInterface';
+import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface';
 
 const SendGEMsToOmno = ({ infoAccount, gemsModalMode, isOpen, onClose }) => {
     const { GEMBalance, accountRs } = infoAccount;

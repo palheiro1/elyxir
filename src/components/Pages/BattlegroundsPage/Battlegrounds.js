@@ -12,36 +12,33 @@ import {
     Text,
     useColorModeValue,
     useDisclosure,
+    useMediaQuery,
 } from '@chakra-ui/react';
-import { Maps } from './Maps';
+import { Maps } from './Components/Maps';
 import React, { useEffect, useState } from 'react';
-import { ScrollLock } from './Components/ScrollLock';
+import { ScrollLock } from './assets/ScrollLock';
 import { BattlegroundsIntro } from './Components/BattlegroundsIntro/BattlegroundsIntro';
 import logo from './assets/image.png';
 import './BattlegroundMap.css';
-import { AdvertModal } from './Components/AdvertModal';
+import { AdvertModal } from './Components/Modals/AdvertModal';
 import { BattleWindow } from './Components/BattleWindow/BattleWindow';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import Inventory from './Components/Inventory/Inventory';
-import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
-import { getUsersState } from '../../../services/Ardor/omnoInterface';
-import { GEMASSET, NQTDIVIDER, WETHASSET } from '../../../data/CONSTANTS';
-import SendGEMsToOmno from './Components/SendGEMsToOmno';
-import SendWethToOmno from './Components/SendWethToOmno';
+import { NQTDIVIDER } from '../../../data/CONSTANTS';
+import SendGEMsToOmno from './Components/Modals/SendGEMsToOmno';
+import SendWethToOmno from './Components/Modals/SendWethToOmno';
 import BattleList from './Components/BattleRecord/BattleList';
-import { getActivePlayers, getBattleCount, getLandLords } from '../../../services/Battlegrounds/Battlegrounds';
+import ChangeName from './Components/Modals/ChangeName';
+import { fetchBattleData } from '../../../redux/reducers/BattlegroundsReducer';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
-    /* Intro pop up managing */
     const { accountRs } = infoAccount;
 
     const [visible, setVisible] = useState(true);
     const [page, setPage] = useState(1);
     const [isScrollLocked, setIsScrollLocked] = useState(true);
-    const [filteredCards, setFilteredCards] = useState([]);
-    const [omnoGEMsBalance, setOmnoGEMsBalance] = useState(0);
-    const [omnoWethBalance, setOmnoWethBalance] = useState(0);
     const [gemsModalMode, setGemsModalMode] = useState(null); // True send , false withdraw
     const [wethModalMode, setWethModalMode] = useState(null); // True send , false withdraw
     const [selectedArena, setSelectedArena] = useState('');
@@ -49,14 +46,20 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [openBattle, setOpenBattle] = useState(false);
     const [openInventory, setOpenInventory] = useState(false);
     const [openBattleRecord, setOpenBattleRecord] = useState(false);
-    const [battleCount, setBattleCount] = useState(0);
-    const [activePlayers, setActivePlayers] = useState(0);
-    const [parseWETH, setParseWETH] = useState(0);
+    // eslint-disable-next-line no-unused-vars
     const [updateState, setUpdateState] = useState(false);
-    const [landLords, setLandLords] = useState(0);
 
     const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
     const { isOpen: isOpenGems, onOpen: onOpenGems, onClose: onCloseGems } = useDisclosure();
+    const { isOpen: isOpenName, onOpen: onOpenName, onClose: onCloseName } = useDisclosure();
+
+    const dispatch = useDispatch();
+    const { battleCount, activePlayers, landLords, omnoGEMsBalance, omnoWethBalance, parseWETH, filteredCards } =
+        useSelector(state => state.battlegrounds);
+
+    useEffect(() => {
+        cards && accountRs && dispatch(fetchBattleData({ accountRs, cards }));
+    }, [dispatch, accountRs, cards]);
 
     const handleNext = () => {
         setPage(2);
@@ -86,19 +89,15 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                 setIsScrollLocked(true);
             },
         },
-        { name: 'Scoreboard', disabled: true },
+        {
+            name: 'Change name',
+            onclick: () => {
+                onOpenName();
+            },
+        },
         { name: 'Elixir', disabled: true },
         { name: 'Earnings', disabled: true },
         { name: 'FAQ', disabled: true },
-    ];
-
-    const statistics = [
-        { name: 'Land lords', value: landLords },
-        { name: 'Active player', value: activePlayers },
-        { name: 'Battles disputed', value: battleCount },
-        // { name: 'GEM Rewards', value: '245k' },
-        // { name: 'General ranking', value: 7 },
-        // { name: 'Time remaining', value: '14 weeks' },
     ];
 
     const handleStartBattle = () => {
@@ -113,67 +112,37 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const handleCloseInventory = () => {
         setOpenInventory(false);
         setIsScrollLocked(false);
-        setUpdateState(!updateState);
+        setUpdateState(prevState => !prevState);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
         setIsScrollLocked(false);
+        setUpdateState(prevState => !prevState);
     };
 
     const handleCloseBattle = () => {
         setOpenBattle(false);
         setIsScrollLocked(false);
-        setUpdateState(!updateState);
+        setUpdateState(prevState => !prevState);
     };
 
     const handleCloseBattleRecord = () => {
         setOpenBattleRecord(false);
         setIsScrollLocked(false);
+        setUpdateState(prevState => !prevState);
     };
 
     let wEthDecimals = 3;
 
-    useEffect(() => {
-        const filterCards = async () => {
-            let [battleCount, activePlayers, landLords] = await Promise.all([
-                getBattleCount(),
-                getActivePlayers(),
-                getLandLords(),
-            ]);
-            setBattleCount(battleCount);
-            setActivePlayers(activePlayers);
-            setLandLords(landLords);
-
-            const userInfo = await getUserState();
-            if (userInfo?.balance) {
-                const assetIds = Object.keys(userInfo?.balance?.asset);
-                setOmnoGEMsBalance(userInfo?.balance?.asset[GEMASSET] || 0);
-                setOmnoWethBalance(userInfo?.balance?.asset[WETHASSET] || 0);
-                setParseWETH(parseFloat(userInfo?.balance?.asset[WETHASSET] || 0));
-
-                const matchingCards = cards
-                    .filter(card => assetIds.includes(card.asset))
-                    .map(card => ({
-                        ...card,
-                        omnoQuantity: userInfo?.balance?.asset[card.asset],
-                    }));
-
-                setFilteredCards(matchingCards);
-            }
-        };
-        filterCards();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cards, infoAccount, updateState]);
-
-    const getUserState = async () => {
-        const accountId = addressToAccountId(accountRs);
-        let res = await getUsersState().then(res => {
-            return res.data.find(item => item.id === accountId);
-        });
-        return res;
-    };
-
+    const statistics = [
+        { name: 'Land lords', value: landLords },
+        { name: 'Active player', value: activePlayers },
+        { name: 'Battles disputed', value: battleCount },
+        // { name: 'GEM Rewards', value: '245k' },
+        // { name: 'General ranking', value: 7 },
+        // { name: 'Time remaining', value: '14 weeks' },
+    ];
     const GemMode = {
         Withdraw: false,
         Send: true,
@@ -194,6 +163,8 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         onOpenWeth();
     };
 
+    const [isMobile] = useMediaQuery('(max-width: 1190px)');
+
     return (
         <>
             <Box className="landscape-only">
@@ -209,6 +180,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                     isOpen={isOpenWeth}
                     onClose={onCloseWeth}
                 />
+                <ChangeName isOpen={isOpenName} onClose={onCloseName} infoAccount={infoAccount} />
                 {openBattle && (
                     <BattleWindow
                         arenaInfo={selectedArena}
@@ -218,6 +190,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                         filteredCards={filteredCards}
                         omnoGEMsBalance={omnoGEMsBalance}
                         omnoWethBalance={omnoWethBalance}
+                        isMobile={isMobile}
                     />
                 )}
                 {openInventory && (
@@ -226,115 +199,143 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                         cards={cards}
                         handleCloseInventory={handleCloseInventory}
                         filteredCards={filteredCards}
+                        isMobile={isMobile}
                     />
                 )}
                 {openBattleRecord && (
-                    <BattleList handleClose={handleCloseBattleRecord} infoAccount={infoAccount} cards={cards} />
+                    <BattleList
+                        handleClose={handleCloseBattleRecord}
+                        infoAccount={infoAccount}
+                        cards={cards}
+                        isMobile={isMobile}
+                    />
                 )}
                 <BattlegroundsIntro visible={visible} page={page} handleClose={handleClose} handleNext={handleNext} />
                 <AdvertModal isOpen={isModalOpen} onClose={closeModal} />
                 <ScrollLock isLocked={isScrollLocked} />
                 <Box position={'relative'} ml={6} mt={5}>
-                    <Img src={logo} color={'#FFF'} />
                     <Stack direction={'row'}>
-                        <Stack direction={'column'} ml={'80px'} mt={'15px'}>
-                            <Text
-                                color={useColorModeValue('black', 'white')}
-                                fontSize={'sm'}
-                                ml={-2}
-                                fontFamily={'Chelsea Market, system-ui'}>
-                                CURRENCIES
-                            </Text>
-                            <Menu>
-                                <MenuButton
-                                    color={'black'}
-                                    bgColor={bgColor}
-                                    borderColor={borderColor}
-                                    rounded="lg"
-                                    w="5rem"
-                                    maxH={'2.2rem'}>
-                                    <Stack direction="row" align="center">
-                                        <Image
-                                            ml={-5}
-                                            src="images/currency/gem.png"
-                                            alt="GEM Icon"
-                                            w="50 px"
-                                            h="50px"
-                                        />
-                                        <Text>{omnoGEMsBalance / NQTDIVIDER}</Text>
-                                    </Stack>
-                                </MenuButton>
-                                <Portal>
-                                    <MenuList>
-                                        <MenuItem onClick={() => handleOpenGemsModal('Send')}>
-                                            Send GEM to Battlegrounds
-                                        </MenuItem>
-                                        <MenuItem onClick={() => handleOpenGemsModal('Withdraw')}>
-                                            Withdraw GEM from Battlegrounds
-                                        </MenuItem>
-                                    </MenuList>
-                                </Portal>
-                            </Menu>
-                            <Menu>
-                                <MenuButton
-                                    mt={1}
-                                    color={'black'}
-                                    bgColor={bgColor}
-                                    borderColor={borderColor}
-                                    rounded="lg"
-                                    w="5rem"
-                                    maxH={'2.2rem'}>
-                                    <Stack direction="row" align="center">
-                                        <Image
-                                            ml={-5}
-                                            src="images/currency/weth.png"
-                                            alt="wETH Icon"
-                                            w="50px"
-                                            h="50px"
-                                        />
-                                        <Text>
-                                            {parseWETH &&
-                                                (parseWETH / NQTDIVIDER).toFixed(
-                                                    Math.max(0, wEthDecimals <= 6 ? wEthDecimals : 6)
-                                                )}
-                                        </Text>
-                                    </Stack>
-                                </MenuButton>
+                        <Stack direction={isMobile ? 'row' : 'column'}>
+                            <Img src={logo} color={'#FFF'} h={'15%'} ml={isMobile && 7} />
+                            <Stack
+                                direction={isMobile ? 'row' : 'column'}
+                                position={isMobile && 'absolute'}
+                                ml={isMobile ? '220px' : '60px'}
+                                mt={isMobile ? '30px' : '15px'}>
+                                <Text
+                                    color={useColorModeValue('black', 'white')}
+                                    fontSize={'sm'}
+                                    ml={-2}
+                                    my={'auto'}
+                                    fontFamily={'Chelsea Market, system-ui'}>
+                                    CURRENCIES
+                                </Text>
+                                <Menu>
+                                    <MenuButton
+                                        zIndex={1}
+                                        my={'auto'}
+                                        color={'black'}
+                                        bgColor={bgColor}
+                                        borderColor={borderColor}
+                                        rounded="lg"
+                                        w="5rem"
+                                        ml={isMobile && 3}
+                                        maxH={'2.2rem'}>
+                                        <Stack direction="row" align="center">
+                                            <Image
+                                                ml={-5}
+                                                src="images/currency/gem.png"
+                                                alt="GEM Icon"
+                                                w="50 px"
+                                                h="50px"
+                                            />
+                                            <Text>{omnoGEMsBalance / NQTDIVIDER}</Text>
+                                        </Stack>
+                                    </MenuButton>
+                                    <Portal>
+                                        <MenuList zIndex={10}>
+                                            <MenuItem onClick={() => handleOpenGemsModal('Send')}>
+                                                Send GEM to Battlegrounds
+                                            </MenuItem>
+                                            <MenuItem onClick={() => handleOpenGemsModal('Withdraw')}>
+                                                Withdraw GEM from Battlegrounds
+                                            </MenuItem>
+                                        </MenuList>
+                                    </Portal>
+                                </Menu>
+                                <Menu>
+                                    <MenuButton
+                                        zIndex={1}
+                                        color={'black'}
+                                        my={isMobile && 'auto'}
+                                        bgColor={bgColor}
+                                        mt={!isMobile && 2}
+                                        borderColor={borderColor}
+                                        rounded="lg"
+                                        w="5rem"
+                                        ml={isMobile && 3}
+                                        maxH={'2.2rem'}>
+                                        <Stack direction="row" align="center">
+                                            <Image
+                                                ml={-5}
+                                                src="images/currency/weth.png"
+                                                alt="wETH Icon"
+                                                w="50px"
+                                                h="50px"
+                                            />
+                                            <Text>
+                                                {parseWETH &&
+                                                    (parseWETH / NQTDIVIDER).toFixed(
+                                                        Math.max(0, wEthDecimals <= 6 ? wEthDecimals : 6)
+                                                    )}
+                                            </Text>
+                                        </Stack>
+                                    </MenuButton>
 
-                                <Portal>
-                                    <MenuList>
-                                        <MenuItem onClick={() => handleOpenWethModal('Send')}>
-                                            Send WETH to Battlegrounds
-                                        </MenuItem>
-                                        <MenuItem onClick={() => handleOpenWethModal('Withdraw')}>
-                                            Withdraw WETH from Battlegrounds
-                                        </MenuItem>
-                                    </MenuList>
-                                </Portal>
-                            </Menu>
+                                    <Portal>
+                                        <MenuList zIndex={10}>
+                                            <MenuItem onClick={() => handleOpenWethModal('Send')}>
+                                                Send WETH to Battlegrounds
+                                            </MenuItem>
+                                            <MenuItem onClick={() => handleOpenWethModal('Withdraw')}>
+                                                Withdraw WETH from Battlegrounds
+                                            </MenuItem>
+                                        </MenuList>
+                                    </Portal>
+                                </Menu>
+                            </Stack>
+
+                            <Stack
+                                direction={isMobile ? 'row' : 'column'}
+                                flexWrap={'wrap'}
+                                mt={isMobile ? '-120px' : 8}
+                                padding={'30px'}
+                                pos={'absolute'}
+                                top={'12rem'}
+                                ml={isMobile ? -2 : -1}>
+                                {buttons.map((btn, index) => (
+                                    <Box
+                                        className="btn-menu"
+                                        m={1}
+                                        key={index}
+                                        onClick={btn.onclick}
+                                        opacity={btn.disabled ? '30%' : null}
+                                        cursor={btn.disabled ? 'default' : 'pointer'}
+                                        title={btn.disabled ? 'Coming soon...' : null}>
+                                        {btn.name}
+                                    </Box>
+                                ))}
+                            </Stack>
                         </Stack>
-                        <Box mt={8} padding={'30px'} pos={'absolute'} top={'12rem'}>
-                            {buttons.map((btn, index) => (
-                                <Box
-                                    className="btn-menu"
-                                    m={5}
-                                    key={index}
-                                    onClick={btn.onclick}
-                                    opacity={btn.disabled ? '30%' : null}
-                                    cursor={btn.disabled ? 'default' : 'pointer'}
-                                    title={btn.disabled ? 'Coming soon...' : null}>
-                                    {btn.name}
-                                </Box>
-                            ))}
-                        </Box>
-                        <Stack ml={'50px'}>
+                        <Stack mt={isMobile && '130px'} w={isMobile ? '200%' : '100%'} ml={isMobile && -24}>
                             <Maps
                                 handleSelectArena={handleSelectArena}
                                 infoAccount={infoAccount}
                                 cards={cards}
                                 handleStartBattle={handleStartBattle}
+                                w={'100%'}
                             />
-                            <Stack direction={'row'} mt={3} mx={'auto'}>
+                            <Stack direction={'row'} mt={isMobile ? '-90px' : 3} mx={'auto'}>
                                 <Stack
                                     direction={'row'}
                                     backgroundColor={'#484848'}
@@ -343,10 +344,16 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                     w={'fit-content'}
                                     fontFamily={'Chelsea Market, system-ui'}>
                                     {statistics.map((item, index) => (
-                                        <Stack direction={'row'} m={3} key={index} cursor={'default'}>
-                                            <Text color={'#FFF'}>{item.name}:</Text>
-                                            <Text color={'#D597B2'}>{item.value}</Text>
-                                        </Stack>
+                                        <Text
+                                            key={index}
+                                            fontSize={isMobile && 'xs'}
+                                            color={'#FFF'}
+                                            my={'auto'}
+                                            p={isMobile ? 2 : 3}
+                                            textAlign={'center'}
+                                            cursor={'default'}>
+                                            {item.name}:<span style={{ color: '#D08FB0' }}> {item.value}</span>
+                                        </Text>
                                     ))}
                                 </Stack>
                                 <Button

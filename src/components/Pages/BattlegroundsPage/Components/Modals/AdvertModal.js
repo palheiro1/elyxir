@@ -18,12 +18,6 @@ export const AdvertModal = ({ isOpen, onClose }) => {
 
     const { onOpen } = useDisclosure();
 
-    useEffect(() => {
-        if (isOpen) {
-            onOpen();
-        }
-    }, [isOpen, onOpen]);
-
     return (
         <>
             <Modal isOpen={isOpen} onClose={handleClose} isCentered>

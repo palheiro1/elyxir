@@ -28,18 +28,18 @@ import { checkPin, sendCardsToOmno } from '../../../../../utils/walletUtils';
 import { errorToast, infoToast, okToast } from '../../../../../utils/alerts';
 
 /**
- * @name SwapToPolygon
- * @description This component is used to swap cards to Polygon
- * @author Jesús Sánchez Fernández
+ * @name OmnoCards
+ * @description This component is used to send cards to the OMNO inventory
+ * @author Darío Maza Berdugo
  * @version 0.1
  * @param {Object} infoAccount - Account info
  * @param {Array} cards - Cards
+ * @param {Boolean} isMobile - Boolean used for controll the mobile view
  * @returns {JSX.Element} - JSX element
  */
-const OmnoCards = ({ infoAccount, cards }) => {
+const OmnoCards = ({ infoAccount, cards, isMobile }) => {
     const toast = useToast();
 
-    // const [isValidAccount, setIsValidAccount] = useState(false);
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
 
     const [isSwapping, setIsSwapping] = useState(false);
@@ -112,13 +112,14 @@ const OmnoCards = ({ infoAccount, cards }) => {
 
                 <Menu w="100%">
                     <MenuButton
-                        w="100%"
+                        w={isMobile ? '90%' : '100%'}
                         px={4}
                         py={2}
                         borderColor="#393b97"
                         transition="all 0.2s"
                         borderRadius="md"
                         borderWidth="1px"
+                        mx={isMobile && 'auto'}
                         _hover={{ bg: 'gray.400' }}
                         _expanded={{ bg: 'blue.400' }}
                         _focus={{ boxShadow: 'outline' }}>
@@ -126,16 +127,14 @@ const OmnoCards = ({ infoAccount, cards }) => {
                     </MenuButton>
                     <MenuList minW="100%" maxH="25rem" overflowY="auto" overflowX="hidden">
                         {notSelectedCards.length > 0 ? (
-                            notSelectedCards.map(card =>
-                                card.asset.length <= 19 ? (
-                                    <MenuItem
-                                        minW="100%"
-                                        key={card.asset}
-                                        onClick={() => setSelectedCards([...selectedCards, card])}>
-                                        <BridgeCard card={card} />
-                                    </MenuItem>
-                                ) : null
-                            )
+                            notSelectedCards.map(card => (
+                                <MenuItem
+                                    minW="100%"
+                                    key={card.asset}
+                                    onClick={() => setSelectedCards([...selectedCards, card])}>
+                                    <BridgeCard card={card} />
+                                </MenuItem>
+                            ))
                         ) : (
                             <MenuItem minW="100%">
                                 <Text color={textColor}>You dont have more cards</Text>
@@ -146,7 +145,7 @@ const OmnoCards = ({ infoAccount, cards }) => {
 
                 {selectedCards.length > 0 && (
                     <Box mb={8}>
-                        <Heading fontSize="xl" fontWeight="light" mb={4}>
+                        <Heading fontSize="xl" fontWeight="light" mb={4} ml={isMobile && 4}>
                             Choosen
                         </Heading>
 

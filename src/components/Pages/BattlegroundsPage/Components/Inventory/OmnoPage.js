@@ -2,33 +2,41 @@ import { Box, Center, Flex, Heading, Img, SimpleGrid, Spacer, Stack, Text, Toolt
 import CardBadges from '../../../../Cards/CardBadges';
 import OmnoCards from './OmnoCards';
 
-const OmnoPage = ({ filteredCards, infoAccount, cards }) => {
+const OmnoPage = ({ filteredCards, infoAccount, cards, isMobile, gridColumns }) => {
     return (
         <>
-            <Stack direction={'column'} color={'#FFF'} mb={5} mx={'auto'} textAlign={'center'} maxH={'90%'}>
+            <Stack
+                direction={'column'}
+                color={'#FFF'}
+                mb={isMobile ? 3 : 5}
+                mt={isMobile && 2}
+                mx={'auto'}
+                textAlign={'center'}
+                maxH={'90%'}>
                 <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
                     INVENTORY
                 </Heading>
                 <Text>In order to play you will have to import your cards to battlegrounds</Text>
             </Stack>
-            <Stack direction={'row'} pt={2} padding={5} height={'90%'}>
+            <Stack direction={'row'} pt={2} padding={5} height={isMobile ? '85%' : '90%'}>
                 <Box
                     mb={4}
                     backgroundColor={'#0F0F0F'}
                     borderRadius={'20px'}
                     p={2}
-                    w={'65%'}
+                    w={isMobile ? '45%' : '65%'}
                     overflowY={'scroll'}
                     className="custom-scrollbar"
                     mx="auto"
                     display="flex"
                     justifyContent="center">
                     <SimpleGrid
-                        columns={[1, 2, 3]}
+                        columns={gridColumns()}
                         spacing={4}
                         align={'center'}
                         overflowY={'auto'}
                         className="custom-scrollbar"
+                        w={'100%'}
                         p={4}
                         overflow={'scroll'}
                         h={'750px'}>
@@ -56,7 +64,7 @@ const OmnoPage = ({ filteredCards, infoAccount, cards }) => {
                                                     textAlign="end"
                                                     minH={{ base: '100%', lg: 'auto' }}
                                                     color={'#000'}>
-                                                    <small>Quantity:</small> {card.omnoQuantity}
+                                                    <small>Quantity: {card.omnoQuantity}</small>
                                                 </Text>
                                             </Flex>
                                         </Tooltip>
@@ -68,13 +76,13 @@ const OmnoPage = ({ filteredCards, infoAccount, cards }) => {
                 </Box>
                 <Box
                     mb={4}
-                    maxW={'60%'}
+                    maxW={isMobile ? '80%' : '60%'}
                     backgroundColor={'#0F0F0F'}
                     borderRadius={'20px'}
                     p={4}
                     className="custom-scrollbar"
                     overflowX={'scroll'}>
-                    <OmnoCards infoAccount={infoAccount} cards={cards} />
+                    <OmnoCards infoAccount={infoAccount} cards={cards} isMobile={isMobile} />
                 </Box>
             </Stack>
         </>

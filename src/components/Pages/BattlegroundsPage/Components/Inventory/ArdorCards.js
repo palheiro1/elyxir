@@ -30,16 +30,16 @@ import { getUsersState, withdrawCardsFromOmno } from '../../../../../services/Ar
 import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface';
 
 /**
- * @name SwapToPolygon
- * @description This component is used to swap cards to Polygon
- * @author Jesús Sánchez Fernández
+ * @name ArdorCards
+ * @description This component is used to withdraw cards from the OMNO inventory
+ * @author Darío Maza Berdugo
  * @version 0.1
  * @param {Object} infoAccount - Account info
- * @param {String} ardorAddress - Ardor address
  * @param {Array} cards - Cards
+ * @param {Boolean} isMobile - Boolean used for controll the mobile view
  * @returns {JSX.Element} - JSX element
  */
-const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
+const ArdorCards = ({ infoAccount, cards, isMobile }) => {
     const toast = useToast();
     const { accountRs } = infoAccount;
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
@@ -143,13 +143,14 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
 
                 <Menu w="100%">
                     <MenuButton
-                        w="100%"
+                        w={isMobile ? '90%' : '100%'}
                         px={4}
                         py={2}
                         borderColor="#393b97"
                         transition="all 0.2s"
                         borderRadius="md"
                         borderWidth="1px"
+                        mx={isMobile && 'auto'}
                         _hover={{ bg: 'gray.400' }}
                         _expanded={{ bg: 'blue.400' }}
                         _focus={{ boxShadow: 'outline' }}>
@@ -175,7 +176,7 @@ const ArdorCards = ({ infoAccount, ardorAddress, cards }) => {
 
                 {selectedCards.length > 0 && (
                     <Box mb={8}>
-                        <Heading fontSize="xl" fontWeight="light" mb={4}>
+                        <Heading fontSize="xl" fontWeight="light" mb={4} ml={isMobile && 4}>
                             Choosen
                         </Heading>
 

@@ -74,6 +74,9 @@ import { firstTimeToast, okToast } from '../../utils/alerts';
 import OpenPackDialog from '../../components/Modals/OpenPackDialog/OpenPackDialog';
 import { getOmnoGiftzBalance } from '../../services/Ardor/omnoInterface';
 import Battlegrounds from '../../components/Pages/BattlegroundsPage/Battlegrounds';
+import { fetchUserBattles } from '../../redux/reducers/BattleReducer';
+import { fetchArenasInfo } from '../../redux/reducers/ArenasReducer';
+import { fetchBattleData } from '../../redux/reducers/BattlegroundsReducer';
 
 /**
  * @name Home
@@ -414,6 +417,17 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     }, []);
 
     // -----------------------------------------------------------------
+    // Load battlegrounds data
+    // -----------------------------------------------------------------
+
+    useEffect(() => {
+        let { accountRs } = infoAccount;
+        cards && accountRs && dispatch(fetchBattleData({ accountRs, cards }));
+        dispatch(fetchArenasInfo());
+        infoAccount && dispatch(fetchUserBattles(infoAccount.accountRs));
+    }, [cards, dispatch, infoAccount]);
+
+    // -----------------------------------------------------------------
     // Check for new unwraps
     // -----------------------------------------------------------------
 
@@ -572,6 +586,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     showAllCards={showAllCards}
                     handleShowAllCards={handleShowAllCards}
                     goToSection={handleChangeOption}
+                    cardsLoaded={cards.length > 0 ? true : false}
                 />
             </Box>
 

@@ -4,7 +4,7 @@ import VerticalMenuButtons from './VerticalMenuButtons';
 import { BLOCKTIME } from '../../../data/CONSTANTS';
 import { useSelector } from 'react-redux';
 
-const NormalMenu = memo(({ option, setOption, handleLogout, showAllCards, handleShowAllCards, children }) => {
+const NormalMenu = memo(({ option, setOption, handleLogout, showAllCards, handleShowAllCards, children, cardsLoaded}) => {
 
     const { prev_height } = useSelector(state => state.blockchain);
     const [actualBlock, setActualBlock] = useState(prev_height);
@@ -33,6 +33,7 @@ const NormalMenu = memo(({ option, setOption, handleLogout, showAllCards, handle
                     option={option}
                     handleLogout={handleLogout}
                     widthBotones="150px"
+                    cardsLoaded={cardsLoaded}
                 />
 
                 <Text fontWeight="bold" textAlign="center" fontSize="2xs" mt={2}>

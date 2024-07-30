@@ -19,11 +19,11 @@ import {
     FormLabel,
     useToast,
 } from '@chakra-ui/react';
-import { checkPin, sendWETHToOmno, withdrawWETHFromOmno } from '../../../../utils/walletUtils';
-import { errorToast, okToast } from '../../../../utils/alerts';
-import { addressToAccountId } from '../../../../services/Ardor/ardorInterface';
-import { getUsersState } from '../../../../services/Ardor/omnoInterface';
-import { NQTDIVIDER, WETHASSET } from '../../../../data/CONSTANTS';
+import { checkPin, sendWETHToOmno, withdrawWETHFromOmno } from '../../../../../utils/walletUtils';
+import { errorToast, okToast } from '../../../../../utils/alerts';
+import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface';
+import { getUsersState } from '../../../../../services/Ardor/omnoInterface';
+import { NQTDIVIDER, WETHASSET } from '../../../../../data/CONSTANTS';
 
 const SendWethToOmno = ({ isOpen, onClose, infoAccount, wethModalMode }) => {
     const { WETHBalance, accountRs } = infoAccount;

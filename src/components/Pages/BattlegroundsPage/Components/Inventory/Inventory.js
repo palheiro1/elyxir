@@ -1,12 +1,11 @@
-import { Box, IconButton, Select } from '@chakra-ui/react';
+import { Box, IconButton, Select, useMediaQuery } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { CloseIcon } from '@chakra-ui/icons';
 import '@fontsource/chelsea-market';
-import '../../BattlegroundMap.css';
 import OmnoPage from './OmnoPage';
 import ArdorPage from './ArdorPage';
-const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards }) => {
+const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards, isMobile }) => {
     const [selectedOption, setSelectedOption] = useState('battlegrounds');
 
     const handleSelectChange = event => {
@@ -17,10 +16,16 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards }) 
         handleCloseInventory();
     };
 
+    const [isMediumScreen] = useMediaQuery('(min-width: 1191px) and (max-width: 1500px)');
+    const getColumns = () => {
+        if (isMobile) return 1;
+        if (isMediumScreen) return 3;
+        return 4;
+    };
+
     return (
         <>
             <Overlay isVisible={true} handleClose={handleCloseInventory} />
-
             <Box
                 pos={'fixed'}
                 top={'50%'}
@@ -28,11 +33,11 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards }) 
                 transform={'translate(-50%, -50%)'}
                 bgColor={'#1F2323'}
                 zIndex={99}
-                w={'98%'}
+                w={isMobile ? '90%' : '98%'}
                 p={4}
                 display={'flex'}
                 flexDir={'column'}
-                h={'90%'}
+                h={isMobile ? '85%' : '90%'}
                 borderRadius={'25px'}>
                 <IconButton
                     background={'transparent'}
@@ -63,10 +68,22 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards }) 
                     </option>
                 </Select>
                 {selectedOption === 'battlegrounds' && (
-                    <OmnoPage filteredCards={filteredCards} infoAccount={infoAccount} cards={cards} />
+                    <OmnoPage
+                        filteredCards={filteredCards}
+                        infoAccount={infoAccount}
+                        cards={cards}
+                        gridColumns={getColumns}
+                        isMobile={isMobile}
+                    />
                 )}
                 {selectedOption === 'ardor' && (
-                    <ArdorPage filteredCards={filteredCards} infoAccount={infoAccount} cards={cards} />
+                    <ArdorPage
+                        filteredCards={filteredCards}
+                        infoAccount={infoAccount}
+                        cards={cards}
+                        isMobile={isMobile}
+                        gridColumns={getColumns}
+                    />
                 )}
             </Box>
         </>

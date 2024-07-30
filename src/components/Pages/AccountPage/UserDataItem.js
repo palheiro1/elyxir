@@ -2,7 +2,7 @@ import { Box, Button, Grid, GridItem, Heading, Text, useDisclosure, useToast } f
 import { useEffect, useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
 import { getIgnisPrice } from '../../../services/coingecko/utils';
-import { getIgnisFromFaucet } from '../../../services/Faucet/faucet';
+import { checkCanClaim, getRewardsFaucet } from '../../../services/Faucet/faucet';
 import { errorToast, okToast } from '../../../utils/alerts';
 import ShowQR from '../../ShowQR/ShowQR';
 
@@ -19,6 +19,7 @@ const UserDataItem = ({
     borderColor,
 }) => {
     const [IGNISUSDBalance, setIGNISUSDBalance] = useState(0);
+    const [isClaimable, setIsClaimable] = useState(false);
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -30,9 +31,19 @@ const UserDataItem = ({
         calculateUSD();
     }, [IGNISBalance]);
 
+    useEffect(() => {
+        const checkClaimable = async () => {
+            const res = await checkCanClaim(accountRs);
+            if (!res.error) {
+                setIsClaimable(true);
+            }
+        };
+        checkClaimable();
+    }, [accountRs]);
+
     const handleClaim = async () => {
         try {
-            const response = await getIgnisFromFaucet(accountRs, publicKey);
+            const response = await getRewardsFaucet(accountRs, publicKey);
             if (!response.error) {
                 okToast(response.message, toast);
             } else {
@@ -124,21 +135,21 @@ const UserDataItem = ({
                 </ContainerText>
                 <ContainerText>
                     <Heading fontSize="lg" pb={2}>
-                        Faucet (IGNIS)
+                        Daily rewards
                     </Heading>
                     <Box fontSize="sm">
-                        {parseFloat(IGNISBalance) <= 0.3 ? (
+                        {isClaimable ? (
                             <>
                                 <Button w="100%" bgColor={bgColor} borderColor={borderColor} onClick={handleClaim}>
                                     Claim
                                 </Button>
                                 <Text fontSize={'xs'} mt={2}>
-                                    Use this transfer to get more ignis for your operations, selling currencies or cards
-                                    in the Market
+                                    Here you can get some daily rewards (1 IGNIS, 1 GEM and 1 MANA). This have a total
+                                    limit of 100 claims (1 per account and IP)
                                 </Text>
                             </>
                         ) : (
-                            <Text>You can only claim if you have less than 0.3 IGNIS.</Text>
+                            <Text>You can only claim the rewards once a day per account and IP. </Text>
                         )}
                     </Box>
                 </ContainerText>
