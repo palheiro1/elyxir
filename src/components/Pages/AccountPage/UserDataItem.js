@@ -44,9 +44,8 @@ const UserDataItem = ({
     const handleClaim = async () => {
         try {
             const response = await getRewardsFaucet(accountRs, publicKey);
-            console.log("🚀 ~ handleClaim ~ response:", response)
             if (!response.data.error) {
-                okToast(response.message, toast);
+                okToast(response.data.message, toast);
                 setIsClaimable(false)
             } else {
                 errorToast(response.data.message, toast);
