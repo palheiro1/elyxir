@@ -34,7 +34,7 @@ const UserDataItem = ({
     useEffect(() => {
         const checkClaimable = async () => {
             const res = await checkCanClaim(accountRs);
-            if (!res.data.error) {
+            if (!res.error) {
                 setIsClaimable(true);
             }
         };
@@ -44,11 +44,11 @@ const UserDataItem = ({
     const handleClaim = async () => {
         try {
             const response = await getRewardsFaucet(accountRs, publicKey);
-            if (!response.data.error) {
-                okToast(response.data.message, toast);
-                setIsClaimable(false)
+            if (!response.error) {
+                okToast(response.message, toast);
+                setIsClaimable(false);
             } else {
-                errorToast(response.data.message, toast);
+                errorToast(response.message, toast);
             }
         } catch (error) {
             console.error('🚀 ~ file: UserDataItem.js:32 ~ handleClaim ~ error:', error);
