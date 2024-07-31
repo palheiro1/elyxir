@@ -55,7 +55,7 @@ export const getTimeDifference = timestamp => {
     return timeDifferenceString;
 };
 
-export function formatDate(dateStr) {
+export const formatDate = dateStr => {
     let [datePart, timePart] = dateStr.split(' ');
     let [day, month, year] = datePart.split('-').map(Number);
     let [hours, minutes, seconds] = timePart.split(':').map(Number);
@@ -69,10 +69,15 @@ export function formatDate(dateStr) {
     let newMonth = String(date.getMonth() + 1).padStart(2, '0');
 
     return `${newHours}:${newMinutes} ${newDay}/${newMonth}`;
-}
+};
 
-export function formatAddress(address) {
+export const formatAddress = address => {
     let firstPart = address.slice(0, 3);
     let lastPart = address.slice(-5);
     return `${firstPart}...${lastPart}`;
-}
+};
+
+export const isEmptyObject = object => {
+    if (Object.keys(object).length === 0 && object.constructor === Object) return true;
+    return false;
+};
