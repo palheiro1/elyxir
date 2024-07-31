@@ -21,8 +21,7 @@ export const getRewardsFaucet = async (address, publicKey) => {
         });
         return response.data;
     } catch (error) {
-        console.error('🚀 ~ file: faucet.js:10 ~ getIgnisFromFaucet ~ error:', error);
-        return error.response;
+        return error.response.data;
     }
 };
 
@@ -33,7 +32,6 @@ export const checkCanClaim = async address => {
         });
         return response.data;
     } catch (error) {
-        console.error('🚀 ~ file: faucet.js:19 ~ checkCanClaim ~ error:', error);
-        return error.response;
+        return error.response.data;
     }
 };
