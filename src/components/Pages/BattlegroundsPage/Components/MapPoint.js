@@ -27,6 +27,7 @@ export const MapPoint = ({ handleClick, arena, selectedArena, cards, handleStart
     const [defenderInfo, setDefenderInfo] = useState(null);
     const [defenderCards, setDefenderCards] = useState(null);
     const [myArena, setMyArena] = useState(false);
+    const [medium, setMedium] = useState('Unknown');
 
     const { id, x, y, name } = arena;
     const toast = useToast();
@@ -57,6 +58,22 @@ export const MapPoint = ({ handleClick, arena, selectedArena, cards, handleStart
         getDefenderInfo();
     }, [arena, cards, infoAccount.accountRs]);
 
+    useEffect(() => {
+        switch (arena.mediumId) {
+            case 1:
+                setMedium('Terrestrial');
+                break;
+            case 2:
+                setMedium('Aerial');
+                break;
+            case 3:
+                setMedium('Aquatic');
+                break;
+            default:
+                setMedium('Unknown');
+        }
+    }, [arena]);
+
     return (
         arena &&
         defenderInfo && (
@@ -76,7 +93,9 @@ export const MapPoint = ({ handleClick, arena, selectedArena, cards, handleStart
                         <PopoverContent backgroundColor={'#EBB2B9'}>
                             <PopoverArrow backgroundColor={'#EBB2B9'} />
                             <PopoverHeader fontFamily={'Chelsea Market, system-ui'}>
-                                Want to conquer {name}?
+                                <Text>Want to conquer {name}? </Text>
+                                <Text>Medium: {medium}</Text>
+                                <Text>Rarity: {arena.rarity} </Text>
                             </PopoverHeader>
                             <PopoverCloseButton />
                             <PopoverBody

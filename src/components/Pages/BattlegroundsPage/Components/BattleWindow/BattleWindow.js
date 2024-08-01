@@ -47,7 +47,7 @@ export const BattleWindow = ({
                 setDefenderInfo(res);
             });
             const soldiers = await getSoldiers().then(res => {
-                setSoldiers(res);
+                setSoldiers(res.soldier);
                 return res;
             });
             const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
@@ -61,9 +61,9 @@ export const BattleWindow = ({
     }, [handBattleCards]);
 
     const calculateBonus = () => {
-        const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
+        const arenaSoldier = soldiers.find(item => item.arenaId === arenaInfo.id);
         if (handBattleCards[index] !== '') {
-            const cardInfo = soldiers.soldier.find(item => item.asset === handBattleCards[index].asset);
+            const cardInfo = soldiers.find(item => item.asset === handBattleCards[index].asset);
             if (cardInfo.mediumId === arenaInfo.mediumId) {
                 setMediumBonus(mediumBonus + 1);
             }
@@ -80,7 +80,7 @@ export const BattleWindow = ({
     const updateCard = newValue => {
         setHandBattleCards(prevCards => {
             const assetExists = prevCards.some(card => card && card.asset === newValue.asset);
-            const soldier = soldiers.soldier.find(item => item.asset === newValue.asset);
+            const soldier = soldiers.find(item => item.asset === newValue.asset);
 
             if (assetExists) {
                 errorToast('You cannot send repeated cards to battle', toast);
@@ -113,7 +113,7 @@ export const BattleWindow = ({
             const newCards = [...prevCards];
             const cardToDelete = newCards[index];
 
-            const soldier = soldiers.soldier.find(item => item.asset === cardToDelete.asset);
+            const soldier = soldiers.find(item => item.asset === cardToDelete.asset);
 
             if (soldier) {
                 if (soldier.rank === 0) {
@@ -122,7 +122,7 @@ export const BattleWindow = ({
                     setRank1Count(prevCount => prevCount - 1);
                 }
 
-                const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
+                const arenaSoldier = soldiers.find(item => item.arenaId === arenaInfo.id);
 
                 if (soldier.mediumId === arenaInfo.mediumId) {
                     setMediumBonus(prevBonus => prevBonus - 1);

@@ -67,7 +67,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                 setCapturedCard(capturedCard);
 
                 const soldiers = await getSoldiers();
-                setSoldiers(soldiers);
+                setSoldiers(soldiers.soldier);
 
                 if (res.defenderAccount === accountId) {
                     setIsUserDefending(true);
@@ -103,8 +103,8 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                 domainBonus: 0,
             };
 
-            const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
-            const cardInfo = soldiers.soldier.find(item => item.asset === card.asset);
+            const arenaSoldier = soldiers.find(item => item.arenaId === arenaInfo.id);
+            const cardInfo = soldiers.find(item => item.asset === card.asset);
             if (cardInfo.mediumId === arenaSoldier.mediumId) {
                 bonus.mediumBonus += 1;
             }

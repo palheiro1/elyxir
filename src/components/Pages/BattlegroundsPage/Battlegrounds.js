@@ -313,16 +313,16 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 pos={'absolute'}
                                 top={'12rem'}
                                 ml={isMobile ? -2 : -1}>
-                                {buttons.map((btn, index) => (
+                                {buttons.map(({ name, disabled, onclick }, index) => (
                                     <Box
                                         className="btn-menu"
                                         m={1}
                                         key={index}
-                                        onClick={btn.onclick}
-                                        opacity={btn.disabled ? '30%' : null}
-                                        cursor={btn.disabled ? 'default' : 'pointer'}
-                                        title={btn.disabled ? 'Coming soon...' : null}>
-                                        {btn.name}
+                                        onClick={onclick}
+                                        opacity={disabled ? '30%' : null}
+                                        cursor={disabled ? 'default' : 'pointer'}
+                                        title={disabled ? 'Coming soon...' : null}>
+                                        {name}
                                     </Box>
                                 ))}
                             </Stack>
@@ -343,7 +343,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                     borderRadius={'30px'}
                                     w={'fit-content'}
                                     fontFamily={'Chelsea Market, system-ui'}>
-                                    {statistics.map((item, index) => (
+                                    {statistics.map(({ name, value }, index) => (
                                         <Text
                                             key={index}
                                             fontSize={isMobile && 'xs'}
@@ -352,7 +352,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                             p={isMobile ? 2 : 3}
                                             textAlign={'center'}
                                             cursor={'default'}>
-                                            {item.name}:<span style={{ color: '#D08FB0' }}> {item.value}</span>
+                                            {name}:<span style={{ color: '#D08FB0' }}> {value}</span>
                                         </Text>
                                     ))}
                                 </Stack>

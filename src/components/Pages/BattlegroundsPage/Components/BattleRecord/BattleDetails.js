@@ -56,7 +56,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
         setCapturedCard(capturedCard);
 
         const soldiers = await getSoldiers();
-        setSoldiers(soldiers);
+        setSoldiers(soldiers.soldier);
 
         setBattleResults(res);
 
@@ -71,10 +71,10 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                 domainBonus: 0,
             };
 
-            const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
+            const arenaSoldier = soldiers.find(item => item.arenaId === arenaInfo.id);
 
             setDomainName(cards.find(card => card.asset === arenaSoldier.asset).channel);
-            const cardInfo = soldiers.soldier.find(item => item.asset === card.asset);
+            const cardInfo = soldiers.find(item => item.asset === card.asset);
             if (cardInfo.mediumId === arenaSoldier.mediumId) {
                 bonus.mediumBonus += 1;
             }

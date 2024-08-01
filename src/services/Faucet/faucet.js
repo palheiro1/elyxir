@@ -35,3 +35,14 @@ export const checkCanClaim = async address => {
         return error.response.data;
     }
 };
+
+export const checkNewAcccount = async address => {
+    try {
+        const response = await axios.get(
+            `https://main.mythicalbeings.io/nxt?requestType=getAccount&account=${address}`
+        );
+        return response.data.errorCode && response.data.errorCode === 5;
+    } catch (error) {
+        return error.response.data;
+    }
+};
