@@ -205,6 +205,7 @@ export const BattleWindow = ({
                                 handBattleCards={handBattleCards}
                                 updateCard={updateCard}
                                 isMobile={isMobile}
+                                arenaInfo={arenaInfo}
                             />
                         )}
                         {showResults && (

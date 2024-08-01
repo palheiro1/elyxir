@@ -48,15 +48,7 @@
                 "asset": {
                   "10230963490193589789": "10000000000"
                 }
-              },
-              "armyRankMaximum": [
-                5,
-                1
-              ],
-              "armyRankMinimum": [
-                0,
-                0
-              ]
+              }
             },
             {
               "id": 3,
@@ -68,7 +60,14 @@
                 "asset": {
                   "10230963490193589789": "10000000000"
                 }
-              },
+              }
+            },
+            {
+              "id": 4,
+              "arenaName": "Turkic People",
+              "domainId": 1,
+              "mediumId": 2,
+              "level": 1,
               "armyRankMaximum": [
                 5,
                 1
@@ -79,53 +78,94 @@
               ]
             },
             {
-              "id": 4,
-              "arenaName": "Turkic People",
-              "domainId": 1,
-              "mediumId": 2,
-              "level": 1
-            },
-            {
               "id": 5,
               "arenaName": "Dravidian People",
               "domainId": 1,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 6,
               "arenaName": "Lepcha",
               "domainId": 1,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 7,
               "arenaName": "China",
               "domainId": 1,
               "mediumId": 2,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 8,
               "arenaName": "Cambodia",
               "domainId": 1,
               "mediumId": 2,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 9,
               "arenaName": "Japan",
               "domainId": 1,
               "mediumId": 3,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 10,
               "arenaName": "Iran",
               "domainId": 1,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 11,
@@ -185,35 +225,75 @@
               "arenaName": "Tahiti",
               "domainId": 2,
               "mediumId": 3,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 15,
               "arenaName": "Timor",
               "domainId": 2,
               "mediumId": 3,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 16,
               "arenaName": "Kiribati",
               "domainId": 2,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 17,
               "arenaName": "Palawa",
               "domainId": 2,
               "mediumId": 2,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 18,
               "arenaName": "Salomon",
               "domainId": 2,
               "mediumId": 3,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 19,
@@ -233,7 +313,15 @@
               "arenaName": "Noongar",
               "domainId": 2,
               "mediumId": 2,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 21,
@@ -306,42 +394,89 @@
               "arenaName": "Maya",
               "domainId": 3,
               "mediumId": 1,
-              "level": 1
+              "level": 1,"armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 26,
               "arenaName": "Guarani",
               "domainId": 3,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 27,
               "arenaName": "Inuit",
               "domainId": 3,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 28,
               "arenaName": "Náhuatl",
               "domainId": 3,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 29,
               "arenaName": "Aymara",
               "domainId": 3,
               "mediumId": 2,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 30,
               "arenaName": "Yupik",
               "domainId": 3,
               "mediumId": 3,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 31,
@@ -379,15 +514,7 @@
                 "asset": {
                   "10230963490193589789": "10000000000"
                 }
-              },
-              "armyRankMaximum": [
-                5,
-                1
-              ],
-              "armyRankMinimum": [
-                0,
-                0
-              ]
+              }
             },
             {
               "id": 34,
@@ -399,7 +526,14 @@
                 "asset": {
                   "10230963490193589789": "10000000000"
                 }
-              },
+              }
+            },
+            {
+              "id": 35,
+              "arenaName": "Zulu",
+              "domainId": 4,
+              "mediumId": 3,
+              "level": 1,
               "armyRankMaximum": [
                 5,
                 1
@@ -410,46 +544,79 @@
               ]
             },
             {
-              "id": 35,
-              "arenaName": "Zulu",
-              "domainId": 4,
-              "mediumId": 3,
-              "level": 1
-            },
-            {
               "id": 36,
               "arenaName": "Ashanti",
               "domainId": 4,
               "mediumId": 2,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 37,
               "arenaName": "Zanzibar",
               "domainId": 4,
               "mediumId": 2,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 38,
               "arenaName": "Amazigh",
               "domainId": 4,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 39,
               "arenaName": "San",
               "domainId": 4,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 40,
               "arenaName": "Ethiopia",
               "domainId": 4,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 41,
@@ -474,15 +641,7 @@
                 "asset": {
                   "10230963490193589789": "10000000000"
                 }
-              },
-              "armyRankMaximum": [
-                5,
-                1
-              ],
-              "armyRankMinimum": [
-                0,
-                0
-              ]
+              }
             },
             {
               "id": 43,
@@ -502,7 +661,15 @@
               "arenaName": "Germany",
               "domainId": 5,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 45,
@@ -514,7 +681,14 @@
                 "asset": {
                   "10230963490193589789": "10000000000"
                 }
-              },
+              }
+            },
+            {
+              "id": 46,
+              "arenaName": "Albania",
+              "domainId": 5,
+              "mediumId": 1,
+              "level": 1,
               "armyRankMaximum": [
                 5,
                 1
@@ -525,32 +699,49 @@
               ]
             },
             {
-              "id": 46,
-              "arenaName": "Albania",
-              "domainId": 5,
-              "mediumId": 1,
-              "level": 1
-            },
-            {
               "id": 47,
               "arenaName": "Iceland",
               "domainId": 5,
               "mediumId": 3,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 48,
               "arenaName": "Russia",
               "domainId": 5,
               "mediumId": 2,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 49,
               "arenaName": "Sami",
               "domainId": 5,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 50,
@@ -588,7 +779,14 @@
                 "asset": {
                   "10230963490193589789": "10000000000"
                 }
-              },
+              }
+            },
+            {
+              "id": 53,
+              "arenaName": "Lakota",
+              "domainId": 3,
+              "mediumId": 1,
+              "level": 1,
               "armyRankMaximum": [
                 5,
                 1
@@ -599,25 +797,34 @@
               ]
             },
             {
-              "id": 53,
-              "arenaName": "Lakota",
-              "domainId": 3,
-              "mediumId": 1,
-              "level": 1
-            },
-            {
               "id": 54,
               "arenaName": "Hadza",
               "domainId": 4,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 55,
               "arenaName": "Gypsy",
               "domainId": 5,
               "mediumId": 1,
-              "level": 1
+              "level": 1,
+              "armyRankMaximum": [
+                5,
+                1
+              ],
+              "armyRankMinimum": [
+                0,
+                0
+              ]
             },
             {
               "id": 56,

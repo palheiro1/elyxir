@@ -31,7 +31,7 @@ import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { sendCardsToBattle } from '../../../../../services/Ardor/omnoInterface';
 import { errorToast } from '../../../../../utils/alerts';
 import { checkPin } from '../../../../../utils/walletUtils';
-import { formatAddress } from '../../Utils/BattlegroundsUtils';
+import { formatAddress, isEmptyObject } from '../../Utils/BattlegroundsUtils';
 
 export const SelectHandPage = ({
     arenaInfo,
@@ -56,10 +56,11 @@ export const SelectHandPage = ({
     */
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [battleCost, setBattleCost] = useState([]);
+    const [battleCost, setBattleCost] = useState({});
     const [medium, setMedium] = useState();
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
+    const [disableButton, setDisableButton] = useState(false);
 
     const statistics = [
         { name: 'Level', value: locations[arenaInfo.id - 1].rarity },
@@ -82,8 +83,10 @@ export const SelectHandPage = ({
             setBattleCost(results);
         };
 
-        if (arenaInfo && arenaInfo.battleCost && arenaInfo.battleCost.asset) {
-            getBattleCost();
+        if (arenaInfo) {
+            if (!isEmptyObject(arenaInfo.battleCost)) {
+                getBattleCost();
+            }
         }
 
         if (arenaInfo) {
@@ -119,21 +122,24 @@ export const SelectHandPage = ({
         if (allEmpty) {
             return errorToast('Select at least one card to start a battle', toast);
         }
-        const gemBalance = omnoGEMsBalance / NQTDIVIDER;
-        const wethBalance = omnoWethBalance / NQTDIVIDER;
-        const battleCostGems = battleCost[0].price / NQTDIVIDER;
-        const battleCostWeth = battleCost.length > 1 ? battleCost[1].price / NQTDIVIDER : 0;
+        if (!isEmptyObject(battleCost)) {
+            const gemBalance = omnoGEMsBalance / NQTDIVIDER;
+            const wethBalance = omnoWethBalance / NQTDIVIDER;
+            const battleCostGems = battleCost[0].price / NQTDIVIDER;
+            const battleCostWeth = battleCost.length > 1 ? battleCost[1].price / NQTDIVIDER : 0;
 
-        if (battleCost.length > 1) {
-            if (battleCostGems > gemBalance || battleCostWeth > wethBalance) {
+            if (battleCost.length > 1) {
+                if (battleCostGems > gemBalance || battleCostWeth > wethBalance) {
+                    return errorToast('Insuficient balance', toast);
+                }
+            }
+
+            if (battleCostGems > gemBalance) {
                 return errorToast('Insuficient balance', toast);
             }
         }
 
-        if (battleCostGems > gemBalance) {
-            return errorToast('Insuficient balance', toast);
-        }
-
+        setDisableButton(true);
         await sendCardsToBattle({ cards: handBattleCards, passPhrase: passphrase, arenaId: arenaInfo.id });
         onClose();
         setCurrentTime(new Date().toISOString());
@@ -245,7 +251,7 @@ export const SelectHandPage = ({
                                 border={'2px solid #D597B2'}
                                 borderRadius={'40px'}
                                 color={'#FFF'}
-                                w={isMobile ? '80px' : '120px'}
+                                w={isMobile ? '80px' : '130px'}
                                 fontSize={isMobile ? 'xs' : 'md'}
                                 textAlign={'center'}
                                 fontFamily={'Chelsea Market, system-ui'}
@@ -277,12 +283,15 @@ export const SelectHandPage = ({
                             TRIBUTE
                         </Text>
                         <Stack direction={'column'} my={'auto'} ml={2}>
-                            {battleCost &&
+                            {battleCost && !isEmptyObject(battleCost) ? (
                                 battleCost.map((item, index) => (
                                     <Text key={index} color={'#FFF'}>
                                         {item.price / NQTDIVIDER} {item.name}
                                     </Text>
-                                ))}
+                                ))
+                            ) : (
+                                <Text color={'#FFF'}>Free</Text>
+                            )}
                         </Stack>
                     </Stack>
                 </Stack>
@@ -332,7 +341,13 @@ export const SelectHandPage = ({
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button color={'#fff'} bgColor="#F48794" mx={'auto'} w={'80%'} onClick={handleStartBattle}>
+                        <Button
+                            color={'#fff'}
+                            bgColor="#F48794"
+                            mx={'auto'}
+                            w={'80%'}
+                            onClick={handleStartBattle}
+                            isDisabled={disableButton}>
                             Play
                         </Button>
                     </ModalFooter>

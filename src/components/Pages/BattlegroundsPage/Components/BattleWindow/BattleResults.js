@@ -19,8 +19,8 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     const [medium, setMedium] = useState();
     const [arenaName, setArenaName] = useState(null);
     const intervalRef = useRef(null);
-    const [attackerPoints, setAttackerPoints] = useState(<Spinner/>);
-    const [defenderPoints, setDefenderPoints] = useState(<Spinner/>);
+    const [attackerPoints, setAttackerPoints] = useState(<Spinner />);
+    const [defenderPoints, setDefenderPoints] = useState(<Spinner />);
     const [attackerBonus, setAttackerBonus] = useState([]);
     const [defenderBonus, setDefenderBonus] = useState([]);
     const [battleResults, setBattleResults] = useState(null);
@@ -29,6 +29,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     const [defenderInfo, setDefenderInfo] = useState(null);
     const [attackerHero, setAttackerHero] = useState(null);
     const [defenderHero, setDefenderHero] = useState(null);
+    const [soldiers, setSoldiers] = useState(null);
 
     const getLastBattle = useCallback(async () => {
         if (currentTime) {
@@ -65,6 +66,9 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                 setDefenderHero(defenderHero);
                 setCapturedCard(capturedCard);
 
+                const soldiers = await getSoldiers();
+                setSoldiers(soldiers);
+
                 if (res.defenderAccount === accountId) {
                     setIsUserDefending(true);
                 }
@@ -99,7 +103,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                 domainBonus: 0,
             };
 
-            const soldiers = await getSoldiers();
             const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
             const cardInfo = soldiers.soldier.find(item => item.asset === card.asset);
             if (cardInfo.mediumId === arenaSoldier.mediumId) {
@@ -111,7 +114,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
 
             return bonus;
         },
-        [arenaInfo.id]
+        [arenaInfo.id, soldiers]
     );
     useEffect(() => {
         if (currentTime) {
@@ -134,11 +137,10 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
 
             await Promise.all(
                 battleResults.map(async item => {
+                    let { defenderValue, attackerValue } = item;
+
                     const attackerCard = cards.find(card => String(card.asset) === String(item.attackerAsset));
                     const defenderCard = cards.find(card => String(card.asset) === String(item.defenderAsset));
-
-                    let attackerSoldier = battleInfo.attacker.find(soldier => soldier.asset === item.attackerAsset);
-                    let defenderSoldier = battleInfo.defender.find(soldier => soldier.asset === item.defenderAsset);
 
                     if (attackerCard && defenderCard) {
                         const attackerBonuses = (await calculateBonus(attackerCard)) || {
@@ -153,17 +155,9 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                         attackerResults.push(attackerBonuses);
                         defenderResults.push(defenderBonuses);
 
-                        pointsA +=
-                            attackerBonuses.mediumBonus +
-                            attackerBonuses.domainBonus +
-                            attackerSoldier.power +
-                            item.attackerRoll;
+                        pointsA += attackerValue;
 
-                        pointsD +=
-                            defenderBonuses.mediumBonus +
-                            defenderBonuses.domainBonus +
-                            defenderSoldier.power +
-                            item.defenderRoll;
+                        pointsD += defenderValue;
                     }
                 })
             );
@@ -174,10 +168,10 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             setDefenderBonus(defenderResults);
         };
 
-        if (battleResults && battleInfo && cards && cards.length > 0 && calculateBonus) {
+        if (battleResults && battleInfo && cards && cards.length > 0 && soldiers && calculateBonus) {
             calculateAllBonusesAndPoints();
         }
-    }, [battleInfo, battleResults, calculateBonus, cards]);
+    }, [battleInfo, battleResults, calculateBonus, cards, soldiers]);
 
     const defaultOptions = {
         loop: true,
@@ -263,11 +257,11 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                             display="flex"
                             alignItems="center"
                             justifyContent="center">
-                            {isNaN(defenderPoints) ? defenderPoints : defenderPoints + 2}
+                            {defenderPoints}
                         </Box>
                     </Stack>
                     <Stack direction={'column'}>
-                        <Text color={battleInfo.isDefenderWin ? '#EDBA2B' : '#E14942'}>
+                        <Text color={battleInfo.isDefenderWin ? '#EDBA2B' : '#E14942'} my={'auto'}>
                             {battleInfo.isDefenderWin ? 'WINNER: ' : 'LOSER: '}{' '}
                             <Tooltip label={defenderInfo.accountRS} hasArrow>
                                 <span style={{ color: '#FFF' }}>
@@ -276,14 +270,13 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                 </span>
                             </Tooltip>
                         </Text>
-                        <Text color={'#FFF'} mx={'auto'}>
-                            Defender bonus: +2
-                        </Text>
                     </Stack>
                 </Stack>
                 <Stack direction={'column'}>
                     {battleResults &&
                         battleResults.map((item, index) => {
+                            const { defenderValue, attackerValue, attackerRoll, defenderRoll } = item;
+
                             let attackerCard = cards.find(card => {
                                 return card.asset === String(item.attackerAsset);
                             });
@@ -299,18 +292,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                 soldier => soldier.asset === item.defenderAsset
                             );
 
-                            let attackerRoundPoints =
-                                attackerBonus[index]?.mediumBonus +
-                                attackerBonus[index]?.domainBonus +
-                                attackerSoldier.power +
-                                item.attackerRoll;
-
-                            let defenderRoundPoints =
-                                defenderBonus[index]?.mediumBonus +
-                                defenderBonus[index]?.domainBonus +
-                                defenderSoldier.power +
-                                item.defenderRoll;
-
                             return (
                                 <Box key={index}>
                                     <Stack
@@ -325,28 +306,32 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                 {attackerHero.asset === attackerCard.asset ? '(Hero)' : null}
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>DOMAIN:</span>{' '}
+                                                <span style={{ color: '#D597B2' }}>CARD POWER:</span>{' '}
+                                                {attackerSoldier.power -
+                                                    attackerBonus[index]?.domainBonus -
+                                                    attackerBonus[index]?.mediumBonus}
+                                            </Text>
+                                            <Text>
+                                                <span style={{ color: '#D597B2' }}>DOMAIN BONUS:</span>{' '}
                                                 {attackerBonus[index]?.domainBonus ?? 0}
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>MEDIUM:</span>{' '}
+                                                <span style={{ color: '#D597B2' }}>MEDIUM BONUS:</span>{' '}
                                                 {attackerBonus[index]?.mediumBonus ?? 0}
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>DICE:</span> {item.attackerRoll}
+                                                <span style={{ color: '#D597B2' }}>TOTAL POWER:</span>{' '}
+                                                {attackerSoldier.power}
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>POWER:</span> {attackerSoldier.power}
+                                                <span style={{ color: '#D597B2' }}>DICE:</span> {attackerRoll}
                                             </Text>
-
-                                            <Text>
-                                                Round points: {isNaN(attackerRoundPoints) ? 0 : attackerRoundPoints}
-                                            </Text>
+                                            <Text>Round points: {attackerValue}</Text>
                                         </Stack>
                                         <Box
                                             width="8"
                                             height="8"
-                                            bg={item.attackerRoll <= item.defenderRoll ? 'transparent' : '#FFF'}
+                                            bg={attackerRoll <= defenderRoll ? 'transparent' : '#FFF'}
                                             display="flex"
                                             alignItems="center"
                                             justifyContent="center"
@@ -360,11 +345,11 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                 paddingBottom: '100%',
                                             }}>
                                             <Text
-                                                color={item.attackerRoll <= item.defenderRoll ? '#D597B2' : '#000'}
+                                                color={attackerRoll <= defenderRoll ? '#D597B2' : '#000'}
                                                 fontSize="xl"
                                                 transform="rotate(-45deg)"
                                                 position="absolute">
-                                                {item.attackerRoll}
+                                                {attackerRoll}
                                             </Text>
                                         </Box>
                                         <Box
@@ -381,7 +366,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                         : 'none',
                                             }}>
                                             <Img src={attackerCard.cardImgUrl} width="100%" />
-                                            {defenderRoundPoints >= attackerRoundPoints && (
+                                            {defenderValue >= attackerValue && (
                                                 <Box
                                                     position="absolute"
                                                     top="0"
@@ -413,7 +398,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                         : 'none',
                                             }}>
                                             <Img src={defenderCard.cardImgUrl} width="100%" />
-                                            {defenderRoundPoints <= attackerRoundPoints && (
+                                            {defenderValue <= attackerValue && (
                                                 <Box
                                                     position="absolute"
                                                     top="0"
@@ -433,7 +418,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                         <Box
                                             width="8"
                                             height="8"
-                                            bg={item.attackerRoll >= item.defenderRoll ? 'transparent' : '#FFF'}
+                                            bg={attackerRoll >= defenderRoll ? 'transparent' : '#FFF'}
                                             display="flex"
                                             alignItems="center"
                                             justifyContent="center"
@@ -447,11 +432,11 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                 paddingBottom: '100%',
                                             }}>
                                             <Text
-                                                color={item.attackerRoll >= item.defenderRoll ? '#D597B2' : '#000'}
+                                                color={attackerRoll >= defenderRoll ? '#D597B2' : '#000'}
                                                 fontSize="xl"
                                                 transform="rotate(-45deg)"
                                                 position="absolute">
-                                                {item.defenderRoll}
+                                                {defenderRoll}
                                             </Text>
                                         </Box>
 
@@ -461,22 +446,37 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                 {defenderHero.asset === defenderCard.asset ? '(Hero)' : null}{' '}
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>DOMAIN:</span>{' '}
+                                                <span style={{ color: '#D597B2' }}>CARD POWER: </span>
+                                                {defenderSoldier.power -
+                                                    defenderBonus[index]?.domainBonus -
+                                                    defenderBonus[index]?.mediumBonus -
+                                                    2 <=
+                                                0
+                                                    ? defenderSoldier.power
+                                                    : defenderSoldier.power -
+                                                      defenderBonus[index]?.domainBonus -
+                                                      defenderBonus[index]?.mediumBonus -
+                                                      2}
+                                            </Text>
+                                            <Text>
+                                                <span style={{ color: '#D597B2' }}>DOMAIN BONUS:</span>{' '}
                                                 {defenderBonus[index]?.domainBonus ?? 0}
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>MEDIUM:</span>{' '}
+                                                <span style={{ color: '#D597B2' }}>MEDIUM BONUS:</span>{' '}
                                                 {defenderBonus[index]?.mediumBonus ?? 0}
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>DICE:</span> {item.defenderRoll}
+                                                <span style={{ color: '#D597B2' }}>DEFENDER BONUS:</span> 2
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>POWER:</span> {defenderSoldier.power}
+                                                <span style={{ color: '#D597B2' }}>TOTAL POWER:</span>{' '}
+                                                {defenderSoldier.power}
                                             </Text>
                                             <Text>
-                                                Round points: {isNaN(defenderRoundPoints) ? 0 : defenderRoundPoints}
+                                                <span style={{ color: '#D597B2' }}>DICE:</span> {defenderRoll}
                                             </Text>
+                                            <Text>Round points: {defenderValue}</Text>
                                         </Stack>
                                     </Stack>
                                     <Divider w={'70%'} mx={'auto'} mt={2} />
@@ -495,7 +495,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                             ? 'Captured card:'
                             : 'Obtained card: '}
                     </Text>
-                    <Img w={'10%'} src={capturedCard.cardImgUrl} mb={3} />
+                    <Img w={'12%'} src={capturedCard.cardImgUrl} mb={5} />
                 </Stack>
             </Stack>
         </Box>

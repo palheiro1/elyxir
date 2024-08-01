@@ -2,23 +2,23 @@ import { Box, Image, Table, Tbody, Td, Text, Th, Thead, Tooltip, Tr } from '@cha
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getAsset } from '../../../../../utils/cardsUtils';
-import { formatAddress } from '../../Utils/BattlegroundsUtils';
+import { formatAddress, isEmptyObject } from '../../Utils/BattlegroundsUtils';
 
 const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, isMobile }) => {
     const [battleRewards, setBattleRewards] = useState({});
 
     const getBattleReward = useCallback(async (arenaInfo, battle) => {
         let rewardFraction = battle.isWinnerLowerPower ? 0.9 : 0.8;
-        const assets = Object.entries(arenaInfo.battleCost.asset);
-
-        const results = await Promise.all(
-            assets.map(async ([asset, price]) => {
-                const assetDetails = await getAsset(asset);
-                return { name: assetDetails, price: price * rewardFraction };
-            })
-        );
-
-        return results;
+        if (!isEmptyObject(arenaInfo.battleCost)) {
+            const assets = Object.entries(arenaInfo.battleCost.asset);
+            const results = await Promise.all(
+                assets.map(async ([asset, price]) => {
+                    const assetDetails = await getAsset(asset);
+                    return { name: assetDetails, price: price * rewardFraction };
+                })
+            );
+            return results;
+        }
     }, []);
 
     useEffect(() => {

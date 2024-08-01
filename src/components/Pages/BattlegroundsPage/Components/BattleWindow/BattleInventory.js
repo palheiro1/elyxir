@@ -3,14 +3,29 @@ import React from 'react';
 import CardBadges from '../../../../Cards/CardBadges';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 
-const BattleInventory = ({ setOpenIventory, filteredCards, index, handBattleCards, updateCard, isMobile }) => {
-    const availableCards = filteredCards
+const BattleInventory = ({
+    setOpenIventory,
+    filteredCards,
+    index,
+    handBattleCards,
+    updateCard,
+    isMobile,
+    arenaInfo,
+}) => {
+    const { armyRankMaximum } = arenaInfo;
+    const commonHand = filteredCards
+        .filter(card => card.rarity === 'Common' || card.rarity === 'Rare')
+        .filter(card => !handBattleCards.find(item => item.asset === card.asset));
+
+    const normalHand = filteredCards
         .filter(
             card =>
                 (index === 0 && (card.rarity === 'Epic' || card.rarity === 'Special')) ||
                 (index !== 0 && (card.rarity === 'Common' || card.rarity === 'Rare'))
         )
         .filter(card => !handBattleCards.find(item => item.asset === card.asset));
+
+    const availableCards = armyRankMaximum[0] === 5 ? commonHand : normalHand;
 
     return (
         <>
