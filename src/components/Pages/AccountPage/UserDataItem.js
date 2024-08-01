@@ -2,7 +2,7 @@ import { Box, Button, Grid, GridItem, Heading, Text, useDisclosure, useToast } f
 import { useEffect, useState } from 'react';
 import { FaQrcode } from 'react-icons/fa';
 import { getIgnisPrice } from '../../../services/coingecko/utils';
-import { checkCanClaim, checkNewAcccount, getIgnisFromFaucet, getRewardsFaucet } from '../../../services/Faucet/faucet';
+import { checkCanClaim, getRewardsFaucet } from '../../../services/Faucet/faucet';
 import { errorToast, okToast } from '../../../utils/alerts';
 import ShowQR from '../../ShowQR/ShowQR';
 
