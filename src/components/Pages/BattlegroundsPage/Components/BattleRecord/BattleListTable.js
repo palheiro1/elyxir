@@ -153,9 +153,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                                         {captured?.name}
                                         {item.isUserDefending === item.isDefenderWin &&
                                             battleReward.length > 0 &&
-                                            battleReward.map(
-                                                reward => ` + ${reward.price / NQTDIVIDER} ${reward.name}`
-                                            )}
+                                            battleReward.map(({ price, name }) => ` + ${price / NQTDIVIDER} ${name}`)}
                                     </Text>
                                 </Box>
                             </Tooltip>

@@ -20,6 +20,7 @@ const UserDataItem = ({
 }) => {
     const [IGNISUSDBalance, setIGNISUSDBalance] = useState(0);
     const [isClaimable, setIsClaimable] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -43,12 +44,13 @@ const UserDataItem = ({
 
     const handleClaim = async () => {
         try {
+            setIsDisabled(true);
             const response = await getRewardsFaucet(accountRs, publicKey);
-            if (!response.error) {
-                okToast(response.message, toast);
+            if (!response.data.error) {
+                okToast(response.data.message, toast);
                 setIsClaimable(false);
             } else {
-                errorToast(response.message, toast);
+                errorToast(response.data.message, toast);
             }
         } catch (error) {
             console.error('🚀 ~ file: UserDataItem.js:32 ~ handleClaim ~ error:', error);
@@ -141,16 +143,20 @@ const UserDataItem = ({
                     <Box fontSize="sm">
                         {isClaimable ? (
                             <>
-                                <Button w="100%" bgColor={bgColor} borderColor={borderColor} onClick={handleClaim}>
+                                <Button
+                                    w="100%"
+                                    bgColor={bgColor}
+                                    borderColor={borderColor}
+                                    onClick={handleClaim}
+                                    isDisabled={isDisabled}>
                                     Claim
                                 </Button>
                                 <Text fontSize={'xs'} mt={2}>
-                                    Here you can get some daily rewards (1 IGNIS, 1 GEM and 1 MANA). This have a total
-                                    limit of 100 claims (1 per account and IP)
+                                    Here you can get some daily rewards (1 IGNIS, 1 GEM and 1 MANA)
                                 </Text>
                             </>
                         ) : (
-                            <Text>You can only claim the rewards once a day per account and IP. </Text>
+                            <Text>No more rewards today, come back tomorrow! </Text>
                         )}
                     </Box>
                 </ContainerText>
