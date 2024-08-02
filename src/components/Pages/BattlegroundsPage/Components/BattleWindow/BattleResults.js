@@ -285,12 +285,16 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                 return card.asset === String(item.defenderAsset);
                             });
 
-                            let attackerSoldier = battleInfo.attacker.find(
+                            let defenderSoldier = soldiers.find(soldier => soldier.asset === item.defenderAsset);
+                            let attackerSoldier = soldiers.find(soldier => soldier.asset === item.defenderAsset);
+
+                            let attackerTotalPower = battleResults.attacker.find(
                                 soldier => soldier.asset === item.attackerAsset
-                            );
-                            let defenderSoldier = battleInfo.defender.find(
+                            ).power;
+
+                            let defenderTotalPower = battleResults.defender.find(
                                 soldier => soldier.asset === item.defenderAsset
-                            );
+                            ).power;
 
                             return (
                                 <Box key={index}>
@@ -301,15 +305,13 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                         alignItems={'center'}
                                         spacing={4}>
                                         <Stack fontSize={'xs'} align={'flex-start'}>
-                                            <Text>
+                                            <Text fontSize={'sm'}>
                                                 {attackerCard.name}{' '}
                                                 {attackerHero.asset === attackerCard.asset ? '(Hero)' : null}
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>CARD POWER:</span>{' '}
-                                                {attackerSoldier.power -
-                                                    attackerBonus[index]?.domainBonus -
-                                                    attackerBonus[index]?.mediumBonus}
+                                                {attackerSoldier.power}
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>DOMAIN BONUS:</span>{' '}
@@ -321,7 +323,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>TOTAL POWER:</span>{' '}
-                                                {attackerSoldier.power}
+                                                {attackerTotalPower}
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>DICE:</span> {attackerRoll}
@@ -441,22 +443,13 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                         </Box>
 
                                         <Stack fontSize={'xs'} align={'flex-end'}>
-                                            <Text>
+                                            <Text fontSize={'sm'}>
                                                 {defenderCard.name}{' '}
                                                 {defenderHero.asset === defenderCard.asset ? '(Hero)' : null}{' '}
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>CARD POWER: </span>
-                                                {defenderSoldier.power -
-                                                    defenderBonus[index]?.domainBonus -
-                                                    defenderBonus[index]?.mediumBonus -
-                                                    2 <=
-                                                0
-                                                    ? defenderSoldier.power
-                                                    : defenderSoldier.power -
-                                                      defenderBonus[index]?.domainBonus -
-                                                      defenderBonus[index]?.mediumBonus -
-                                                      2}
+                                                {defenderSoldier.power}
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>DOMAIN BONUS:</span>{' '}
@@ -471,7 +464,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>TOTAL POWER:</span>{' '}
-                                                {defenderSoldier.power}
+                                                {defenderTotalPower}
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>DICE:</span> {defenderRoll}
