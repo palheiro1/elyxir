@@ -123,8 +123,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             if (cardInfo.domainId === hero.domainId) {
                 bonus.heroBonus += 1;
             }
-
-            console.log('🚀 ~ bonus:', bonus);
             return bonus;
         },
         [arenaInfo.id, attackerHero, defenderHero, soldiers]

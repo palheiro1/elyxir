@@ -57,12 +57,6 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
 
         const soldiers = await getSoldiers();
         setSoldiers(soldiers.soldier);
-
-        // const bunyip = cards.find(card => card.name === 'Bunyip');
-        // console.log('🚀 ~ getLastBattle ~ bunyip:', bunyip);
-        // const bunyipSoldier = soldiers.soldier.find(item => item.asset === bunyip.asset);
-        // console.log('🚀 ~ getLastBattle ~ bunyipSoldier:', bunyipSoldier);
-
         setBattleResults(res);
 
         setBattleInfo(res);
@@ -71,7 +65,6 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
 
     const calculateBonus = useCallback(
         async (card, isAttacker) => {
-
             let defenderSoldier = soldiers.find(soldier => soldier.asset === defenderHero.asset);
             let attackerSoldier = soldiers.find(soldier => soldier.asset === attackerHero.asset);
             const hero = isAttacker ? attackerSoldier : defenderSoldier;
@@ -98,8 +91,6 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
             if (cardInfo.domainId === hero.domainId) {
                 bonus.heroBonus += 1;
             }
-
-            console.log('🚀 ~ bonus:', bonus);
             return bonus;
         },
         [arenaInfo.id, attackerHero, cards, defenderHero, soldiers]
