@@ -248,12 +248,16 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                 return card.asset === String(item.defenderAsset);
                             });
 
-                            let attackerSoldier = battleResults.attacker.find(
+                            let defenderSoldier = soldiers.find(soldier => soldier.asset === item.defenderAsset);
+                            let attackerSoldier = soldiers.find(soldier => soldier.asset === item.defenderAsset);
+
+                            let attackerTotalPower = battleResults.attacker.find(
                                 soldier => soldier.asset === item.attackerAsset
-                            );
-                            let defenderSoldier = battleResults.defender.find(
+                            ).power;
+                            
+                            let defenderTotalPower = battleResults.defender.find(
                                 soldier => soldier.asset === item.defenderAsset
-                            );
+                            ).power;
 
                             return (
                                 <Box key={index}>
@@ -270,9 +274,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>CARD POWER:</span>{' '}
-                                                {attackerSoldier.power -
-                                                    attackerBonus[index]?.domainBonus -
-                                                    attackerBonus[index]?.mediumBonus}
+                                                {attackerSoldier.power}
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>DOMAIN BONUS:</span>{' '}
@@ -284,7 +286,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>TOTAL POWER:</span>{' '}
-                                                {attackerSoldier.power}
+                                                {attackerTotalPower}
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>DICE:</span> {attackerRoll}
@@ -410,16 +412,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>CARD POWER: </span>
-                                                {defenderSoldier.power -
-                                                    defenderBonus[index]?.domainBonus -
-                                                    defenderBonus[index]?.mediumBonus -
-                                                    2 <=
-                                                0
-                                                    ? defenderSoldier.power
-                                                    : defenderSoldier.power -
-                                                      defenderBonus[index]?.domainBonus -
-                                                      defenderBonus[index]?.mediumBonus -
-                                                      2}
+                                                {defenderSoldier.power}
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>DOMAIN BONUS:</span>{' '}
@@ -434,7 +427,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>TOTAL POWER:</span>{' '}
-                                                {defenderSoldier.power}
+                                                {defenderTotalPower}
                                             </Text>
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>DICE:</span> {defenderRoll}
