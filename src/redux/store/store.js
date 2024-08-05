@@ -4,6 +4,7 @@ import CardsReducer from '../reducers/CardsReducer';
 import BattleReducer from '../reducers/BattleReducer';
 import ArenasReducer from '../reducers/ArenasReducer';
 import BattlegroundsReducer from '../reducers/BattlegroundsReducer';
+import SoldiersReducer from '../reducers/SoldiersReducer';
 
 /**
  *
@@ -19,5 +20,6 @@ export const store = configureStore({
         battle: BattleReducer,
         arenas: ArenasReducer,
         battlegrounds: BattlegroundsReducer,
+        soldiers: SoldiersReducer,
     },
 });

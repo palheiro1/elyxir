@@ -58,6 +58,11 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
         const soldiers = await getSoldiers();
         setSoldiers(soldiers.soldier);
 
+        // const bunyip = cards.find(card => card.name === 'Bunyip');
+        // console.log('🚀 ~ getLastBattle ~ bunyip:', bunyip);
+        // const bunyipSoldier = soldiers.soldier.find(item => item.asset === bunyip.asset);
+        // console.log('🚀 ~ getLastBattle ~ bunyipSoldier:', bunyipSoldier);
+
         setBattleResults(res);
 
         setBattleInfo(res);
@@ -65,10 +70,16 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
     }, [arenaInfo, battleId, cards]);
 
     const calculateBonus = useCallback(
-        async card => {
+        async (card, isAttacker) => {
+
+            let defenderSoldier = soldiers.find(soldier => soldier.asset === defenderHero.asset);
+            let attackerSoldier = soldiers.find(soldier => soldier.asset === attackerHero.asset);
+            const hero = isAttacker ? attackerSoldier : defenderSoldier;
+
             const bonus = {
                 mediumBonus: 0,
                 domainBonus: 0,
+                heroBonus: 0,
             };
 
             const arenaSoldier = soldiers.find(item => item.arenaId === arenaInfo.id);
@@ -81,10 +92,17 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
             if (cardInfo.domainId === arenaSoldier.domainId) {
                 bonus.domainBonus += 1;
             }
+            if (cardInfo.mediumId === hero.mediumId) {
+                bonus.heroBonus += 1;
+            }
+            if (cardInfo.domainId === hero.domainId) {
+                bonus.heroBonus += 1;
+            }
 
+            console.log('🚀 ~ bonus:', bonus);
             return bonus;
         },
-        [arenaInfo.id, cards, soldiers]
+        [arenaInfo.id, attackerHero, cards, defenderHero, soldiers]
     );
 
     useEffect(() => {
@@ -107,8 +125,12 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
 
                     if (attackerCard && defenderCard) {
                         const [attackerBonuses, defenderBonuses] = await Promise.all([
-                            calculateBonus(attackerCard).then(result => result || { mediumBonus: 0, domainBonus: 0 }),
-                            calculateBonus(defenderCard).then(result => result || { mediumBonus: 0, domainBonus: 0 }),
+                            calculateBonus(attackerCard, true).then(
+                                result => result || { mediumBonus: 0, domainBonus: 0, heroBonus: 0 }
+                            ),
+                            calculateBonus(defenderCard, false).then(
+                                result => result || { mediumBonus: 0, domainBonus: 0, heroBonus: 0 }
+                            ),
                         ]);
 
                         attackerResults.push(attackerBonuses);
@@ -239,24 +261,32 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                 <Stack direction={'column'} mt={2}>
                     {battleResults &&
                         battleResults.battleResult.map((item, index) => {
-                            const { defenderValue, attackerValue, attackerRoll, defenderRoll } = item;
+                            const {
+                                defenderValue,
+                                attackerValue,
+                                attackerRoll,
+                                defenderRoll,
+                                defenderAsset,
+                                attackerAsset,
+                            } = item;
+
                             let attackerCard = cards.find(card => {
-                                return card.asset === String(item.attackerAsset);
+                                return card.asset === String(attackerAsset);
                             });
 
                             let defenderCard = cards.find(card => {
-                                return card.asset === String(item.defenderAsset);
+                                return card.asset === String(defenderAsset);
                             });
 
-                            let defenderSoldier = soldiers.find(soldier => soldier.asset === item.defenderAsset);
-                            let attackerSoldier = soldiers.find(soldier => soldier.asset === item.defenderAsset);
+                            let defenderSoldier = soldiers.find(soldier => soldier.asset === defenderAsset);
+                            let attackerSoldier = soldiers.find(soldier => soldier.asset === attackerAsset);
 
                             let attackerTotalPower = battleResults.attacker.find(
-                                soldier => soldier.asset === item.attackerAsset
+                                soldier => soldier.asset === attackerAsset
                             ).power;
-                            
+
                             let defenderTotalPower = battleResults.defender.find(
-                                soldier => soldier.asset === item.defenderAsset
+                                soldier => soldier.asset === defenderAsset
                             ).power;
 
                             return (
@@ -284,6 +314,12 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                 <span style={{ color: '#D597B2' }}>MEDIUM BONUS:</span>{' '}
                                                 {attackerBonus[index]?.mediumBonus ?? 0}
                                             </Text>
+                                            {attackerHero.asset !== attackerCard.asset ? (
+                                                <Text>
+                                                    <span style={{ color: '#D597B2' }}>HERO BONUS:</span>{' '}
+                                                    {attackerBonus[index]?.heroBonus ?? 0}
+                                                </Text>
+                                            ) : null}
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>TOTAL POWER:</span>{' '}
                                                 {attackerTotalPower}
@@ -319,7 +355,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                         </Box>
                                         <Box
                                             position="relative"
-                                            width="10%"
+                                            width="12%"
                                             sx={{
                                                 border:
                                                     attackerHero.asset === attackerCard.asset
@@ -342,7 +378,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                     alignItems="center"
                                                     justifyContent="center"
                                                     bg="rgba(0, 0, 0, 0.3)">
-                                                    <Text fontSize="130px" color="black" opacity="0.7">
+                                                    <Text fontSize="150px" color="black" opacity="0.7">
                                                         X
                                                     </Text>
                                                 </Box>
@@ -351,7 +387,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                         <Text> vs </Text>
                                         <Box
                                             position="relative"
-                                            width="10%"
+                                            width="12%"
                                             sx={{
                                                 border:
                                                     defenderHero.asset === defenderCard.asset
@@ -374,7 +410,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                     alignItems="center"
                                                     justifyContent="center"
                                                     bg="rgba(0, 0, 0, 0.3)">
-                                                    <Text fontSize="130px" color="black" opacity="0.7">
+                                                    <Text fontSize="150px" color="black" opacity="0.7">
                                                         X
                                                     </Text>
                                                 </Box>
@@ -422,6 +458,12 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                 <span style={{ color: '#D597B2' }}>MEDIUM BONUS:</span>{' '}
                                                 {defenderBonus[index]?.mediumBonus ?? 0}
                                             </Text>
+                                            {defenderHero.asset !== defenderCard.asset ? (
+                                                <Text>
+                                                    <span style={{ color: '#D597B2' }}>HERO BONUS:</span>{' '}
+                                                    {defenderBonus[index]?.heroBonus ?? 0}
+                                                </Text>
+                                            ) : null}
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>DEFENDER BONUS:</span> 2
                                             </Text>

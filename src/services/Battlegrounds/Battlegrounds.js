@@ -52,9 +52,7 @@ export const getLastUserBattle = async (accountId, currentTime) => {
             }
 
             const latestBattle = battles.reduce((latest, current) => {
-                return new Date(current.timestamp) > new Date(latest.timestamp)
-                    ? current
-                    : latest;
+                return new Date(current.timestamp) > new Date(latest.timestamp) ? current : latest;
             }, battles[0]);
 
             // Timestamp del último combate en formato UTC
@@ -64,7 +62,7 @@ export const getLastUserBattle = async (accountId, currentTime) => {
             // Fecha y hora actual en formato UTC
             const currentTimestamp = new Date(currentTime);
 
-            // Comparar las fechas
+            //Comparar las fechas
             if (battleStamp < currentTimestamp) {
                 return null;
             }

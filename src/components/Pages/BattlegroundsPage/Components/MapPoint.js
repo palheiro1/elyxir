@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     Box,
     Button,
     ButtonGroup,
-    Img,
+    Center,
+    Image,
     Popover,
     PopoverArrow,
     PopoverBody,
@@ -22,8 +23,14 @@ import '@fontsource/inter';
 import { addressToAccountId, getAccount } from '../../../../services/Ardor/ardorInterface';
 import { copyToast } from '../../../../utils/alerts';
 import { formatAddress, getTimeDifference } from '../Utils/BattlegroundsUtils';
+import CardBadges from '../../../Cards/CardBadges';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchSoldiers } from '../../../../redux/reducers/SoldiersReducer';
 
-export const MapPoint = ({ handleClick, arena, selectedArena, cards, handleStartBattle, infoAccount }) => {
+export const MapPoint = React.memo(({ handleClick, arena, selectedArena, cards, handleStartBattle, infoAccount }) => {
+    const dispatch = useDispatch();
+    const { soldiers } = useSelector(state => state.soldiers);
+
     const [defenderInfo, setDefenderInfo] = useState(null);
     const [defenderCards, setDefenderCards] = useState(null);
     const [myArena, setMyArena] = useState(false);
@@ -32,31 +39,37 @@ export const MapPoint = ({ handleClick, arena, selectedArena, cards, handleStart
     const { id, x, y, name } = arena;
     const toast = useToast();
 
-    const clickButton = () => {
+    const clickButton = useCallback(() => {
         handleClick(id);
         handleStartBattle();
-    };
+    }, [handleClick, handleStartBattle, id]);
 
-    const copyToClipboard = address => {
-        navigator.clipboard.writeText(address);
-        copyToast('ARDOR address', toast);
-    };
+    const copyToClipboard = useCallback(
+        address => {
+            navigator.clipboard.writeText(address);
+            copyToast('ARDOR address', toast);
+        },
+        [toast]
+    );
 
     useEffect(() => {
         const getDefenderInfo = async () => {
             const accountId = addressToAccountId(infoAccount.accountRs);
-            await getAccount(arena.defender.account).then(res => {
-                if (arena.defender.account === accountId) {
-                    setMyArena(true);
-                }
-                setDefenderInfo(res);
-                const defenderAssets = new Set(arena.defender.asset);
-                const matchingObjects = cards.filter(obj => defenderAssets.has(obj.asset));
-                setDefenderCards(matchingObjects);
-            });
+            const res = await getAccount(arena.defender.account);
+            if (arena.defender.account === accountId) {
+                setMyArena(true);
+            }
+            setDefenderInfo(res);
+            const defenderAssets = new Set(arena.defender.asset);
+            const matchingObjects = cards.filter(obj => defenderAssets.has(obj.asset));
+            setDefenderCards(matchingObjects);
         };
         getDefenderInfo();
-    }, [arena, cards, infoAccount.accountRs]);
+    }, [arena.defender.account, arena.defender.asset, cards, infoAccount.accountRs]);
+
+    useEffect(() => {
+        dispatch(fetchSoldiers());
+    }, [dispatch]);
 
     useEffect(() => {
         switch (arena.mediumId) {
@@ -72,7 +85,7 @@ export const MapPoint = ({ handleClick, arena, selectedArena, cards, handleStart
             default:
                 setMedium('Unknown');
         }
-    }, [arena]);
+    }, [arena.mediumId]);
 
     return (
         arena &&
@@ -121,9 +134,60 @@ export const MapPoint = ({ handleClick, arena, selectedArena, cards, handleStart
                                     <Box>
                                         Defender's cards:
                                         <Stack direction={'row'} mt={0}>
-                                            {defenderCards.map(card => (
-                                                <Img w={'50px'} key={card.asset} src={card.cardThumbUrl} />
-                                            ))}
+                                            {defenderCards.map((card, index) => {
+                                                let cardSoldier = soldiers.soldier.find(
+                                                    soldier => soldier.asset === card.asset
+                                                );
+
+                                                return (
+                                                    <Tooltip
+                                                        bgColor={'#FFF'}
+                                                        key={index}
+                                                        label={
+                                                            <Box
+                                                                w={'225px'}
+                                                                h={'350px'}
+                                                                bg={'white'}
+                                                                borderRadius={'10px'}
+                                                                mx={'auto'}>
+                                                                <Center>
+                                                                    <Image src={card.cardImgUrl} w={'90%'} h={'75%'} />
+                                                                </Center>
+                                                                <Stack
+                                                                    direction={{ base: 'column', lg: 'row' }}
+                                                                    spacing={0}
+                                                                    mx={2}>
+                                                                    <Stack
+                                                                        direction="column"
+                                                                        spacing={0}
+                                                                        align={{ base: 'center', lg: 'start' }}>
+                                                                        <Text
+                                                                            fontSize={{
+                                                                                base: 'sm',
+                                                                                md: 'md',
+                                                                                '2xl': 'md',
+                                                                            }}
+                                                                            noOfLines={1}
+                                                                            fontWeight="bold"
+                                                                            color={'#000'}>
+                                                                            Power: {cardSoldier.power}
+                                                                        </Text>
+                                                                        <CardBadges
+                                                                            rarity={card.rarity}
+                                                                            continent={card.channel}
+                                                                            size="sm"
+                                                                        />
+                                                                    </Stack>
+                                                                </Stack>
+                                                            </Box>
+                                                        }
+                                                        aria-label={card?.name}
+                                                        placement="bottom"
+                                                        hasArrow>
+                                                        <Image w={'50px'} key={card.asset} src={card.cardThumbUrl} />
+                                                    </Tooltip>
+                                                );
+                                            })}
                                         </Stack>
                                     </Box>
                                 </Stack>
@@ -156,4 +220,6 @@ export const MapPoint = ({ handleClick, arena, selectedArena, cards, handleStart
             </>
         )
     );
-};
+});
+
+export default MapPoint;

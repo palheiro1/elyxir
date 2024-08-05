@@ -97,13 +97,19 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     };
 
     const calculateBonus = useCallback(
-        async card => {
+        async (card, isAttacker) => {
+            let defenderSoldier = soldiers.find(soldier => soldier.asset === defenderHero.asset);
+            let attackerSoldier = soldiers.find(soldier => soldier.asset === attackerHero.asset);
+            const hero = isAttacker ? attackerSoldier : defenderSoldier;
+
             const bonus = {
                 mediumBonus: 0,
                 domainBonus: 0,
+                heroBonus: 0,
             };
 
             const arenaSoldier = soldiers.find(item => item.arenaId === arenaInfo.id);
+
             const cardInfo = soldiers.find(item => item.asset === card.asset);
             if (cardInfo.mediumId === arenaSoldier.mediumId) {
                 bonus.mediumBonus += 1;
@@ -111,10 +117,17 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             if (cardInfo.domainId === arenaSoldier.domainId) {
                 bonus.domainBonus += 1;
             }
+            if (cardInfo.mediumId === hero.mediumId) {
+                bonus.heroBonus += 1;
+            }
+            if (cardInfo.domainId === hero.domainId) {
+                bonus.heroBonus += 1;
+            }
 
+            console.log('🚀 ~ bonus:', bonus);
             return bonus;
         },
-        [arenaInfo.id, soldiers]
+        [arenaInfo.id, attackerHero, defenderHero, soldiers]
     );
     useEffect(() => {
         if (currentTime) {
@@ -143,13 +156,15 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                     const defenderCard = cards.find(card => String(card.asset) === String(item.defenderAsset));
 
                     if (attackerCard && defenderCard) {
-                        const attackerBonuses = (await calculateBonus(attackerCard)) || {
+                        const attackerBonuses = (await calculateBonus(attackerCard, true)) || {
                             mediumBonus: 0,
                             domainBonus: 0,
+                            heroBonus: 0,
                         };
-                        const defenderBonuses = (await calculateBonus(defenderCard)) || {
+                        const defenderBonuses = (await calculateBonus(defenderCard, false)) || {
                             mediumBonus: 0,
                             domainBonus: 0,
+                            heroBonus: 0,
                         };
 
                         attackerResults.push(attackerBonuses);
@@ -275,25 +290,32 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                 <Stack direction={'column'}>
                     {battleResults &&
                         battleResults.map((item, index) => {
-                            const { defenderValue, attackerValue, attackerRoll, defenderRoll } = item;
+                            const {
+                                defenderValue,
+                                attackerValue,
+                                attackerRoll,
+                                defenderRoll,
+                                defenderAsset,
+                                attackerAsset,
+                            } = item;
 
                             let attackerCard = cards.find(card => {
-                                return card.asset === String(item.attackerAsset);
+                                return card.asset === String(attackerAsset);
                             });
 
                             let defenderCard = cards.find(card => {
-                                return card.asset === String(item.defenderAsset);
+                                return card.asset === String(defenderAsset);
                             });
 
-                            let defenderSoldier = soldiers.find(soldier => soldier.asset === item.defenderAsset);
-                            let attackerSoldier = soldiers.find(soldier => soldier.asset === item.defenderAsset);
+                            let defenderSoldier = soldiers.find(soldier => soldier.asset === defenderAsset);
+                            let attackerSoldier = soldiers.find(soldier => soldier.asset === attackerAsset);
 
-                            let attackerTotalPower = battleResults.attacker.find(
-                                soldier => soldier.asset === item.attackerAsset
+                            let attackerTotalPower = battleInfo.attacker.find(
+                                soldier => soldier.asset === attackerAsset
                             ).power;
 
-                            let defenderTotalPower = battleResults.defender.find(
-                                soldier => soldier.asset === item.defenderAsset
+                            let defenderTotalPower = battleInfo.defender.find(
+                                soldier => soldier.asset === defenderAsset
                             ).power;
 
                             return (
@@ -321,6 +343,12 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                 <span style={{ color: '#D597B2' }}>MEDIUM BONUS:</span>{' '}
                                                 {attackerBonus[index]?.mediumBonus ?? 0}
                                             </Text>
+                                            {attackerHero.asset !== attackerCard.asset ? (
+                                                <Text>
+                                                    <span style={{ color: '#D597B2' }}>HERO BONUS:</span>{' '}
+                                                    {attackerBonus[index]?.heroBonus ?? 0}
+                                                </Text>
+                                            ) : null}
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>TOTAL POWER:</span>{' '}
                                                 {attackerTotalPower}
@@ -356,7 +384,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                         </Box>
                                         <Box
                                             position="relative"
-                                            width="9%"
+                                            width="11%"
                                             sx={{
                                                 border:
                                                     attackerHero.asset === attackerCard.asset
@@ -379,7 +407,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                     alignItems="center"
                                                     justifyContent="center"
                                                     bg="rgba(0, 0, 0, 0.3)">
-                                                    <Text fontSize="130px" color="black" opacity="0.7">
+                                                    <Text fontSize="150px" color="black" opacity="0.7">
                                                         X
                                                     </Text>
                                                 </Box>
@@ -388,7 +416,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                         <Text> vs </Text>
                                         <Box
                                             position="relative"
-                                            width="9%"
+                                            width="11%"
                                             sx={{
                                                 border:
                                                     defenderHero.asset === defenderCard.asset
@@ -411,7 +439,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                     alignItems="center"
                                                     justifyContent="center"
                                                     bg="rgba(0, 0, 0, 0.3)">
-                                                    <Text fontSize="130px" color="black" opacity="0.7">
+                                                    <Text fontSize="150px" color="black" opacity="0.7">
                                                         X
                                                     </Text>
                                                 </Box>
@@ -459,6 +487,12 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                 <span style={{ color: '#D597B2' }}>MEDIUM BONUS:</span>{' '}
                                                 {defenderBonus[index]?.mediumBonus ?? 0}
                                             </Text>
+                                            {defenderHero.asset !== defenderCard.asset ? (
+                                                <Text>
+                                                    <span style={{ color: '#D597B2' }}>HERO BONUS:</span>{' '}
+                                                    {defenderBonus[index]?.heroBonus ?? 0}
+                                                </Text>
+                                            ) : null}
                                             <Text>
                                                 <span style={{ color: '#D597B2' }}>DEFENDER BONUS:</span> 2
                                             </Text>

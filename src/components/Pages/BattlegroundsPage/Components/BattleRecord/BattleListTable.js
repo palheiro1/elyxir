@@ -6,7 +6,6 @@ import { formatAddress, isEmptyObject } from '../../Utils/BattlegroundsUtils';
 
 const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, isMobile }) => {
     const [battleRewards, setBattleRewards] = useState({});
-
     const getBattleReward = useCallback(async (arenaInfo, battle) => {
         let rewardFraction = battle.isWinnerLowerPower ? 0.9 : 0.8;
         if (!isEmptyObject(arenaInfo.battleCost)) {
