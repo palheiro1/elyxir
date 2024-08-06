@@ -55,5 +55,7 @@ const locations = [
     { id: 54, name: 'Hadza', x: 416, y: 404, rarity: 'Common' },
     { id: 55, name: 'Gypsy', x: 297, y: 240, rarity: 'Common' },
     { id: 56, name: 'Sama-bajau', x: 787, y: 272, rarity: 'Special' },
+    { id: 57, name: 'Nepal', x: 720, y: 200, rarity: 'Rare' },
 ];
+
 export default locations;

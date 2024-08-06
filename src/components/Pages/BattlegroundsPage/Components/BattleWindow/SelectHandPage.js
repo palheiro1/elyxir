@@ -66,7 +66,7 @@ export const SelectHandPage = ({
         { name: 'Level', value: locations[arenaInfo.id - 1].rarity },
         { name: 'Medium', value: medium },
         { name: 'Team size', value: 5 },
-        { name: 'Defender', value: defenderInfo.name || formatAddress(defenderInfo.accountRS) },
+        { name: 'Guardian', value: defenderInfo.name || formatAddress(defenderInfo.accountRS) },
     ];
 
     useEffect(() => {
@@ -123,10 +123,10 @@ export const SelectHandPage = ({
             return errorToast('Select at least one card to start a battle', toast);
         }
         if (!isEmptyObject(battleCost)) {
-            const gemBalance = omnoGEMsBalance / NQTDIVIDER;
-            const wethBalance = omnoWethBalance / NQTDIVIDER;
-            const battleCostGems = battleCost[0].price / NQTDIVIDER;
-            const battleCostWeth = battleCost.length > 1 ? battleCost[1].price / NQTDIVIDER : 0;
+            const gemBalance = omnoGEMsBalance;
+            const wethBalance = omnoWethBalance;
+            const battleCostGems = battleCost[0].price;
+            const battleCostWeth = battleCost.length > 1 ? battleCost[1].price : 0;
 
             if (battleCost.length > 1) {
                 if (battleCostGems > gemBalance || battleCostWeth > wethBalance) {
@@ -230,7 +230,7 @@ export const SelectHandPage = ({
                                         left={1}
                                         fontFamily={'Chelsea Market, system-ui'}
                                         color={'#fff'}>
-                                        Hero slot{' '}
+                                        Alpha slot{' '}
                                     </Text>
                                 ) : null}
                             </Box>

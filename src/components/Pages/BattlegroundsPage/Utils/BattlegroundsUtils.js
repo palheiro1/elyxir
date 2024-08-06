@@ -81,3 +81,29 @@ export const isEmptyObject = object => {
     if (Object.keys(object).length === 0 && object.constructor === Object) return true;
     return false;
 };
+
+export const getBattleRoundInfo = ( defenderAsset, attackerAsset, cards, battleInfo, soldiers) => {
+    let attackerCard = cards.find(card => {
+        return card.asset === String(attackerAsset);
+    });
+
+    let defenderCard = cards.find(card => {
+        return card.asset === String(defenderAsset);
+    });
+
+    let defenderSoldier = soldiers.find(soldier => soldier.asset === defenderAsset);
+    let attackerSoldier = soldiers.find(soldier => soldier.asset === attackerAsset);
+
+    let attackerTotalPower = battleInfo.attacker.find(soldier => soldier.asset === attackerAsset).power;
+
+    let defenderTotalPower = battleInfo.defender.find(soldier => soldier.asset === defenderAsset).power;
+
+    return {
+        attackerCard,
+        defenderCard,
+        defenderSoldier,
+        attackerSoldier,
+        attackerTotalPower,
+        defenderTotalPower,
+    };
+};

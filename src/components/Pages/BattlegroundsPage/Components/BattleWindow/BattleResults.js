@@ -11,7 +11,7 @@ import '@fontsource/chelsea-market';
 import locations from '../../assets/LocationsEnum';
 import Lottie from 'react-lottie';
 import animationData from '../../assets/Animation-1720173159051.json';
-import { formatAddress } from '../../Utils/BattlegroundsUtils';
+import { formatAddress, getBattleRoundInfo } from '../../Utils/BattlegroundsUtils';
 
 const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName }) => {
     const [battleInfo, setBattleInfo] = useState(null);
@@ -232,7 +232,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                     </Stack>
                     <Box flex="1" />
                     <Stack direction={'row'} mr={6}>
-                        <Text color="#D08FB0">MEDIUM: </Text>
+                        <Text color="#D08FB0">ELEMENT: </Text>
                         <Text textTransform={'uppercase'}>{medium}</Text>
                     </Stack>
                 </Stack>
@@ -296,25 +296,14 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                 defenderAsset,
                                 attackerAsset,
                             } = item;
-
-                            let attackerCard = cards.find(card => {
-                                return card.asset === String(attackerAsset);
-                            });
-
-                            let defenderCard = cards.find(card => {
-                                return card.asset === String(defenderAsset);
-                            });
-
-                            let defenderSoldier = soldiers.find(soldier => soldier.asset === defenderAsset);
-                            let attackerSoldier = soldiers.find(soldier => soldier.asset === attackerAsset);
-
-                            let attackerTotalPower = battleInfo.attacker.find(
-                                soldier => soldier.asset === attackerAsset
-                            ).power;
-
-                            let defenderTotalPower = battleInfo.defender.find(
-                                soldier => soldier.asset === defenderAsset
-                            ).power;
+                            const {
+                                attackerCard,
+                                defenderCard,
+                                defenderSoldier,
+                                attackerSoldier,
+                                attackerTotalPower,
+                                defenderTotalPower,
+                            } = getBattleRoundInfo(defenderAsset, attackerAsset, cards, battleInfo, soldiers);
 
                             return (
                                 <Box key={index}>
@@ -327,28 +316,28 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                         <Stack fontSize={'xs'} align={'flex-start'}>
                                             <Text fontSize={'sm'}>
                                                 {attackerCard.name}{' '}
-                                                {attackerHero.asset === attackerCard.asset ? '(Hero)' : null}
+                                                {attackerHero.asset === attackerCard.asset ? '(Alpha)' : null}
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>CARD POWER:</span>{' '}
+                                                <span style={{ color: '#D597B2' }}>CARD LEVEL:</span>{' '}
                                                 {attackerSoldier.power}
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>DOMAIN BONUS:</span>{' '}
+                                                <span style={{ color: '#D597B2' }}>CONTINENT BONUS:</span>{' '}
                                                 {attackerBonus[index]?.domainBonus ?? 0}
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>MEDIUM BONUS:</span>{' '}
+                                                <span style={{ color: '#D597B2' }}>ELEMENT BONUS:</span>{' '}
                                                 {attackerBonus[index]?.mediumBonus ?? 0}
                                             </Text>
                                             {attackerHero.asset !== attackerCard.asset ? (
                                                 <Text>
-                                                    <span style={{ color: '#D597B2' }}>HERO BONUS:</span>{' '}
+                                                    <span style={{ color: '#D597B2' }}>ALPHA BONUS:</span>{' '}
                                                     {attackerBonus[index]?.heroBonus ?? 0}
                                                 </Text>
                                             ) : null}
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>TOTAL POWER:</span>{' '}
+                                                <span style={{ color: '#D597B2' }}>TOTAL LEVEL:</span>{' '}
                                                 {attackerTotalPower}
                                             </Text>
                                             <Text>
@@ -471,31 +460,31 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                         <Stack fontSize={'xs'} align={'flex-end'}>
                                             <Text fontSize={'sm'}>
                                                 {defenderCard.name}{' '}
-                                                {defenderHero.asset === defenderCard.asset ? '(Hero)' : null}{' '}
+                                                {defenderHero.asset === defenderCard.asset ? '(Alpha)' : null}{' '}
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>CARD POWER: </span>
+                                                <span style={{ color: '#D597B2' }}>CARD LEVEL: </span>
                                                 {defenderSoldier.power}
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>DOMAIN BONUS:</span>{' '}
+                                                <span style={{ color: '#D597B2' }}>CONTINENT BONUS:</span>{' '}
                                                 {defenderBonus[index]?.domainBonus ?? 0}
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>MEDIUM BONUS:</span>{' '}
+                                                <span style={{ color: '#D597B2' }}>ELEMENT BONUS:</span>{' '}
                                                 {defenderBonus[index]?.mediumBonus ?? 0}
                                             </Text>
                                             {defenderHero.asset !== defenderCard.asset ? (
                                                 <Text>
-                                                    <span style={{ color: '#D597B2' }}>HERO BONUS:</span>{' '}
+                                                    <span style={{ color: '#D597B2' }}>ALPHA BONUS:</span>{' '}
                                                     {defenderBonus[index]?.heroBonus ?? 0}
                                                 </Text>
                                             ) : null}
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>DEFENDER BONUS:</span> 2
+                                                <span style={{ color: '#D597B2' }}>GUARDIAN BONUS:</span> 2
                                             </Text>
                                             <Text>
-                                                <span style={{ color: '#D597B2' }}>TOTAL POWER:</span>{' '}
+                                                <span style={{ color: '#D597B2' }}>TOTAL LEVEL:</span>{' '}
                                                 {defenderTotalPower}
                                             </Text>
                                             <Text>

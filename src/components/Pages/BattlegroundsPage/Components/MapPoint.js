@@ -107,7 +107,7 @@ export const MapPoint = React.memo(({ handleClick, arena, selectedArena, cards, 
                             <PopoverArrow backgroundColor={'#EBB2B9'} />
                             <PopoverHeader fontFamily={'Chelsea Market, system-ui'}>
                                 <Text>Want to conquer {name}? </Text>
-                                <Text>Medium: {medium}</Text>
+                                <Text>Element: {medium}</Text>
                                 <Text>Rarity: {arena.rarity} </Text>
                             </PopoverHeader>
                             <PopoverCloseButton />
@@ -121,7 +121,7 @@ export const MapPoint = React.memo(({ handleClick, arena, selectedArena, cards, 
                                 <Stack spacing={4}>
                                     <Tooltip label={`Copy: ${defenderInfo.accountRS}`} hasArrow placement="right">
                                         <Text onClick={() => copyToClipboard(defenderInfo.accountRS)}>
-                                            Defender of the land:{' '}
+                                            Guardian of the land:{' '}
                                             {defenderInfo.name || formatAddress(defenderInfo.accountRS)}
                                         </Text>
                                     </Tooltip>
@@ -132,7 +132,7 @@ export const MapPoint = React.memo(({ handleClick, arena, selectedArena, cards, 
                                         </Text>
                                     ) : null}
                                     <Box>
-                                        Defender's cards:
+                                        Guardian's cards:
                                         <Stack direction={'row'} mt={0}>
                                             {defenderCards.map((card, index) => {
                                                 let cardSoldier = soldiers.soldier.find(
@@ -170,7 +170,7 @@ export const MapPoint = React.memo(({ handleClick, arena, selectedArena, cards, 
                                                                             noOfLines={1}
                                                                             fontWeight="bold"
                                                                             color={'#000'}>
-                                                                            Power: {cardSoldier.power}
+                                                                            Level: {cardSoldier.power}
                                                                         </Text>
                                                                         <CardBadges
                                                                             rarity={card.rarity}

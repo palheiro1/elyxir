@@ -110,7 +110,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                             alignItems="center"
                             fontSize={isMobile ? 'xs' : 'md'}
                             justifyContent="center">
-                            {item.isUserDefending ? 'DEFENDER' : 'ATTACKER'}
+                            {item.isUserDefending ? 'GUARDIAN' : 'ATTACKER'}
                         </Box>
                     </Td>
                     <Td textAlign={'center'} p={2}>
@@ -189,7 +189,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                         color={'#FFF'}
                         fontSize={isMobile ? 'sm' : 'lg'}
                         textAlign={'center'}>
-                        Arena
+                        Land
                     </Th>
                     <Th
                         fontFamily={'Chelsea Market, System'}
