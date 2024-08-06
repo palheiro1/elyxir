@@ -1,0 +1,526 @@
+{
+  "contract": "MBOmno",
+  "operation": [
+    {
+      "service": "rgame",
+      "request": "configureAsMerge",
+      "parameter": {
+        "soldier": [
+          {
+            "asset": "4367881087678870632",
+            "name": "Kyzy",
+            "domainId": 1,
+            "mediumId": 1,
+            "arenaId": 1,
+            "rank": 0,
+            "power": 3
+          },
+          {
+            "asset": "11654119158397769364",
+            "name": "Haechi",
+            "domainId": 1,
+            "mediumId": 1,
+            "arenaId": 2,
+            "rank": 1,
+            "power": 2
+          },
+          {
+            "asset": "1770779863759720918",
+            "name": "Şahmaran",
+            "domainId": 1,
+            "mediumId": 1,
+            "arenaId": 3,
+            "rank": 1,
+            "power": 2
+          },
+          {
+            "asset": "4735490741705855799",
+            "name": "Tulpar",
+            "domainId": 1,
+            "mediumId": 2,
+            "arenaId": 4,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "374078224198142471",
+            "name": "Rompo",
+            "domainId": 1,
+            "mediumId": 1,
+            "arenaId": 5,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "7891814295348826088",
+            "name": "Yeti",
+            "domainId": 1,
+            "mediumId": 1,
+            "arenaId": 6,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "1310229991284473521",
+            "name": "Shen-long",
+            "domainId": 1,
+            "mediumId": 2,
+            "arenaId": 7,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "9451976923053037726",
+            "name": "Rahu",
+            "domainId": 1,
+            "mediumId": 2,
+            "arenaId": 8,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "188493294393002400",
+            "name": "Kappa",
+            "domainId": 1,
+            "mediumId": 3,
+            "arenaId": 9,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "7536385584787697086",
+            "name": "Karkadann",
+            "domainId": 1,
+            "mediumId": 1,
+            "arenaId": 10,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "15778342868690621160",
+            "name": "Pele",
+            "domainId": 2,
+            "mediumId": 1,
+            "arenaId": 11,
+            "rank": 0,
+            "power": 3
+          },
+          {
+            "asset": "12936439663349626618",
+            "name": "Dudugera",
+            "domainId": 2,
+            "mediumId": 2,
+            "arenaId": 12,
+            "rank": 1,
+            "power": 2
+          },
+          {
+            "asset": "7024690161218732154",
+            "name": "Kanmare",
+            "domainId": 2,
+            "mediumId": 2,
+            "arenaId": 13,
+            "rank": 1,
+            "power": 2
+          },
+          {
+            "asset": "2795734210888256790",
+            "name": "Pua Tu Tahi",
+            "domainId": 2,
+            "mediumId": 3,
+            "arenaId": 14,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "16326649816730553703",
+            "name": "Lafaic",
+            "domainId": 2,
+            "mediumId": 3,
+            "arenaId": 15,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "10917692030112170713",
+            "name": "Nei Tituaabine",
+            "domainId": 2,
+            "mediumId": 1,
+            "arenaId": 16,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "10444425886085847503",
+            "name": "Droemerdene",
+            "domainId": 2,
+            "mediumId": 2,
+            "arenaId": 17,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "18101012326255288772",
+            "name": "Adaro",
+            "domainId": 2,
+            "mediumId": 3,
+            "arenaId": 18,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "16453401161130674677",
+            "name": "Marakihau",
+            "domainId": 2,
+            "mediumId": 3,
+            "arenaId": 19,
+            "rank": 0,
+            "power": 4
+          },
+          {
+            "asset": "3607141736374727634",
+            "name": "Wati-Kutjaran",
+            "domainId": 2,
+            "mediumId": 2,
+            "arenaId": 20,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "3758988694981372970",
+            "name": "Tsenahale",
+            "domainId": 3,
+            "mediumId": 2,
+            "arenaId": 21,
+            "rank": 0,
+            "power": 3
+          },
+          {
+            "asset": "1462047204733593633",
+            "name": "Jepá",
+            "domainId": 3,
+            "mediumId": 3,
+            "arenaId": 22,
+            "rank": 1,
+            "power": 2
+          },
+          {
+            "asset": "6864800023593094679",
+            "name": "Trempulcahue",
+            "domainId": 3,
+            "mediumId": 3,
+            "arenaId": 23,
+            "rank": 1,
+            "power": 2
+          },
+          {
+            "asset": "8504616031553931056",
+            "name": "Sasquatch",
+            "domainId": 3,
+            "mediumId": 1,
+            "arenaId": 24,
+            "rank": 0,
+            "power": 4
+          },
+          {
+            "asset": "65767141008711421",
+            "name": "Chulel",
+            "domainId": 3,
+            "mediumId": 1,
+            "arenaId": 25,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "8717959006135737805",
+            "name": "Caaporá",
+            "domainId": 3,
+            "mediumId": 1,
+            "arenaId": 26,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "488367278629756964",
+            "name": "Tupilaq",
+            "domainId": 3,
+            "mediumId": 1,
+            "arenaId": 27,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "6086151229884242778",
+            "name": "Macihuatli",
+            "domainId": 3,
+            "mediumId": 1,
+            "arenaId": 28,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "8966516609271135665",
+            "name": "Japiñuñus",
+            "domainId": 3,
+            "mediumId": 2,
+            "arenaId": 29,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "1941380340903453000",
+            "name": "Kăk-whăn’-û-ghăt Kǐg-û-lu’-nǐk",
+            "domainId": 3,
+            "mediumId": 3,
+            "arenaId": 30,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "14906207210027210012",
+            "name": "Grootslang",
+            "domainId": 4,
+            "mediumId": 1,
+            "arenaId": 31,
+            "rank": 0,
+            "power": 4
+          },
+          {
+            "asset": "1328293559375692481",
+            "name": "Ninki Nanka",
+            "domainId": 4,
+            "mediumId": 1,
+            "arenaId": 32,
+            "rank": 0,
+            "power": 3
+          },
+          {
+            "asset": "10956456574154580310",
+            "name": "Mokèlé-mbèmbé",
+            "domainId": 4,
+            "mediumId": 3,
+            "arenaId": 33,
+            "rank": 1,
+            "power": 2
+          },
+          {
+            "asset": "7535070915409870441",
+            "name": "Ifrit",
+            "domainId": 4,
+            "mediumId": 1,
+            "arenaId": 34,
+            "rank": 1,
+            "power": 2
+          },
+          {
+            "asset": "5528548442683058721",
+            "name": "Inkanyamba",
+            "domainId": 4,
+            "mediumId": 3,
+            "arenaId": 35,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "524790161704873898",
+            "name": "Sasabonsam",
+            "domainId": 4,
+            "mediumId": 2,
+            "arenaId": 36,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "583958094572828441",
+            "name": "Popobawa",
+            "domainId": 4,
+            "mediumId": 2,
+            "arenaId": 37,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "12313032092046113556",
+            "name": "Kel Essuf",
+            "domainId": 4,
+            "mediumId": 1,
+            "arenaId": 38,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "8825927167203958938",
+            "name": "/Kaggen",
+            "domainId": 4,
+            "mediumId": 1,
+            "arenaId": 39,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "15284691712437925618",
+            "name": "Catoblepas",
+            "domainId": 4,
+            "mediumId": 1,
+            "arenaId": 40,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "13187825386854631652",
+            "name": "Tarasca",
+            "domainId": 5,
+            "mediumId": 2,
+            "arenaId": 41,
+            "rank": 0,
+            "power": 4
+          },
+          {
+            "asset": "13244842214545819858",
+            "name": "Nessie",
+            "domainId": 5,
+            "mediumId": 3,
+            "arenaId": 42,
+            "rank": 1,
+            "power": 2
+          },
+          {
+            "asset": "3651682276536707874",
+            "name": "Maruxaina",
+            "domainId": 5,
+            "mediumId": 3,
+            "arenaId": 43,
+            "rank": 0,
+            "power": 4
+          },
+          {
+            "asset": "16412049206728355506",
+            "name": "Wolpertinger",
+            "domainId": 5,
+            "mediumId": 1,
+            "arenaId": 44,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "16570943417360649598",
+            "name": "Lisovik",
+            "domainId": 5,
+            "mediumId": 1,
+            "arenaId": 45,
+            "rank": 1,
+            "power": 2
+          },
+          {
+            "asset": "609721796834652174",
+            "name": "Dhampir",
+            "domainId": 5,
+            "mediumId": 1,
+            "arenaId": 46,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "9057629654312953814",
+            "name": "Nykur",
+            "domainId": 5,
+            "mediumId": 3,
+            "arenaId": 47,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "3865726407233803673",
+            "name": "Zhar-Ptitsa",
+            "domainId": 5,
+            "mediumId": 2,
+            "arenaId": 48,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "13430257599807483745",
+            "name": "Werewolf",
+            "domainId": 5,
+            "mediumId": 1,
+            "arenaId": 49,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "8026549983053279231",
+            "name": "Iku-Turso",
+            "domainId": 5,
+            "mediumId": 3,
+            "arenaId": 50,
+            "rank": 0,
+            "power": 3
+          },
+          {
+            "asset": "9118586585609900793",
+            "name": "Dybbuk",
+            "domainId": 1,
+            "mediumId": 1,
+            "arenaId": 51,
+            "rank": 0,
+            "power": 3
+          },
+          {
+            "asset": "5384772991499461482",
+            "name": "Bunyip",
+            "domainId": 2,
+            "mediumId": 3,
+            "arenaId": 52,
+            "rank": 1,
+            "power": 2
+          },
+          {
+            "asset": "17472981396773816914",
+            "name": "Ika Hokshi",
+            "domainId": 3,
+            "mediumId": 1,
+            "arenaId": 53,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "1479526493428793943",
+            "name": "Sengani",
+            "domainId": 4,
+            "mediumId": 1,
+            "arenaId": 54,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "10229749181769297696",
+            "name": "Muló",
+            "domainId": 5,
+            "mediumId": 1,
+            "arenaId": 55,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "15052794016100653835",
+            "name": "Sumangâ",
+            "domainId": 1,
+            "mediumId": 2,
+            "arenaId": 56,
+            "rank": 0,
+            "power": 4
+          },
+          {
+            "asset": "7657449004415200937",
+            "name": "Mahakali",
+            "domainId": 1,
+            "mediumId": 1,
+            "arenaId": 57,
+            "rank": 1,
+            "power": 2
+          }
+        ]
+      }
+    }
+  ]
+}

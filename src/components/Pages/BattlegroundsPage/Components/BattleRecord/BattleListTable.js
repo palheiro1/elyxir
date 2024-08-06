@@ -6,7 +6,6 @@ import { formatAddress, isEmptyObject } from '../../Utils/BattlegroundsUtils';
 
 const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, isMobile }) => {
     const [battleRewards, setBattleRewards] = useState({});
-
     const getBattleReward = useCallback(async (arenaInfo, battle) => {
         let rewardFraction = battle.isWinnerLowerPower ? 0.9 : 0.8;
         if (!isEmptyObject(arenaInfo.battleCost)) {
@@ -111,7 +110,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                             alignItems="center"
                             fontSize={isMobile ? 'xs' : 'md'}
                             justifyContent="center">
-                            {item.isUserDefending ? 'DEFENDER' : 'ATTACKER'}
+                            {item.isUserDefending ? 'GUARDIAN' : 'ATTACKER'}
                         </Box>
                     </Td>
                     <Td textAlign={'center'} p={2}>
@@ -190,7 +189,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                         color={'#FFF'}
                         fontSize={isMobile ? 'sm' : 'lg'}
                         textAlign={'center'}>
-                        Arena
+                        Land
                     </Th>
                     <Th
                         fontFamily={'Chelsea Market, System'}

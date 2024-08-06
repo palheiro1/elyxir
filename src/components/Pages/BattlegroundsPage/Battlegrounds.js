@@ -136,7 +136,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     let wEthDecimals = 3;
 
     const statistics = [
-        { name: 'Land lords', value: landLords },
+        { name: 'Defenders', value: landLords },
         { name: 'Active player', value: activePlayers },
         { name: 'Battles disputed', value: battleCount },
         // { name: 'GEM Rewards', value: '245k' },
@@ -249,7 +249,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                                 w="50 px"
                                                 h="50px"
                                             />
-                                            <Text>{omnoGEMsBalance / NQTDIVIDER}</Text>
+                                            <Text>{(omnoGEMsBalance / NQTDIVIDER).toFixed(0)}</Text>
                                         </Stack>
                                     </MenuButton>
                                     <Portal>

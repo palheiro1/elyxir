@@ -81,12 +81,10 @@ export const BattleWindow = ({
         setHandBattleCards(prevCards => {
             const assetExists = prevCards.some(card => card && card.asset === newValue.asset);
             const soldier = soldiers.find(item => item.asset === newValue.asset);
-
             if (assetExists) {
                 errorToast('You cannot send repeated cards to battle', toast);
                 return prevCards;
             }
-
             if (soldier.rank === 0 && rank0Count > arenaInfo.armyRankMinimum[1]) {
                 errorToast(`You cannot have more than ${arenaInfo.armyRankMinimum[1]} special/epic in battle`, toast);
                 return prevCards;
