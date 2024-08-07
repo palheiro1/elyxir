@@ -54,7 +54,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const { isOpen: isOpenName, onOpen: onOpenName, onClose: onCloseName } = useDisclosure();
 
     const dispatch = useDispatch();
-    const { battleCount, activePlayers, landLords, omnoGEMsBalance, omnoWethBalance, parseWETH, filteredCards } =
+    const { battleCount, activePlayers, landLords, omnoGEMsBalance, omnoWethBalance, filteredCards, parseWETH } =
         useSelector(state => state.battlegrounds);
 
     useEffect(() => {
@@ -133,7 +133,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         setUpdateState(prevState => !prevState);
     };
 
-    let wEthDecimals = 3;
+    let wEthDecimals = 4;
 
     const statistics = [
         { name: 'Defenders', value: landLords },
@@ -283,7 +283,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                                 w="50px"
                                                 h="50px"
                                             />
-                                            <Text>
+                                            <Text ml={parseWETH !== 0 ? -3 : 2}>
                                                 {parseWETH &&
                                                     (parseWETH / NQTDIVIDER).toFixed(
                                                         Math.max(0, wEthDecimals <= 6 ? wEthDecimals : 6)
