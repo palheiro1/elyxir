@@ -123,19 +123,17 @@ export const SelectHandPage = ({
             return errorToast('Select at least one card to start a battle', toast);
         }
         if (!isEmptyObject(battleCost)) {
-            const gemBalance = omnoGEMsBalance;
-            const wethBalance = omnoWethBalance;
-            const battleCostGems = battleCost[0].price;
-            const battleCostWeth = battleCost.length > 1 ? battleCost[1].price : 0;
-
-            if (battleCost.length > 1) {
-                if (battleCostGems > gemBalance || battleCostWeth > wethBalance) {
-                    return errorToast('Insuficient balance', toast);
-                }
-            }
+            const gemBalance = parseInt(omnoGEMsBalance);
+            const wethBalance = parseInt(omnoWethBalance);
+            const battleCostGems = parseInt(battleCost[0].price);
+            const battleCostWeth = battleCost.length > 1 ? parseInt(battleCost[1].price) : 0;
 
             if (battleCostGems > gemBalance) {
-                return errorToast('Insuficient balance', toast);
+                return errorToast('Insuficient GEM balance', toast);
+            }
+
+            if (battleCost.length > 1 && battleCostWeth > wethBalance) {
+                return errorToast('Insuficient wETH balance', toast);
             }
         }
 
