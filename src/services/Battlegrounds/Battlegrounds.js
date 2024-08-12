@@ -88,3 +88,10 @@ export const getLandLords = async () => {
         .then(res => res.data.state.landLords)
         .catch(error => error);
 };
+
+export const getLeaderboards = async () => {
+    return axios
+        .get(`${OMNO_API}/index.php?action=getLeaderboards`)
+        .then(res => res.data.leaderboards)
+        .catch(error => error);
+};

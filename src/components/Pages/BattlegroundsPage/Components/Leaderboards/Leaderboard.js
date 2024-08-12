@@ -1,0 +1,152 @@
+import { ChevronLeftIcon } from '@chakra-ui/icons';
+import { Box, Heading, IconButton, Spinner, Stack, Table, Tbody, Td, Text, Thead, Tr } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { capitalize } from '../../Utils/BattlegroundsUtils';
+import { getAccount } from '../../../../../services/Ardor/ardorInterface';
+
+const Leaderboard = ({ data, handleGoBack, isMobile }) => {
+    const [entries, setEntries] = useState(null);
+    const { info, type } = data;
+
+    useEffect(() => {
+        const fetchEntries = async () => {
+            if (info && info.length > 0) {
+                let temp = await Promise.all(
+                    info.map(async item => {
+                        const accountInfo = await getAccount(item.accountId);
+                        return { ...item, ...accountInfo };
+                    })
+                );
+
+                temp.sort((a, b) => b.points - a.points);
+                console.log('🚀 ~ useEffect ~ data:', temp);
+                setEntries(temp);
+            } else {
+                setEntries([]);
+            }
+        };
+
+        fetchEntries();
+    }, [info]);
+
+    return (
+        <Stack>
+            <Heading mx={'auto'} mt={4} fontFamily={'Chelsea Market, System'} fontWeight={100}>
+                {capitalize(type)} leaderboard
+            </Heading>
+            <IconButton
+                background={'transparent'}
+                color={'#FFF'}
+                icon={<ChevronLeftIcon />}
+                _hover={{ background: 'transparent' }}
+                position="fixed"
+                top={2}
+                left={3}
+                fontSize="2rem"
+                zIndex={999}
+                onClick={handleGoBack}
+            />
+            {entries ? (
+                entries.length > 0 ? (
+                    <Table w={'80%'} mx={'auto'}>
+                        <Thead>
+                            <Tr>
+                                <Td
+                                    fontFamily={'Chelsea Market, System'}
+                                    color={'#FFF'}
+                                    fontSize={isMobile ? 'sm' : 'lg'}
+                                    textAlign={'center'}>
+                                    Position
+                                </Td>
+                                <Td
+                                    fontFamily={'Chelsea Market, System'}
+                                    color={'#FFF'}
+                                    fontSize={isMobile ? 'sm' : 'lg'}
+                                    textAlign={'center'}>
+                                    Name/ Address
+                                </Td>
+                                <Td
+                                    fontFamily={'Chelsea Market, System'}
+                                    color={'#FFF'}
+                                    fontSize={isMobile ? 'sm' : 'lg'}
+                                    textAlign={'center'}>
+                                    Points
+                                </Td>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {entries.map(({ accountRS, points, name }, index) => {
+                                return (
+                                    <Tr
+                                        key={index}
+                                        bgColor={() => {
+                                            switch (index) {
+                                                case 0:
+                                                    return '#FFD700';
+                                                case 1:
+                                                    return '#C0C0C0';
+                                                case 2:
+                                                    return '#CD7F32';
+                                                default:
+                                                    return '#DB78AA';
+                                            }
+                                        }}>
+                                        <Td
+                                            fontFamily={'Chelsea Market, System'}
+                                            color={'#FFF'}
+                                            py={2}
+                                            textAlign={'center'}>{`#${index + 1}`}</Td>
+                                        <Td
+                                            fontFamily={'Chelsea Market, System'}
+                                            color={'#FFF'}
+                                            py={2}
+                                            textAlign={'center'}>
+                                            {name ? name : accountRS}
+                                        </Td>
+                                        <Td
+                                            fontFamily={'Chelsea Market, System'}
+                                            color={'#FFF'}
+                                            py={2}
+                                            textAlign={'center'}>
+                                            {points}
+                                        </Td>
+                                    </Tr>
+                                );
+                            })}
+                        </Tbody>
+                    </Table>
+                ) : (
+                    <Box
+                        h={'100%'}
+                        position={'absolute'}
+                        color={'#FFF'}
+                        alignContent={'center'}
+                        top={'50%'}
+                        left={'50%'}
+                        w={'100%'}
+                        textAlign={'center'}
+                        transform={'translate(-50%, -50%)'}>
+                        <Text ontFamily={'Chelsea Market, System'} fontWeight={100} fontSize={'medium'}>
+                            Any participants yet
+                        </Text>
+                    </Box>
+                )
+            ) : (
+                <Box
+                    h={'100%'}
+                    position={'absolute'}
+                    color={'#FFF'}
+                    alignContent={'center'}
+                    top={'50%'}
+                    left={'50%'}
+                    w={'100%'}
+                    textAlign={'center'}
+                    transform={'translate(-50%, -50%)'}>
+                    <Spinner color="#FFF" w={20} h={20} />
+                </Box>
+            )}
+        </Stack>
+    );
+};
+
+export default Leaderboard;

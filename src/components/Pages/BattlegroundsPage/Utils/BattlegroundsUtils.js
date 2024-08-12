@@ -82,7 +82,7 @@ export const isEmptyObject = object => {
     return false;
 };
 
-export const getBattleRoundInfo = ( defenderAsset, attackerAsset, cards, battleInfo, soldiers) => {
+export const getBattleRoundInfo = (defenderAsset, attackerAsset, cards, battleInfo, soldiers) => {
     let attackerCard = cards.find(card => {
         return card.asset === String(attackerAsset);
     });
@@ -106,4 +106,9 @@ export const getBattleRoundInfo = ( defenderAsset, attackerAsset, cards, battleI
         attackerTotalPower,
         defenderTotalPower,
     };
+};
+
+export const capitalize = string => {
+    if (string.length === 0) return string;
+    return string.charAt(0).toUpperCase() + string.slice(1);
 };

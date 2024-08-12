@@ -32,6 +32,7 @@ import BattleList from './Components/BattleRecord/BattleList';
 import ChangeName from './Components/Modals/ChangeName';
 import { fetchBattleData } from '../../../redux/reducers/BattlegroundsReducer';
 import { useDispatch, useSelector } from 'react-redux';
+import Leaderboards from './Components/Leaderboards/Leaderboards';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
     const { accountRs } = infoAccount;
@@ -46,6 +47,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [openBattle, setOpenBattle] = useState(false);
     const [openInventory, setOpenInventory] = useState(false);
     const [openBattleRecord, setOpenBattleRecord] = useState(false);
+    const [openLeaderboards, setOpenLeaderboards] = useState(false);
     // eslint-disable-next-line no-unused-vars
     const [updateState, setUpdateState] = useState(false);
 
@@ -90,6 +92,13 @@ const Battlegrounds = ({ infoAccount, cards }) => {
             },
         },
         {
+            name: 'Leaderboards',
+            onclick: () => {
+                setOpenLeaderboards(true);
+                setIsScrollLocked(true);
+            },
+        },
+        {
             name: 'Change name',
             onclick: () => {
                 onOpenName();
@@ -129,6 +138,12 @@ const Battlegrounds = ({ infoAccount, cards }) => {
 
     const handleCloseBattleRecord = () => {
         setOpenBattleRecord(false);
+        setIsScrollLocked(false);
+        setUpdateState(prevState => !prevState);
+    };
+
+    const handleCloseLeaderboards = () => {
+        setOpenLeaderboards(false);
         setIsScrollLocked(false);
         setUpdateState(prevState => !prevState);
     };
@@ -210,6 +225,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                         isMobile={isMobile}
                     />
                 )}
+                {openLeaderboards && <Leaderboards handleClose={handleCloseLeaderboards} isMobile={isMobile} />}
                 <BattlegroundsIntro visible={visible} page={page} handleClose={handleClose} handleNext={handleNext} />
                 <AdvertModal isOpen={isModalOpen} onClose={closeModal} />
                 <ScrollLock isLocked={isScrollLocked} />
