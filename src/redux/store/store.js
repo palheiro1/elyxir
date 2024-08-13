@@ -5,6 +5,7 @@ import BattleReducer from '../reducers/BattleReducer';
 import ArenasReducer from '../reducers/ArenasReducer';
 import BattlegroundsReducer from '../reducers/BattlegroundsReducer';
 import SoldiersReducer from '../reducers/SoldiersReducer';
+import LeaderboardsReducer from '../reducers/LeaderboardsReducer';
 
 /**
  *
@@ -21,5 +22,6 @@ export const store = configureStore({
         arenas: ArenasReducer,
         battlegrounds: BattlegroundsReducer,
         soldiers: SoldiersReducer,
+        leaderboards: LeaderboardsReducer,
     },
 });

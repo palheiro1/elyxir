@@ -1,22 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { Box, Button, Heading, IconButton, Spinner, Stack } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
-import { getLeaderboards } from '../../../../../services/Battlegrounds/Battlegrounds';
 import Leaderboard from './Leaderboard';
+import { fetchAccountDetails, fetchLeaderboards, resetState, setViewData } from '../../../../../redux/reducers/LeaderboardsReducer';
 
 const Leaderboards = ({ handleClose, isMobile }) => {
-    const [leaderboards, setLeaderboards] = useState(null);
-    const [viewData, setViewData] = useState(false);
-    const [data, setData] = useState(null);
+    const dispatch = useDispatch();
+    const { leaderboards, viewData, data, status } = useSelector(state => state.leaderboards);
 
     useEffect(() => {
-        const fetchLeaderboards = async () => {
-            const res = await getLeaderboards();
-            setLeaderboards(res);
-        };
-        fetchLeaderboards();
-    }, []);
+        dispatch(fetchLeaderboards());
+    }, [dispatch]);
 
     const changeData = option => {
         if (leaderboards) {
@@ -44,33 +40,22 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                 default:
                     break;
             }
-            setData(data);
-            setViewData(true);
+            dispatch(setViewData({ viewData: true, data }));
+            if (data.info.length > 0) {
+                dispatch(fetchAccountDetails(data.info));
+            }
         }
     };
 
     const handleGoBack = () => {
-        setData(null);
-        setViewData(false);
+        dispatch(resetState());
     };
 
     const availableLeaderboards = [
-        {
-            name: 'General',
-            option: 1,
-        },
-        {
-            name: 'Terrestrial',
-            option: 2,
-        },
-        {
-            name: 'Aerial',
-            option: 3,
-        },
-        {
-            name: 'Aquatic',
-            option: 4,
-        },
+        { name: 'General', option: 1 },
+        { name: 'Terrestrial', option: 2 },
+        { name: 'Aerial', option: 3 },
+        { name: 'Aquatic', option: 4 },
     ];
 
     return (
@@ -99,33 +84,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                     zIndex={999}
                     onClick={handleClose}
                 />
-                {leaderboards ? (
-                    <>
-                        {!viewData ? (
-                            <Stack
-                                direction={'column'}
-                                color={'#FFF'}
-                                my={5}
-                                mx={'auto'}
-                                textAlign={'center'}
-                                h={'90%'}>
-                                <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
-                                    LEADERBOARDS
-                                </Heading>
-
-                                <Stack m={'auto'}>
-                                    {availableLeaderboards.map(({ name, option }, index) => (
-                                        <Button key={index} onClick={() => changeData(option)}>
-                                            {name}
-                                        </Button>
-                                    ))}
-                                </Stack>
-                            </Stack>
-                        ) : (
-                            <Leaderboard data={data} handleGoBack={handleGoBack} isMobile={isMobile} />
-                        )}
-                    </>
-                ) : (
+                {status === 'loading' ? (
                     <Box
                         h={'100%'}
                         position={'absolute'}
@@ -138,6 +97,31 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                         transform={'translate(-50%, -50%)'}>
                         <Spinner color="#FFF" w={20} h={20} />
                     </Box>
+                ) : (
+                    <>
+                        {!viewData ? (
+                            <Stack
+                                direction={'column'}
+                                color={'#FFF'}
+                                my={5}
+                                mx={'auto'}
+                                textAlign={'center'}
+                                h={'90%'}>
+                                <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
+                                    LEADERBOARDS
+                                </Heading>
+                                <Stack m={'auto'}>
+                                    {availableLeaderboards.map(({ name, option }, index) => (
+                                        <Button key={index} onClick={() => changeData(option)}>
+                                            {name}
+                                        </Button>
+                                    ))}
+                                </Stack>
+                            </Stack>
+                        ) : (
+                            <Leaderboard data={data} handleGoBack={handleGoBack} isMobile={isMobile} />
+                        )}
+                    </>
                 )}
             </Box>
         </>
