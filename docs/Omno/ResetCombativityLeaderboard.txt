@@ -1,11 +1,11 @@
-MESSAGE TO RESET ONLY THE GENERAL LEADERBOARD 
+MESSAGE TO RESET ONLY THE COMBATIVITY LEADERBOARD 
 
 {
     "contract": "MBOmno",
     "operation": [
         {
             "service": "rgame",
-            "request": "resetGeneralLeaderboard"
+            "request": "resetCombativityLeaderboard"
         }
     ]
 }

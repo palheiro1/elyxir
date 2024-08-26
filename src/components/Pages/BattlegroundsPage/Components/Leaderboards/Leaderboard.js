@@ -68,42 +68,66 @@ const Leaderboard = ({ data, handleGoBack, isMobile }) => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {entries.map(({ accountRS, points, name }, index) => (
-                                    <Tr
-                                        key={index}
-                                        bgColor={() => {
-                                            switch (index) {
-                                                case 0:
-                                                    return '#FFD700';
-                                                case 1:
-                                                    return '#C0C0C0';
-                                                case 2:
-                                                    return '#CD7F32';
-                                                default:
-                                                    return '#DB78AA';
-                                            }
-                                        }}>
-                                        <Td
-                                            fontFamily={'Chelsea Market, System'}
-                                            color={'#FFF'}
-                                            py={2}
-                                            textAlign={'center'}>{`#${index + 1}`}</Td>
-                                        <Td
-                                            fontFamily={'Chelsea Market, System'}
-                                            color={'#FFF'}
-                                            py={2}
-                                            textAlign={'center'}>
-                                            {name ? name : accountRS}
-                                        </Td>
-                                        <Td
-                                            fontFamily={'Chelsea Market, System'}
-                                            color={'#FFF'}
-                                            py={2}
-                                            textAlign={'center'}>
-                                            {points}
-                                        </Td>
-                                    </Tr>
-                                ))}
+                                {entries.map(({ accountRS, points, name }, index) => {
+                                    let bg = () => {
+                                        switch (index) {
+                                            case 0:
+                                                return 'radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%)';
+                                            case 1:
+                                                return 'linear-gradient(45deg,#999 5%,#fff 10%,#ccc 30%,#ddd 50%,#ccc 70%,#fff 80%,#999 95%)';
+                                            case 2:
+                                                return 'linear-gradient(45deg, #8c5e3c, #b08d57, #d6c3a1)';
+                                            default:
+                                                return '#DB78AA';
+                                        }
+                                    };
+                                    return (
+                                        <Tr key={index} p={2}>
+                                            <Td textAlign={'center'} p={2}>
+                                                <Box
+                                                    bg={bg}
+                                                    p={3}
+                                                    maxH={'45px'}
+                                                    fontFamily={'Chelsea Market, System'}
+                                                    h="100%"
+                                                    fontSize={isMobile ? 'xs' : 'md'}
+                                                    display="flex"
+                                                    alignItems="center"
+                                                    justifyContent="center">
+                                                    {`#${index + 1}`}
+                                                </Box>
+                                            </Td>
+                                            <Td textAlign={'center'} p={2}>
+                                                <Box
+                                                    bg={bg}
+                                                    p={3}
+                                                    maxH={'45px'}
+                                                    fontFamily={'Chelsea Market, System'}
+                                                    h="100%"
+                                                    fontSize={isMobile ? 'xs' : 'md'}
+                                                    display="flex"
+                                                    alignItems="center"
+                                                    justifyContent="center">
+                                                    {name ? name : accountRS}
+                                                </Box>
+                                            </Td>
+                                            <Td textAlign={'center'} p={2}>
+                                                <Box
+                                                    bg={bg}
+                                                    p={3}
+                                                    maxH={'45px'}
+                                                    fontFamily={'Chelsea Market, System'}
+                                                    h="100%"
+                                                    fontSize={isMobile ? 'xs' : 'md'}
+                                                    display="flex"
+                                                    alignItems="center"
+                                                    justifyContent="center">
+                                                    {points > 10000 ? (points / 10000).toFixed(0) : points}
+                                                </Box>
+                                            </Td>
+                                        </Tr>
+                                    );
+                                })}
                             </Tbody>
                         </Table>
                     ) : (

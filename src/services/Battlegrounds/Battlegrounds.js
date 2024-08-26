@@ -95,3 +95,10 @@ export const getLeaderboards = async () => {
         .then(res => res.data.leaderboards)
         .catch(error => error);
 };
+
+export const getAccumulatedBounty = async () => {
+    return axios
+        .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
+        .then(res => res.data.state.arena.accumulatedBounty)
+        .catch(error => error);
+};

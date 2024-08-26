@@ -1,18 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
-import { Box, Button, Heading, IconButton, Spinner, Stack } from '@chakra-ui/react';
+import { Box, Heading, IconButton, Spinner, Stack, Text } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import Leaderboard from './Leaderboard';
-import { fetchAccountDetails, fetchLeaderboards, resetState, setViewData } from '../../../../../redux/reducers/LeaderboardsReducer';
+import {
+    fetchAccountDetails,
+    fetchLeaderboards,
+    resetState,
+    setViewData,
+} from '../../../../../redux/reducers/LeaderboardsReducer';
+import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
+import { isEmptyObject } from '../../Utils/BattlegroundsUtils';
+import { getAccumulatedBounty } from '../../../../../services/Battlegrounds/Battlegrounds';
+import { getAsset } from '../../../../../services/Ardor/ardorInterface';
 
 const Leaderboards = ({ handleClose, isMobile }) => {
     const dispatch = useDispatch();
     const { leaderboards, viewData, data, status } = useSelector(state => state.leaderboards);
+    const [accumulatedBounty, setAccumulatedBounty] = useState({});
 
     useEffect(() => {
         dispatch(fetchLeaderboards());
     }, [dispatch]);
+
+    useEffect(() => {
+        const getBattleCost = async () => {
+            let res = await getAccumulatedBounty();
+            if (!isEmptyObject(res)) {
+                const assets = Object.entries(res.asset);
+
+                const results = await Promise.all(
+                    assets.map(async ([asset, price]) => {
+                        const assetDetails = await getAsset(asset);
+                        return { ...assetDetails, price };
+                    })
+                );
+                setAccumulatedBounty(results);
+            }
+        };
+
+        getBattleCost();
+    }, []);
 
     const changeData = option => {
         if (leaderboards) {
@@ -37,6 +66,10 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                     data.type = 'aquatic';
                     data.info = leaderboards.aquatic;
                     break;
+                case 5:
+                    data.type = 'combativity';
+                    data.info = leaderboards.combativity;
+                    break;
                 default:
                     break;
             }
@@ -45,6 +78,11 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                 dispatch(fetchAccountDetails(data.info));
             }
         }
+    };
+
+    const closeLeaderboards = () => {
+        handleClose();
+        dispatch(resetState());
     };
 
     const handleGoBack = () => {
@@ -56,11 +94,12 @@ const Leaderboards = ({ handleClose, isMobile }) => {
         { name: 'Terrestrial', option: 2 },
         { name: 'Aerial', option: 3 },
         { name: 'Aquatic', option: 4 },
+        { name: 'Combativity', option: 5 },
     ];
 
     return (
         <>
-            <Overlay isVisible={true} handleClose={handleClose} />
+            <Overlay isVisible={true} handleClose={closeLeaderboards} />
             <Box
                 pos={'fixed'}
                 bgColor={'#1F2323'}
@@ -82,7 +121,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                     top={2}
                     right={2}
                     zIndex={999}
-                    onClick={handleClose}
+                    onClick={closeLeaderboards}
                 />
                 {status === 'loading' ? (
                     <Box
@@ -110,12 +149,37 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                 <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
                                     LEADERBOARDS
                                 </Heading>
-                                <Stack m={'auto'}>
+                                <Stack m={'auto'} mt={6}>
                                     {availableLeaderboards.map(({ name, option }, index) => (
-                                        <Button key={index} onClick={() => changeData(option)}>
+                                        <Box
+                                            mx={'auto'}
+                                            className="btn-menu"
+                                            cursor={'pointer'}
+                                            key={index}
+                                            onClick={() => changeData(option)}>
                                             {name}
-                                        </Button>
+                                        </Box>
                                     ))}
+                                    <Stack
+                                        direction={'column'}
+                                        my={'auto'}
+                                        mt={2}
+                                        fontFamily={'Chelsea Market, System'}>
+                                        {accumulatedBounty && (
+                                            <>
+                                                <Text>Accumulated bounty: </Text>
+                                                {!isEmptyObject(accumulatedBounty) ? (
+                                                    accumulatedBounty.map(({ price, name }, index) => (
+                                                        <Text key={index} color={'#FFF'}>
+                                                            {(price / NQTDIVIDER).toFixed(2)} {name}
+                                                        </Text>
+                                                    ))
+                                                ) : (
+                                                    <Text color={'#FFF'}>There are no accumulated bounty yet.</Text>
+                                                )}
+                                            </>
+                                        )}
+                                    </Stack>
                                 </Stack>
                             </Stack>
                         ) : (
