@@ -216,22 +216,21 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                     )}
                 </Tr>
             </Thead>
-            <Tbody>
-                {battleDetails.length > 0 ? (
-                    tableRows
-                ) : (
-                    <Text
-                        position={'absolute'}
-                        fontFamily={'Chelsea Market, system-ui'}
-                        color={'#FFF'}
-                        fontSize={'large'}
-                        top={'50%'}
-                        left={'50%'}
-                        transform={'translate(-50%, -50%)'}>
-                        You have not yet fought any battle
-                    </Text>
-                )}
-            </Tbody>
+
+            {battleDetails.length > 0 ? (
+                <Tbody>{tableRows}</Tbody>
+            ) : (
+                <Text
+                    position={'absolute'}
+                    fontFamily={'Chelsea Market, system-ui'}
+                    color={'#FFF'}
+                    fontSize={'large'}
+                    top={'50%'}
+                    left={'50%'}
+                    transform={'translate(-50%, -50%)'}>
+                    You have not yet fought any battle
+                </Text>
+            )}
         </Table>
     );
 };

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { OMNO_API } from '../../data/CONSTANTS';
+import { addressToAccountId } from '../Ardor/ardorInterface';
 
 export const getArenas = async () => {
     return axios
@@ -101,4 +102,37 @@ export const getAccumulatedBounty = async () => {
         .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
         .then(res => res.data.state.arena.accumulatedBounty)
         .catch(error => error);
+
+export const getAveragesDices = async accountRs => {
+    try {
+        let accountId = addressToAccountId(accountRs);
+        let res = await getUserBattles(accountId);
+        let attackerSum = 0;
+        let defenderSum = 0;
+        let battleCount = 0;
+
+        for (const { battleId } of res) {
+            let battle = await getBattleById(battleId);
+            if (!battle.battleResult || battle.battleResult.length === 0) continue;
+            let { battleResult } = battle;
+
+            // eslint-disable-next-line no-loop-func
+            battleResult.forEach(item => {
+                defenderSum += parseInt(item.defenderRoll);
+                attackerSum += parseInt(item.attackerRoll);
+            });
+
+            battleCount++;
+        }
+        return {
+            AttackerAverage: attackerSum / battleCount,
+            DefenderAverage: defenderSum / battleCount,
+            AttackerSum: attackerSum,
+            DefenderSum: defenderSum,
+            battleCount: battleCount,
+        };
+    } catch (error) {
+        console.error('Error calculating averages:', error);
+    }
+
 };

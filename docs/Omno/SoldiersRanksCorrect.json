@@ -118,7 +118,7 @@
             "asset": "7024690161218732154",
             "name": "Kanmare",
             "domainId": 2,
-            "mediumId": 2,
+            "mediumId": 1,
             "arenaId": 13,
             "rank": 1,
             "power": 2
@@ -370,7 +370,7 @@
             "asset": "13187825386854631652",
             "name": "Tarasca",
             "domainId": 5,
-            "mediumId": 2,
+            "mediumId": 1,
             "arenaId": 41,
             "rank": 0,
             "power": 4
@@ -518,6 +518,60 @@
             "arenaId": 57,
             "rank": 1,
             "power": 2
+          },
+          {
+            "asset": "13446501052073878899",
+            "name": "Fenrir",
+            "domainId": 5,
+            "mediumId": 1,
+            "arenaId": 58,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "16991089534084699344",
+            "name": "Dragon",
+            "domainId": 4,
+            "mediumId": 2,
+            "arenaId": 59,
+            "rank": 0,
+            "power": 3
+          },
+          {
+            "asset": "16991089534084699344",
+            "name": "Dragon",
+            "domainId": 4,
+            "mediumId": 2,
+            "arenaId": 59,
+            "rank": 0,
+            "power": 3
+          },
+          {
+            "asset": "465570788961452184",
+            "name": "Tecelán",
+            "domainId": 5,
+            "mediumId": 1,
+            "arenaId": 60,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "2603114092541070832",
+            "name": "Kukulkán",
+            "domainId": 3,
+            "mediumId": 2,
+            "arenaId": 61,
+            "rank": 1,
+            "power": 1
+          },
+          {
+            "asset": "18428491578408295076",
+            "name": "Bahana",
+            "domainId": 3,
+            "mediumId": 1,
+            "arenaId": 62,
+            "rank": 0,
+            "power": 4
           }
         ]
       }
