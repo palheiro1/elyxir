@@ -48,7 +48,6 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [openInventory, setOpenInventory] = useState(false);
     const [openBattleRecord, setOpenBattleRecord] = useState(false);
     const [openLeaderboards, setOpenLeaderboards] = useState(false);
-    // eslint-disable-next-line no-unused-vars
     const [updateState, setUpdateState] = useState(false);
 
     const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
@@ -61,7 +60,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
 
     useEffect(() => {
         cards && accountRs && dispatch(fetchBattleData({ accountRs, cards }));
-    }, [dispatch, accountRs, cards]);
+    }, [dispatch, accountRs, cards, updateState]);
 
     const handleNext = () => {
         setPage(2);
@@ -149,7 +148,6 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     };
 
     let wEthDecimals = 3;
-
 
     const statistics = [
         { name: 'Defenders', value: landLords },

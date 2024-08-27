@@ -35,9 +35,14 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
         setViewDetails(false);
     };
 
+    const closeRecord = () => {
+        handleClose();
+        handleGoBack();
+    };
+
     return (
         <>
-            <Overlay isVisible={true} handleClose={handleClose} />
+            <Overlay isVisible={true} handleClose={closeRecord} />
             <Box
                 pos={'fixed'}
                 bgColor={'#1F2323'}
@@ -59,7 +64,7 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
                     top={2}
                     right={2}
                     zIndex={999}
-                    onClick={handleClose}
+                    onClick={closeRecord}
                 />
                 {!viewDetails && (
                     <>

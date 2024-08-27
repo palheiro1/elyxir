@@ -166,7 +166,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
 
     const tableRows = useMemo(() => battleDetails.map(renderBattleRow), [battleDetails, renderBattleRow]);
 
-    return (
+    return battleDetails.length > 0 ? (
         <Table variant={'unstyled'} textColor={'#FFF'} w={'85%'} mx={'auto'}>
             <Thead>
                 <Tr>
@@ -216,22 +216,23 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                     )}
                 </Tr>
             </Thead>
-
-            {battleDetails.length > 0 ? (
-                <Tbody>{tableRows}</Tbody>
-            ) : (
-                <Text
-                    position={'absolute'}
-                    fontFamily={'Chelsea Market, system-ui'}
-                    color={'#FFF'}
-                    fontSize={'large'}
-                    top={'50%'}
-                    left={'50%'}
-                    transform={'translate(-50%, -50%)'}>
-                    You have not yet fought any battle
-                </Text>
-            )}
+            <Tbody>{tableRows}</Tbody>
         </Table>
+    ) : (
+        <Box
+            h={'100%'}
+            position={'absolute'}
+            color={'#FFF'}
+            alignContent={'center'}
+            top={'50%'}
+            left={'50%'}
+            w={'100%'}
+            fontSize={'lg'}
+            fontFamily={'Chelsea Market, System'}
+            textAlign={'center'}
+            transform={'translate(-50%, -50%)'}>
+            You have not yet fought any battle
+        </Box>
     );
 };
 

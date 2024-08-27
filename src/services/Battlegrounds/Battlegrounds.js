@@ -102,7 +102,7 @@ export const getAccumulatedBounty = async () => {
         .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
         .then(res => res.data.state.arena.accumulatedBounty)
         .catch(error => error);
-}
+};
 
 export const getAveragesDices = async accountRs => {
     try {
@@ -135,5 +135,11 @@ export const getAveragesDices = async accountRs => {
     } catch (error) {
         console.error('Error calculating averages:', error);
     }
+};
 
+export const getLeaderboardsResetBlock = () => {
+    return axios
+        .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
+        .then(res => res.data.state.leaderboardsResetBlock)
+        .catch(error => error);
 };

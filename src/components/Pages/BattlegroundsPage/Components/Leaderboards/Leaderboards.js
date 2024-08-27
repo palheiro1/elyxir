@@ -4,21 +4,23 @@ import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { Box, Heading, IconButton, Spinner, Stack, Text } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import Leaderboard from './Leaderboard';
-import {
-    fetchAccountDetails,
-    fetchLeaderboards,
-    resetState,
-    setViewData,
-} from '../../../../../redux/reducers/LeaderboardsReducer';
-import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
+import { fetchAccountDetails, fetchLeaderboards, setViewData } from '../../../../../redux/reducers/LeaderboardsReducer';
+import { BLOCKTIME, NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { isEmptyObject } from '../../Utils/BattlegroundsUtils';
-import { getAccumulatedBounty } from '../../../../../services/Battlegrounds/Battlegrounds';
+import { getAccumulatedBounty, getLeaderboardsResetBlock } from '../../../../../services/Battlegrounds/Battlegrounds';
 import { getAsset } from '../../../../../services/Ardor/ardorInterface';
 
 const Leaderboards = ({ handleClose, isMobile }) => {
     const dispatch = useDispatch();
     const { leaderboards, viewData, data, status } = useSelector(state => state.leaderboards);
-    const [accumulatedBounty, setAccumulatedBounty] = useState({});
+    const { prev_height } = useSelector(state => state.blockchain);
+    const [accumulatedBounty, setAccumulatedBounty] = useState(null);
+    const [leaderboardResetTimer, setLeaderboardResetTimer] = useState({
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        remainingBlocks: 'loading',
+    });
 
     useEffect(() => {
         dispatch(fetchLeaderboards());
@@ -27,6 +29,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
     useEffect(() => {
         const getBattleCost = async () => {
             let res = await getAccumulatedBounty();
+            setAccumulatedBounty({});
             if (!isEmptyObject(res)) {
                 const assets = Object.entries(res.asset);
 
@@ -42,6 +45,23 @@ const Leaderboards = ({ handleClose, isMobile }) => {
 
         getBattleCost();
     }, []);
+
+    useEffect(() => {
+        const calculateLeaderboardsResetTime = async () => {
+            const resetBlock = await getLeaderboardsResetBlock();
+            const remainingBlocks = resetBlock - prev_height;
+            const remainingSecs = remainingBlocks * BLOCKTIME;
+            const delta = Number(remainingSecs - BLOCKTIME);
+
+            const days = Math.floor(delta / (24 * 60 * 60));
+            const hours = Math.floor((delta % (24 * 60 * 60)) / (60 * 60));
+            const minutes = Math.floor((delta % (60 * 60)) / 60);
+
+            setLeaderboardResetTimer({ days, hours, minutes, remainingBlocks });
+        };
+
+        prev_height && calculateLeaderboardsResetTime();
+    }, [prev_height]);
 
     const changeData = option => {
         if (leaderboards) {
@@ -71,10 +91,14 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                     data.info = leaderboards.combativity;
                     break;
                 default:
+                    data.info = [];
+                    data.type = null;
+                    dispatch(setViewData({ viewData: false, data }));
                     break;
             }
-            dispatch(setViewData({ viewData: true, data }));
-            if (data.info.length > 0) {
+
+            if (option !== 0 && data.info.length > 0) {
+                dispatch(setViewData({ viewData: true, data }));
                 dispatch(fetchAccountDetails(data.info));
             }
         }
@@ -82,11 +106,11 @@ const Leaderboards = ({ handleClose, isMobile }) => {
 
     const closeLeaderboards = () => {
         handleClose();
-        dispatch(resetState());
+        changeData(0);
     };
 
     const handleGoBack = () => {
-        dispatch(resetState());
+        changeData(0);
     };
 
     const availableLeaderboards = [
@@ -149,7 +173,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                 <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
                                     LEADERBOARDS
                                 </Heading>
-                                <Stack m={'auto'} mt={6}>
+                                <Stack m={'auto'}>
                                     {availableLeaderboards.map(({ name, option }, index) => (
                                         <Box
                                             mx={'auto'}
@@ -165,7 +189,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                         my={'auto'}
                                         mt={2}
                                         fontFamily={'Chelsea Market, System'}>
-                                        {accumulatedBounty && (
+                                        {accumulatedBounty ? (
                                             <>
                                                 <Text>Accumulated bounty: </Text>
                                                 {!isEmptyObject(accumulatedBounty) ? (
@@ -178,8 +202,23 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                                     <Text color={'#FFF'}>There are no accumulated bounty yet.</Text>
                                                 )}
                                             </>
+                                        ) : (
+                                            <Box mx={'auto'}>
+                                                <Spinner />
+                                            </Box>
                                         )}
                                     </Stack>
+                                </Stack>
+                                <Stack fontFamily={'Chelsea market, System'}>
+                                    {leaderboardResetTimer.remainingBlocks !== 'loading' ? (
+                                        <Text color={'#FFF'} fontFamily={'Chelsea market, System'}>
+                                            Reseting combativity leaderboard in {leaderboardResetTimer?.days || 0} days,{' '}
+                                            {leaderboardResetTimer?.hours || 0} hours and{' '}
+                                            {leaderboardResetTimer?.minutes || 0} minutes.
+                                        </Text>
+                                    ) : (
+                                        <Text color={'#FFF'}>Loading...</Text>
+                                    )}
                                 </Stack>
                             </Stack>
                         ) : (

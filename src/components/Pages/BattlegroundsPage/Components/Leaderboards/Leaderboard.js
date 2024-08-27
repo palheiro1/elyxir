@@ -11,7 +11,7 @@ const Leaderboard = ({ data, handleGoBack, isMobile }) => {
     return (
         <Stack>
             <Heading mx={'auto'} mt={4} fontFamily={'Chelsea Market, System'} fontWeight={100}>
-                {capitalize(type)} leaderboard
+                {type && capitalize(type)} leaderboard
             </Heading>
             <IconButton
                 background={'transparent'}
@@ -84,7 +84,7 @@ const Leaderboard = ({ data, handleGoBack, isMobile }) => {
                                     return (
                                         <Tr key={index} p={2}>
                                             <Td textAlign={'center'} p={2}>
-                                                <Box
+                                                <Text
                                                     bg={bg}
                                                     p={3}
                                                     maxH={'45px'}
@@ -95,10 +95,10 @@ const Leaderboard = ({ data, handleGoBack, isMobile }) => {
                                                     alignItems="center"
                                                     justifyContent="center">
                                                     {`#${index + 1}`}
-                                                </Box>
+                                                </Text>
                                             </Td>
                                             <Td textAlign={'center'} p={2}>
-                                                <Box
+                                                <Text
                                                     bg={bg}
                                                     p={3}
                                                     maxH={'45px'}
@@ -109,10 +109,10 @@ const Leaderboard = ({ data, handleGoBack, isMobile }) => {
                                                     alignItems="center"
                                                     justifyContent="center">
                                                     {name ? name : accountRS}
-                                                </Box>
+                                                </Text>
                                             </Td>
                                             <Td textAlign={'center'} p={2}>
-                                                <Box
+                                                <Text
                                                     bg={bg}
                                                     p={3}
                                                     maxH={'45px'}
@@ -123,7 +123,7 @@ const Leaderboard = ({ data, handleGoBack, isMobile }) => {
                                                     alignItems="center"
                                                     justifyContent="center">
                                                     {points > 10000 ? (points / 10000).toFixed(0) : points}
-                                                </Box>
+                                                </Text>
                                             </Td>
                                         </Tr>
                                     );
