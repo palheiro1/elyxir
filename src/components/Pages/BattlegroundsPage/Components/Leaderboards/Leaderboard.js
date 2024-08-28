@@ -122,7 +122,7 @@ const Leaderboard = ({ data, handleGoBack, isMobile }) => {
                                                     display="flex"
                                                     alignItems="center"
                                                     justifyContent="center">
-                                                    {points > 10000 ? (points / 10000).toFixed(0) : points}
+                                                    {points}
                                                 </Text>
                                             </Td>
                                         </Tr>
