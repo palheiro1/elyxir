@@ -9,12 +9,15 @@ import { BLOCKTIME, NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { isEmptyObject } from '../../Utils/BattlegroundsUtils';
 import { getAccumulatedBounty, getLeaderboardsResetBlock } from '../../../../../services/Battlegrounds/Battlegrounds';
 import { getAsset } from '../../../../../services/Ardor/ardorInterface';
+import GeneralLeaderboard from './GeneralLeaderboard';
 
 const Leaderboards = ({ handleClose, isMobile }) => {
     const dispatch = useDispatch();
     const { leaderboards, viewData, data, status } = useSelector(state => state.leaderboards);
     const { prev_height } = useSelector(state => state.blockchain);
     const [accumulatedBounty, setAccumulatedBounty] = useState(null);
+    const [option, setOption] = useState(0);
+
     const [leaderboardResetTimer, setLeaderboardResetTimer] = useState({
         days: 0,
         hours: 0,
@@ -97,7 +100,8 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                     break;
             }
 
-            if (option !== 0 && data.info.length > 0) {
+            setOption(option);
+            if (option !== 0) {
                 dispatch(setViewData({ viewData: true, data }));
                 dispatch(fetchAccountDetails(data.info));
             }
@@ -221,8 +225,10 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                     )}
                                 </Stack>
                             </Stack>
-                        ) : (
+                        ) : option !== 1 ? (
                             <Leaderboard data={data} handleGoBack={handleGoBack} isMobile={isMobile} />
+                        ) : (
+                            <GeneralLeaderboard handleGoBack={handleGoBack} isMobile={isMobile} />
                         )}
                     </>
                 )}
