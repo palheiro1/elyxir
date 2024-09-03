@@ -199,7 +199,10 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                                 {!isEmptyObject(accumulatedBounty) ? (
                                                     accumulatedBounty.map(({ price, name }, index) => (
                                                         <Text key={index} color={'#FFF'}>
-                                                            {(price / NQTDIVIDER).toFixed(2)} {name}
+                                                            {name === 'wETH'
+                                                                ? (price / NQTDIVIDER).toFixed(4)
+                                                                : (price / NQTDIVIDER).toFixed(0)}{' '}
+                                                            {name}
                                                         </Text>
                                                     ))
                                                 ) : (
