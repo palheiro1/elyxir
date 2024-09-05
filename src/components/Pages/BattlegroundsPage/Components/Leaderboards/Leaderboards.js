@@ -33,7 +33,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
         const getBattleCost = async () => {
             let res = await getAccumulatedBounty();
             setAccumulatedBounty({});
-            if (!isEmptyObject(res)) {
+            if (res && !isEmptyObject(res)) {
                 const assets = Object.entries(res.asset);
 
                 const results = await Promise.all(
@@ -196,7 +196,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                         {accumulatedBounty ? (
                                             <>
                                                 <Text>Accumulated bounty: </Text>
-                                                {!isEmptyObject(accumulatedBounty) ? (
+                                                {accumulatedBounty && !isEmptyObject(accumulatedBounty) ? (
                                                     accumulatedBounty.map(({ price, name }, index) => (
                                                         <Text key={index} color={'#FFF'}>
                                                             {name === 'wETH'

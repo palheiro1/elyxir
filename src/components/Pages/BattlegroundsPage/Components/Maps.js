@@ -6,7 +6,7 @@ import { MapPoint } from './MapPoint';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchArenasInfo } from '../../../../redux/reducers/ArenasReducer';
 
-export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle, w }) => {
+export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle, w, filters }) => {
     const [selectedArena, setSelectedArena] = useState();
     const { arenasInfo } = useSelector(state => state.arenas);
 
@@ -31,17 +31,20 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
                     xlink="http://www.w3.org/1999/xlink">
                     <g clipPath="url(#clip0_3079_4498)">
                         <rect width="979" height="542.802" fill="url(#pattern0)" />
-                        {arenasInfo.map(arena => (
-                            <MapPoint
-                                key={arena.id}
-                                arena={arena}
-                                handleClick={handleClick}
-                                selectedArena={selectedArena}
-                                cards={cards}
-                                handleStartBattle={handleStartBattle}
-                                infoAccount={infoAccount}
-                            />
-                        ))}
+                        {arenasInfo
+                            .filter(arena => filters.rarity === '' || arena.level === Number(filters.rarity))
+                            .filter(arena => filters.element === '' || arena.mediumId === Number(filters.element))
+                            .map(arena => (
+                                <MapPoint
+                                    key={arena.id}
+                                    arena={arena}
+                                    handleClick={handleClick}
+                                    selectedArena={selectedArena}
+                                    cards={cards}
+                                    handleStartBattle={handleStartBattle}
+                                    infoAccount={infoAccount}
+                                />
+                            ))}
                         {/* Max X: 970 Max Y: 530*/}
                     </g>
                     <defs>

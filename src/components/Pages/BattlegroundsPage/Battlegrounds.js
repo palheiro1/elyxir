@@ -8,6 +8,7 @@ import {
     MenuItem,
     MenuList,
     Portal,
+    Select,
     Stack,
     Text,
     useColorModeValue,
@@ -49,6 +50,10 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [openBattleRecord, setOpenBattleRecord] = useState(false);
     const [openLeaderboards, setOpenLeaderboards] = useState(false);
     const [updateState, setUpdateState] = useState(false);
+    const [filters, setFilters] = useState({
+        rarity: '',
+        element: '',
+    });
 
     const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
     const { isOpen: isOpenGems, onOpen: onOpenGems, onClose: onCloseGems } = useDisclosure();
@@ -178,6 +183,20 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     };
 
     const [isMobile] = useMediaQuery('(max-width: 1190px)');
+
+    const handleRarityChange = event => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            rarity: event.target.value,
+        }));
+    };
+
+    const handleElementChange = event => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            element: event.target.value,
+        }));
+    };
 
     return (
         <>
@@ -343,11 +362,28 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                             </Stack>
                         </Stack>
                         <Stack mt={isMobile && '130px'} w={isMobile ? '200%' : '100%'} ml={isMobile && -24}>
+                            <Stack direction="row" fontFamily={'Chelsea Market, system-ui'}>
+                                <Text my={'auto'} fontSize={'lg'} mx={3}>
+                                    Lands' filters:{' '}
+                                </Text>
+                                <Select placeholder="Rarity" w={'15%'} onChange={handleRarityChange}>
+                                    <option value="1">Common</option>
+                                    <option value="2">Rare</option>
+                                    <option value="3">Epic</option>
+                                    <option value="4">Special</option>
+                                </Select>
+                                <Select placeholder="Element" w={'15%'} onChange={handleElementChange}>
+                                    <option value="1">Terrestrial</option>
+                                    <option value="2">Aerial</option>
+                                    <option value="3">Aquatic</option>
+                                </Select>
+                            </Stack>
                             <Maps
                                 handleSelectArena={handleSelectArena}
                                 infoAccount={infoAccount}
                                 cards={cards}
                                 handleStartBattle={handleStartBattle}
+                                filters={filters}
                                 w={'100%'}
                             />
                             <Stack direction={'row'} mt={isMobile ? '-90px' : 3} mx={'auto'}>
