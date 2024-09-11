@@ -102,7 +102,6 @@ export const BattleWindow = ({
 
             const newCards = [...prevCards];
             newCards[index] = newValue;
-            console.log('🚀 ~ updateCard ~ newCards:', newCards);
             return newCards;
         });
     };

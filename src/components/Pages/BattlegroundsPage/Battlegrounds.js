@@ -155,8 +155,8 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     let wEthDecimals = 3;
 
     const statistics = [
-        { name: 'Defenders', value: landLords },
-        { name: 'Active player', value: activePlayers },
+        { name: 'Guardians', value: landLords },
+        { name: 'Active players', value: activePlayers },
         { name: 'Battles disputed', value: battleCount },
         // { name: 'GEM Rewards', value: '245k' },
         // { name: 'General ranking', value: 7 },

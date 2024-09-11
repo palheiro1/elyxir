@@ -142,7 +142,7 @@ const Leaderboard = ({ data, handleGoBack, isMobile }) => {
                             textAlign={'center'}
                             transform={'translate(-50%, -50%)'}>
                             <Text fontFamily={'Chelsea Market, System'} fontWeight={100} fontSize={'medium'}>
-                                Any participants yet
+                                No participants yet
                             </Text>
                         </Box>
                     )}
