@@ -5,7 +5,7 @@ MESSAGE TO RESET ONLY THE COMBATIVITY LEADERBOARD
     "operation": [
         {
             "service": "rgame",
-            "request": "resetCombativityLeaderboard"
+            "request": "resetTypeLeaderboards"
         }
     ]
 }

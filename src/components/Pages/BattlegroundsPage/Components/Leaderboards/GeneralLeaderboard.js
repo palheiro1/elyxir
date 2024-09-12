@@ -62,13 +62,6 @@ const GeneralLeaderboard = ({ handleGoBack, isMobile }) => {
                                         color={'#FFF'}
                                         fontSize={isMobile ? 'sm' : 'lg'}
                                         textAlign={'center'}>
-                                        Tribute won
-                                    </Td>
-                                    <Td
-                                        fontFamily={'Chelsea Market, System'}
-                                        color={'#FFF'}
-                                        fontSize={isMobile ? 'sm' : 'lg'}
-                                        textAlign={'center'}>
                                         Lands conquered
                                     </Td>
                                     <Td
@@ -108,7 +101,6 @@ const GeneralLeaderboard = ({ handleGoBack, isMobile }) => {
                                             accountRS,
                                             totalPoints,
                                             name,
-                                            tributeWonPoints,
                                             landsConqueredPoints,
                                             successfullDefensesPoints,
                                             battleEfficiencyPoints,
@@ -156,20 +148,6 @@ const GeneralLeaderboard = ({ handleGoBack, isMobile }) => {
                                                         alignItems="center"
                                                         justifyContent="center">
                                                         {name ? name : formatAddress(accountRS)}
-                                                    </Text>
-                                                </Td>
-                                                <Td textAlign={'center'} p={2}>
-                                                    <Text
-                                                        bg={bg}
-                                                        p={3}
-                                                        maxH={'45px'}
-                                                        fontFamily={'Chelsea Market, System'}
-                                                        h="100%"
-                                                        fontSize={isMobile ? 'xs' : 'md'}
-                                                        display="flex"
-                                                        alignItems="center"
-                                                        justifyContent="center">
-                                                        {tributeWonPoints || 0}
                                                     </Text>
                                                 </Td>
                                                 <Td textAlign={'center'} p={2}>
