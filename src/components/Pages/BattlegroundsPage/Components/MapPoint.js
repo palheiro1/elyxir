@@ -43,11 +43,6 @@ export const MapPoint = React.memo(
         const { id, x, y, name } = arena;
         const toast = useToast();
 
-        const clickButton = useCallback(() => {
-            handleClick(id);
-            handleStartBattle();
-        }, [handleClick, handleStartBattle, id]);
-
         const copyToClipboard = useCallback(
             address => {
                 navigator.clipboard.writeText(address);
@@ -89,11 +84,17 @@ export const MapPoint = React.memo(
             }
         };
 
-        const handleClose = () => {
+        const handleClose = useCallback(() => {
             setOpenPopoverId(null);
             onClose();
-        };
+        }, [onClose, setOpenPopoverId]);
 
+        const clickButton = useCallback(() => {
+            handleClose();
+            handleClick(id);
+            handleStartBattle();
+        }, [handleClick, handleClose, handleStartBattle, id]);
+        
         useEffect(() => {
             dispatch(fetchSoldiers());
         }, [dispatch]);

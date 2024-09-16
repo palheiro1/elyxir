@@ -10,6 +10,7 @@ import { isEmptyObject } from '../../Utils/BattlegroundsUtils';
 import { getAccumulatedBounty, getLeaderboardsResetBlock } from '../../../../../services/Battlegrounds/Battlegrounds';
 import { getAsset } from '../../../../../services/Ardor/ardorInterface';
 import GeneralLeaderboard from './GeneralLeaderboard';
+import CombativityResetTimer from './CombativityResetTimer';
 
 const Leaderboards = ({ handleClose, isMobile }) => {
     const dispatch = useDispatch();
@@ -216,17 +217,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                         )}
                                     </Stack>
                                 </Stack>
-                                <Stack fontFamily={'Chelsea market, System'}>
-                                    {leaderboardResetTimer.remainingBlocks !== 'loading' ? (
-                                        <Text color={'#FFF'} fontFamily={'Chelsea market, System'}>
-                                            Reseting combativity leaderboard in {leaderboardResetTimer?.days || 0} days,{' '}
-                                            {leaderboardResetTimer?.hours || 0} hours and{' '}
-                                            {leaderboardResetTimer?.minutes || 0} minutes.
-                                        </Text>
-                                    ) : (
-                                        <Text color={'#FFF'}>Loading...</Text>
-                                    )}
-                                </Stack>
+                                <CombativityResetTimer leaderboardResetTimer={leaderboardResetTimer} />
                             </Stack>
                         ) : option !== 1 ? (
                             <Leaderboard data={data} handleGoBack={handleGoBack} isMobile={isMobile} />
