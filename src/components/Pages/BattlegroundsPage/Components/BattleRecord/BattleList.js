@@ -37,7 +37,8 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
 
     const closeRecord = () => {
         handleClose();
-        handleGoBack();
+        setSelectedBattle(null);
+        setViewDetails(false);
     };
 
     return (
@@ -69,7 +70,7 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
                 {!viewDetails && (
                     <>
                         <Stack direction={'column'} color={'#FFF'} my={5} mx={'auto'} textAlign={'center'} maxH={'90%'}>
-                            <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
+                            <Heading fontFamily={'Chelsea Market, System'} fontWeight={100} fontSize={'2xl'}>
                                 BATTLE RECORD
                             </Heading>
                         </Stack>
