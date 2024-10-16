@@ -1,31 +1,65 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { ChevronLeftIcon } from '@chakra-ui/icons';
-import { Box, Heading, IconButton, Spinner, Stack, Table, Tbody, Td, Text, Thead, Tr } from '@chakra-ui/react';
-import { capitalize } from '../../Utils/BattlegroundsUtils';
+import { Box, Spinner, Stack, Grid, GridItem, Text } from '@chakra-ui/react';
 
-const Leaderboard = ({ data, handleGoBack, isMobile }) => {
-    const { entries, status } = useSelector(state => state.leaderboards);
-    const { type } = data;
+const LeaderboardRow = ({ index, accountRS, points, name, isMobile }) => {
+    const color = index < 1 ? '#39D5D5' : '#FFF';
 
     return (
-        <Stack>
-            <Heading mx={'auto'} mt={4} fontFamily={'Chelsea Market, System'} fontWeight={100}>
-                {type && capitalize(type)} leaderboard
-            </Heading>
-            <IconButton
-                background={'transparent'}
-                color={'#FFF'}
-                icon={<ChevronLeftIcon />}
-                _hover={{ background: 'transparent' }}
-                position="fixed"
-                top={2}
-                left={3}
-                fontSize="2rem"
-                zIndex={999}
-                onClick={handleGoBack}
-            />
-            {status === 'loading' ? (
+        <Grid templateColumns="repeat(3, 1fr)" gap={4} w="100%" mx="auto" mt={0} borderRadius="10px" color={color}>
+            <GridItem colSpan={1} textAlign="center">
+                <Text
+                    p={3}
+                    maxH={'45px'}
+                    fontFamily={'Inter, System'}
+                    fontWeight={700}
+                    h="100%"
+                    fontSize={isMobile ? 'xs' : 'md'}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center">
+                    {`#${index + 1}`}
+                </Text>
+            </GridItem>
+            <GridItem colSpan={1} textAlign="center">
+                <Text
+                    p={3}
+                    maxH={'45px'}
+                    fontFamily={'Inter, System'}
+                    fontWeight={700}
+                    h="100%"
+                    fontSize={isMobile ? 'xs' : 'md'}
+                    display="flex"
+                    alignItems="center"
+                    textTransform={'uppercase'}
+                    justifyContent="center">
+                    {name ? name : accountRS}
+                </Text>
+            </GridItem>
+            <GridItem colSpan={1} textAlign="center">
+                <Text
+                    p={3}
+                    maxH={'45px'}
+                    fontFamily={'Inter, System'}
+                    fontWeight={700}
+                    h="100%"
+                    fontSize={isMobile ? 'xs' : 'md'}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center">
+                    {points || 0}
+                </Text>
+            </GridItem>
+        </Grid>
+    );
+};
+
+const Leaderboard = ({ isMobile }) => {
+    const { entries } = useSelector(state => state.leaderboards);
+
+    return (
+        <Stack overflowY={'scroll'} className="custom-scrollbar">
+            {entries === null ? (
                 <Box
                     h={'100%'}
                     position={'absolute'}
@@ -38,114 +72,66 @@ const Leaderboard = ({ data, handleGoBack, isMobile }) => {
                     transform={'translate(-50%, -50%)'}>
                     <Spinner color="#FFF" w={20} h={20} />
                 </Box>
+            ) : !entries || entries.length === 0 ? (
+                <Box
+                    h={'100%'}
+                    position={'absolute'}
+                    color={'#FFF'}
+                    alignContent={'center'}
+                    top={'50%'}
+                    left={'50%'}
+                    w={'100%'}
+                    textAlign={'center'}
+                    transform={'translate(-50%, -50%)'}>
+                    <Text fontFamily={'Chelsea Market, System'} fontWeight={100} fontSize={'medium'}>
+                        No participants yet
+                    </Text>
+                </Box>
             ) : (
                 <>
-                    {entries && entries.length > 0 ? (
-                        <Table w={'80%'} mx={'auto'}>
-                            <Thead>
-                                <Tr>
-                                    <Td
-                                        fontFamily={'Chelsea Market, System'}
-                                        color={'#FFF'}
-                                        fontSize={isMobile ? 'sm' : 'lg'}
-                                        textAlign={'center'}>
-                                        Position
-                                    </Td>
-                                    <Td
-                                        fontFamily={'Chelsea Market, System'}
-                                        color={'#FFF'}
-                                        fontSize={isMobile ? 'sm' : 'lg'}
-                                        textAlign={'center'}>
-                                        Name/ Address
-                                    </Td>
-                                    <Td
-                                        fontFamily={'Chelsea Market, System'}
-                                        color={'#FFF'}
-                                        fontSize={isMobile ? 'sm' : 'lg'}
-                                        textAlign={'center'}>
-                                        Points
-                                    </Td>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {entries.map(({ accountRS, points, name }, index) => {
-                                    let bg = () => {
-                                        switch (index) {
-                                            case 0:
-                                                return 'radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%)';
-                                            case 1:
-                                                return 'linear-gradient(45deg,#999 5%,#fff 10%,#ccc 30%,#ddd 50%,#ccc 70%,#fff 80%,#999 95%)';
-                                            case 2:
-                                                return 'linear-gradient(45deg, #8c5e3c, #b08d57, #d6c3a1)';
-                                            default:
-                                                return '#DB78AA';
-                                        }
-                                    };
-                                    return (
-                                        <Tr key={index} p={2}>
-                                            <Td textAlign={'center'} p={2}>
-                                                <Text
-                                                    bg={bg}
-                                                    p={3}
-                                                    maxH={'45px'}
-                                                    fontFamily={'Chelsea Market, System'}
-                                                    h="100%"
-                                                    fontSize={isMobile ? 'xs' : 'md'}
-                                                    display="flex"
-                                                    alignItems="center"
-                                                    justifyContent="center">
-                                                    {`#${index + 1}`}
-                                                </Text>
-                                            </Td>
-                                            <Td textAlign={'center'} p={2}>
-                                                <Text
-                                                    bg={bg}
-                                                    p={3}
-                                                    maxH={'45px'}
-                                                    fontFamily={'Chelsea Market, System'}
-                                                    h="100%"
-                                                    fontSize={isMobile ? 'xs' : 'md'}
-                                                    display="flex"
-                                                    alignItems="center"
-                                                    justifyContent="center">
-                                                    {name ? name : accountRS}
-                                                </Text>
-                                            </Td>
-                                            <Td textAlign={'center'} p={2}>
-                                                <Text
-                                                    bg={bg}
-                                                    p={3}
-                                                    maxH={'45px'}
-                                                    fontFamily={'Chelsea Market, System'}
-                                                    h="100%"
-                                                    fontSize={isMobile ? 'xs' : 'md'}
-                                                    display="flex"
-                                                    alignItems="center"
-                                                    justifyContent="center">
-                                                    {points}
-                                                </Text>
-                                            </Td>
-                                        </Tr>
-                                    );
-                                })}
-                            </Tbody>
-                        </Table>
-                    ) : (
-                        <Box
-                            h={'100%'}
-                            position={'absolute'}
-                            color={'#FFF'}
-                            alignContent={'center'}
-                            top={'50%'}
-                            left={'50%'}
-                            w={'100%'}
-                            textAlign={'center'}
-                            transform={'translate(-50%, -50%)'}>
-                            <Text fontFamily={'Chelsea Market, System'} fontWeight={100} fontSize={'medium'}>
-                                No participants yet
+                    <Grid
+                        templateColumns="repeat(3, 1fr)"
+                        gap={4}
+                        w={'90%'}
+                        mx={'auto'}
+                        mt={3}
+                        p={5}
+                        borderRadius={'10px'}
+                        bgColor={'#5A679B'}
+                        border={'2px solid #5A679B'}>
+                        <GridItem colSpan={1} textAlign="center" my={'auto'}>
+                            <Text
+                                fontFamily={'Inter, System'}
+                                fontWeight={700}
+                                color={'#FFF'}
+                                fontSize={isMobile ? 'sm' : 'md'}>
+                                POSITION
                             </Text>
-                        </Box>
-                    )}
+                        </GridItem>
+                        <GridItem colSpan={1} textAlign="center" my={'auto'}>
+                            <Text
+                                fontFamily={'Inter, System'}
+                                fontWeight={700}
+                                color={'#FFF'}
+                                fontSize={isMobile ? 'sm' : 'md'}>
+                                NAME/ ADDRESS
+                            </Text>
+                        </GridItem>
+                        <GridItem colSpan={1} textAlign="center" my={'auto'}>
+                            <Text
+                                fontFamily={'Inter, System'}
+                                fontWeight={700}
+                                color={'#FFF'}
+                                fontSize={isMobile ? 'sm' : 'md'}>
+                                POINTS
+                            </Text>
+                        </GridItem>
+                    </Grid>
+                    <Box w={'90%'} mx={'auto'} borderRadius={'10px'} p={2}>
+                        {entries.map((entry, index) => (
+                            <LeaderboardRow key={index} index={index} {...entry} isMobile={isMobile} />
+                        ))}
+                    </Box>
                 </>
             )}
         </Stack>

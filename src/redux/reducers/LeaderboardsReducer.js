@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getAccount } from '../../services/Ardor/ardorInterface';
 import { getLeaderboards } from '../../services/Battlegrounds/Battlegrounds';
 
-// Thunks para obtener los leaderboards y detalles de las cuentas
 export const fetchLeaderboards = createAsyncThunk('leaderboards/fetchLeaderboards', async () => {
     const res = await getLeaderboards();
     return res;
@@ -22,8 +21,8 @@ export const fetchAccountDetails = createAsyncThunk('leaderboards/fetchAccountDe
 const leaderboardsSlice = createSlice({
     name: 'leaderboards',
     initialState: {
-        leaderboards: null,
-        viewData: false,
+        leaderboards: null, 
+        viewData: true,
         data: null,
         entries: null,
         status: 'idle',
@@ -35,7 +34,7 @@ const leaderboardsSlice = createSlice({
             state.data = action.payload.data;
         },
         resetState: state => {
-            state.viewData = false;
+            state.viewData = true;
             state.data = null;
             state.entries = null;
         },
@@ -47,7 +46,7 @@ const leaderboardsSlice = createSlice({
             })
             .addCase(fetchLeaderboards.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.leaderboards = action.payload;
+                state.leaderboards = action.payload.length === 0 ? [] : action.payload; 
             })
             .addCase(fetchLeaderboards.rejected, (state, action) => {
                 state.status = 'failed';
@@ -58,7 +57,7 @@ const leaderboardsSlice = createSlice({
             })
             .addCase(fetchAccountDetails.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.entries = action.payload;
+                state.entries = action.payload.length === 0 ? [] : action.payload;
             })
             .addCase(fetchAccountDetails.rejected, (state, action) => {
                 state.status = 'failed';

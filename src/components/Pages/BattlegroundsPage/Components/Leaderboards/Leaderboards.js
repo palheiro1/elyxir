@@ -1,33 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
-import { Box, Heading, IconButton, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Box, Heading, IconButton, Spinner, Stack, Text, Select, Image } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import Leaderboard from './Leaderboard';
 import { fetchAccountDetails, fetchLeaderboards, setViewData } from '../../../../../redux/reducers/LeaderboardsReducer';
-import { BLOCKTIME, NQTDIVIDER } from '../../../../../data/CONSTANTS';
+import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { isEmptyObject } from '../../Utils/BattlegroundsUtils';
-import { getAccumulatedBounty, getLeaderboardsResetBlock } from '../../../../../services/Battlegrounds/Battlegrounds';
+import { getAccumulatedBounty } from '../../../../../services/Battlegrounds/Battlegrounds';
 import { getAsset } from '../../../../../services/Ardor/ardorInterface';
 import GeneralLeaderboard from './GeneralLeaderboard';
 import CombativityResetTimer from './CombativityResetTimer';
+import panteon from '../../assets/icons/panteon.svg';
 
 const Leaderboards = ({ handleClose, isMobile }) => {
     const dispatch = useDispatch();
-    const { leaderboards, viewData, data, status } = useSelector(state => state.leaderboards);
-    const { prev_height } = useSelector(state => state.blockchain);
-    const [accumulatedBounty, setAccumulatedBounty] = useState(null);
-    const [option, setOption] = useState(0);
+    const { leaderboards, data, status } = useSelector(state => state.leaderboards);
 
-    const [leaderboardResetTimer, setLeaderboardResetTimer] = useState({
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        remainingBlocks: 'loading',
-    });
+    const [accumulatedBounty, setAccumulatedBounty] = useState(null);
+    const [option, setOption] = useState(1);
 
     useEffect(() => {
         dispatch(fetchLeaderboards());
+        changeData(1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
     useEffect(() => {
@@ -50,25 +46,8 @@ const Leaderboards = ({ handleClose, isMobile }) => {
         getBattleCost();
     }, []);
 
-    useEffect(() => {
-        const calculateLeaderboardsResetTime = async () => {
-            const resetBlock = await getLeaderboardsResetBlock();
-            const remainingBlocks = resetBlock - prev_height;
-            const remainingSecs = remainingBlocks * BLOCKTIME;
-            const delta = Number(remainingSecs - BLOCKTIME);
-
-            const days = Math.floor(delta / (24 * 60 * 60));
-            const hours = Math.floor((delta % (24 * 60 * 60)) / (60 * 60));
-            const minutes = Math.floor((delta % (60 * 60)) / 60);
-
-            setLeaderboardResetTimer({ days, hours, minutes, remainingBlocks });
-        };
-
-        prev_height && calculateLeaderboardsResetTime();
-    }, [prev_height]);
-
     const changeData = option => {
-        if (leaderboards) {
+        if (leaderboards && option !== 0) {
             let data = {
                 type: null,
                 info: [],
@@ -114,18 +93,6 @@ const Leaderboards = ({ handleClose, isMobile }) => {
         changeData(0);
     };
 
-    const handleGoBack = () => {
-        changeData(0);
-    };
-
-    const availableLeaderboards = [
-        { name: 'General', option: 1 },
-        { name: 'Terrestrial', option: 2 },
-        { name: 'Aerial', option: 3 },
-        { name: 'Aquatic', option: 4 },
-        { name: 'Combativity', option: 5 },
-    ];
-
     return (
         <>
             <Overlay isVisible={true} handleClose={closeLeaderboards} />
@@ -136,8 +103,6 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                 w={isMobile ? '80%' : '70%'}
                 h={'90%'}
                 borderRadius={'25px'}
-                overflowY={'scroll'}
-                className="custom-scrollbar"
                 top={'50%'}
                 left={'50%'}
                 transform={'translate(-50%, -50%)'}>
@@ -167,63 +132,82 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                     </Box>
                 ) : (
                     <>
-                        {!viewData ? (
+                        <Stack direction={'row'} color={'#FFF'} mt={10} mx={'auto'} w={'90%'} textAlign={'center'}>
+                            <Select
+                                value={option}
+                                onChange={e => changeData(Number(e.target.value))}
+                                color={'#000'}
+                                bgColor={'#FFF'}
+                                my={'auto'}
+                                zIndex={999}
+                                fontFamily={'Chelsea Market, System'}
+                                _hover={{ borderColor: '#555' }}
+                                maxW={'250px'}>
+                                <option value={1}>CHAMPIONS PANTHEON</option>
+                                <option value={2}>LORD OF LANDS</option>
+                                <option value={3}>LORD OF SKY</option>
+                                <option value={4}>LORD OF OCEANS</option>
+                                <option value={5}>LORD OF COMBATIVENESS</option>
+                            </Select>
+                            <Heading fontFamily={'Chelsea Market, System'} mx={'auto'} fontWeight={100} my={'auto'}>
+                                LEADERBOARDS
+                            </Heading>
+                            <Image src={panteon} w={'190px'} mr={5} />
+                        </Stack>
+                        <Stack direction={'column'} color={'#FFF'} mx={'auto'} textAlign={'center'} h={'90%'}>
                             <Stack
                                 direction={'column'}
-                                color={'#FFF'}
-                                my={5}
-                                mx={'auto'}
-                                textAlign={'center'}
-                                h={'90%'}>
-                                <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
-                                    LEADERBOARDS
-                                </Heading>
-                                <Stack m={'auto'}>
-                                    {availableLeaderboards.map(({ name, option }, index) => (
-                                        <Box
-                                            mx={'auto'}
-                                            className="btn-menu"
-                                            cursor={'pointer'}
-                                            key={index}
-                                            onClick={() => changeData(option)}>
-                                            {name}
-                                        </Box>
-                                    ))}
+                                my={'auto'}
+                                mt={2}
+                                fontFamily={'Chelsea Market, System'}
+                                mb={0}
+                                h={'85%'}>
+                                {option !== 1 ? (
+                                    <Leaderboard data={data} isMobile={isMobile} />
+                                ) : (
+                                    <GeneralLeaderboard isMobile={isMobile} />
+                                )}
+                            </Stack>
+                            <Stack dir="row" mx={'auto'}>
+                                {option === 5 ? (
+                                    <CombativityResetTimer />
+                                ) : accumulatedBounty ? (
                                     <Stack
-                                        direction={'column'}
-                                        my={'auto'}
-                                        mt={2}
-                                        fontFamily={'Chelsea Market, System'}>
-                                        {accumulatedBounty ? (
-                                            <>
-                                                <Text>Accumulated bounty: </Text>
-                                                {accumulatedBounty && !isEmptyObject(accumulatedBounty) ? (
-                                                    accumulatedBounty.map(({ price, name }, index) => (
-                                                        <Text key={index} color={'#FFF'}>
-                                                            {name === 'wETH'
-                                                                ? (price / NQTDIVIDER).toFixed(4)
-                                                                : (price / NQTDIVIDER).toFixed(0)}{' '}
-                                                            {name}
-                                                        </Text>
-                                                    ))
-                                                ) : (
-                                                    <Text color={'#FFF'}>There are no accumulated bounty yet.</Text>
-                                                )}
-                                            </>
+                                        direction="row"
+                                        align="center"
+                                        fontFamily={'Inter, system'}
+                                        fontSize={'md'}
+                                        fontWeight={700}>
+                                        <Text>ACCUMULATED BOUNTY: </Text>
+                                        {accumulatedBounty && !isEmptyObject(accumulatedBounty) ? (
+                                            accumulatedBounty.map(({ price, name }, index) => (
+                                                <Stack key={index} direction="row" align="center" mx={4}>
+                                                    <Text my={'auto'}>
+                                                        {name === 'wETH'
+                                                            ? (price / NQTDIVIDER).toFixed(4)
+                                                            : (price / NQTDIVIDER).toFixed(0)}
+                                                        {` ${name}`}
+                                                    </Text>
+                                                    <Image
+                                                        my={'auto'}
+                                                        src={`images/currency/${name === 'wETH' ? 'weth' : 'gem'}.png`}
+                                                        alt={`${name === 'wETH' ? 'WETH' : 'GEM'} Icon`}
+                                                        w="50px"
+                                                        h="50px"
+                                                    />
+                                                </Stack>
+                                            ))
                                         ) : (
-                                            <Box mx={'auto'}>
-                                                <Spinner />
-                                            </Box>
+                                            <Text color={'#FFF'}>THERE ARE NO ACCUMULATED BOUNTY YET.</Text>
                                         )}
                                     </Stack>
-                                </Stack>
-                                <CombativityResetTimer leaderboardResetTimer={leaderboardResetTimer} />
+                                ) : (
+                                    <Box mx={'auto'}>
+                                        <Spinner />
+                                    </Box>
+                                )}
                             </Stack>
-                        ) : option !== 1 ? (
-                            <Leaderboard data={data} handleGoBack={handleGoBack} isMobile={isMobile} />
-                        ) : (
-                            <GeneralLeaderboard handleGoBack={handleGoBack} isMobile={isMobile} />
-                        )}
+                        </Stack>
                     </>
                 )}
             </Box>

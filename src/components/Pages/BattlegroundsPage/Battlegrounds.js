@@ -82,7 +82,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     /* Buttons menu list */
     const buttons = [
         {
-            name: 'Inventory',
+            name: 'Army',
             onclick: () => {
                 setOpenInventory(true);
                 setIsScrollLocked(true);
