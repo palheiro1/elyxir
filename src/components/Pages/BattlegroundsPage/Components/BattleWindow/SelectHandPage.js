@@ -4,7 +4,6 @@ import {
     Center,
     HStack,
     Heading,
-    IconButton,
     Image,
     Modal,
     ModalBody,
@@ -24,7 +23,6 @@ import {
 import locations from '../../assets/LocationsEnum';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
-import { CloseIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
 import { getAsset } from '../../../../../services/Ardor/ardorInterface';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
@@ -48,12 +46,8 @@ export const SelectHandPage = ({
     setShowResults,
     setCurrentTime,
     isMobile,
+    defenderCards,
 }) => {
-    /* mediums: 
-        1 -> terrestial 
-        2 -> aerial
-        3 -> acuatic
-    */
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [battleCost, setBattleCost] = useState({});
@@ -61,12 +55,12 @@ export const SelectHandPage = ({
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
     const [disableButton, setDisableButton] = useState(false);
+    const [preSelectedCard, setPreSelectedCard] = useState(null);
 
     const statistics = [
         { name: 'Level', value: locations[arenaInfo.id - 1].rarity },
         { name: 'Medium', value: medium },
-        { name: 'Team size', value: 5 },
-        { name: 'Guardian', value: defenderInfo.name || formatAddress(defenderInfo.accountRS) },
+        { name: 'Continent', value: domainName },
     ];
 
     useEffect(() => {
@@ -109,36 +103,36 @@ export const SelectHandPage = ({
     }, [arenaInfo]);
 
     const handleStartBattle = async () => {
-        if (!isValidPin || !passphrase) return errorToast('The pin is not correct', toast);
-        let allEmpty = true;
+        // if (!isValidPin || !passphrase) return errorToast('The pin is not correct', toast);
+        // let allEmpty = true;
 
-        for (let i = 0; i < handBattleCards.length; i++) {
-            if (handBattleCards[i] !== '') {
-                allEmpty = false;
-                break;
-            }
-        }
+        // for (let i = 0; i < handBattleCards.length; i++) {
+        //     if (handBattleCards[i] !== '') {
+        //         allEmpty = false;
+        //         break;
+        //     }
+        // }
 
-        if (allEmpty) {
-            return errorToast('Select at least one card to start a battle', toast);
-        }
-        if (!isEmptyObject(battleCost)) {
-            const gemBalance = parseInt(omnoGEMsBalance);
-            const wethBalance = parseInt(omnoWethBalance);
-            const battleCostGems = parseInt(battleCost[0].price);
-            const battleCostWeth = battleCost.length > 1 ? parseInt(battleCost[1].price) : 0;
+        // if (allEmpty) {
+        //     return errorToast('Select at least one card to start a battle', toast);
+        // }
+        // if (!isEmptyObject(battleCost)) {
+        //     const gemBalance = parseInt(omnoGEMsBalance);
+        //     const wethBalance = parseInt(omnoWethBalance);
+        //     const battleCostGems = parseInt(battleCost[0].price);
+        //     const battleCostWeth = battleCost.length > 1 ? parseInt(battleCost[1].price) : 0;
 
-            if (battleCostGems > gemBalance) {
-                return errorToast('Insuficient GEM balance', toast);
-            }
+        //     if (battleCostGems > gemBalance) {
+        //         return errorToast('Insuficient GEM balance', toast);
+        //     }
 
-            if (battleCost.length > 1 && battleCostWeth > wethBalance) {
-                return errorToast('Insuficient wETH balance', toast);
-            }
-        }
+        //     if (battleCost.length > 1 && battleCostWeth > wethBalance) {
+        //         return errorToast('Insuficient wETH balance', toast);
+        //     }
+        // }
 
         setDisableButton(true);
-        await sendCardsToBattle({ cards: handBattleCards, passPhrase: passphrase, arenaId: arenaInfo.id });
+        // await sendCardsToBattle({ cards: handBattleCards, passPhrase: passphrase, arenaId: arenaInfo.id });
         onClose();
         setCurrentTime(new Date().toISOString());
         setShowResults(true);
@@ -157,39 +151,114 @@ export const SelectHandPage = ({
 
     const [isLowHeight] = useMediaQuery('(max-height: 420px)');
 
+    const getImageSrc = (name, value) => {
+        if (name === 'Level') return getLevelIcon(value);
+        if (name === 'Medium') return getMediumIcon(value);
+        if (name === 'Continent') return getContinentIcon(value);
+        return null; // Para manejar casos en que no se cumpla ninguna condición
+    };
+
+    const getLevelIcon = value => {
+        let path = '/images/cards/rarity/';
+        switch (value) {
+            case 'Common':
+                return `${path}common.svg`;
+            case 'Rare':
+                return `${path}rare.svg`;
+            case 'Epic':
+                return `${path}epic.svg`;
+            case 'Special':
+                return `${path}special.svg`;
+            default:
+                return null;
+        }
+    };
+
+    const getMediumIcon = value => {
+        let path = '/images/cards/type/';
+        switch (value) {
+            case 'Aquatic':
+                return `${path}water.svg`;
+            case 'Aerial':
+                return `${path}air.svg`;
+            case 'Terrestrial':
+                return `${path}earth.svg`;
+            default:
+                return null;
+        }
+    };
+
+    const getContinentIcon = value => {
+        let path = '/images/cards/continent/old/';
+        switch (value) {
+            case 'Europe':
+                return `${path}europa.svg`;
+            case 'Asia':
+                return `${path}asia.svg`;
+            case 'Africa':
+                return `${path}africa.svg`;
+            case 'America':
+                return `${path}america.svg`;
+            case 'Oceania':
+                return `${path}oceania.svg`;
+            default:
+                return null;
+        }
+    };
+
+    const handleDeleteCard = (card, index) => {
+        if (preSelectedCard && preSelectedCard.asset === card.asset) {
+            deleteCard(index);
+            setPreSelectedCard(null);
+        } else {
+            setPreSelectedCard(card);
+        }
+    };
     return (
         <>
             <Box display={'flex'} flexDir={'column'}>
                 <Stack direction={'column'} mx={'auto'} mt={isMobile ? 4 : 8}>
-                    <Heading color={'#FFF'} size={isMobile ? 'md' : 'xl'} fontFamily={'Chelsea Market, system-ui'}>
+                    <Heading
+                        color={'#FFF'}
+                        size={isMobile ? 'md' : 'lg'}
+                        fontFamily={'Chelsea Market, system-ui'}
+                        fontWeight={'300'}>
                         {' '}
                         CONQUER{' '}
-                        <span style={{ color: '#D08FB0' }}>
-                            {locations[arenaInfo.id - 1].name}, {domainName}
+                        <span style={{ color: '#D08FB0', textTransform: 'uppercase' }}>
+                            {locations[arenaInfo.id - 1].name}
                         </span>{' '}
                     </Heading>
                     <Text color={'#FFF'} textAlign={'center'} fontSize={isMobile ? 'md' : 'large'}>
-                        SELECT YOUR ARMY
+                        CHOOSE YOUR HAND
                     </Text>
                 </Stack>
                 <Stack direction={'row'} mx={'auto'} mt={3}>
-                    {handBattleCards.map((card, index) =>
-                        card !== '' ? (
-                            <Box key={index} position="relative">
-                                <IconButton
-                                    icon={<CloseIcon boxSize={3} />}
-                                    zIndex={9}
-                                    position="absolute"
-                                    top="0"
-                                    right="0"
-                                    backgroundColor={'#D08FB0'}
-                                    borderRadius={'full'}
-                                    onClick={() => deleteCard(index)}
-                                />
+                    {handBattleCards.map((card, index) => {
+                        const isPreSelected = preSelectedCard?.asset === card.asset;
+
+                        return card !== '' ? (
+                            <Box key={index} position="relative" onClick={() => handleDeleteCard(card, index)}>
+                                {isPreSelected && (
+                                    <Box
+                                        position="absolute"
+                                        top="0"
+                                        left="0"
+                                        width="100%"
+                                        height="100%"
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        fontSize={'xl'}
+                                        bg="rgba(1, 151, 135, 0.5)"
+                                        fontFamily={'Chelsea Market, system-ui'}>
+                                        x
+                                    </Box>
+                                )}
                                 <Box
                                     backgroundColor={'#465A5A'}
-                                    w={isMobile ? '90px' : '150px'}
-                                    h={isMobile ? '122px' : '200px'}
+                                    w={isMobile ? '76px' : '127px'}
+                                    h={isMobile ? '103px' : '172px'}
                                     gap={'15px'}
                                     display={'flex'}>
                                     <Image src={card.cardImgUrl} w={'100%'} />
@@ -200,8 +269,8 @@ export const SelectHandPage = ({
                                 key={index}
                                 backgroundColor="#465A5A"
                                 cursor={'pointer'}
-                                w={isMobile ? '90px' : '150px'}
-                                h={isMobile ? '122px' : '200px'}
+                                w={isMobile ? '76px' : '127px'}
+                                h={isMobile ? '103px' : '172px'}
                                 position="relative"
                                 gap="15px"
                                 display="flex"
@@ -232,30 +301,41 @@ export const SelectHandPage = ({
                                     </Text>
                                 ) : null}
                             </Box>
-                        )
-                    )}
+                        );
+                    })}
                 </Stack>
-                <Stack direction={'row'} mx={'auto'} mt={isMobile ? 1 : 4} fontSize={'md'}>
-                    {statistics.map((item, index) => (
+                <Stack
+                    direction={'row'}
+                    mx={'auto'}
+                    mt={isMobile ? 1 : 4}
+                    fontSize={'md'}
+                    justify="space-between"
+                    textAlign={'center'}
+                    w={'60%'}>
+                    {statistics.map(({ name, value }, index) => (
                         <Stack direction={'column'} key={index} textAlign={'center'} m={2}>
                             <Text
                                 color={'#FFF'}
                                 fontFamily={'Chelsea Market, system-ui'}
+                                textTransform={'uppercase'}
                                 fontSize={isMobile ? 'sm' : 'lg'}>
-                                {item.name}
+                                {name}
                             </Text>
-                            <Text
-                                backgroundColor={'#484848'}
+                            <Stack
+                                backgroundColor={'#FFF'}
+                                direction={'row'}
                                 border={'2px solid #D597B2'}
                                 borderRadius={'40px'}
-                                color={'#FFF'}
-                                w={isMobile ? '80px' : '130px'}
+                                color={'#000'}
+                                w={isMobile ? '80px' : '155px'}
                                 fontSize={isMobile ? 'xs' : 'md'}
                                 textAlign={'center'}
+                                textTransform={'uppercase'}
                                 fontFamily={'Chelsea Market, system-ui'}
                                 p={isMobile ? 0 : 2}>
-                                {item.value}
-                            </Text>
+                                <Image src={getImageSrc(name, value)} w={'30px'} h={'25px'} />
+                                <Text ml={2}>{value}</Text>
+                            </Stack>
                         </Stack>
                     ))}
                 </Stack>
@@ -263,24 +343,34 @@ export const SelectHandPage = ({
                     direction={'row'}
                     mx={'auto'}
                     mt={isMobile ? 1 : 4}
-                    fontFamily={'Chelsea Market, system-ui'}
                     fontSize={isMobile ? 'xs' : 'md'}
                     fontWeight={100}
                     gap={10}>
-                    <Stack direction={'row'} marginRight={2}>
-                        <Text color={'#D597B2'} my={'auto'}>
+                    <Stack direction={'row'} marginRight={2} spacing={8}>
+                        <Text color={'#D597B2'} my={'auto'} fontFamily={'Chelsea Market, system-ui'} fontSize={'lg'}>
                             BONUS
                         </Text>
-                        <Text color={'#FFF'} my={'auto'}>
+                        <Text
+                            color={'#FFF'}
+                            my={'auto'}
+                            fontFamily={'Inter, system-ui'}
+                            fontWeight={500}
+                            fontSize={'sm'}>
                             +{mediumBonus} {medium}
                             {<br></br>}+{domainBonus} {domainName}
                         </Text>
                     </Stack>
-                    <Stack direction={'row'}>
-                        <Text color={'#D597B2'} my={'auto'}>
+                    <Stack direction={'row'} spacing={8}>
+                        <Text color={'#D597B2'} my={'auto'} fontFamily={'Chelsea Market, system-ui'} fontSize={'lg'}>
                             TRIBUTE
                         </Text>
-                        <Stack direction={'column'} my={'auto'} ml={2}>
+                        <Stack
+                            direction={'column'}
+                            my={'auto'}
+                            ml={2}
+                            fontFamily={'Inter, system-ui'}
+                            fontWeight={500}
+                            fontSize={'sm'}>
                             {battleCost && !isEmptyObject(battleCost) ? (
                                 battleCost.map((item, index) => (
                                     <Text key={index} color={'#FFF'}>
@@ -290,6 +380,40 @@ export const SelectHandPage = ({
                             ) : (
                                 <Text color={'#FFF'}>Free</Text>
                             )}
+                        </Stack>
+                    </Stack>
+                </Stack>
+                <Stack>
+                    <Stack
+                        mt={3}
+                        direction={'column'}
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        textAlign={'center'}
+                        mx={'auto'}
+                        textTransform={'uppercase'}
+                        fontFamily={'Chelsea Market, system-ui'}>
+                        <Text
+                            mx={'auto'}
+                            backgroundColor={'#FFF'}
+                            border={'2px solid #D597B2'}
+                            borderRadius={'40px'}
+                            color={'#000'}
+                            p={isMobile ? 0 : 1}
+                            w={isMobile ? '80px' : '155px'}>
+                            {defenderInfo.name || formatAddress(defenderInfo.accountRS)}
+                        </Text>
+                        <Stack direction={'row'} mt={1}>
+                            {defenderCards &&
+                                defenderCards.map(card => (
+                                    <Box
+                                        backgroundColor={'#465A5A'}
+                                        w={isMobile ? '76px' : '127px'}
+                                        h={isMobile ? '103px' : '172px'}
+                                        gap={'15px'}
+                                        display={'flex'}>
+                                        <Image src={card.cardImgUrl} w={'100%'} />
+                                    </Box>
+                                ))}
                         </Stack>
                     </Stack>
                 </Stack>
@@ -311,7 +435,7 @@ export const SelectHandPage = ({
                     bottom={isLowHeight && 2}
                     right={isLowHeight && 2}
                     onClick={onOpen}>
-                    Start battle
+                    Start a battle
                 </Button>
             </Box>
             <Modal isOpen={isOpen} onClose={onClose} isCentered>

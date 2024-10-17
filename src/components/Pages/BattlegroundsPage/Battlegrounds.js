@@ -82,9 +82,9 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     /* Buttons menu list */
     const buttons = [
         {
-            name: 'Army',
+            name: 'Leaderboards',
             onclick: () => {
-                setOpenInventory(true);
+                setOpenLeaderboards(true);
                 setIsScrollLocked(true);
             },
         },
@@ -95,22 +95,22 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                 setIsScrollLocked(true);
             },
         },
+
+        { name: 'Earnings', disabled: true },
         {
-            name: 'Leaderboards',
+            name: 'Army',
             onclick: () => {
-                setOpenLeaderboards(true);
+                setOpenInventory(true);
                 setIsScrollLocked(true);
             },
         },
+        { name: 'FAQ', disabled: true },
         {
             name: 'Change name',
             onclick: () => {
                 onOpenName();
             },
         },
-        { name: 'Elixir', disabled: true },
-        { name: 'Earnings', disabled: true },
-        { name: 'FAQ', disabled: true },
     ];
 
     const handleStartBattle = () => {

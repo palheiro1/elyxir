@@ -1,8 +1,21 @@
-import { Box, Center, Flex, IconButton, Img, Select, SimpleGrid, Spacer, Stack, Text, Tooltip } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import CardBadges from '../../../../Cards/CardBadges';
+import {
+    Box,
+    Center,
+    Flex,
+    Heading,
+    IconButton,
+    Img,
+    Select,
+    SimpleGrid,
+    Spacer,
+    Stack,
+    Text,
+    Tooltip,
+} from '@chakra-ui/react';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
+import CardBadges from '../../../../Cards/CardBadges';
 
 const BattleInventory = ({
     setOpenIventory,
@@ -20,6 +33,7 @@ const BattleInventory = ({
         element: '',
         domain: '',
     });
+    const [preSelectedCard, setPreSelectedCard] = useState(null);
 
     const handleRarityChange = event => {
         setFilters(prevFilters => ({
@@ -44,7 +58,10 @@ const BattleInventory = ({
 
     const commonHand = filteredCards
         .filter(card => card.rarity === 'Common' || card.rarity === 'Rare')
-        .filter(card => !handBattleCards.find(item => item.asset === card.asset));
+        .map(card => ({
+            ...card,
+            selected: handBattleCards.some(item => item.asset === card.asset),
+        }));
 
     const normalHand = filteredCards
         .filter(
@@ -52,7 +69,10 @@ const BattleInventory = ({
                 (index === 0 && (card.rarity === 'Epic' || card.rarity === 'Special')) ||
                 (index !== 0 && (card.rarity === 'Common' || card.rarity === 'Rare'))
         )
-        .filter(card => !handBattleCards.find(item => item.asset === card.asset));
+        .map(card => ({
+            ...card,
+            selected: handBattleCards.some(item => item.asset === card.asset),
+        }));
 
     const availableCards = armyRankMaximum[0] === 5 ? commonHand : normalHand;
 
@@ -81,6 +101,16 @@ const BattleInventory = ({
             return filters.domain ? card.channel === domainMapping[filters.domain] : true;
         });
 
+    const handleCardClick = card => {
+        if (preSelectedCard && preSelectedCard.asset === card.asset) {
+            updateCard(card);
+            setOpenIventory(false);
+            setPreSelectedCard(null);
+        } else {
+            setPreSelectedCard(card);
+        }
+    };
+
     return (
         <>
             <IconButton
@@ -90,136 +120,167 @@ const BattleInventory = ({
                 bg={'transparent'}
                 color={'#FFF'}
                 _hover={{ bg: 'transparent' }}
-                onClick={() => setOpenIventory(false)}>
-                Go back
-            </IconButton>
-            <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={'9%'}>
-                <Text my={'auto'} fontSize={'lg'}>
-                    Cards' filters:{' '}
-                </Text>
-                <Select placeholder="Rarity" w={'20%'} onChange={handleRarityChange}>
-                    {armyRankMaximum[0] === 5 && (
-                        <>
-                            <option value="1">Common</option>
-                            <option value="2">Rare</option>
-                        </>
-                    )}
-                    {armyRankMaximum[0] !== 5 && (
-                        <>
-                            {index !== 0 && (
-                                <>
-                                    <option value="1">Common</option>
-                                    <option value="2">Rare</option>
-                                </>
-                            )}
-                            {index === 0 && (
-                                <>
-                                    <option value="3">Epic</option>
-                                    <option value="4">Special</option>
-                                </>
-                            )}
-                        </>
-                    )}
-                </Select>
-
-                <Select placeholder="Element" w={'20%'} onChange={handleElementChange}>
-                    <option value="1">Terrestrial</option>
-                    <option value="2">Aerial</option>
-                    <option value="3">Aquatic</option>
-                </Select>
-                <Select placeholder="Continent" w={'20%'} onChange={handleDomainChange}>
-                    <option value="1">Asia</option>
-                    <option value="2">Oceania</option>
-                    <option value="3">America</option>
-                    <option value="4">Africa</option>
-                    <option value="5">Europe</option>
-                </Select>
-            </Stack>
-            <Stack direction={'row'} padding={5} pt={1} height={'90%'}>
-                <Box
-                    mb={2}
-                    borderRadius={'20px'}
-                    p={4}
-                    w={'90%'}
-                    mx={'auto'}
-                    overflowY={'scroll'}
-                    className="custom-scrollbar">
-                    <SimpleGrid
-                        columns={isMobile ? 2 : 4}
-                        spacing={5}
-                        overflowY={'auto'}
-                        className="custom-scrollbar"
-                        p={5}
-                        overflow={'scroll'}
-                        h={'750px'}>
-                        {filteredAvailableCards.length > 0 ? (
-                            filteredAvailableCards.map((card, i) => {
-                                const { cardImgUrl, name, rarity, channel, omnoQuantity } = card;
-                                return (
-                                    <Box
-                                        key={i}
-                                        w={'225px'}
-                                        h={'350px'}
-                                        cursor={'pointer'}
-                                        bg={'white'}
-                                        onClick={() => {
-                                            setOpenIventory(false);
-                                            updateCard(card);
-                                        }}
-                                        borderRadius={'10px'}>
-                                        <Center>
-                                            <Img src={cardImgUrl} w={'90%'} h={'75%'} />
-                                        </Center>
-                                        <Stack direction={{ base: 'column', lg: 'row' }} spacing={0} mx={2}>
-                                            <Stack
-                                                direction="column"
-                                                spacing={0}
-                                                align={{ base: 'center', lg: 'start' }}>
-                                                <Text
-                                                    fontSize={{
-                                                        base: 'sm',
-                                                        md: 'md',
-                                                        '2xl': 'xl',
-                                                    }}
-                                                    noOfLines={1}
-                                                    fontWeight="bold"
-                                                    color={'#000'}>
-                                                    {name}
-                                                </Text>
-                                                <CardBadges rarity={rarity} continent={channel} size="sm" />
-                                            </Stack>
-                                            <Spacer display={{ base: 'none', lg: 'block' }} />
-                                            <Center minHeight={{ base: 'auto', lg: '100%' }}>
-                                                <Tooltip display={'flex'} placement="bottom">
-                                                    <Flex w={{ base: 'auto', lg: '100%' }}>
-                                                        <Text
-                                                            textAlign="end"
-                                                            minH={{ base: '100%', lg: 'auto' }}
-                                                            mb={isMobile && 3}
-                                                            color={'#000'}>
-                                                            <small>Quantity:</small> {omnoQuantity}
-                                                        </Text>
-                                                    </Flex>
-                                                </Tooltip>
-                                            </Center>
-                                        </Stack>
-                                    </Box>
-                                );
-                            })
-                        ) : (
-                            <Text
-                                position={'absolute'}
-                                fontFamily={'Chelsea Market, system-ui'}
-                                color={'#FFF'}
-                                fontSize={'xl'}
-                                top={'50%'}
-                                left={'50%'}
-                                transform={'translate(-50%, -50%)'}>
-                                No cards left
-                            </Text>
+                onClick={() => setOpenIventory(false)}
+            />
+            <Stack h={'90%'}>
+                <Heading mx={'auto'} fontFamily={'Chelsea Market, system-ui'} fontWeight={400}>
+                    BATTELEGROUND CARDS
+                </Heading>
+                <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={'9%'}>
+                    <Text my={'auto'} fontSize={'lg'}>
+                        Cards' filters:
+                    </Text>
+                    <Select placeholder="Rarity" w={'10%'} onChange={handleRarityChange}>
+                        {armyRankMaximum[0] === 5 && (
+                            <>
+                                <option value="1">Common</option>
+                                <option value="2">Rare</option>
+                            </>
                         )}
-                    </SimpleGrid>
-                </Box>
+                        {armyRankMaximum[0] !== 5 && (
+                            <>
+                                {index !== 0 && (
+                                    <>
+                                        <option value="1">Common</option>
+                                        <option value="2">Rare</option>
+                                    </>
+                                )}
+                                {index === 0 && (
+                                    <>
+                                        <option value="3">Epic</option>
+                                        <option value="4">Special</option>
+                                    </>
+                                )}
+                            </>
+                        )}
+                    </Select>
+
+                    <Select placeholder="Element" w={'10%'} onChange={handleElementChange}>
+                        <option value="1">Terrestrial</option>
+                        <option value="2">Aerial</option>
+                        <option value="3">Aquatic</option>
+                    </Select>
+                    <Select placeholder="Continent" w={'10%'} onChange={handleDomainChange}>
+                        <option value="1">Asia</option>
+                        <option value="2">Oceania</option>
+                        <option value="3">America</option>
+                        <option value="4">Africa</option>
+                        <option value="5">Europe</option>
+                    </Select>
+                </Stack>
+                <Stack direction={'row'} padding={5} pt={0} height={'90%'}>
+                    <Box
+                        mb={2}
+                        borderRadius={'20px'}
+                        p={4}
+                        pt={0}
+                        w={'90%'}
+                        mx={'auto'}
+                        h={'100%'}
+                        overflowY={'auto'}
+                        className="custom-scrollbar">
+                        <SimpleGrid
+                            columns={isMobile ? 2 : 5}
+                            spacing={3}
+                            p={3}
+                            h={'100%'}
+                            overflowY={'auto'}
+                            className="custom-scrollbar">
+                            {filteredAvailableCards.length > 0 ? (
+                                filteredAvailableCards.map((card, i) => {
+                                    const { cardImgUrl, name, rarity, channel, selected } = card;
+                                    const isPreSelected = preSelectedCard?.asset === card.asset;
+
+                                    return (
+                                        <Box
+                                            key={i}
+                                            position="relative"
+                                            w={'214px'}
+                                            h={'333px'}
+                                            cursor={'pointer'}
+                                            bg={'white'}
+                                            onClick={() => !selected && handleCardClick(card)}
+                                            borderRadius={'10px'}>
+                                            <Center>
+                                                <Img src={cardImgUrl} w={'90%'} h={'75%'} />
+                                            </Center>
+                                            <Stack direction={{ base: 'column', lg: 'row' }} spacing={0} mx={2}>
+                                                <Stack
+                                                    direction="column"
+                                                    spacing={0}
+                                                    align={{ base: 'center', lg: 'start' }}>
+                                                    <Text
+                                                        fontSize={{
+                                                            base: 'sm',
+                                                            md: 'md',
+                                                            '2xl': 'xl',
+                                                        }}
+                                                        noOfLines={1}
+                                                        fontWeight="bold"
+                                                        color={'#000'}>
+                                                        {name}
+                                                    </Text>
+                                                    <CardBadges rarity={rarity} continent={channel} size="sm" />
+                                                </Stack>
+                                                <Spacer display={{ base: 'none', lg: 'block' }} />
+                                                <Center minHeight={{ base: 'auto', lg: '100%' }}>
+                                                    <Tooltip display={'flex'} placement="bottom">
+                                                        <Flex w={{ base: 'auto', lg: '100%' }}>
+                                                            <Text
+                                                                textAlign="end"
+                                                                minH={{ base: '100%', lg: 'auto' }}
+                                                                mb={isMobile && 3}
+                                                                color={'#000'}></Text>
+                                                        </Flex>
+                                                    </Tooltip>
+                                                </Center>
+                                            </Stack>
+                                            {selected && (
+                                                <Box
+                                                    position="absolute"
+                                                    top="0"
+                                                    left="0"
+                                                    width="100%"
+                                                    height="100%"
+                                                    display="flex"
+                                                    alignItems="center"
+                                                    justifyContent="center"
+                                                    bg="rgba(0, 0, 0, 0.3)"
+                                                />
+                                            )}
+                                            {isPreSelected && (
+                                                <Box
+                                                    position="absolute"
+                                                    top="0"
+                                                    left="0"
+                                                    width="100%"
+                                                    height="100%"
+                                                    display="flex"
+                                                    alignItems="center"
+                                                    justifyContent="center"
+                                                    bg="rgba(1, 151, 135, 0.5)"
+                                                    fontFamily={'Chelsea Market, system-ui'}>
+                                                    CHOOSE
+                                                </Box>
+                                            )}
+                                        </Box>
+                                    );
+                                })
+                            ) : (
+                                <Text
+                                    position={'absolute'}
+                                    fontFamily={'Chelsea Market, system-ui'}
+                                    color={'#FFF'}
+                                    fontSize={'xl'}
+                                    top={'50%'}
+                                    left={'50%'}
+                                    transform={'translate(-50%, -50%)'}>
+                                    No cards left
+                                </Text>
+                            )}
+                        </SimpleGrid>
+                    </Box>
+                </Stack>
             </Stack>
         </>
     );

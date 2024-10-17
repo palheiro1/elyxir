@@ -14,9 +14,11 @@ const OmnoPage = ({ filteredCards, infoAccount, cards, isMobile, gridColumns }) 
                 textAlign={'center'}
                 maxH={'90%'}>
                 <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
-                    INVENTORY
+                    ARMY
                 </Heading>
-                <Text>In order to play you will have to import your cards to battlegrounds</Text>
+                <Text textTransform={'uppercase'}>
+                    In order to play you will have to import your cards to battlegrounds
+                </Text>
             </Stack>
             <Stack direction={'row'} pt={2} padding={5} height={isMobile ? '85%' : '90%'}>
                 <Box

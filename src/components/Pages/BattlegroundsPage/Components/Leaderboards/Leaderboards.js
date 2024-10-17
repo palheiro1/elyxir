@@ -11,11 +11,15 @@ import { getAccumulatedBounty } from '../../../../../services/Battlegrounds/Batt
 import { getAsset } from '../../../../../services/Ardor/ardorInterface';
 import GeneralLeaderboard from './GeneralLeaderboard';
 import CombativityResetTimer from './CombativityResetTimer';
-import panteon from '../../assets/icons/panteon.svg';
+import panteon from '../../assets/icons/panteon_banner.svg';
+import landsBanner from '../../assets/icons/lands_banner.svg';
+import waterBanner from '../../assets/icons/water_banner.svg';
+import airBanner from '../../assets/icons/air_banner.svg';
+import combativityBanner from '../../assets/icons/combativeness_banner.svg';
 
 const Leaderboards = ({ handleClose, isMobile }) => {
     const dispatch = useDispatch();
-    const { leaderboards, data, status } = useSelector(state => state.leaderboards);
+    const { leaderboards, data } = useSelector(state => state.leaderboards);
 
     const [accumulatedBounty, setAccumulatedBounty] = useState(null);
     const [option, setOption] = useState(1);
@@ -117,99 +121,105 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                     zIndex={999}
                     onClick={closeLeaderboards}
                 />
-                {status === 'loading' ? (
-                    <Box
-                        h={'100%'}
-                        position={'absolute'}
-                        color={'#FFF'}
-                        alignContent={'center'}
-                        top={'50%'}
-                        left={'50%'}
-                        w={'100%'}
-                        textAlign={'center'}
-                        transform={'translate(-50%, -50%)'}>
-                        <Spinner color="#FFF" w={20} h={20} />
-                    </Box>
-                ) : (
-                    <>
-                        <Stack direction={'row'} color={'#FFF'} mt={10} mx={'auto'} w={'90%'} textAlign={'center'}>
-                            <Select
-                                value={option}
-                                onChange={e => changeData(Number(e.target.value))}
-                                color={'#000'}
-                                bgColor={'#FFF'}
-                                my={'auto'}
-                                zIndex={999}
-                                fontFamily={'Chelsea Market, System'}
-                                _hover={{ borderColor: '#555' }}
-                                maxW={'250px'}>
-                                <option value={1}>CHAMPIONS PANTHEON</option>
-                                <option value={2}>LORD OF LANDS</option>
-                                <option value={3}>LORD OF SKY</option>
-                                <option value={4}>LORD OF OCEANS</option>
-                                <option value={5}>LORD OF COMBATIVENESS</option>
-                            </Select>
-                            <Heading fontFamily={'Chelsea Market, System'} mx={'auto'} fontWeight={100} my={'auto'}>
-                                LEADERBOARDS
-                            </Heading>
-                            <Image src={panteon} w={'190px'} mr={5} />
+                <>
+                    <Stack direction={'row'} color={'#FFF'} mt={10} mx={'auto'} w={'90%'} textAlign={'center'}>
+                        <Select
+                            value={option}
+                            onChange={e => changeData(Number(e.target.value))}
+                            color={'#000'}
+                            bgColor={'#FFF'}
+                            my={'auto'}
+                            zIndex={999}
+                            fontFamily={'Chelsea Market, System'}
+                            _hover={{ borderColor: '#555' }}
+                            maxW={'250px'}>
+                            <option value={1}>CHAMPIONS PANTHEON</option>
+                            <option value={2}>LORD OF LANDS</option>
+                            <option value={3}>LORD OF SKY</option>
+                            <option value={4}>LORD OF OCEANS</option>
+                            <option value={5}>LORD OF COMBATIVENESS</option>
+                        </Select>
+                        <Heading fontFamily={'Chelsea Market, System'} mx={'auto'} fontWeight={100} my={'auto'}>
+                            LEADERBOARDS
+                        </Heading>
+                        <Image
+                            src={(() => {
+                                switch (option) {
+                                    case 1:
+                                        return panteon;
+                                    case 2:
+                                        return landsBanner;
+                                    case 3:
+                                        return airBanner;
+                                    case 4:
+                                        return waterBanner;
+                                    case 5:
+                                        return combativityBanner;
+                                    default:
+                                        return null;
+                                }
+                            })()}
+                            w={'190px'}
+                            maxH={'80px'}
+                            mr={5}
+                        />
+                    </Stack>
+                    <Stack direction={'column'} color={'#FFF'} mx={'auto'} textAlign={'center'} h={'90%'}>
+                        <Stack
+                            direction={'column'}
+                            my={'auto'}
+                            mt={2}
+                            fontFamily={'Chelsea Market, System'}
+                            mb={0}
+                            h={'85%'}>
+                            {option !== 1 ? (
+                                <Leaderboard data={data} isMobile={isMobile} />
+                            ) : (
+                                <GeneralLeaderboard isMobile={isMobile} />
+                            )}
                         </Stack>
-                        <Stack direction={'column'} color={'#FFF'} mx={'auto'} textAlign={'center'} h={'90%'}>
-                            <Stack
-                                direction={'column'}
-                                my={'auto'}
-                                mt={2}
-                                fontFamily={'Chelsea Market, System'}
-                                mb={0}
-                                h={'85%'}>
-                                {option !== 1 ? (
-                                    <Leaderboard data={data} isMobile={isMobile} />
-                                ) : (
-                                    <GeneralLeaderboard isMobile={isMobile} />
-                                )}
-                            </Stack>
-                            <Stack dir="row" mx={'auto'}>
-                                {option === 5 ? (
-                                    <CombativityResetTimer />
-                                ) : accumulatedBounty ? (
-                                    <Stack
-                                        direction="row"
-                                        align="center"
-                                        fontFamily={'Inter, system'}
-                                        fontSize={'md'}
-                                        fontWeight={700}>
-                                        <Text>ACCUMULATED BOUNTY: </Text>
-                                        {accumulatedBounty && !isEmptyObject(accumulatedBounty) ? (
-                                            accumulatedBounty.map(({ price, name }, index) => (
-                                                <Stack key={index} direction="row" align="center" mx={4}>
-                                                    <Text my={'auto'}>
-                                                        {name === 'wETH'
-                                                            ? (price / NQTDIVIDER).toFixed(4)
-                                                            : (price / NQTDIVIDER).toFixed(0)}
-                                                        {` ${name}`}
-                                                    </Text>
-                                                    <Image
-                                                        my={'auto'}
-                                                        src={`images/currency/${name === 'wETH' ? 'weth' : 'gem'}.png`}
-                                                        alt={`${name === 'wETH' ? 'WETH' : 'GEM'} Icon`}
-                                                        w="50px"
-                                                        h="50px"
-                                                    />
-                                                </Stack>
-                                            ))
-                                        ) : (
-                                            <Text color={'#FFF'}>THERE ARE NO ACCUMULATED BOUNTY YET.</Text>
-                                        )}
-                                    </Stack>
-                                ) : (
-                                    <Box mx={'auto'}>
-                                        <Spinner />
-                                    </Box>
-                                )}
-                            </Stack>
+                        <Stack dir="row" mx={'auto'}>
+                            {option === 5 ? (
+                                <CombativityResetTimer />
+                            ) : accumulatedBounty ? (
+                                <Stack
+                                    direction="row"
+                                    align="center"
+                                    fontFamily={'Inter, system'}
+                                    fontSize={'md'}
+                                    fontWeight={700}>
+                                    <Text>ACCUMULATED BOUNTY: </Text>
+                                    {accumulatedBounty && !isEmptyObject(accumulatedBounty) ? (
+                                        accumulatedBounty.map(({ price, name }, index) => (
+                                            <Stack key={index} direction="row" align="center" mx={4}>
+                                                <Text my={'auto'}>
+                                                    {name === 'wETH'
+                                                        ? (price / NQTDIVIDER).toFixed(4)
+                                                        : (price / NQTDIVIDER).toFixed(0)}
+                                                    {` ${name}`}
+                                                </Text>
+                                                <Image
+                                                    my={'auto'}
+                                                    src={`images/currency/${name === 'wETH' ? 'weth' : 'gem'}.png`}
+                                                    alt={`${name === 'wETH' ? 'WETH' : 'GEM'} Icon`}
+                                                    w="50px"
+                                                    h="50px"
+                                                    mt={-2}
+                                                />
+                                            </Stack>
+                                        ))
+                                    ) : (
+                                        <Text color={'#FFF'}>THERE ARE NO ACCUMULATED BOUNTY YET.</Text>
+                                    )}
+                                </Stack>
+                            ) : (
+                                <Box mx={'auto'}>
+                                    <Spinner />
+                                </Box>
+                            )}
                         </Stack>
-                    </>
-                )}
+                    </Stack>
+                </>
             </Box>
         </>
     );

@@ -56,17 +56,17 @@ export const getLastUserBattle = async (accountId, currentTime) => {
                 return new Date(current.timestamp) > new Date(latest.timestamp) ? current : latest;
             }, battles[0]);
 
-            // Timestamp del último combate en formato UTC
-            const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
-            const battleStamp = new Date(eb.getTime() + 20000 + latestBattle.timestamp * 1000);
+            // // Timestamp del último combate en formato UTC
+            // const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
+            // const battleStamp = new Date(eb.getTime() + 20000 + latestBattle.timestamp * 1000);
 
-            // Fecha y hora actual en formato UTC
-            const currentTimestamp = new Date(currentTime);
+            // // Fecha y hora actual en formato UTC
+            // const currentTimestamp = new Date(currentTime);
 
-            //Comparar las fechas
-            if (battleStamp < currentTimestamp) {
-                return null;
-            }
+            // //Comparar las fechas
+            // if (battleStamp < currentTimestamp) {
+            //     return null;
+            // }
 
             return latestBattle;
         })
