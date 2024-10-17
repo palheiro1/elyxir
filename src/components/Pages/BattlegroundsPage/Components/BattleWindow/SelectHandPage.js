@@ -103,36 +103,36 @@ export const SelectHandPage = ({
     }, [arenaInfo]);
 
     const handleStartBattle = async () => {
-        // if (!isValidPin || !passphrase) return errorToast('The pin is not correct', toast);
-        // let allEmpty = true;
+        if (!isValidPin || !passphrase) return errorToast('The pin is not correct', toast);
+        let allEmpty = true;
 
-        // for (let i = 0; i < handBattleCards.length; i++) {
-        //     if (handBattleCards[i] !== '') {
-        //         allEmpty = false;
-        //         break;
-        //     }
-        // }
+        for (let i = 0; i < handBattleCards.length; i++) {
+            if (handBattleCards[i] !== '') {
+                allEmpty = false;
+                break;
+            }
+        }
 
-        // if (allEmpty) {
-        //     return errorToast('Select at least one card to start a battle', toast);
-        // }
-        // if (!isEmptyObject(battleCost)) {
-        //     const gemBalance = parseInt(omnoGEMsBalance);
-        //     const wethBalance = parseInt(omnoWethBalance);
-        //     const battleCostGems = parseInt(battleCost[0].price);
-        //     const battleCostWeth = battleCost.length > 1 ? parseInt(battleCost[1].price) : 0;
+        if (allEmpty) {
+            return errorToast('Select at least one card to start a battle', toast);
+        }
+        if (!isEmptyObject(battleCost)) {
+            const gemBalance = parseInt(omnoGEMsBalance);
+            const wethBalance = parseInt(omnoWethBalance);
+            const battleCostGems = parseInt(battleCost[0].price);
+            const battleCostWeth = battleCost.length > 1 ? parseInt(battleCost[1].price) : 0;
 
-        //     if (battleCostGems > gemBalance) {
-        //         return errorToast('Insuficient GEM balance', toast);
-        //     }
+            if (battleCostGems > gemBalance) {
+                return errorToast('Insuficient GEM balance', toast);
+            }
 
-        //     if (battleCost.length > 1 && battleCostWeth > wethBalance) {
-        //         return errorToast('Insuficient wETH balance', toast);
-        //     }
-        // }
+            if (battleCost.length > 1 && battleCostWeth > wethBalance) {
+                return errorToast('Insuficient wETH balance', toast);
+            }
+        }
 
         setDisableButton(true);
-        // await sendCardsToBattle({ cards: handBattleCards, passPhrase: passphrase, arenaId: arenaInfo.id });
+        await sendCardsToBattle({ cards: handBattleCards, passPhrase: passphrase, arenaId: arenaInfo.id });
         onClose();
         setCurrentTime(new Date().toISOString());
         setShowResults(true);
