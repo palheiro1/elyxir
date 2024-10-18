@@ -1,4 +1,4 @@
-import { Box, Img, Stack, Text, Tooltip, Spinner, Image, Square, Button, IconButton } from '@chakra-ui/react';
+import { Box, Img, Stack, Text, Tooltip, Spinner, Image, Square, IconButton } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { addressToAccountId, getAccount } from '../../../../../services/Ardor/ardorInterface';
 import {
@@ -246,8 +246,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
 
     const elementRef = useRef(null);
 
-    const [arrowDisable, setArrowDisable] = useState(true);
-
     const handleHorizantalScroll = (element, speed, distance, step) => {
         let scrollAmount = 0;
         const slideTimer = setInterval(() => {
@@ -255,11 +253,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             scrollAmount += Math.abs(step);
             if (scrollAmount >= distance) {
                 clearInterval(slideTimer);
-            }
-            if (element.scrollLeft === 0) {
-                setArrowDisable(true);
-            } else {
-                setArrowDisable(false);
             }
         }, speed);
     };
@@ -324,7 +317,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                 spacing={4}>
                 <IconButton
                     position="absolute"
-                    left="0"
+                    left="2"
                     icon={<ChevronLeftIcon />}
                     top="50%"
                     color={'black'}
@@ -335,6 +328,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                     }}
                     bg="rgba(255, 255, 255, 0.8)"
                     _hover={{ bg: 'rgba(255, 255, 255, 1)' }}
+                    borderRadius={'full'}
                 />
 
                 {battleResults &&
@@ -383,7 +377,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                             ) : null}
                                             <Text>TOTAL LEVEL: {attackerTotalPower}</Text>
                                             <Text>DICE: {attackerRoll}</Text>
-                                            <Text>Round points: {attackerValue}</Text>
+                                            <Text fontWeight={'bold'}>ROUND POINTS: {attackerValue}</Text>
                                         </Stack>
                                         <Box
                                             width="8"
@@ -466,7 +460,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                             ) : null}
                                             <Text>TOTAL LEVEL: {defenderTotalPower}</Text>
                                             <Text>DICE: {defenderRoll}</Text>
-                                            <Text>Round points: {defenderValue}</Text>
+                                            <Text fontWeight={'bold'}>ROUND POINTS: {defenderValue}</Text>
                                         </Stack>
                                         <Box
                                             width="8"
@@ -538,13 +532,14 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                     })}
                 <IconButton
                     position="absolute"
-                    right="0"
+                    right="2"
                     top="50%"
                     icon={<ChevronRightIcon />}
                     bgColor={'transparent'}
                     color={'black'}
                     transform="translateY(-50%)"
                     zIndex="1"
+                    borderRadius={'full'}
                     onClick={() => {
                         handleHorizantalScroll(elementRef.current, 10, 200, 5);
                     }}

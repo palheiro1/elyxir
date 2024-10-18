@@ -48,7 +48,7 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
                 pos={'fixed'}
                 bgColor={'#1F2323'}
                 zIndex={99}
-                w={isMobile ? '80%' : '70%'}
+                w={isMobile ? '80%' : viewDetails ? '60%' : '70%'}
                 h={'90%'}
                 borderRadius={'25px'}
                 overflowY={'scroll'}
@@ -58,7 +58,7 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
                 transform={'translate(-50%, -50%)'}>
                 <IconButton
                     background={'transparent'}
-                    color={'#FFF'}
+                    color={viewDetails ? '#000' : '#FFF'}
                     icon={<CloseIcon />}
                     _hover={{ background: 'transparent' }}
                     position="absolute"
