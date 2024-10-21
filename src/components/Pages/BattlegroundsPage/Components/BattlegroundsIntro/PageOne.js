@@ -1,8 +1,10 @@
-import { Box, Button, Heading, Img, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, Image, Img, Stack, Text } from '@chakra-ui/react';
 import logo from '../../assets/image.png';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import locations from '../../assets/LocationsEnum';
+import welcome1 from '../../assets/wellcome1.svg';
+import welcome2 from '../../assets/wellcome2.svg';
 
 export const PageOne = ({ handleNext }) => {
     return (
@@ -14,15 +16,18 @@ export const PageOne = ({ handleNext }) => {
                 justifyContent: 'center',
                 textAlign: 'center',
             }}>
-            <Heading
+            <Image src={welcome1} position={'absolute'} top={0} left={0} h={'70%'} />
+            <Image src={welcome2} position={'absolute'} bottom={0} right={0} h={'80%'} />
+            <Stack
                 fontFamily={'Chelsea Market, system-ui'}
                 color={'#FFF'}
                 display={'flex'}
-                mt={7}
+                mt={8}
+                direction={'column'}
                 fontWeight={'100'}
-                size={'md'}>
-                <Text mt={8}>Wellcome to</Text> <Img src={logo} w={'114px'} h={'54px'} ml={4} />
-            </Heading>
+                fontSize={'large'}>
+                <Text mt={8}>Wellcome to</Text> <Img src={logo} w={'85%'} ml={5} />
+            </Stack>
             <Box>
                 <Heading
                     color={'#FFF'}
@@ -55,7 +60,7 @@ export const PageOne = ({ handleNext }) => {
                 <Button
                     colorScheme="transparent"
                     mx={'auto'}
-                    mt={7}
+                    mt={10}
                     onClick={handleNext}
                     fontFamily={'Chelsea Market, system-ui'}
                     color={'#EBB2B9'}>

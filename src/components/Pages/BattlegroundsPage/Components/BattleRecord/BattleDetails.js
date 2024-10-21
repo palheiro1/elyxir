@@ -4,7 +4,13 @@ import { getBattleById, getSoldiers } from '../../../../../services/Battleground
 import '@fontsource/chelsea-market';
 import locations from '../../assets/LocationsEnum';
 import { ChevronLeftIcon, ChevronRightIcon, TriangleUpIcon } from '@chakra-ui/icons';
-import { formatAddress, getBattleRoundInfo } from '../../Utils/BattlegroundsUtils';
+import {
+    formatAddress,
+    getBattleRoundInfo,
+    getContinentIcon,
+    getLevelIconInt,
+    getMediumIcon,
+} from '../../Utils/BattlegroundsUtils';
 import { errorToast } from '../../../../../utils/alerts';
 
 const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId, infoAccount }) => {
@@ -22,6 +28,8 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
     const [attackerHero, setAttackerHero] = useState(null);
     const [defenderHero, setDefenderHero] = useState(null);
     const [soldiers, setSoldiers] = useState(null);
+    const [arrowDisable, setArrowDisable] = useState(true);
+    const [arrowRigthDisable, setArrowRigthDisable] = useState(false);
 
     const getLastBattle = useCallback(async () => {
         if (arenaInfo) {
@@ -151,62 +159,28 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
         handleGoBack();
     }
 
-    const getLevelIcon = value => {
-        let path = '/images/cards/rarity/';
-        switch (value) {
-            case 1:
-                return `${path}common.svg`;
-            case 2:
-                return `${path}rare.svg`;
-            case 3:
-                return `${path}epic.svg`;
-            case 4:
-                return `${path}special.svg`;
-            default:
-                return null;
-        }
-    };
-
-    const getMediumIcon = value => {
-        let path = '/images/cards/type/';
-        switch (value) {
-            case 'Aquatic':
-                return `${path}water.svg`;
-            case 'Aerial':
-                return `${path}air.svg`;
-            case 'Terrestrial':
-                return `${path}earth.svg`;
-            default:
-                return null;
-        }
-    };
-
-    const getContinentIcon = value => {
-        let path = '/images/cards/continent/old/';
-        switch (value) {
-            case 'Europe':
-                return `${path}europa.svg`;
-            case 'Asia':
-                return `${path}asia.svg`;
-            case 'Africa':
-                return `${path}africa.svg`;
-            case 'America':
-                return `${path}america.svg`;
-            case 'Oceania':
-                return `${path}oceania.svg`;
-            default:
-                return null;
-        }
-    };
-
     const elementRef = useRef(null);
     const handleHorizantalScroll = (element, speed, distance, step) => {
+        const maxScrollLeft = element.scrollWidth - element.clientWidth;
         let scrollAmount = 0;
         const slideTimer = setInterval(() => {
             element.scrollLeft += step;
             scrollAmount += Math.abs(step);
+
             if (scrollAmount >= distance) {
                 clearInterval(slideTimer);
+            }
+
+            if (element.scrollLeft === 0) {
+                setArrowDisable(true);
+            } else {
+                setArrowDisable(false);
+            }
+
+            if (element.scrollLeft >= maxScrollLeft) {
+                setArrowRigthDisable(true);
+            } else {
+                setArrowRigthDisable(false);
             }
         }, speed);
     };
@@ -258,7 +232,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                     </Text>
                     <Image src={getContinentIcon(domainName)} w={'30px'} />
                     <Image src={getMediumIcon(medium)} w={'30px'} />
-                    <Image src={getLevelIcon(arenaInfo.level)} w={'30px'} />
+                    <Image src={getLevelIconInt(arenaInfo.level)} w={'30px'} />
                 </Stack>
             </Stack>
             <Stack direction={'row'} mx={'auto'} w={'45%'} justifyContent={'space-between'} mt={5}>
@@ -287,6 +261,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                     icon={<ChevronLeftIcon />}
                     top="50%"
                     color={'black'}
+                    isDisabled={arrowDisable}
                     transform="translateY(-50%)"
                     zIndex="1"
                     onClick={() => {
@@ -343,12 +318,11 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                             ) : null}
                                             <Text>TOTAL LEVEL: {attackerTotalPower}</Text>
                                             <Text>DICE: {attackerRoll}</Text>
-                                            <Text fontWeight={'bold'}>ROUND POINTS: {attackerValue}</Text>
                                         </Stack>
                                         <Box
                                             width="8"
                                             height="8"
-                                            bg={attackerRoll <= defenderRoll ? 'transparent' : '#FFF'}
+                                            bg={attackerValue <= defenderValue ? 'transparent' : '#FFF'}
                                             display="flex"
                                             alignItems="center"
                                             justifyContent="center"
@@ -364,11 +338,11 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                             }}>
                                             <Text
                                                 fontFamily={'Chelsea Market'}
-                                                color={attackerRoll <= defenderRoll ? '#D597B2' : '#000'}
+                                                color={attackerValue <= defenderValue ? '#D597B2' : '#000'}
                                                 fontSize="xl"
                                                 transform="rotate(-45deg)"
                                                 position="absolute">
-                                                {attackerRoll}
+                                                {attackerValue}
                                             </Text>
                                         </Box>
                                         <Box
@@ -379,10 +353,6 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                 border:
                                                     attackerHero.asset === attackerCard.asset
                                                         ? '3px solid #D08FB0'
-                                                        : 'none',
-                                                borderImage:
-                                                    attackerHero.asset === attackerCard.asset
-                                                        ? `linear-gradient(90deg, rgba(163,161,81,1) 0%, rgba(219,227,82,1) 35%, rgba(244,135,148,1) 100%) 1`
                                                         : 'none',
                                             }}>
                                             <Img src={attackerCard.cardImgUrl} width="100%" />
@@ -421,18 +391,18 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                             <Text>CARD LEVEL: {defenderSoldier.power}</Text>
                                             <Text>CONTINENT BONUS: {defenderBonus[index]?.domainBonus ?? 0}</Text>
                                             <Text>ELEMENT BONUS: {defenderBonus[index]?.mediumBonus ?? 0}</Text>
+                                            <Text>DEFENDER BONUS: 2</Text>
                                             {defenderHero.asset !== defenderCard.asset ? (
                                                 <Text>ALPHA BONUS: {defenderBonus[index]?.heroBonus ?? 0}</Text>
                                             ) : null}
                                             <Text>TOTAL LEVEL: {defenderTotalPower}</Text>
                                             <Text>DICE: {defenderRoll}</Text>
-                                            <Text fontWeight={'bold'}>ROUND POINTS: {defenderValue}</Text>
                                         </Stack>
                                         <Box
                                             width="8"
                                             height="8"
                                             m={'auto'}
-                                            bg={attackerRoll >= defenderRoll ? 'transparent' : '#FFF'}
+                                            bg={attackerValue >= defenderValue ? 'transparent' : '#FFF'}
                                             display="flex"
                                             alignItems="center"
                                             justifyContent="center"
@@ -447,11 +417,11 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                 paddingBottom: '100%',
                                             }}>
                                             <Text
-                                                color={attackerRoll >= defenderRoll ? '#D597B2' : '#000'}
+                                                color={attackerValue >= defenderValue ? '#D597B2' : '#000'}
                                                 fontSize="xl"
                                                 transform="rotate(-45deg)"
                                                 position="absolute">
-                                                {defenderRoll}
+                                                {defenderValue}
                                             </Text>
                                         </Box>
                                         <Box
@@ -462,10 +432,6 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                 border:
                                                     defenderHero.asset === defenderCard.asset
                                                         ? '3px solid #D08FB0'
-                                                        : 'none',
-                                                borderImage:
-                                                    defenderHero.asset === defenderCard.asset
-                                                        ? `linear-gradient(90deg, rgba(163,161,81,1) 0%, rgba(219,227,82,1) 35%, rgba(244,135,148,1) 100%) 1`
                                                         : 'none',
                                             }}>
                                             <Img src={defenderCard.cardImgUrl} width="100%" />
@@ -505,6 +471,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                     color={'black'}
                     transform="translateY(-50%)"
                     zIndex="1"
+                    isDisabled={arrowRigthDisable}
                     borderRadius={'full'}
                     onClick={() => {
                         handleHorizantalScroll(elementRef.current, 10, 200, 5);

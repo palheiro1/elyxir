@@ -147,7 +147,6 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                             />
                         </Box>
                     </GridItem>
-
                     {cards && cards.length > 0 && (
                         <GridItem textAlign="center">
                             <Tooltip
@@ -196,7 +195,15 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
 
     return battleDetails.length > 0 ? (
         <Box w="85%" mx="auto">
-            <Grid templateColumns="repeat(6, 1fr)" border="2px solid #DB78AA" p={3} py={1} borderRadius="20px">
+            <Grid
+                templateColumns="repeat(6, 1fr)"
+                border="2px solid #DB78AA"
+                p={3}
+                py={1}
+                borderRadius="20px"
+                position="relative"
+                bg="inherit"
+                zIndex={1}>
                 <GridItem fontWeight="700" fontSize="md" textAlign="center" color="#FFF">
                     DATE
                 </GridItem>
@@ -218,7 +225,9 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                     </GridItem>
                 )}
             </Grid>
-            {gridRows}
+            <Box maxHeight="700px" overflowY="auto" borderBottomRadius={'20px'}>
+                {gridRows}
+            </Box>
         </Box>
     ) : (
         <Box

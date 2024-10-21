@@ -187,27 +187,31 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                     align="center"
                                     fontFamily={'Inter, system'}
                                     fontSize={'md'}
+                                    w={'100%'}
+                                    mt={-5}
                                     fontWeight={700}>
-                                    <Text>ACCUMULATED BOUNTY: </Text>
                                     {accumulatedBounty && !isEmptyObject(accumulatedBounty) ? (
-                                        accumulatedBounty.map(({ price, name }, index) => (
-                                            <Stack key={index} direction="row" align="center" mx={4}>
-                                                <Text my={'auto'}>
-                                                    {name === 'wETH'
-                                                        ? (price / NQTDIVIDER).toFixed(4)
-                                                        : (price / NQTDIVIDER).toFixed(0)}
-                                                    {` ${name}`}
-                                                </Text>
-                                                <Image
-                                                    my={'auto'}
-                                                    src={`images/currency/${name === 'wETH' ? 'weth' : 'gem'}.png`}
-                                                    alt={`${name === 'wETH' ? 'WETH' : 'GEM'} Icon`}
-                                                    w="50px"
-                                                    h="50px"
-                                                    mt={-2}
-                                                />
-                                            </Stack>
-                                        ))
+                                        <>
+                                            <Text>ACCUMULATED BOUNTY: </Text>
+                                            {accumulatedBounty.map(({ price, name }, index) => (
+                                                <Stack key={index} direction="row" align="center" mx={4}>
+                                                    <Text my={'auto'}>
+                                                        {name === 'wETH'
+                                                            ? (price / NQTDIVIDER).toFixed(4)
+                                                            : (price / NQTDIVIDER).toFixed(0)}
+                                                        {` ${name}`}
+                                                    </Text>
+                                                    <Image
+                                                        my={'auto'}
+                                                        src={`images/currency/${name === 'wETH' ? 'weth' : 'gem'}.png`}
+                                                        alt={`${name === 'wETH' ? 'WETH' : 'GEM'} Icon`}
+                                                        w="40px"
+                                                        h="40px"
+                                                        mt={-2}
+                                                    />
+                                                </Stack>
+                                            ))}
+                                        </>
                                     ) : (
                                         <Text color={'#FFF'}>THERE ARE NO ACCUMULATED BOUNTY YET.</Text>
                                     )}

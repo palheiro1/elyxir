@@ -29,7 +29,13 @@ import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { sendCardsToBattle } from '../../../../../services/Ardor/omnoInterface';
 import { errorToast } from '../../../../../utils/alerts';
 import { checkPin } from '../../../../../utils/walletUtils';
-import { formatAddress, isEmptyObject } from '../../Utils/BattlegroundsUtils';
+import {
+    formatAddress,
+    getContinentIcon,
+    getLevelIconString,
+    getMediumIcon,
+    isEmptyObject,
+} from '../../Utils/BattlegroundsUtils';
 
 export const SelectHandPage = ({
     arenaInfo,
@@ -149,61 +155,13 @@ export const SelectHandPage = ({
         }
     };
 
-    const [isLowHeight] = useMediaQuery('(max-height: 420px)');
+    const [isLowHeight] = useMediaQuery('(max-height: 680px)');
 
     const getImageSrc = (name, value) => {
-        if (name === 'Level') return getLevelIcon(value);
+        if (name === 'Level') return getLevelIconString(value);
         if (name === 'Medium') return getMediumIcon(value);
         if (name === 'Continent') return getContinentIcon(value);
-        return null; // Para manejar casos en que no se cumpla ninguna condición
-    };
-
-    const getLevelIcon = value => {
-        let path = '/images/cards/rarity/';
-        switch (value) {
-            case 'Common':
-                return `${path}common.svg`;
-            case 'Rare':
-                return `${path}rare.svg`;
-            case 'Epic':
-                return `${path}epic.svg`;
-            case 'Special':
-                return `${path}special.svg`;
-            default:
-                return null;
-        }
-    };
-
-    const getMediumIcon = value => {
-        let path = '/images/cards/type/';
-        switch (value) {
-            case 'Aquatic':
-                return `${path}water.svg`;
-            case 'Aerial':
-                return `${path}air.svg`;
-            case 'Terrestrial':
-                return `${path}earth.svg`;
-            default:
-                return null;
-        }
-    };
-
-    const getContinentIcon = value => {
-        let path = '/images/cards/continent/old/';
-        switch (value) {
-            case 'Europe':
-                return `${path}europa.svg`;
-            case 'Asia':
-                return `${path}asia.svg`;
-            case 'Africa':
-                return `${path}africa.svg`;
-            case 'America':
-                return `${path}america.svg`;
-            case 'Oceania':
-                return `${path}oceania.svg`;
-            default:
-                return null;
-        }
+        return null;
     };
 
     const handleDeleteCard = (card, index) => {
@@ -216,7 +174,7 @@ export const SelectHandPage = ({
     };
     return (
         <>
-            <Box display={'flex'} flexDir={'column'}>
+            <Box display={'flex'} flexDir={'column'} overflowY={'scroll'} maxH={'95%'} className="custom-scrollbar">
                 <Stack direction={'column'} mx={'auto'} mt={isMobile ? 4 : 8}>
                     <Heading
                         color={'#FFF'}
@@ -257,8 +215,8 @@ export const SelectHandPage = ({
                                 )}
                                 <Box
                                     backgroundColor={'#465A5A'}
-                                    w={isMobile ? '76px' : '127px'}
-                                    h={isMobile ? '103px' : '172px'}
+                                    w={isMobile || isLowHeight ? '76px' : '127px'}
+                                    h={isMobile || isLowHeight ? '103px' : '172px'}
                                     gap={'15px'}
                                     display={'flex'}>
                                     <Image src={card.cardImgUrl} w={'100%'} />
@@ -390,17 +348,9 @@ export const SelectHandPage = ({
                         fontSize={isMobile ? 'xs' : 'md'}
                         textAlign={'center'}
                         mx={'auto'}
-                        textTransform={'uppercase'}
-                        fontFamily={'Chelsea Market, system-ui'}>
-                        <Text
-                            mx={'auto'}
-                            backgroundColor={'#FFF'}
-                            border={'2px solid #D597B2'}
-                            borderRadius={'40px'}
-                            color={'#000'}
-                            p={isMobile ? 0 : 1}
-                            w={isMobile ? '80px' : '155px'}>
-                            {defenderInfo.name || formatAddress(defenderInfo.accountRS)}
+                        textTransform={'uppercase'}>
+                        <Text color={'#FFF'} p={isMobile ? 0 : 1} w={'fit-content'}>
+                            {defenderInfo.name || formatAddress(defenderInfo.accountRS)}'S HAND
                         </Text>
                         <Stack direction={'row'} mt={1}>
                             {defenderCards &&

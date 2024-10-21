@@ -362,7 +362,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                             </Stack>
                         </Stack>
                         <Stack mt={isMobile && '130px'} w={isMobile ? '200%' : '100%'} ml={isMobile && -24}>
-                            <Stack direction="row" fontFamily={'Chelsea Market, system-ui'}>
+                            <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} justifyContent={'flex-end'}>
                                 <Text my={'auto'} fontSize={'lg'} mx={3}>
                                     Lands' filters:{' '}
                                 </Text>

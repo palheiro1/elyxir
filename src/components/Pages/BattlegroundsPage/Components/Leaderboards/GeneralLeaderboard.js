@@ -128,7 +128,7 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
 const GeneralLeaderboard = ({ isMobile }) => {
     const { entries } = useSelector(state => state.leaderboards);
     return (
-        <Stack overflowY={'scroll'} className="custom-scrollbar">
+        <Stack className="custom-scrollbar">
             {entries === null ? (
                 <Box
                     h={'100%'}
@@ -146,6 +146,7 @@ const GeneralLeaderboard = ({ isMobile }) => {
                 <>
                     {entries.length > 0 ? (
                         <>
+                            {/* Header fijo */}
                             <Grid
                                 templateColumns="repeat(7, 1fr)"
                                 gap={4}
@@ -154,13 +155,16 @@ const GeneralLeaderboard = ({ isMobile }) => {
                                 mt={3}
                                 p={2}
                                 borderRadius={'10px'}
-                                border={'2px solid #5A679B'}>
-                                {/* Header Row */}
+                                border={'2px solid #FFD900'}
+                                color={'#000'}
+                                bgColor={'#FFD900'}
+                                position="sticky"
+                                top="0"
+                                zIndex={1}>
                                 <GridItem colSpan={1} textAlign="center" my={'auto'}>
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        color={'#FFF'}
                                         fontSize={isMobile ? 'sm' : 'md'}>
                                         POSITION
                                     </Text>
@@ -169,7 +173,6 @@ const GeneralLeaderboard = ({ isMobile }) => {
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        color={'#FFF'}
                                         fontSize={isMobile ? 'sm' : 'md'}>
                                         NAME/ ADDRESS
                                     </Text>
@@ -178,7 +181,6 @@ const GeneralLeaderboard = ({ isMobile }) => {
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        color={'#FFF'}
                                         fontSize={isMobile ? 'sm' : 'md'}>
                                         LANDS CONQUERED
                                     </Text>
@@ -187,7 +189,6 @@ const GeneralLeaderboard = ({ isMobile }) => {
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        color={'#FFF'}
                                         fontSize={isMobile ? 'sm' : 'md'}>
                                         SUCCESSFUL DEFENSES
                                     </Text>
@@ -196,7 +197,6 @@ const GeneralLeaderboard = ({ isMobile }) => {
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        color={'#FFF'}
                                         fontSize={isMobile ? 'sm' : 'md'}>
                                         BATTLE EFFICIENCY
                                     </Text>
@@ -205,22 +205,27 @@ const GeneralLeaderboard = ({ isMobile }) => {
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        color={'#FFF'}
                                         fontSize={isMobile ? 'sm' : 'md'}>
-                                        DEFESE DURATION
+                                        DEFENSE DURATION
                                     </Text>
                                 </GridItem>
                                 <GridItem colSpan={1} textAlign="center" my={'auto'}>
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        color={'#FFF'}
                                         fontSize={isMobile ? 'sm' : 'md'}>
                                         TOTAL POINTS
                                     </Text>
                                 </GridItem>
                             </Grid>
-                            <Box bgColor={'#323636'} w={'90%'} mx={'auto'} borderRadius={'10px'} p={2}>
+                            <Box
+                                maxHeight={'55vh'}
+                                overflowY="auto"
+                                bgColor={'#323636'}
+                                w={'90%'}
+                                mx={'auto'}
+                                borderRadius={'10px'}
+                                p={2}>
                                 {entries.map((entry, index) => (
                                     <LeaderboardRow key={index} index={index} data={entry} isMobile={isMobile} />
                                 ))}

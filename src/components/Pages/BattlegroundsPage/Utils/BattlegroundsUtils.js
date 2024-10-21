@@ -5,7 +5,7 @@ export const formatTimeStamp = timestamp => {
     return battleStamp;
 };
 
-export const getTimeDifference = timestamp => {
+export const getTimeDifference = (timestamp, getMinSeconds) => {
     const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
 
     // Calculate the battle timestamp by adding the given timestamp (in seconds) to the base date
@@ -37,11 +37,14 @@ export const getTimeDifference = timestamp => {
     if (differenceInHours > 0) {
         timeDifferenceArray.push(`${differenceInHours} ${differenceInHours !== 1 ? 'hours' : 'hour'}`);
     }
-    if (differenceInMinutes > 0) {
-        timeDifferenceArray.push(`${differenceInMinutes} ${differenceInMinutes !== 1 ? 'minutes' : 'minute'}`);
-    }
-    if (differenceInSeconds > 0) {
-        timeDifferenceArray.push(`${differenceInSeconds} ${differenceInSeconds !== 1 ? 'seconds' : 'second'}`);
+
+    if (getMinSeconds) {
+        if (differenceInMinutes > 0) {
+            timeDifferenceArray.push(`${differenceInMinutes} ${differenceInMinutes !== 1 ? 'minutes' : 'minute'}`);
+        }
+        if (differenceInSeconds > 0) {
+            timeDifferenceArray.push(`${differenceInSeconds} ${differenceInSeconds !== 1 ? 'seconds' : 'second'}`);
+        }
     }
 
     // Join the array into a single string
@@ -111,4 +114,82 @@ export const getBattleRoundInfo = (defenderAsset, attackerAsset, cards, battleIn
 export const capitalize = string => {
     if (string.length === 0) return string;
     return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+export const getLevelIconString = value => {
+    let path = '/images/cards/rarity/';
+    switch (value) {
+        case 'Common':
+            return `${path}common.svg`;
+        case 'Rare':
+            return `${path}rare.svg`;
+        case 'Epic':
+            return `${path}epic.svg`;
+        case 'Special':
+            return `${path}special.svg`;
+        default:
+            return null;
+    }
+};
+
+export const getLevelIconInt = value => {
+    let path = '/images/cards/rarity/';
+    switch (value) {
+        case 1:
+            return `${path}common.svg`;
+        case 2:
+            return `${path}rare.svg`;
+        case 3:
+            return `${path}epic.svg`;
+        case 4:
+            return `${path}special.svg`;
+        default:
+            return null;
+    }
+};
+
+export const getMediumIcon = value => {
+    let path = '/images/cards/type/';
+    switch (value) {
+        case 'Aquatic':
+            return `${path}water.svg`;
+        case 'Aerial':
+            return `${path}air.svg`;
+        case 'Terrestrial':
+            return `${path}earth.svg`;
+        default:
+            return null;
+    }
+};
+
+export const getMediumIconInt = value => {
+    let path = '/images/cards/type/';
+    switch (value) {
+        case 1:
+            return `${path}earth.svg`;
+        case 2:
+            return `${path}air.svg`;
+        case 3:
+            return `${path}water.svg`;
+        default:
+            return null;
+    }
+};
+
+export const getContinentIcon = value => {
+    let path = '/images/cards/continent/old/';
+    switch (value) {
+        case 'Europe':
+            return `${path}europa.svg`;
+        case 'Asia':
+            return `${path}asia.svg`;
+        case 'Africa':
+            return `${path}africa.svg`;
+        case 'America':
+            return `${path}america.svg`;
+        case 'Oceania':
+            return `${path}oceania.svg`;
+        default:
+            return null;
+    }
 };

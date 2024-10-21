@@ -57,7 +57,7 @@ const CombativityResetTimer = () => {
     return (
         <Stack fontFamily="Chelsea market, System">
             {leaderboardResetTimer.remainingBlocks !== 'loading' ? (
-                <Text color="#FFF" fontFamily="Chelsea market, System">
+                <Text color="#FFF" fontFamily="Chelsea market, System" textTransform={'uppercase'}>
                     Reseting combativity leaderboard in {timeString}.
                 </Text>
             ) : (

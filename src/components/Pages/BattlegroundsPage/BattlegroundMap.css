@@ -1,4 +1,4 @@
-.containerMap circle {
+.containerMap .circle-btn {
     cursor: pointer;
     &:hover {
         fill: black;

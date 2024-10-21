@@ -20,7 +20,7 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards, is
     const getColumns = () => {
         if (isMobile) return 1;
         if (isMediumScreen) return 3;
-        return 4;
+        return 5;
     };
 
     return (

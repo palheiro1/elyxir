@@ -42,7 +42,7 @@ const ArdorPage = ({ cards, filteredCards, infoAccount, isMobile, gridColumns })
                         overflow={'scroll'}
                         h={'750px'}>
                         {userCards.map((card, cardIndex) => (
-                            <Box key={cardIndex} w={'225px'} h={'350px'} bg={'white'} borderRadius={'10px'} mx={'auto'}>
+                            <Box key={cardIndex} w={'202px'} h={'315px'} bg={'white'} borderRadius={'10px'} mx={'auto'}>
                                 <Center>
                                     <Img src={card.cardImgUrl} w={'90%'} h={'75%'} />
                                 </Center>
@@ -64,8 +64,9 @@ const ArdorPage = ({ cards, filteredCards, infoAccount, isMobile, gridColumns })
                                                 <Text
                                                     textAlign="end"
                                                     minH={{ base: '100%', lg: 'auto' }}
+                                                    fontSize={'x-small'}
                                                     color={'#000'}>
-                                                    <small>Quantity: {card.quantityQNT}</small>
+                                                    Quantity: {card.quantityQNT}
                                                 </Text>
                                             </Flex>
                                         </Tooltip>
