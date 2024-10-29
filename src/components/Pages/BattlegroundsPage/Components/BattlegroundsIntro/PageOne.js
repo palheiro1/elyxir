@@ -52,20 +52,17 @@ export const PageOne = ({ handleNext }) => {
                     textAlign={'justify'}>
                     <strong>Battlegrounds</strong> is the playground for Mythical Beings NFTs. The world is divided into{' '}
                     {locations.length} territories, each of which can be conquered and defended by a battalion of
-                    mythological creatures.
+                    mythological creatures.{' '}
+                    <Button
+                        colorScheme="transparent"
+                        mr={'0'}
+                        p={0}
+                        onClick={handleNext}
+                        fontFamily={'Chelsea Market, system-ui'}
+                        color={'#EBB2B9'}>
+                        {'Next >'}
+                    </Button>
                 </Text>
-            </Box>
-
-            <Box>
-                <Button
-                    colorScheme="transparent"
-                    mx={'auto'}
-                    mt={10}
-                    onClick={handleNext}
-                    fontFamily={'Chelsea Market, system-ui'}
-                    color={'#EBB2B9'}>
-                    {'Next >'}
-                </Button>
             </Box>
         </Box>
     );

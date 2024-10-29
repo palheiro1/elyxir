@@ -117,78 +117,83 @@ export const capitalize = string => {
 };
 
 export const getLevelIconString = value => {
-    let path = '/images/cards/rarity/';
+    let path = '/images/battlegrounds/rarity/';
     switch (value) {
         case 'Common':
-            return `${path}common.svg`;
+            return `${path}common.png`;
         case 'Rare':
-            return `${path}rare.svg`;
+            return `${path}rare.png`;
         case 'Epic':
-            return `${path}epic.svg`;
+            return `${path}epic.png`;
         case 'Special':
-            return `${path}special.svg`;
+            return `${path}epic.png`;
         default:
             return null;
     }
 };
 
 export const getLevelIconInt = value => {
-    let path = '/images/cards/rarity/';
+    let path = '/images/battlegrounds/rarity/';
     switch (value) {
         case 1:
-            return `${path}common.svg`;
+            return `${path}common.png`;
         case 2:
-            return `${path}rare.svg`;
+            return `${path}rare.png`;
         case 3:
-            return `${path}epic.svg`;
+            return `${path}epic.png`;
         case 4:
-            return `${path}special.svg`;
+            return `${path}epic.png`;
         default:
             return null;
     }
 };
 
 export const getMediumIcon = value => {
-    let path = '/images/cards/type/';
+    let path = '/images/battlegrounds/medium/';
     switch (value) {
         case 'Aquatic':
-            return `${path}water.svg`;
+            return `${path}water.png`;
         case 'Aerial':
-            return `${path}air.svg`;
+            return `${path}air.png`;
         case 'Terrestrial':
-            return `${path}earth.svg`;
+            return `${path}earth.png`;
         default:
             return null;
     }
 };
+export const getDiceIcon = value => {
+    let path = '/images/cards/dices/';
+    if (value < 1 || value > 6 || !value) return null;
+    return `${path}dice${value}.png`;
+};
 
 export const getMediumIconInt = value => {
-    let path = '/images/cards/type/';
+    let path = '/images/battlegrounds/medium/';
     switch (value) {
         case 1:
-            return `${path}earth.svg`;
+            return `${path}earth.png`;
         case 2:
-            return `${path}air.svg`;
+            return `${path}air.png`;
         case 3:
-            return `${path}water.svg`;
+            return `${path}water.png`;
         default:
             return null;
     }
 };
 
 export const getContinentIcon = value => {
-    let path = '/images/cards/continent/old/';
+    let path = '/images/battlegrounds/continent/';
     switch (value) {
         case 'Europe':
-            return `${path}europa.svg`;
+            return `${path}europa.png`;
         case 'Asia':
-            return `${path}asia.svg`;
+            return `${path}asia.png`;
         case 'Africa':
-            return `${path}africa.svg`;
+            return `${path}africa.png`;
         case 'America':
-            return `${path}america.svg`;
+            return `${path}america.png`;
         case 'Oceania':
-            return `${path}oceania.svg`;
+            return `${path}oceania.png`;
         default:
             return null;
     }

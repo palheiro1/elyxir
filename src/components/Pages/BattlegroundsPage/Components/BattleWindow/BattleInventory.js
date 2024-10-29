@@ -123,13 +123,10 @@ const BattleInventory = ({
                 onClick={() => setOpenIventory(false)}
             />
             <Stack h={'90%'}>
-                <Heading mx={'auto'} fontFamily={'Chelsea Market, system-ui'} fontWeight={400}>
-                    BATTELEGROUND CARDS
+                <Heading fontFamily={'Chelsea Market, system-ui'} fontSize={'large'} fontWeight={400} ml={'9%'}>
+                    BATTELEGROUNDS CARDS
                 </Heading>
                 <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={'9%'}>
-                    <Text my={'auto'} fontSize={'lg'}>
-                        Cards' filters:
-                    </Text>
                     <Select placeholder="Rarity" w={'10%'} onChange={handleRarityChange}>
                         {armyRankMaximum[0] === 5 && (
                             <>
@@ -256,6 +253,7 @@ const BattleInventory = ({
                                                     width="100%"
                                                     height="100%"
                                                     display="flex"
+                                                    borderRadius={'inherit'}
                                                     alignItems="center"
                                                     justifyContent="center"
                                                     bg="rgba(1, 151, 135, 0.5)"

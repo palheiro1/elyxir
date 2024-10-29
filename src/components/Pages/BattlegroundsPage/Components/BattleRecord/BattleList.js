@@ -98,6 +98,7 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
                         )}
                     </>
                 )}
+
                 {viewDetails && (
                     <BattleDetails
                         battleId={selectedBattle}

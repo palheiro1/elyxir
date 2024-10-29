@@ -34,6 +34,7 @@ import ChangeName from './Components/Modals/ChangeName';
 import { fetchBattleData } from '../../../redux/reducers/BattlegroundsReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import Leaderboards from './Components/Leaderboards/Leaderboards';
+import Earnings from './Components/EarnigsPage/Earnings';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
     const { accountRs } = infoAccount;
@@ -49,6 +50,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [openInventory, setOpenInventory] = useState(false);
     const [openBattleRecord, setOpenBattleRecord] = useState(false);
     const [openLeaderboards, setOpenLeaderboards] = useState(false);
+    const [openEarnings, setOpenEarnings] = useState(false);
     const [updateState, setUpdateState] = useState(false);
     const [filters, setFilters] = useState({
         rarity: '',
@@ -96,7 +98,13 @@ const Battlegrounds = ({ infoAccount, cards }) => {
             },
         },
 
-        { name: 'Earnings', disabled: true },
+        {
+            name: 'Earnings',
+            onclick: () => {
+                setOpenEarnings(true);
+                setIsScrollLocked(true);
+            },
+        },
         {
             name: 'Army',
             onclick: () => {
@@ -142,6 +150,12 @@ const Battlegrounds = ({ infoAccount, cards }) => {
 
     const handleCloseBattleRecord = () => {
         setOpenBattleRecord(false);
+        setIsScrollLocked(false);
+        setUpdateState(prevState => !prevState);
+    };
+
+    const handleCloseEarnings = () => {
+        setOpenEarnings(false);
         setIsScrollLocked(false);
         setUpdateState(prevState => !prevState);
     };
@@ -243,6 +257,15 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                         isMobile={isMobile}
                     />
                 )}
+                {openEarnings && (
+                    <Earnings
+                        isMobile={isMobile}
+                        closeEarnigs={handleCloseEarnings}
+                        infoAccount={infoAccount}
+                        cards={cards}
+                    />
+                )}
+
                 {openLeaderboards && <Leaderboards handleClose={handleCloseLeaderboards} isMobile={isMobile} />}
                 <BattlegroundsIntro visible={visible} page={page} handleClose={handleClose} handleNext={handleNext} />
                 <AdvertModal isOpen={isModalOpen} onClose={closeModal} />

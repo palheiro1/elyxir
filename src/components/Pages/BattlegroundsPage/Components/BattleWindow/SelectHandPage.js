@@ -36,6 +36,7 @@ import {
     getMediumIcon,
     isEmptyObject,
 } from '../../Utils/BattlegroundsUtils';
+import { getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 
 export const SelectHandPage = ({
     arenaInfo,
@@ -62,6 +63,10 @@ export const SelectHandPage = ({
     const [passphrase, setPassphrase] = useState('');
     const [disableButton, setDisableButton] = useState(false);
     const [preSelectedCard, setPreSelectedCard] = useState(null);
+    const [defenderBonus, setDefenderBonus] = useState({
+        medium: 0,
+        domain: 0,
+    });
 
     const statistics = [
         { name: 'Level', value: locations[arenaInfo.id - 1].rarity },
@@ -172,6 +177,26 @@ export const SelectHandPage = ({
             setPreSelectedCard(card);
         }
     };
+
+    useEffect(() => {
+        const getDefenderBonus = async () => {
+            const defenderSoldiers = await getSoldiers()
+                .then(res => res.soldier)
+                .then(soldiers => soldiers.filter(soldier => defenderCards.some(card => card.asset === soldier.asset)))
+                .catch(error => console.error(error));
+            let domainBonus = 0;
+            let mediumBonus = 0;
+            defenderSoldiers.forEach(soldier => {
+                if (soldier.mediumId === arenaInfo.mediumId) mediumBonus++;
+                if (soldier.domainId === arenaInfo.domainId) domainBonus++;
+            });
+            setDefenderBonus({
+                medium: mediumBonus,
+                domain: domainBonus,
+            });
+        };
+        getDefenderBonus();
+    }, [arenaInfo.domainId, arenaInfo.mediumId, defenderCards]);
     return (
         <>
             <Box display={'flex'} flexDir={'column'} overflowY={'scroll'} maxH={'95%'} className="custom-scrollbar">
@@ -187,9 +212,147 @@ export const SelectHandPage = ({
                             {locations[arenaInfo.id - 1].name}
                         </span>{' '}
                     </Heading>
-                    <Text color={'#FFF'} textAlign={'center'} fontSize={isMobile ? 'md' : 'large'}>
+                </Stack>
+                <Stack
+                    direction={'row'}
+                    mx={'auto'}
+                    mt={isMobile ? 1 : 4}
+                    fontSize={'md'}
+                    justify="space-between"
+                    textAlign={'center'}
+                    w={'60%'}>
+                    {statistics.map(({ name, value }, index) => (
+                        <Stack direction={'column'} key={index} textAlign={'center'} m={2}>
+                            <Stack
+                                backgroundColor={'#5A679B'}
+                                direction={'row'}
+                                border={'2px solid #D597B2'}
+                                borderRadius={'40px'}
+                                color={'#000'}
+                                w={isMobile ? '80px' : '155px'}
+                                fontSize={isMobile ? 'xs' : 'md'}
+                                textAlign={'center'}
+                                textTransform={'uppercase'}
+                                fontFamily={'Chelsea Market, system-ui'}
+                                p={isMobile ? 0 : 2}>
+                                <Image src={getImageSrc(name, value)} boxSize={'30px'} />
+                                <Text ml={2} my={'auto'}>
+                                    {value}
+                                </Text>
+                            </Stack>
+                        </Stack>
+                    ))}
+                </Stack>
+
+                <Stack bgColor={'#5A679B'} mt={5}>
+                    <Stack
+                        my={5}
+                        direction={'column'}
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        textAlign={'center'}
+                        mx={'auto'}
+                        textTransform={'uppercase'}>
+                        <Stack direction={'row'} w={'100%'} justifyContent={'space-between'}>
+                            <Text
+                                color={'#FFF'}
+                                p={isMobile ? 0 : 1}
+                                w={'fit-content'}
+                                fontFamily={'Chelsea Market, system-ui'}
+                                fontSize={'larger'}
+                                my={'auto'}>
+                                {defenderInfo.name || formatAddress(defenderInfo.accountRS)}'S HAND
+                            </Text>
+                            <Stack direction={'row'} marginRight={2} spacing={8}>
+                                <Text
+                                    color={'#D597B2'}
+                                    my={'auto'}
+                                    fontFamily={'Chelsea Market, system-ui'}
+                                    fontSize={'lg'}>
+                                    BONUS
+                                </Text>
+                                <Text
+                                    color={'#FFF'}
+                                    my={'auto'}
+                                    fontFamily={'Inter, system-ui'}
+                                    fontWeight={500}
+                                    textAlign={'end'}
+                                    fontSize={'sm'}>
+                                    +{defenderBonus.medium} {medium}
+                                    {<br></br>}+{defenderBonus.domain} {domainName}
+                                </Text>
+                            </Stack>
+                        </Stack>
+                        <Stack direction={'row'} mt={1}>
+                            {defenderCards &&
+                                defenderCards.map((card, index) => (
+                                    <Box
+                                        key={index}
+                                        backgroundColor={'#465A5A'}
+                                        w={isMobile ? '76px' : '127px'}
+                                        h={isMobile ? '103px' : '172px'}
+                                        gap={'15px'}
+                                        display={'flex'}>
+                                        <Image src={card.cardImgUrl} w={'100%'} />
+                                    </Box>
+                                ))}
+                        </Stack>
+                    </Stack>
+                </Stack>
+                <Stack
+                    direction={'row'}
+                    mx={'auto'}
+                    mt={isMobile ? 1 : 4}
+                    w={'70%'}
+                    justifyContent={'space-between'}
+                    fontSize={isMobile ? 'xs' : 'md'}
+                    fontWeight={100}
+                    gap={10}>
+                    <Text
+                        color={'#FFF'}
+                        textAlign={'center'}
+                        my={'auto'}
+                        fontFamily={'Chelsea Market, system-ui'}
+                        fontSize={isMobile ? 'md' : 'large'}>
                         CHOOSE YOUR HAND
                     </Text>
+                    <Stack direction={'row'} spacing={8}>
+                        <Text color={'#D597B2'} my={'auto'} fontFamily={'Chelsea Market, system-ui'} fontSize={'lg'}>
+                            TRIBUTE
+                        </Text>
+                        <Stack
+                            direction={'column'}
+                            my={'auto'}
+                            ml={2}
+                            fontFamily={'Inter, system-ui'}
+                            fontWeight={500}
+                            fontSize={'sm'}>
+                            {battleCost && !isEmptyObject(battleCost) ? (
+                                battleCost.map((item, index) => (
+                                    <Text key={index} color={'#FFF'}>
+                                        {item.price / NQTDIVIDER} {item.name}
+                                    </Text>
+                                ))
+                            ) : (
+                                <Text color={'#FFF'}>FREE</Text>
+                            )}
+                        </Stack>
+                    </Stack>
+                    <Stack direction={'row'} marginRight={2} spacing={8}>
+                        <Text color={'#D597B2'} my={'auto'} fontFamily={'Chelsea Market, system-ui'} fontSize={'lg'}>
+                            BONUS
+                        </Text>
+                        <Text
+                            color={'#FFF'}
+                            textTransform={'uppercase'}
+                            my={'auto'}
+                            fontFamily={'Inter, system-ui'}
+                            textAlign={'end'}
+                            fontWeight={500}
+                            fontSize={'sm'}>
+                            +{mediumBonus} {medium}
+                            {<br></br>}+{domainBonus} {domainName}
+                        </Text>
+                    </Stack>
                 </Stack>
                 <Stack direction={'row'} mx={'auto'} mt={3}>
                     {handBattleCards.map((card, index) => {
@@ -261,111 +424,6 @@ export const SelectHandPage = ({
                             </Box>
                         );
                     })}
-                </Stack>
-                <Stack
-                    direction={'row'}
-                    mx={'auto'}
-                    mt={isMobile ? 1 : 4}
-                    fontSize={'md'}
-                    justify="space-between"
-                    textAlign={'center'}
-                    w={'60%'}>
-                    {statistics.map(({ name, value }, index) => (
-                        <Stack direction={'column'} key={index} textAlign={'center'} m={2}>
-                            <Text
-                                color={'#FFF'}
-                                fontFamily={'Chelsea Market, system-ui'}
-                                textTransform={'uppercase'}
-                                fontSize={isMobile ? 'sm' : 'lg'}>
-                                {name}
-                            </Text>
-                            <Stack
-                                backgroundColor={'#FFF'}
-                                direction={'row'}
-                                border={'2px solid #D597B2'}
-                                borderRadius={'40px'}
-                                color={'#000'}
-                                w={isMobile ? '80px' : '155px'}
-                                fontSize={isMobile ? 'xs' : 'md'}
-                                textAlign={'center'}
-                                textTransform={'uppercase'}
-                                fontFamily={'Chelsea Market, system-ui'}
-                                p={isMobile ? 0 : 2}>
-                                <Image src={getImageSrc(name, value)} w={'30px'} h={'25px'} />
-                                <Text ml={2}>{value}</Text>
-                            </Stack>
-                        </Stack>
-                    ))}
-                </Stack>
-                <Stack
-                    direction={'row'}
-                    mx={'auto'}
-                    mt={isMobile ? 1 : 4}
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    fontWeight={100}
-                    gap={10}>
-                    <Stack direction={'row'} marginRight={2} spacing={8}>
-                        <Text color={'#D597B2'} my={'auto'} fontFamily={'Chelsea Market, system-ui'} fontSize={'lg'}>
-                            BONUS
-                        </Text>
-                        <Text
-                            color={'#FFF'}
-                            my={'auto'}
-                            fontFamily={'Inter, system-ui'}
-                            fontWeight={500}
-                            fontSize={'sm'}>
-                            +{mediumBonus} {medium}
-                            {<br></br>}+{domainBonus} {domainName}
-                        </Text>
-                    </Stack>
-                    <Stack direction={'row'} spacing={8}>
-                        <Text color={'#D597B2'} my={'auto'} fontFamily={'Chelsea Market, system-ui'} fontSize={'lg'}>
-                            TRIBUTE
-                        </Text>
-                        <Stack
-                            direction={'column'}
-                            my={'auto'}
-                            ml={2}
-                            fontFamily={'Inter, system-ui'}
-                            fontWeight={500}
-                            fontSize={'sm'}>
-                            {battleCost && !isEmptyObject(battleCost) ? (
-                                battleCost.map((item, index) => (
-                                    <Text key={index} color={'#FFF'}>
-                                        {item.price / NQTDIVIDER} {item.name}
-                                    </Text>
-                                ))
-                            ) : (
-                                <Text color={'#FFF'}>Free</Text>
-                            )}
-                        </Stack>
-                    </Stack>
-                </Stack>
-                <Stack>
-                    <Stack
-                        mt={3}
-                        direction={'column'}
-                        fontSize={isMobile ? 'xs' : 'md'}
-                        textAlign={'center'}
-                        mx={'auto'}
-                        textTransform={'uppercase'}>
-                        <Text color={'#FFF'} p={isMobile ? 0 : 1} w={'fit-content'}>
-                            {defenderInfo.name || formatAddress(defenderInfo.accountRS)}'S HAND
-                        </Text>
-                        <Stack direction={'row'} mt={1}>
-                            {defenderCards &&
-                                defenderCards.map(card => (
-                                    <Box
-                                        backgroundColor={'#465A5A'}
-                                        w={isMobile ? '76px' : '127px'}
-                                        h={isMobile ? '103px' : '172px'}
-                                        gap={'15px'}
-                                        display={'flex'}>
-                                        <Image src={card.cardImgUrl} w={'100%'} />
-                                    </Box>
-                                ))}
-                        </Stack>
-                    </Stack>
                 </Stack>
                 <Button
                     mx={'auto'}

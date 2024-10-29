@@ -122,26 +122,18 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                     onClick={closeLeaderboards}
                 />
                 <>
-                    <Stack direction={'row'} color={'#FFF'} mt={10} mx={'auto'} w={'90%'} textAlign={'center'}>
-                        <Select
-                            value={option}
-                            onChange={e => changeData(Number(e.target.value))}
-                            color={'#000'}
-                            bgColor={'#FFF'}
-                            my={'auto'}
-                            zIndex={999}
-                            fontFamily={'Chelsea Market, System'}
-                            _hover={{ borderColor: '#555' }}
-                            maxW={'250px'}>
-                            <option value={1}>CHAMPIONS PANTHEON</option>
-                            <option value={2}>LORD OF LANDS</option>
-                            <option value={3}>LORD OF SKY</option>
-                            <option value={4}>LORD OF OCEANS</option>
-                            <option value={5}>LORD OF COMBATIVENESS</option>
-                        </Select>
-                        <Heading fontFamily={'Chelsea Market, System'} mx={'auto'} fontWeight={100} my={'auto'}>
+                    <Stack
+                        direction={'row'}
+                        color={'#FFF'}
+                        mt={10}
+                        mx={'auto'}
+                        w={'80%'}
+                        textAlign={'center'}
+                        justifyContent={'space-between'}>
+                        <Heading fontFamily={'Chelsea Market, System'} fontWeight={100} my={'auto'}>
                             LEADERBOARDS
                         </Heading>
+
                         <Image
                             src={(() => {
                                 switch (option) {
@@ -161,8 +153,23 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                             })()}
                             w={'190px'}
                             maxH={'80px'}
-                            mr={5}
                         />
+                        <Select
+                            value={option}
+                            onChange={e => changeData(Number(e.target.value))}
+                            color={'#000'}
+                            bgColor={'#FFF'}
+                            my={'auto'}
+                            zIndex={999}
+                            fontFamily={'Chelsea Market, System'}
+                            _hover={{ borderColor: '#555' }}
+                            maxW={'250px'}>
+                            <option value={1}>CHAMPIONS PANTHEON</option>
+                            <option value={2}>LORD OF LANDS</option>
+                            <option value={3}>LORD OF SKY</option>
+                            <option value={4}>LORD OF OCEANS</option>
+                            <option value={5}>LORD OF COMBATIVENESS</option>
+                        </Select>
                     </Stack>
                     <Stack direction={'column'} color={'#FFF'} mx={'auto'} textAlign={'center'} h={'90%'}>
                         <Stack
