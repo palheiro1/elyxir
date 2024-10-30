@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+    Box,
     Button,
     Image,
     Popover,
@@ -270,27 +271,33 @@ export const MapPoint = React.memo(
                                             hasArrow
                                             label={myArena ? `You can't fight against yourself` : null}
                                             placement="right">
-                                            <Button
-                                                backgroundColor={'#484848'}
-                                                border={'2px solid #D597B2'}
-                                                borderRadius={'30px'}
-                                                color={'#FFF'}
-                                                isDisabled={myArena}
-                                                style={{
-                                                    background:
-                                                        'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
-                                                    border: '2px solid #EBB2B9',
-                                                }}
-                                                sx={{
-                                                    _hover: myArena
-                                                        ? { backgroundColor: '#484848' }
-                                                        : { backgroundColor: 'whiteAlpha.100' },
-                                                }}
-                                                fontFamily={'Chelsea market'}
-                                                fontWeight={400}
-                                                onClick={clickButton}>
-                                                START A BATTLE
-                                            </Button>
+                                            <Box
+                                                mx="auto"
+                                                borderRadius="30px"
+                                                p="3px"
+                                                background="linear-gradient(49deg, rgba(235,178,185,1) 0%, rgba(32,36,36,1) 100%)"
+                                                display="inline-block">
+                                                <Button
+                                                    color={'#FFF'}
+                                                    isDisabled={myArena}
+                                                    sx={{
+                                                        _hover: myArena
+                                                            ? { backgroundColor: '#484848' }
+                                                            : { backgroundColor: 'whiteAlpha.100' },
+                                                        background:
+                                                            'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
+                                                        borderRadius: '30px',
+                                                        textTransform: 'uppercase',
+                                                        letterSpacing: '1px',
+                                                        padding: '3',
+                                                        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                                    }}
+                                                    fontFamily={'Chelsea market'}
+                                                    fontWeight={400}
+                                                    onClick={clickButton}>
+                                                    START A BATTLE
+                                                </Button>
+                                            </Box>
                                         </Tooltip>
                                         {arena.conquestEconomicCluster.timestamp &&
                                         arena.conquestEconomicCluster.timestamp !== 0 ? (

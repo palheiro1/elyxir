@@ -228,17 +228,19 @@ const BattlesEarnigs = ({ infoAccount, cards, isMobile }) => {
                         fontWeight={700}
                         fontSize={isMobile ? 'sm' : 'md'}
                         mx="auto">
-                        {arenas.map(arena => (
-                            <option
-                                key={arena.arenaId}
-                                value={arena.arenaId}
-                                style={{
-                                    backgroundColor: '#FFF',
-                                    color: '#000',
-                                }}>
-                                {arena.name}
-                            </option>
-                        ))}
+                        {arenas
+                            ? arenas.map(arena => (
+                                  <option
+                                      key={arena.arenaId}
+                                      value={arena.arenaId}
+                                      style={{
+                                          backgroundColor: '#FFF',
+                                          color: '#000',
+                                      }}>
+                                      {arena.name}
+                                  </option>
+                              ))
+                            : 'ALL LANDS'}
                     </Select>
                 </GridItem>
                 <GridItem colSpan={1} textAlign="center" my={'auto'}>

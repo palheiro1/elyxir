@@ -53,8 +53,8 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [openEarnings, setOpenEarnings] = useState(false);
     const [updateState, setUpdateState] = useState(false);
     const [filters, setFilters] = useState({
-        rarity: '',
-        element: '',
+        rarity: -1,
+        element: -1,
     });
 
     const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
@@ -112,7 +112,12 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                 setIsScrollLocked(true);
             },
         },
-        { name: 'FAQ', disabled: true },
+        {
+            name: 'FAQ',
+            onclick: () => {
+                window.open('https://mythicalbeings.io/how-to-play-battlegrounds.html', '_blank');
+            },
+        },
         {
             name: 'Change name',
             onclick: () => {
@@ -201,16 +206,32 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const handleRarityChange = event => {
         setFilters(prevFilters => ({
             ...prevFilters,
-            rarity: event.target.value,
+            rarity: Number(event.target.value),
         }));
     };
 
     const handleElementChange = event => {
         setFilters(prevFilters => ({
             ...prevFilters,
-            element: event.target.value,
+            element: Number(event.target.value),
         }));
     };
+
+    const rarityFilterOptions = [
+        { name: 'Rarity', value: -1 },
+        { name: 'Common', value: 1 },
+        { name: 'Rare', value: 2 },
+        { name: 'Epic', value: 3 },
+        { name: 'Special', value: 4 },
+    ];
+    const mediumFilterOptions = [
+        { name: 'Element', value: -1 },
+        { name: 'Terrestrial', value: 1 },
+        { name: 'Aerial', value: 2 },
+        { name: 'Aquatic', value: 3 },
+    ];
+    const selectBgColor = useColorModeValue('#FFF', '#000');
+    const selectColor = useColorModeValue('#000', '#FFF');
 
     return (
         <>
@@ -389,16 +410,29 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                 <Text my={'auto'} fontSize={'lg'} mx={3}>
                                     Lands' filters:{' '}
                                 </Text>
-                                <Select placeholder="Rarity" w={'15%'} onChange={handleRarityChange}>
-                                    <option value="1">Common</option>
-                                    <option value="2">Rare</option>
-                                    <option value="3">Epic</option>
-                                    <option value="4">Special</option>
+                                <Select w={'15%'} onChange={handleRarityChange}>
+                                    {rarityFilterOptions.map(({ name, value }, index) => {
+                                        return (
+                                            <option
+                                                key={index}
+                                                value={value}
+                                                style={{ backgroundColor: selectBgColor, color: selectColor }}>
+                                                {name}
+                                            </option>
+                                        );
+                                    })}
                                 </Select>
-                                <Select placeholder="Element" w={'15%'} onChange={handleElementChange}>
-                                    <option value="1">Terrestrial</option>
-                                    <option value="2">Aerial</option>
-                                    <option value="3">Aquatic</option>
+                                <Select w={'15%'} onChange={handleElementChange}>
+                                    {mediumFilterOptions.map(({ name, value }, index) => {
+                                        return (
+                                            <option
+                                                key={index}
+                                                value={value}
+                                                style={{ backgroundColor: selectBgColor, color: selectColor }}>
+                                                {name}
+                                            </option>
+                                        );
+                                    })}
                                 </Select>
                             </Stack>
                             <Maps
@@ -430,21 +464,29 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                         </Text>
                                     ))}
                                 </Stack>
-                                <Button
-                                    style={{
-                                        background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
-                                        border: '3px solid #EBB2B9',
-                                    }}
-                                    padding={6}
-                                    textTransform={'uppercase'}
-                                    color={'#FFF'}
-                                    fontWeight={'100'}
-                                    borderRadius={'40px'}
-                                    zIndex={5}
-                                    fontFamily={'Chelsea Market, system-ui'}
-                                    onClick={() => setIsModalOpen(true)}>
-                                    Start battle
-                                </Button>
+                                <Box
+                                    mx="auto"
+                                    borderRadius="30px"
+                                    p="3px"
+                                    background="linear-gradient(49deg, rgba(235,178,185,1) 0%, rgba(32,36,36,1) 100%)"
+                                    display="inline-block">
+                                    <Button
+                                        sx={{
+                                            background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
+                                            borderRadius: '30px',
+                                            color: '#FFF',
+                                            textTransform: 'uppercase',
+                                            fontWeight: '400',
+                                            letterSpacing: '1px',
+                                            fontSize: 'lg',
+                                            fontFamily: "'Chelsea Market', system-ui",
+                                            padding: '6',
+                                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                        }}
+                                        onClick={() => setIsModalOpen(true)}>
+                                        Start a Battle
+                                    </Button>
+                                </Box>
                             </Stack>
                         </Stack>
                     </Stack>

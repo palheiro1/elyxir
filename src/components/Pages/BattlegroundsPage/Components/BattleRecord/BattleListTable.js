@@ -3,8 +3,6 @@ import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getAsset } from '../../../../../utils/cardsUtils';
 import { formatAddress, isEmptyObject } from '../../Utils/BattlegroundsUtils';
-import attackIcon from '../../assets/icons/attack_icon.svg';
-import defenseIcon from '../../assets/icons/defense_icon.svg';
 import defeatIcon from '../../assets/icons/defeat_icon.svg';
 import victoryIcon from '../../assets/icons/victory_icon.svg';
 
@@ -127,7 +125,12 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                             display="flex"
                             alignItems="center"
                             justifyContent="center">
-                            <Image src={item.isUserDefending ? defenseIcon : attackIcon} boxSize="45px" />
+                            <Image
+                                src={`/images/battlegrounds/${
+                                    item.isUserDefending ? 'defense_icon.svg' : 'attack_icon.svg'
+                                }`}
+                                boxSize="45px"
+                            />
                         </Box>
                     </GridItem>
 

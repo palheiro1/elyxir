@@ -1,5 +1,5 @@
 import { Box, IconButton, Image, Spinner, Square, Stack, Text, Tooltip, useToast } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, Fragment } from 'react';
 import { getBattleById, getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 import '@fontsource/chelsea-market';
 import locations from '../../assets/LocationsEnum';
@@ -14,7 +14,6 @@ import {
     getMediumIconInt,
 } from '../../Utils/BattlegroundsUtils';
 import { errorToast } from '../../../../../utils/alerts';
-import alphaIcon from '../../assets/icons/alpha_icon.svg';
 import defeatIcon from '../../assets/icons/defeat_icon.svg';
 import victoryIcon from '../../assets/icons/victory_icon.svg';
 
@@ -240,15 +239,46 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                     <Image src={getLevelIconInt(arenaInfo.level)} w={'30px'} />
                 </Stack>
             </Stack>
+
             <Stack direction={'row'} mx={'auto'} w={'45%'} justifyContent={'space-between'} mt={5}>
                 <Text fontSize={'x-small'} color={'#FFF'} fontFamily={'Inter, system-ui'} my={'auto'}>
                     {infoAccount.accountRs === attackerInfo.accountRS ? 'MY' : 'OPPONENT'} CARDS:
                 </Text>
                 {battleInfo &&
-                    battleInfo.attackerArmy.asset.map(item => {
-                        let attackerCard = cards.find(card => card.asset === item);
-                        return <Image src={attackerCard.cardImgUrl} w={'12%'} />;
+                    battleInfo.attackerArmy.asset.map((item, index) => {
+                        const attackerCard = cards.find(card => card.asset === item);
+                        const isOverlayVisible =
+                            battleInfo.isDefenderWin ||
+                            battleResults.battleResult[battleResults.battleResult.length - 1].attackerAsset !==
+                                attackerCard.asset;
+
+                        return (
+                            <Box position="relative" m={'auto'} width="12%" key={index}>
+                                <Image src={attackerCard.cardImgUrl} width="100%" />
+                                {isOverlayVisible && (
+                                    <Box
+                                        position="absolute"
+                                        top="0"
+                                        left="0"
+                                        width="100%"
+                                        height="100%"
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        bg="rgba(0, 0, 0, 0.3)">
+                                        <Text
+                                            fontSize="5rem"
+                                            color="#E14942"
+                                            opacity="0.8"
+                                            fontFamily="'Aagaz', sans-serif">
+                                            X
+                                        </Text>
+                                    </Box>
+                                )}
+                            </Box>
+                        );
                     })}
+
                 <Image src={battleInfo.isDefenderWin ? defeatIcon : victoryIcon} boxSize={'50px'} my={'auto'} />
             </Stack>
             <Stack
@@ -297,14 +327,8 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                         );
 
                         return (
-                            <>
-                                <Stack
-                                    key={index}
-                                    direction={'column'}
-                                    minW={'250px'}
-                                    w={'250px'}
-                                    h={'100%'}
-                                    flexShrink={0}>
+                            <Fragment key={index}>
+                                <Stack direction={'column'} minW={'250px'} w={'250px'} h={'100%'} flexShrink={0}>
                                     <Stack direction={'row'} color={'#FFF'} h={'50%'} spacing={4}>
                                         <Stack
                                             direction={'column'}
@@ -360,7 +384,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                                 boxSize={'20px'}
                                                                 borderRadius={'5px'}
                                                                 bgColor={'#FFF'}
-                                                                src={alphaIcon}
+                                                                src={'/images/battlegrounds/alpha_icon.svg'}
                                                             />
                                                             <Text>{attackerBonus[index]?.heroBonus ?? 0}</Text>
                                                         </Stack>
@@ -509,7 +533,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                                 boxSize={'20px'}
                                                                 borderRadius={'5px'}
                                                                 bgColor={'#FFF'}
-                                                                src={alphaIcon}
+                                                                src={'/images/battlegrounds/alpha_icon.svg'}
                                                             />
                                                             <Text>{defenderBonus[index]?.heroBonus ?? 0}</Text>
                                                         </Stack>
@@ -524,7 +548,14 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                         />
                                                         <Text>{defenderRoll}</Text>
                                                     </Stack>
-                                                    <Text fontSize={'small'}>DB: 2</Text>
+                                                    <Stack direction={'row'}>
+                                                        <Image
+                                                            boxSize={'20px'}
+                                                            borderRadius={'5px'}
+                                                            src={'/images/battlegrounds/defense_icon.svg'}
+                                                        />
+                                                        <Text>2</Text>
+                                                    </Stack>
                                                 </Stack>
 
                                                 <Box
@@ -606,7 +637,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                     </Stack>
                                 </Stack>
                                 <Square bgColor={'#FFF'} height={'95%'} width={'1px'} my={'auto'} />
-                            </>
+                            </Fragment>
                         );
                     })}
                 <IconButton
@@ -632,9 +663,38 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                     {infoAccount.accountRs === defenderInfo.accountRS ? 'MY' : 'OPPONENT'} CARDS:
                 </Text>
                 {battleInfo &&
-                    battleInfo.defenderArmy.asset.map(item => {
-                        let defenderCard = cards.find(card => card.asset === item);
-                        return <Image src={defenderCard.cardImgUrl} w={'12%'} />;
+                    battleInfo.defenderArmy.asset.map((item, index) => {
+                        const defenderCard = cards.find(card => card.asset === item);
+                        const isOverlayVisible =
+                            !battleInfo.isDefenderWin ||
+                            battleResults.battleResult[battleResults.battleResult.length - 1].defenderAsset !==
+                                defenderCard.asset;
+
+                        return (
+                            <Box position="relative" m={'auto'} width="12%" key={index}>
+                                <Image src={defenderCard.cardImgUrl} width="100%" />
+                                {isOverlayVisible && (
+                                    <Box
+                                        position="absolute"
+                                        top="0"
+                                        left="0"
+                                        width="100%"
+                                        height="100%"
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        bg="rgba(0, 0, 0, 0.3)">
+                                        <Text
+                                            fontSize="5rem"
+                                            color="#E14942"
+                                            opacity="0.8"
+                                            fontFamily="'Aagaz', sans-serif">
+                                            X
+                                        </Text>
+                                    </Box>
+                                )}
+                            </Box>
+                        );
                     })}
                 <Image src={battleInfo.isDefenderWin ? victoryIcon : defeatIcon} boxSize={'50px'} my={'auto'} />
             </Stack>

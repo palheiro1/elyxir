@@ -160,7 +160,7 @@ export const SelectHandPage = ({
         }
     };
 
-    const [isLowHeight] = useMediaQuery('(max-height: 680px)');
+    const [isLowHeight] = useMediaQuery('(max-height: 700px)');
 
     const getImageSrc = (name, value) => {
         if (name === 'Level') return getLevelIconString(value);
@@ -222,13 +222,14 @@ export const SelectHandPage = ({
                     textAlign={'center'}
                     w={'60%'}>
                     {statistics.map(({ name, value }, index) => (
-                        <Stack direction={'column'} key={index} textAlign={'center'} m={2}>
+                        <Stack direction={'column'} key={index} textAlign={'center'} my={2} mx={'auto'}>
                             <Stack
                                 backgroundColor={'#5A679B'}
                                 direction={'row'}
                                 border={'2px solid #D597B2'}
                                 borderRadius={'40px'}
-                                color={'#000'}
+                                color={'#FFF'}
+                                letterSpacing={1}
                                 w={isMobile ? '80px' : '155px'}
                                 fontSize={isMobile ? 'xs' : 'md'}
                                 textAlign={'center'}
@@ -236,9 +237,7 @@ export const SelectHandPage = ({
                                 fontFamily={'Chelsea Market, system-ui'}
                                 p={isMobile ? 0 : 2}>
                                 <Image src={getImageSrc(name, value)} boxSize={'30px'} />
-                                <Text ml={2} my={'auto'}>
-                                    {value}
-                                </Text>
+                                <Text m={'auto'}>{value}</Text>
                             </Stack>
                         </Stack>
                     ))}
@@ -302,7 +301,7 @@ export const SelectHandPage = ({
                     direction={'row'}
                     mx={'auto'}
                     mt={isMobile ? 1 : 4}
-                    w={'70%'}
+                    w={isLowHeight ? '90%' : '70%'}
                     justifyContent={'space-between'}
                     fontSize={isMobile ? 'xs' : 'md'}
                     fontWeight={100}
@@ -397,10 +396,6 @@ export const SelectHandPage = ({
                                 display="flex"
                                 sx={{
                                     border: index === 0 ? '2px solid #D08FB0' : 'none',
-                                    borderImage:
-                                        index === 0
-                                            ? `linear-gradient(90deg, rgba(163,161,81,1) 0%, rgba(219,227,82,1) 35%, rgba(244,135,148,1) 100%) 1`
-                                            : 'none',
                                 }}
                                 onClick={() => openInventory(index)}>
                                 <Text
@@ -425,26 +420,30 @@ export const SelectHandPage = ({
                         );
                     })}
                 </Stack>
-                <Button
-                    mx={'auto'}
-                    style={{
-                        background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
-                        border: '3px solid #EBB2B9',
-                    }}
-                    padding={isMobile ? 5 : 7}
-                    textTransform={'uppercase'}
-                    color={'#FFF'}
-                    fontWeight={'100'}
-                    borderRadius={'30px'}
-                    mt={isMobile ? 3 : 6}
-                    fontSize={isMobile ? 'md' : 'x-large'}
-                    fontFamily={'Chelsea Market, system-ui'}
-                    position={isLowHeight && 'absolute'}
-                    bottom={isLowHeight && 2}
-                    right={isLowHeight && 2}
-                    onClick={onOpen}>
-                    Start a battle
-                </Button>
+                <Box
+                    mx="auto"
+                    borderRadius="30px"
+                    p="3px"
+                    background="linear-gradient(49deg, rgba(235,178,185,1) 0%, rgba(32,36,36,1) 100%)"
+                    display="inline-block"
+                    mt={isMobile ? 3 : 6}>
+                    <Button
+                        sx={{
+                            background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
+                            borderRadius: '30px',
+                            color: '#FFF',
+                            textTransform: 'uppercase',
+                            fontWeight: '400',
+                            letterSpacing: '1px',
+                            fontSize: isMobile ? 'md' : 'lg',
+                            fontFamily: "'Chelsea Market', system-ui",
+                            padding: isMobile ? '5' : '6',
+                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                        }}
+                        onClick={onOpen}>
+                        Start a Battle
+                    </Button>
+                </Box>
             </Box>
             <Modal isOpen={isOpen} onClose={onClose} isCentered>
                 <ModalOverlay />

@@ -1,5 +1,5 @@
 import { Box, Img, Stack, Text, Tooltip, Spinner, Image, Square, IconButton } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { addressToAccountId, getAccount } from '../../../../../services/Ardor/ardorInterface';
 import {
     getArenas,
@@ -21,7 +21,6 @@ import {
     getMediumIconInt,
 } from '../../Utils/BattlegroundsUtils';
 import { ChevronLeftIcon, ChevronRightIcon, TriangleUpIcon } from '@chakra-ui/icons';
-import alphaIcon from '../../assets/icons/alpha_icon.svg';
 import defeatIcon from '../../assets/icons/defeat_icon.svg';
 import victoryIcon from '../../assets/icons/victory_icon.svg';
 
@@ -279,9 +278,36 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                     {infoAccount.accountRs === attackerInfo.accountRS ? 'MY' : 'OPPONENT'} CARDS:
                 </Text>
                 {battleInfo &&
-                    battleInfo.attackerArmy.asset.map(item => {
-                        let attackerCard = cards.find(card => card.asset === item);
-                        return <Image src={attackerCard.cardImgUrl} w={'12%'} />;
+                    battleInfo.attackerArmy.asset.map((item, index) => {
+                        const attackerCard = cards.find(card => card.asset === item);
+                        const isOverlayVisible =
+                            battleInfo.isDefenderWin ||
+                            battleResults[battleResults.length - 1].attackerAsset !== attackerCard.asset;
+                        return (
+                            <Box position="relative" m={'auto'} width="12%" key={index}>
+                                <Image src={attackerCard.cardImgUrl} width="100%" />
+                                {isOverlayVisible && (
+                                    <Box
+                                        position="absolute"
+                                        top="0"
+                                        left="0"
+                                        width="100%"
+                                        height="100%"
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        bg="rgba(0, 0, 0, 0.3)">
+                                        <Text
+                                            fontSize="5rem"
+                                            color="#E14942"
+                                            opacity="0.8"
+                                            fontFamily="'Aagaz', sans-serif">
+                                            X
+                                        </Text>
+                                    </Box>
+                                )}
+                            </Box>
+                        );
                     })}
                 <Image src={battleInfo.isDefenderWin ? defeatIcon : victoryIcon} boxSize={'50px'} my={'auto'} />
             </Stack>
@@ -331,14 +357,8 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                         );
 
                         return (
-                            <>
-                                <Stack
-                                    key={index}
-                                    direction={'column'}
-                                    minW={'250px'}
-                                    w={'250px'}
-                                    h={'100%'}
-                                    flexShrink={0}>
+                            <Fragment key={index}>
+                                <Stack direction={'column'} minW={'250px'} w={'250px'} h={'100%'} flexShrink={0}>
                                     <Stack direction={'row'} color={'#FFF'} h={'50%'} spacing={4}>
                                         <Stack
                                             direction={'column'}
@@ -394,7 +414,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                                 boxSize={'20px'}
                                                                 borderRadius={'5px'}
                                                                 bgColor={'#FFF'}
-                                                                src={alphaIcon}
+                                                                src={'/images/battlegrounds/alpha_icon.svg'}
                                                             />
                                                             <Text>{attackerBonus[index]?.heroBonus ?? 0}</Text>
                                                         </Stack>
@@ -528,7 +548,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                                 boxSize={'20px'}
                                                                 borderRadius={'5px'}
                                                                 bgColor={'#FFF'}
-                                                                src={alphaIcon}
+                                                                src={'/images/battlegrounds/alpha_icon.svg'}
                                                             />
                                                             <Text>{defenderBonus[index]?.heroBonus ?? 0}</Text>
                                                         </Stack>
@@ -543,7 +563,14 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                         />
                                                         <Text>{defenderRoll}</Text>
                                                     </Stack>
-                                                    <Text fontSize={'small'}>DB: 2</Text>
+                                                    <Stack direction={'row'}>
+                                                        <Image
+                                                            boxSize={'20px'}
+                                                            borderRadius={'5px'}
+                                                            src={'/images/battlegrounds/defense_icon.svg'}
+                                                        />
+                                                        <Text>2</Text>
+                                                    </Stack>
                                                 </Stack>
 
                                                 <Box
@@ -610,7 +637,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                     </Stack>
                                 </Stack>
                                 <Square bgColor={'#FFF'} height={'95%'} width={'1px'} my={'auto'} />
-                            </>
+                            </Fragment>
                         );
                     })}
                 <IconButton
@@ -636,9 +663,37 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                     {infoAccount.accountRs === defenderInfo.accountRS ? 'MY' : 'OPPONENT'} CARDS:
                 </Text>
                 {battleInfo &&
-                    battleInfo.defenderArmy.asset.map(item => {
-                        let defenderCard = cards.find(card => card.asset === item);
-                        return <Image src={defenderCard.cardImgUrl} w={'12%'} />;
+                    battleInfo.defenderArmy.asset.map((item, index) => {
+                        const defenderCard = cards.find(card => card.asset === item);
+                        const isOverlayVisible =
+                            !battleInfo.isDefenderWin ||
+                            battleResults[battleResults.length - 1].defenderAsset !== defenderCard.asset;
+
+                        return (
+                            <Box position="relative" m={'auto'} width="12%" key={index}>
+                                <Image src={defenderCard.cardImgUrl} width="100%" />
+                                {isOverlayVisible && (
+                                    <Box
+                                        position="absolute"
+                                        top="0"
+                                        left="0"
+                                        width="100%"
+                                        height="100%"
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        bg="rgba(0, 0, 0, 0.3)">
+                                        <Text
+                                            fontSize="5rem"
+                                            color="#E14942"
+                                            opacity="0.8"
+                                            fontFamily="'Aagaz', sans-serif">
+                                            X
+                                        </Text>
+                                    </Box>
+                                )}
+                            </Box>
+                        );
                     })}
                 <Image src={battleInfo.isDefenderWin ? victoryIcon : defeatIcon} boxSize={'50px'} my={'auto'} />
             </Stack>

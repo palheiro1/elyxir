@@ -35,8 +35,8 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
                     <g clipPath="url(#clip0_3079_4498)">
                         <rect width="979" height="542.802" fill="url(#pattern0)" />
                         {arenasInfo
-                            .filter(arena => filters.rarity === '' || arena.level === Number(filters.rarity))
-                            .filter(arena => filters.element === '' || arena.mediumId === Number(filters.element))
+                            .filter(arena => filters.rarity === -1 || arena.level === filters.rarity)
+                            .filter(arena => filters.element === -1 || arena.mediumId === filters.element)
                             .map(arena => (
                                 <MapPoint
                                     key={arena.id}

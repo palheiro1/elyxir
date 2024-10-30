@@ -97,6 +97,13 @@ const Leaderboards = ({ handleClose, isMobile }) => {
         changeData(0);
     };
 
+    const availableLeaderboards = [
+        { name: 'CHAMPIONS PANTHEON', value: 1 },
+        { name: 'LORD OF LANDS', value: 2 },
+        { name: 'LORD OF SKY', value: 3 },
+        { name: 'LORD OF OCEANS', value: 4 },
+        { name: 'LORD OF COMBATIVENESS', value: 5 },
+    ];
     return (
         <>
             <Overlay isVisible={true} handleClose={closeLeaderboards} />
@@ -164,11 +171,18 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                             fontFamily={'Chelsea Market, System'}
                             _hover={{ borderColor: '#555' }}
                             maxW={'250px'}>
-                            <option value={1}>CHAMPIONS PANTHEON</option>
-                            <option value={2}>LORD OF LANDS</option>
-                            <option value={3}>LORD OF SKY</option>
-                            <option value={4}>LORD OF OCEANS</option>
-                            <option value={5}>LORD OF COMBATIVENESS</option>
+                            {availableLeaderboards.map(({ name, value }, index) => {
+                                return (
+                                    <option
+                                        key={index}
+                                        value={value}
+                                        style={{
+                                            backgroundColor: '#FFF',
+                                        }}>
+                                        {name}
+                                    </option>
+                                );
+                            })}
                         </Select>
                     </Stack>
                     <Stack direction={'column'} color={'#FFF'} mx={'auto'} textAlign={'center'} h={'90%'}>
