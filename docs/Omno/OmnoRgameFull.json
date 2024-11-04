@@ -6,7 +6,10 @@
       "request": "configureAsMerge",
       "parameter": {
         "incomeAccount": "8827069720377389395",
+        "giftzRewardQNT": 5,
+        "activeRewards" : false,
         "arenaDefault": {
+          "defenderBonus": 2,
           "defenderBonusOnDomainMatch": 1,
           "armyRankMaximum": [
             4,

@@ -78,6 +78,7 @@ import { fetchUserBattles } from '../../redux/reducers/BattleReducer';
 import { fetchArenasInfo } from '../../redux/reducers/ArenasReducer';
 import { fetchBattleData } from '../../redux/reducers/BattlegroundsReducer';
 import { fetchSoldiers } from '../../redux/reducers/SoldiersReducer';
+import { fetchLeaderboards } from '../../redux/reducers/LeaderboardsReducer';
 
 /**
  * @name Home
@@ -427,6 +428,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         dispatch(fetchArenasInfo());
         infoAccount && dispatch(fetchUserBattles(infoAccount.accountRs));
         dispatch(fetchSoldiers());
+        dispatch(fetchLeaderboards());
     }, [cards, dispatch, infoAccount]);
 
     // -----------------------------------------------------------------

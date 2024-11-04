@@ -1,11 +1,14 @@
-import { Box, Image, Table, Tbody, Td, Text, Th, Thead, Tooltip, Tr } from '@chakra-ui/react';
+import { Box, Image, Grid, GridItem, Tooltip, Text } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getAsset } from '../../../../../utils/cardsUtils';
 import { formatAddress, isEmptyObject } from '../../Utils/BattlegroundsUtils';
+import defeatIcon from '../../assets/icons/defeat_icon.svg';
+import victoryIcon from '../../assets/icons/victory_icon.svg';
 
 const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, isMobile }) => {
     const [battleRewards, setBattleRewards] = useState({});
+
     const getBattleReward = useCallback(async (arenaInfo, battle) => {
         let rewardFraction = battle.isWinnerLowerPower ? 0.9 : 0.8;
         if (!isEmptyObject(arenaInfo.battleCost)) {
@@ -39,32 +42,38 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
     }, [battleDetails, arenasInfo, getBattleReward]);
 
     const renderBattleRow = useCallback(
-        (item, index) => {
-            const bgColor = index % 2 === 0 ? '#DB78AA' : '#D08FB0';
+        item => {
+            const bgColor = 'transparent';
             const captured = cards.find(obj => Object.keys(item.capturedAsset).includes(obj.asset));
             const battleReward = battleRewards[item.battleId] || [];
 
             return (
-                <Tr
+                <Grid
                     key={item.battleId}
-                    onClick={() => handleViewDetails(item.battleId)}
-                    cursor={'pointer'}
-                    _hover={{ backgroundColor: 'whiteAlpha.300' }}>
-                    <Td textAlign={'center'} p={2}>
+                    templateColumns="repeat(6, 1fr)"
+                    p={3}
+                    alignItems="center"
+                    bg="transparent"
+                    cursor="pointer"
+                    _hover={{ backgroundColor: 'whiteAlpha.300', borderRadius: '25px' }}
+                    onClick={() => handleViewDetails(item.battleId)}>
+                    <GridItem textAlign="center">
                         <Box
                             bgColor={bgColor}
-                            fontFamily={'Chelsea Market, System'}
-                            h="100%"
+                            fontFamily="Inter, System"
+                            fontWeight="700"
+                            fontSize="sm"
                             p={3}
+                            maxH="45px"
+                            h="100%"
                             display="flex"
-                            maxH={'45px'}
-                            fontSize={isMobile ? 'xs' : 'md'}
                             alignItems="center"
                             justifyContent="center">
                             {item.date}
                         </Box>
-                    </Td>
-                    <Td textAlign={'center'} p={2}>
+                    </GridItem>
+
+                    <GridItem textAlign="center">
                         <Tooltip
                             label={
                                 item.isUserDefending ? item.attackerDetails.accountRS : item.defenderDetails.accountRS
@@ -73,9 +82,10 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                             placement="bottom">
                             <Box
                                 bgColor={bgColor}
-                                fontFamily={'Chelsea Market, System'}
-                                p={3}
+                                fontFamily="Inter, System"
+                                fontWeight="700"
                                 fontSize={isMobile ? 'xs' : 'md'}
+                                p={3}
                                 h="100%"
                                 display="flex"
                                 alignItems="center"
@@ -85,49 +95,63 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                                     : item.defenderDetails.name || formatAddress(item.defenderDetails.accountRS)}
                             </Box>
                         </Tooltip>
-                    </Td>
-                    <Td textAlign={'center'} p={2}>
+                    </GridItem>
+
+                    <GridItem textAlign="center">
                         <Box
                             bgColor={bgColor}
-                            p={3}
-                            maxH={'45px'}
-                            fontFamily={'Chelsea Market, System'}
-                            h="100%"
+                            fontFamily="Inter, System"
+                            fontWeight="700"
                             fontSize={isMobile ? 'xs' : 'md'}
+                            p={3}
+                            ml={3}
+                            maxH="45px"
+                            h="100%"
                             display="flex"
                             alignItems="center"
                             justifyContent="center">
                             {item.arenaName}
                         </Box>
-                    </Td>
-                    <Td textAlign={'center'} p={2}>
+                    </GridItem>
+
+                    <GridItem textAlign="center">
                         <Box
                             bgColor={bgColor}
                             p={3}
-                            fontFamily={'Chelsea Market, System'}
+                            fontFamily="Inter, System"
+                            fontWeight="700"
+                            ml={3}
                             h="100%"
                             display="flex"
                             alignItems="center"
-                            fontSize={isMobile ? 'xs' : 'md'}
                             justifyContent="center">
-                            {item.isUserDefending ? 'GUARDIAN' : 'ATTACKER'}
+                            <Image
+                                src={`/images/battlegrounds/${
+                                    item.isUserDefending ? 'defense_icon.svg' : 'attack_icon.svg'
+                                }`}
+                                boxSize="45px"
+                            />
                         </Box>
-                    </Td>
-                    <Td textAlign={'center'} p={2}>
+                    </GridItem>
+
+                    <GridItem textAlign="center">
                         <Box
                             h="100%"
                             display="flex"
-                            fontSize={isMobile ? 'xs' : 'md'}
-                            p={3}
                             alignItems="center"
                             justifyContent="center"
-                            bgColor={item.isUserDefending === item.isDefenderWin ? '#66FA7C' : '#FF6058'}
-                            fontFamily={'Chelsea Market, System'}>
-                            {item.isUserDefending === item.isDefenderWin ? 'WON' : 'LOST'}
+                            fontFamily="Inter, System"
+                            ml={4}
+                            p={3}
+                            fontSize={isMobile ? 'xs' : 'md'}>
+                            <Image
+                                src={item.isUserDefending === item.isDefenderWin ? victoryIcon : defeatIcon}
+                                boxSize="45px"
+                            />
                         </Box>
-                    </Td>
+                    </GridItem>
                     {cards && cards.length > 0 && (
-                        <Td textAlign={'center'} p={2}>
+                        <GridItem textAlign="center">
                             <Tooltip
                                 label={
                                     <Box>
@@ -140,15 +164,21 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                                 <Box
                                     bgColor={bgColor}
                                     p={3}
-                                    fontFamily={'Chelsea Market, System'}
+                                    fontFamily="Inter, System"
+                                    fontWeight="700"
                                     h="100%"
                                     display="flex"
-                                    fontSize={isMobile ? 'xs' : 'md'}
                                     alignItems="center"
-                                    maxH={'45px'}
                                     justifyContent="center"
-                                    cursor="pointer">
-                                    <Text color={'#FFF'}>
+                                    cursor="pointer"
+                                    maxH="45px"
+                                    fontSize={isMobile ? 'xs' : 'md'}>
+                                    <Text
+                                        color={item.isUserDefending === item.isDefenderWin ? '#7FC0BE' : '#D597B2'}
+                                        border="2px solid white"
+                                        p={2}
+                                        borderRadius="20px"
+                                        w="130px">
                                         {captured?.name}
                                         {item.isUserDefending === item.isDefenderWin &&
                                             battleReward.length > 0 &&
@@ -156,82 +186,67 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                                     </Text>
                                 </Box>
                             </Tooltip>
-                        </Td>
+                        </GridItem>
                     )}
-                </Tr>
+                </Grid>
             );
         },
         [cards, battleRewards, isMobile, handleViewDetails]
     );
 
-    const tableRows = useMemo(() => battleDetails.map(renderBattleRow), [battleDetails, renderBattleRow]);
+    const gridRows = useMemo(() => battleDetails.map(renderBattleRow), [battleDetails, renderBattleRow]);
 
-    return (
-        <Table variant={'unstyled'} textColor={'#FFF'} w={'85%'} mx={'auto'}>
-            <Thead>
-                <Tr>
-                    <Th
-                        fontFamily={'Chelsea Market, System'}
-                        color={'#FFF'}
-                        fontSize={isMobile ? 'sm' : 'lg'}
-                        textAlign={'center'}>
-                        Date
-                    </Th>
-                    <Th
-                        fontFamily={'Chelsea Market, System'}
-                        color={'#FFF'}
-                        fontSize={isMobile ? 'sm' : 'lg'}
-                        textAlign={'center'}>
-                        Opponent
-                    </Th>
-                    <Th
-                        fontFamily={'Chelsea Market, System'}
-                        color={'#FFF'}
-                        fontSize={isMobile ? 'sm' : 'lg'}
-                        textAlign={'center'}>
-                        Land
-                    </Th>
-                    <Th
-                        fontFamily={'Chelsea Market, System'}
-                        color={'#FFF'}
-                        fontSize={isMobile ? 'sm' : 'lg'}
-                        textAlign={'center'}>
-                        Position
-                    </Th>
-                    <Th
-                        fontFamily={'Chelsea Market, System'}
-                        color={'#FFF'}
-                        fontSize={isMobile ? 'sm' : 'lg'}
-                        textAlign={'center'}>
-                        Result
-                    </Th>
-                    {cards && cards.length > 0 && (
-                        <Th
-                            fontFamily={'Chelsea Market, System'}
-                            color={'#FFF'}
-                            fontSize={isMobile ? 'sm' : 'lg'}
-                            textAlign={'center'}>
-                            Rewards/ Losses
-                        </Th>
-                    )}
-                </Tr>
-            </Thead>
-
-            {battleDetails.length > 0 ? (
-                <Tbody>{tableRows}</Tbody>
-            ) : (
-                <Text
-                    position={'absolute'}
-                    fontFamily={'Chelsea Market, system-ui'}
-                    color={'#FFF'}
-                    fontSize={'large'}
-                    top={'50%'}
-                    left={'50%'}
-                    transform={'translate(-50%, -50%)'}>
-                    You have not yet fought any battle
-                </Text>
-            )}
-        </Table>
+    return battleDetails.length > 0 ? (
+        <Box w="85%" mx="auto">
+            <Grid
+                templateColumns="repeat(6, 1fr)"
+                border="2px solid #DB78AA"
+                p={3}
+                py={1}
+                borderRadius="20px"
+                position="relative"
+                bg="inherit"
+                zIndex={1}>
+                <GridItem fontWeight="700" fontSize="md" textAlign="center" color="#FFF">
+                    DATE
+                </GridItem>
+                <GridItem fontWeight="700" fontSize="md" textAlign="center" color="#FFF">
+                    OPPONENT
+                </GridItem>
+                <GridItem fontWeight="700" fontSize="md" textAlign="center" color="#FFF">
+                    LAND
+                </GridItem>
+                <GridItem fontWeight="700" fontSize="md" textAlign="center" color="#FFF">
+                    POSITION
+                </GridItem>
+                <GridItem fontWeight="700" fontSize="md" textAlign="center" color="#FFF">
+                    RESULT
+                </GridItem>
+                {cards && cards.length > 0 && (
+                    <GridItem fontWeight="700" fontSize="md" textAlign="center" color="#FFF">
+                        REWARDS/ LOSSES
+                    </GridItem>
+                )}
+            </Grid>
+            <Box maxHeight="700px" overflowY="auto" borderBottomRadius={'20px'}>
+                {gridRows}
+            </Box>
+        </Box>
+    ) : (
+        <Box
+            h="100%"
+            position="absolute"
+            color="#FFF"
+            alignContent="center"
+            top="50%"
+            left="50%"
+            w="100%"
+            fontSize="lg"
+            fontFamily="Chelsea Market, System"
+            textAlign="center"
+            transform="translate(-50%, -50%)">
+            You have not yet fought any battle
+        </Box>
     );
 };
 

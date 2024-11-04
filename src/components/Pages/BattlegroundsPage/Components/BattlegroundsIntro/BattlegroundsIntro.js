@@ -12,8 +12,8 @@ export const BattlegroundsIntro = ({ visible, page, handleClose, handleNext }) =
                 visibility={visible ? 'visible' : 'hidden'}
                 backgroundColor={'#1F2323'}
                 borderRadius={'30px'}
-                w={'600px'}
-                h={'350px'}
+                w={'60%'}
+                h={'60%'}
                 pos={'fixed'}
                 top={'50%'}
                 left={'50%'}

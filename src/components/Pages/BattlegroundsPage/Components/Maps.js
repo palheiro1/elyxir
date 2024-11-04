@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react';
 import '../BattlegroundMap.css';
 import { Box } from '@chakra-ui/react';
 import { MapImage } from '../assets/MapImage';
-import { MapPoint } from './MapPoint';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchArenasInfo } from '../../../../redux/reducers/ArenasReducer';
+import MapPoint from './MapPoint';
 
-export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle, w }) => {
+export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle, w, filters }) => {
     const [selectedArena, setSelectedArena] = useState();
+    const [openPopoverId, setOpenPopoverId] = useState(null);
     const { arenasInfo } = useSelector(state => state.arenas);
 
     const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch(fetchArenasInfo());
     }, [dispatch]);
@@ -19,6 +21,7 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
         handleSelectArena(arenasInfo[id - 1]);
         setSelectedArena(id);
     };
+
     return (
         arenasInfo && (
             <Box className="containerMap" zIndex={0}>
@@ -31,18 +34,22 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
                     xlink="http://www.w3.org/1999/xlink">
                     <g clipPath="url(#clip0_3079_4498)">
                         <rect width="979" height="542.802" fill="url(#pattern0)" />
-                        {arenasInfo.map(arena => (
-                            <MapPoint
-                                key={arena.id}
-                                arena={arena}
-                                handleClick={handleClick}
-                                selectedArena={selectedArena}
-                                cards={cards}
-                                handleStartBattle={handleStartBattle}
-                                infoAccount={infoAccount}
-                            />
-                        ))}
-                        {/* Max X: 970 Max Y: 530*/}
+                        {arenasInfo
+                            .filter(arena => filters.rarity === -1 || arena.level === filters.rarity)
+                            .filter(arena => filters.element === -1 || arena.mediumId === filters.element)
+                            .map(arena => (
+                                <MapPoint
+                                    key={arena.id}
+                                    arena={arena}
+                                    handleClick={handleClick}
+                                    selectedArena={selectedArena}
+                                    cards={cards}
+                                    handleStartBattle={handleStartBattle}
+                                    infoAccount={infoAccount}
+                                    openPopoverId={openPopoverId}
+                                    setOpenPopoverId={setOpenPopoverId}
+                                />
+                            ))}
                     </g>
                     <defs>
                         <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">

@@ -33,6 +33,7 @@ export const BattleWindow = ({
     const [currentTime, setCurrentTime] = useState();
     const [rank0Count, setRank0Count] = useState(0);
     const [rank1Count, setRank1Count] = useState(1);
+    const [defenderCards, setDefenderCards] = useState(null);
 
     const toast = useToast();
 
@@ -52,6 +53,10 @@ export const BattleWindow = ({
             });
             const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
             setDomainName(cards.find(card => card.asset === arenaSoldier.asset).channel);
+
+            const defenderAssets = new Set(arenaInfo.defender.asset);
+            const matchingObjects = cards.filter(obj => defenderAssets.has(obj.asset));
+            setDefenderCards(matchingObjects);
         };
         getDefenderInfo();
     }, [arenaInfo, cards]);
@@ -143,7 +148,7 @@ export const BattleWindow = ({
                 pos={'fixed'}
                 bgColor={'#1F2323'}
                 zIndex={99}
-                w={'80%'}
+                w={(!openIventory && !showResults && defenderInfo) || showResults ? '50%' : '80%'}
                 h={'90%'}
                 borderRadius={'25px'}
                 top={'50%'}
@@ -151,7 +156,7 @@ export const BattleWindow = ({
                 transform={'translate(-50%, -50%)'}>
                 <IconButton
                     background={'transparent'}
-                    color={'#FFF'}
+                    color={showResults ? '#000' : '#FFF'}
                     icon={<CloseIcon />}
                     _hover={{ background: 'transparent' }}
                     position="absolute"
@@ -183,6 +188,7 @@ export const BattleWindow = ({
                                 handBattleCards={handBattleCards}
                                 openInventory={handleOpenInventory}
                                 defenderInfo={defenderInfo}
+                                defenderCards={defenderCards}
                                 deleteCard={deleteCard}
                                 domainBonus={domainBonus}
                                 mediumBonus={mediumBonus}

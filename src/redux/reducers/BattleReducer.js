@@ -1,4 +1,3 @@
-// battleSlice.js
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getArenas, getUserBattles } from '../../services/Battlegrounds/Battlegrounds';
 import { formatTimeStamp } from '../../components/Pages/BattlegroundsPage/Utils/BattlegroundsUtils';
@@ -77,8 +76,11 @@ const battleSlice = createSlice({
             })
             .addCase(fetchUserBattles.fulfilled, (state, action) => {
                 state.loading = false;
-                state.arenasInfo = action.payload.arenas;
-                state.userBattles = action.payload.details;
+
+                if (!action.payload.cached) {
+                    state.arenasInfo = action.payload.arenas;
+                    state.userBattles = action.payload.details;
+                }
                 state.battleDetails = action.payload.details;
             })
             .addCase(fetchUserBattles.rejected, (state, action) => {

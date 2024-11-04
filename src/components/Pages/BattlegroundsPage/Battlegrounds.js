@@ -8,6 +8,7 @@ import {
     MenuItem,
     MenuList,
     Portal,
+    Select,
     Stack,
     Text,
     useColorModeValue,
@@ -32,6 +33,8 @@ import BattleList from './Components/BattleRecord/BattleList';
 import ChangeName from './Components/Modals/ChangeName';
 import { fetchBattleData } from '../../../redux/reducers/BattlegroundsReducer';
 import { useDispatch, useSelector } from 'react-redux';
+import Leaderboards from './Components/Leaderboards/Leaderboards';
+import Earnings from './Components/EarnigsPage/Earnings';
 
 const Battlegrounds = ({ infoAccount, cards }) => {
     const { accountRs } = infoAccount;
@@ -46,8 +49,13 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const [openBattle, setOpenBattle] = useState(false);
     const [openInventory, setOpenInventory] = useState(false);
     const [openBattleRecord, setOpenBattleRecord] = useState(false);
-    // eslint-disable-next-line no-unused-vars
+    const [openLeaderboards, setOpenLeaderboards] = useState(false);
+    const [openEarnings, setOpenEarnings] = useState(false);
     const [updateState, setUpdateState] = useState(false);
+    const [filters, setFilters] = useState({
+        rarity: -1,
+        element: -1,
+    });
 
     const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
     const { isOpen: isOpenGems, onOpen: onOpenGems, onClose: onCloseGems } = useDisclosure();
@@ -59,7 +67,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
 
     useEffect(() => {
         cards && accountRs && dispatch(fetchBattleData({ accountRs, cards }));
-    }, [dispatch, accountRs, cards]);
+    }, [dispatch, accountRs, cards, updateState]);
 
     const handleNext = () => {
         setPage(2);
@@ -76,9 +84,9 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     /* Buttons menu list */
     const buttons = [
         {
-            name: 'Inventory',
+            name: 'Leaderboards',
             onclick: () => {
-                setOpenInventory(true);
+                setOpenLeaderboards(true);
                 setIsScrollLocked(true);
             },
         },
@@ -89,15 +97,33 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                 setIsScrollLocked(true);
             },
         },
+
+        {
+            name: 'Earnings',
+            onclick: () => {
+                setOpenEarnings(true);
+                setIsScrollLocked(true);
+            },
+        },
+        {
+            name: 'Army',
+            onclick: () => {
+                setOpenInventory(true);
+                setIsScrollLocked(true);
+            },
+        },
+        {
+            name: 'FAQ',
+            onclick: () => {
+                window.open('https://mythicalbeings.io/how-to-play-battlegrounds.html', '_blank');
+            },
+        },
         {
             name: 'Change name',
             onclick: () => {
                 onOpenName();
             },
         },
-        { name: 'Elixir', disabled: true },
-        { name: 'Earnings', disabled: true },
-        { name: 'FAQ', disabled: true },
     ];
 
     const handleStartBattle = () => {
@@ -133,11 +159,23 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         setUpdateState(prevState => !prevState);
     };
 
-    let wEthDecimals = 4;
+    const handleCloseEarnings = () => {
+        setOpenEarnings(false);
+        setIsScrollLocked(false);
+        setUpdateState(prevState => !prevState);
+    };
+
+    const handleCloseLeaderboards = () => {
+        setOpenLeaderboards(false);
+        setIsScrollLocked(false);
+        setUpdateState(prevState => !prevState);
+    };
+
+    let wEthDecimals = 3;
 
     const statistics = [
-        { name: 'Defenders', value: landLords },
-        { name: 'Active player', value: activePlayers },
+        { name: 'Guardians', value: landLords },
+        { name: 'Active players', value: activePlayers },
         { name: 'Battles disputed', value: battleCount },
         // { name: 'GEM Rewards', value: '245k' },
         // { name: 'General ranking', value: 7 },
@@ -164,6 +202,36 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     };
 
     const [isMobile] = useMediaQuery('(max-width: 1190px)');
+
+    const handleRarityChange = event => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            rarity: Number(event.target.value),
+        }));
+    };
+
+    const handleElementChange = event => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            element: Number(event.target.value),
+        }));
+    };
+
+    const rarityFilterOptions = [
+        { name: 'Rarity', value: -1 },
+        { name: 'Common', value: 1 },
+        { name: 'Rare', value: 2 },
+        { name: 'Epic', value: 3 },
+        { name: 'Special', value: 4 },
+    ];
+    const mediumFilterOptions = [
+        { name: 'Element', value: -1 },
+        { name: 'Terrestrial', value: 1 },
+        { name: 'Aerial', value: 2 },
+        { name: 'Aquatic', value: 3 },
+    ];
+    const selectBgColor = useColorModeValue('#FFF', '#000');
+    const selectColor = useColorModeValue('#000', '#FFF');
 
     return (
         <>
@@ -210,6 +278,16 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                         isMobile={isMobile}
                     />
                 )}
+                {openEarnings && (
+                    <Earnings
+                        isMobile={isMobile}
+                        closeEarnigs={handleCloseEarnings}
+                        infoAccount={infoAccount}
+                        cards={cards}
+                    />
+                )}
+
+                {openLeaderboards && <Leaderboards handleClose={handleCloseLeaderboards} isMobile={isMobile} />}
                 <BattlegroundsIntro visible={visible} page={page} handleClose={handleClose} handleNext={handleNext} />
                 <AdvertModal isOpen={isModalOpen} onClose={closeModal} />
                 <ScrollLock isLocked={isScrollLocked} />
@@ -328,11 +406,41 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                             </Stack>
                         </Stack>
                         <Stack mt={isMobile && '130px'} w={isMobile ? '200%' : '100%'} ml={isMobile && -24}>
+                            <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} justifyContent={'flex-end'}>
+                                <Text my={'auto'} fontSize={'lg'} mx={3}>
+                                    Lands' filters:{' '}
+                                </Text>
+                                <Select w={'15%'} onChange={handleRarityChange}>
+                                    {rarityFilterOptions.map(({ name, value }, index) => {
+                                        return (
+                                            <option
+                                                key={index}
+                                                value={value}
+                                                style={{ backgroundColor: selectBgColor, color: selectColor }}>
+                                                {name}
+                                            </option>
+                                        );
+                                    })}
+                                </Select>
+                                <Select w={'15%'} onChange={handleElementChange}>
+                                    {mediumFilterOptions.map(({ name, value }, index) => {
+                                        return (
+                                            <option
+                                                key={index}
+                                                value={value}
+                                                style={{ backgroundColor: selectBgColor, color: selectColor }}>
+                                                {name}
+                                            </option>
+                                        );
+                                    })}
+                                </Select>
+                            </Stack>
                             <Maps
                                 handleSelectArena={handleSelectArena}
                                 infoAccount={infoAccount}
                                 cards={cards}
                                 handleStartBattle={handleStartBattle}
+                                filters={filters}
                                 w={'100%'}
                             />
                             <Stack direction={'row'} mt={isMobile ? '-90px' : 3} mx={'auto'}>
@@ -356,21 +464,29 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                         </Text>
                                     ))}
                                 </Stack>
-                                <Button
-                                    style={{
-                                        background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
-                                        border: '3px solid #EBB2B9',
-                                    }}
-                                    padding={6}
-                                    textTransform={'uppercase'}
-                                    color={'#FFF'}
-                                    fontWeight={'100'}
-                                    borderRadius={'40px'}
-                                    zIndex={5}
-                                    fontFamily={'Chelsea Market, system-ui'}
-                                    onClick={() => setIsModalOpen(true)}>
-                                    Start battle
-                                </Button>
+                                <Box
+                                    mx="auto"
+                                    borderRadius="30px"
+                                    p="3px"
+                                    background="linear-gradient(49deg, rgba(235,178,185,1) 0%, rgba(32,36,36,1) 100%)"
+                                    display="inline-block">
+                                    <Button
+                                        sx={{
+                                            background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
+                                            borderRadius: '30px',
+                                            color: '#FFF',
+                                            textTransform: 'uppercase',
+                                            fontWeight: '400',
+                                            letterSpacing: '1px',
+                                            fontSize: 'lg',
+                                            fontFamily: "'Chelsea Market', system-ui",
+                                            padding: '6',
+                                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                        }}
+                                        onClick={() => setIsModalOpen(true)}>
+                                        Start a Battle
+                                    </Button>
+                                </Box>
                             </Stack>
                         </Stack>
                     </Stack>

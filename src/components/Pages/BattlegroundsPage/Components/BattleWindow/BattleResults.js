@@ -1,5 +1,5 @@
-import { Box, Img, Stack, Text, Divider, Tooltip, Spinner } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Box, Img, Stack, Text, Tooltip, Spinner, Image, Square, IconButton } from '@chakra-ui/react';
+import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { addressToAccountId, getAccount } from '../../../../../services/Ardor/ardorInterface';
 import {
     getArenas,
@@ -11,7 +11,18 @@ import '@fontsource/chelsea-market';
 import locations from '../../assets/LocationsEnum';
 import Lottie from 'react-lottie';
 import animationData from '../../assets/Animation-1720173159051.json';
-import { formatAddress, getBattleRoundInfo } from '../../Utils/BattlegroundsUtils';
+import {
+    formatAddress,
+    getBattleRoundInfo,
+    getContinentIcon,
+    getDiceIcon,
+    getLevelIconInt,
+    getMediumIcon,
+    getMediumIconInt,
+} from '../../Utils/BattlegroundsUtils';
+import { ChevronLeftIcon, ChevronRightIcon, TriangleUpIcon } from '@chakra-ui/icons';
+import defeatIcon from '../../assets/icons/defeat_icon.svg';
+import victoryIcon from '../../assets/icons/victory_icon.svg';
 
 const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName }) => {
     const [battleInfo, setBattleInfo] = useState(null);
@@ -30,6 +41,8 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     const [attackerHero, setAttackerHero] = useState(null);
     const [defenderHero, setDefenderHero] = useState(null);
     const [soldiers, setSoldiers] = useState(null);
+    const [arrowLeftDisable, setArrowLeftDisable] = useState(true);
+    const [arrowRightDisable, setArrowRightDisable] = useState(false);
 
     const getLastBattle = useCallback(async () => {
         if (currentTime) {
@@ -195,324 +208,550 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
         },
     };
 
-    return battleInfo ? (
-        <Box
-            display={'flex'}
-            h={'100%'}
-            position={'absolute'}
-            fontFamily={'Chelsea Market, system-ui'}
-            fontSize={'larger'}
-            color={'#FFF'}
-            alignContent={'center'}
-            left={'50%'}
-            top={'50%'}
-            transform={'translate(-50%, -50%)'}
-            className="custom-scrollbar"
-            overflowY={'scroll'}
-            overflowX={'hidden'}
-            w={'100%'}
-            textAlign={'center'}>
-            <Stack direction={'column'} h={'20%'} mx={'auto'}>
-                <Stack
-                    alignSelf={'center'}
-                    fontFamily={'Chelsea Market, system-ui'}
-                    direction={'row'}
-                    border={'2px solid #D08FB0'}
-                    borderRadius={25}
-                    p={2}
-                    mt={4}
-                    w={'90%'}
-                    spacing={10}
-                    fontSize={'large'}>
-                    <Stack direction={'row'} flexGrow={1} ml={6}>
-                        <Text color="#D08FB0">TERRITORY: </Text>
-                        <Text textTransform={'uppercase'}>
-                            {arenaName}, {domainName}
-                        </Text>
-                    </Stack>
-                    <Box flex="1" />
-                    <Stack direction={'row'} mr={6}>
-                        <Text color="#D08FB0">ELEMENT: </Text>
-                        <Text textTransform={'uppercase'}>{medium}</Text>
-                    </Stack>
-                </Stack>
+    const elementRef = useRef(null);
 
-                <Stack direction={'row'} spacing={10} mx={'auto'} justifyContent={'center'} w={'60%'}>
-                    <Text color={battleInfo.isDefenderWin ? '#E14942' : '#EDBA2B'} my={'auto'}>
-                        {battleInfo.isDefenderWin ? 'LOSER: ' : 'WINNER: '}{' '}
+    const handleHorizantalScroll = (element, speed, distance, step) => {
+        const maxScrollLeft = element.scrollWidth - element.clientWidth;
+        let scrollAmount = 0;
+        const slideTimer = setInterval(() => {
+            element.scrollLeft += step;
+            scrollAmount += Math.abs(step);
+
+            if (scrollAmount >= distance) {
+                clearInterval(slideTimer);
+            }
+
+            if (element.scrollLeft === 0) {
+                setArrowLeftDisable(true);
+            } else {
+                setArrowLeftDisable(false);
+            }
+
+            if (element.scrollLeft >= maxScrollLeft) {
+                setArrowRightDisable(true);
+            } else {
+                setArrowRightDisable(false);
+            }
+        }, speed);
+    };
+
+    return battleInfo ? (
+        <Stack h={'100%'} w={'100%'} direction={'column'}>
+            <Stack
+                direction={'row'}
+                bgColor={'#BFD1ED'}
+                w={'100%'}
+                h={'7%'}
+                fontFamily={'Chelsea Market, system-ui'}
+                borderTopRadius={'25px'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                px={4}>
+                <Stack direction={'row'}>
+                    <Text color={'#000'} my={'auto'} fontSize={'large'} ml={10}>
+                        {battleInfo.isDefenderWin ? 'LOSER: ' : 'WINNER: '}
                         <Tooltip label={attackerInfo.accountRS} hasArrow>
-                            <span style={{ color: '#FFF' }}>
-                                {' '}
-                                {attackerInfo.name || formatAddress(attackerInfo.accountRS)}
-                            </span>
+                            {attackerInfo.name || formatAddress(attackerInfo.accountRS)}
                         </Tooltip>
                     </Text>
-
-                    <Stack direction={'row'} alignItems={'center'} justifyContent={'center'}>
-                        <Box
-                            border={'2px solid #7FC0BE'}
-                            borderRadius={5}
-                            w={9}
-                            h={9}
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center">
-                            {attackerPoints}
-                        </Box>
-                        <Text color={'#D597B2'} mx={2}>
-                            TO
-                        </Text>
-                        <Box
-                            border={'2px solid #7FC0BE'}
-                            borderRadius={5}
-                            w={9}
-                            h={9}
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center">
-                            {defenderPoints}
-                        </Box>
-                    </Stack>
-                    <Stack direction={'column'}>
-                        <Text color={battleInfo.isDefenderWin ? '#EDBA2B' : '#E14942'} my={'auto'}>
-                            {battleInfo.isDefenderWin ? 'WINNER: ' : 'LOSER: '}{' '}
-                            <Tooltip label={defenderInfo.accountRS} hasArrow>
-                                <span style={{ color: '#FFF' }}>
-                                    {' '}
-                                    {defenderInfo.name || formatAddress(defenderInfo.accountRS)}{' '}
-                                </span>
-                            </Tooltip>
-                        </Text>
-                    </Stack>
+                    <Text
+                        color={'#000'}
+                        my={'auto'}
+                        fontSize={'large'}
+                        border={'1px solid #2ba39c'}
+                        p={1}
+                        borderRadius={'8px'}>
+                        {attackerPoints}
+                    </Text>
                 </Stack>
-                <Stack direction={'column'}>
-                    {battleResults &&
-                        battleResults.map((item, index) => {
-                            const {
-                                defenderValue,
-                                attackerValue,
-                                attackerRoll,
-                                defenderRoll,
-                                defenderAsset,
-                                attackerAsset,
-                            } = item;
-                            const {
-                                attackerCard,
-                                defenderCard,
-                                defenderSoldier,
-                                attackerSoldier,
-                                attackerTotalPower,
-                                defenderTotalPower,
-                            } = getBattleRoundInfo(defenderAsset, attackerAsset, cards, battleInfo, soldiers);
+                <Stack direction={'row'} spacing={3} alignItems={'center'} mr={10}>
+                    <Text textTransform={'uppercase'} color={'#000'} mr={5} fontSize={'large'}>
+                        {arenaName}
+                    </Text>
+                    <Image src={getContinentIcon(domainName)} w={'30px'} />
+                    <Image src={getMediumIcon(medium)} w={'30px'} />
+                    <Image src={getLevelIconInt(arenaInfo.level)} w={'30px'} />
+                </Stack>
+            </Stack>
+            <Stack direction={'row'} mx={'auto'} w={'45%'} justifyContent={'space-between'} mt={2}>
+                <Text fontSize={'x-small'} color={'#FFF'} fontFamily={'Inter, system-ui'} my={'auto'}>
+                    {infoAccount.accountRs === attackerInfo.accountRS ? 'MY' : 'OPPONENT'} CARDS:
+                </Text>
+                {battleInfo &&
+                    battleInfo.attackerArmy.asset.map((item, index) => {
+                        const attackerCard = cards.find(card => card.asset === item);
+                        const isOverlayVisible =
+                            battleInfo.isDefenderWin ||
+                            battleResults[battleResults.length - 1].attackerAsset !== attackerCard.asset;
+                        return (
+                            <Box position="relative" m={'auto'} width="12%" key={index}>
+                                <Image src={attackerCard.cardImgUrl} width="100%" />
+                                {isOverlayVisible && (
+                                    <Box
+                                        position="absolute"
+                                        top="0"
+                                        left="0"
+                                        width="100%"
+                                        height="100%"
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        bg="rgba(0, 0, 0, 0.3)">
+                                        <Text
+                                            fontSize="4rem"
+                                            color="#E14942"
+                                            opacity="0.8"
+                                            fontFamily="'Aagaz', sans-serif">
+                                            X
+                                        </Text>
+                                    </Box>
+                                )}
+                            </Box>
+                        );
+                    })}
+                <Image src={battleInfo.isDefenderWin ? defeatIcon : victoryIcon} boxSize={'50px'} my={'auto'} />
+            </Stack>
+            <Stack
+                direction={'row'}
+                mx={'auto'}
+                w={'90%'}
+                h={'60%'}
+                className="custom-scrollbar"
+                overflowX={'scroll'}
+                overflowY={'hidden'}
+                ref={elementRef}
+                spacing={4}>
+                <IconButton
+                    position="absolute"
+                    left="2"
+                    icon={<ChevronLeftIcon />}
+                    top="50%"
+                    color={'black'}
+                    isDisabled={arrowLeftDisable}
+                    transform="translateY(-50%)"
+                    zIndex="1"
+                    onClick={() => {
+                        handleHorizantalScroll(elementRef.current, 10, 200, -5);
+                    }}
+                    bg="rgba(255, 255, 255, 0.8)"
+                    _hover={{ bg: 'rgba(255, 255, 255, 1)' }}
+                    borderRadius={'full'}
+                />
 
-                            return (
-                                <Box key={index}>
-                                    <Stack
-                                        direction={'row'}
-                                        display={'flex'}
-                                        justifyContent={'center'}
-                                        alignItems={'center'}
-                                        spacing={4}>
-                                        <Stack fontSize={'xs'} align={'flex-start'}>
-                                            <Text fontSize={'sm'}>
+                {battleResults &&
+                    battleResults.map((item, index) => {
+                        const {
+                            defenderValue,
+                            attackerValue,
+                            attackerRoll,
+                            defenderRoll,
+                            defenderAsset,
+                            attackerAsset,
+                        } = item;
+                        const { attackerCard, defenderCard, defenderSoldier, attackerSoldier } = getBattleRoundInfo(
+                            defenderAsset,
+                            attackerAsset,
+                            cards,
+                            battleInfo,
+                            soldiers
+                        );
+
+                        return (
+                            <Fragment key={index}>
+                                <Stack direction={'column'} minW={'250px'} w={'250px'} h={'100%'} flexShrink={0}>
+                                    <Stack direction={'row'} color={'#FFF'} h={'50%'} spacing={4}>
+                                        <Stack
+                                            direction={'column'}
+                                            fontSize={'xs'}
+                                            align={'flex-start'}
+                                            my={'auto'}
+                                            w={'90%'}>
+                                            <Text
+                                                fontSize={'large'}
+                                                letterSpacing={2}
+                                                fontFamily="'Aagaz', sans-serif"
+                                                color={'#D597B2'}>
                                                 {attackerCard.name}{' '}
                                                 {attackerHero.asset === attackerCard.asset ? '(Alpha)' : null}
                                             </Text>
-                                            <Text>
-                                                <span style={{ color: '#D597B2' }}>CARD LEVEL:</span>{' '}
-                                                {attackerSoldier.power}
-                                            </Text>
-                                            <Text>
-                                                <span style={{ color: '#D597B2' }}>CONTINENT BONUS:</span>{' '}
-                                                {attackerBonus[index]?.domainBonus ?? 0}
-                                            </Text>
-                                            <Text>
-                                                <span style={{ color: '#D597B2' }}>ELEMENT BONUS:</span>{' '}
-                                                {attackerBonus[index]?.mediumBonus ?? 0}
-                                            </Text>
-                                            {attackerHero.asset !== attackerCard.asset ? (
-                                                <Text>
-                                                    <span style={{ color: '#D597B2' }}>ALPHA BONUS:</span>{' '}
-                                                    {attackerBonus[index]?.heroBonus ?? 0}
-                                                </Text>
-                                            ) : null}
-                                            <Text>
-                                                <span style={{ color: '#D597B2' }}>TOTAL LEVEL:</span>{' '}
-                                                {attackerTotalPower}
-                                            </Text>
-                                            <Text>
-                                                <span style={{ color: '#D597B2' }}>DICE:</span> {attackerRoll}
-                                            </Text>
-                                            <Text>Round points: {attackerValue}</Text>
-                                        </Stack>
-                                        <Box
-                                            width="8"
-                                            height="8"
-                                            bg={attackerRoll <= defenderRoll ? 'transparent' : '#FFF'}
-                                            display="flex"
-                                            alignItems="center"
-                                            justifyContent="center"
-                                            position="relative"
-                                            border="2px solid #D597B2"
-                                            borderRadius={5}
-                                            transform="rotate(45deg)"
-                                            _after={{
-                                                content: '""',
-                                                display: 'block',
-                                                paddingBottom: '100%',
-                                            }}>
-                                            <Text
-                                                color={attackerRoll <= defenderRoll ? '#D597B2' : '#000'}
-                                                fontSize="xl"
-                                                transform="rotate(-45deg)"
-                                                position="absolute">
-                                                {attackerRoll}
-                                            </Text>
-                                        </Box>
-                                        <Box
-                                            position="relative"
-                                            width="11%"
-                                            sx={{
-                                                border:
-                                                    attackerHero.asset === attackerCard.asset
-                                                        ? '3px solid #D08FB0'
-                                                        : 'none',
-                                                borderImage:
-                                                    attackerHero.asset === attackerCard.asset
-                                                        ? `linear-gradient(90deg, rgba(163,161,81,1) 0%, rgba(219,227,82,1) 35%, rgba(244,135,148,1) 100%) 1`
-                                                        : 'none',
-                                            }}>
-                                            <Img src={attackerCard.cardImgUrl} width="100%" />
-                                            {defenderValue >= attackerValue && (
-                                                <Box
-                                                    position="absolute"
-                                                    top="0"
-                                                    left="0"
-                                                    width="100%"
-                                                    height="100%"
-                                                    display="flex"
-                                                    alignItems="center"
-                                                    justifyContent="center"
-                                                    bg="rgba(0, 0, 0, 0.3)">
-                                                    <Text fontSize="150px" color="black" opacity="0.7">
-                                                        X
-                                                    </Text>
-                                                </Box>
-                                            )}
-                                        </Box>
-                                        <Text> vs </Text>
-                                        <Box
-                                            position="relative"
-                                            width="11%"
-                                            sx={{
-                                                border:
-                                                    defenderHero.asset === defenderCard.asset
-                                                        ? '3px solid #D08FB0'
-                                                        : 'none',
-                                                borderImage:
-                                                    defenderHero.asset === defenderCard.asset
-                                                        ? `linear-gradient(90deg, rgba(163,161,81,1) 0%, rgba(219,227,82,1) 35%, rgba(244,135,148,1) 100%) 1`
-                                                        : 'none',
-                                            }}>
-                                            <Img src={defenderCard.cardImgUrl} width="100%" />
-                                            {defenderValue <= attackerValue && (
-                                                <Box
-                                                    position="absolute"
-                                                    top="0"
-                                                    left="0"
-                                                    width="100%"
-                                                    height="100%"
-                                                    display="flex"
-                                                    alignItems="center"
-                                                    justifyContent="center"
-                                                    bg="rgba(0, 0, 0, 0.3)">
-                                                    <Text fontSize="150px" color="black" opacity="0.7">
-                                                        X
-                                                    </Text>
-                                                </Box>
-                                            )}
-                                        </Box>
-                                        <Box
-                                            width="8"
-                                            height="8"
-                                            bg={attackerRoll >= defenderRoll ? 'transparent' : '#FFF'}
-                                            display="flex"
-                                            alignItems="center"
-                                            justifyContent="center"
-                                            position="relative"
-                                            border="2px solid #D597B2"
-                                            borderRadius={5}
-                                            transform="rotate(45deg)"
-                                            _after={{
-                                                content: '""',
-                                                display: 'block',
-                                                paddingBottom: '100%',
-                                            }}>
-                                            <Text
-                                                color={attackerRoll >= defenderRoll ? '#D597B2' : '#000'}
-                                                fontSize="xl"
-                                                transform="rotate(-45deg)"
-                                                position="absolute">
-                                                {defenderRoll}
-                                            </Text>
-                                        </Box>
+                                            <Stack direction={'row'} w={'95%'}>
+                                                <Stack direction={'column'} m={'auto'}>
+                                                    <Stack direction={'row'}>
+                                                        <Image
+                                                            boxSize={'20px'}
+                                                            borderRadius={'5px'}
+                                                            p={0.5}
+                                                            bgColor={'#FFF'}
+                                                            src={getContinentIcon(attackerCard.channel)}
+                                                        />
+                                                        <Text>{attackerBonus[index]?.domainBonus ?? 0}</Text>
+                                                    </Stack>
 
-                                        <Stack fontSize={'xs'} align={'flex-end'}>
-                                            <Text fontSize={'sm'}>
-                                                {defenderCard.name}{' '}
-                                                {defenderHero.asset === defenderCard.asset ? '(Alpha)' : null}{' '}
-                                            </Text>
-                                            <Text>
-                                                <span style={{ color: '#D597B2' }}>CARD LEVEL: </span>
-                                                {defenderSoldier.power}
-                                            </Text>
-                                            <Text>
-                                                <span style={{ color: '#D597B2' }}>CONTINENT BONUS:</span>{' '}
-                                                {defenderBonus[index]?.domainBonus ?? 0}
-                                            </Text>
-                                            <Text>
-                                                <span style={{ color: '#D597B2' }}>ELEMENT BONUS:</span>{' '}
-                                                {defenderBonus[index]?.mediumBonus ?? 0}
-                                            </Text>
-                                            {defenderHero.asset !== defenderCard.asset ? (
-                                                <Text>
-                                                    <span style={{ color: '#D597B2' }}>ALPHA BONUS:</span>{' '}
-                                                    {defenderBonus[index]?.heroBonus ?? 0}
-                                                </Text>
-                                            ) : null}
-                                            <Text>
-                                                <span style={{ color: '#D597B2' }}>GUARDIAN BONUS:</span> 2
-                                            </Text>
-                                            <Text>
-                                                <span style={{ color: '#D597B2' }}>TOTAL LEVEL:</span>{' '}
-                                                {defenderTotalPower}
-                                            </Text>
-                                            <Text>
-                                                <span style={{ color: '#D597B2' }}>DICE:</span> {defenderRoll}
-                                            </Text>
-                                            <Text>Round points: {defenderValue}</Text>
+                                                    <Stack direction={'row'}>
+                                                        <Image
+                                                            boxSize={'20px'}
+                                                            borderRadius={'5px'}
+                                                            p={0.5}
+                                                            bgColor={'#FFF'}
+                                                            src={getMediumIconInt(attackerSoldier.mediumId)}
+                                                        />
+                                                        <Text>{attackerBonus[index]?.mediumBonus ?? 0}</Text>
+                                                    </Stack>
+
+                                                    <Stack direction={'row'}>
+                                                        <Image
+                                                            w={'20px'}
+                                                            borderRadius={'full'}
+                                                            bgColor={'#FFF'}
+                                                            src={getLevelIconInt(attackerSoldier.power)}
+                                                        />
+                                                        <Text>{attackerSoldier.power}</Text>
+                                                    </Stack>
+
+                                                    {attackerHero.asset !== attackerCard.asset ? (
+                                                        <Stack direction={'row'}>
+                                                            <Image
+                                                                boxSize={'20px'}
+                                                                borderRadius={'5px'}
+                                                                bgColor={'#FFF'}
+                                                                src={'/images/battlegrounds/alpha_icon.svg'}
+                                                            />
+                                                            <Text>{attackerBonus[index]?.heroBonus ?? 0}</Text>
+                                                        </Stack>
+                                                    ) : null}
+
+                                                    <Stack direction={'row'}>
+                                                        <Image
+                                                            boxSize={'20px'}
+                                                            borderRadius={'5px'}
+                                                            bgColor={'#FFF'}
+                                                            src={getDiceIcon(attackerRoll)}
+                                                        />
+                                                        <Text>{attackerRoll}</Text>
+                                                    </Stack>
+                                                </Stack>
+                                                <Box
+                                                    position="relative"
+                                                    m={'auto'}
+                                                    width="45%"
+                                                    sx={{
+                                                        border:
+                                                            attackerHero.asset === attackerCard.asset
+                                                                ? '3px solid #D08FB0'
+                                                                : 'none',
+                                                    }}>
+                                                    <Img src={attackerCard.cardImgUrl} width="100%" />
+                                                    {defenderValue >= attackerValue && (
+                                                        <Box
+                                                            position="absolute"
+                                                            top="0"
+                                                            left="0"
+                                                            width="100%"
+                                                            height="100%"
+                                                            display="flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            bg="rgba(0, 0, 0, 0.3)">
+                                                            <Text
+                                                                fontSize="9rem"
+                                                                color="#E14942"
+                                                                opacity="0.8"
+                                                                fontFamily="'Aagaz', sans-serif">
+                                                                X
+                                                            </Text>
+                                                        </Box>
+                                                    )}
+                                                </Box>
+                                            </Stack>
                                         </Stack>
+
+                                        <Box
+                                            right={5}
+                                            width="8"
+                                            height="8"
+                                            bg={attackerValue <= defenderValue ? 'transparent' : '#FFF'}
+                                            display="flex"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                            position="relative"
+                                            m={'auto'}
+                                            border="2px solid #D597B2"
+                                            borderRadius={5}
+                                            transform="rotate(45deg)"
+                                            _after={{
+                                                content: '""',
+                                                display: 'block',
+                                                paddingBottom: '100%',
+                                            }}>
+                                            <Text
+                                                fontFamily={'Chelsea Market'}
+                                                color={attackerValue <= defenderValue ? '#D597B2' : '#000'}
+                                                fontSize="xl"
+                                                transform="rotate(-45deg)"
+                                                position="absolute">
+                                                {attackerValue}
+                                            </Text>
+                                        </Box>
                                     </Stack>
-                                    <Divider w={'70%'} mx={'auto'} mt={2} />
-                                </Box>
-                            );
-                        })}
-                </Stack>
+                                    {/* ======= */}
+                                    <Stack direction={'row'} color={'#FFF'} h={'50%'} spacing={4}>
+                                        <Stack
+                                            direction={'column'}
+                                            fontSize={'xs'}
+                                            align={'flex-start'}
+                                            my={'auto'}
+                                            w={'90%'}>
+                                            <Text
+                                                fontSize={'large'}
+                                                letterSpacing={2}
+                                                fontFamily="'Aagaz', sans-serif"
+                                                color={'#D597B2'}>
+                                                {defenderCard.name}{' '}
+                                                {defenderHero.asset === defenderCard.asset ? '(Alpha)' : null}
+                                            </Text>{' '}
+                                            <Stack direction={'row'} w={'95%'}>
+                                                <Stack direction={'column'} m={'auto'}>
+                                                    <Stack direction={'row'}>
+                                                        <Image
+                                                            boxSize={'20px'}
+                                                            borderRadius={'5px'}
+                                                            p={0.5}
+                                                            bgColor={'#FFF'}
+                                                            src={getContinentIcon(defenderCard.channel)}
+                                                        />
+                                                        <Text>{defenderBonus[index]?.domainBonus ?? 0}</Text>
+                                                    </Stack>
 
-                <Stack direction={'column'} align={'center'}>
-                    <Text fontSize={'medium'}>
-                        {isUserDefending
-                            ? battleInfo.isDefenderWin
-                                ? 'Obtained card:'
-                                : 'Captured card: '
-                            : battleInfo.isDefenderWin
-                            ? 'Captured card:'
-                            : 'Obtained card: '}
+                                                    <Stack direction={'row'}>
+                                                        <Image
+                                                            boxSize={'20px'}
+                                                            borderRadius={'5px'}
+                                                            p={0.5}
+                                                            bgColor={'#FFF'}
+                                                            src={getMediumIconInt(defenderSoldier.mediumId)}
+                                                        />
+                                                        <Text>{defenderBonus[index]?.mediumBonus ?? 0}</Text>
+                                                    </Stack>
+                                                    <Stack direction={'row'}>
+                                                        <Image
+                                                            boxSize={'20px'}
+                                                            borderRadius={'full'}
+                                                            bgColor={'#FFF'}
+                                                            src={getLevelIconInt(defenderSoldier.power)}
+                                                        />
+                                                        <Text>{defenderSoldier.power}</Text>
+                                                    </Stack>
+
+                                                    {defenderHero.asset !== defenderCard.asset ? (
+                                                        <Stack direction={'row'}>
+                                                            <Image
+                                                                boxSize={'20px'}
+                                                                borderRadius={'5px'}
+                                                                bgColor={'#FFF'}
+                                                                src={'/images/battlegrounds/alpha_icon.svg'}
+                                                            />
+                                                            <Text>{defenderBonus[index]?.heroBonus ?? 0}</Text>
+                                                        </Stack>
+                                                    ) : null}
+
+                                                    <Stack direction={'row'}>
+                                                        <Image
+                                                            boxSize={'20px'}
+                                                            borderRadius={'5px'}
+                                                            bgColor={'#FFF'}
+                                                            src={getDiceIcon(defenderRoll)}
+                                                        />
+                                                        <Text>{defenderRoll}</Text>
+                                                    </Stack>
+                                                    <Stack direction={'row'}>
+                                                        <Image
+                                                            boxSize={'20px'}
+                                                            borderRadius={'5px'}
+                                                            src={'/images/battlegrounds/defense_icon.svg'}
+                                                        />
+                                                        <Text>2</Text>
+                                                    </Stack>
+                                                </Stack>
+
+                                                <Box
+                                                    position="relative"
+                                                    m={'auto'}
+                                                    width="45%"
+                                                    sx={{
+                                                        border:
+                                                            defenderHero.asset === defenderCard.asset
+                                                                ? '3px solid #D08FB0'
+                                                                : 'none',
+                                                    }}>
+                                                    <Img src={defenderCard.cardImgUrl} width="100%" />
+                                                    {defenderValue <= attackerValue && (
+                                                        <Box
+                                                            position="absolute"
+                                                            top="0"
+                                                            left="0"
+                                                            width="100%"
+                                                            height="100%"
+                                                            display="flex"
+                                                            alignItems="center"
+                                                            justifyContent="center"
+                                                            bg="rgba(0, 0, 0, 0.3)">
+                                                            <Text
+                                                                fontSize="9rem"
+                                                                color="#E14942"
+                                                                opacity="0.8"
+                                                                fontFamily="'Aagaz', sans-serif">
+                                                                X
+                                                            </Text>
+                                                        </Box>
+                                                    )}
+                                                </Box>
+                                            </Stack>
+                                        </Stack>
+                                        <Box
+                                            right={5}
+                                            width="8"
+                                            height="8"
+                                            m={'auto'}
+                                            bg={attackerValue >= defenderValue ? 'transparent' : '#FFF'}
+                                            display="flex"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                            position="relative"
+                                            border="2px solid #D597B2"
+                                            fontFamily={'Chelsea market'}
+                                            borderRadius={5}
+                                            transform="rotate(45deg)"
+                                            _after={{
+                                                content: '""',
+                                                display: 'block',
+                                                paddingBottom: '100%',
+                                            }}>
+                                            <Text
+                                                color={attackerValue >= defenderValue ? '#D597B2' : '#000'}
+                                                fontSize="xl"
+                                                transform="rotate(-45deg)"
+                                                position="absolute">
+                                                {defenderValue}
+                                            </Text>
+                                        </Box>
+                                    </Stack>
+                                </Stack>
+                                <Square bgColor={'#FFF'} height={'95%'} width={'1px'} my={'auto'} />
+                            </Fragment>
+                        );
+                    })}
+                <IconButton
+                    position="absolute"
+                    right="2"
+                    top="50%"
+                    icon={<ChevronRightIcon />}
+                    bgColor={'transparent'}
+                    color={'black'}
+                    transform="translateY(-50%)"
+                    zIndex="1"
+                    isDisabled={arrowRightDisable}
+                    borderRadius={'full'}
+                    onClick={() => {
+                        handleHorizantalScroll(elementRef.current, 10, 200, 5);
+                    }}
+                    bg="rgba(255, 255, 255, 0.8)"
+                    _hover={{ bg: 'rgba(255, 255, 255, 1)' }}
+                />
+            </Stack>
+            <Stack direction={'row'} mx={'auto'} w={'45%'} justifyContent={'space-between'} mt={5}>
+                <Text fontSize={'x-small'} color={'#FFF'} fontFamily={'Inter, system-ui'} my={'auto'}>
+                    {infoAccount.accountRs === defenderInfo.accountRS ? 'MY' : 'OPPONENT'} CARDS:
+                </Text>
+                {battleInfo &&
+                    battleInfo.defenderArmy.asset.map((item, index) => {
+                        const defenderCard = cards.find(card => card.asset === item);
+                        const isOverlayVisible =
+                            !battleInfo.isDefenderWin ||
+                            battleResults[battleResults.length - 1].defenderAsset !== defenderCard.asset;
+
+                        return (
+                            <Box position="relative" m={'auto'} width="12%" key={index}>
+                                <Image src={defenderCard.cardImgUrl} width="100%" />
+                                {isOverlayVisible && (
+                                    <Box
+                                        position="absolute"
+                                        top="0"
+                                        left="0"
+                                        width="100%"
+                                        height="100%"
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        bg="rgba(0, 0, 0, 0.3)">
+                                        <Text
+                                            fontSize="4rem"
+                                            color="#E14942"
+                                            opacity="0.8"
+                                            fontFamily="'Aagaz', sans-serif">
+                                            X
+                                        </Text>
+                                    </Box>
+                                )}
+                            </Box>
+                        );
+                    })}
+                <Image src={battleInfo.isDefenderWin ? victoryIcon : defeatIcon} boxSize={'50px'} my={'auto'} />
+            </Stack>
+            <Stack
+                direction={'row'}
+                bgColor={'#BFD1ED'}
+                w={'100%'}
+                h={'7%'}
+                mb={-2}
+                fontFamily={'Chelsea Market, system-ui'}
+                borderBottomRadius={'25px'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                px={4}>
+                <Stack direction={'row'} w={'100%'}>
+                    <Text color={'#000'} my={'auto'} fontSize={'large'} ml={10}>
+                        {battleInfo.isDefenderWin ? 'WINNER: ' : 'LOSER: '}
+                        <Tooltip label={defenderInfo.accountRS} hasArrow>
+                            {defenderInfo.name || formatAddress(defenderInfo.accountRS)}
+                        </Tooltip>
                     </Text>
-                    <Img w={'12%'} src={capturedCard.cardImgUrl} mb={5} />
+                    <Text
+                        color={'#000'}
+                        my={'auto'}
+                        fontSize={'large'}
+                        border={'1px solid #2ba39c'}
+                        p={1}
+                        borderRadius={'8px'}>
+                        {defenderPoints}
+                    </Text>
+                </Stack>
+                <Stack></Stack>
+                <Stack direction={'row'} spacing={1} alignItems={'end'} mx={'auto'} w={'30%'} h={'100%'}>
+                    <Tooltip
+                        label={
+                            <Box>
+                                <Image src={capturedCard?.cardImgUrl} alt={capturedCard?.name} w="200px" />
+                            </Box>
+                        }
+                        aria-label={capturedCard?.name}
+                        placement="top"
+                        hasArrow>
+                        <Stack direction={'row'} mx={'auto'} my={'auto'}>
+                            <Text color={'#000'} fontSize={'large'}>
+                                {isUserDefending
+                                    ? battleInfo.isDefenderWin
+                                        ? 'OBTAINED CARD:'
+                                        : 'CAPTURED CARD: '
+                                    : battleInfo.isDefenderWin
+                                    ? 'CAPTURED CARD:'
+                                    : 'OBTAINED CARD: '}
+                            </Text>
+                            <TriangleUpIcon color={'#000'} my={'auto'} />
+                        </Stack>
+                    </Tooltip>
                 </Stack>
             </Stack>
-        </Box>
+        </Stack>
     ) : (
         <Box
             position={'absolute'}

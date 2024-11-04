@@ -5,7 +5,7 @@ export const formatTimeStamp = timestamp => {
     return battleStamp;
 };
 
-export const getTimeDifference = timestamp => {
+export const getTimeDifference = (timestamp, getMinSeconds) => {
     const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
 
     // Calculate the battle timestamp by adding the given timestamp (in seconds) to the base date
@@ -37,11 +37,14 @@ export const getTimeDifference = timestamp => {
     if (differenceInHours > 0) {
         timeDifferenceArray.push(`${differenceInHours} ${differenceInHours !== 1 ? 'hours' : 'hour'}`);
     }
-    if (differenceInMinutes > 0) {
-        timeDifferenceArray.push(`${differenceInMinutes} ${differenceInMinutes !== 1 ? 'minutes' : 'minute'}`);
-    }
-    if (differenceInSeconds > 0) {
-        timeDifferenceArray.push(`${differenceInSeconds} ${differenceInSeconds !== 1 ? 'seconds' : 'second'}`);
+
+    if (getMinSeconds) {
+        if (differenceInMinutes > 0) {
+            timeDifferenceArray.push(`${differenceInMinutes} ${differenceInMinutes !== 1 ? 'minutes' : 'minute'}`);
+        }
+        if (differenceInSeconds > 0) {
+            timeDifferenceArray.push(`${differenceInSeconds} ${differenceInSeconds !== 1 ? 'seconds' : 'second'}`);
+        }
     }
 
     // Join the array into a single string
@@ -82,7 +85,7 @@ export const isEmptyObject = object => {
     return false;
 };
 
-export const getBattleRoundInfo = ( defenderAsset, attackerAsset, cards, battleInfo, soldiers) => {
+export const getBattleRoundInfo = (defenderAsset, attackerAsset, cards, battleInfo, soldiers) => {
     let attackerCard = cards.find(card => {
         return card.asset === String(attackerAsset);
     });
@@ -106,4 +109,92 @@ export const getBattleRoundInfo = ( defenderAsset, attackerAsset, cards, battleI
         attackerTotalPower,
         defenderTotalPower,
     };
+};
+
+export const capitalize = string => {
+    if (string.length === 0) return string;
+    return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+export const getLevelIconString = value => {
+    let path = '/images/battlegrounds/rarity/';
+    switch (value) {
+        case 'Common':
+            return `${path}common.png`;
+        case 'Rare':
+            return `${path}rare.png`;
+        case 'Epic':
+            return `${path}epic.png`;
+        case 'Special':
+            return `${path}epic.png`;
+        default:
+            return null;
+    }
+};
+
+export const getLevelIconInt = value => {
+    let path = '/images/battlegrounds/rarity/';
+    switch (value) {
+        case 1:
+            return `${path}common.png`;
+        case 2:
+            return `${path}rare.png`;
+        case 3:
+            return `${path}epic.png`;
+        case 4:
+            return `${path}epic.png`;
+        default:
+            return null;
+    }
+};
+
+export const getMediumIcon = value => {
+    let path = '/images/battlegrounds/medium/';
+    switch (value) {
+        case 'Aquatic':
+            return `${path}water.png`;
+        case 'Aerial':
+            return `${path}air.png`;
+        case 'Terrestrial':
+            return `${path}earth.png`;
+        default:
+            return null;
+    }
+};
+export const getDiceIcon = value => {
+    let path = '/images/cards/dices/';
+    if (value < 1 || value > 6 || !value) return null;
+    return `${path}dice${value}.png`;
+};
+
+export const getMediumIconInt = value => {
+    let path = '/images/battlegrounds/medium/';
+    switch (value) {
+        case 1:
+            return `${path}earth.png`;
+        case 2:
+            return `${path}air.png`;
+        case 3:
+            return `${path}water.png`;
+        default:
+            return null;
+    }
+};
+
+export const getContinentIcon = value => {
+    let path = '/images/battlegrounds/continent/';
+    switch (value) {
+        case 'Europe':
+            return `${path}europa.png`;
+        case 'Asia':
+            return `${path}asia.png`;
+        case 'Africa':
+            return `${path}africa.png`;
+        case 'America':
+            return `${path}america.png`;
+        case 'Oceania':
+            return `${path}oceania.png`;
+        default:
+            return null;
+    }
 };

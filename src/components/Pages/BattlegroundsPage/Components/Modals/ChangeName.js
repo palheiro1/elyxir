@@ -26,6 +26,7 @@ const ChangeName = ({ isOpen, onClose, infoAccount }) => {
     const [newName, setNewName] = useState('');
     const [passphrase, setPassphrase] = useState('');
     const [isValidPin, setIsValidPin] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
     const toast = useToast();
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -39,9 +40,10 @@ const ChangeName = ({ isOpen, onClose, infoAccount }) => {
     };
 
     const handleChangeName = async () => {
+        if (newName === null || newName === '') return errorToast("New name can't be empty", toast);
         if (!isValidPin) return errorToast('Invalid pin', toast);
-        if (newName === null || newName === '') return errorToast('New name can not be empty', toast);
         try {
+            setIsDisabled(true);
             await changeAccountName(infoAccount.accountRs, passphrase, newName);
             onClose();
             return okToast('Account name changed successfuly', toast);
@@ -94,7 +96,14 @@ const ChangeName = ({ isOpen, onClose, infoAccount }) => {
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button color={'#fff'} bgColor="#F48794" mr={3} mx={'auto'} w={'80%'} onClick={handleChangeName}>
+                    <Button
+                        color={'#fff'}
+                        bgColor="#F48794"
+                        mr={3}
+                        mx={'auto'}
+                        w={'80%'}
+                        isDisabled={isDisabled}
+                        onClick={handleChangeName}>
                         Submit
                     </Button>
                 </ModalFooter>

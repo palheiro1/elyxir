@@ -1069,13 +1069,6 @@ const changeAccountName = async (accountRs, passPhrase, newName) => {
     }
 };
 
-/*
-
-            deadline: 30,
-            feeNQT: 0,
-            broadcast: false,
-            */
-
 export {
     sendIgnis,
     transferCurrency,

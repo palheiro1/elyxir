@@ -14,9 +14,11 @@ const OmnoPage = ({ filteredCards, infoAccount, cards, isMobile, gridColumns }) 
                 textAlign={'center'}
                 maxH={'90%'}>
                 <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
-                    INVENTORY
+                    ARMY
                 </Heading>
-                <Text>In order to play you will have to import your cards to battlegrounds</Text>
+                <Text textTransform={'uppercase'}>
+                    In order to play you will have to import your cards to battlegrounds
+                </Text>
             </Stack>
             <Stack direction={'row'} pt={2} padding={5} height={isMobile ? '85%' : '90%'}>
                 <Box
@@ -41,7 +43,7 @@ const OmnoPage = ({ filteredCards, infoAccount, cards, isMobile, gridColumns }) 
                         overflow={'scroll'}
                         h={'750px'}>
                         {filteredCards.map((card, cardIndex) => (
-                            <Box key={cardIndex} w={'225px'} h={'350px'} bg={'white'} borderRadius={'10px'}>
+                            <Box key={cardIndex} w={'202px'} h={'315px'} bg={'white'} borderRadius={'10px'} mx={'auto'}>
                                 <Center>
                                     <Img src={card.cardImgUrl} w={'90%'} h={'75%'} />
                                 </Center>
@@ -63,8 +65,9 @@ const OmnoPage = ({ filteredCards, infoAccount, cards, isMobile, gridColumns }) 
                                                 <Text
                                                     textAlign="end"
                                                     minH={{ base: '100%', lg: 'auto' }}
+                                                    fontSize={'x-small'}
                                                     color={'#000'}>
-                                                    <small>Quantity: {card.omnoQuantity}</small>
+                                                    Quantity: {card.omnoQuantity}
                                                 </Text>
                                             </Flex>
                                         </Tooltip>

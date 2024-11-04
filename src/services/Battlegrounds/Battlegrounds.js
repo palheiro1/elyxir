@@ -90,6 +90,20 @@ export const getLandLords = async () => {
         .catch(error => error);
 };
 
+export const getLeaderboards = async () => {
+    return axios
+        .get(`${OMNO_API}/index.php?action=getLeaderboards`)
+        .then(res => res.data.leaderboards)
+        .catch(error => error);
+};
+
+export const getAccumulatedBounty = async () => {
+    return axios
+        .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
+        .then(res => res.data.state.arena.accumulatedBounty)
+        .catch(error => error);
+};
+
 export const getAveragesDices = async accountRs => {
     try {
         let accountId = addressToAccountId(accountRs);
@@ -121,4 +135,11 @@ export const getAveragesDices = async accountRs => {
     } catch (error) {
         console.error('Error calculating averages:', error);
     }
+};
+
+export const getLeaderboardsResetBlock = () => {
+    return axios
+        .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
+        .then(res => res.data.state.leaderboardsResetBlock)
+        .catch(error => error);
 };

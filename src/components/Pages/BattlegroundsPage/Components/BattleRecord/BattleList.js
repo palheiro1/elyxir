@@ -10,8 +10,8 @@ import { fetchUserBattles } from '../../../../../redux/reducers/BattleReducer';
 const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
     const { accountRs } = infoAccount;
 
-    const { arenasInfo, userBattles } = useSelector(state => state.battle);
-
+    const { arenasInfo, userBattles, loading } = useSelector(state => state.battle);
+    console.log("🚀 ~ BattleList ~ userBattles:", userBattles)
     const [viewDetails, setViewDetails] = useState(false);
     const [selectedBattle, setSelectedBattle] = useState(null);
     const [selectedArena, setSelectedArena] = useState(null);
@@ -35,40 +35,46 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
         setViewDetails(false);
     };
 
+    const closeRecord = () => {
+        setSelectedBattle(null);
+        handleClose();
+        setViewDetails(false);
+    };
+
     return (
         <>
-            <Overlay isVisible={true} handleClose={handleClose} />
+            <Overlay isVisible={true} handleClose={closeRecord} />
             <Box
                 pos={'fixed'}
                 bgColor={'#1F2323'}
                 zIndex={99}
-                w={isMobile ? '80%' : '70%'}
-                h={'90%'}
+                w={isMobile ? '80%' : viewDetails ? '60%' : '70%'}
+                h={viewDetails ? '95%' : '90%'}
                 borderRadius={'25px'}
-                overflowY={'scroll'}
+                overflowY={'hidden'}
                 className="custom-scrollbar"
                 top={'50%'}
                 left={'50%'}
                 transform={'translate(-50%, -50%)'}>
                 <IconButton
                     background={'transparent'}
-                    color={'#FFF'}
+                    color={viewDetails ? '#000' : '#FFF'}
                     icon={<CloseIcon />}
                     _hover={{ background: 'transparent' }}
                     position="absolute"
                     top={2}
                     right={2}
                     zIndex={999}
-                    onClick={handleClose}
+                    onClick={closeRecord}
                 />
                 {!viewDetails && (
                     <>
                         <Stack direction={'column'} color={'#FFF'} my={5} mx={'auto'} textAlign={'center'} maxH={'90%'}>
-                            <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
+                            <Heading fontFamily={'Chelsea Market, System'} fontWeight={100} fontSize={'2xl'}>
                                 BATTLE RECORD
                             </Heading>
                         </Stack>
-                        {userBattles ? (
+                        {!loading ? (
                             <BattleListTable
                                 arenasInfo={arenasInfo}
                                 handleViewDetails={handleViewDetails}
@@ -92,6 +98,7 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
                         )}
                     </>
                 )}
+
                 {viewDetails && (
                     <BattleDetails
                         battleId={selectedBattle}

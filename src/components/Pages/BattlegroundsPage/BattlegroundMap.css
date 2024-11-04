@@ -1,4 +1,4 @@
-.containerMap circle {
+.containerMap .circle-btn {
     cursor: pointer;
     &:hover {
         fill: black;
@@ -20,10 +20,8 @@
     border-radius: 30.6965px;
 
     border: 1.23px solid;
-    border-image-source: linear-gradient(46.32deg, 'tranpsarent', #56689F 93.73%);
-    
-    
-    ;
+    border-image-source: linear-gradient(46.32deg, 'tranpsarent', #56689f 93.73%);
+
     /* Scoreboard */
 
     font-family: 'Chelsea Market';
@@ -40,32 +38,31 @@
 }
 
 .custom-scrollbar {
-    scrollbar-width: thin;
+    scrollbar-width: none;
     scrollbar-color: #ffffff00 #00000000;
 }
 
 /* styles.css */
 @media only screen and (orientation: portrait) {
     .landscape-only {
-      display: none;
+        display: none;
     }
-  
+
     .rotate-device {
-      display: block;
-      text-align: center;
-      margin-top: 50px;
-      font-size: 20px;
-      color: red; /* Puedes cambiar el estilo según tus necesidades */
+        display: block;
+        text-align: center;
+        margin-top: 50px;
+        font-size: 20px;
+        color: red; /* Puedes cambiar el estilo según tus necesidades */
     }
-  }
-  
-  @media only screen and (orientation: landscape) {
+}
+
+@media only screen and (orientation: landscape) {
     .landscape-only {
-      display: block;
+        display: block;
     }
-  
+
     .rotate-device {
-      display: none;
+        display: none;
     }
-  }
-  
+}

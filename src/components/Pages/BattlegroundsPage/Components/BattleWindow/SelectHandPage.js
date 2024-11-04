@@ -4,7 +4,6 @@ import {
     Center,
     HStack,
     Heading,
-    IconButton,
     Image,
     Modal,
     ModalBody,
@@ -24,14 +23,20 @@ import {
 import locations from '../../assets/LocationsEnum';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
-import { CloseIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
 import { getAsset } from '../../../../../services/Ardor/ardorInterface';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { sendCardsToBattle } from '../../../../../services/Ardor/omnoInterface';
 import { errorToast } from '../../../../../utils/alerts';
 import { checkPin } from '../../../../../utils/walletUtils';
-import { formatAddress, isEmptyObject } from '../../Utils/BattlegroundsUtils';
+import {
+    formatAddress,
+    getContinentIcon,
+    getLevelIconString,
+    getMediumIcon,
+    isEmptyObject,
+} from '../../Utils/BattlegroundsUtils';
+import { getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 
 export const SelectHandPage = ({
     arenaInfo,
@@ -48,12 +53,8 @@ export const SelectHandPage = ({
     setShowResults,
     setCurrentTime,
     isMobile,
+    defenderCards,
 }) => {
-    /* mediums: 
-        1 -> terrestial 
-        2 -> aerial
-        3 -> acuatic
-    */
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [battleCost, setBattleCost] = useState({});
@@ -61,12 +62,16 @@ export const SelectHandPage = ({
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
     const [passphrase, setPassphrase] = useState('');
     const [disableButton, setDisableButton] = useState(false);
+    const [preSelectedCard, setPreSelectedCard] = useState(null);
+    const [defenderBonus, setDefenderBonus] = useState({
+        medium: 0,
+        domain: 0,
+    });
 
     const statistics = [
         { name: 'Level', value: locations[arenaInfo.id - 1].rarity },
         { name: 'Medium', value: medium },
-        { name: 'Team size', value: 5 },
-        { name: 'Guardian', value: defenderInfo.name || formatAddress(defenderInfo.accountRS) },
+        { name: 'Continent', value: domainName },
     ];
 
     useEffect(() => {
@@ -155,41 +160,225 @@ export const SelectHandPage = ({
         }
     };
 
-    const [isLowHeight] = useMediaQuery('(max-height: 420px)');
+    const [isLowHeight] = useMediaQuery('(max-height: 700px)');
 
+    const getImageSrc = (name, value) => {
+        if (name === 'Level') return getLevelIconString(value);
+        if (name === 'Medium') return getMediumIcon(value);
+        if (name === 'Continent') return getContinentIcon(value);
+        return null;
+    };
+
+    const handleDeleteCard = (card, index) => {
+        if (preSelectedCard && preSelectedCard.asset === card.asset) {
+            deleteCard(index);
+            setPreSelectedCard(null);
+        } else {
+            setPreSelectedCard(card);
+        }
+    };
+
+    useEffect(() => {
+        const getDefenderBonus = async () => {
+            const defenderSoldiers = await getSoldiers()
+                .then(res => res.soldier)
+                .then(soldiers => soldiers.filter(soldier => defenderCards.some(card => card.asset === soldier.asset)))
+                .catch(error => console.error(error));
+            let domainBonus = 0;
+            let mediumBonus = 0;
+            defenderSoldiers.forEach(soldier => {
+                if (soldier.mediumId === arenaInfo.mediumId) mediumBonus++;
+                if (soldier.domainId === arenaInfo.domainId) domainBonus++;
+            });
+            setDefenderBonus({
+                medium: mediumBonus,
+                domain: domainBonus,
+            });
+        };
+        getDefenderBonus();
+    }, [arenaInfo.domainId, arenaInfo.mediumId, defenderCards]);
     return (
         <>
-            <Box display={'flex'} flexDir={'column'}>
+            <Box display={'flex'} flexDir={'column'} overflowY={'scroll'} maxH={'95%'} className="custom-scrollbar">
                 <Stack direction={'column'} mx={'auto'} mt={isMobile ? 4 : 8}>
-                    <Heading color={'#FFF'} size={isMobile ? 'md' : 'xl'} fontFamily={'Chelsea Market, system-ui'}>
+                    <Heading
+                        color={'#FFF'}
+                        size={isMobile ? 'md' : 'lg'}
+                        fontFamily={'Chelsea Market, system-ui'}
+                        fontWeight={'300'}>
                         {' '}
                         CONQUER{' '}
-                        <span style={{ color: '#D08FB0' }}>
-                            {locations[arenaInfo.id - 1].name}, {domainName}
+                        <span style={{ color: '#D08FB0', textTransform: 'uppercase' }}>
+                            {locations[arenaInfo.id - 1].name}
                         </span>{' '}
                     </Heading>
-                    <Text color={'#FFF'} textAlign={'center'} fontSize={isMobile ? 'md' : 'large'}>
-                        SELECT YOUR ARMY
+                </Stack>
+                <Stack
+                    direction={'row'}
+                    mx={'auto'}
+                    mt={isMobile ? 1 : 4}
+                    fontSize={'md'}
+                    justify="space-between"
+                    textAlign={'center'}
+                    w={'60%'}>
+                    {statistics.map(({ name, value }, index) => (
+                        <Stack direction={'column'} key={index} textAlign={'center'} my={2} mx={'auto'}>
+                            <Stack
+                                backgroundColor={'#5A679B'}
+                                direction={'row'}
+                                border={'2px solid #D597B2'}
+                                borderRadius={'40px'}
+                                color={'#FFF'}
+                                letterSpacing={1}
+                                w={isMobile ? '80px' : '155px'}
+                                fontSize={isMobile ? 'xs' : 'md'}
+                                textAlign={'center'}
+                                textTransform={'uppercase'}
+                                fontFamily={'Chelsea Market, system-ui'}
+                                p={isMobile ? 0 : 2}>
+                                <Image src={getImageSrc(name, value)} boxSize={'30px'} />
+                                <Text m={'auto'}>{value}</Text>
+                            </Stack>
+                        </Stack>
+                    ))}
+                </Stack>
+
+                <Stack bgColor={'#5A679B'} mt={5}>
+                    <Stack
+                        my={5}
+                        direction={'column'}
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        textAlign={'center'}
+                        mx={'auto'}
+                        textTransform={'uppercase'}>
+                        <Stack direction={'row'} w={'100%'} justifyContent={'space-between'}>
+                            <Text
+                                color={'#FFF'}
+                                p={isMobile ? 0 : 1}
+                                w={'fit-content'}
+                                fontFamily={'Chelsea Market, system-ui'}
+                                fontSize={'larger'}
+                                my={'auto'}>
+                                {defenderInfo.name || formatAddress(defenderInfo.accountRS)}'S HAND
+                            </Text>
+                            <Stack direction={'row'} marginRight={2} spacing={8}>
+                                <Text
+                                    color={'#D597B2'}
+                                    my={'auto'}
+                                    fontFamily={'Chelsea Market, system-ui'}
+                                    fontSize={'lg'}>
+                                    BONUS
+                                </Text>
+                                <Text
+                                    color={'#FFF'}
+                                    my={'auto'}
+                                    fontFamily={'Inter, system-ui'}
+                                    fontWeight={500}
+                                    textAlign={'end'}
+                                    fontSize={'sm'}>
+                                    +{defenderBonus.medium} {medium}
+                                    {<br></br>}+{defenderBonus.domain} {domainName}
+                                </Text>
+                            </Stack>
+                        </Stack>
+                        <Stack direction={'row'} mt={1}>
+                            {defenderCards &&
+                                defenderCards.map((card, index) => (
+                                    <Box
+                                        key={index}
+                                        backgroundColor={'#465A5A'}
+                                        w={isMobile ? '76px' : '127px'}
+                                        h={isMobile ? '103px' : '172px'}
+                                        gap={'15px'}
+                                        display={'flex'}>
+                                        <Image src={card.cardImgUrl} w={'100%'} />
+                                    </Box>
+                                ))}
+                        </Stack>
+                    </Stack>
+                </Stack>
+                <Stack
+                    direction={'row'}
+                    mx={'auto'}
+                    mt={isMobile ? 1 : 4}
+                    w={isLowHeight ? '90%' : '70%'}
+                    justifyContent={'space-between'}
+                    fontSize={isMobile ? 'xs' : 'md'}
+                    fontWeight={100}
+                    gap={10}>
+                    <Text
+                        color={'#FFF'}
+                        textAlign={'center'}
+                        my={'auto'}
+                        fontFamily={'Chelsea Market, system-ui'}
+                        fontSize={isMobile ? 'md' : 'large'}>
+                        CHOOSE YOUR HAND
                     </Text>
+                    <Stack direction={'row'} spacing={8}>
+                        <Text color={'#D597B2'} my={'auto'} fontFamily={'Chelsea Market, system-ui'} fontSize={'lg'}>
+                            TRIBUTE
+                        </Text>
+                        <Stack
+                            direction={'column'}
+                            my={'auto'}
+                            ml={2}
+                            fontFamily={'Inter, system-ui'}
+                            fontWeight={500}
+                            fontSize={'sm'}>
+                            {battleCost && !isEmptyObject(battleCost) ? (
+                                battleCost.map((item, index) => (
+                                    <Text key={index} color={'#FFF'}>
+                                        {item.price / NQTDIVIDER} {item.name}
+                                    </Text>
+                                ))
+                            ) : (
+                                <Text color={'#FFF'}>FREE</Text>
+                            )}
+                        </Stack>
+                    </Stack>
+                    <Stack direction={'row'} marginRight={2} spacing={8}>
+                        <Text color={'#D597B2'} my={'auto'} fontFamily={'Chelsea Market, system-ui'} fontSize={'lg'}>
+                            BONUS
+                        </Text>
+                        <Text
+                            color={'#FFF'}
+                            textTransform={'uppercase'}
+                            my={'auto'}
+                            fontFamily={'Inter, system-ui'}
+                            textAlign={'end'}
+                            fontWeight={500}
+                            fontSize={'sm'}>
+                            +{mediumBonus} {medium}
+                            {<br></br>}+{domainBonus} {domainName}
+                        </Text>
+                    </Stack>
                 </Stack>
                 <Stack direction={'row'} mx={'auto'} mt={3}>
-                    {handBattleCards.map((card, index) =>
-                        card !== '' ? (
-                            <Box key={index} position="relative">
-                                <IconButton
-                                    icon={<CloseIcon boxSize={3} />}
-                                    zIndex={9}
-                                    position="absolute"
-                                    top="0"
-                                    right="0"
-                                    backgroundColor={'#D08FB0'}
-                                    borderRadius={'full'}
-                                    onClick={() => deleteCard(index)}
-                                />
+                    {handBattleCards.map((card, index) => {
+                        const isPreSelected = preSelectedCard?.asset === card.asset;
+
+                        return card !== '' ? (
+                            <Box key={index} position="relative" onClick={() => handleDeleteCard(card, index)}>
+                                {isPreSelected && (
+                                    <Box
+                                        position="absolute"
+                                        top="0"
+                                        left="0"
+                                        width="100%"
+                                        height="100%"
+                                        display="flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        fontSize={'xl'}
+                                        bg="rgba(1, 151, 135, 0.5)"
+                                        fontFamily={'Chelsea Market, system-ui'}>
+                                        x
+                                    </Box>
+                                )}
                                 <Box
                                     backgroundColor={'#465A5A'}
-                                    w={isMobile ? '90px' : '150px'}
-                                    h={isMobile ? '122px' : '200px'}
+                                    w={isMobile || isLowHeight ? '76px' : '127px'}
+                                    h={isMobile || isLowHeight ? '103px' : '172px'}
                                     gap={'15px'}
                                     display={'flex'}>
                                     <Image src={card.cardImgUrl} w={'100%'} />
@@ -200,17 +389,13 @@ export const SelectHandPage = ({
                                 key={index}
                                 backgroundColor="#465A5A"
                                 cursor={'pointer'}
-                                w={isMobile ? '90px' : '150px'}
-                                h={isMobile ? '122px' : '200px'}
+                                w={isMobile ? '76px' : '127px'}
+                                h={isMobile ? '103px' : '172px'}
                                 position="relative"
                                 gap="15px"
                                 display="flex"
                                 sx={{
                                     border: index === 0 ? '2px solid #D08FB0' : 'none',
-                                    borderImage:
-                                        index === 0
-                                            ? `linear-gradient(90deg, rgba(163,161,81,1) 0%, rgba(219,227,82,1) 35%, rgba(244,135,148,1) 100%) 1`
-                                            : 'none',
                                 }}
                                 onClick={() => openInventory(index)}>
                                 <Text
@@ -232,87 +417,33 @@ export const SelectHandPage = ({
                                     </Text>
                                 ) : null}
                             </Box>
-                        )
-                    )}
+                        );
+                    })}
                 </Stack>
-                <Stack direction={'row'} mx={'auto'} mt={isMobile ? 1 : 4} fontSize={'md'}>
-                    {statistics.map((item, index) => (
-                        <Stack direction={'column'} key={index} textAlign={'center'} m={2}>
-                            <Text
-                                color={'#FFF'}
-                                fontFamily={'Chelsea Market, system-ui'}
-                                fontSize={isMobile ? 'sm' : 'lg'}>
-                                {item.name}
-                            </Text>
-                            <Text
-                                backgroundColor={'#484848'}
-                                border={'2px solid #D597B2'}
-                                borderRadius={'40px'}
-                                color={'#FFF'}
-                                w={isMobile ? '80px' : '130px'}
-                                fontSize={isMobile ? 'xs' : 'md'}
-                                textAlign={'center'}
-                                fontFamily={'Chelsea Market, system-ui'}
-                                p={isMobile ? 0 : 2}>
-                                {item.value}
-                            </Text>
-                        </Stack>
-                    ))}
-                </Stack>
-                <Stack
-                    direction={'row'}
-                    mx={'auto'}
-                    mt={isMobile ? 1 : 4}
-                    fontFamily={'Chelsea Market, system-ui'}
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    fontWeight={100}
-                    gap={10}>
-                    <Stack direction={'row'} marginRight={2}>
-                        <Text color={'#D597B2'} my={'auto'}>
-                            BONUS
-                        </Text>
-                        <Text color={'#FFF'} my={'auto'}>
-                            +{mediumBonus} {medium}
-                            {<br></br>}+{domainBonus} {domainName}
-                        </Text>
-                    </Stack>
-                    <Stack direction={'row'}>
-                        <Text color={'#D597B2'} my={'auto'}>
-                            TRIBUTE
-                        </Text>
-                        <Stack direction={'column'} my={'auto'} ml={2}>
-                            {battleCost && !isEmptyObject(battleCost) ? (
-                                battleCost.map((item, index) => (
-                                    <Text key={index} color={'#FFF'}>
-                                        {item.price / NQTDIVIDER} {item.name}
-                                    </Text>
-                                ))
-                            ) : (
-                                <Text color={'#FFF'}>Free</Text>
-                            )}
-                        </Stack>
-                    </Stack>
-                </Stack>
-                <Button
-                    mx={'auto'}
-                    style={{
-                        background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
-                        border: '3px solid #EBB2B9',
-                    }}
-                    padding={isMobile ? 5 : 7}
-                    textTransform={'uppercase'}
-                    color={'#FFF'}
-                    fontWeight={'100'}
-                    borderRadius={'30px'}
-                    mt={isMobile ? 3 : 6}
-                    fontSize={isMobile ? 'md' : 'x-large'}
-                    fontFamily={'Chelsea Market, system-ui'}
-                    position={isLowHeight && 'absolute'}
-                    bottom={isLowHeight && 2}
-                    right={isLowHeight && 2}
-                    onClick={onOpen}>
-                    Start battle
-                </Button>
+                <Box
+                    mx="auto"
+                    borderRadius="30px"
+                    p="3px"
+                    background="linear-gradient(49deg, rgba(235,178,185,1) 0%, rgba(32,36,36,1) 100%)"
+                    display="inline-block"
+                    mt={isMobile ? 3 : 6}>
+                    <Button
+                        sx={{
+                            background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
+                            borderRadius: '30px',
+                            color: '#FFF',
+                            textTransform: 'uppercase',
+                            fontWeight: '400',
+                            letterSpacing: '1px',
+                            fontSize: isMobile ? 'md' : 'lg',
+                            fontFamily: "'Chelsea Market', system-ui",
+                            padding: isMobile ? '5' : '6',
+                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                        }}
+                        onClick={onOpen}>
+                        Start a Battle
+                    </Button>
+                </Box>
             </Box>
             <Modal isOpen={isOpen} onClose={onClose} isCentered>
                 <ModalOverlay />
