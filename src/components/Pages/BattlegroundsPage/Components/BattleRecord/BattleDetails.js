@@ -190,7 +190,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
     };
 
     return cards && cards.length > 0 && battleInfo ? (
-        <Stack h="100%" w="100%" maxW="100%" direction="column" mx="auto" flexGrow={1} alignItems="stretch">
+        <Stack boxSize="100%">
             <IconButton
                 background={'transparent'}
                 color={'#000'}
@@ -240,7 +240,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                 </Stack>
             </Stack>
 
-            <Stack direction={'row'} mx={'auto'} w={'45%'} justifyContent={'space-between'} mt={5}>
+            <Stack direction={'row'} mx={'auto'} w={'45%'} justifyContent={'space-between'} mt={2}>
                 <Text fontSize={'x-small'} color={'#FFF'} fontFamily={'Inter, system-ui'} my={'auto'}>
                     {infoAccount.accountRs === attackerInfo.accountRS ? 'MY' : 'OPPONENT'} CARDS:
                 </Text>
@@ -267,7 +267,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                         justifyContent="center"
                                         bg="rgba(0, 0, 0, 0.3)">
                                         <Text
-                                            fontSize="5rem"
+                                            fontSize="4rem"
                                             color="#E14942"
                                             opacity="0.8"
                                             fontFamily="'Aagaz', sans-serif">
@@ -685,7 +685,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                         justifyContent="center"
                                         bg="rgba(0, 0, 0, 0.3)">
                                         <Text
-                                            fontSize="5rem"
+                                            fontSize="4rem"
                                             color="#E14942"
                                             opacity="0.8"
                                             fontFamily="'Aagaz', sans-serif">

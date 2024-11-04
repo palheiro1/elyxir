@@ -273,7 +273,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                     <Image src={getLevelIconInt(arenaInfo.level)} w={'30px'} />
                 </Stack>
             </Stack>
-            <Stack direction={'row'} mx={'auto'} w={'45%'} justifyContent={'space-between'} mt={5}>
+            <Stack direction={'row'} mx={'auto'} w={'45%'} justifyContent={'space-between'} mt={2}>
                 <Text fontSize={'x-small'} color={'#FFF'} fontFamily={'Inter, system-ui'} my={'auto'}>
                     {infoAccount.accountRs === attackerInfo.accountRS ? 'MY' : 'OPPONENT'} CARDS:
                 </Text>
@@ -298,7 +298,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                         justifyContent="center"
                                         bg="rgba(0, 0, 0, 0.3)">
                                         <Text
-                                            fontSize="5rem"
+                                            fontSize="4rem"
                                             color="#E14942"
                                             opacity="0.8"
                                             fontFamily="'Aagaz', sans-serif">
@@ -684,7 +684,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                         justifyContent="center"
                                         bg="rgba(0, 0, 0, 0.3)">
                                         <Text
-                                            fontSize="5rem"
+                                            fontSize="4rem"
                                             color="#E14942"
                                             opacity="0.8"
                                             fontFamily="'Aagaz', sans-serif">

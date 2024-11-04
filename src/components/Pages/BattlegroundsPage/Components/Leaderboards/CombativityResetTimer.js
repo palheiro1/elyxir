@@ -4,7 +4,7 @@ import { getLeaderboardsResetBlock } from '../../../../../services/Battlegrounds
 import { useSelector } from 'react-redux';
 import { BLOCKTIME } from '../../../../../data/CONSTANTS';
 
-const CombativityResetTimer = () => {
+const CombativityResetTimer = props => {
     const [leaderboardResetTimer, setLeaderboardResetTimer] = useState({
         days: 0,
         hours: 0,
@@ -55,7 +55,7 @@ const CombativityResetTimer = () => {
     }, [leaderboardResetTimer.days, leaderboardResetTimer.hours, leaderboardResetTimer.minutes]);
 
     return (
-        <Stack fontFamily="Chelsea market, System">
+        <Stack fontFamily="Chelsea market, System" {...props}>
             {leaderboardResetTimer.remainingBlocks !== 'loading' ? (
                 <Text color="#FFF" fontFamily="Chelsea market, System" textTransform={'uppercase'}>
                     Reseting combativity leaderboard in {timeString}.

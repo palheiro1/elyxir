@@ -41,28 +41,30 @@ export const PageOne = ({ handleNext }) => {
                     w={'450px'}>
                     Prepare your creatures and conquer the world!
                 </Heading>
-                <Text
-                    color={'#FFF'}
-                    fontFamily={'Inter, sans-serif'}
-                    fontWeight={'400'}
-                    fontSize={'md'}
-                    mx={'auto'}
-                    mt={6}
-                    w={'500px'}
-                    textAlign={'justify'}>
-                    <strong>Battlegrounds</strong> is the playground for Mythical Beings NFTs. The world is divided into{' '}
-                    {locations.length} territories, each of which can be conquered and defended by a battalion of
-                    mythological creatures.{' '}
+                <Stack>
+                    <Text
+                        color={'#FFF'}
+                        fontFamily={'Inter, sans-serif'}
+                        fontWeight={'400'}
+                        fontSize={'md'}
+                        mx={'auto'}
+                        mt={6}
+                        w={'500px'}
+                        textAlign={'justify'}>
+                        <strong>Battlegrounds</strong> is the playground for Mythical Beings NFTs. The world is divided
+                        into {locations.length} territories, each of which can be conquered and defended by a battalion
+                        of mythological creatures.{' '}
+                    </Text>
                     <Button
                         colorScheme="transparent"
-                        mr={'0'}
                         p={0}
+                        mx={'auto'}
                         onClick={handleNext}
                         fontFamily={'Chelsea Market, system-ui'}
                         color={'#EBB2B9'}>
                         {'Next >'}
                     </Button>
-                </Text>
+                </Stack>
             </Box>
         </Box>
     );

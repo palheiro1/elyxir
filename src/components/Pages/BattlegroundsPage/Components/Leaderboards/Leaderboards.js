@@ -159,7 +159,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                 }
                             })()}
                             w={'190px'}
-                            maxH={'80px'}
+                            h={'75px'}
                         />
                         <Select
                             value={option}
@@ -201,7 +201,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                         </Stack>
                         <Stack dir="row" mx={'auto'}>
                             {option === 5 ? (
-                                <CombativityResetTimer />
+                                <CombativityResetTimer mt={-5} />
                             ) : accumulatedBounty ? (
                                 <Stack
                                     direction="row"
@@ -238,7 +238,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                     )}
                                 </Stack>
                             ) : (
-                                <Box mx={'auto'}>
+                                <Box mx={'auto'} mt={-5}>
                                     <Spinner />
                                 </Box>
                             )}

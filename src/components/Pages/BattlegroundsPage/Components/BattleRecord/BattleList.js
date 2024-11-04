@@ -10,8 +10,8 @@ import { fetchUserBattles } from '../../../../../redux/reducers/BattleReducer';
 const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
     const { accountRs } = infoAccount;
 
-    const { arenasInfo, userBattles } = useSelector(state => state.battle);
-
+    const { arenasInfo, userBattles, loading } = useSelector(state => state.battle);
+    console.log("🚀 ~ BattleList ~ userBattles:", userBattles)
     const [viewDetails, setViewDetails] = useState(false);
     const [selectedBattle, setSelectedBattle] = useState(null);
     const [selectedArena, setSelectedArena] = useState(null);
@@ -36,8 +36,8 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
     };
 
     const closeRecord = () => {
-        handleClose();
         setSelectedBattle(null);
+        handleClose();
         setViewDetails(false);
     };
 
@@ -49,9 +49,9 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
                 bgColor={'#1F2323'}
                 zIndex={99}
                 w={isMobile ? '80%' : viewDetails ? '60%' : '70%'}
-                h={'90%'}
+                h={viewDetails ? '95%' : '90%'}
                 borderRadius={'25px'}
-                overflowY={'scroll'}
+                overflowY={'hidden'}
                 className="custom-scrollbar"
                 top={'50%'}
                 left={'50%'}
@@ -74,7 +74,7 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
                                 BATTLE RECORD
                             </Heading>
                         </Stack>
-                        {userBattles ? (
+                        {!loading ? (
                             <BattleListTable
                                 arenasInfo={arenasInfo}
                                 handleViewDetails={handleViewDetails}
