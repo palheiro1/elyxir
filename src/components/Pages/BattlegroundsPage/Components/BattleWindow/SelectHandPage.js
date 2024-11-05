@@ -377,8 +377,8 @@ export const SelectHandPage = ({
                                 )}
                                 <Box
                                     backgroundColor={'#465A5A'}
-                                    w={isMobile || isLowHeight ? '76px' : '127px'}
-                                    h={isMobile || isLowHeight ? '103px' : '172px'}
+                                    w={isMobile ? '76px' : '127px'}
+                                    h={isMobile ? '103px' : '172px'}
                                     gap={'15px'}
                                     display={'flex'}>
                                     <Image src={card.cardImgUrl} w={'100%'} />

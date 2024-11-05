@@ -1,4 +1,4 @@
-import { Box, Img, Stack, Text, Tooltip, Spinner, Image, Square, IconButton } from '@chakra-ui/react';
+import { Box, Stack, Text, Tooltip, Spinner, Image, Square, IconButton } from '@chakra-ui/react';
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { addressToAccountId, getAccount } from '../../../../../services/Ardor/ardorInterface';
 import {
@@ -26,6 +26,7 @@ import victoryIcon from '../../assets/icons/victory_icon.svg';
 
 const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName }) => {
     const [battleInfo, setBattleInfo] = useState(null);
+    console.log('🚀 ~ BattleResults ~ battleInfo:', battleInfo);
     const [capturedCard, setCapturedCard] = useState(null);
     const [medium, setMedium] = useState();
     const [arenaName, setArenaName] = useState(null);
@@ -433,14 +434,29 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                 <Box
                                                     position="relative"
                                                     m={'auto'}
-                                                    width="45%"
+                                                    width="55%"
+                                                    height={'150px'}
                                                     sx={{
                                                         border:
                                                             attackerHero.asset === attackerCard.asset
                                                                 ? '3px solid #D08FB0'
                                                                 : 'none',
                                                     }}>
-                                                    <Img src={attackerCard.cardImgUrl} width="100%" />
+                                                    <Box
+                                                        display="flex"
+                                                        justifyContent="center"
+                                                        alignItems="center"
+                                                        height="100%">
+                                                        <Image
+                                                            src={attackerCard.cardImgUrl}
+                                                            width={
+                                                                attackerHero.asset === attackerCard.asset
+                                                                    ? '90%'
+                                                                    : '100%'
+                                                            }
+                                                            m={'auto'}
+                                                        />
+                                                    </Box>
                                                     {defenderValue >= attackerValue && (
                                                         <Box
                                                             position="absolute"
@@ -569,21 +585,36 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                             borderRadius={'5px'}
                                                             src={'/images/battlegrounds/defense_icon.svg'}
                                                         />
-                                                        <Text>2</Text>
+                                                        <Text>{battleInfo.defenderBonus || 2}</Text>
                                                     </Stack>
                                                 </Stack>
 
                                                 <Box
                                                     position="relative"
                                                     m={'auto'}
-                                                    width="45%"
+                                                    width="55%"
+                                                    height={'150px'}
                                                     sx={{
                                                         border:
                                                             defenderHero.asset === defenderCard.asset
                                                                 ? '3px solid #D08FB0'
                                                                 : 'none',
                                                     }}>
-                                                    <Img src={defenderCard.cardImgUrl} width="100%" />
+                                                    <Box
+                                                        display="flex"
+                                                        justifyContent="center"
+                                                        alignItems="center"
+                                                        height="100%">
+                                                        <Image
+                                                            src={defenderCard.cardImgUrl}
+                                                            width={
+                                                                defenderHero.asset === defenderCard.asset
+                                                                    ? '90%'
+                                                                    : '100%'
+                                                            }
+                                                            m={'auto'}
+                                                        />
+                                                    </Box>
                                                     {defenderValue <= attackerValue && (
                                                         <Box
                                                             position="absolute"

@@ -48,7 +48,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
             const battleReward = battleRewards[item.battleId] || [];
 
             return (
-                <Grid
+                <Grid color={'#FFF'}
                     key={item.battleId}
                     templateColumns="repeat(6, 1fr)"
                     p={3}

@@ -18,110 +18,116 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
     const color = index < 5 ? '#D597B2' : '#FFF';
 
     return (
-        <Grid templateColumns="repeat(7, 1fr)" gap={4} w="100%" mx="auto" mt={0} bgColor={bg} borderRadius="10px">
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={1}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    color={color}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {`#${index + 1}`}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={1}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    color={color}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    textTransform={'uppercase'}
-                    justifyContent="center">
-                    {name ? name : formatAddress(accountRS)}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={1}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {landsConqueredPoints || 0}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={1}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {successfullDefensesPoints || 0}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={1}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {battleEfficiencyPoints || 0}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={1}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {defenseDurationPoints || 0}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={1}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    color={'#7FC0BE'}
-                    justifyContent="center">
-                    {totalPoints?.toFixed(1)}
-                </Text>
-            </GridItem>
-        </Grid>
+        totalPoints > 0 && (
+            <Grid templateColumns="repeat(7, 1fr)" gap={4} w="100%" mx="auto" mt={0} bgColor={bg} borderRadius="10px">
+                <GridItem colSpan={1} textAlign="center">
+                    <Text
+                        p={1}
+                        maxH={'45px'}
+                        fontFamily={'Inter, System'}
+                        fontWeight={700}
+                        color={color}
+                        h="100%"
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center">
+                        {`#${index + 1}`}
+                    </Text>
+                </GridItem>
+                <GridItem colSpan={1} textAlign="center">
+                    <Text
+                        p={1}
+                        maxH={'45px'}
+                        fontFamily={'Inter, System'}
+                        fontWeight={700}
+                        color={color}
+                        h="100%"
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        display="flex"
+                        alignItems="center"
+                        textTransform={'uppercase'}
+                        justifyContent="center">
+                        {name ? name : formatAddress(accountRS)}
+                    </Text>
+                </GridItem>
+                <GridItem colSpan={1} textAlign="center">
+                    <Text
+                        p={1}
+                        maxH={'45px'}
+                        fontFamily={'Inter, System'}
+                        fontWeight={700}
+                        h="100%"
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center">
+                        {landsConqueredPoints || 0}
+                    </Text>
+                </GridItem>
+                <GridItem colSpan={1} textAlign="center">
+                    <Text
+                        p={1}
+                        maxH={'45px'}
+                        fontFamily={'Inter, System'}
+                        fontWeight={700}
+                        h="100%"
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center">
+                        {successfullDefensesPoints || 0}
+                    </Text>
+                </GridItem>
+                <GridItem colSpan={1} textAlign="center">
+                    <Text
+                        p={1}
+                        maxH={'45px'}
+                        fontFamily={'Inter, System'}
+                        fontWeight={700}
+                        h="100%"
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center">
+                        {battleEfficiencyPoints
+                            ? Number.isInteger(battleEfficiencyPoints)
+                                ? battleEfficiencyPoints
+                                : battleEfficiencyPoints.toFixed(1)
+                            : 0}
+                    </Text>
+                </GridItem>
+                <GridItem colSpan={1} textAlign="center">
+                    <Text
+                        p={1}
+                        maxH={'45px'}
+                        fontFamily={'Inter, System'}
+                        fontWeight={700}
+                        h="100%"
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center">
+                        {defenseDurationPoints ? Math.floor(defenseDurationPoints).toLocaleString('de-DE') : 0}
+                    </Text>
+                </GridItem>
+                <GridItem colSpan={1} textAlign="center">
+                    <Text
+                        p={1}
+                        maxH={'45px'}
+                        fontFamily={'Inter, System'}
+                        fontWeight={700}
+                        h="100%"
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        display="flex"
+                        alignItems="center"
+                        color={'#7FC0BE'}
+                        justifyContent="center">
+                        {totalPoints ? Math.ceil(totalPoints).toLocaleString('de-DE') : 0}
+                    </Text>
+                </GridItem>
+            </Grid>
+        )
     );
 };
 

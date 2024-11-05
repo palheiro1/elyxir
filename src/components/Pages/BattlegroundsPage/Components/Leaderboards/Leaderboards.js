@@ -170,7 +170,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                             zIndex={999}
                             fontFamily={'Chelsea Market, System'}
                             _hover={{ borderColor: '#555' }}
-                            maxW={'250px'}>
+                            maxW={'260px'}>
                             {availableLeaderboards.map(({ name, value }, index) => {
                                 return (
                                     <option

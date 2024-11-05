@@ -195,8 +195,9 @@ export const MapPoint = React.memo(
                                         <Tooltip label={`Copy: ${defenderInfo.accountRS}`} hasArrow placement="right">
                                             <Text
                                                 textTransform={'uppercase'}
+                                                color={'#FFF'}
                                                 onClick={() => copyToClipboard(defenderInfo.accountRS)}>
-                                                GUARDIAN: {defenderInfo.name || formatAddress(defenderInfo.accountRS)}
+                                                GUARDIAN: {defenderInfo.name || formatAddress(defenderInfo.accountRS)}{' '}
                                             </Text>
                                         </Tooltip>
                                     </PopoverHeader>
@@ -226,6 +227,7 @@ export const MapPoint = React.memo(
                                                         />
                                                         <Stack direction={'column'} ml={2}>
                                                             <Text
+                                                                color={'#FFF'}
                                                                 textTransform={'capitalize'}
                                                                 fontFamily={'Inter, system-ui'}
                                                                 fontWeight={'700'}

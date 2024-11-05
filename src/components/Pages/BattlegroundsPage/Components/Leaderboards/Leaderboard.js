@@ -47,7 +47,7 @@ const LeaderboardRow = ({ index, accountRS, points, name, isMobile }) => {
                     display="flex"
                     alignItems="center"
                     justifyContent="center">
-                    {points || 0}
+                    {points ? Math.floor(points).toLocaleString('de-DE') : 0}
                 </Text>
             </GridItem>
         </Grid>
@@ -56,6 +56,7 @@ const LeaderboardRow = ({ index, accountRS, points, name, isMobile }) => {
 
 const Leaderboard = ({ isMobile }) => {
     const { entries, data } = useSelector(state => state.leaderboards);
+
     const color = () => {
         switch (data.type) {
             case 'terrestrial':
@@ -70,6 +71,7 @@ const Leaderboard = ({ isMobile }) => {
                 return null;
         }
     };
+    console.log('🚀 ~ Leaderboard ~ data:', data);
 
     return (
         <Stack overflowY="auto" className="custom-scrollbar" maxHeight="80vh" w="100%">
