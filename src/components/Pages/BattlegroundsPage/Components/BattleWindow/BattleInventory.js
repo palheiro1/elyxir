@@ -12,6 +12,7 @@ import {
     Stack,
     Text,
     Tooltip,
+    useMediaQuery,
 } from '@chakra-ui/react';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
@@ -34,6 +35,15 @@ const BattleInventory = ({
         domain: '',
     });
     const [preSelectedCard, setPreSelectedCard] = useState(null);
+
+    const [isLittleScreen] = useMediaQuery('(min-width: 1190px) and (max-width: 1330px)');
+    const [isMediumScreen] = useMediaQuery('(min-width: 1330px) and (max-width: 1600px)');
+
+    const getColumns = () => {
+        if (isMobile || isLittleScreen) return 3;
+        if (isMediumScreen) return 4;
+        return 5;
+    };
 
     const handleRarityChange = event => {
         setFilters(prevFilters => ({
@@ -177,7 +187,7 @@ const BattleInventory = ({
                         overflowY={'auto'}
                         className="custom-scrollbar">
                         <SimpleGrid
-                            columns={isMobile ? 2 : 5}
+                            columns={getColumns()}
                             spacing={3}
                             p={3}
                             h={'100%'}

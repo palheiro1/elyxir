@@ -11,7 +11,6 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
     const { accountRs } = infoAccount;
 
     const { arenasInfo, userBattles, loading } = useSelector(state => state.battle);
-    console.log("🚀 ~ BattleList ~ userBattles:", userBattles)
     const [viewDetails, setViewDetails] = useState(false);
     const [selectedBattle, setSelectedBattle] = useState(null);
     const [selectedArena, setSelectedArena] = useState(null);
@@ -48,7 +47,7 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
                 pos={'fixed'}
                 bgColor={'#1F2323'}
                 zIndex={99}
-                w={isMobile ? '80%' : viewDetails ? '60%' : '70%'}
+                w={isMobile ? '80%' : viewDetails ? '50%' : '70%'}
                 h={viewDetails ? '95%' : '90%'}
                 borderRadius={'25px'}
                 overflowY={'hidden'}

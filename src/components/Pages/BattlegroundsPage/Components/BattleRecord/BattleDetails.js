@@ -554,7 +554,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                             borderRadius={'5px'}
                                                             src={'/images/battlegrounds/defense_icon.svg'}
                                                         />
-                                                        <Text>2</Text>
+                                                        <Text>{battleInfo.defenderBonus || 2}</Text>
                                                     </Stack>
                                                 </Stack>
 
