@@ -13,7 +13,7 @@ const EarningsRow = ({ isMobile, date, arenaName, capturedAsset, rewards, cards 
     const ObtainedCard = cards.find(card => capturedAsset[card.asset]);
 
     return (
-        <Grid templateColumns="repeat(5, 1fr)" gap={4} w="100%" mx="auto" mt={2} borderRadius="10px">
+        <Grid templateColumns="repeat(5, 1fr)" gap={4} w="100%" mx="auto" mt={2} borderRadius="10px" color={'#FFF'}>
             <GridItem colSpan={1} textAlign="center">
                 <Text
                     p={3}

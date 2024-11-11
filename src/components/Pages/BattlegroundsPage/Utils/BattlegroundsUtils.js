@@ -52,7 +52,7 @@ export const getTimeDifference = (timestamp, getMinSeconds) => {
     if (timeDifferenceArray.length > 1) {
         timeDifferenceString = timeDifferenceArray.slice(0, -1).join(', ') + ' and ' + timeDifferenceArray.slice(-1);
     } else {
-        timeDifferenceString = timeDifferenceArray[0] || '0 seconds';
+        timeDifferenceString = timeDifferenceArray[0] || (getMinSeconds ? '0 seconds' : 'less than an hour');
     }
 
     return timeDifferenceString;
