@@ -51,7 +51,7 @@ const Earnings = ({ infoAccount, isMobile, closeEarnigs, cards }) => {
                         zIndex={999}
                         fontFamily={'Chelsea Market, System'}
                         _hover={{ borderColor: '#555' }}
-                        maxW={'150px'}
+                        maxW={'160px'}
                         flex="1">
                         <option
                             value={1}
@@ -67,7 +67,7 @@ const Earnings = ({ infoAccount, isMobile, closeEarnigs, cards }) => {
                                 backgroundColor: '#FFF',
                                 color: '#000',
                             }}>
-                            PANTHEON
+                            PANTHEONS
                         </option>
                     </Select>
                     <Heading fontFamily={'Chelsea market'} flex="1" fontWeight={400}>

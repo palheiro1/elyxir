@@ -72,7 +72,7 @@ const EarningsRow = ({ isMobile, date, arenaName, capturedAsset, rewards, cards 
                 </Text>
             </GridItem>
             <GridItem colSpan={1} textAlign="center">
-                <Text>
+                <Box>
                     <Tooltip
                         label={
                             <Box>
@@ -111,7 +111,7 @@ const EarningsRow = ({ isMobile, date, arenaName, capturedAsset, rewards, cards 
                             </Text>
                         </Box>
                     </Tooltip>
-                </Text>
+                </Box>
             </GridItem>
         </Grid>
     );

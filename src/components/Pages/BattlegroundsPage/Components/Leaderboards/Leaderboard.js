@@ -73,7 +73,6 @@ const Leaderboard = ({ isMobile }) => {
                 return null;
         }
     };
-    console.log('🚀 ~ Leaderboard ~ data:', data);
 
     return (
         <Stack overflowY="auto" className="custom-scrollbar" maxHeight="80vh" w="100%">
