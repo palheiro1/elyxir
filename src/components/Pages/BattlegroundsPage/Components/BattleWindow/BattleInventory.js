@@ -94,11 +94,11 @@ const BattleInventory = ({
                 3: 'Epic',
                 4: 'Special',
             };
-            return filters.rarity ? card.rarity === rarityMapping[filters.rarity] : true;
+            return filters.rarity && filters.rarity !== '-1' ? card.rarity === rarityMapping[filters.rarity] : true;
         })
         .filter(card => {
             const cardInfo = soldiers.soldier.find(soldier => soldier.asset === card.asset);
-            return filters.element ? cardInfo.mediumId === Number(filters.element) : true;
+            return filters.element && filters.element !== '-1' ? cardInfo.mediumId === Number(filters.element) : true;
         })
         .filter(card => {
             const domainMapping = {
@@ -108,7 +108,7 @@ const BattleInventory = ({
                 4: 'Africa',
                 5: 'Europe',
             };
-            return filters.domain ? card.channel === domainMapping[filters.domain] : true;
+            return filters.domain && filters.domain !== '-1' ? card.channel === domainMapping[filters.domain] : true;
         });
 
     const handleCardClick = card => {
@@ -120,6 +120,8 @@ const BattleInventory = ({
             setPreSelectedCard(card);
         }
     };
+
+    const optionStyle = { backgroundColor: '#FFF', color: '#000' };
 
     return (
         <>
@@ -137,42 +139,79 @@ const BattleInventory = ({
                     BATTELEGROUNDS CARDS
                 </Heading>
                 <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={'9%'}>
-                    <Select placeholder="Rarity" w={'10%'} onChange={handleRarityChange}>
+                    <Select w={'10%'} onChange={handleRarityChange} color={'#FFF'}>
+                        <option value="-1" style={optionStyle}>
+                            Rarity
+                        </option>
                         {armyRankMaximum[0] === 5 && (
                             <>
-                                <option value="1">Common</option>
-                                <option value="2">Rare</option>
+                                <option style={optionStyle} value="1">
+                                    Common
+                                </option>
+                                <option value="2" style={optionStyle}>
+                                    Rare
+                                </option>
                             </>
                         )}
                         {armyRankMaximum[0] !== 5 && (
                             <>
                                 {index !== 0 && (
                                     <>
-                                        <option value="1">Common</option>
-                                        <option value="2">Rare</option>
+                                        <option value="1" style={optionStyle}>
+                                            Common
+                                        </option>
+                                        <option value="2" style={optionStyle}>
+                                            Rare
+                                        </option>
                                     </>
                                 )}
                                 {index === 0 && (
                                     <>
-                                        <option value="3">Epic</option>
-                                        <option value="4">Special</option>
+                                        <option value="3" style={optionStyle}>
+                                            Epic
+                                        </option>
+                                        <option value="4" style={optionStyle}>
+                                            Special
+                                        </option>
                                     </>
                                 )}
                             </>
                         )}
                     </Select>
 
-                    <Select placeholder="Element" w={'10%'} onChange={handleElementChange}>
-                        <option value="1">Terrestrial</option>
-                        <option value="2">Aerial</option>
-                        <option value="3">Aquatic</option>
+                    <Select w={'10%'} onChange={handleElementChange} color={'#FFF'}>
+                        <option value="-1" style={optionStyle}>
+                            Element
+                        </option>
+                        <option value="1" style={optionStyle}>
+                            Terrestrial
+                        </option>
+                        <option value="2" style={optionStyle}>
+                            Aerial
+                        </option>
+                        <option value="3" style={optionStyle}>
+                            Aquatic
+                        </option>
                     </Select>
-                    <Select placeholder="Continent" w={'10%'} onChange={handleDomainChange}>
-                        <option value="1">Asia</option>
-                        <option value="2">Oceania</option>
-                        <option value="3">America</option>
-                        <option value="4">Africa</option>
-                        <option value="5">Europe</option>
+                    <Select w={'10%'} onChange={handleDomainChange} color={'#FFF'}>
+                        <option value="-1" style={optionStyle}>
+                            Continent
+                        </option>
+                        <option value="1" style={optionStyle}>
+                            Asia
+                        </option>
+                        <option value="2" style={optionStyle}>
+                            Oceania
+                        </option>
+                        <option value="3" style={optionStyle}>
+                            America
+                        </option>
+                        <option value="4" style={optionStyle}>
+                            Africa
+                        </option>
+                        <option value="5" style={optionStyle}>
+                            Europe
+                        </option>
                     </Select>
                 </Stack>
                 <Stack direction={'row'} padding={5} pt={0} height={'90%'}>

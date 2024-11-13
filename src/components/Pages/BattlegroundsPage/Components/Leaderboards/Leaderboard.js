@@ -6,51 +6,53 @@ const LeaderboardRow = ({ index, accountRS, points, name, isMobile }) => {
     const color = index < 1 ? '#39D5D5' : '#FFF';
 
     return (
-        <Grid templateColumns="repeat(3, 1fr)" gap={4} w="100%" mx="auto" mt={0} borderRadius="10px" color={color}>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={3}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {`#${index + 1}`}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={3}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    textTransform={'uppercase'}
-                    justifyContent="center">
-                    {name ? name : accountRS}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={3}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {points ? Math.floor(points).toLocaleString('de-DE') : 0}
-                </Text>
-            </GridItem>
-        </Grid>
+        points > 0 && (
+            <Grid templateColumns="repeat(3, 1fr)" gap={4} w="100%" mx="auto" mt={0} borderRadius="10px" color={color}>
+                <GridItem colSpan={1} textAlign="center">
+                    <Text
+                        p={3}
+                        maxH={'45px'}
+                        fontFamily={'Inter, System'}
+                        fontWeight={700}
+                        h="100%"
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center">
+                        {`#${index + 1}`}
+                    </Text>
+                </GridItem>
+                <GridItem colSpan={1} textAlign="center">
+                    <Text
+                        p={3}
+                        maxH={'45px'}
+                        fontFamily={'Inter, System'}
+                        fontWeight={700}
+                        h="100%"
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        display="flex"
+                        alignItems="center"
+                        textTransform={'uppercase'}
+                        justifyContent="center">
+                        {name ? name : accountRS}
+                    </Text>
+                </GridItem>
+                <GridItem colSpan={1} textAlign="center">
+                    <Text
+                        p={3}
+                        maxH={'45px'}
+                        fontFamily={'Inter, System'}
+                        fontWeight={700}
+                        h="100%"
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center">
+                        {points ? Math.floor(points).toLocaleString('de-DE') : 0}
+                    </Text>
+                </GridItem>
+            </Grid>
+        )
     );
 };
 
@@ -71,7 +73,6 @@ const Leaderboard = ({ isMobile }) => {
                 return null;
         }
     };
-    console.log('🚀 ~ Leaderboard ~ data:', data);
 
     return (
         <Stack overflowY="auto" className="custom-scrollbar" maxHeight="80vh" w="100%">
