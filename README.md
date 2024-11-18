@@ -1,6 +1,6 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Full battlegrounds beta
+Full battlegrounds + rewards
 
 ## Available Scripts
 
