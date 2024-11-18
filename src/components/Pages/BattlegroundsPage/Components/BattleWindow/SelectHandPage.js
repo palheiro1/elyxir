@@ -197,6 +197,17 @@ export const SelectHandPage = ({
         };
         getDefenderBonus();
     }, [arenaInfo.domainId, arenaInfo.mediumId, defenderCards]);
+
+    const checkBalance = asset => {
+        if (asset.name === 'GEM') {
+            if (Number(asset.price) < Number(omnoGEMsBalance)) return '#FFF';
+            return 'red';
+        }
+        if (asset.name === 'wETH') {
+            if (Number(asset.price) < Number(omnoWethBalance)) return '#FFF';
+            return 'red';
+        }
+    };
     return (
         <>
             <Box display={'flex'} flexDir={'column'} overflowY={'scroll'} maxH={'95%'} className="custom-scrollbar">
@@ -314,28 +325,6 @@ export const SelectHandPage = ({
                         fontSize={isMobile ? 'md' : 'large'}>
                         CHOOSE YOUR HAND
                     </Text>
-                    <Stack direction={'row'} spacing={8}>
-                        <Text color={'#D597B2'} my={'auto'} fontFamily={'Chelsea Market, system-ui'} fontSize={'lg'}>
-                            TRIBUTE
-                        </Text>
-                        <Stack
-                            direction={'column'}
-                            my={'auto'}
-                            ml={2}
-                            fontFamily={'Inter, system-ui'}
-                            fontWeight={500}
-                            fontSize={'sm'}>
-                            {battleCost && !isEmptyObject(battleCost) ? (
-                                battleCost.map((item, index) => (
-                                    <Text key={index} color={'#FFF'}>
-                                        {item.price / NQTDIVIDER} {item.name}
-                                    </Text>
-                                ))
-                            ) : (
-                                <Text color={'#FFF'}>FREE</Text>
-                            )}
-                        </Stack>
-                    </Stack>
                     <Stack direction={'row'} marginRight={2} spacing={8}>
                         <Text color={'#D597B2'} my={'auto'} fontFamily={'Chelsea Market, system-ui'} fontSize={'lg'}>
                             BONUS
@@ -420,30 +409,53 @@ export const SelectHandPage = ({
                         );
                     })}
                 </Stack>
-                <Box
-                    mx="auto"
-                    borderRadius="30px"
-                    p="3px"
-                    background="linear-gradient(49deg, rgba(235,178,185,1) 0%, rgba(32,36,36,1) 100%)"
-                    display="inline-block"
-                    mt={isMobile ? 3 : 6}>
-                    <Button
-                        sx={{
-                            background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
-                            borderRadius: '30px',
-                            color: '#FFF',
-                            textTransform: 'uppercase',
-                            fontWeight: '400',
-                            letterSpacing: '1px',
-                            fontSize: isMobile ? 'md' : 'lg',
-                            fontFamily: "'Chelsea Market', system-ui",
-                            padding: isMobile ? '5' : '6',
-                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                        }}
-                        onClick={onOpen}>
-                        Start a Battle
-                    </Button>
-                </Box>
+                <Stack direction={'row'} w={'50%'} mx={'auto'} mt={isMobile ? 3 : 6}>
+                    <Box
+                        m="auto"
+                        borderRadius="30px"
+                        p="3px"
+                        background="linear-gradient(49deg, rgba(235,178,185,1) 0%, rgba(32,36,36,1) 100%)"
+                        display="inline-block">
+                        <Button
+                            sx={{
+                                background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
+                                borderRadius: '30px',
+                                color: '#FFF',
+                                textTransform: 'uppercase',
+                                fontWeight: '400',
+                                letterSpacing: '1px',
+                                fontSize: isMobile ? 'md' : 'lg',
+                                fontFamily: "'Chelsea Market', system-ui",
+                                padding: isMobile ? '5' : '6',
+                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                            }}
+                            onClick={onOpen}>
+                            Start a Battle
+                        </Button>
+                    </Box>
+                    <Stack direction={'row'} spacing={8} my={'auto'}>
+                        <Text color={'#D597B2'} my={'auto'} fontFamily={'Chelsea Market, system-ui'} fontSize={'lg'}>
+                            TRIBUTE
+                        </Text>
+                        <Stack
+                            direction={'column'}
+                            my={'auto'}
+                            ml={2}
+                            fontFamily={'Inter, system-ui'}
+                            fontWeight={500}
+                            fontSize={'sm'}>
+                            {battleCost && !isEmptyObject(battleCost) ? (
+                                battleCost.map((item, index) => (
+                                    <Text key={index} color={checkBalance(item)}>
+                                        {item.price / NQTDIVIDER} {item.name}
+                                    </Text>
+                                ))
+                            ) : (
+                                <Text color={'#FFF'}>FREE</Text>
+                            )}
+                        </Stack>
+                    </Stack>
+                </Stack>
             </Box>
             <Modal isOpen={isOpen} onClose={onClose} isCentered>
                 <ModalOverlay />

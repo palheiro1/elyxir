@@ -34,7 +34,8 @@ const ArdorPage = ({ cards, filteredCards, infoAccount, isMobile, gridColumns })
                     justifyContent="center">
                     <SimpleGrid
                         columns={gridColumns()}
-                        spacing={3}
+                        spacing={4}
+                        align={'center'}
                         overflowY={'auto'}
                         className="custom-scrollbar"
                         w={'100%'}

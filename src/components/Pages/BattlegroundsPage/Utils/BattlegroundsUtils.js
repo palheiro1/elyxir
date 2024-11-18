@@ -126,7 +126,7 @@ export const getLevelIconString = value => {
         case 'Epic':
             return `${path}epic.png`;
         case 'Special':
-            return `${path}epic.png`;
+            return `${path}special.png`;
         default:
             return null;
     }
@@ -142,7 +142,7 @@ export const getLevelIconInt = value => {
         case 3:
             return `${path}epic.png`;
         case 4:
-            return `${path}epic.png`;
+            return `${path}special.png`;
         default:
             return null;
     }
