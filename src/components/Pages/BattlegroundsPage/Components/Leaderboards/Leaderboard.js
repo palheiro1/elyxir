@@ -54,24 +54,8 @@ const LeaderboardRow = ({ index, accountRS, points, name, isMobile }) => {
     );
 };
 
-const Leaderboard = ({ isMobile }) => {
-    const { entries, data } = useSelector(state => state.leaderboards);
-
-    const color = () => {
-        switch (data.type) {
-            case 'terrestrial':
-                return '#866678';
-            case 'aquatic':
-                return '#393CC1';
-            case 'aerial':
-                return '#5E67A2';
-            case 'combativity':
-                return '#FF4B85';
-            default:
-                return null;
-        }
-    };
-    console.log('🚀 ~ Leaderboard ~ data:', data);
+const Leaderboard = ({ isMobile, color }) => {
+    const { entries } = useSelector(state => state.leaderboards);
 
     return (
         <Stack overflowY="auto" className="custom-scrollbar" maxHeight="80vh" w="100%">

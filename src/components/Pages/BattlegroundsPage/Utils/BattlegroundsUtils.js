@@ -52,7 +52,7 @@ export const getTimeDifference = (timestamp, getMinSeconds) => {
     if (timeDifferenceArray.length > 1) {
         timeDifferenceString = timeDifferenceArray.slice(0, -1).join(', ') + ' and ' + timeDifferenceArray.slice(-1);
     } else {
-        timeDifferenceString = timeDifferenceArray[0] || '0 seconds';
+        timeDifferenceString = timeDifferenceArray[0] || (getMinSeconds ? '0 seconds' : 'less than an hour');
     }
 
     return timeDifferenceString;
@@ -126,7 +126,7 @@ export const getLevelIconString = value => {
         case 'Epic':
             return `${path}epic.png`;
         case 'Special':
-            return `${path}epic.png`;
+            return `${path}special.png`;
         default:
             return null;
     }
@@ -142,7 +142,7 @@ export const getLevelIconInt = value => {
         case 3:
             return `${path}epic.png`;
         case 4:
-            return `${path}epic.png`;
+            return `${path}special.png`;
         default:
             return null;
     }

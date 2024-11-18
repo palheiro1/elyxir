@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
-import { Box, Heading, IconButton, Spinner, Stack, Text, Select, Image } from '@chakra-ui/react';
+import { Box, Heading, IconButton, Spinner, Stack, Text, Select, Image, Tooltip } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import Leaderboard from './Leaderboard';
 import { fetchAccountDetails, fetchLeaderboards, setViewData } from '../../../../../redux/reducers/LeaderboardsReducer';
@@ -49,6 +49,24 @@ const Leaderboards = ({ handleClose, isMobile }) => {
 
         getBattleCost();
     }, []);
+
+    const color = () => {
+        if (!data) return;
+        switch (data.type) {
+            case 'terrestrial':
+                return '#866678';
+            case 'aquatic':
+                return '#393CC1';
+            case 'aerial':
+                return '#5E67A2';
+            case 'combativity':
+                return '#FF4B85';
+            case 'general':
+                return '#FFD900';
+            default:
+                return null;
+        }
+    };
 
     const changeData = option => {
         if (leaderboards && option !== 0) {
@@ -98,12 +116,13 @@ const Leaderboards = ({ handleClose, isMobile }) => {
     };
 
     const availableLeaderboards = [
-        { name: 'CHAMPIONS PANTHEON', value: 1 },
-        { name: 'LORD OF LANDS', value: 2 },
-        { name: 'LORD OF SKY', value: 3 },
-        { name: 'LORD OF OCEANS', value: 4 },
-        { name: 'LORD OF COMBATIVENESS', value: 5 },
+        { name: 'CHAMPIONS PANTHEON', value: 1, description: 'Lorem ajhagh champions' },
+        { name: 'LORD OF LANDS', value: 2, description: 'Lorem ajhagh lands' },
+        { name: 'LORD OF SKY', value: 3, description: 'Lorem ajhagh sky' },
+        { name: 'LORD OF OCEANS', value: 4, description: 'Lorem ajhagh oceans' },
+        { name: 'LORD OF COMBATIVENESS', value: 5, description: 'Lorem ajhagh combativeness loagaj asaq a0an asa' },
     ];
+
     return (
         <>
             <Overlay isVisible={true} handleClose={closeLeaderboards} />
@@ -128,6 +147,35 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                     zIndex={999}
                     onClick={closeLeaderboards}
                 />
+                <Tooltip
+                    bgColor={color()}
+                    borderRadius={'10px'}
+                    w={'200px'}
+                    h={'250px'}
+                    label={
+                        <Box>
+                            <Text fontFamily={'Chelsea Market, System'} mt={1} textAlign={'center'}>
+                                {availableLeaderboards.find(item => item.value === option).name}
+                            </Text>
+                            <Text fontWeight={'100'}>
+                                {availableLeaderboards.find(item => item.value === option).description}
+                            </Text>
+                        </Box>
+                    }
+                    fontSize="md"
+                    placement="top"
+                    hasArrow>
+                    <Image
+                        background={'transparent'}
+                        color={'#FFF'}
+                        src="/images/battlegrounds/info.svg"
+                        position="absolute"
+                        bottom={10}
+                        right={10}
+                        zIndex={999}
+                        boxSize={'40px'}
+                    />
+                </Tooltip>
                 <>
                     <Stack
                         direction={'row'}
@@ -185,7 +233,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                             })}
                         </Select>
                     </Stack>
-                    <Stack direction={'column'} color={'#FFF'} mx={'auto'} textAlign={'center'} h={'90%'}>
+                    <Stack direction={'column'} color={'#FFF'} mx={'auto'} textAlign={'center'} h={'85%'}>
                         <Stack
                             direction={'column'}
                             my={'auto'}
@@ -194,14 +242,14 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                             mb={0}
                             h={'85%'}>
                             {option !== 1 ? (
-                                <Leaderboard data={data} isMobile={isMobile} />
+                                <Leaderboard isMobile={isMobile} color={color} />
                             ) : (
                                 <GeneralLeaderboard isMobile={isMobile} />
                             )}
                         </Stack>
                         <Stack dir="row" mx={'auto'}>
                             {option === 5 ? (
-                                <CombativityResetTimer mt={-5} />
+                                <CombativityResetTimer mt={5} />
                             ) : accumulatedBounty ? (
                                 <Stack
                                     direction="row"
@@ -209,7 +257,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                     fontFamily={'Inter, system'}
                                     fontSize={'md'}
                                     w={'100%'}
-                                    mt={-5}
+                                    mt={5}
                                     fontWeight={700}>
                                     {accumulatedBounty && !isEmptyObject(accumulatedBounty) ? (
                                         <>
@@ -238,7 +286,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                     )}
                                 </Stack>
                             ) : (
-                                <Box mx={'auto'} mt={-5}>
+                                <Box mx={'auto'} mt={5}>
                                     <Spinner />
                                 </Box>
                             )}
