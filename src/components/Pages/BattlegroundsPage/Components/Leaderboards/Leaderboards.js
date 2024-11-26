@@ -117,10 +117,10 @@ const Leaderboards = ({ handleClose, isMobile }) => {
 
     const availableLeaderboards = [
         { name: 'CHAMPIONS PANTHEON', value: 1, description: 'Lorem ajhagh champions' },
-        { name: 'LORD OF LANDS', value: 2, description: 'Lorem ajhagh lands' },
-        { name: 'LORD OF SKY', value: 3, description: 'Lorem ajhagh sky' },
-        { name: 'LORD OF OCEANS', value: 4, description: 'Lorem ajhagh oceans' },
-        { name: 'LORD OF COMBATIVENESS', value: 5, description: 'Lorem ajhagh combativeness loagaj asaq a0an asa' },
+        { name: 'TERRESTRIAL PANTHEON', value: 2, description: 'Lorem ajhagh lands' },
+        { name: 'AERAIL PANTHEON', value: 3, description: 'Lorem ajhagh sky' },
+        { name: 'AQUATIC PANTHEON', value: 4, description: 'Lorem ajhagh oceans' },
+        { name: 'CHAMPION OF FIRECENESS', value: 5, description: 'Lorem ajhagh combativeness loagaj asaq a0an asa' },
     ];
 
     return (
