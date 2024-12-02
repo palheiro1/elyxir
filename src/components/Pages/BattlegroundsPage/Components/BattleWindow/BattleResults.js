@@ -26,7 +26,6 @@ import victoryIcon from '../../assets/icons/victory_icon.svg';
 
 const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName }) => {
     const [battleInfo, setBattleInfo] = useState(null);
-    console.log('🚀 ~ BattleResults ~ battleInfo:', battleInfo);
     const [capturedCard, setCapturedCard] = useState(null);
     const [medium, setMedium] = useState();
     const [arenaName, setArenaName] = useState(null);
@@ -161,7 +160,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             const defenderResults = [];
 
             await Promise.all(
-                battleResults.map(async item => {
+                battleResults.battleResult.map(async (item, index) => {
                     let { defenderValue, attackerValue } = item;
 
                     const attackerCard = cards.find(card => String(card.asset) === String(item.attackerAsset));
@@ -179,11 +178,10 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                             heroBonus: 0,
                         };
 
-                        attackerResults.push(attackerBonuses);
-                        defenderResults.push(defenderBonuses);
+                        attackerResults[index] = attackerBonuses;
+                        defenderResults[index] = defenderBonuses;
 
                         pointsA += attackerValue;
-
                         pointsD += defenderValue;
                     }
                 })

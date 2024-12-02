@@ -13,7 +13,6 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
         battleEfficiencyPoints,
         defenseDurationPoints,
     } = data;
-
     const bg = index % 2 === 0 ? '#2A2E2E' : '#323636';
     const color = index < 5 ? '#D597B2' : '#FFF';
 
@@ -62,7 +61,11 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
                         display="flex"
                         alignItems="center"
                         justifyContent="center">
-                        {landsConqueredPoints || 0}
+                        {landsConqueredPoints
+                            ? Number.isInteger(landsConqueredPoints)
+                                ? landsConqueredPoints
+                                : landsConqueredPoints.toFixed(3).toLocaleString('de-DE')
+                            : 0}
                     </Text>
                 </GridItem>
                 <GridItem colSpan={1} textAlign="center">
@@ -76,7 +79,11 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
                         display="flex"
                         alignItems="center"
                         justifyContent="center">
-                        {successfullDefensesPoints || 0}
+                        {successfullDefensesPoints
+                            ? Number.isInteger(successfullDefensesPoints)
+                                ? successfullDefensesPoints
+                                : successfullDefensesPoints.toFixed(3).toLocaleString('de-DE')
+                            : 0}
                     </Text>
                 </GridItem>
                 <GridItem colSpan={1} textAlign="center">
@@ -93,7 +100,7 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
                         {battleEfficiencyPoints
                             ? Number.isInteger(battleEfficiencyPoints)
                                 ? battleEfficiencyPoints
-                                : battleEfficiencyPoints.toFixed(1)
+                                : battleEfficiencyPoints.toFixed(3).toLocaleString('de-DE')
                             : 0}
                     </Text>
                 </GridItem>
@@ -108,7 +115,11 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
                         display="flex"
                         alignItems="center"
                         justifyContent="center">
-                        {defenseDurationPoints ? Math.floor(defenseDurationPoints).toLocaleString('de-DE') : 0}
+                        {defenseDurationPoints
+                            ? Number.isInteger(defenseDurationPoints)
+                                ? defenseDurationPoints
+                                : defenseDurationPoints.toFixed(3).toLocaleString('de-DE')
+                            : 0}
                     </Text>
                 </GridItem>
                 <GridItem colSpan={1} textAlign="center">
@@ -123,7 +134,11 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
                         alignItems="center"
                         color={'#7FC0BE'}
                         justifyContent="center">
-                        {totalPoints ? Math.ceil(totalPoints).toLocaleString('de-DE') : 0}
+                        {totalPoints
+                            ? Number.isInteger(totalPoints)
+                                ? totalPoints
+                                : totalPoints.toFixed(3).toLocaleString('de-DE')
+                            : 0}
                     </Text>
                 </GridItem>
             </Grid>

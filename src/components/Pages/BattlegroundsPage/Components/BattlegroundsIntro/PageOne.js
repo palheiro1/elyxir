@@ -26,7 +26,7 @@ export const PageOne = ({ handleNext }) => {
                 direction={'column'}
                 fontWeight={'100'}
                 fontSize={'large'}>
-                <Text mt={8}>Wellcome to</Text> <Img src={logo} w={'85%'} ml={5} />
+                <Text mt={8}>Welcome to</Text> <Img src={logo} w={'85%'} ml={5} />
             </Stack>
             <Box>
                 <Heading

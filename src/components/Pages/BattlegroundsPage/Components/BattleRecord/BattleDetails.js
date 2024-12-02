@@ -120,27 +120,28 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
             const defenderResults = [];
 
             await Promise.all(
-                battleResults.battleResult.map(async item => {
+                battleResults.battleResult.map(async (item, index) => {
                     let { defenderValue, attackerValue } = item;
 
                     const attackerCard = cards.find(card => String(card.asset) === String(item.attackerAsset));
                     const defenderCard = cards.find(card => String(card.asset) === String(item.defenderAsset));
 
                     if (attackerCard && defenderCard) {
-                        const [attackerBonuses, defenderBonuses] = await Promise.all([
-                            calculateBonus(attackerCard, true).then(
-                                result => result || { mediumBonus: 0, domainBonus: 0, heroBonus: 0 }
-                            ),
-                            calculateBonus(defenderCard, false).then(
-                                result => result || { mediumBonus: 0, domainBonus: 0, heroBonus: 0 }
-                            ),
-                        ]);
+                        const attackerBonuses = (await calculateBonus(attackerCard, true)) || {
+                            mediumBonus: 0,
+                            domainBonus: 0,
+                            heroBonus: 0,
+                        };
+                        const defenderBonuses = (await calculateBonus(defenderCard, false)) || {
+                            mediumBonus: 0,
+                            domainBonus: 0,
+                            heroBonus: 0,
+                        };
 
-                        attackerResults.push(attackerBonuses);
-                        defenderResults.push(defenderBonuses);
+                        attackerResults[index] = attackerBonuses;
+                        defenderResults[index] = defenderBonuses;
 
                         pointsA += attackerValue;
-
                         pointsD += defenderValue;
                     }
                 })
