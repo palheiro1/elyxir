@@ -13,7 +13,7 @@ const locations = [
     { id: 12, name: 'Papua', x: 865, y: 332, rarity: 'Rare' },
     { id: 13, name: 'Yalarrnga', x: 702, y: 374, rarity: 'Rare' },
     { id: 14, name: 'Tahiti', x: 924, y: 291, rarity: 'Common' },
-    { id: 15, name: 'Timor', x: 786, y: 320, rarity: 'Common' },
+    { id: 15, name: 'Timor', x: 815, y: 340, rarity: 'Common' },
     { id: 16, name: 'Kiribati', x: 887, y: 259, rarity: 'Common' },
     { id: 17, name: 'Palawa', x: 757, y: 521, rarity: 'Common' },
     { id: 18, name: 'Salomon', x: 895, y: 340, rarity: 'Common' },

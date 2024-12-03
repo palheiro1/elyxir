@@ -1,6 +1,6 @@
-import { Stack, Text } from '@chakra-ui/react';
+import { Image, Stack, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { getLeaderboardsResetBlock } from '../../../../../services/Battlegrounds/Battlegrounds';
+import { getGiftzRewardQNT, getLeaderboardsResetBlock } from '../../../../../services/Battlegrounds/Battlegrounds';
 import { useSelector } from 'react-redux';
 import { BLOCKTIME } from '../../../../../data/CONSTANTS';
 
@@ -14,6 +14,7 @@ const CombativityResetTimer = props => {
 
     const { prev_height } = useSelector(state => state.blockchain);
     const [timeString, setTimeString] = useState(null);
+    const [giftzRewardQNT, setGiftzRewardQNT] = useState(null);
     useEffect(() => {
         const calculateLeaderboardsResetTime = async () => {
             const resetBlock = await getLeaderboardsResetBlock();
@@ -31,6 +32,13 @@ const CombativityResetTimer = props => {
         prev_height && calculateLeaderboardsResetTime();
     }, [prev_height]);
 
+    useEffect(() => {
+        const fetchGiftzRewardQNT = async () => {
+            const qnt = await getGiftzRewardQNT();
+            setGiftzRewardQNT(qnt);
+        };
+        fetchGiftzRewardQNT();
+    }, []);
     useEffect(() => {
         const timeParts = [];
 
@@ -57,9 +65,22 @@ const CombativityResetTimer = props => {
     return (
         <Stack fontFamily="Chelsea market, System" {...props}>
             {leaderboardResetTimer.remainingBlocks !== 'loading' ? (
-                <Text color="#FFF" fontFamily="Chelsea market, System" textTransform={'uppercase'}>
-                    Reseting combativity leaderboard in {timeString}.
-                </Text>
+                <Stack direction={'column'}>
+                    <Stack direction={'row'} mx={'auto'}>
+                        <Text>REWARD: {giftzRewardQNT}</Text>{' '}
+                        <Image
+                            my="auto"
+                            src={'images/currency/giftz.png'}
+                            alt={'GIFTZ Icon (˘･_･˘)'}
+                            w="40px"
+                            h="40px"
+                            mt={-2}
+                        />
+                    </Stack>
+                    <Text color="#FFF" fontFamily="Chelsea market, System" textTransform={'uppercase'}>
+                        Reseting combativity leaderboard in {timeString}.
+                    </Text>
+                </Stack>
             ) : (
                 <Text color="#FFF">Loading...</Text>
             )}
