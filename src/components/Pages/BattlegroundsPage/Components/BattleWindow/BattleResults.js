@@ -160,7 +160,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             const defenderResults = [];
 
             await Promise.all(
-                battleResults.battleResult.map(async (item, index) => {
+                battleResults.map(async (item, index) => {
                     let { defenderValue, attackerValue } = item;
 
                     const attackerCard = cards.find(card => String(card.asset) === String(item.attackerAsset));
@@ -194,6 +194,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
         };
 
         if (battleResults && battleInfo && cards && cards.length > 0 && soldiers && calculateBonus) {
+            console.log('🚀 ~ useEffect ~ battleResults:', battleResults);
             calculateAllBonusesAndPoints();
         }
     }, [battleInfo, battleResults, calculateBonus, cards, soldiers]);

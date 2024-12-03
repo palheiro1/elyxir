@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
-import { Box, Heading, IconButton, Spinner, Stack, Text, Select, Image, Tooltip } from '@chakra-ui/react';
+import { Box, Heading, IconButton, Stack, Text, Select, Image, Tooltip } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import Leaderboard from './Leaderboard';
 import { fetchAccountDetails, fetchLeaderboards, setViewData } from '../../../../../redux/reducers/LeaderboardsReducer';
-import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
-import { isEmptyObject } from '../../Utils/BattlegroundsUtils';
-import { getAccumulatedBounty } from '../../../../../services/Battlegrounds/Battlegrounds';
-import { getAsset } from '../../../../../services/Ardor/ardorInterface';
 import GeneralLeaderboard from './GeneralLeaderboard';
 import CombativityResetTimer from './CombativityResetTimer';
 import panteon from '../../assets/icons/panteon_banner.svg';
@@ -16,12 +12,11 @@ import landsBanner from '../../assets/icons/lands_banner.svg';
 import waterBanner from '../../assets/icons/water_banner.svg';
 import airBanner from '../../assets/icons/air_banner.svg';
 import combativityBanner from '../../assets/icons/combativeness_banner.svg';
+import LeaderboardsRewards from './LeaderboardsRewards';
 
 const Leaderboards = ({ handleClose, isMobile }) => {
     const dispatch = useDispatch();
     const { leaderboards, data } = useSelector(state => state.leaderboards);
-
-    const [accumulatedBounty, setAccumulatedBounty] = useState(null);
     const [option, setOption] = useState(1);
 
     useEffect(() => {
@@ -29,26 +24,6 @@ const Leaderboards = ({ handleClose, isMobile }) => {
         changeData(1);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
-
-    useEffect(() => {
-        const getBattleCost = async () => {
-            let res = await getAccumulatedBounty();
-            setAccumulatedBounty({});
-            if (res && !isEmptyObject(res)) {
-                const assets = Object.entries(res.asset);
-
-                const results = await Promise.all(
-                    assets.map(async ([asset, price]) => {
-                        const assetDetails = await getAsset(asset);
-                        return { ...assetDetails, price };
-                    })
-                );
-                setAccumulatedBounty(results);
-            }
-        };
-
-        getBattleCost();
-    }, []);
 
     const color = () => {
         if (!data) return;
@@ -116,11 +91,16 @@ const Leaderboards = ({ handleClose, isMobile }) => {
     };
 
     const availableLeaderboards = [
-        { name: 'CHAMPIONS PANTHEON', value: 1, description: 'Lorem ajhagh champions' },
+        {
+            name: 'CHAMPIONS PANTHEON',
+            value: 1,
+            description:
+                "The players' scores are calculated as the weighted sum of four elements. Each element is normalized using the formula (player score / highest score recorded), ensuring that the weighted value of every metric falls within the range of 0 to 1. Finally, the normalized values are summed to produce the total score, which will always range between 0 and 4.",
+        },
         { name: 'TERRESTRIAL PANTHEON', value: 2, description: 'Lorem ajhagh lands' },
-        { name: 'AERAIL PANTHEON', value: 3, description: 'Lorem ajhagh sky' },
+        { name: 'AERIAL PANTHEON', value: 3, description: 'Lorem ajhagh sky' },
         { name: 'AQUATIC PANTHEON', value: 4, description: 'Lorem ajhagh oceans' },
-        { name: 'CHAMPION OF FIRECENESS', value: 5, description: 'Lorem ajhagh combativeness loagaj asaq a0an asa' },
+        { name: 'CHAMPION OF FIERCENESS', value: 5, description: 'Lorem ajhagh combativeness loagaj asaq a0an asa' },
     ];
 
     return (
@@ -150,10 +130,10 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                 <Tooltip
                     bgColor={color()}
                     borderRadius={'10px'}
-                    w={'200px'}
-                    h={'250px'}
+                    w={'300px'}
+                    h={'300px'}
                     label={
-                        <Box>
+                        <Box m={'auto'} boxSize={'90%'}>
                             <Text fontFamily={'Chelsea Market, System'} mt={1} textAlign={'center'}>
                                 {availableLeaderboards.find(item => item.value === option).name}
                             </Text>
@@ -176,7 +156,37 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                         boxSize={'40px'}
                     />
                 </Tooltip>
-                <>
+                {option === 1 && (
+                    <Tooltip
+                        bgColor={color()}
+                        borderRadius={'10px'}
+                        w={'200px'}
+                        h={'250px'}
+                        label={
+                            <Box m={'auto'} boxSize={'90%'}>
+                                <Text fontWeight={'100'}>
+                                    The top five finishers will each receive a Sumangâ special card and 1000 MANA. GEM
+                                    and wETH sums will be distributed as follows: 1st place, 50%. 2nd place, 25%. 3rd
+                                    place, 12.5%. 4th place, 8%. 5th place, 4.5%.
+                                </Text>
+                            </Box>
+                        }
+                        fontSize="md"
+                        placement="top"
+                        hasArrow>
+                        <Image
+                            background={'transparent'}
+                            color={'#FFF'}
+                            src="/images/currency/multicurrency.png"
+                            position="absolute"
+                            bottom={10}
+                            left={10}
+                            zIndex={999}
+                            boxSize={'40px'}
+                        />
+                    </Tooltip>
+                )}
+                <Stack boxSize={'100%'}>
                     <Stack
                         direction={'row'}
                         color={'#FFF'}
@@ -233,7 +243,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                             })}
                         </Select>
                     </Stack>
-                    <Stack direction={'column'} color={'#FFF'} mx={'auto'} textAlign={'center'} h={'85%'}>
+                    <Stack direction={'column'} color={'#FFF'} mx={'auto'} w={'100%'} textAlign={'center'} h={'85%'}>
                         <Stack
                             direction={'column'}
                             my={'auto'}
@@ -247,52 +257,11 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                 <GeneralLeaderboard isMobile={isMobile} />
                             )}
                         </Stack>
-                        <Stack dir="row" mx={'auto'}>
-                            {option === 5 ? (
-                                <CombativityResetTimer mt={5} />
-                            ) : accumulatedBounty ? (
-                                <Stack
-                                    direction="row"
-                                    align="center"
-                                    fontFamily={'Inter, system'}
-                                    fontSize={'md'}
-                                    w={'100%'}
-                                    mt={5}
-                                    fontWeight={700}>
-                                    {accumulatedBounty && !isEmptyObject(accumulatedBounty) ? (
-                                        <>
-                                            <Text>ACCUMULATED BOUNTY: </Text>
-                                            {accumulatedBounty.map(({ price, name }, index) => (
-                                                <Stack key={index} direction="row" align="center" mx={4}>
-                                                    <Text my={'auto'}>
-                                                        {name === 'wETH'
-                                                            ? (price / NQTDIVIDER).toFixed(4)
-                                                            : (price / NQTDIVIDER).toFixed(0)}
-                                                        {` ${name}`}
-                                                    </Text>
-                                                    <Image
-                                                        my={'auto'}
-                                                        src={`images/currency/${name === 'wETH' ? 'weth' : 'gem'}.png`}
-                                                        alt={`${name === 'wETH' ? 'WETH' : 'GEM'} Icon`}
-                                                        w="40px"
-                                                        h="40px"
-                                                        mt={-2}
-                                                    />
-                                                </Stack>
-                                            ))}
-                                        </>
-                                    ) : (
-                                        <Text color={'#FFF'}>THERE ARE NO ACCUMULATED BOUNTY YET.</Text>
-                                    )}
-                                </Stack>
-                            ) : (
-                                <Box mx={'auto'} mt={5}>
-                                    <Spinner />
-                                </Box>
-                            )}
+                        <Stack dir="row" mx={'auto'} mt={3}>
+                            {option === 5 ? <CombativityResetTimer mb={4}/> : <LeaderboardsRewards option={option} />}
                         </Stack>
                     </Stack>
-                </>
+                </Stack>
             </Box>
         </>
     );

@@ -104,6 +104,19 @@ export const getAccumulatedBounty = async () => {
         .catch(error => error);
 };
 
+export const getLeaderboardsRewards = async () => {
+    return axios
+        .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
+        .then(res => res.data.state.leaderboardsRewards)
+        .catch(error => error);
+};
+export const getGiftzRewardQNT = async () => {
+    return axios
+        .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
+        .then(res => res.data.state.giftzRewardQNT)
+        .catch(error => error);
+};
+
 export const getAveragesDices = async accountRs => {
     try {
         let accountId = addressToAccountId(accountRs);
