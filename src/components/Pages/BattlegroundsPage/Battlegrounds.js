@@ -171,7 +171,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         setUpdateState(prevState => !prevState);
     };
 
-    let wEthDecimals = 3;
+    let wEthDecimals = 4;
 
     const statistics = [
         { name: 'Guardians', value: landLords },
@@ -266,7 +266,6 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                         infoAccount={infoAccount}
                         cards={cards}
                         handleCloseInventory={handleCloseInventory}
-                        filteredCards={filteredCards}
                         isMobile={isMobile}
                     />
                 )}

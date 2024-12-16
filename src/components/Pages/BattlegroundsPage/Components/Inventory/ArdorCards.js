@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
     Box,
     Button,
@@ -6,10 +6,6 @@ import {
     Divider,
     Heading,
     HStack,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuList,
     PinInput,
     PinInputField,
     Stack,
@@ -18,16 +14,13 @@ import {
     useToast,
 } from '@chakra-ui/react';
 
-import { ChevronDownIcon } from '@chakra-ui/icons';
-
 // Components
 import BridgeCard from '../../../../Cards/BridgeCard';
 
 // Utils
 import { checkPin } from '../../../../../utils/walletUtils';
 import { errorToast, infoToast, okToast } from '../../../../../utils/alerts';
-import { getUsersState, withdrawCardsFromOmno } from '../../../../../services/Ardor/omnoInterface';
-import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface';
+import { withdrawCardsFromOmno } from '../../../../../services/Ardor/omnoInterface';
 
 /**
  * @name ArdorCards
@@ -39,19 +32,20 @@ import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface
  * @param {Boolean} isMobile - Boolean used for controll the mobile view
  * @returns {JSX.Element} - JSX element
  */
-const ArdorCards = ({ infoAccount, cards, isMobile }) => {
+const ArdorCards = ({
+    infoAccount,
+    isMobile,
+    selectedCards,
+    setSelectedCards,
+    handleEdit,
+    handleDeleteSelectedCard,
+}) => {
     const toast = useToast();
-    const { accountRs } = infoAccount;
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
-    const [filteredCards, setFilteredCards] = useState([]);
 
     const [isSwapping, setIsSwapping] = useState(false);
 
     const [passphrase, setPassphrase] = useState('');
-    const [selectedCards, setSelectedCards] = useState([]);
-
-    const myCards = filteredCards;
-    const notSelectedCards = myCards.filter(card => !selectedCards.includes(card));
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -62,21 +56,6 @@ const ArdorCards = ({ infoAccount, cards, isMobile }) => {
             setIsValidPin(true);
             setPassphrase(account.passphrase);
         }
-    };
-
-    const handleDeleteSelectedCard = card => {
-        const newSelectedCards = selectedCards.filter(selectedCard => selectedCard.asset !== card);
-        setSelectedCards(newSelectedCards);
-    };
-
-    const handleEdit = (card, quantity) => {
-        const newSelectedCards = selectedCards.map(selectedCard => {
-            if (selectedCard.asset === card) {
-                return { ...selectedCard, selectQuantity: Number(quantity) };
-            }
-            return selectedCard;
-        });
-        setSelectedCards(newSelectedCards);
     };
 
     const handleSwap = async () => {
@@ -104,82 +83,15 @@ const ArdorCards = ({ infoAccount, cards, isMobile }) => {
     };
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
-    const textColor = useColorModeValue('black', 'white');
-
-    useEffect(() => {
-        const filterCards = async () => {
-            const userInfo = await getUserState();
-            if (userInfo?.balance) {
-                const assetIds = Object.keys(userInfo?.balance?.asset);
-
-                const matchingCards = cards
-                    .filter(card => assetIds.includes(card.asset))
-                    .map(card => ({
-                        ...card,
-                        omnoQuantity: userInfo?.balance?.asset[card.asset],
-                    }));
-
-                setFilteredCards(matchingCards);
-            }
-        };
-        filterCards();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cards, infoAccount]);
-
-    const getUserState = async () => {
-        const accountId = addressToAccountId(accountRs);
-        let res = await getUsersState().then(res => {
-            return res.data.find(item => item.id === accountId);
-        });
-        return res;
-    };
 
     return (
         <Center color={'#FFF'}>
             <Stack direction="column" spacing={8} w={'30rem'}>
-                <Heading fontSize="xl" fontWeight="light" textAlign="center">
-                    1. Select cards to send to Inventory
-                </Heading>
-
-                <Menu w="100%">
-                    <MenuButton
-                        w={isMobile ? '90%' : '100%'}
-                        px={4}
-                        py={2}
-                        borderColor="#393b97"
-                        transition="all 0.2s"
-                        borderRadius="md"
-                        borderWidth="1px"
-                        mx={isMobile && 'auto'}
-                        _hover={{ bg: 'gray.400' }}
-                        _expanded={{ bg: 'blue.400' }}
-                        _focus={{ boxShadow: 'outline' }}>
-                        Select cards <ChevronDownIcon />
-                    </MenuButton>
-                    <MenuList minW="100%" maxH="25rem" overflowY="auto" overflowX="hidden">
-                        {notSelectedCards.length > 0 ? (
-                            notSelectedCards.map(card => (
-                                <MenuItem
-                                    minW="100%"
-                                    key={card.asset}
-                                    onClick={() => setSelectedCards([...selectedCards, card])}>
-                                    <BridgeCard card={card} omnoQuantity={card.omnoQuantity} />
-                                </MenuItem>
-                            ))
-                        ) : (
-                            <MenuItem minW="100%">
-                                <Text color={textColor}>You dont have more cards</Text>
-                            </MenuItem>
-                        )}
-                    </MenuList>
-                </Menu>
-
-                {selectedCards.length > 0 && (
-                    <Box mb={8}>
-                        <Heading fontSize="xl" fontWeight="light" mb={4} ml={isMobile && 4}>
-                            Choosen
-                        </Heading>
-
+                <Box mb={8}>
+                    <Heading fontSize="xl" fontWeight="light" mb={4} ml={isMobile && 4}>
+                        Choosen
+                    </Heading>
+                    {selectedCards.length > 0 ? (
                         <Stack
                             direction="column"
                             spacing={4}
@@ -201,8 +113,12 @@ const ArdorCards = ({ infoAccount, cards, isMobile }) => {
                                 />
                             ))}
                         </Stack>
-                    </Box>
-                )}
+                    ) : (
+                        <Text fontWeight="light" my={'auto'}>
+                            No cards selected
+                        </Text>
+                    )}
+                </Box>
 
                 <Divider bgColor="#393b97" />
                 <Heading fontSize="xl" fontWeight="light" textAlign="center">

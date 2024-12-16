@@ -1,4 +1,4 @@
-import { Box, Image, Grid, GridItem, Tooltip, Text } from '@chakra-ui/react';
+import { Box, Image, Grid, GridItem, Tooltip, Text, Spinner } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getAsset } from '../../../../../utils/cardsUtils';
@@ -48,7 +48,8 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
             const battleReward = battleRewards[item.battleId] || [];
 
             return (
-                <Grid color={'#FFF'}
+                <Grid
+                    color={'#FFF'}
                     key={item.battleId}
                     templateColumns="repeat(6, 1fr)"
                     p={3}
@@ -195,6 +196,23 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
     );
 
     const gridRows = useMemo(() => battleDetails.map(renderBattleRow), [battleDetails, renderBattleRow]);
+
+    if (!battleDetails) {
+        return (
+            <Box
+                h={'100%'}
+                position={'absolute'}
+                color={'#FFF'}
+                alignContent={'center'}
+                top={'50%'}
+                left={'50%'}
+                w={'100%'}
+                textAlign={'center'}
+                transform={'translate(-50%, -50%)'}>
+                <Spinner color="#FFF" w={20} h={20} />
+            </Box>
+        );
+    }
 
     return battleDetails.length > 0 ? (
         <Box w="85%" mx="auto">
