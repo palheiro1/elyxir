@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
-import { Box, Heading, IconButton, Spinner, Stack } from '@chakra-ui/react';
+import { Box, Heading, IconButton, Stack } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import BattleDetails from './BattleDetails';
 import BattleListTable from './BattleListTable';
@@ -10,7 +10,7 @@ import { fetchUserBattles } from '../../../../../redux/reducers/BattleReducer';
 const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
     const { accountRs } = infoAccount;
 
-    const { arenasInfo, userBattles, loading } = useSelector(state => state.battle);
+    const { arenasInfo, userBattles } = useSelector(state => state.battle);
     const [viewDetails, setViewDetails] = useState(false);
     const [selectedBattle, setSelectedBattle] = useState(null);
     const [selectedArena, setSelectedArena] = useState(null);
@@ -73,28 +73,13 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
                                 BATTLE RECORD
                             </Heading>
                         </Stack>
-                        {!loading ? (
-                            <BattleListTable
-                                arenasInfo={arenasInfo}
-                                handleViewDetails={handleViewDetails}
-                                battleDetails={userBattles}
-                                cards={cards}
-                                isMobile={isMobile}
-                            />
-                        ) : (
-                            <Box
-                                h={'100%'}
-                                position={'absolute'}
-                                color={'#FFF'}
-                                alignContent={'center'}
-                                top={'50%'}
-                                left={'50%'}
-                                w={'100%'}
-                                textAlign={'center'}
-                                transform={'translate(-50%, -50%)'}>
-                                <Spinner color="#FFF" w={20} h={20} />
-                            </Box>
-                        )}
+                        <BattleListTable
+                            arenasInfo={arenasInfo}
+                            handleViewDetails={handleViewDetails}
+                            battleDetails={userBattles}
+                            cards={cards}
+                            isMobile={isMobile}
+                        />
                     </>
                 )}
 

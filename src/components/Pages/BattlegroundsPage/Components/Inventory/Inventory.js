@@ -1,10 +1,11 @@
-import { Box, IconButton, Select, useMediaQuery } from '@chakra-ui/react';
+import { Box, IconButton, Select, Stack, Text, useMediaQuery } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { CloseIcon } from '@chakra-ui/icons';
 import OmnoPage from './OmnoPage';
 import ArdorPage from './ArdorPage';
-const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards, isMobile }) => {
+
+const Inventory = ({ infoAccount, cards, handleCloseInventory, isMobile }) => {
     const [selectedOption, setSelectedOption] = useState('battlegrounds');
 
     const handleSelectChange = event => {
@@ -51,41 +52,30 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, filteredCards, is
                     right={2}
                     onClick={() => closeInvetory()}
                 />
-                <Select
-                    position="absolute"
-                    top={8}
-                    left={8}
-                    w={'fit-content'}
-                    bg={'#FFF'}
-                    color={'#000'}
-                    fontFamily={'Chelsea Market, System'}
-                    fontWeight={100}
-                    value={selectedOption}
-                    onChange={handleSelectChange}>
-                    <option value="battlegrounds" style={{ backgroundColor: '#FFF' }}>
-                        Battlegrounds
-                    </option>
-                    <option value="ardor" style={{ backgroundColor: '#FFF' }}>
-                        Inventory
-                    </option>
-                </Select>
+                <Stack direction={'column'} fontFamily={'Chelsea Market, System'} position="absolute" top={8} left={8}>
+                    <Text fontSize={'xs'} mx={'auto'}>
+                        SEND TO
+                    </Text>
+                    <Select
+                        w={'fit-content'}
+                        bg={'#FFF'}
+                        color={'#000'}
+                        fontWeight={100}
+                        value={selectedOption}
+                        onChange={handleSelectChange}>
+                        <option value="battlegrounds" style={{ backgroundColor: '#FFF' }}>
+                            Battlegrounds
+                        </option>
+                        <option value="ardor" style={{ backgroundColor: '#FFF' }}>
+                            Inventory
+                        </option>
+                    </Select>
+                </Stack>
                 {selectedOption === 'battlegrounds' && (
-                    <OmnoPage
-                        filteredCards={filteredCards}
-                        infoAccount={infoAccount}
-                        cards={cards}
-                        gridColumns={getColumns}
-                        isMobile={isMobile}
-                    />
+                    <OmnoPage infoAccount={infoAccount} cards={cards} gridColumns={getColumns} isMobile={isMobile} />
                 )}
                 {selectedOption === 'ardor' && (
-                    <ArdorPage
-                        filteredCards={filteredCards}
-                        infoAccount={infoAccount}
-                        cards={cards}
-                        isMobile={isMobile}
-                        gridColumns={getColumns}
-                    />
+                    <ArdorPage infoAccount={infoAccount} cards={cards} gridColumns={getColumns} isMobile={isMobile} />
                 )}
             </Box>
         </>
