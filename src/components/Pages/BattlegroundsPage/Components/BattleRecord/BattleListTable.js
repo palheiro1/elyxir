@@ -195,7 +195,10 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
         [cards, battleRewards, isMobile, handleViewDetails]
     );
 
-    const gridRows = useMemo(() => battleDetails.map(renderBattleRow), [battleDetails, renderBattleRow]);
+    const gridRows = useMemo(
+        () => battleDetails && battleDetails.map(renderBattleRow),
+        [battleDetails, renderBattleRow]
+    );
 
     if (!battleDetails) {
         return (
