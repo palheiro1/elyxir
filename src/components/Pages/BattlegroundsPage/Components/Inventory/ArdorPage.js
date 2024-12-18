@@ -122,7 +122,6 @@ const ArdorPage = ({ cards, infoAccount, isMobile, gridColumns }) => {
             };
             return filters.domain && filters.domain !== '-1' ? card.channel === domainMapping[filters.domain] : true;
         });
-
     const optionStyle = { backgroundColor: '#FFF', color: '#000' };
     const textColor = useColorModeValue('black', 'white');
 
@@ -200,7 +199,7 @@ const ArdorPage = ({ cards, infoAccount, isMobile, gridColumns }) => {
                         </option>
                     </Select>
                 </Stack>
-                <Stack direction={'row'} pt={2} padding={5} height={isMobile ? '85%' : '90%'}>
+                <Stack direction={'row'} pt={2} padding={5} height={'inherit'}>
                     <Box
                         mb={4}
                         backgroundColor={'#0F0F0F'}
@@ -214,58 +213,59 @@ const ArdorPage = ({ cards, infoAccount, isMobile, gridColumns }) => {
                         justifyContent="center">
                         <SimpleGrid
                             columns={gridColumns()}
-                            spacing={4}
+                            gap={4}
                             align={'center'}
                             overflowY={'auto'}
                             className="custom-scrollbar"
                             w={'100%'}
                             p={4}
                             overflow={'scroll'}
-                            h={'750px'}>
+                            height={'100%'}>
                             {filteredNotSelectedCards.length > 0 &&
-                                filteredNotSelectedCards.map((card, cardIndex) => (
-                                    <Box
-                                        key={cardIndex}
-                                        w={'202px'}
-                                        h={'315px'}
-                                        bg={'white'}
-                                        borderRadius={'10px'}
-                                        mx={'auto'}
-                                        onClick={() => setSelectedCards([...selectedCards, card])}>
-                                        <Center>
-                                            <Img src={card.cardImgUrl} w={'90%'} h={'75%'} />
-                                        </Center>
-                                        <Stack direction={{ base: 'column', lg: 'row' }} spacing={0} mx={2}>
-                                            <Stack
-                                                direction="column"
-                                                spacing={0}
-                                                align={{ base: 'center', lg: 'start' }}>
-                                                <Text
-                                                    fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }}
-                                                    noOfLines={1}
-                                                    fontWeight="bold"
-                                                    color={'#000'}>
-                                                    {card.name}
-                                                </Text>
-                                                <CardBadges rarity={card.rarity} continent={card.channel} size="sm" />
-                                            </Stack>
-                                            <Spacer display={{ base: 'none', lg: 'block' }} />
-                                            <Center minHeight={{ base: 'auto', lg: '100%' }}>
-                                                <Tooltip display={'flex'} placement="bottom">
-                                                    <Flex w={{ base: 'auto', lg: '100%' }}>
-                                                        <Text
-                                                            textAlign="end"
-                                                            minH={{ base: '100%', lg: 'auto' }}
-                                                            fontSize={'x-small'}
-                                                            color={'#000'}>
-                                                            Quantity: {card.omnoQuantity}
-                                                        </Text>
-                                                    </Flex>
-                                                </Tooltip>
+                                filteredNotSelectedCards.map((card, cardIndex) => {
+                                    const { name, cardImgUrl, rarity, channel, omnoQuantity } = card;
+                                    return (
+                                        <Box
+                                            key={cardIndex}
+                                            bg={'white'}
+                                            borderRadius={'10px'}
+                                            mx={'auto'}
+                                            onClick={() => setSelectedCards([...selectedCards, card])}>
+                                            <Center>
+                                                <Img src={cardImgUrl} w={'90%'} h={'75%'} />
                                             </Center>
-                                        </Stack>
-                                    </Box>
-                                ))}
+                                            <Stack direction={{ base: 'column', lg: 'row' }} spacing={0} mx={2} mb={1}>
+                                                <Stack
+                                                    direction="column"
+                                                    spacing={0}
+                                                    align={{ base: 'center', lg: 'start' }}>
+                                                    <Text
+                                                        fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }}
+                                                        noOfLines={1}
+                                                        fontWeight="bold"
+                                                        color={'#000'}>
+                                                        {name}
+                                                    </Text>
+                                                    <CardBadges rarity={rarity} continent={channel} size="sm" />
+                                                </Stack>
+                                                <Spacer display={{ base: 'none', lg: 'block' }} />
+                                                <Center minHeight={{ base: 'auto', lg: '100%' }}>
+                                                    <Tooltip display={'flex'} placement="bottom">
+                                                        <Flex w={{ base: 'auto', lg: '100%' }}>
+                                                            <Text
+                                                                textAlign="end"
+                                                                minH={{ base: '100%', lg: 'auto' }}
+                                                                fontSize={'x-small'}
+                                                                color={'#000'}>
+                                                                Quantity: {omnoQuantity}
+                                                            </Text>
+                                                        </Flex>
+                                                    </Tooltip>
+                                                </Center>
+                                            </Stack>
+                                        </Box>
+                                    );
+                                })}
                         </SimpleGrid>
                         {filteredNotSelectedCards <= 0 && (
                             <Box
