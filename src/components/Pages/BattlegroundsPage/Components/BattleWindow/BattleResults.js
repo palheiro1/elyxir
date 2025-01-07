@@ -26,6 +26,7 @@ import victoryIcon from '../../assets/icons/victory_icon.svg';
 
 const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName }) => {
     const [battleInfo, setBattleInfo] = useState(null);
+    console.log('🚀 ~ BattleResults ~ battleInfo:', battleInfo);
     const [capturedCard, setCapturedCard] = useState(null);
     const [medium, setMedium] = useState();
     const [arenaName, setArenaName] = useState(null);
@@ -194,7 +195,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
         };
 
         if (battleResults && battleInfo && cards && cards.length > 0 && soldiers && calculateBonus) {
-            console.log('🚀 ~ useEffect ~ battleResults:', battleResults);
             calculateAllBonusesAndPoints();
         }
     }, [battleInfo, battleResults, calculateBonus, cards, soldiers]);
@@ -578,14 +578,16 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                                                         />
                                                         <Text>{defenderRoll}</Text>
                                                     </Stack>
-                                                    <Stack direction={'row'}>
-                                                        <Image
-                                                            boxSize={'20px'}
-                                                            borderRadius={'5px'}
-                                                            src={'/images/battlegrounds/defense_icon.svg'}
-                                                        />
-                                                        <Text>{battleInfo.defenderBonus || 2}</Text>
-                                                    </Stack>
+                                                    {defenderHero.asset === defenderCard.asset && (
+                                                        <Stack direction={'row'}>
+                                                            <Image
+                                                                boxSize={'20px'}
+                                                                borderRadius={'5px'}
+                                                                src={'/images/battlegrounds/defense_icon.svg'}
+                                                            />
+                                                            <Text>{battleInfo.defenderBonus || 2}</Text>
+                                                        </Stack>
+                                                    )}
                                                 </Stack>
 
                                                 <Box

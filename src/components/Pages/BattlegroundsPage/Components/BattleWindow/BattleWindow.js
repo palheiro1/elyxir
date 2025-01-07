@@ -34,7 +34,32 @@ export const BattleWindow = ({
     const [rank0Count, setRank0Count] = useState(0);
     const [rank1Count, setRank1Count] = useState(1);
     const [defenderCards, setDefenderCards] = useState(null);
+    const [filters, setFilters] = useState({
+        rarity: '',
+        element: '',
+        domain: '',
+    });
 
+    const handleRarityChange = event => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            rarity: event.target.value,
+        }));
+    };
+
+    const handleElementChange = event => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            element: event.target.value,
+        }));
+    };
+
+    const handleDomainChange = event => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            domain: event.target.value,
+        }));
+    };
     const toast = useToast();
 
     const handleOpenInventory = index => {
@@ -210,6 +235,10 @@ export const BattleWindow = ({
                                 updateCard={updateCard}
                                 isMobile={isMobile}
                                 arenaInfo={arenaInfo}
+                                filters={filters}
+                                handleRarityChange={handleRarityChange}
+                                handleElementChange={handleElementChange}
+                                handleDomainChange={handleDomainChange}
                             />
                         )}
                         {showResults && (
