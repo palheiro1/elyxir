@@ -549,14 +549,16 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                         />
                                                         <Text>{defenderRoll}</Text>
                                                     </Stack>
-                                                    <Stack direction={'row'}>
-                                                        <Image
-                                                            boxSize={'20px'}
-                                                            borderRadius={'5px'}
-                                                            src={'/images/battlegrounds/defense_icon.svg'}
-                                                        />
-                                                        <Text>{battleInfo.defenderBonus || 2}</Text>
-                                                    </Stack>
+                                                    {(defenderHero.asset === defenderCard.asset || battleId < 913) && ( // First battle with defender bonus only for alpha
+                                                        <Stack direction={'row'}>
+                                                            <Image
+                                                                boxSize={'20px'}
+                                                                borderRadius={'5px'}
+                                                                src={'/images/battlegrounds/defense_icon.svg'}
+                                                            />
+                                                            <Text>{battleInfo.defenderBonus || 2}</Text>
+                                                        </Stack>
+                                                    )}
                                                 </Stack>
 
                                                 <Box

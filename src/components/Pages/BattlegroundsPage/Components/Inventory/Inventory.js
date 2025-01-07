@@ -64,7 +64,7 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, isMobile }) => {
                         value={selectedOption}
                         onChange={handleSelectChange}>
                         <option value="battlegrounds" style={{ backgroundColor: '#FFF' }}>
-                            Battlegrounds
+                            Army
                         </option>
                         <option value="ardor" style={{ backgroundColor: '#FFF' }}>
                             Inventory

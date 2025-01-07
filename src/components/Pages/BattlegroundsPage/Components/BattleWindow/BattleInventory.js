@@ -26,14 +26,14 @@ const BattleInventory = ({
     updateCard,
     isMobile,
     arenaInfo,
+    filters,
+    handleRarityChange,
+    handleElementChange,
+    handleDomainChange,
 }) => {
     const { soldiers } = useSelector(state => state.soldiers);
     const { armyRankMaximum } = arenaInfo;
-    const [filters, setFilters] = useState({
-        rarity: '',
-        element: '',
-        domain: '',
-    });
+
     const [preSelectedCard, setPreSelectedCard] = useState(null);
 
     const [isLittleScreen] = useMediaQuery('(min-width: 1190px) and (max-width: 1330px)');
@@ -43,27 +43,6 @@ const BattleInventory = ({
         if (isMobile || isLittleScreen) return 3;
         if (isMediumScreen) return 4;
         return 5;
-    };
-
-    const handleRarityChange = event => {
-        setFilters(prevFilters => ({
-            ...prevFilters,
-            rarity: event.target.value,
-        }));
-    };
-
-    const handleElementChange = event => {
-        setFilters(prevFilters => ({
-            ...prevFilters,
-            element: event.target.value,
-        }));
-    };
-
-    const handleDomainChange = event => {
-        setFilters(prevFilters => ({
-            ...prevFilters,
-            domain: event.target.value,
-        }));
     };
 
     const commonHand = filteredCards
@@ -136,10 +115,10 @@ const BattleInventory = ({
             />
             <Stack h={'90%'}>
                 <Heading fontFamily={'Chelsea Market, system-ui'} fontSize={'large'} fontWeight={400} ml={'9%'}>
-                    BATTELEGROUNDS CARDS
+                    ARMY CARDS
                 </Heading>
                 <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={'9%'}>
-                    <Select w={'10%'} onChange={handleRarityChange} color={'#FFF'}>
+                    <Select w={'10%'} onChange={handleRarityChange} color={'#FFF'} defaultValue={filters.rarity}>
                         <option value="-1" style={optionStyle}>
                             Rarity
                         </option>
@@ -179,7 +158,7 @@ const BattleInventory = ({
                         )}
                     </Select>
 
-                    <Select w={'10%'} onChange={handleElementChange} color={'#FFF'}>
+                    <Select w={'10%'} onChange={handleElementChange} color={'#FFF'} defaultValue={filters.element}>
                         <option value="-1" style={optionStyle}>
                             Element
                         </option>
@@ -193,7 +172,7 @@ const BattleInventory = ({
                             Aquatic
                         </option>
                     </Select>
-                    <Select w={'10%'} onChange={handleDomainChange} color={'#FFF'}>
+                    <Select w={'10%'} onChange={handleDomainChange} color={'#FFF'} defaultValue={filters.domain}>
                         <option value="-1" style={optionStyle}>
                             Continent
                         </option>
