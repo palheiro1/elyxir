@@ -246,7 +246,7 @@ export const getIGNISBalance = async account => {
  */
 const getMorphMessage = (asset, noCards) => {
     return JSON.stringify({
-        contract: 'TarascaDaoOmno',
+        contract: OMNO_CONTRACT,
         operation: [
             {
                 service: 'cardmorph',
@@ -280,7 +280,7 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
     const response_1 = await transferAsset({
         asset: asset,
         quantityQNT: noCards,
-        recipient: BUYPACKACCOUNT,
+        recipient: OMNO_ACCOUNT,
         passPhrase,
         message,
         messagePrunable: true,
@@ -296,7 +296,7 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
     // ----------------------------------
     const response_2 = await transferGEM({
         quantityQNT: cost * NQTDIVIDER,
-        recipient: BUYPACKACCOUNT,
+        recipient: OMNO_ACCOUNT,
         passPhrase,
         message,
         messagePrunable: true,
