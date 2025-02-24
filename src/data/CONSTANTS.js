@@ -70,7 +70,7 @@ export const NQTDIVIDER = 100000000;
 // ---------------------------------------------
 
 export const ACTUAL_SEASON = 7;
-export const IS_BOUNTY_ENABLED = true;
+export const IS_BOUNTY_ENABLED = false;
 
 // ---------------------------------------------
 // ---------- NEW ECONOMICS WITH OMNO ----------
