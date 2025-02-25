@@ -1,0 +1,63 @@
+{
+  "contract": "MBOmno",
+  "operation": [
+    {
+      "service": "rgame",
+      "request": "configureAsMerge",
+      "parameter": {
+        "leaderboardsRewards": {
+          "top1": {
+            "tributePercentage": 0.2,
+            "giftz": 5,
+            "manaQNT": 2000,
+            "specialCards": 1
+          },
+          "top3": {
+            "tributePercentage": 0.2,
+            "giftz": 5,
+            "manaQNT": 2000,
+            "specialCards": 0
+          },
+          "top5": {
+            "tributePercentage": 0.1,
+            "giftz": 2,
+            "manaQNT": 1000,
+            "specialCards": 0
+          },
+          "top10": {
+            "tributePercentage": 0.025,
+            "giftz": 1,
+            "manaQNT": 200,
+            "specialCards": 0
+          },
+          "wethAsset": "935701767940516955",
+          "gemAsset": "10230963490193589789",
+          "manaAsset": "2188455459770682500",
+          "giftzAsset": "13993107092599641878"
+        },
+        "incomeAccount": "8827069720377389395",
+        "giftzRewardQNT": 5,
+        "activeRewards": false,
+        "arenaDefault": {
+          "defenderBonusOnDomainMatch": 1,
+          "defenderBonus": 2,
+          "armyRankMaximum": [
+            4,
+            1
+          ],
+          "armyRankMinimum": [
+            0,
+            1
+          ],
+          "armyRequireUnique": true,
+          "rewardChainFraction": "0.9",
+          "rewardChainFractionIfEqualOrStronger": "0.8",
+          "battleCost": {},
+          "rewardCostIsChainTokenOnly": true,
+          "cardWinQuantity": 1,
+          "diceRollSize": 6
+        }
+      }
+    }
+  ]
+}

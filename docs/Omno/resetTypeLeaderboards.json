@@ -1,0 +1,9 @@
+{
+    "contract": "MBOmno",
+    "operation": [
+        {
+            "service": "rgame",
+            "request": "resetTypeLeaderboards"
+        }
+    ]
+}

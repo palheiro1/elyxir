@@ -57,7 +57,7 @@ export const fetchAssetCount = async asset => {
 
 export const addressToAccountId = address => {
     return ardorjs.rsConvert(address).account;
-}
+};
 
 // -------------------------------------------------
 //                  ARDOR REQUESTS
@@ -226,9 +226,7 @@ const calculateFeeByRecipient = async (recipient, query, URL_TO_CALL) => {
 
 const calculateFee = async (query, URL_TO_CALL) => {
     const { data: sendMoneyData } = await axios.post(URL_TO_CALL, qs.stringify(query), config);
-    console.log("🚀 ~ calculateFee ~ sendMoneyData:", sendMoneyData)
     const total = Math.ceil(sendMoneyData.minimumFeeFQT * sendMoneyData.bundlerRateNQTPerFXT * 0.00000001);
-    console.log("🚀 ~ calculateFee ~ total:", total)
     return total;
 };
 
@@ -624,7 +622,6 @@ const transferAsset = async ({
 
     try {
         query.feeNQT = await calculateFee(query, URL_TRANSFER_ASSET);
-        console.log("🚀 ~ query:", query)
         query.broadcast = false;
 
         const response = await axios.post(URL_TRANSFER_ASSET, qs.stringify(query), config);
@@ -821,7 +818,7 @@ export const processUnwrapsForGemBridge = async accountRs => {
         });
         return response.data;
     } catch (error) {
-        console.error("🚀 ~ file: ardorInterface.js:808 ~ processUnwrapsForGemBridge ~ error:", error)
+        console.error('🚀 ~ file: ardorInterface.js:808 ~ processUnwrapsForGemBridge ~ error:', error);
     }
 };
 
@@ -1048,12 +1045,29 @@ export const getAccountPublicKey = async accountRs => {
     }
 };
 
-/*
-
-            deadline: 30,
-            feeNQT: 0,
-            broadcast: false,
-            */
+const changeAccountName = async (accountRs, passPhrase, newName) => {
+    try {
+        let publicKey = getAccountPublicKey(accountRs);
+        let query = {
+            requestType: 'setAccountInfo',
+            secretPhrase: passPhrase,
+            name: newName,
+            chain: 2,
+            publicKey: publicKey,
+            feeNQT: -1,
+            deadline: 10,
+            broadcast: true,
+            messageIsPrunable: true,
+        };
+        const fee = await calculateFee(query, NODEURL);
+        query.feeNQT = fee;
+        return await axios.post(NODEURL, null, {
+            params: query,
+        });
+    } catch (error) {
+        console.error('Error al enviar la solicitud:', error.message);
+    }
+};
 
 export {
     sendIgnis,
@@ -1065,4 +1079,5 @@ export {
     getBlockchainStatus,
     getBlockchainTransactions,
     getUnconfirmedTransactions,
+    changeAccountName,
 };

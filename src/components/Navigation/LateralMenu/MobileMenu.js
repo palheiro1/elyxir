@@ -10,6 +10,7 @@ const MobileMenu = ({
     showAllCards,
     handleShowAllCards,
     goToSection,
+    cardsLoaded,
 }) => {
     const { name: username, accountRs: account } = infoAccount;
     return (
@@ -23,7 +24,6 @@ const MobileMenu = ({
                         {account}
                     </Text>
                 </Stack>
-                
 
                 {infoAccount && (
                     <Center my={2}>
@@ -37,6 +37,7 @@ const MobileMenu = ({
                         option={option}
                         handleLogout={handleLogout}
                         widthBotones="100%"
+                        cardsLoaded={cardsLoaded}
                     />
                 </Center>
 

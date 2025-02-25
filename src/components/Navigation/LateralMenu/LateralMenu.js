@@ -21,7 +21,17 @@ import TopMenu from '../../../pages/Home/TopMenu';
  * @version 1.0
  */
 const LateralMenu = memo(
-    ({ option = 0, setOption, children, showAllCards, handleShowAllCards, infoAccount, handleLogout, goToSection }) => {
+    ({
+        option = 0,
+        setOption,
+        children,
+        showAllCards,
+        handleShowAllCards,
+        infoAccount,
+        handleLogout,
+        goToSection,
+        cardsLoaded,
+    }) => {
         const { isOpen, onToggle, onClose } = useDisclosure();
 
         const handleSetOption = option => {
@@ -52,6 +62,7 @@ const LateralMenu = memo(
                         showAllCards={showAllCards}
                         handleShowAllCards={handleShowAllCards}
                         children={children}
+                        cardsLoaded={cardsLoaded}
                     />
                 </Flex>
                 <Collapse in={isOpen} animateOpacity>
@@ -64,6 +75,7 @@ const LateralMenu = memo(
                             showAllCards={showAllCards}
                             handleShowAllCards={handleShowAllCards}
                             goToSection={goToSection}
+                            cardsLoaded={cardsLoaded}
                         />
                     )}
                 </Collapse>

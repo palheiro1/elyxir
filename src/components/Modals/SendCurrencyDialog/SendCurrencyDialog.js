@@ -44,7 +44,11 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
 
     const [passphrase, setPassphrase] = useState('');
     const maxCurrency =
-        currency.name === 'GIFTZ' ? Math.floor(currency.balance) : parseFloat(Number(currency.balance).toFixed(2));
+        currency.name === 'GIFTZ'
+            ? Math.floor(currency.balance)
+            : currency.name === 'wETH'
+            ? parseFloat(Number(currency.balance))
+            : parseFloat(Number(currency.balance).toFixed(2));
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: 1,
@@ -165,7 +169,12 @@ const SendCurrencyDialog = ({ reference, isOpen, onClose, currency, username, IG
                 isCentered>
                 <AlertDialogOverlay />
 
-                <AlertDialogContent bgColor={bgColor} border="1px" borderColor={borderColor} shadow="dark-lg" color="#202424">
+                <AlertDialogContent
+                    bgColor={bgColor}
+                    border="1px"
+                    borderColor={borderColor}
+                    shadow="dark-lg"
+                    color="#202424">
                     <AlertDialogHeader textAlign="center">
                         <Center>
                             <Text>SEND {currency.name}</Text>

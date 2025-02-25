@@ -63,10 +63,12 @@ const Bounty = ({ infoAccount, cards = [] }) => {
 
             getBountyMissingCards().then(response => {
                 const missingCardIds = response[account];
-                const missingCardWithData = missingCardIds.map(cardId => {
-                    return totalNoSpecialCards.find(card => card.asset === cardId);
-                });
-                setMissingCards(missingCardWithData);
+                if (missingCardIds) {
+                    const missingCardWithData = missingCardIds.map(cardId => {
+                        return totalNoSpecialCards.find(card => card.asset === cardId);
+                    });
+                    setMissingCards(missingCardWithData);
+                }
             });
         };
 

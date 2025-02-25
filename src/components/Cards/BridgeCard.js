@@ -1,4 +1,16 @@
-import { Box, Button, Center, HStack, IconButton, Image, Input, Stack, Text, useNumberInput } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Center,
+    HStack,
+    IconButton,
+    Image,
+    Input,
+    Stack,
+    Text,
+    useColorModeValue,
+    useNumberInput,
+} from '@chakra-ui/react';
 
 import { AiFillDelete } from 'react-icons/ai';
 import CardBadges from './CardBadges';
@@ -15,19 +27,27 @@ import CardBadges from './CardBadges';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdit }) => {
-    const { cardImgUrl: image, name: title, asset, channel: continent, rarity, unconfirmedQuantityQNT: quantity } = card;
+const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdit, omnoQuantity }) => {
+    const {
+        cardImgUrl: image,
+        name: title,
+        asset,
+        channel: continent,
+        rarity,
+        unconfirmedQuantityQNT: quantity,
+    } = card;
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: 1,
         defaultValue: 1,
         min: 1,
-        max: quantity,
+        max: omnoQuantity || quantity,
     });
 
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
     const input = getInputProps();
+    const textColor = useColorModeValue(!canEdit ? 'black' : 'white', canEdit ? 'white' : 'white');
 
     return (
         <Stack direction={'row'} minWidth="375px" spacing={4}>
@@ -35,19 +55,19 @@ const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdi
 
             <Stack direction={'row'} align="center" minW="35%">
                 <Box>
-                    <Text fontWeight="bold" fontSize="2xl">
+                    <Text fontWeight="bold" fontSize="2xl" textColor={textColor}>
                         {title}
                     </Text>
 
                     <CardBadges continent={continent} rarity={rarity} />
 
-                    <Text color="grey">Available: {quantity}</Text>
+                    <Text color="grey">Available: {omnoQuantity || quantity}</Text>
                 </Box>
             </Stack>
 
             {canEdit && (
                 <>
-                    <HStack>
+                    <HStack ml={2}>
                         <HStack maxW="200px" spacing={0}>
                             <Button rounded="none" {...dec} onClick={() => handleEdit(card.asset, input.value)}>
                                 -
@@ -56,6 +76,7 @@ const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdi
                                 rounded="none"
                                 border="none"
                                 textAlign="center"
+                                disabled={true}
                                 {...input}
                                 onChange={() => handleEdit(card.asset, input.value)}
                             />

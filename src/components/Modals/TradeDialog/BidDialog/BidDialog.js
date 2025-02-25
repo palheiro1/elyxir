@@ -200,7 +200,6 @@ const BidDialog = ({
             } else {
                 quantity = value;
             }
-            
             const parser = parseFloat(priceCard);
             const finalPrice = (parser * NQTDIVIDER).toFixed(0);
 
@@ -379,7 +378,9 @@ const BidDialog = ({
                                         <Box pt={4}>
                                             <FormControl variant="floatingModalTransparent" id="PricePerCard">
                                                 <InputGroup border="1px" borderColor={borderColor} rounded="lg">
-                                                    <NumberInput isReadOnly value={roundNumberWithMaxDecimals(priceCard * input.value, 8)}>
+                                                    <NumberInput
+                                                        isReadOnly
+                                                        value={roundNumberWithMaxDecimals(priceCard * input.value, 8)}>
                                                         <NumberInputField
                                                             rounded="none"
                                                             border="none"

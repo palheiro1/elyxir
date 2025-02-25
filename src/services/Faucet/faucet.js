@@ -12,3 +12,37 @@ export const getIgnisFromFaucet = async (address, publicKey) => {
         throw error;
     }
 };
+
+export const getRewardsFaucet = async (address, publicKey) => {
+    try {
+        const response = await axios.post('https://faucet-api.mythicalbeings.io/getRewards', {
+            address: address,
+            publicKey: publicKey,
+        });
+        return response.data;
+    } catch (error) {
+        return error.response.data;
+    }
+};
+
+export const checkCanClaim = async address => {
+    try {
+        const response = await axios.post('https://faucet-api.mythicalbeings.io/checkClaim', {
+            address: address,
+        });
+        return response.data;
+    } catch (error) {
+        return error.response.data;
+    }
+};
+
+export const checkNewAcccount = async address => {
+    try {
+        const response = await axios.get(
+            `https://main.mythicalbeings.io/nxt?requestType=getAccount&account=${address}`
+        );
+        return response.data.errorCode && response.data.errorCode === 5;
+    } catch (error) {
+        return error.response.data;
+    }
+};
