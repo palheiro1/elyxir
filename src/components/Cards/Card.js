@@ -97,6 +97,8 @@ const Card = ({
         bidOmnoOrders,
         lastPrice: lastIgnisPrice,
         lastOmnoPrice,
+        totalQuantityQNT,
+        burnedQuantity,
     } = card;
 
     let fixOnlyBuy = onlyBuy;
@@ -208,6 +210,10 @@ const Card = ({
                                 {name}
                             </Text>
                             <CardBadges rarity={rarity} continent={continent} size="sm" />
+                            <Text fontSize={'sm'} noOfLines={1} mt={1}>
+                                Burned: {burnedQuantity}/{totalQuantityQNT} (
+                                {((burnedQuantity / totalQuantityQNT) * 100).toFixed(2)}%)
+                            </Text>
                         </Stack>
                         <Spacer display={{ base: 'none', lg: 'block' }} />
                         <Center minHeight={{ base: 'auto', lg: '100%' }}>

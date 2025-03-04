@@ -97,6 +97,7 @@ export const VIEW_ONLY_REASON = 'This function is disabled until start of Season
 export const WHITELIST = [];
 export const SEASON1TIMESTAMP = 105800000;
 export const CURRENTSEASON = 'season01';
+export const STARTED_BURNING = 189650826; // For burning transactions
 
 // ---------------------------------------------
 // ------------------- BOUNTY -----------------
@@ -278,7 +279,7 @@ export const ASSETS_IDS = [
     GEMASSET,
     WETHASSET,
     GIFTZASSET,
-    MANAASSET
+    MANAASSET,
 ];
 
 export const CURRENCY_ASSETS = {

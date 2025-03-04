@@ -5,6 +5,7 @@ import ardorjs from 'ardorjs';
 
 // Constants
 import {
+    ASSETS_IDS,
     BOUNTYACCOUNT,
     BRIDGEAPIURL,
     CURRENCY,
@@ -105,6 +106,24 @@ const getRequestToIgnisByOrder = async (type, order) => {
         return response.data;
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js:118 ~ getRequestToIgnisByOrder ~ error', error);
+    }
+};
+
+const getAccountInventory = async account => {
+    try {
+        const response = await axios.get(NODEURL, {
+            params: {
+                requestType: 'getAccountAssets',
+                account,
+                includeAssetInfo: true,
+            },
+        });
+
+        const assets = response.data.accountAssets || [];
+        return assets.filter(item => ASSETS_IDS.includes(item.asset));
+    } catch (error) {
+        console.error('🚀 ~ getAccountInventory ~ error', error);
+        return [];
     }
 };
 
@@ -1080,4 +1099,5 @@ export {
     getBlockchainTransactions,
     getUnconfirmedTransactions,
     changeAccountName,
+    getAccountInventory,
 };
