@@ -1,5 +1,6 @@
 import {
     ASSETS_IDS,
+    BURNACCOUNT,
     BUYPACKACCOUNT,
     CATOBLEPASASSETWRONG,
     CURRENCY_ASSETS,
@@ -19,6 +20,7 @@ import {
     QUANT_VERYRARE,
     REFERRALASSET,
     SASQUATCHASSET,
+    STARTED_BURNING,
     WETHASSET,
 } from '../data/CONSTANTS';
 
@@ -27,6 +29,7 @@ import {
     getAskOrders,
     getAssetsByIssuer,
     getBidOrders,
+    getBlockchainTransactions,
     getLastTrades,
     sendIgnis,
     transferAsset,
@@ -251,7 +254,7 @@ function cleanJSON(jsonString) {
 }
 
 export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders = false) => {
-    let cardDetails = cleanJSON(asset.description)
+    let cardDetails = cleanJSON(asset.description);
 
     if (cardDetails) {
         if (isJSON(cardDetails)) {
@@ -264,6 +267,7 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
         let bidOmnoOrders = [];
         let lastPrice = 0;
         let lastOmnoPrice = 0;
+
         if (fetchOrders) {
             const [askResponse, bidResponse, lastTradesResponse, omnoOrdersResponse] = await Promise.all([
                 getAskOrders(asset.asset),
@@ -276,6 +280,7 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
             bidOrders = bidResponse.bidOrders;
             askOmnoOrders = omnoOrdersResponse.askOrders;
             bidOmnoOrders = omnoOrdersResponse.bidOrders;
+
             if (lastTradesResponse.trades.length > 0) {
                 const auxLastPrice = lastTradesResponse.trades[0].priceNQTPerShare / NQTDIVIDER;
                 lastPrice = Number.isInteger(auxLastPrice) ? auxLastPrice : auxLastPrice.toFixed(2);
@@ -284,6 +289,7 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
 
         let totalQuantityQNT = 0;
         let rarity = RARITY_MAP[cardDetails.rarity];
+
         if (rarity) {
             totalQuantityQNT = rarity.quantity;
             cardDetails.rarity = rarity.name;
@@ -291,6 +297,9 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
 
         const cardname = getTruncatedName(cardDetails.name);
         const fixContinent = cardDetails.channel === 'Europa' ? 'Europe' : cardDetails.channel;
+
+        const burnedAmounts = await getBurnedAmounts();
+        const burnedQuantity = burnedAmounts[asset.asset] || 0;
 
         return {
             asset: asset.asset,
@@ -301,6 +310,7 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
             rarity: cardDetails.rarity,
             quantityQNT: quantityQNT,
             totalQuantityQNT: totalQuantityQNT,
+            burnedQuantity: burnedQuantity,
             unconfirmedQuantityQNT: unconfirmedQuantityQNT,
             lastPrice: lastPrice,
             lastOmnoPrice: lastOmnoPrice,
@@ -311,6 +321,23 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
             askOmnoOrders: askOmnoOrders,
             bidOmnoOrders: bidOmnoOrders,
         };
+    }
+};
+
+const getBurnedAmounts = async () => {
+    try {
+        const transactions = await getBlockchainTransactions(2, BURNACCOUNT, true, STARTED_BURNING, 1000);
+
+        const assetTransfers = transactions.transactions?.filter(tx => tx.attachment?.asset) || [];
+
+        return assetTransfers.reduce((acc, tx) => {
+            const { asset, quantityQNT } = tx.attachment;
+            acc[asset] = (acc[asset] || 0) + Number(quantityQNT);
+            return acc;
+        }, {});
+    } catch (error) {
+        console.error('🚀 ~ getBurnedAmounts ~ error', error);
+        return {};
     }
 };
 
