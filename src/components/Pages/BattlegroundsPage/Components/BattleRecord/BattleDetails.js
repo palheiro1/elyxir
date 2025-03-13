@@ -430,13 +430,14 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                     {defenderValue >= attackerValue && (
                                                         <Box
                                                             position="absolute"
-                                                            top="0"
-                                                            left="0"
-                                                            width="100%"
-                                                            height="100%"
+                                                            top="50%"
+                                                            left="50%"
+                                                            transform="translate(-50%, -50%)"
                                                             display="flex"
                                                             alignItems="center"
                                                             justifyContent="center"
+                                                            width="100%"
+                                                            height="100%"
                                                             bg="rgba(0, 0, 0, 0.3)">
                                                             <Text
                                                                 fontSize="9rem"
@@ -590,13 +591,14 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                                                     {defenderValue <= attackerValue && (
                                                         <Box
                                                             position="absolute"
-                                                            top="0"
-                                                            left="0"
-                                                            width="100%"
-                                                            height="100%"
+                                                            top="50%"
+                                                            left="50%"
+                                                            transform="translate(-50%, -50%)"
                                                             display="flex"
                                                             alignItems="center"
                                                             justifyContent="center"
+                                                            width="100%"
+                                                            height="100%"
                                                             bg="rgba(0, 0, 0, 0.3)">
                                                             <Text
                                                                 fontSize="9rem"
