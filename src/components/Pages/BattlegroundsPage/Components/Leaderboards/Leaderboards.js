@@ -251,14 +251,14 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                             fontFamily={'Chelsea Market, System'}
                             mb={0}
                             h={'85%'}>
-                            {option !== 1 ? (
+                            {option === 5 ? (
                                 <Leaderboard isMobile={isMobile} color={color} />
                             ) : (
-                                <GeneralLeaderboard isMobile={isMobile} />
+                                <GeneralLeaderboard isMobile={isMobile} color={color}  />
                             )}
                         </Stack>
                         <Stack dir="row" mx={'auto'} mt={3}>
-                            {option === 5 ? <CombativityResetTimer mb={4}/> : <LeaderboardsRewards option={option} />}
+                            {option === 5 ? <CombativityResetTimer mb={4} /> : <LeaderboardsRewards option={option} />}
                         </Stack>
                     </Stack>
                 </Stack>
