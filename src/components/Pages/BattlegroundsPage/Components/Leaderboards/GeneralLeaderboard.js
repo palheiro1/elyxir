@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Box, Spinner, Stack, Grid, GridItem, Text } from '@chakra-ui/react';
 import { formatAddress } from '../../Utils/BattlegroundsUtils';
 
-const LeaderboardRow = ({ index, data, isMobile }) => {
+const LeaderboardRow = ({ index, data, isMobile, type }) => {
     const {
         accountRS,
         totalPoints,
@@ -13,9 +13,12 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
         battleEfficiencyPoints,
         defenseDurationPoints,
     } = data;
-    const bg = index % 2 === 0 ? '#2A2E2E' : '#323636';
-    const color = index < 5 ? '#D597B2' : '#FFF';
 
+    const bg = index % 2 === 0 ? '#2A2E2E' : '#323636';
+    const fiveWinners = index < 5 ? '#D597B2' : '#FFF';
+    const oneWiner = index === 0 ? '#D597B2' : '#FFF';
+    const color = type === 'general' ? fiveWinners : oneWiner;
+    
     return (
         totalPoints > 0 && (
             <Grid templateColumns="repeat(7, 1fr)" gap={4} w="100%" mx="auto" mt={0} bgColor={bg} borderRadius="10px">
@@ -61,11 +64,7 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
                         display="flex"
                         alignItems="center"
                         justifyContent="center">
-                        {landsConqueredPoints
-                            ? Number.isInteger(landsConqueredPoints)
-                                ? landsConqueredPoints
-                                : landsConqueredPoints.toFixed(3).toLocaleString('de-DE')
-                            : 0}
+                        {landsConqueredPoints ? (landsConqueredPoints * 1000).toFixed(0).toLocaleString('de-DE') : 0}
                     </Text>
                 </GridItem>
                 <GridItem colSpan={1} textAlign="center">
@@ -80,9 +79,7 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
                         alignItems="center"
                         justifyContent="center">
                         {successfullDefensesPoints
-                            ? Number.isInteger(successfullDefensesPoints)
-                                ? successfullDefensesPoints
-                                : successfullDefensesPoints.toFixed(3).toLocaleString('de-DE')
+                            ? (successfullDefensesPoints * 1000).toFixed(0).toLocaleString('de-DE')
                             : 0}
                     </Text>
                 </GridItem>
@@ -98,9 +95,7 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
                         alignItems="center"
                         justifyContent="center">
                         {battleEfficiencyPoints
-                            ? Number.isInteger(battleEfficiencyPoints)
-                                ? battleEfficiencyPoints
-                                : battleEfficiencyPoints.toFixed(3).toLocaleString('de-DE')
+                            ? (battleEfficiencyPoints * 1000).toFixed(0).toLocaleString('de-DE')
                             : 0}
                     </Text>
                 </GridItem>
@@ -115,11 +110,7 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
                         display="flex"
                         alignItems="center"
                         justifyContent="center">
-                        {defenseDurationPoints
-                            ? Number.isInteger(defenseDurationPoints)
-                                ? defenseDurationPoints
-                                : defenseDurationPoints.toFixed(3).toLocaleString('de-DE')
-                            : 0}
+                        {defenseDurationPoints ? (defenseDurationPoints * 1000).toFixed(0).toLocaleString('de-DE') : 0}
                     </Text>
                 </GridItem>
                 <GridItem colSpan={1} textAlign="center">
@@ -134,11 +125,7 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
                         alignItems="center"
                         color={'#7FC0BE'}
                         justifyContent="center">
-                        {totalPoints
-                            ? Number.isInteger(totalPoints)
-                                ? totalPoints
-                                : totalPoints.toFixed(3).toLocaleString('de-DE')
-                            : 0}
+                        {totalPoints ? (totalPoints * 1000).toFixed(0).toLocaleString('de-DE') : 0}
                     </Text>
                 </GridItem>
             </Grid>
@@ -146,8 +133,8 @@ const LeaderboardRow = ({ index, data, isMobile }) => {
     );
 };
 
-const GeneralLeaderboard = ({ isMobile }) => {
-    const { entries } = useSelector(state => state.leaderboards);
+const GeneralLeaderboard = ({ isMobile, color }) => {
+    const { entries, data } = useSelector(state => state.leaderboards);
     return (
         <Stack className="custom-scrollbar">
             {entries === null ? (
@@ -176,9 +163,9 @@ const GeneralLeaderboard = ({ isMobile }) => {
                                 mt={3}
                                 p={2}
                                 borderRadius={'10px'}
-                                border={'2px solid #FFD900'}
+                                border={`2px solid ${color}`}
                                 color={'#000'}
-                                bgColor={'#FFD900'}
+                                bgColor={color}
                                 position="sticky"
                                 top="0"
                                 zIndex={1}>
@@ -248,7 +235,13 @@ const GeneralLeaderboard = ({ isMobile }) => {
                                 borderRadius={'10px'}
                                 p={2}>
                                 {entries.map((entry, index) => (
-                                    <LeaderboardRow key={index} index={index} data={entry} isMobile={isMobile} />
+                                    <LeaderboardRow
+                                        key={index}
+                                        index={index}
+                                        data={entry}
+                                        isMobile={isMobile}
+                                        type={data.type}
+                                    />
                                 ))}
                             </Box>
                         </>
