@@ -246,11 +246,11 @@ const getTruncatedName = name => (name === 'Kăk-whăn’-û-ghăt Kǐg-û-lu’
 
 function cleanJSON(jsonString) {
     return jsonString
-        .replace(/\bNaN\b/g, 'null')  // Reemplaza NaN por null
-        .replace(/\t/g, 'null')  // Reemplaza tabulaciones por null
-        .replace(/[\n\r]/g, '')  // Elimina nuevas líneas y retornos de carro
-        .replace(/\\n/g, '')  // Elimina las secuencias de escape de nuevas líneas
-        .replace(/\\r/g, '');  // Elimina las secuencias de escape de retornos de carro
+        .replace(/\bNaN\b/g, 'null') // Reemplaza NaN por null
+        .replace(/\t/g, 'null') // Reemplaza tabulaciones por null
+        .replace(/[\n\r]/g, '') // Elimina nuevas líneas y retornos de carro
+        .replace(/\\n/g, '') // Elimina las secuencias de escape de nuevas líneas
+        .replace(/\\r/g, ''); // Elimina las secuencias de escape de retornos de carro
 }
 
 export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders = false) => {
@@ -324,9 +324,9 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
     }
 };
 
-const getBurnedAmounts = async () => {
+export const getBurnedAmounts = async () => {
     try {
-        const transactions = await getBlockchainTransactions(2, BURNACCOUNT, true, STARTED_BURNING, 1000);
+        const transactions = await getBlockchainTransactions(2, BURNACCOUNT, true, STARTED_BURNING, -1);
 
         const assetTransfers = transactions.transactions?.filter(tx => tx.attachment?.asset) || [];
 
@@ -335,6 +335,20 @@ const getBurnedAmounts = async () => {
             acc[asset] = (acc[asset] || 0) + Number(quantityQNT);
             return acc;
         }, {});
+    } catch (error) {
+        console.error('🚀 ~ getBurnedAmounts ~ error', error);
+        return {};
+    }
+};
+
+export const getBurnTransactions = async (account = null) => {
+    try {
+        const transactions = await getBlockchainTransactions(2, BURNACCOUNT, true, STARTED_BURNING, -1);
+
+        const assetTransfers = transactions.transactions?.filter(tx => tx.attachment?.asset) || [];
+        const filteredTransfers = assetTransfers.filter(tx => tx.senderRS === account);
+
+        return account ? filteredTransfers : assetTransfers;
     } catch (error) {
         console.error('🚀 ~ getBurnedAmounts ~ error', error);
         return {};

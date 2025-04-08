@@ -1,5 +1,6 @@
 import { BOUNTYACCOUNT, BOUNTYHALF, NQTDIVIDER, WETHASSETACCOUNT } from '../../data/CONSTANTS';
 import { fetchCurrencyAssets } from '../../utils/cardsUtils';
+import { getBlockchainTransactions } from '../Ardor/ardorInterface';
 // import { getIgnisBalance } from '../Ardor/ardorInterface';
 import { getEthPrice } from '../coingecko/utils';
 
@@ -28,3 +29,24 @@ export const getBountyMissingCards = async () => {
     const response = await fetch('https://api.mythicalbeings.io/index.php?action=participantsWithMissingCards');
     return await response.json();
 };
+
+export const getJackpotParticipants = async () => {
+    const response = await fetch('https://api.mythicalbeings.io/index.php?action=jackpot');
+    return await response.json();
+};
+
+export const getBountyTransactions = async () => {
+    const res = await getBlockchainTransactions(2, BOUNTYACCOUNT, true, 229348323, -1);
+
+    const transactions = res.transactions.filter(tx => {
+        try {
+            const msg = JSON.parse(tx.attachment.message);
+            return 'jackpotHeight' in msg;
+        } catch (e) {
+            return false;
+        }
+    });
+
+    return transactions;
+};
+/* 229348323 */
