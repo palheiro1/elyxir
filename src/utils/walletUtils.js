@@ -12,6 +12,7 @@ import {
     WETHASSET,
     OMNO_ACCOUNT,
     OMNO_CONTRACT,
+    BURNACCOUNT,
 } from '../data/CONSTANTS';
 import { decrypt, getUser } from './storage';
 import {
@@ -589,6 +590,34 @@ export const sendCardsToOmno = async ({ cards, passPhrase }) => {
             recipient: OMNO_ACCOUNT,
             passPhrase: passPhrase,
             message: message,
+            messagePrunable: true,
+            deadline: 361,
+            priority: 'HIGH',
+        })
+    );
+
+    try {
+        const results = await Promise.all(promises);
+        const success = results.every(result => result.status === 200 || true);
+        if (success) {
+            return true;
+        } else {
+            console.error('Error transferring assets: Not all promises resolved successfully');
+            return false;
+        }
+    } catch (error) {
+        console.error(`Error transferring assets: ${error.message}`);
+        return false;
+    }
+};
+
+export const sendCardsToBurn = async ({ cards, passPhrase }) => {
+    const promises = cards.map(card =>
+        transferAsset({
+            asset: card.asset,
+            quantityQNT: card.quantity,
+            recipient: BURNACCOUNT,
+            passPhrase: passPhrase,
             messagePrunable: true,
             deadline: 361,
             priority: 'HIGH',

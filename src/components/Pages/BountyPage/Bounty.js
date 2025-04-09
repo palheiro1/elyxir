@@ -1,12 +1,11 @@
-import { Box, Button, Center, Text, useDisclosure } from '@chakra-ui/react';
-import { useEffect, useRef, useState } from 'react';
-import { getBountyMissingCards, getBountyParticipants } from '../../../services/Bounty/utils';
-import RemainingCards from '../../Cards/RemainingCards';
-import BountyWidget from '../../BountyWidget/BountyWidget';
-import SortAndFilterCards from '../../SortAndFilters/SortAndFilterCards';
-import ClaimBounty from './ClaimBounty';
-import { IGNIS_REQUIRED, IS_BOUNTY_ENABLED, REFRESH_BOUNTY_PARTICIPANTS } from '../../../data/CONSTANTS';
-import SendMissingCardDialog from '../../Modals/BountyDialog/SendMissingCardDialog';
+import { Box, Button, Stack, Text, useMediaQuery } from '@chakra-ui/react';
+import { useState } from 'react';
+import Inventory from './Components/Inventory/Inventory';
+import Tickets from './Components/Tickets/Tickets';
+import Rewards from './Components/Rewards/Rewards';
+import { useSelector } from 'react-redux';
+import { BLOCKTIME, FREQUENCY } from '../../../data/CONSTANTS';
+import { useEffect } from 'react';
 
 /**
  * @name Bounty
@@ -14,140 +13,107 @@ import SendMissingCardDialog from '../../Modals/BountyDialog/SendMissingCardDial
  * @param {object} infoAccount - Account info
  * @param {array} cards - All cards
  * @returns {JSX.Element} - JSX to display
- * @author Jesús Sánchez Fernández
+ * @author Dario Maza Berdugo
  * @version 1.0
  */
 const Bounty = ({ infoAccount, cards = [] }) => {
-    const [totalNoSpecialCards, setTotalNoSpecialCards] = useState([]); // Cards without specials
-    const [remainingCards, setRemainingCards] = useState([]); // Cards without specials and with 0 quantity
-    const [cardsFiltered, setCardsFiltered] = useState([]); // Cards filtered by search and rarity
-    const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
-    const [missingCards, setMissingCards] = useState([]);
-    const reference = useRef();
-    const { accountRs: account, IGNISBalance } = infoAccount;
+    const [openInventory, setOpenInventory] = useState(false);
+    const [option, setOption] = useState(1);
 
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const handleCloseInventory = () => {
+        setOpenInventory(false);
+    };
 
-    useEffect(() => {
-        // Get remaining cards
-        const getRemainingCards = () => {
-            const auxNoSpecialCards = cards.filter(card => card.rarity !== 'Special');
-            setTotalNoSpecialCards(auxNoSpecialCards);
+    const handleOpenInventory = () => {
+        cards && setOpenInventory(true);
+    };
 
-            const cardWithZero = auxNoSpecialCards.filter(
-                card =>
-                    Number(card.quantityQNT) === 0 ||
-                    (Number(card.quantityQNT) > Number(card.unconfirmedQuantityQNT) &&
-                        Number(card.unconfirmedQuantityQNT) === 0)
-            );
-            setRemainingCards(cardWithZero);
-        };
-
-        getRemainingCards();
-    }, [cards]);
+    const { prev_height } = useSelector(state => state.blockchain);
+    const [bountyTimer, setBountyTimer] = useState({
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        remainingBlocks: 'loading',
+    });
 
     useEffect(() => {
-        const getParticipants = async () => {
-            // Get participants
-            const response = await getBountyParticipants();
-            let auxParticipants = [];
-            let numParticipants = 0;
-            Object.entries(response).forEach(entry => {
-                const [key, value] = entry;
-                if (value > 0) {
-                    auxParticipants.push({ account: key, quantity: value });
-                    numParticipants += value;
-                }
-            });
-            setParticipants({ numParticipants, participants: auxParticipants });
+        const getBountyTimer = () => {
+            const modulo = prev_height % FREQUENCY;
+            const remainingBlocks = FREQUENCY - modulo;
+            const remainingSecs = remainingBlocks * BLOCKTIME;
+            const delta = Number(remainingSecs - BLOCKTIME);
 
-            getBountyMissingCards().then(response => {
-                const missingCardIds = response[account];
-                if (missingCardIds) {
-                    const missingCardWithData = missingCardIds.map(cardId => {
-                        return totalNoSpecialCards.find(card => card.asset === cardId);
-                    });
-                    setMissingCards(missingCardWithData);
-                }
-            });
+            const days = Math.floor(delta / (24 * 60 * 60));
+            const hours = Math.floor((delta % (24 * 60 * 60)) / (60 * 60));
+            const minutes = Math.floor((delta % (60 * 60)) / 60);
+
+            setBountyTimer({ days, hours, minutes, remainingBlocks });
         };
 
-        getParticipants();
+        prev_height && getBountyTimer();
+    }, [prev_height]);
 
-        const interval = setInterval(() => {
-            getParticipants();
-        }, REFRESH_BOUNTY_PARTICIPANTS);
-        return () => clearInterval(interval);
-    }, [account, totalNoSpecialCards]);
-
-    const findParticipation = participants.participants.find(participant => participant.account === account);
-    const imParticipant = findParticipation !== undefined;
-    const myParticipation = findParticipation && (findParticipation ? findParticipation.quantity : 0);
-    const textParticipations =
-        findParticipation && (myParticipation === 1 ? 'once' : findParticipation.quantity + ' times');
-
-    const canClaimBounty = IS_BOUNTY_ENABLED && cards.length > 0 && remainingCards.length === 0;
+    const [isMobile] = useMediaQuery('(max-width: 1190px)');
 
     return (
-        <Box>
-            <Center>
-                <BountyWidget cStyle={2} />
-            </Center>
-
-            {imParticipant && (
-                <Text mt={4} fontSize="2xl" textAlign="center" fontWeight="bolder">
-                    ✅ You've participated {textParticipations} for this round!
-                </Text>
-            )}
-
-            {missingCards.length > 0 && (
-                <Box>
-                    <Text textAlign="center" fontWeight="bolder" color={'red'}>
-                        We have detected that you have played the Bounty, but there are still cards to be sent.
-                    </Text>
-                    <Text pb={2} textTransform={'uppercase'} textAlign="center" fontWeight="bolder" color={'red'}>
-                        (your participation is not taken into account)
-                    </Text>
-                    <Button onClick={onOpen} colorScheme="red" size={'sm'} mx="auto" display="block">
-                        SEND MISSING CARDS
-                    </Button>
-                </Box>
-            )}
-
-            {remainingCards.length > 0 && (
-                <>
-                    <SortAndFilterCards
-                        cards={remainingCards}
-                        setCardsFiltered={setCardsFiltered}
-                        needSpecials={false}
-                        needSorting={false}
-                        rgbColor={'59, 83, 151'}
-                    />
-                    <RemainingCards
-                        infoAccount={infoAccount}
-                        username={infoAccount.name}
-                        totalCards={totalNoSpecialCards.length}
-                        remainingCards={remainingCards}
-                        cards={cardsFiltered}
-                    />
-                </>
-            )}
-
-            {isOpen && (
-                <SendMissingCardDialog
-                    isOpen={isOpen}
-                    onClose={onClose}
-                    reference={reference}
-                    username={infoAccount.name}
-                    missingCards={missingCards}
+        <Box bgColor={'#202323'} borderRadius={'25px'}>
+            {option === 1 && (
+                <Tickets
+                    accountRs={infoAccount.accountRs}
+                    isMobile={isMobile}
+                    setOption={setOption}
                 />
             )}
-
-            {canClaimBounty && (
-                <ClaimBounty
-                    username={infoAccount.name}
-                    cards={totalNoSpecialCards}
-                    haveIgnis={IGNISBalance >= IGNIS_REQUIRED}
+            {option === 2 && <Rewards account={infoAccount.accountRs} />}
+            <Stack
+                mx={2}
+                w={'100%'}
+                direction={'row'}
+                justifyContent={option === 2 ? 'space-between' : 'flex-end'}
+                p={4}
+                px={4}>
+                {option === 2 && (
+                    <Button
+                        color={'#B2496C'}
+                        bgColor={'#FFF'}
+                        borderRadius={'full'}
+                        letterSpacing={1}
+                        fontFamily={'Chelsea Market, System UI'}
+                        fontWeight={500}
+                        px={4}
+                        py={2}
+                        onClick={() => setOption(1)}>
+                        MY TICKETS
+                    </Button>
+                )}
+                <Stack direction={'row'} fontFamily={'Chelsea Market, System UI'}>
+                    {option === 2 && (
+                        <Stack direction={'row'} my={'auto'} mx={2}>
+                            <Text fontSize={'md'}>NEXT BOUNTY IN: </Text>
+                            <Text fontSize={'md'} color={'#39D5D5'}>
+                                {bountyTimer.days}D {bountyTimer.hours}H {bountyTimer.minutes}MIN
+                            </Text>
+                        </Stack>
+                    )}
+                    <Button
+                        color={'#FFF'}
+                        bgColor={'#B2496C'}
+                        borderRadius={'full'}
+                        justifySelf={'flex-end'}
+                        letterSpacing={1.5}
+                        fontSize={'lg'}
+                        fontWeight={500}
+                        onClick={() => handleOpenInventory()}>
+                        PARTICIPATE
+                    </Button>
+                </Stack>
+            </Stack>
+            {openInventory && (
+                <Inventory
+                    infoAccount={infoAccount}
+                    cards={cards}
+                    handleCloseInventory={handleCloseInventory}
+                    isMobile={isMobile}
                 />
             )}
         </Box>
