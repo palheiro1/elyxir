@@ -41,9 +41,9 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
         setSelectedCards(newSelectedCards);
     };
 
-    const myCards = cards
-        .filter(card => parseInt(card.unconfirmedQuantityQNT) > 0)
-        .filter(card => card.rarity !== 'Special');
+    const myCards = cards.filter(card => parseInt(card.unconfirmedQuantityQNT) > 0);
+    // .filter(card => card.rarity !== 'Special');
+
     const notSelectedCards = myCards.filter(card => !selectedCards.some(selected => selected.asset === card.asset));
 
     const handleRarityChange = event => {

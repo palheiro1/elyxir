@@ -341,9 +341,9 @@ export const getBurnedAmounts = async () => {
     }
 };
 
-export const getBurnTransactions = async (account = null) => {
+export const getBurnTransactions = async (account = null, startTimestamp = STARTED_BURNING) => {
     try {
-        const transactions = await getBlockchainTransactions(2, BURNACCOUNT, true, STARTED_BURNING, -1);
+        const transactions = await getBlockchainTransactions(2, BURNACCOUNT, true, startTimestamp, -1);
 
         const assetTransfers = transactions.transactions?.filter(tx => tx.attachment?.asset) || [];
         const filteredTransfers = assetTransfers.filter(tx => tx.senderRS === account);
