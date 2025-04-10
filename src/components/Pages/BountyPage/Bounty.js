@@ -57,13 +57,7 @@ const Bounty = ({ infoAccount, cards = [] }) => {
 
     return (
         <Box bgColor={'#202323'} borderRadius={'25px'}>
-            {option === 1 && (
-                <Tickets
-                    accountRs={infoAccount.accountRs}
-                    isMobile={isMobile}
-                    setOption={setOption}
-                />
-            )}
+            {option === 1 && <Tickets accountRs={infoAccount.accountRs} isMobile={isMobile} setOption={setOption} />}
             {option === 2 && <Rewards account={infoAccount.accountRs} />}
             <Stack
                 mx={2}

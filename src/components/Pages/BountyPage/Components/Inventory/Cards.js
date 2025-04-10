@@ -114,7 +114,7 @@ const Cards = ({ infoAccount, isMobile, selectedCards, setSelectedCards, handleE
 
                 <Divider bgColor="#393b97" />
                 <Heading fontSize="xl" fontWeight="light" textAlign="center">
-                    2. Sign and send
+                    2. Sign and burn
                 </Heading>
 
                 <Center>
@@ -141,7 +141,7 @@ const Cards = ({ infoAccount, isMobile, selectedCards, setSelectedCards, handleE
                     disabled={!isValidPin || selectedCards.length === 0 || isSwapping}
                     onClick={handleSwap}
                     letterSpacing="widest">
-                    Send to jackpot
+                    Burn for bounty
                 </Button>
             </Stack>
         </Center>
