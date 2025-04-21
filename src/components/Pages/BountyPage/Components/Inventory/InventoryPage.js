@@ -73,6 +73,7 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                 1: 'Common',
                 2: 'Rare',
                 3: 'Epic',
+                4: 'Special',
             };
             return filters.rarity && filters.rarity !== '-1' ? card.rarity === rarityMapping[filters.rarity] : true;
         })
@@ -105,13 +106,13 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                 textAlign={'center'}
                 maxH={'90%'}>
                 <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
-                    JACKPOT
+                    BOUNTY
                 </Heading>
-                <Text textTransform={'uppercase'}>Select the cards to be sent to obtain jackpot tickets</Text>
+                <Text textTransform={'uppercase'}>Select the cards to be burned to obtain bounty tickets</Text>
             </Stack>
             <Stack backgroundColor={'#0F0F0F'} borderRadius={'20px'} h={'85%'}>
                 <Heading fontSize="xl" fontWeight="light" textAlign="center" mt={3}>
-                    1. Select cards to sned to jackpot
+                    1. Select cards to burn fot the the bounty
                 </Heading>
                 <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={'10'}>
                     <Select w={'10%'} onChange={handleRarityChange} color={'#FFF'}>
@@ -126,6 +127,9 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                         </option>
                         <option value="3" style={optionStyle}>
                             Epic
+                        </option>
+                        <option value="4" style={optionStyle}>
+                            Specia
                         </option>
                     </Select>
 
