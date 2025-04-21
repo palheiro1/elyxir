@@ -74,7 +74,8 @@ export const getAssetDistributorTransactions = async (timestamp = 229348323) => 
 
 export const getUserParticipations = async accountRs => {
     const jackpotInfo = await getJackpotInfo();
-    const res = await getBurnTransactions(accountRs, jackpotInfo.lastJackpotHeight);
+    const block = await getBlock(jackpotInfo.lastJackpotHeight);
+    const res = await getBurnTransactions(accountRs, block.timestamp);
     const tickets = {
         common: { burned: 0, multiplier: jackpotInfo.multipliers.common },
         rare: { burned: 0, multiplier: jackpotInfo.multipliers.rare },
