@@ -41,6 +41,7 @@ export const REFERRALASSET = '15893499867718551186'; // mainnet
 export const SASQUATCHASSET = '13270129604409279596';
 export const MARUXAINAASSETWRONG = '7783220465634719235';
 export const CATOBLEPASASSETWRONG = '16992402711643280652';
+export const SEASONSPECIALCARDASSET = '15052794016100653835'; //SUMANGA
 
 // ---------------------------------------------
 // ------------------ ADDRESS ------------------

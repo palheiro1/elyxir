@@ -84,21 +84,23 @@ export const getUserParticipations = async accountRs => {
     };
     for await (const tx of res) {
         const { attachment } = tx;
-        if (attachment.asset) {
+        const { asset, quantityQNT } = attachment;
+        if (asset) {
             const card = await getAsset(attachment.asset);
             const description = JSON.parse(card.description);
+            const quantity = parseInt(quantityQNT) || 0;
             switch (description.rarity) {
                 case 'common':
-                    tickets.common.burned += 1;
+                    tickets.common.burned += quantity;
                     break;
                 case 'rare':
-                    tickets.rare.burned += 1;
+                    tickets.rare.burned += quantity;
                     break;
                 case 'epic':
-                    tickets.epic.burned += 1;
+                    tickets.epic.burned += quantity;
                     break;
                 case 'special':
-                    tickets.special.burned += 1;
+                    tickets.special.burned += quantity;
                     break;
                 default:
                     break;
@@ -212,6 +214,52 @@ export const getJackpotRewards = async () => {
     });
 
     return rewards;
+};
+
+export const getJackpotFormattedTickets = async () => {
+    const colors = [
+        '#B2496C',
+        '#7FC0BE',
+        '#E1A325',
+        '#E53055',
+        '#979797',
+        '#5BB249',
+        '#E43E4A',
+        '#0056F5',
+        '#D497B2',
+        '#5F6368',
+        '#39D5D5',
+        '#5A679B',
+        '#01B29F',
+    ];
+
+    const accountColorMap = {};
+    let colorIndex = 0;
+
+    const jackpotInfo = await getJackpotInfo();
+    const accountsTickets = jackpotInfo.participants;
+    for (const account in accountsTickets) {
+        accountColorMap[account] = colors[colorIndex % colors.length];
+        colorIndex++;
+        if (colorIndex >= colors.length) colorIndex = 0;
+    }
+
+    const allTickets = [];
+
+    for (const account in accountsTickets) {
+        const tickets = accountsTickets[account];
+        tickets.forEach(ticket => {
+            allTickets.push({
+                ticket,
+                account,
+                color: accountColorMap[account],
+            });
+        });
+    }
+
+    allTickets.sort((a, b) => a.ticket - b.ticket);
+
+    return { allTickets, participants: Object.entries(accountsTickets).length };
 };
 
 const getBlock = async height => {

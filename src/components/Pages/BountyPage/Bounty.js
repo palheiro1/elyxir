@@ -6,6 +6,7 @@ import Rewards from './Components/Rewards/Rewards';
 import { useSelector } from 'react-redux';
 import { BLOCKTIME, FREQUENCY } from '../../../data/CONSTANTS';
 import { useEffect } from 'react';
+import { ScrollLock } from '../BattlegroundsPage/assets/ScrollLock';
 
 /**
  * @name Bounty
@@ -19,13 +20,18 @@ import { useEffect } from 'react';
 const Bounty = ({ infoAccount, cards = [] }) => {
     const [openInventory, setOpenInventory] = useState(false);
     const [option, setOption] = useState(1);
+    const [isScrollLocked, setIsScrollLocked] = useState(false);
 
     const handleCloseInventory = () => {
         setOpenInventory(false);
+        setIsScrollLocked(false);
     };
 
     const handleOpenInventory = () => {
-        cards && setOpenInventory(true);
+        if (cards) {
+            setOpenInventory(true);
+            setIsScrollLocked(true);
+        }
     };
 
     const { prev_height } = useSelector(state => state.blockchain);
@@ -56,61 +62,73 @@ const Bounty = ({ infoAccount, cards = [] }) => {
     const [isMobile] = useMediaQuery('(max-width: 1190px)');
 
     return (
-        <Box bgColor={'#202323'} borderRadius={'25px'}>
-            {option === 1 && <Tickets accountRs={infoAccount.accountRs} isMobile={isMobile} setOption={setOption} />}
-            {option === 2 && <Rewards account={infoAccount.accountRs} />}
-            <Stack
-                mx={2}
-                w={'100%'}
-                direction={'row'}
-                justifyContent={option === 2 ? 'space-between' : 'flex-end'}
-                p={4}
-                px={4}>
-                {option === 2 && (
-                    <Button
-                        color={'#B2496C'}
-                        bgColor={'#FFF'}
-                        borderRadius={'full'}
-                        letterSpacing={1}
-                        fontFamily={'Chelsea Market, System UI'}
-                        fontWeight={500}
-                        px={4}
-                        py={2}
-                        onClick={() => setOption(1)}>
-                        MY TICKETS
-                    </Button>
+        <>
+            <ScrollLock isLocked={isScrollLocked} />
+            <Box bgColor={'#202323'} borderRadius={'25px'}>
+                {option === 1 && (
+                    <Tickets accountRs={infoAccount.accountRs} isMobile={isMobile} setOption={setOption} />
                 )}
-                <Stack direction={'row'} fontFamily={'Chelsea Market, System UI'}>
+                {option === 2 && <Rewards account={infoAccount.accountRs} />}
+                <Stack
+                    mx={2}
+                    w={'100%'}
+                    direction={{ base: 'column', md: 'row' }}
+                    justifyContent={'space-between'}
+                    p={4}
+                    px={4}>
                     {option === 2 && (
-                        <Stack direction={'row'} my={'auto'} mx={2}>
-                            <Text fontSize={'md'}>NEXT BOUNTY IN: </Text>
-                            <Text fontSize={'md'} color={'#39D5D5'}>
-                                {bountyTimer.days}D {bountyTimer.hours}H {bountyTimer.minutes}MIN
-                            </Text>
-                        </Stack>
+                        <Button
+                            color={'#B2496C'}
+                            bgColor={'#FFF'}
+                            borderRadius={'full'}
+                            letterSpacing={1}
+                            fontFamily={'Chelsea Market, System UI'}
+                            fontWeight={500}
+                            px={4}
+                            py={2}
+                            onClick={() => setOption(1)}>
+                            TICKETS
+                        </Button>
                     )}
-                    <Button
-                        color={'#FFF'}
-                        bgColor={'#B2496C'}
-                        borderRadius={'full'}
-                        justifySelf={'flex-end'}
-                        letterSpacing={1.5}
-                        fontSize={'lg'}
-                        fontWeight={500}
-                        onClick={() => handleOpenInventory()}>
-                        PARTICIPATE
-                    </Button>
+                    {option === 1 && (
+                        <Text color={'#39D5D5'} my={'auto'}>
+                            The more tickets you have, the more chances you have to win.
+                        </Text>
+                    )}
+                    <Stack direction={{ base: 'column', md: 'row' }} fontFamily={'Chelsea Market, System UI'}>
+                        {option === 2 && (
+                            <Stack direction={'row'} my={'auto'} mx={2}>
+                                <Text fontSize={'md'} color={'#FFF'}>
+                                    NEXT BOUNTY IN:{' '}
+                                </Text>
+                                <Text fontSize={'md'} color={'#39D5D5'}>
+                                    {bountyTimer.days}D - {bountyTimer.hours}H - {bountyTimer.minutes}MIN
+                                </Text>
+                            </Stack>
+                        )}
+                        <Button
+                            color={'#FFF'}
+                            bgColor={'#B2496C'}
+                            borderRadius={'full'}
+                            justifySelf={'flex-end'}
+                            letterSpacing={1.5}
+                            fontSize={'lg'}
+                            fontWeight={500}
+                            onClick={() => handleOpenInventory()}>
+                            PARTICIPATE
+                        </Button>
+                    </Stack>
                 </Stack>
-            </Stack>
-            {openInventory && (
-                <Inventory
-                    infoAccount={infoAccount}
-                    cards={cards}
-                    handleCloseInventory={handleCloseInventory}
-                    isMobile={isMobile}
-                />
-            )}
-        </Box>
+                {openInventory && (
+                    <Inventory
+                        infoAccount={infoAccount}
+                        cards={cards}
+                        handleCloseInventory={handleCloseInventory}
+                        isMobile={isMobile}
+                    />
+                )}
+            </Box>
+        </>
     );
 };
 

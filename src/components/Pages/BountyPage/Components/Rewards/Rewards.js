@@ -20,11 +20,20 @@ const Rewards = ({ account }) => {
 
     return (
         <>
-            <Stack direction="row" w="80%" align="center" px={4} py={2} mx={'auto'}>
-                <Box w="33%" display="flex" justifyContent="flex-start">
-                    <Image src="/images/jackpot/jackpotHand.png" boxSize="20%" background="transparent" color="#FFF" />
+            <Stack
+                direction={{ base: 'column', lg: 'row' }}
+                w={{ base: '100%', lg: '80%' }}
+                align="center"
+                px={4}
+                py={2}
+                mx={'auto'}>
+                <Box
+                    w={{ base: '100%', lg: '33%' }}
+                    display="flex"
+                    justifyContent={{ base: 'center', lg: 'flex-start' }}>
+                    <Image src="/images/jackpot/jackpotHand.png" boxSize="30%" background="transparent" color="#FFF" />
                 </Box>
-                <Box w="33%" display="flex" justifyContent="center">
+                <Box w={{ base: '100%', lg: '33%' }} display="flex" justifyContent="center" color={'#FFF'}>
                     <Stack direction="column">
                         <Text fontSize="2xl" fontFamily="Chelsea Market, System-ui" letterSpacing={1.5}>
                             PREVIOUS BOUNTY WINNERS
@@ -45,7 +54,7 @@ const Rewards = ({ account }) => {
                     </Stack>
                 </Box>
 
-                <Box w="33%" display="flex" justifyContent="flex-end">
+                <Box w={{ base: '100%', lg: '33%' }} display="flex" justifyContent={{ base: 'center', lg: 'flex-end' }}>
                     <Select
                         value={filterRewards}
                         onChange={e => setFilterRewards(parseInt(e.target.value))}

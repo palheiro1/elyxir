@@ -22,7 +22,7 @@ import { useSelector } from 'react-redux';
  * @param {Number} numParticipants - Number of participants in the bounty
  * @returns {JSX.Element} - JSX element
  */
-const BountyWidget = ({ cStyle = 0 }) => {
+const BountyWidget = ({ cStyle = 0, totalParticipants }) => {
     const { prev_height } = useSelector(state => state.blockchain);
     const [bountyTimer, setBountyTimer] = useState({
         days: 0,
@@ -122,56 +122,83 @@ const BountyWidget = ({ cStyle = 0 }) => {
 
     return (
         <Center py={4}>
-            <Stack direction={{ base: 'column', xl: 'row' }} w="100%" gap={3}>
-                <Box
-                    p={4}
-                    border="1px"
-                    borderColor={borderColor}
-                    rounded="lg"
-                    bg="blackAlpha"
-                    direction="row"
-                    bgColor={bgColor}>
-                    <HCountdown
-                        cStyle={cStyle}
-                        bountyTimer={bountyTimer}
-                        numParticipants={participants.numParticipants}
-                        bountyBalance={bountyBalance}
-                        bountyBalanceUSD={bountyBalanceUSD}
-                    />
-                </Box>
-                <Box
-                    p={4}
-                    border="1px"
-                    borderColor={borderColor}
-                    rounded="lg"
-                    bg="blackAlpha"
-                    direction="row"
-                    bgColor={bgColor}>
-                    <Center>
-                        <Box h="100%">
-                            <Center>
-                                <Image src="/images/currency/multicurrency.png" w="150px" />
-                            </Center>
-                            <Heading size="md" color={textColor} textAlign={'center'}>
-                                BOUNTY
-                            </Heading>
+            <Stack direction={'column'}>
+                <Stack direction={{ base: 'column', xl: 'row' }} w="100%" gap={3}>
+                    <Box
+                        p={4}
+                        border="1px"
+                        borderColor={borderColor}
+                        rounded="lg"
+                        bg="blackAlpha"
+                        direction="row"
+                        bgColor={bgColor}>
+                        <HCountdown
+                            cStyle={cStyle}
+                            bountyTimer={bountyTimer}
+                            numParticipants={participants.numParticipants}
+                            bountyBalance={bountyBalance}
+                            bountyBalanceUSD={bountyBalanceUSD}
+                        />
+                    </Box>
+                    <Box
+                        p={4}
+                        border="1px"
+                        borderColor={borderColor}
+                        rounded="lg"
+                        bg="blackAlpha"
+                        direction="row"
+                        bgColor={bgColor}>
+                        <Center>
+                            <Box h="100%">
+                                <Center>
+                                    <Image src="/images/currency/multicurrency.png" w="150px" />
+                                </Center>
+                                <Heading size="md" color={textColor} textAlign={'center'}>
+                                    BOUNTY
+                                </Heading>
 
-                            <Center gap={2}>
-                                <Text
-                                    textAlign={'center'}
-                                    h="100%"
-                                    fontWeight={'bold'}
-                                    fontSize={'4xl'}
-                                    color={textColor}>
-                                    {bountyBalanceUSD.Total.toFixed(2)}
-                                </Text>
-                                <Text textAlign={'center'} fontSize={'xl'} color={textColor}>
-                                    USD
-                                </Text>
-                            </Center>
-                        </Box>
-                    </Center>
-                </Box>
+                                <Center gap={2}>
+                                    <Text
+                                        textAlign={'center'}
+                                        h="100%"
+                                        fontWeight={'bold'}
+                                        fontSize={'4xl'}
+                                        color={textColor}>
+                                        {bountyBalanceUSD.Total.toFixed(2)}
+                                    </Text>
+                                    <Text textAlign={'center'} fontSize={'xl'} color={textColor}>
+                                        USD
+                                    </Text>
+                                </Center>
+                            </Box>
+                        </Center>
+                    </Box>
+                </Stack>
+                {totalParticipants && (
+                    <Box
+                        px={4}
+                        border="1px"
+                        borderColor={borderColor}
+                        rounded="lg"
+                        bg="blackAlpha"
+                        direction="row"
+                        color={textColor}
+                        bgColor={bgColor}>
+                        <Stack
+                            direction={{ base: 'column', md: 'row' }}
+                            justifyContent={'space-between'}
+                            w={'100%'}
+                            p={2}>
+                            <Text fontSize={'xl'} letterSpacing={1} fontWeight={500}>
+                                Live status
+                            </Text>
+                            <Text fontSize={'xl'} letterSpacing={1} fontWeight={500}>
+                                {totalParticipants} users have burned cards to win {bountyBalanceUSD.Total.toFixed(2)}{' '}
+                                USD
+                            </Text>
+                        </Stack>
+                    </Box>
+                )}
             </Stack>
         </Center>
     );

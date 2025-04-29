@@ -53,7 +53,7 @@ const Cards = ({ infoAccount, isMobile, selectedCards, setSelectedCards, handleE
 
     const handleSwap = async () => {
         if (!isValidPin || selectedCards.length === 0) return;
-        infoToast('Swapping cards...', toast);
+        infoToast('Burning cards...', toast);
         setIsSwapping(true);
 
         const cardsToSwap = selectedCards.map(card => ({
@@ -67,11 +67,11 @@ const Cards = ({ infoAccount, isMobile, selectedCards, setSelectedCards, handleE
         });
 
         if (success) {
-            okToast('Swap completed successfully. Wait to the next block and refresh the page.', toast);
+            okToast('Burning completed successfully', toast);
             setSelectedCards([]);
             setIsSwapping(false);
         } else {
-            errorToast('Swap failed', toast);
+            errorToast('Burn failed', toast);
         }
     };
 
@@ -79,7 +79,7 @@ const Cards = ({ infoAccount, isMobile, selectedCards, setSelectedCards, handleE
 
     return (
         <Center color={'#FFF'}>
-            <Stack direction="column" spacing={8} w={'30rem'}>
+            <Stack direction="column" spacing={8} w={{ base: '20rem', md: '30rem' }}>
                 <Box mb={8}>
                     <Heading fontSize="xl" fontWeight="light" mb={4} ml={isMobile && 4}>
                         Choosen
