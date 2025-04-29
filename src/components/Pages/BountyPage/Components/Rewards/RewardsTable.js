@@ -5,9 +5,9 @@ import { prepareTableData } from '../../../../../services/Bounty/utils';
 import { GEMASSET, MANAASSET, SEASONSPECIALCARDASSET, WETHASSET } from '../../../../../data/CONSTANTS';
 
 const RewardsTableRow = ({ index, data, isMobile, account, filter, getCurrencyImage }) => {
-    const { address, accountName, quantity, ticketNumber, assetId, name } = data;
-    // const assetDetails = JSON.parse(data.assetDetails.description);
-    // const { name } = assetDetails;
+    const { address, accountName, quantity, ticketNumber, assetId } = data;
+    const assetDetails = JSON.parse(data.assetDetails.description);
+    const { name } = assetDetails;
 
     const bg = filter
         ? index % 2 === 0
