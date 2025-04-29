@@ -270,19 +270,21 @@ const getBlock = async height => {
 export const prepareTableData = rewards => {
     const tableData = [];
 
-    for (const [address, data] of Object.entries(rewards)) {
-        const { accountInfo, assets } = data;
-        for (const [assetId, assetData] of Object.entries(assets)) {
-            tableData.push({
-                address,
-                accountName: accountInfo.name,
-                assetId,
-                assetName: assetData.assetInfo.name,
-                quantity: assetData.quantity,
-                assetDetails: assetData.assetInfo,
-                accountId: accountInfo.account,
-                ticketNumber: assetData.ticketNumber,
-            });
+    if (rewards) {
+        for (const [address, data] of Object.entries(rewards)) {
+            const { accountInfo, assets } = data;
+            for (const [assetId, assetData] of Object.entries(assets)) {
+                tableData.push({
+                    address,
+                    accountName: accountInfo.name,
+                    assetId,
+                    assetName: assetData.assetInfo.name,
+                    quantity: assetData.quantity,
+                    assetDetails: assetData.assetInfo,
+                    accountId: accountInfo.account,
+                    ticketNumber: assetData.ticketNumber,
+                });
+            }
         }
     }
 
