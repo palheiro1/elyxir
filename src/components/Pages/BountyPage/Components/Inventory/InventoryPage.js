@@ -114,8 +114,8 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                 <Heading fontSize="xl" fontWeight="light" textAlign="center" mt={3}>
                     1. Select cards to burn fot the the bounty
                 </Heading>
-                <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={'10'}>
-                    <Select w={'10%'} onChange={handleRarityChange} color={'#FFF'}>
+                <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={{ base: 0, md: 10 }}>
+                    <Select w={{ base: '33%', md: '10%' }} onChange={handleRarityChange} color={'#FFF'}>
                         <option value="-1" style={optionStyle}>
                             Rarity
                         </option>
@@ -133,7 +133,7 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                         </option>
                     </Select>
 
-                    <Select w={'10%'} onChange={handleElementChange} color={'#FFF'}>
+                    <Select w={{ base: '33%', md: '10%' }} onChange={handleElementChange} color={'#FFF'}>
                         <option value="-1" style={optionStyle}>
                             Element
                         </option>
@@ -147,7 +147,7 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                             Aquatic
                         </option>
                     </Select>
-                    <Select w={'10%'} onChange={handleDomainChange} color={'#FFF'}>
+                    <Select w={{ base: '33%', md: '10%' }} onChange={handleDomainChange} color={'#FFF'}>
                         <option value="-1" style={optionStyle}>
                             Continent
                         </option>
@@ -168,12 +168,12 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                         </option>
                     </Select>
                 </Stack>
-                <Stack direction={'row'} pt={2} padding={5} height={'inherit'}>
+                <Stack direction={{ base: 'column-reverse', md: 'row' }} pt={2} padding={5} height={'inherit'}>
                     <Box
                         mb={4}
                         p={2}
                         mt={-2}
-                        w={isMobile ? '45%' : '65%'}
+                        w={{ base: '100%', md: '65%' }}
                         overflowY={'scroll'}
                         className="custom-scrollbar"
                         mx="auto"
@@ -249,7 +249,8 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                     </Box>
                     <Box
                         mb={4}
-                        maxW={isMobile ? '80%' : '60%'}
+                        maxW={isMobile ? '100%' : '60%'}
+                        minH={'50%'}
                         backgroundColor={'#0F0F0F'}
                         borderRadius={'20px'}
                         p={4}

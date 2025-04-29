@@ -84,39 +84,46 @@ export const RewardsDisplay = () => {
             key: 'total',
             image: '/images/currency/multicurrency.png',
             alt: 'total bounty Icon',
-            value: bountyBalanceUSD.Total,
+            value: bountyBalanceUSD.Total.toFixed(2),
             label: 'USD TOTAL BOUNTY',
         },
     ];
 
     return (
         <Stack
-            direction={{ base: 'column', lg: 'row' }}
+            direction={'column'}
             align="center"
             justifyContent={'space-between'}
             fontFamily="Inter, system"
             fontSize="md"
             w="100%"
+            color={'#FFF'}
             px={4}>
             <Text fontFamily={'Chelsea market, system-ui'} fontWeight={500}>
-                ACCUMULATED BOUNTY:
+                TOTAL ACCUMULATED IN THIS BOUNTY
             </Text>
-
-            {rewardsData.map(reward => (
-                <Stack key={reward.key} direction={'row'} align="center" mx={4}>
-                    <Image
-                        my="auto"
-                        src={reward.image}
-                        alt={reward.alt}
-                        w={reward.customSize?.w || '40px'}
-                        h={reward.customSize?.h || '40px'}
-                        mt={-2}
-                    />
-                    <Text my="auto" textTransform={'uppercase'} fontWeight={300}>
-                        {reward.value} {reward.label}
-                    </Text>
-                </Stack>
-            ))}
+            <Stack
+                direction={{ base: 'column', lg: 'row' }}
+                align="center"
+                justifyContent={'space-between'}
+                mt={3}
+                w="100%">
+                {rewardsData.map(reward => (
+                    <Stack key={reward.key} direction={'row'} align="center" mx={4}>
+                        <Image
+                            my="auto"
+                            src={reward.image}
+                            alt={reward.alt}
+                            w={reward.customSize?.w || '40px'}
+                            h={reward.customSize?.h || '40px'}
+                            mt={-2}
+                        />
+                        <Text my="auto" textTransform={'uppercase'} fontWeight={300}>
+                            {reward.value} {reward.label}
+                        </Text>
+                    </Stack>
+                ))}
+            </Stack>
         </Stack>
     );
 };

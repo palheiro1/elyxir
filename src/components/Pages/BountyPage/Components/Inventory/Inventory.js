@@ -10,13 +10,11 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, isMobile }) => {
     };
 
     const [isLittleScreen] = useMediaQuery('(min-width: 1200px) and (max-width: 1399px)');
-    const [isMediumScreen] = useMediaQuery('(min-width: 1400px) and (max-width: 1550px)');
 
     const getColumns = () => {
         if (isMobile) return 1;
-        if (isMediumScreen) return 4;
         if (isLittleScreen) return 3;
-        return 5;
+        return 4;
     };
 
     return (
