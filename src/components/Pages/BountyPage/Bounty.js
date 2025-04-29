@@ -28,7 +28,7 @@ const Bounty = ({ infoAccount, cards = [] }) => {
     };
 
     const handleOpenInventory = () => {
-        if (cards) {
+        if (cards && cards.length > 0) {
             setOpenInventory(true);
             setIsScrollLocked(true);
         }
