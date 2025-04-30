@@ -1,3 +1,6 @@
+import { getAsset } from '../../../../services/Ardor/ardorInterface';
+import { getAccumulatedBounty, getLeaderboardsRewards } from '../../../../services/Battlegrounds/Battlegrounds';
+
 export const formatTimeStamp = timestamp => {
     const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
     let battleStamp = new Date(eb.getTime() + timestamp * 1000);
@@ -194,6 +197,66 @@ export const getContinentIcon = value => {
             return `${path}america.png`;
         case 'Oceania':
             return `${path}oceania.png`;
+        default:
+            return null;
+    }
+};
+
+export const formatLeaderboardRewards = async (option = 1) => {
+    const accumulatedBounty = await getAccumulatedBounty();
+    const rewards = await getLeaderboardsRewards();
+    if (accumulatedBounty && !isEmptyObject(accumulatedBounty) && rewards && !isEmptyObject(rewards)) {
+        const assets = Object.entries(accumulatedBounty.asset);
+        const results = await Promise.all(
+            assets.map(async ([asset, price]) => {
+                const assetDetails = await getAsset(asset);
+                return { ...assetDetails, price };
+            })
+        );
+        const generalTributePercetage = rewards.GeneralLeaderboard.totalRewards.tributePercentage;
+        const tributePercetage = rewards.TerrestrialLeaderboard.top1.tributePercentage;
+
+        const reward = () => {
+            switch (option) {
+                case 1:
+                    return {
+                        cards: rewards.GeneralLeaderboard.totalRewards.specialCards,
+                        mana: rewards.GeneralLeaderboard.totalRewards.manaQNT,
+                        weth: Number(results.find(item => item.name === 'wETH').price) * generalTributePercetage,
+                        gem: Number(results.find(item => item.name === 'GEM').price) * generalTributePercetage,
+                    };
+                case 'gen':
+                    return {
+                        cards: rewards.GeneralLeaderboard.totalRewards.specialCards,
+                        mana: rewards.GeneralLeaderboard.totalRewards.manaQNT,
+                        weth: Number(results.find(item => item.name === 'wETH').price),
+                        gem: Number(results.find(item => item.name === 'GEM').price),
+                    };
+                default:
+                    return {
+                        cards: rewards.TerrestrialLeaderboard.top1.specialCards,
+                        mana: rewards.TerrestrialLeaderboard.top1.manaQNT,
+                        weth: Number(results.find(item => item.name === 'wETH').price) * tributePercetage,
+                        gem: Number(results.find(item => item.name === 'GEM').price) * tributePercetage,
+                    };
+            }
+        };
+
+        return reward;
+    }
+};
+
+export const getCurrencyImage = key => {
+    const path = 'images/currency/';
+    switch (key) {
+        case 'weth':
+            return `${path}weth.png`;
+        case 'gem':
+            return `${path}gem.png`;
+        case 'mana':
+            return `${path}mana.png`;
+        case 'cards':
+            return '/images/battlegrounds/SUMANGA.svg';
         default:
             return null;
     }

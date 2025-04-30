@@ -3,7 +3,7 @@ import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import tarasca from '../../assets/tarasca.svg';
 
-export const PageTwo = ({ handleClose }) => {
+export const PageTwo = ({ handleClose, isMobile }) => {
     return (
         <Box
             style={{
@@ -12,14 +12,14 @@ export const PageTwo = ({ handleClose }) => {
                 alignItems: 'center',
                 justifyContent: 'center',
             }}>
-            <Stack direction={'row'} m={'auto'} mt={'5%'} boxSize={'90%'}>
+            <Stack direction={'row'} m={'auto'} mt={!isMobile ? '5%' : 0} boxSize={'90%'}>
                 <Image src={tarasca} w={'40%'} />
                 <Stack direction={'column'} w={'60%'} mt={8}>
                     <Text
                         color={'#FFF'}
                         fontFamily={'Inter, sans-serif'}
                         fontWeight={'400'}
-                        fontSize={'md'}
+                        fontSize={isMobile ? 'sm' : 'md'}
                         m={'auto'}
                         w={'90%'}
                         textAlign={'justify'}>
@@ -31,7 +31,7 @@ export const PageTwo = ({ handleClose }) => {
                         color={'#FFF'}
                         fontFamily={'Inter, sans-serif'}
                         fontWeight={'400'}
-                        fontSize={'md'}
+                        fontSize={isMobile ? 'sm' : 'md'}
                         m={'auto'}
                         w={'90%'}
                         textAlign={'justify'}>
@@ -45,7 +45,7 @@ export const PageTwo = ({ handleClose }) => {
                             mt={5}
                             onClick={handleClose}
                             fontFamily={'Chelsea Market, system-ui'}
-                            fontSize={'lg'}
+                            fontSize={isMobile ? 'sm' : 'lg'}
                             fontWeight={'100'}
                             border={'1px solid #EBB2B9'}
                             letterSpacing={3}

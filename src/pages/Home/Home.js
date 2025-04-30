@@ -79,6 +79,7 @@ import { fetchArenasInfo } from '../../redux/reducers/ArenasReducer';
 import { fetchBattleData } from '../../redux/reducers/BattlegroundsReducer';
 import { fetchSoldiers } from '../../redux/reducers/SoldiersReducer';
 import { fetchLeaderboards } from '../../redux/reducers/LeaderboardsReducer';
+import { setCardsManually } from '../../redux/reducers/CardsReducer';
 
 /**
  * @name Home
@@ -267,6 +268,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 const giftzAsset = currencyAssets[2].find(asset => asset.asset === GIFTZASSET);
                 const mana = currencyAssets[3].find(asset => asset.asset === MANAASSET);
 
+                dispatch(setCardsManually(loadCards));
                 if (txs.transactions.length === 0) {
                     firstTimeToast(toast);
                 }
@@ -515,14 +517,14 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 wethCards={wethCards}
                 manaCards={manaCards}
             />, // OPTION 4 - Bridge
-            <Bounty infoAccount={infoAccount} cards={cards} />, // OPTION 5 - Bounty
+            <Bounty infoAccount={infoAccount} />, // OPTION 5 - Bounty
             <Account infoAccount={infoAccount} />, // OPTION 6 - Account
             '', // OPTION 7 - Buy pack
             <Exchange infoAccount={infoAccount} />, // OPTION 8 - Exchange
             <ArdorChat infoAccount={infoAccount} />, // OPTION 9 - Chat
             <Book cards={cards} />, // OPTION 10 - Book
             '', // OPTION 11 - OPEN PACK
-            <Battlegrounds infoAccount={infoAccount} cards={cards} />,
+            <Battlegrounds infoAccount={infoAccount} />,
         ],
         [infoAccount, cards, cardsFiltered, gemCards, haveUnconfirmed, giftzCards, wethCards, manaCards]
     );

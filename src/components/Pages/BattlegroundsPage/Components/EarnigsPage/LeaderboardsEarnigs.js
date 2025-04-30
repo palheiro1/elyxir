@@ -240,7 +240,7 @@ const LeaderboardsEarnigs = ({ infoAccount, cards, isMobile }) => {
                 mt={3}
                 p={1}
                 borderRadius={'10px'}
-                border={'2px solid #7FC0BE'}
+                border={'2px solid #BBC4D3'}
                 color={'#FFF'}
                 bgColor={'inherit'}
                 position="sticky"
@@ -344,9 +344,9 @@ const LeaderboardsEarnigs = ({ infoAccount, cards, isMobile }) => {
                 mt={3}
                 p={2}
                 borderRadius={'10px'}
-                border={'2px solid #7FC0BE'}
-                color={'#FFF'}
-                bgColor={' #7FC0BE'}
+                border={'2px solid #BBC4D3'}
+                color={'#000'}
+                bgColor={'#BBC4D3'}
                 position="sticky"
                 top="0"
                 zIndex={1}>
