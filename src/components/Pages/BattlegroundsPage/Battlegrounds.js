@@ -349,12 +349,15 @@ const Battlegrounds = ({ infoAccount }) => {
                                         as={Button}
                                         bgColor={'transparent'}
                                         rightIcon={<ChevronUpIcon />}
-                                        fontFamily={'Chelsea market, system-ui'}>
+                                        fontFamily={'Chelsea market, system-ui'}
+                                        color={'#FFF'}>
                                         Menu
                                     </MenuButton>
-                                    <MenuList>
+                                    <MenuList bg={'#202323'} border={'none'}>
                                         {buttons.map(({ name, onclick }, index) => (
                                             <MenuItem
+                                                bg={'#202323'}
+                                                color={'#FFF'}
                                                 key={index}
                                                 onClick={onclick}
                                                 fontFamily={'Chelsea market, system-ui'}>
@@ -449,14 +452,14 @@ const Battlegrounds = ({ infoAccount }) => {
                                         </Portal>
                                     </Menu>
                                 </Stack>
-                                <Stack direction={'row'} w={isMobile ? '90%' : '50%'}>
+                                <Stack direction={'row'} w={isMobile ? '90%' : '50%'} color={'#FFF'}>
                                     <Text my={'auto'} fontSize={'md'} fontWeight={500} mx={3}>
                                         Lands
                                     </Text>
                                     <Menu>
                                         <MenuButton as={Button} w={'fit-content'} minW={'160px'} bg={'transparent'}>
                                             <Stack direction={'row'} justifyContent={'space-between'} w={'100%'}>
-                                                <Stack direction={'row'}>
+                                                <Stack direction={'row'} color={'#FFF'}>
                                                     <Text fontSize={'md'} fontWeight={500}>
                                                         {rarityFilterOptions[filters.rarity]?.name || 'Rarity'}
                                                     </Text>
@@ -473,9 +476,10 @@ const Battlegrounds = ({ infoAccount }) => {
                                                 </Stack>
                                             </Stack>
                                         </MenuButton>
-                                        <MenuList>
+                                        <MenuList bg={'#202323'} border={'none'}>
                                             {rarityFilterOptions.map(({ name, value }) => (
                                                 <MenuItem
+                                                    bg={'#202323'}
                                                     key={value}
                                                     onClick={() => handleRarityChange({ target: { value } })}>
                                                     <Stack direction={'row'}>
@@ -495,7 +499,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                     <Menu>
                                         <MenuButton as={Button} bg={'transparent'} w={'fit-content'} minW={'160px'}>
                                             <Stack direction={'row'} justifyContent={'space-between'} w={'100%'}>
-                                                <Stack direction={'row'}>
+                                                <Stack direction={'row'} color={'#FFF'}>
                                                     <Text fontSize={'md'} fontWeight={500}>
                                                         {mediumFilterOptions[filters.element]?.name || 'Medium'}
                                                     </Text>
@@ -512,9 +516,10 @@ const Battlegrounds = ({ infoAccount }) => {
                                                 </Stack>
                                             </Stack>
                                         </MenuButton>
-                                        <MenuList>
+                                        <MenuList bg={'#202323'}>
                                             {mediumFilterOptions.map(({ name, value }) => (
                                                 <MenuItem
+                                                    bg={'#202323'}
                                                     key={value}
                                                     onClick={() => handleElementChange({ target: { value } })}>
                                                     <Stack direction={'row'}>
