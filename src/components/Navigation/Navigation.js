@@ -9,9 +9,8 @@ import {
     Link,
     useColorModeValue,
     useDisclosure,
-    Image,
     Center,
-    useMediaQuery,
+    Spacer,
 } from '@chakra-ui/react';
 
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
@@ -92,8 +91,7 @@ const FooterCentrado = () => {
             w={'100%'}
             position={'absolute'}
             bottom={0}
-            bgColor={'rgb(98,46,120)'}
-            background={'linear-gradient(225deg, rgba(98,46,120,1) 0%, rgba(10,22,49,1) 100%)'}>
+            background={'linear-gradient(180deg, #0A1631 0%, #579197 100%)'}>
             <Stack direction={'column'} w="100%">
                 <Center>
                     <Stack direction={'column'} align="center">
@@ -114,17 +112,16 @@ const FooterCentrado = () => {
 const Header = () => {
     const linkColor = useColorModeValue('gray.200', 'gray.200');
     const linkHoverColor = useColorModeValue('white', 'white');
-    const [isMobile] = useMediaQuery('(max-width: 980px)');
+    // const [isMobile] = useMediaQuery('(max-width: 980px)');
 
     return (
         <Stack
             direction={'column'}
             w={'100%'}
             bottom={0}
-            bgColor={'rgb(98,46,120)'}
-            background={'linear-gradient(225deg, rgba(98,46,120,1) 0%, rgba(10,22,49,1) 100%)'}>
+            background={'linear-gradient(180deg, #0A1631 0%, #579197 100%)'}>
             <Stack direction={'row'} spacing={12} align="center" my={'auto'} w={'100%'}>
-                <Logo key="logo" width={'10%'} p={3} mr={-5} isLogoGame={true} ml={7} />
+                <Logo key="logo" p={3} isLogoGame={true} ml={7} />
                 {NAV_ITEMS.map((navItem, index) => (
                     <Fragment key={index}>
                         <Box key={navItem.label}>
@@ -144,23 +141,29 @@ const Header = () => {
                         </Box>
                     </Fragment>
                 ))}
-                <Box flexGrow={isMobile ? 0.5 : 0.7} />
-                <Stack py={1} direction={'row'}>
-                    <Box w={'400px'} textAlign={'center'} h={'fit-content'} my={'auto'} ml={isMobile && -20}>
+                <Spacer />
+                {/* <Box flexGrow={isMobile ? 0.5 : 0.7} /> */}
+                {/* <Stack py={1} direction={'row'}>
+                    <Box w={'450px'} textAlign={'center'} h={'fit-content'} my={'auto'} ml={isMobile && -20}>
                         <Text
                             fontFamily="'Aagaz', sans-serif"
-                            fontSize="4xl"
+                            fontSize="2xl"
                             color="#F4931A"
+                            w="100%"
                             letterSpacing="widest"
-                            w={'fit-content'}>
+                            textAlign={'center'}>
                             The Awakening of the Firts Light
                         </Text>
-                        <Text fontFamily="'Alatsi', sans-serif" fontSize="sm" color="#F4931A">
+                        <Text
+                            fontFamily="'Alatsi', sans-serif"
+                            fontSize="sm"
+                            color="#F4931A"
+                            textAlign={'center'}
+                            w="100%">
                             SEASON 8
                         </Text>
                     </Box>
-                    {/* <Image mr={0} src={'/images/logos/new/seasonLogo.svg'} w={isMobile ? '50%' : '20%'} /> */}
-                </Stack>
+                </Stack> */}
             </Stack>
         </Stack>
     );

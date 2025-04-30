@@ -7,19 +7,15 @@
  */
 export const NAV_ITEMS = [
     {
-        label: 'About',
-        href: 'https://mythicalbeings.io/',
-    },
-    {
-        label: 'How to play?',
+        label: 'How to play',
         href: 'https://mythicalbeings.io/how-to-play.html',
     },
     {
-        label: 'Blog',
-        href: 'https://mythicalbeings.io/blog',
+        label: 'Whitepaper',
+        href: 'https://mythical-beings.gitbook.io/whitepaper',
     },
     {
-        label: 'Shop',
-        href: 'https://shop.mythicalbeings.io/',
+        label: 'About',
+        href: 'https://mythicalbeings.io/',
     },
 ];
