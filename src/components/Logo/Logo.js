@@ -7,7 +7,8 @@ import { Image } from '@chakra-ui/react';
  */
 const Logo = ({ isLogoGame = true, ...props }) => {
     // const logoGame = useColorModeValue("images/logos/new/logo_negro.png", "images/logos/new/logo_blanco.png");
-    const logoGame = 'images/logos/new/goldLogo.svg';
+    const logoGame = 'images/logos/new/logo_blanco.png';
+    // const logoGame = 'images/logos/new/goldLogo.svg';
     const logoTarasca = 'images/logos/new/tarasca_blanco.png';
     // const logoTarasca = useColorModeValue("images/logos/new/tarasca_negro.png", "images/logos/new/tarasca_blanco.png");
     const logoImg = isLogoGame ? logoGame : logoTarasca;
