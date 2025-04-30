@@ -33,7 +33,7 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
 
     // -------------------------------------------------------------
     const needTarascaLogo = isHeader ? false : true;
-    const needChangeColor = isHeader ? true : false;
+    const needChangeColor = !isHeader ? false : true;
 
     return (
         <Box mt={needTarascaLogo ? 24 : 0} w={'100%'}>
@@ -86,18 +86,13 @@ export default Navigation;
 
 const FooterCentrado = () => {
     return (
-        <Stack
-            direction={'column'}
-            w={'100%'}
-            position={'absolute'}
-            bottom={0}
-            background={'linear-gradient(180deg, #0A1631 0%, #579197 100%)'}>
+        <Stack direction={'column'} w={'100%'} position={'absolute'} bottom={0} background={'#0A1631'}>
             <Stack direction={'column'} w="100%">
                 <Center>
                     <Stack direction={'column'} align="center">
                         <Logo key="logo" isLogoGame={false} w="4rem" mt={1} />
 
-                        <Text textAlign="center" fontSize="2xs" textColor="#FFF" pb={2} w="100%">
+                        <Text textAlign="center" fontSize="2xs" textColor="white" pb={2} w="100%">
                             © 2022 Tarasca GmbH. All Rights Reserved.
                             <br />
                             Build: {process.env.REACT_APP_GIT_SHA}
@@ -110,16 +105,12 @@ const FooterCentrado = () => {
 };
 
 const Header = () => {
-    const linkColor = useColorModeValue('gray.200', 'gray.200');
+    const linkColor = 'white'; //useColorModeValue('gray.200', 'gray.200');
     const linkHoverColor = useColorModeValue('white', 'white');
     // const [isMobile] = useMediaQuery('(max-width: 980px)');
 
     return (
-        <Stack
-            direction={'column'}
-            w={'100%'}
-            bottom={0}
-            background={'linear-gradient(180deg, #0A1631 0%, #579197 100%)'}>
+        <Stack direction={'column'} w={'100%'} bottom={0} background={'#0A1631'}>
             <Stack direction={'row'} spacing={12} align="center" my={'auto'} w={'100%'}>
                 <Logo key="logo" p={3} isLogoGame={true} ml={7} />
                 {NAV_ITEMS.map((navItem, index) => (

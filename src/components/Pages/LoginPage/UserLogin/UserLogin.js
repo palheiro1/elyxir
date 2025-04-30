@@ -110,7 +110,7 @@ const UserLogin = ({ setInfoAccount }) => {
 
     return (
         <>
-            <Stack spacing={4} pt={4} w="100%">
+            <Stack spacing={4} pt={2} w="100%">
                 <HStack>
                     <Select size="lg" w="100%" onChange={handleSelectUser} variant="filled">
                         {accounts.map(account => (
@@ -122,7 +122,7 @@ const UserLogin = ({ setInfoAccount }) => {
                     {accounts.length > 0 && <IconButton p={6} icon={<ImCross />} onClick={onOpen} />}
                 </HStack>
 
-                <Center gap={12} w="100%">
+                <Center gap={{ base: 2, lg: 12 }} w="100%">
                     <PinInput size="lg" onChange={handleCompletePin} isInvalid={isInvalidPin} variant="filled" mask>
                         <PinInputField />
                         <PinInputField />

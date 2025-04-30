@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Heading, Image, Stack, Center, Button } from '@chakra-ui/react';
+import { Box, Heading, Image, Stack, Center, Button, Text } from '@chakra-ui/react';
 
 import LoginButtons from '../../components/Pages/LoginPage/LoginButtons/LoginButtons';
 import UserLogin from '../../components/Pages/LoginPage/UserLogin/UserLogin';
@@ -21,19 +21,28 @@ const Login = ({ setInfoAccount }) => {
     return (
         <Box px={8}>
             <Center>
-                <Stack direction={{ base: 'column', lg: 'row' }} spacing={12} pt={8} align="center">
-                    <Box w={{ base: '90%', lg: '60%' }}>
+                <Stack direction={{ base: 'column' }} spacing={8} pt={8} align="center" w={'100%'}>
+                    <Image
+                        src="images/logos/s8.png"
+                        h={{ base: '100%', lg: '20%' }}
+                        w={{ base: '100%', md: '40%', lg: '30%', xl: '17%' }}
+                    />
+
+                    <Box w={{ base: '90%', md: '60%', lg: '40%', xl: '30%' }}>
+                        <Heading textAlign={'center'}>
+                            Welcome to <br />
+                            <strong>Mythical Beings</strong>
+                        </Heading>
+                        <Text textAlign={'center'} fontSize={'sm'}>
+                            SEASON 08
+                        </Text>
+
                         <LoginButtons
                             showNewUser={true}
                             showRestore={true}
                             loginType={loginType}
                             setLoginType={setLoginType}
                         />
-
-                        <Heading>
-                            Welcome to <br />
-                            <strong>Mythical Beings</strong>
-                        </Heading>
 
                         {loginType === 'normal' && <UserLogin setInfoAccount={setInfoAccount} />}
                         {loginType === 'sigbro' && <SigBroLogin setInfoAccount={setInfoAccount} />}
@@ -48,8 +57,6 @@ const Login = ({ setInfoAccount }) => {
                             Claim voucher
                         </Button>
                     </Box>
-
-                    <Image src="images/criatures/login.png" w={{ base: '100%', lg: '50%' }} />
                 </Stack>
             </Center>
         </Box>

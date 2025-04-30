@@ -15,7 +15,7 @@ const Buttons = () => {
 
     return (
         <Center>
-            <SimpleGrid columns={{ base: 1, md: 3, xl: 4, '2xl': 5 }} spacing={4} p={4}>
+            <SimpleGrid columns={{ base: 1, sm: 2, md: 3, xl: 3, '2xl': 6 }} spacing={4} p={4}>
                 <FlowItem
                     number={1}
                     title={`Obtain cards by`}
@@ -87,7 +87,25 @@ const Buttons = () => {
 
                 <FlowItem
                     number={5}
-                    title="The Bounty: Your Ultimate Challenge!"
+                    title="The Bounty: Win Rewards!"
+                    color={textBounty}
+                    button={
+                        <MenuButton
+                            bgColor={'#E53055'}
+                            fontWeight={'bold'}
+                            hoverBg={'rgba(229, 48, 85, 0.75)'}
+                            icon={'/images/icons/menu/blanco/bounty.png'}
+                            isActive={false}
+                            text={'Bounty'}
+                            onClick={() => navigate('/home?goToSection=5')}
+                            isDisabled={!IS_BOUNTY_ENABLED}
+                        />
+                    }
+                />
+
+                <FlowItem
+                    number={6}
+                    title="Battlegrounds: Ultimate Challenge!"
                     color={textBounty}
                     button={
                         <MenuButton
