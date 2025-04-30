@@ -131,11 +131,12 @@ export const MapPoint = React.memo(
                         onClose={handleClose}
                         closeOnBlur={true}
                         motionPreset="scale"
+                        placement="right"
                         modifiers={[
                             {
                                 name: 'offset',
                                 options: {
-                                    offset: [0, -15],
+                                    offset: [0, -20],
                                 },
                             },
                         ]}>

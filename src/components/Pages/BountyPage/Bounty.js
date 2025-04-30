@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Text, useMediaQuery } from '@chakra-ui/react';
+import { Box, Button, Spinner, Stack, Text, useMediaQuery } from '@chakra-ui/react';
 import { useState } from 'react';
 import Inventory from './Components/Inventory/Inventory';
 import Tickets from './Components/Tickets/Tickets';
@@ -17,7 +17,7 @@ import { ScrollLock } from '../BattlegroundsPage/assets/ScrollLock';
  * @author Dario Maza Berdugo
  * @version 1.0
  */
-const Bounty = ({ infoAccount, cards = [] }) => {
+const Bounty = ({ infoAccount }) => {
     const [openInventory, setOpenInventory] = useState(false);
     const [option, setOption] = useState(1);
     const [isScrollLocked, setIsScrollLocked] = useState(false);
@@ -28,13 +28,13 @@ const Bounty = ({ infoAccount, cards = [] }) => {
     };
 
     const handleOpenInventory = () => {
-        if (cards && cards.length > 0) {
-            setOpenInventory(true);
-            setIsScrollLocked(true);
-        }
+        setOpenInventory(true);
+        setIsScrollLocked(true);
     };
 
     const { prev_height } = useSelector(state => state.blockchain);
+    const { cards } = useSelector(state => state.cards);
+
     const [bountyTimer, setBountyTimer] = useState({
         days: 0,
         hours: 0,
@@ -114,8 +114,10 @@ const Bounty = ({ infoAccount, cards = [] }) => {
                             letterSpacing={1.5}
                             fontSize={'lg'}
                             fontWeight={500}
+                            minW={'155px'}
+                            isDisabled={!cards || cards.length === 0}
                             onClick={() => handleOpenInventory()}>
-                            PARTICIPATE
+                            {cards && cards.length > 0 ? 'PARTICIPATE' : <Spinner />}
                         </Button>
                     </Stack>
                 </Stack>

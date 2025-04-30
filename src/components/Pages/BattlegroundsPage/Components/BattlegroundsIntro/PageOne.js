@@ -6,7 +6,7 @@ import locations from '../../assets/LocationsEnum';
 import welcome1 from '../../assets/wellcome1.svg';
 import welcome2 from '../../assets/wellcome2.svg';
 
-export const PageOne = ({ handleNext }) => {
+export const PageOne = ({ handleNext, isMobile }) => {
     return (
         <Box
             style={{
@@ -25,31 +25,32 @@ export const PageOne = ({ handleNext }) => {
                 mt={8}
                 direction={'column'}
                 fontWeight={'100'}
-                fontSize={'large'}>
-                <Text mt={8}>Welcome to</Text> <Img src={logo} w={'85%'} ml={5} />
+                fontSize={isMobile ? 'small' : 'large'}>
+                <Text mt={8}>Welcome to</Text> <Img src={logo} w={isMobile ? '50%' : '85%'} mx={'auto'} />
             </Stack>
-            <Box>
+            <Box w={'100%'}>
                 <Heading
                     color={'#FFF'}
                     fontFamily={'Chelsea Market, system-ui'}
                     textTransform={'uppercase'}
-                    size={'md'}
+                    size={isMobile ? 'sm' : 'md'}
                     textAlign={'center'}
                     mt={7}
                     fontWeight={'100'}
                     mx={'auto'}
-                    w={'450px'}>
+                    w={isMobile ? '300px' : '450px'}>
                     Prepare your creatures and conquer the world!
                 </Heading>
-                <Stack>
+                <Stack w={'100%'}>
                     <Text
                         color={'#FFF'}
                         fontFamily={'Inter, sans-serif'}
                         fontWeight={'400'}
-                        fontSize={'md'}
-                        mx={'auto'}
+                        fontSize={isMobile ? 'xs' : 'md'}
+                        mx={!isMobile && 'auto'}
+                        ml={isMobile && '0'}
                         mt={6}
-                        w={'500px'}
+                        w={isMobile ? '400px' : '500px'}
                         textAlign={'justify'}>
                         <strong>Battlegrounds</strong> is the playground for Mythical Beings NFTs. The world is divided
                         into {locations.length} territories, each of which can be conquered and defended by a battalion
@@ -58,6 +59,8 @@ export const PageOne = ({ handleNext }) => {
                     <Button
                         colorScheme="transparent"
                         p={0}
+                        mt={isMobile && -2}
+                        fontSize={isMobile && 'sm'}
                         mx={'auto'}
                         onClick={handleNext}
                         fontFamily={'Chelsea Market, system-ui'}

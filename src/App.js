@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
 import { theme } from './themes/theme';
 
@@ -22,6 +22,7 @@ import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
 import './App.css';
 import Redeem from './pages/Redeem/Redeem';
 import { clearCacheData, getVersion, setVersion } from './utils/storage';
+import Battlegrounds from './components/Pages/BattlegroundsPage/Battlegrounds';
 
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
@@ -39,9 +40,12 @@ function App() {
         }
     }, []);
 
+    const location = useLocation();
+    const showHeaderAndFooter = location.pathname !== '/battlegrounds';
+
     return (
         <ChakraProvider theme={theme}>
-            <Header isLogged={isLogged} />
+            {showHeaderAndFooter && <Header isLogged={isLogged} />}
             <Routes>
                 {/* LOGING PAGE / CREATE WALLET / RESTORE WALLET */}
                 <Route path="/" element={<Navigate replace to="/login" />} />
@@ -56,13 +60,13 @@ function App() {
 
                 {/* HOME PAGE */}
                 <Route path="/home" element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />} />
-
+                <Route path="/battlegrounds" element={<Battlegrounds infoAccount={infoAccount} />} />
                 <Route path="/welcome" element={<Welcome />} />
 
                 {/* 404 - NOT FOUND */}
                 <Route path="*" element={<Navigate replace to="/login" />} />
             </Routes>
-            <Footer isLogged={isLogged} />
+            {showHeaderAndFooter && <Footer isLogged={isLogged} />}
         </ChakraProvider>
     );
 }
