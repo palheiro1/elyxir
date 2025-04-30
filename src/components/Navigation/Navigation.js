@@ -153,13 +153,13 @@ const Header = () => {
                             color="#F4931A"
                             letterSpacing="widest"
                             w={'fit-content'}>
-                            AT THE GATES OF PROPHECY
+                            The Awakening of the Firts Light
                         </Text>
                         <Text fontFamily="'Alatsi', sans-serif" fontSize="sm" color="#F4931A">
-                            SEASON 7
+                            SEASON 8
                         </Text>
                     </Box>
-                    <Image mr={0} src={'/images/logos/new/seasonLogo.svg'} w={isMobile ? '50%' : '20%'} />
+                    {/* <Image mr={0} src={'/images/logos/new/seasonLogo.svg'} w={isMobile ? '50%' : '20%'} /> */}
                 </Stack>
             </Stack>
         </Stack>

@@ -111,7 +111,7 @@ const HCountdown = ({ bountyTimer, numParticipants = 0, bountyBalance = 0, bount
                     <CurrencyBounty currencyName={'wETH'} />
                     <CurrencyBounty currencyName={'GEM'} />
                     <CurrencyBounty currencyName={'Mana'} />
-                    <CurrencyBounty specialCard={'Bahana'} />
+                    <CurrencyBounty specialCard={'Garuda'} />
                 </SimpleGrid>
 
                 <Countdown />
