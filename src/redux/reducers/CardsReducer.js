@@ -26,6 +26,9 @@ const cardsSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
+        setCardsManually: (state, action) => {
+            state.cards = action.payload;
+        },
     },
     extraReducers: builder => {
         builder
@@ -43,5 +46,5 @@ const cardsSlice = createSlice({
     },
 });
 
-export const { resetCardsState } = cardsSlice.actions;
+export const { resetCardsState, setCardsManually } = cardsSlice.actions;
 export default cardsSlice.reducer;

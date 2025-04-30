@@ -94,13 +94,13 @@ const EarningsRow = ({ isMobile, date, arenaName, capturedAsset, rewards, cards 
                             maxH="45px"
                             fontSize={isMobile ? 'xs' : 'md'}>
                             <Text
-                                border="2px solid white"
+                                border="2px solid #C1A34C"
                                 borderRadius="20px"
                                 w="150px"
                                 p={3}
                                 maxH={'45px'}
                                 fontFamily={'Inter, System'}
-                                color={'#7FC0BE'}
+                                color={'#C1A34C'}
                                 fontWeight={700}
                                 h="100%"
                                 fontSize={isMobile ? 'xs' : 'md'}
@@ -206,7 +206,7 @@ const BattlesEarnigs = ({ infoAccount, cards, isMobile }) => {
                 mt={3}
                 p={1}
                 borderRadius={'10px'}
-                border={'2px solid #0056F5'}
+                border={'2px solid #C1A34C'}
                 color={'#FFF'}
                 bgColor={'inherit'}
                 position="sticky"
@@ -307,9 +307,9 @@ const BattlesEarnigs = ({ infoAccount, cards, isMobile }) => {
                 mt={3}
                 p={2}
                 borderRadius={'10px'}
-                border={'2px solid #0056F5'}
+                border={'2px solid #C1A34C'}
                 color={'#FFF'}
-                bgColor={' #0056F5'}
+                bgColor={' #C1A34C'}
                 position="sticky"
                 top="0"
                 zIndex={1}>

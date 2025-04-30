@@ -8,7 +8,6 @@ import {
     MenuItem,
     MenuList,
     Portal,
-    Select,
     Stack,
     Text,
     useColorModeValue,
@@ -19,7 +18,6 @@ import { Maps } from './Components/Maps';
 import React, { useEffect, useState } from 'react';
 import { ScrollLock } from './assets/ScrollLock';
 import { BattlegroundsIntro } from './Components/BattlegroundsIntro/BattlegroundsIntro';
-import logo from './assets/image.png';
 import './BattlegroundMap.css';
 import { AdvertModal } from './Components/Modals/AdvertModal';
 import { BattleWindow } from './Components/BattleWindow/BattleWindow';
@@ -35,8 +33,15 @@ import { fetchBattleData } from '../../../redux/reducers/BattlegroundsReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import Leaderboards from './Components/Leaderboards/Leaderboards';
 import Earnings from './Components/EarnigsPage/Earnings';
+import { isNotLogged } from '../../../utils/validators';
+import { useNavigate } from 'react-router-dom';
+import { getLevelIconInt, getMediumIconInt } from './Utils/BattlegroundsUtils';
+import { MdOutlineArrowDropDown } from 'react-icons/md';
+import ListButton from './Components/ListButton';
+import Rewards from './Components/Rewards';
+import { ChevronUpIcon } from '@chakra-ui/icons';
 
-const Battlegrounds = ({ infoAccount, cards }) => {
+const Battlegrounds = ({ infoAccount }) => {
     const { accountRs } = infoAccount;
 
     const [visible, setVisible] = useState(true);
@@ -62,9 +67,16 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     const { isOpen: isOpenName, onOpen: onOpenName, onClose: onCloseName } = useDisclosure();
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isNotLogged(infoAccount)) navigate('/login');
+    }, [infoAccount, navigate]);
+
     const { battleCount, activePlayers, landLords, omnoGEMsBalance, omnoWethBalance, filteredCards, parseWETH } =
         useSelector(state => state.battlegrounds);
 
+    const { cards } = useSelector(state => state.cards);
     useEffect(() => {
         cards && accountRs && dispatch(fetchBattleData({ accountRs, cards }));
     }, [dispatch, accountRs, cards, updateState]);
@@ -84,7 +96,7 @@ const Battlegrounds = ({ infoAccount, cards }) => {
     /* Buttons menu list */
     const buttons = [
         {
-            name: 'Leaderboards',
+            name: 'Leaderboard',
             onclick: () => {
                 setOpenLeaderboards(true);
                 setIsScrollLocked(true);
@@ -122,6 +134,12 @@ const Battlegrounds = ({ infoAccount, cards }) => {
             name: 'Change name',
             onclick: () => {
                 onOpenName();
+            },
+        },
+        {
+            name: 'Exit to the wallet',
+            onclick: () => {
+                navigate('/home');
             },
         },
     ];
@@ -230,12 +248,18 @@ const Battlegrounds = ({ infoAccount, cards }) => {
         { name: 'Aerial', value: 2 },
         { name: 'Aquatic', value: 3 },
     ];
-    const selectBgColor = useColorModeValue('#FFF', '#000');
-    const selectColor = useColorModeValue('#000', '#FFF');
 
     return (
         <>
-            <Box className="landscape-only">
+            <Box
+                className="landscape-only"
+                bgImage="url('/images/battlegrounds/battlegroundsBackground.png')"
+                bgSize="cover"
+                overflow={'hidden'}
+                overflowY={isMobile ? 'auto' : 'hidden'}
+                bgPosition="center"
+                h={'100vh'}
+                bgRepeat="repeat">
                 <SendGEMsToOmno
                     gemsModalMode={gemsModalMode}
                     infoAccount={infoAccount}
@@ -287,176 +311,270 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                 )}
 
                 {openLeaderboards && <Leaderboards handleClose={handleCloseLeaderboards} isMobile={isMobile} />}
-                <BattlegroundsIntro visible={visible} page={page} handleClose={handleClose} handleNext={handleNext} />
+                <BattlegroundsIntro
+                    visible={visible}
+                    page={page}
+                    handleClose={handleClose}
+                    handleNext={handleNext}
+                    isMobile={isMobile}
+                />
                 <AdvertModal isOpen={isModalOpen} onClose={closeModal} />
                 <ScrollLock isLocked={isScrollLocked} />
-                <Box position={'relative'} ml={6} mt={5}>
-                    <Stack direction={'row'}>
-                        <Stack direction={isMobile ? 'row' : 'column'}>
-                            <Img src={logo} color={'#FFF'} h={'15%'} ml={isMobile && 7} />
-                            <Stack
-                                direction={isMobile ? 'row' : 'column'}
-                                position={isMobile && 'absolute'}
-                                ml={isMobile ? '220px' : '60px'}
-                                mt={isMobile ? '30px' : '15px'}>
-                                <Text
-                                    color={useColorModeValue('black', 'white')}
-                                    fontSize={'sm'}
-                                    ml={-2}
-                                    my={'auto'}
-                                    fontFamily={'Chelsea Market, system-ui'}>
-                                    CURRENCIES
-                                </Text>
-                                <Menu>
-                                    <MenuButton
-                                        zIndex={1}
-                                        my={'auto'}
-                                        color={'black'}
-                                        bgColor={bgColor}
-                                        borderColor={borderColor}
-                                        rounded="lg"
-                                        w="5rem"
-                                        ml={isMobile && 3}
-                                        maxH={'2.2rem'}>
-                                        <Stack direction="row" align="center">
-                                            <Image
-                                                ml={-5}
-                                                src="images/currency/gem.png"
-                                                alt="GEM Icon"
-                                                w="50 px"
-                                                h="50px"
-                                            />
-                                            <Text>{(omnoGEMsBalance / NQTDIVIDER).toFixed(0)}</Text>
-                                        </Stack>
-                                    </MenuButton>
-                                    <Portal>
-                                        <MenuList zIndex={10}>
-                                            <MenuItem onClick={() => handleOpenGemsModal('Send')}>
-                                                Send GEM to Battlegrounds
-                                            </MenuItem>
-                                            <MenuItem onClick={() => handleOpenGemsModal('Withdraw')}>
-                                                Withdraw GEM from Battlegrounds
-                                            </MenuItem>
-                                        </MenuList>
-                                    </Portal>
-                                </Menu>
-                                <Menu>
-                                    <MenuButton
-                                        zIndex={1}
-                                        color={'black'}
-                                        my={isMobile && 'auto'}
-                                        bgColor={bgColor}
-                                        mt={!isMobile && 2}
-                                        borderColor={borderColor}
-                                        rounded="lg"
-                                        w="5rem"
-                                        ml={isMobile && 3}
-                                        maxH={'2.2rem'}>
-                                        <Stack direction="row" align="center">
-                                            <Image
-                                                ml={-5}
-                                                src="images/currency/weth.png"
-                                                alt="wETH Icon"
-                                                w="50px"
-                                                h="50px"
-                                            />
-                                            <Text ml={parseWETH !== 0 ? -3 : 2}>
-                                                {parseWETH &&
-                                                    (parseWETH / NQTDIVIDER).toFixed(
-                                                        Math.max(0, wEthDecimals <= 6 ? wEthDecimals : 6)
-                                                    )}
-                                            </Text>
-                                        </Stack>
-                                    </MenuButton>
-
-                                    <Portal>
-                                        <MenuList zIndex={10}>
-                                            <MenuItem onClick={() => handleOpenWethModal('Send')}>
-                                                Send WETH to Battlegrounds
-                                            </MenuItem>
-                                            <MenuItem onClick={() => handleOpenWethModal('Withdraw')}>
-                                                Withdraw WETH from Battlegrounds
-                                            </MenuItem>
-                                        </MenuList>
-                                    </Portal>
-                                </Menu>
-                            </Stack>
-
-                            <Stack
-                                direction={isMobile ? 'row' : 'column'}
-                                flexWrap={'wrap'}
-                                mt={isMobile ? '-120px' : 8}
-                                padding={'30px'}
-                                pos={'absolute'}
-                                top={'12rem'}
-                                ml={isMobile ? -2 : -1}>
-                                {buttons.map(({ name, disabled, onclick }, index) => (
-                                    <Box
-                                        className="btn-menu"
-                                        m={1}
-                                        key={index}
-                                        onClick={onclick}
-                                        opacity={disabled ? '30%' : null}
-                                        cursor={disabled ? 'default' : 'pointer'}
-                                        title={disabled ? 'Coming soon...' : null}>
-                                        {name}
-                                    </Box>
-                                ))}
-                            </Stack>
-                        </Stack>
-                        <Stack mt={isMobile && '130px'} w={isMobile ? '200%' : '100%'} ml={isMobile && -24}>
-                            <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} justifyContent={'flex-end'}>
-                                <Text my={'auto'} fontSize={'lg'} mx={3}>
-                                    Lands' filters:{' '}
-                                </Text>
-                                <Select w={'15%'} onChange={handleRarityChange}>
-                                    {rarityFilterOptions.map(({ name, value }, index) => {
-                                        return (
-                                            <option
-                                                key={index}
-                                                value={value}
-                                                style={{ backgroundColor: selectBgColor, color: selectColor }}>
-                                                {name}
-                                            </option>
-                                        );
-                                    })}
-                                </Select>
-                                <Select w={'15%'} onChange={handleElementChange}>
-                                    {mediumFilterOptions.map(({ name, value }, index) => {
-                                        return (
-                                            <option
-                                                key={index}
-                                                value={value}
-                                                style={{ backgroundColor: selectBgColor, color: selectColor }}>
-                                                {name}
-                                            </option>
-                                        );
-                                    })}
-                                </Select>
-                            </Stack>
-                            <Maps
-                                handleSelectArena={handleSelectArena}
-                                infoAccount={infoAccount}
-                                cards={cards}
-                                handleStartBattle={handleStartBattle}
-                                filters={filters}
-                                w={'100%'}
+                <Box position={'relative'} ml={6} mt={isMobile ? 0 : 5} h={'100%'}>
+                    <Stack direction={'row'} h={'100%'}>
+                        <Stack direction={'column'} w={'20%'}>
+                            <Img
+                                src={'/images/battlegrounds/battlegroundsLogo.svg'}
+                                color={'#FFF'}
+                                h={'15%'}
+                                mx={'auto'}
+                                mt={isMobile && 2}
                             />
-                            <Stack direction={'row'} mt={isMobile ? '-90px' : 3} mx={'auto'}>
+                            <Rewards mx={'auto'} />
+                            {!isMobile ? (
+                                <Stack direction={'column'} flexWrap={'wrap'} padding={'30px'} mx={'auto'}>
+                                    {buttons.map(({ name, disabled, onclick }, index) => (
+                                        <ListButton
+                                            disabled={disabled}
+                                            onclick={onclick}
+                                            isExit={index === buttons.length - 1}
+                                            key={index}>
+                                            {name}
+                                        </ListButton>
+                                    ))}
+                                </Stack>
+                            ) : (
+                                <Menu placement="top">
+                                    <MenuButton
+                                        as={Button}
+                                        bgColor={'transparent'}
+                                        rightIcon={<ChevronUpIcon />}
+                                        fontFamily={'Chelsea market, system-ui'}>
+                                        Menu
+                                    </MenuButton>
+                                    <MenuList>
+                                        {buttons.map(({ name, onclick }, index) => (
+                                            <MenuItem
+                                                key={index}
+                                                onClick={onclick}
+                                                fontFamily={'Chelsea market, system-ui'}>
+                                                {name}
+                                            </MenuItem>
+                                        ))}
+                                    </MenuList>
+                                </Menu>
+                            )}
+                        </Stack>
+                        <Stack mx={'auto'} w={'80%'}>
+                            <Stack
+                                direction="row"
+                                fontFamily={'Chelsea Market, system-ui'}
+                                mx={'auto'}
+                                mt={isMobile && 2}
+                                w={isMobile ? '90%' : '70%'}
+                                justifyContent={'space-between'}>
+                                <Stack direction={'row'} w={'30%'} mx={'auto'} justifyContent={'space-between'} px={10}>
+                                    <Menu>
+                                        <MenuButton
+                                            zIndex={1}
+                                            color={'black'}
+                                            my={'auto'}
+                                            bgColor={bgColor}
+                                            borderColor={borderColor}
+                                            rounded="full"
+                                            w="6rem"
+                                            minW={'68px'}
+                                            ml={isMobile && 3}
+                                            maxH={'1.5rem'}>
+                                            <Stack direction="row" align="center">
+                                                <Image
+                                                    ml={-3}
+                                                    src="images/battlegrounds/currencies/ETHBattle.svg"
+                                                    alt="wETH Icon"
+                                                    w="40px"
+                                                    h="40px"
+                                                />
+                                                <Text ml={parseWETH !== 0 ? -3 : 2}>
+                                                    {parseWETH &&
+                                                        (parseWETH / NQTDIVIDER).toFixed(
+                                                            Math.max(0, wEthDecimals <= 6 ? wEthDecimals : 6)
+                                                        )}
+                                                </Text>
+                                            </Stack>
+                                        </MenuButton>
+
+                                        <Portal>
+                                            <MenuList zIndex={10}>
+                                                <MenuItem onClick={() => handleOpenWethModal('Send')}>
+                                                    Send WETH to Battlegrounds
+                                                </MenuItem>
+                                                <MenuItem onClick={() => handleOpenWethModal('Withdraw')}>
+                                                    Withdraw WETH from Battlegrounds
+                                                </MenuItem>
+                                            </MenuList>
+                                        </Portal>
+                                    </Menu>
+                                    <Menu>
+                                        <MenuButton
+                                            zIndex={1}
+                                            my={'auto'}
+                                            color={'black'}
+                                            bgColor={bgColor}
+                                            borderColor={borderColor}
+                                            rounded="full"
+                                            minW={'68px'}
+                                            w="6rem"
+                                            ml={isMobile && 3}
+                                            maxH={'1.5rem'}>
+                                            <Stack direction="row" align="center">
+                                                <Image
+                                                    ml={-3}
+                                                    src="images/battlegrounds/currencies/GEMBattle.svg"
+                                                    alt="GEM Icon"
+                                                    w="40px"
+                                                    h="40px"
+                                                />
+                                                <Text>{(omnoGEMsBalance / NQTDIVIDER).toFixed(0)}</Text>
+                                            </Stack>
+                                        </MenuButton>
+                                        <Portal>
+                                            <MenuList zIndex={10}>
+                                                <MenuItem onClick={() => handleOpenGemsModal('Send')}>
+                                                    Send GEM to Battlegrounds
+                                                </MenuItem>
+                                                <MenuItem onClick={() => handleOpenGemsModal('Withdraw')}>
+                                                    Withdraw GEM from Battlegrounds
+                                                </MenuItem>
+                                            </MenuList>
+                                        </Portal>
+                                    </Menu>
+                                </Stack>
+                                <Stack direction={'row'} w={isMobile ? '90%' : '50%'}>
+                                    <Text my={'auto'} fontSize={'md'} fontWeight={500} mx={3}>
+                                        Lands
+                                    </Text>
+                                    <Menu>
+                                        <MenuButton as={Button} w={'fit-content'} minW={'160px'} bg={'transparent'}>
+                                            <Stack direction={'row'} justifyContent={'space-between'} w={'100%'}>
+                                                <Stack direction={'row'}>
+                                                    <Text fontSize={'md'} fontWeight={500}>
+                                                        {rarityFilterOptions[filters.rarity]?.name || 'Rarity'}
+                                                    </Text>
+                                                    <MdOutlineArrowDropDown size={20} />
+                                                    {filters.rarity !== -1 && (
+                                                        <Image
+                                                            boxSize="20px"
+                                                            src={getLevelIconInt(
+                                                                rarityFilterOptions[filters.rarity]?.value
+                                                            )}
+                                                            border={'none'}
+                                                        />
+                                                    )}
+                                                </Stack>
+                                            </Stack>
+                                        </MenuButton>
+                                        <MenuList>
+                                            {rarityFilterOptions.map(({ name, value }) => (
+                                                <MenuItem
+                                                    key={value}
+                                                    onClick={() => handleRarityChange({ target: { value } })}>
+                                                    <Stack direction={'row'}>
+                                                        {value !== -1 && (
+                                                            <Image
+                                                                boxSize="20px"
+                                                                src={getLevelIconInt(value)}
+                                                                border={'none'}
+                                                            />
+                                                        )}
+                                                        <Text mx={value === -1 && 'auto'}>{name}</Text>
+                                                    </Stack>
+                                                </MenuItem>
+                                            ))}
+                                        </MenuList>
+                                    </Menu>
+                                    <Menu>
+                                        <MenuButton as={Button} bg={'transparent'} w={'fit-content'} minW={'160px'}>
+                                            <Stack direction={'row'} justifyContent={'space-between'} w={'100%'}>
+                                                <Stack direction={'row'}>
+                                                    <Text fontSize={'md'} fontWeight={500}>
+                                                        {mediumFilterOptions[filters.element]?.name || 'Medium'}
+                                                    </Text>
+                                                    <MdOutlineArrowDropDown size={20} />
+                                                    {filters.element !== -1 && (
+                                                        <Image
+                                                            boxSize="20px"
+                                                            src={getMediumIconInt(
+                                                                mediumFilterOptions[filters.element]?.value
+                                                            )}
+                                                            border={'none'}
+                                                        />
+                                                    )}
+                                                </Stack>
+                                            </Stack>
+                                        </MenuButton>
+                                        <MenuList>
+                                            {mediumFilterOptions.map(({ name, value }) => (
+                                                <MenuItem
+                                                    key={value}
+                                                    onClick={() => handleElementChange({ target: { value } })}>
+                                                    <Stack direction={'row'}>
+                                                        {value !== -1 && (
+                                                            <Image
+                                                                boxSize="20px"
+                                                                src={getMediumIconInt(value)}
+                                                                border={'none'}
+                                                            />
+                                                        )}
+                                                        <Text mx={value === -1 && 'auto'}>{name}</Text>
+                                                    </Stack>
+                                                </MenuItem>
+                                            ))}
+                                        </MenuList>
+                                    </Menu>
+                                </Stack>
+                            </Stack>
+                            <Box
+                                className="containerMap"
+                                zIndex={0}
+                                mx="auto"
+                                w="100%"
+                                h={'80%'}
+                                display="flex"
+                                justifyContent="center"
+                                alignItems="center"
+                                overflow="hidden">
+                                <Maps
+                                    handleSelectArena={handleSelectArena}
+                                    infoAccount={infoAccount}
+                                    cards={cards}
+                                    handleStartBattle={handleStartBattle}
+                                    filters={filters}
+                                    w={'100%'}
+                                    isMobile={isMobile}
+                                />
+                            </Box>
+                            <Stack
+                                direction={'row'}
+                                mx={'auto'}
+                                maxH={'55px'}
+                                w={'85%'}
+                                justifyContent={'space-between'}>
                                 <Stack
-                                    direction={'row'}
-                                    backgroundColor={'#484848'}
-                                    border={'2px solid #D597B2'}
-                                    borderRadius={'30px'}
-                                    w={'fit-content'}
-                                    fontFamily={'Chelsea Market, system-ui'}>
+                                    direction="row"
+                                    backgroundImage="linear-gradient(180deg, rgba(86, 104, 159, 1) 0%, rgba(72, 71, 110, 1) 100%)"
+                                    border="2px solid #D597B2"
+                                    borderRadius="30px"
+                                    justifyContent="space-between"
+                                    w="65%"
+                                    fontFamily="'Chelsea Market', system-ui">
                                     {statistics.map(({ name, value }, index) => (
                                         <Text
                                             key={index}
-                                            fontSize={isMobile && 'xs'}
+                                            fontSize={isMobile ? 'xs' : 'lg'}
                                             color={'#FFF'}
                                             my={'auto'}
                                             p={isMobile ? 2 : 3}
+                                            px={5}
                                             textAlign={'center'}
                                             cursor={'default'}>
                                             {name}:<span style={{ color: '#D08FB0' }}> {value}</span>
@@ -464,9 +582,8 @@ const Battlegrounds = ({ infoAccount, cards }) => {
                                     ))}
                                 </Stack>
                                 <Box
-                                    mx="auto"
                                     borderRadius="30px"
-                                    p="3px"
+                                    p="1"
                                     background="linear-gradient(49deg, rgba(235,178,185,1) 0%, rgba(32,36,36,1) 100%)"
                                     display="inline-block">
                                     <Button

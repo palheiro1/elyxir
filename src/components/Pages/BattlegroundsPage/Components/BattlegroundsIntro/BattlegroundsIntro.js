@@ -4,7 +4,7 @@ import { PageOne } from './PageOne';
 import { Overlay } from './Overlay';
 import { PageTwo } from './PageTwo';
 
-export const BattlegroundsIntro = ({ visible, page, handleClose, handleNext }) => {
+export const BattlegroundsIntro = ({ visible, page, handleClose, handleNext, isMobile }) => {
     return (
         <>
             <Overlay handleClose={handleClose} isVisible={visible} />
@@ -13,7 +13,7 @@ export const BattlegroundsIntro = ({ visible, page, handleClose, handleNext }) =
                 backgroundColor={'#1F2323'}
                 borderRadius={'30px'}
                 w={'60%'}
-                h={'60%'}
+                h={isMobile ? '80%' : '60%'}
                 pos={'fixed'}
                 top={'50%'}
                 left={'50%'}
@@ -30,8 +30,8 @@ export const BattlegroundsIntro = ({ visible, page, handleClose, handleNext }) =
                     right={2}
                 />
 
-                {page === 1 && <PageOne handleNext={handleNext} />}
-                {page === 2 && <PageTwo handleClose={handleClose} />}
+                {page === 1 && <PageOne handleNext={handleNext} isMobile={isMobile} />}
+                {page === 2 && <PageTwo handleClose={handleClose} isMobile={isMobile} />}
             </Box>
         </>
     );

@@ -1,5 +1,6 @@
 import { Box, Button, Image, Spinner, Stack, Text, VStack } from '@chakra-ui/react';
 import { IS_BOUNTY_ENABLED } from '../../../data/CONSTANTS';
+import { useNavigate } from 'react-router-dom';
 
 const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, cardsLoaded }) => {
     // ---------------------------------------------
@@ -15,12 +16,13 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
     // ---------------------------------------------
     // ------------------ BUTTONS ------------------
     // ---------------------------------------------
+    const navigate = useNavigate();
     const buttons = [
         {
             icon: !isActive(12)
                 ? '/images/icons/menu/blanco/battlegrounds.svg'
                 : '/images/icons/menu/color/battlegrounds.svg',
-            onClick: () => setOption(12),
+            onClick: () => navigate('/battlegrounds'),
             hoverBg: 'rgba(220, 48, 235, 0.75)',
             bgColor: isActive(12) ? 'white' : '#DC30EB',
             textColor: isActive(12) ? '#DC30EB' : 'white',

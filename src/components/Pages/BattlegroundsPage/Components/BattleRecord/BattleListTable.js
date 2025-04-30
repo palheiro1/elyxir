@@ -10,32 +10,40 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
     const [battleRewards, setBattleRewards] = useState({});
 
     const getBattleReward = useCallback(async (arenaInfo, battle) => {
-        let rewardFraction = battle.isWinnerLowerPower ? 0.9 : 0.8;
-        if (!isEmptyObject(arenaInfo.battleCost)) {
-            const assets = Object.entries(arenaInfo.battleCost.asset);
-            const results = await Promise.all(
-                assets.map(async ([asset, price]) => {
-                    const assetDetails = await getAsset(asset);
-                    return { name: assetDetails, price: price * rewardFraction };
-                })
-            );
-            return results;
+        try {
+            let rewardFraction = battle.isWinnerLowerPower ? 0.9 : 0.8;
+            if (!isEmptyObject(arenaInfo.battleCost)) {
+                const assets = Object.entries(arenaInfo.battleCost.asset);
+                const results = await Promise.all(
+                    assets.map(async ([asset, price]) => {
+                        const assetDetails = await getAsset(asset);
+                        return { name: assetDetails, price: price * rewardFraction };
+                    })
+                );
+                return results;
+            }
+        } catch (error) {
+            console.error('🚀 ~ getBattleReward ~ error:', error);
         }
     }, []);
 
     useEffect(() => {
         const fetchBattleRewards = async () => {
-            const rewards = {};
-            await Promise.all(
-                battleDetails.map(async item => {
-                    const arena = arenasInfo.find(arena => arena.id === item.arenaId);
-                    if (arena) {
-                        const reward = await getBattleReward(arena, item);
-                        rewards[item.battleId] = reward;
-                    }
-                })
-            );
-            setBattleRewards(rewards);
+            try {
+                const rewards = {};
+                await Promise.all(
+                    battleDetails.map(async item => {
+                        const arena = arenasInfo.find(arena => arena.id === item.arenaId);
+                        if (arena) {
+                            const reward = await getBattleReward(arena, item);
+                            rewards[item.battleId] = reward;
+                        }
+                    })
+                );
+                setBattleRewards(rewards);
+            } catch (error) {
+                console.error('🚀 ~ fetchBattleRewards ~ error:', error);
+            }
         };
 
         fetchBattleRewards();

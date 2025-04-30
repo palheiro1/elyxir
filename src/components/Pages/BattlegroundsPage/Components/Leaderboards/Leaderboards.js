@@ -97,12 +97,21 @@ const Leaderboards = ({ handleClose, isMobile }) => {
             description:
                 "The players' scores are calculated as the weighted sum of four elements. Each element is normalized using the formula (player score / highest score recorded), ensuring that the weighted value of every metric falls within the range of 0 to 1. Finally, the normalized values are summed to produce the total score, which will always range between 0 and 4.",
         },
-        { name: 'TERRESTRIAL PANTHEON', value: 2, description: 'Lorem ajhagh lands' },
-        { name: 'AERIAL PANTHEON', value: 3, description: 'Lorem ajhagh sky' },
-        { name: 'AQUATIC PANTHEON', value: 4, description: 'Lorem ajhagh oceans' },
-        { name: 'CHAMPION OF FIERCENESS', value: 5, description: 'Lorem ajhagh combativeness loagaj asaq a0an asa' },
+        { name: 'TERRESTRIAL PANTHEON', value: 2 },
+        { name: 'AERIAL PANTHEON', value: 3 },
+        { name: 'AQUATIC PANTHEON', value: 4 },
+        {
+            name: 'CHAMPION OF FIERCENESS',
+            value: 5,
+            description:
+                '1 point per battle initiated on common territory. 2 points per battle initiated on rare territory. 3 points per battle initiated on epic territory. 4 points per battle initiated on special territory.',
+        },
     ];
 
+    console.log(
+        '🚀 ~ Leaderboards ~ availableLeaderboards.find(item => item.value === option).description:',
+        availableLeaderboards.find(item => item.value === option).description ? 'none' : 'block'
+    );
     return (
         <>
             <Overlay isVisible={true} handleClose={closeLeaderboards} />
@@ -154,6 +163,9 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                         right={10}
                         zIndex={999}
                         boxSize={'40px'}
+                        display={
+                            availableLeaderboards.find(item => item.value === option).description ? 'block' : 'none'
+                        }
                     />
                 </Tooltip>
                 {option === 1 && (
@@ -222,13 +234,14 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                         <Select
                             value={option}
                             onChange={e => changeData(Number(e.target.value))}
-                            color={'#000'}
-                            bgColor={'#FFF'}
+                            color={color()}
+                            bgColor={'transparent'}
                             my={'auto'}
                             zIndex={999}
+                            border={'none'}
                             fontFamily={'Chelsea Market, System'}
                             _hover={{ borderColor: '#555' }}
-                            maxW={'260px'}>
+                            maxW={'270px'}>
                             {availableLeaderboards.map(({ name, value }, index) => {
                                 return (
                                     <option
@@ -236,6 +249,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                         value={value}
                                         style={{
                                             backgroundColor: '#FFF',
+                                            color: '#000',
                                         }}>
                                         {name}
                                     </option>
@@ -254,10 +268,10 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                             {option === 5 ? (
                                 <Leaderboard isMobile={isMobile} color={color} />
                             ) : (
-                                <GeneralLeaderboard isMobile={isMobile} color={color}  />
+                                <GeneralLeaderboard isMobile={isMobile} color={color} />
                             )}
                         </Stack>
-                        <Stack dir="row" mx={'auto'} mt={3}>
+                        <Stack dir="row" mx={'auto'}>
                             {option === 5 ? <CombativityResetTimer mb={4} /> : <LeaderboardsRewards option={option} />}
                         </Stack>
                     </Stack>
