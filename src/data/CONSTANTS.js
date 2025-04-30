@@ -41,6 +41,7 @@ export const REFERRALASSET = '15893499867718551186'; // mainnet
 export const SASQUATCHASSET = '13270129604409279596';
 export const MARUXAINAASSETWRONG = '7783220465634719235';
 export const CATOBLEPASASSETWRONG = '16992402711643280652';
+export const SEASONSPECIALCARDASSET = '15052794016100653835'; //SUMANGA
 
 // ---------------------------------------------
 // ------------------ ADDRESS ------------------
@@ -69,8 +70,8 @@ export const NQTDIVIDER = 100000000;
 
 // ---------------------------------------------
 
-export const ACTUAL_SEASON = 7;
-export const IS_BOUNTY_ENABLED = false;
+export const ACTUAL_SEASON = 8;
+export const IS_BOUNTY_ENABLED = true;
 
 // ---------------------------------------------
 // ---------- NEW ECONOMICS WITH OMNO ----------
@@ -97,6 +98,7 @@ export const VIEW_ONLY_REASON = 'This function is disabled until start of Season
 export const WHITELIST = [];
 export const SEASON1TIMESTAMP = 105800000;
 export const CURRENTSEASON = 'season01';
+export const STARTED_BURNING = 189650826; // For burning transactions
 
 // ---------------------------------------------
 // ------------------- BOUNTY -----------------
@@ -279,7 +281,7 @@ export const ASSETS_IDS = [
     GEMASSET,
     WETHASSET,
     GIFTZASSET,
-    MANAASSET
+    MANAASSET,
 ];
 
 export const CURRENCY_ASSETS = {

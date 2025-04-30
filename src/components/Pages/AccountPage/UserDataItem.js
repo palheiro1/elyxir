@@ -46,15 +46,15 @@ const UserDataItem = ({
         try {
             setIsDisabled(true);
             const response = await getRewardsFaucet(accountRs, publicKey);
-            if (!response.data.error) {
-                okToast(response.data.message, toast);
+            if (!response.error) {
+                okToast(response.message, toast);
                 setIsClaimable(false);
             } else {
-                errorToast(response.data.message, toast);
+                errorToast(response.message, toast);
             }
         } catch (error) {
             console.error('🚀 ~ file: UserDataItem.js:32 ~ handleClaim ~ error:', error);
-            errorToast(error.response.data.message || 'ERROR', toast);
+            errorToast(error.response.message || 'ERROR', toast);
         }
     };
 
