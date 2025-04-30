@@ -1451,5 +1451,137 @@
         ],
         "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d63323.92091438508!2d-110.57021625013174!3d35.865915371611266!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2ses!4v1719935743626!5m2!1sen!2ses' width='600px' height='400px' frameborder='0' style='border:0' allowfullscreen/>",
         "assetname": "mythical62"
+    },
+    {
+        "name": "Hah-nu-nah",
+        "country": "Haudenosaunee",
+        "continent": "America",
+        "picture": "hahnunah.jpg",
+        "rarity": "Epic",
+        "creature": [
+            "Hah-nu-nah is a giant tortoise whose shell forms the entire orography of the earth. Its legs are thick and strong, capable of carrying the weight of the world. The Haudenosaunee believe that her body is so vast that mountains and rivers rest upon her, and that her slow but inexorable movements are responsible for the profound changes in the cosmos.",
+            "Hah-nu-nah is not only a physical being, but also a spiritual one that carries the world on its back. Her origin goes back to the beginning of creation, when the Sky Woman descended to the earth before it had a surface. The animals then dived into the ocean to get some land, which, when deposited on the turtle's shell, expanded to create the world we know. The story goes that his endurance and patience allowed life to flourish on his back, becoming a symbol of perseverance.",
+            "For the Iroquois culture, the turtle represents the earth itself and the interconnectedness of all living beings. It is a symbol of stability, support and origin, reminding the Iroquois of the importance of caring for the world in which they live. The image of the turtle holding the world on its back reflects a belief in the interdependence of nature and humanity, and the need for balance to maintain universal harmony."
+        ],
+        "landscape": "haudenosaunee.jpg",
+        "culture": [
+            "The ancestors of the Haudenosaunee, known as the Iroquois, settled in North America about 4,000 years ago, occupying what is now the northeastern United States and southeastern Canada. In a region of intense alliances and rivalries, the Iroquois formed the Haudenosaunee Confederacy, or People of the Long House, in the 15th and 16th centuries. This alliance, initially made up of five nations (Mohawk, Oneida, Onondaga, Cayuga, and Seneca), aimed to promote peace among these tribes.",
+            "The Iroquois were a sedentary people with an economy based on agriculture, hunting and gathering. Women were fundamental, taking care of the cultivation of corn, beans, and squash, and leading the matrilineal family clans. Decisions were made by consensus of the Council of Five Nations, emphasizing cooperation among the members of the confederacy.",
+            "The Iroquois religion combined belief in a creator ‘Great Spirit’ with the worship of nature spirits, reflecting a worldview based on harmony and balance. ",
+            "With the arrival of Europeans, the Iroquois participated in alliances and conflicts that weakened the Confederacy over time. Today, the Iroquois Confederacy still exists, and the Six Nations maintain their cultural and political traditions. Despite challenges such as loss of land and the effects of colonization, the Iroquois are active advocates for indigenous rights and environmental protection in North America.",
+            "Current population: 125.000"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d77612.73805110446!2d-88.266814465986!3d44.47831728386241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8802fea6aa27c74f%3A0xd8699706b4c8ef9c!2sOneida%20Nation%20Museum!5e1!3m2!1sen!2ses!4v1745836385790!5m2!1sen!2ses' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>",
+        "assetname": "mythical63"
+    },
+    {
+        "name": "Simurgh",
+        "country": "Georgia",
+        "continent": "Asia",
+        "picture": "simurgh.jpg",
+        "rarity": "Common",
+        "creature": [
+            "The Simurgh is a gigantic bird with golden and silver feathers that shine like the sun. Its wings are enormous, allowing it to cover vast distances in flight, and its body resembles that of a lion, with powerful claws. Its tail is similar to that of a peacock, endowed with vibrant colors, giving it an imposing and fascinating appearance.",
+            "The Simurgh possesses extraordinary powers; its feathers have healing properties and can heal illnesses or even resurrect the dead. It is a wise creature and its age is counted in thousands of years, so it has seen the destruction and rebirth of the world on several occasions. He lives at the top of the mythical Tree of Life, where he protects all the seeds of the world. Although benevolent, he acts with a deep purpose and only assists those who call upon him if it contributes to the fulfillment of a transcendent destiny.",
+            "The Simurgh symbolizes rebirth, wisdom and protection. It is an emblem of harmony between earth and sky, and appears in epic stories to guide heroes at critical moments. It is invoked in times of despair, seeking its intervention to overcome adversity or to find a greater purpose."
+        ],
+        "landscape": "georgia.jpg",
+        "culture": [
+            "The ancestors of Georgians settled in the region thousands of years ago, with ancient civilizations such as the Colchian and Iberian, which flourished between 2,500 and 3,000 years ago. Due to its strategic location between Europe and Asia, the Caucasus region has been a crossroads for different cultures. Throughout history, Georgians have established relationships with powers such as the Persian Empire, Byzantium and later the Russian Empire, which has contributed to the rich cultural diversity of the people.",
+            "Georgia has traditionally been a sedentary and rural society, with a strong emphasis on village self-sufficiency and the central role of the family in local communities. The monarchy had great influence, but the Christian religion and cultural customs played a key role in the country's political and social structure.",
+            "Religiously, Georgia is known for its early adoption of Christianity in the 4th century, becoming one of the first countries to formalize the faith. The Georgian Church has maintained a dominant presence in the spiritual life of the people, but influences from other cultures, such as the Persian heritage, have also been important. A clear example of this influence can be seen in Georgian iconography, which incorporates Persian mythological figures such as the Simurgh.",
+            "Georgia is an independent nation and its culture remains vibrant, with a strong preservation of its traditions, including music, dances, gastronomy and wine making.",
+            "Current population: 4.000.000"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1786.0623669524846!2d44.40703540939809!3d42.00606561261117!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40448e6098cc5943%3A0xd26d4b6b794129f5!2sSamtavisi%20Cathedral!5e1!3m2!1sen!2ses!4v1745836238809!5m2!1sen!2ses' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>",
+        "assetname": "mythical64"
+    },
+    {
+        "name": "Yhi",
+        "country": "Gamilaraay",
+        "continent": "Oceania",
+        "picture": "yhi.jpg",
+        "rarity": "Common",
+        "creature": [
+            "Yhi is described as a radiant and luminous female figure who embodies the sun and life. Her presence is manifested as a warm light that illuminates the world and gives life to everything she touches. She is depicted with shining golden skin and hair that resembles rays of sunlight, emphasizing her connection to life energy and creation. As she walks the earth, her radiance not only provides light, but causes plants to blossom and life to spring forth with each step.",
+            "Yhi is the creator of all living things. After the creation of the world, she was awakened by a whistling sound, and when she opened her eyes, light flooded the world. As she walked the earth, plants and flowers sprang up beneath her feet. Searching for something that could dance, she encountered evil spirits beneath the earth who tried to stop her, but her warmth turned them into insects. She continued her journey until she awakened various creatures from the ice caves with her light, creating the animals. Yhi also gave each creature its characteristics and blessed the world with the changing seasons.",
+            "In the Gamilaraay culture, Yhi represents the life force and the eternal cycle of life, death, and rebirth. It is a symbol of hope and renewal, and its history reflects the deep connection between nature and spirituality. The worship of Yhi emphasizes the importance of light and warmth as sources of life, and its presence in mythology underscores the fundamental role of the sun in creating and sustaining the world."
+        ],
+        "landscape": "gamilaraay.jpg",
+        "culture": [
+            "The Gamilaraay are an Aboriginal people who for thousands of years have lived in the regions of northern New South Wales and southern Queensland, on the plains and along the rivers of eastern Australia. They were one of the four largest indigenous peoples of Australia.",
+            "Traditionally the Gamilaraay were a nomadic people whose economy was based on hunting, fishing and gathering. Women played a key role in gathering food such as roots and fruits, while men hunted and fished. They lived in family groups organized into clans, with a social structure based on the division of functions by sex and age, but without private property or a political elite.",
+            "The Gamilaraay religion is deeply spiritual, with an emphasis on belief in spiritual beings, ancestors, and mythological figures who control the forces of nature. Like other indigenous cultures, Gamilaraay cosmology reflects an interdependence between humans and the natural world, with ceremonial practices that honor this relationship.",
+            "Today, the Gamilaraay continue to struggle to preserve their language, culture, and territory. Although contact with European colonizers brought great challenges, including the loss of land and the imposition of new forms of government, the Gamilaraay keep their cultural identity alive through community efforts such as revitalizing their language and strengthening their presence in politics and the Australian indigenous movement.",
+            "Current population: 13.000"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d258676.0542236169!2d138.03257174619222!3d-30.06981787814661!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8045e6bb8fb37d6b%3A0xc8e4c11edc3af21a!2sGamilaraay%20Gulay!5e1!3m2!1sen!2ses!4v1745836207686!5m2!1sen!2ses' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>",
+        "assetname": "mythical65"
+    },
+    {
+        "name": "Rollibock",
+        "country": "Switzerland",
+        "continent": "Europa",
+        "picture": "rollibock.jpg",
+        "rarity": "Rare",
+        "creature": [
+            "The Rollibock is an imposing and terrifying creature that inhabits the depths of the Aletsch Glacier in Switzerland. This creature appears as a majestic billy goat with large and twisted horns. Its eyes glow intensely, but its entire body is covered in blocks of ice that, when moved, produce a resounding sound that announces its arrival.",
+            "More than just a monster, the Rollibock is a guardian of the mountains, appearing only when someone challenges its rule or destroys the nature it protects. His wrath, which can unleash storms and avalanches, is especially directed at those who, in their greed, hunt more animals than they need or destroy the Aletsch landscape. It is said that a greedy hunter, after desecrating the glacier, faced the Rollibock and was condemned to eternal damnation in the cold waters of the Märjelensee, which borders the Aletsch Glacier. This story underlines the role of the Rollibock as protector and punisher of those who damage its territory.",
+            "In the culture of Naters and the surrounding area, the Rollibock represents the forces of nature and the respect due to them. It is not just a monster to be feared, but a reminder of the balance between man and his environment. When the glacier roars and the ice creaks, the villagers still whisper the name of the Rollibock, a symbol of indomitable nature and boundaries that must not be crossed."
+        ],
+        "landscape": "switzerland.jpg",
+        "culture": [
+            "The formation of the Helvetic Confederation can be traced to the resistance of local communities to attempts at external domination in a fragmented medieval Europe.  National identity began to be forged with the Battle of Morgarten in 1315, when three cantons united to resist Habsburg rule. This event marked the beginning of the formation of the Helvetic Confederation, a mutual defense pact that was joined by other cantons over time, creating a decentralized power structure.",
+            "Switzerland has always been a rural and mountainous society, characterized by the self-sufficiency and independence of the cantons. The political system of federalism has been central to the country's stability, allowing the cantons to retain considerable autonomy even when united in a federation.",
+            "In the 16th century, the Protestant Reformation had a profound impact, dividing the country into Catholic and Protestant cantons. This division still characterizes Switzerland today, with the German part predominantly Protestant and the French and Italian parts predominantly Catholic. Popular mythology also plays a role, with legends of local saints and the spirituality of the mountains shaping Swiss culture.",
+            "Today, Switzerland is a model of political and economic stability, with a high standard of living and a political system that preserves the cultural diversity of its cantons. It is a very unique case of a Western country oriented towards pacifism, which has never had colonial fears, nor a professional army, a beacon of neutrality and non-interference, respecting the different languages and religions of its territories.",
+            "Current population: 9.000.000"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25724.31281562804!2d8.032478160251845!3d46.48873024830901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x478f706358ba0c6b%3A0x814ab15289527d53!2sAletsch%20Glacier!5e1!3m2!1sen!2ses!4v1745836182903!5m2!1sen!2ses' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>",
+        "assetname": "mythical66"
+    },
+    {
+        "name": "Olapa",
+        "country": "Masaai",
+        "continent": "Africa",
+        "picture": "olapa.jpg",
+        "rarity": "Epic",
+        "creature": [
+            "Olapa, Goddess of the Moon, is a majestic figure representing fertility and renewal. With skin as dark as night, bright eyes, and hair as long as an ebony river, she carries with her the luminosity of the moon. However, she is distinguished by a singular feature: a single eye, the result of a mythical confrontation with her husband, Enkai, the sun god. This feature is symbolically linked to the phases of the moon, reflecting both her integrity during the full moon and her wound during the waning quarter.",
+            "Olapa is a life force that influences the earth, the cycles of life, and the order that emerges from chaos. Her power encompasses the fertility of women and cattle, as well as the fertility of the earth itself, guiding the rhythms of life. In addition, her rule extends to the realm of dreams, where she grants wisdom and clarity to those who seek guidance. In her role as guardian of the night and the cycles of life, Olapa has a protective and renewing nature, providing balance after times of disorder.",
+            "She is a symbol of connection to the cosmos and the feminine influence on nature. Her story and attributes are intertwined with the practices and beliefs of her culture, keeping alive a cosmovision that values balance, fertility, and the power of nature. Today, her figure is still present in rites, ornaments, and ceremonies, representing the strength of the feminine and the constant cycle of renewal. Olapa is a reminder that even in darkness there is clarity and order."
+        ],
+        "landscape": "masaai.jpg",
+        "culture": [
+            "The Maasai, the Nilotic people, migrated from the Nile region to East Africa between the 15th and 18th centuries. During their migration, they settled in areas of present-day Tanzania and Kenya, where their traditions and identity were consolidated, surrounded by Bantu peoples dedicated to agriculture.",
+            "The Maasai have traditionally been pastoralists, raising cattle as their main source of livelihood, social status and spirituality. Their diet is based on milk, meat and occasionally the blood of cattle. They are organized into clans and divided into age groups, with each stage of life marked by rites of passage. Men undergo initiations to become warriors and later community leaders, while women play a central role in family management.",
+            "In Maasai religion, Enkai is the unique, incorporeal creator god who communicates with humans through nature. Their connection to nature permeates their worldview, and cattle are considered a divine gift. They celebrate rituals such as harvests and initiations, with priests acting as spiritual intermediaries.",
+            "The Maasai resisted European colonialism with guns in hand, but eventually lost vast tracts of land to European settlers. Today, they face challenges such as limited access to resources and pressure to abandon nomadism. Yet they continue to promote their culture, defend their territorial rights, and preserve their unique way of life.",
+            "Current population: 2.000.000"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8318.864359224914!2d35.1251834142953!3d-1.4850279214912956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182ce8a64a31fdb1%3A0x296a9587e0c3c410!2sMaasai%20Mara%20National%20Reserve!5e1!3m2!1sen!2ses!4v1745836132495!5m2!1sen!2ses' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>",
+        "assetname": "mythical67"
+    },
+    {
+        "name": "Garuda",
+        "country": "Sri Lanka",
+        "continent": "Asia",
+        "picture": "garuda.jpg",
+        "rarity": "Special",
+        "creature": [
+            "The majestic King of Birds is an imposing creature with a humanoid body and eagle-like features. He has huge wings that can darken the sky, golden feathers that shine like the sun, and sharp talons that symbolise his power. His face combines the fierceness of a bird of prey with the intelligence of a divine being, while his muscular chest and heavenly ornaments reflect his nature between the earthly and the divine. A symbol of strength and speed, Garuda is known for crossing the sky with a single flap of his wings.",
+            "He is a celestial protector of Dharma, the natural order of the universe, and an enemy of the naga (serpents who are themselves earthly protectors of Dharma). Although he is often portrayed as aggressive in his Hindu origins, his story evolves in Buddhism: Garuda learns to control his anger and develops compassion for his former rivals. This transformation makes him a symbol of the balance between strength and wisdom. His battle with the Naga represents the overcoming of internal and external obstacles to enlightenment.",
+            "In Sri Lankan culture, Garuda symbolises protection, renewal and the triumph of order over chaos. His depictions adorn temples and festivals, reminding the faithful of the importance of righteousness and compassion. His flight is seen as a path to spiritual transcendence, a link between heaven and earth."
+        ],
+        "landscape": "srilanka.jpg",
+        "culture": [
+            "Known as the 'Tear of India' due to its shape and location in the Indian Ocean, Sri Lanka is an island rich in history and culture. Proto-Australoid peoples arrived more than 30,000 years ago, but the Sinhalese, descendants of Indo-Aryan peoples, settled around the 6th century BC and created kingdoms that thrived on agriculture based on sophisticated irrigation systems.",
+            "Theravada Buddhism, introduced by the Indian emperor Ashoka in the 3rd century BC, shaped the island's worldview. This branch of Buddhism emphasises simplicity and meditation, and is closely linked to everyday life and popular mythology. Local gods and mythological creatures such as Nagas and Yakshas are revered as protectors of the Dharma, revealing a unique fusion of spirituality and ancestral traditions. Sacred sites such as the Temple of the Tooth in Kandy illustrate the people's deep connection with Buddhism.",
+            "The island, which had never been a political or cultural entity, was subjected to centuries of European colonial rule from the 16th century. After independence in 1948, the creation of a unitary state on the island provoked ethnic tensions between the majority Buddhist Sinhalese and the minority Hindu Tamils, leading to a devastating civil war that ended in 2009. The conflict ended in military victory for the Sinhalese.",
+            "Today, Sri Lanka remains a traditional, highly agrarian and rural society where religiosity is pervasive in everyday life. Social conflicts persist, a sign of a state that seeks to consolidate itself despite popular and cultural resistance.",
+            "Current population: 22.000.000"
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d37129.08398555025!2d81.30673244651027!3d6.414470086058173!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae4260426c19ea1%3A0x722d6bf359bc2aca!2sKataragama%2C%20Sri%20Lanka!5e1!3m2!1sen!2ses!4v1745915088397!5m2!1sen!2ses' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>",
+        "assetname": "mythical68"
     }
 ]
