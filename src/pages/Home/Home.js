@@ -337,22 +337,11 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         };
 
         loadAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         infoAccount,
         needReload,
         isLoading,
-        firstTime,
-        cardsHash,
-        gemCardsHash,
-        giftzCardsHash,
-        wethCardsHash,
-        manaCardsHash,
-        infoAccountHash,
-        setInfoAccount,
-        setCards,
-        cardsNotification,
-        toast,
-        unconfirmedTransactions,
     ]);
 
     useEffect(() => {

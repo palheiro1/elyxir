@@ -22,16 +22,32 @@ const LoginButtons = ({ showNewUser, showLogIn, showRestore, loginType, setLogin
     const handleLogin = () => navigate('/login');
 
     return (
-        <Stack direction={'row'} spacing={0} mb={4}>
-            {showNewUser && <Button rounded="none" w="100%" onClick={handleNewUser}>New user</Button>}
+        <Stack direction={'row'} spacing={2} mt={8}>
+            {showNewUser && (
+                <Button w="100%" onClick={handleNewUser}>
+                    Create
+                </Button>
+            )}
 
-            {showLogIn && <Button rounded="none" w="100%" onClick={handleLogin}>Log in</Button>}
+            {showLogIn && (
+                <Button w="100%" onClick={handleLogin}>
+                    Log in
+                </Button>
+            )}
 
-            {showRestore && <Button rounded="none" w="100%" onClick={handleRestoreUser}>Restore user</Button>}
+            {showRestore && (
+                <Button w="100%" onClick={handleRestoreUser}>
+                    Restore
+                </Button>
+            )}
 
             {loginType === 'normal' && (
-                <Button rounded="none" w="100%" px={6} onClick={() => setLoginType('sigbro')} leftIcon={<Image src="/images/logos/sigbro.png" w="20px" />}>
-                    Sigbro login
+                <Button
+                    w="100%"
+                    px={6}
+                    onClick={() => setLoginType('sigbro')}
+                    leftIcon={<Image src="/images/logos/sigbro.png" w="20px" />}>
+                    Sigbro
                 </Button>
             )}
 

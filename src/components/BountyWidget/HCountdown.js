@@ -40,8 +40,8 @@ const HCountdown = ({ bountyTimer, numParticipants = 0, bountyBalance = 0, bount
         return (
             <Stack direction={{ base: 'column', xl: 'row' }} margin={{ base: 'auto', lg: 'unset' }}>
                 <Image
-                    src={`/images/criatures/${specialCardLower}.png`}
-                    w="100px"
+                    src={`/images/criatures/${specialCardLower}.webp`}
+                    w="80px"
                     margin={{ base: 'auto', lg: 'unset' }}
                 />
                 <VStack align="flex-start">
