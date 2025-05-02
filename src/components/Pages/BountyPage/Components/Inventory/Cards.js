@@ -31,7 +31,15 @@ import { errorToast, infoToast, okToast } from '../../../../../utils/alerts';
  * @param {Boolean} isMobile - Boolean used for controll the mobile view
  * @returns {JSX.Element} - JSX element
  */
-const Cards = ({ infoAccount, isMobile, selectedCards, setSelectedCards, handleEdit, handleDeleteSelectedCard }) => {
+const Cards = ({
+    infoAccount,
+    isMobile,
+    selectedCards,
+    setSelectedCards,
+    handleEdit,
+    handleDeleteSelectedCard,
+    handleCloseInventory,
+}) => {
     const toast = useToast();
 
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
@@ -70,6 +78,7 @@ const Cards = ({ infoAccount, isMobile, selectedCards, setSelectedCards, handleE
             okToast('Burning completed successfully', toast);
             setSelectedCards([]);
             setIsSwapping(false);
+            handleCloseInventory();
         } else {
             errorToast('Burn failed', toast);
         }

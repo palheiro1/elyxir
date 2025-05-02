@@ -3,6 +3,7 @@ import FlowItem from './FlowItem';
 import MenuButton from './MenuButton';
 import { useNavigate } from 'react-router-dom';
 import { IS_BOUNTY_ENABLED } from '../../../../data/CONSTANTS';
+import { useSelector } from 'react-redux';
 
 const Buttons = () => {
     const textBuy = useColorModeValue('#9f3772', 'white');
@@ -12,6 +13,8 @@ const Buttons = () => {
     const textBounty = useColorModeValue('#3b5397', 'white');
 
     const navigate = useNavigate();
+
+    const { cards } = useSelector(state => state.cards);
 
     return (
         <Center>
@@ -109,14 +112,13 @@ const Buttons = () => {
                     color={textBounty}
                     button={
                         <MenuButton
-                            bgColor={'#E53055'}
+                            bgColor={'#DC30EB'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(229, 48, 85, 0.75)'}
-                            icon={'/images/icons/menu/blanco/bounty.png'}
+                            hoverBg={'rgba(220, 48, 235, 0.75)'}
+                            icon={'/images/icons/menu/blanco/battlegrounds.svg'}
                             isActive={false}
-                            text={'Bounty'}
-                            onClick={() => navigate('/home?goToSection=5')}
-                            isDisabled={!IS_BOUNTY_ENABLED}
+                            onClick={() => navigate('/battlegrounds')}
+                            isDisabled={!cards || cards.length < 0}
                         />
                     }
                 />

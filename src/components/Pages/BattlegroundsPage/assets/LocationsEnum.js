@@ -55,7 +55,18 @@ const locations = [
     { id: 54, name: 'Hadza', x: 416, y: 404, rarity: 'Common' },
     { id: 55, name: 'Gypsy', x: 297, y: 240, rarity: 'Common' },
     { id: 56, name: 'Sama-bajau', x: 787, y: 272, rarity: 'Special' },
-    { id: 57, name: 'Nepal', x: 720, y: 200, rarity: 'Rare' },
+    { id: 57, name: 'Sama-bajau', x: 787, y: 272, rarity: 'Special' },
+    { id: 58, name: 'Nepal', x: 720, y: 200, rarity: 'Rare' },
+    { id: 59, name: 'Denmark', x: 380, y: 120, rarity: 'Common' },
+    { id: 60, name: 'Coptic People', x: 475, y: 294, rarity: 'Epic' },
+    { id: 61, name: 'Maya', x: 110, y: 252, rarity: 'Common' },
+    { id: 62, name: 'Hopi', x: 80, y: 190, rarity: 'Special' },
+    { id: 63, name: 'Haudenosaunee', x: 220, y: 150, rarity: 'Epic' },
+    { id: 64, name: 'Georgia', x: 470, y: 240, rarity: 'Common' },
+    { id: 65, name: 'Gamilaraay', x: 785, y: 450, rarity: 'Common' },
+    { id: 66, name: 'Switzerland', x: 335, y: 195, rarity: 'Rare' },
+    { id: 67, name: 'Masaai', x: 450, y: 400, rarity: 'Epic' },
+    { id: 68, name: 'Sri Lanka', x: 665, y: 300, rarity: 'Special' },
 ];
 
 export default locations;

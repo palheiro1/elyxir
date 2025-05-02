@@ -44,7 +44,7 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, isMobile }) => {
                     onClick={() => closeInvetory()}
                 />
 
-                <InventoryPage infoAccount={infoAccount} cards={cards} gridColumns={getColumns} isMobile={isMobile} />
+                <InventoryPage infoAccount={infoAccount} cards={cards} gridColumns={getColumns} isMobile={isMobile} handleCloseInventory={closeInvetory}/>
             </Box>
         </>
     );
