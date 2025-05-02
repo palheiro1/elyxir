@@ -14,16 +14,22 @@ const MenuButton = ({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeig
                 textColor={textColor}
                 onClick={isDisabled ? null : onClick}>
                 <Stack direction="row" align="center" w="100%">
-                    <Box minW={'2rem'}>
-                        <Image src={icon} w={isActive ? '30px' : '25px'} />
-                    </Box>
-                    <Text fontSize="sm" fontWeight={fontWeight} color="white">
-                        {text}
-                    </Text>
+                    {icon && text ? (
+                        <>
+                            <Box minW={'2rem'} ml={isActive ? -1 : 0} mr={isActive ? 1 : 0}>
+                                <Image src={icon} w={isActive ? '30px' : '25px'} />
+                            </Box>
+                            <Text fontSize="sm" fontWeight={fontWeight}>
+                                {text}
+                            </Text>
+                        </>
+                    ) : (
+                        !text && <Box mx={'auto'}>{<Image src={icon} w={'75px'} />}</Box>
+                    )}
                 </Stack>
             </Button>
             {isDisabled && (
-                <Text fontSize="2xs" fontWeight="bold" color="red" textAlign={"center"}>
+                <Text fontSize="2xs" fontWeight="bold" color="red" textAlign={'center'}>
                     OFF - waiting new season
                 </Text>
             )}

@@ -115,18 +115,19 @@ export const BattleWindow = ({
                 errorToast('You cannot send repeated cards to battle', toast);
                 return prevCards;
             }
-            if (soldier.rank === 0 && rank0Count > arenaInfo.armyRankMinimum[1]) {
+            const { rank = 0 } = soldier;
+            if (rank === 0 && rank0Count > arenaInfo.armyRankMinimum[1]) {
                 errorToast(`You cannot have more than ${arenaInfo.armyRankMinimum[1]} special/epic in battle`, toast);
                 return prevCards;
             }
-            if (soldier.rank === 1 && rank1Count > arenaInfo.armyRankMaximum[0]) {
+            if (rank === 1 && rank1Count > arenaInfo.armyRankMaximum[0]) {
                 errorToast(`You cannot have more than ${arenaInfo.armyRankMaximum[0]} common cards in battle`, toast);
                 return prevCards;
             }
 
-            if (soldier.rank === 0) {
+            if (rank === 0) {
                 setRank0Count(rank0Count + 1);
-            } else if (soldier.rank === 1) {
+            } else if (rank === 1) {
                 setRank1Count(rank1Count + 1);
             }
 

@@ -1,0 +1,67 @@
+{
+    "contract": "MBOmno",
+    "operation": [
+        {
+            "service": "rgame",
+            "request": "configureAsMerge",
+            "parameter": {
+                "soldier": [
+                    {
+                        "asset": "16487322021968998192",
+                        "name": "Hah-nu-nah",
+                        "domainId": 3,
+                        "mediumId": 3,
+                        "arenaId": 63,
+                        "rank": 0,
+                        "power": 3
+                    },
+                    {
+                        "asset": "8821500247715349893",
+                        "name": "Simurgh",
+                        "domainId": 1,
+                        "mediumId": 2,
+                        "arenaId": 64,
+                        "rank": 1,
+                        "power": 1
+                    },
+                    {
+                        "asset": "7394449015011337044",
+                        "name": "Yhi",
+                        "domainId": 2,
+                        "mediumId": 1,
+                        "arenaId": 65,
+                        "rank": 1,
+                        "power": 1
+                    },
+                    {
+                        "asset": "8984219258343024609",
+                        "name": "Rollibock",
+                        "domainId": 5,
+                        "mediumId": 1,
+                        "arenaId": 66,
+                        "rank": 1,
+                        "power": 2
+                    },
+                    {
+                        "asset": "7523837742047401501",
+                        "name": "Olapa",
+                        "domainId": 4,
+                        "mediumId": 2,
+                        "arenaId": 67,
+                        "rank": 0,
+                        "power": 3
+                    },
+                    {
+                        "asset": "17992331071615561028",
+                        "name": "Garuda",
+                        "domainId": 1,
+                        "mediumId": 2,
+                        "arenaId": 68,
+                        "rank": 0,
+                        "power": 4
+                    }
+                ]
+            }
+        }
+    ]
+}
