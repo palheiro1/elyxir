@@ -30,7 +30,7 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 style={{
-                    transform: isMobile ? 'scale(0.7)' : 'scale(1.25)',
+                    transform: isMobile ? 'scale(0.7)' : 'scale(1.2)',
                     transformOrigin: 'center center',
                 }}
                 xlink="http://www.w3.org/1999/xlink">

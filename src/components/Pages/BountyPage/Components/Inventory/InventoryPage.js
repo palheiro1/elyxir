@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Cards from './Cards';
 
-const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
+const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns, handleCloseInventory }) => {
     const [selectedCards, setSelectedCards] = useState([]);
     const [filters, setFilters] = useState({
         rarity: '',
@@ -262,7 +262,7 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                             selectedCards={selectedCards}
                             setSelectedCards={setSelectedCards}
                             handleEdit={handleEdit}
-                            handleDeleteSelectedCard={handleDeleteSelectedCard}
+                            handleDeleteSelectedCard={handleDeleteSelectedCard} handleCloseInventory={handleCloseInventory}
                         />
                     </Box>
                 </Stack>
