@@ -32,7 +32,7 @@ const BattleInventory = ({
     handleDomainChange,
 }) => {
     const { soldiers } = useSelector(state => state.soldiers);
-    const { armyRankMaximum } = arenaInfo;
+    const { level } = arenaInfo;
 
     const [preSelectedCard, setPreSelectedCard] = useState(null);
 
@@ -63,7 +63,7 @@ const BattleInventory = ({
             selected: handBattleCards.some(item => item.asset === card.asset),
         }));
 
-    const availableCards = armyRankMaximum[0] === 5 ? commonHand : normalHand;
+    const availableCards = level === 1 ? commonHand : normalHand;
 
     const filteredAvailableCards = availableCards
         .filter(card => {
@@ -122,7 +122,7 @@ const BattleInventory = ({
                         <option value="-1" style={optionStyle}>
                             Rarity
                         </option>
-                        {armyRankMaximum[0] === 5 && (
+                        {level === 1 && (
                             <>
                                 <option style={optionStyle} value="1">
                                     Common
@@ -132,7 +132,7 @@ const BattleInventory = ({
                                 </option>
                             </>
                         )}
-                        {armyRankMaximum[0] !== 5 && (
+                        {level !== 1 && (
                             <>
                                 {index !== 0 && (
                                     <>
