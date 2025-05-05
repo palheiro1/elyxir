@@ -34,6 +34,7 @@ import {
 import { getAsset, isMBAsset } from './cardsUtils';
 import { handleConfirmateNotification, handleNewIncomingNotification, handleNewOutcomingNotification } from './alerts';
 import { generateHash } from './hash';
+import { v4 as uuid } from 'uuid';
 
 export function waitForRefresh() {
     return new Promise(resolve => setTimeout(resolve, REFRESH_DATA_TIME));
@@ -256,6 +257,7 @@ const getMorphMessage = (asset, noCards) => {
                     asset: asset,
                     count: ''.concat('', noCards, ''),
                     withdraw: true,
+                    id: uuid(),
                 },
             },
         ],
@@ -283,7 +285,7 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
         quantityQNT: noCards,
         recipient: OMNO_ACCOUNT,
         passPhrase,
-        message: { contract: OMNO_CONTRACT },
+        message,
         messagePrunable: true,
         deadline: 1440,
         priority: 'HIGH',
