@@ -118,7 +118,7 @@ const Buttons = () => {
                             icon={'/images/icons/menu/blanco/battlegrounds.svg'}
                             isActive={false}
                             onClick={() => navigate('/battlegrounds')}
-                            isDisabled={!cards || cards.length < 0}
+                            isLoading={!cards || cards.length <= 0}
                         />
                     }
                 />

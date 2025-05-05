@@ -1,6 +1,17 @@
-import { Box, Button, Image, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Image, Spinner, Stack, Text } from '@chakra-ui/react';
 
-const MenuButton = ({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive, isDisabled }) => {
+const MenuButton = ({
+    icon,
+    text,
+    onClick,
+    bgColor,
+    hoverBg,
+    textColor,
+    fontWeight,
+    isActive,
+    isDisabled,
+    isLoading,
+}) => {
     return (
         <Stack direction={'column'}>
             <Button
@@ -12,7 +23,7 @@ const MenuButton = ({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeig
                 _hover={{ background: hoverBg, color: 'white' }}
                 bgColor={bgColor}
                 textColor={textColor}
-                onClick={isDisabled ? null : onClick}>
+                onClick={isDisabled || isLoading ? null : onClick}>
                 <Stack direction="row" align="center" w="100%">
                     {icon && text ? (
                         <>
@@ -24,7 +35,7 @@ const MenuButton = ({ icon, text, onClick, bgColor, hoverBg, textColor, fontWeig
                             </Text>
                         </>
                     ) : (
-                        !text && <Box mx={'auto'}>{<Image src={icon} w={'75px'} />}</Box>
+                        !text && <Box mx={'auto'}>{isLoading ? <Spinner /> : <Image src={icon} w={'75px'} />}</Box>
                     )}
                 </Stack>
             </Button>
