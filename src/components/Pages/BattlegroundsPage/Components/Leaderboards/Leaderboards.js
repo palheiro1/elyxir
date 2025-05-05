@@ -108,10 +108,6 @@ const Leaderboards = ({ handleClose, isMobile }) => {
         },
     ];
 
-    console.log(
-        '🚀 ~ Leaderboards ~ availableLeaderboards.find(item => item.value === option).description:',
-        availableLeaderboards.find(item => item.value === option).description ? 'none' : 'block'
-    );
     return (
         <>
             <Overlay isVisible={true} handleClose={closeLeaderboards} />

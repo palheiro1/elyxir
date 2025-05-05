@@ -283,7 +283,7 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
         quantityQNT: noCards,
         recipient: OMNO_ACCOUNT,
         passPhrase,
-        message,
+        message: { contract: OMNO_CONTRACT },
         messagePrunable: true,
         deadline: 1440,
         priority: 'HIGH',
