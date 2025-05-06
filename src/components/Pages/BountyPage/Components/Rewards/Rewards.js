@@ -4,7 +4,7 @@ import RewardsTable from './RewardsTable';
 import { getJackpotInfo, getJackpotRewards } from '../../../../../services/Bounty/utils';
 import { RewardsDisplay } from './RewardsDisplay';
 
-const Rewards = ({ account }) => {
+const Rewards = ({ accountRs }) => {
     const [rewards, setRewards] = useState(null);
     const [jackpotInfo, setJackpotInfo] = useState(null);
     const [filterRewards, setFilterRewards] = useState(false);
@@ -74,7 +74,7 @@ const Rewards = ({ account }) => {
                 </Box>
             </Stack>
             <Box px={4} py={2}>
-                <RewardsTable rewards={rewards} account={account} filter={filterRewards} />
+                <RewardsTable rewards={rewards} accountRs={accountRs} filter={filterRewards} />
             </Box>
             {filterRewards ? '' : <RewardsDisplay />}
         </>
