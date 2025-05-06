@@ -34,6 +34,7 @@ import {
 import { getAsset, isMBAsset } from './cardsUtils';
 import { handleConfirmateNotification, handleNewIncomingNotification, handleNewOutcomingNotification } from './alerts';
 import { generateHash } from './hash';
+import { v4 as uuid } from 'uuid';
 
 export function waitForRefresh() {
     return new Promise(resolve => setTimeout(resolve, REFRESH_DATA_TIME));
@@ -256,6 +257,7 @@ const getMorphMessage = (asset, noCards) => {
                     asset: asset,
                     count: ''.concat('', noCards, ''),
                     withdraw: true,
+                    id: uuid(),
                 },
             },
         ],

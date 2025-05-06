@@ -1,6 +1,6 @@
 import { Center, Flex, Grid, GridItem, Spinner, Stack, Text } from '@chakra-ui/react';
 
-const TicketsTable = ({ isMobile, tickets, totalTickets }) => {
+const TicketsTable = ({ tickets, totalTickets }) => {
     return (
         <Stack className="custom-scrollbar" spacing={4}>
             {tickets === null ? (
@@ -46,7 +46,7 @@ const TicketsTable = ({ isMobile, tickets, totalTickets }) => {
                         color={'#000'}
                         fontFamily={'Chelsea market, system-ui'}
                         bgColor={'#73DDE8'}
-                        fontSize={isMobile ? 'md' : 'xl'}
+                        fontSize={{ base: 'md', md: 'xl' }}
                         position="sticky"
                         top="0"
                         zIndex={1}>

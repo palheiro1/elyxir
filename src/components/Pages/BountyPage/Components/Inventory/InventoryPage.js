@@ -129,7 +129,7 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns, handleCloseI
                             Epic
                         </option>
                         <option value="4" style={optionStyle}>
-                            Specia
+                            Special
                         </option>
                     </Select>
 
@@ -198,7 +198,7 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns, handleCloseI
                                             key={cardIndex}
                                             bg={'white'}
                                             borderRadius={'10px'}
-                                            mx={'auto'}
+                                            mx={'auto'} 
                                             onClick={() => setSelectedCards([...selectedCards, card])}>
                                             <Center>
                                                 <Img src={cardImgUrl} w={'90%'} h={'75%'} />
@@ -262,7 +262,8 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns, handleCloseI
                             selectedCards={selectedCards}
                             setSelectedCards={setSelectedCards}
                             handleEdit={handleEdit}
-                            handleDeleteSelectedCard={handleDeleteSelectedCard} handleCloseInventory={handleCloseInventory}
+                            handleDeleteSelectedCard={handleDeleteSelectedCard}
+                            handleCloseInventory={handleCloseInventory}
                         />
                     </Box>
                 </Stack>
