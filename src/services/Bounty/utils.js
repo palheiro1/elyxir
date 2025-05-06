@@ -188,8 +188,7 @@ export const getJackpotRewards = async () => {
         ) {
             const recipient = transaction.recipientRS;
             const asset = transaction.attachment.asset;
-            const quantity = transaction.attachment.quantityQNT || '0';
-
+            const quantity = Number(transaction.attachment.quantityQNT || 0);
             const message = JSON.parse(transaction.attachment.message);
             let ticketNumber = message.ticketNumber || '0';
 
@@ -207,7 +206,7 @@ export const getJackpotRewards = async () => {
                 };
             }
 
-            rewards[recipient].assets[asset].quantity = rewards[recipient].assets[asset].quantity + quantity;
+            rewards[recipient].assets[asset].quantity = Number(rewards[recipient].assets[asset].quantity) + quantity;
 
             rewards[recipient].assets[asset].ticketNumber = ticketNumber;
         }

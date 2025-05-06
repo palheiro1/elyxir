@@ -65,10 +65,8 @@ const Bounty = ({ infoAccount }) => {
         <>
             <ScrollLock isLocked={isScrollLocked} />
             <Box bgColor={'#202323'} borderRadius={'25px'}>
-                {option === 1 && (
-                    <Tickets accountRs={infoAccount.accountRs} isMobile={isMobile} setOption={setOption} />
-                )}
-                {option === 2 && <Rewards account={infoAccount.accountRs} />}
+                {option === 1 && <Tickets accountRs={infoAccount.accountRs} setOption={setOption} />}
+                {option === 2 && <Rewards accountRs={infoAccount.accountRs} />}
                 <Stack
                     mx={2}
                     w={'100%'}

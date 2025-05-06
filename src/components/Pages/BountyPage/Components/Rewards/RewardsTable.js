@@ -1,25 +1,38 @@
-import { Box, Center, Grid, GridItem, Image, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Box, Center, Grid, GridItem, Image, Spinner, Stack, Text, useBreakpointValue } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { prepareTableData } from '../../../../../services/Bounty/utils';
-import { GEMASSET, MANAASSET, SEASONSPECIALCARDASSET, WETHASSET } from '../../../../../data/CONSTANTS';
+import { GEMASSET, MANAASSET, NQTDIVIDER, SEASONSPECIALCARDASSET, WETHASSET } from '../../../../../data/CONSTANTS';
+import { formatAddress } from '../../../BattlegroundsPage/Utils/BattlegroundsUtils';
 
-const RewardsTableRow = ({ index, data, isMobile, account, filter, getCurrencyImage }) => {
-    const { address, accountName, quantity, ticketNumber, assetId } = data;
-    const assetDetails = JSON.parse(data.assetDetails.description);
-    const { name } = assetDetails;
+const RewardsTableRow = ({ index, data, accountRs, filter, getCurrencyImage }) => {
+    const { address, accountName, quantity, ticketNumber, assetId, assetName } = data;
+    let assetDetails = null;
+    let name = null;
+    let formattedQNT = quantity;
+    try {
+        assetDetails = JSON.parse(data.assetDetails.description);
+        name = assetDetails.name;
+    } catch (error) {
+        name = assetName;
+        formattedQNT = quantity / NQTDIVIDER;
+    }
 
     const bg = filter
         ? index % 2 === 0
             ? '#323636'
             : '#202323'
-        : account === address
+        : accountRs === address
         ? '#73DDE8'
         : index % 2 === 0
         ? '#323636'
         : '#202323';
 
-    const color = filter ? '#7FC0BE' : account === address ? '#193235' : '#7FC0BE';
+    const color = filter ? '#7FC0BE' : accountRs === address ? '#193235' : '#7FC0BE';
+    const formattedAddress = useBreakpointValue({
+        base: formatAddress(address),
+        md: address,
+    });
 
     return (
         <Grid templateColumns="repeat(3, 1fr)" gap={4} w="100%" mx="auto" mt={0} bgColor={bg} borderRadius="10px" p={2}>
@@ -31,11 +44,11 @@ const RewardsTableRow = ({ index, data, isMobile, account, filter, getCurrencyIm
                     fontWeight={500}
                     color={color}
                     h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
+                    fontSize={{ base: 'xs', md: 'md' }}
                     display="flex"
                     alignItems="center"
                     justifyContent="center">
-                    #{ticketNumber}
+                    {Number(ticketNumber) === 0 ? 'Distribution' : `#${ticketNumber}`}
                 </Text>
             </GridItem>
             <GridItem colSpan={1} textAlign="center">
@@ -46,12 +59,12 @@ const RewardsTableRow = ({ index, data, isMobile, account, filter, getCurrencyIm
                     fontWeight={500}
                     color={color}
                     h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
+                    fontSize={{ base: 'xs', md: 'md' }}
                     display="flex"
                     alignItems="center"
-                    textTransform={'uppercase'}
+                    textTransform={'capitalize'}
                     justifyContent="center">
-                    {account === address ? 'You' : accountName || address}
+                    {accountRs === address ? 'You' : accountName || formattedAddress}
                 </Text>
             </GridItem>
             <GridItem colSpan={1} justifyContent="center" display={'flex'}>
@@ -69,17 +82,17 @@ const RewardsTableRow = ({ index, data, isMobile, account, filter, getCurrencyIm
                     fontFamily={'Inter, System'}
                     fontWeight={500}
                     h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
+                    fontSize={{ base: 'xs', md: 'md' }}
                     color={color}
                     display="flex"
                     alignItems="center"
-                    justifyContent="center">{`x${quantity} ${name}`}</Text>
+                    justifyContent="center">{`x${formattedQNT} ${name}`}</Text>
             </GridItem>
         </Grid>
     );
 };
 
-const RewardsTable = ({ rewards, isMobile, account, filter }) => {
+const RewardsTable = ({ rewards, accountRs, filter }) => {
     const [rewardsData, setRewardsData] = useState(null);
     const [userRewards, setUserRewards] = useState(null);
 
@@ -101,20 +114,14 @@ const RewardsTable = ({ rewards, isMobile, account, filter }) => {
     useEffect(() => {
         if (!rewards) return;
 
-        let filteredRewards;
-        if (filter === 1 && account) {
-            filteredRewards = rewards[account] ? { [account]: rewards[account] } : null;
-        } else {
-            filteredRewards = rewards;
-        }
-        if (filteredRewards) {
-            setRewardsData(prepareTableData(filteredRewards));
-        } else {
-            setRewardsData([]);
-        }
+        const userEntries = rewards[accountRs] ?? [];
+        const hasUserRewards = userEntries.length > 0;
+        const userData = hasUserRewards ? prepareTableData({ [accountRs]: userEntries }) : [];
 
-        setUserRewards(prepareTableData(filteredRewards));
-    }, [rewards, filter, account]);
+        setUserRewards(userData);
+        setRewardsData(filter === 1 ? userData : prepareTableData(rewards));
+    }, [rewards, filter, accountRs]);
+
     return (
         <>
             {userRewards && userRewards.length > 0 && (
@@ -124,7 +131,7 @@ const RewardsTable = ({ rewards, isMobile, account, filter }) => {
                         textAlign={'center'}
                         fontFamily={'Chelsea market, system-ui'}
                         fontWeight={500}
-                        fontSize={isMobile ? 'md' : 'xl'}
+                        fontSize={{ base: 'md', md: 'xl' }}
                         p={1}
                         px={3}
                         color={'#000'}
@@ -141,20 +148,28 @@ const RewardsTable = ({ rewards, isMobile, account, filter }) => {
                         p={4}
                         mx={'auto'}
                         textAlign={'center'}>
-                        {userRewards.map(({ assetId, quantity, name }, index) => (
-                            <Stack direction={'column'} key={index}>
-                                <Box w={assetId === SEASONSPECIALCARDASSET ? '80px' : '100px'} h={'100px'} mx={'auto'}>
-                                    <Image boxSize={'100%'} src={getCurrencyImage(assetId)} />
-                                </Box>
-                                <Text
-                                    fontFamily={'Chelsea market, system-ui'}
-                                    fontWeight={500}
-                                    textTransform={'uppercase'}
-                                    fontSize={isMobile ? 'md' : 'xl'}>
-                                    {`x${quantity} ${name}`}
-                                </Text>
-                            </Stack>
-                        ))}
+                        {userRewards.map(({ assetId, quantity, assetName }, index) => {
+                            const isDivisible = [MANAASSET, WETHASSET, GEMASSET].includes(assetId);
+                            const formattedQNT = isDivisible ? Number(quantity) / NQTDIVIDER : quantity;
+
+                            return (
+                                <Stack direction={'column'} key={index}>
+                                    <Box
+                                        w={assetId === SEASONSPECIALCARDASSET ? '80px' : '100px'}
+                                        h={'100px'}
+                                        mx={'auto'}>
+                                        <Image boxSize={'100%'} src={getCurrencyImage(assetId)} />
+                                    </Box>
+                                    <Text
+                                        fontFamily={'Chelsea market, system-ui'}
+                                        fontWeight={500}
+                                        textTransform={'uppercase'}
+                                        fontSize={{ base: 'md', md: 'xl' }}>
+                                        {`x${formattedQNT} ${assetName}`}
+                                    </Text>
+                                </Stack>
+                            );
+                        })}
                     </Stack>
                 </Stack>
             )}
@@ -186,30 +201,29 @@ const RewardsTable = ({ rewards, isMobile, account, filter }) => {
                             top="0"
                             zIndex={1}>
                             <GridItem colSpan={1} textAlign="center">
-                                <Text fontFamily="Inter, System" fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
+                                <Text fontFamily="Inter, System" fontWeight={700} fontSize={{ base: 'sm', md: 'md' }}>
                                     TICKET
                                 </Text>
                             </GridItem>
                             <GridItem colSpan={1} textAlign="center">
-                                <Text fontFamily="Inter, System" fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
+                                <Text fontFamily="Inter, System" fontWeight={700} fontSize={{ base: 'sm', md: 'md' }}>
                                     NAME / ADDRESS
                                 </Text>
                             </GridItem>
                             <GridItem colSpan={1} textAlign="center">
-                                <Text fontFamily="Inter, System" fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
+                                <Text fontFamily="Inter, System" fontWeight={700} fontSize={{ base: 'sm', md: 'md' }}>
                                     REWARD EARNED
                                 </Text>
                             </GridItem>
                         </Grid>
 
-                        <Box maxHeight={'55vh'} overflowY="auto" w={'100%'} mx={'auto'} borderRadius={'10px'}>
+                        <Box maxHeight={{ md: '55vh' }} overflowY="auto" w={'100%'} mx={'auto'} borderRadius={'10px'}>
                             {rewardsData.map((entry, index) => (
                                 <RewardsTableRow
                                     key={index}
                                     index={index}
                                     data={entry}
-                                    isMobile={isMobile}
-                                    account={account}
+                                    accountRs={accountRs}
                                     filter={filter === 1}
                                     getCurrencyImage={getCurrencyImage}
                                 />

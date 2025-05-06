@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { getJackpotFormattedTickets } from '../../../../../services/Bounty/utils';
 import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface';
 
-const Tickets = ({ accountRs, isMobile, setOption }) => {
+const Tickets = ({ accountRs, setOption }) => {
     const [entries, setEntries] = useState(null);
     const [userTickets, setUserTickets] = useState(null);
     const [totalTickets, setTotalTickets] = useState(0);
@@ -113,7 +113,7 @@ const Tickets = ({ accountRs, isMobile, setOption }) => {
                 </Stack>
             </Stack>
             <Box px={4} pb={6}>
-                <TicketsTable isMobile={isMobile} tickets={entries} totalTickets={totalTickets} />
+                <TicketsTable tickets={entries} totalTickets={totalTickets} />
             </Box>
         </>
     );
