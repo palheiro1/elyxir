@@ -8,7 +8,7 @@ import HCountdown from './HCountdown';
 import { BLOCKTIME, FREQUENCY } from '../../data/CONSTANTS';
 
 // Services
-import { getBountyBalance, swapPriceEthtoUSD, getBountyParticipants } from '../../services/Bounty/utils';
+import { getBountyBalance, swapPriceEthtoUSD, getJackpotFormattedTickets } from '../../services/Bounty/utils';
 import { getGemPrice, getManaPrice } from '../../services/Ardor/evmInterface';
 
 import { useSelector } from 'react-redux';
@@ -24,6 +24,8 @@ import { useSelector } from 'react-redux';
  */
 const BountyWidget = ({ cStyle = 0, totalParticipants }) => {
     const { prev_height } = useSelector(state => state.blockchain);
+    const [totalTickets, setTotalTickets] = useState(0);
+
     const [bountyTimer, setBountyTimer] = useState({
         days: 0,
         hours: 0,
@@ -44,7 +46,6 @@ const BountyWidget = ({ cStyle = 0, totalParticipants }) => {
         Sumanga: 0,
         Total: 0,
     });
-    const [participants, setParticipants] = useState({ numParticipants: 0, participants: [] });
 
     const selectedColor = cStyle === 0 ? '#2f9088' : '#3b5397';
     const textColor = useColorModeValue(selectedColor, 'white');
@@ -52,9 +53,8 @@ const BountyWidget = ({ cStyle = 0, totalParticipants }) => {
     useEffect(() => {
         const fetchBountyBalance = async () => {
             try {
-                const [bountyBalance, responseParticipants, gemPrice, manaPrice] = await Promise.all([
+                const [bountyBalance, gemPrice, manaPrice] = await Promise.all([
                     getBountyBalance(),
-                    getBountyParticipants(),
                     getGemPrice(),
                     getManaPrice(),
                 ]);
@@ -82,16 +82,8 @@ const BountyWidget = ({ cStyle = 0, totalParticipants }) => {
                     Total: Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalCard),
                 });
 
-                let auxParticipants = [];
-                let numParticipants = 0;
-                Object.entries(responseParticipants).forEach(entry => {
-                    const [key, value] = entry;
-                    if (value > 0) {
-                        auxParticipants.push({ account: key, quantity: value });
-                        numParticipants += value;
-                    }
-                });
-                setParticipants({ numParticipants, participants: auxParticipants });
+                const { allTickets: tickets } = await getJackpotFormattedTickets();
+                setTotalTickets(tickets.length);
             } catch (error) {
                 console.error('🚀 ~ file: BountyWidget.js:47 ~ fetchBountyBalance ~ error:', error);
             }
@@ -135,7 +127,7 @@ const BountyWidget = ({ cStyle = 0, totalParticipants }) => {
                         <HCountdown
                             cStyle={cStyle}
                             bountyTimer={bountyTimer}
-                            numParticipants={participants.numParticipants}
+                            totalTickets={totalTickets}
                             bountyBalance={bountyBalance}
                             bountyBalanceUSD={bountyBalanceUSD}
                         />

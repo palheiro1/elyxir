@@ -614,11 +614,13 @@ export const sendCardsToOmno = async ({ cards, passPhrase }) => {
 };
 
 export const sendCardsToBurn = async ({ cards, passPhrase }) => {
+    const message = JSON.stringify({ reason: 'burningForJackpot' });
     const promises = cards.map(card =>
         transferAsset({
             asset: card.asset,
             quantityQNT: card.quantity,
             recipient: BURNACCOUNT,
+            message,
             passPhrase: passPhrase,
             messagePrunable: true,
             deadline: 361,
