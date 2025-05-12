@@ -15,7 +15,7 @@ import {
     useMediaQuery,
 } from '@chakra-ui/react';
 import { Maps } from './Components/Maps';
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ScrollLock } from './assets/ScrollLock';
 import { BattlegroundsIntro } from './Components/BattlegroundsIntro/BattlegroundsIntro';
 import './BattlegroundMap.css';
@@ -24,7 +24,7 @@ import { BattleWindow } from './Components/BattleWindow/BattleWindow';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import Inventory from './Components/Inventory/Inventory';
-import { NQTDIVIDER } from '../../../data/CONSTANTS';
+import { NQTDIVIDER, REFRESH_BLOCK_TIME } from '../../../data/CONSTANTS';
 import SendGEMsToOmno from './Components/Modals/SendGEMsToOmno';
 import SendWethToOmno from './Components/Modals/SendWethToOmno';
 import BattleList from './Components/BattleRecord/BattleList';
@@ -40,6 +40,11 @@ import { MdOutlineArrowDropDown } from 'react-icons/md';
 import ListButton from './Components/ListButton';
 import Rewards from './Components/Rewards';
 import { ChevronUpIcon } from '@chakra-ui/icons';
+import { getBlockchainBlocks } from '../../../redux/reducers/BlockchainReducer';
+import { fetchArenasInfo } from '../../../redux/reducers/ArenasReducer';
+import { fetchSoldiers } from '../../../redux/reducers/SoldiersReducer';
+import { fetchUserBattles } from '../../../redux/reducers/BattleReducer';
+import { fetchLeaderboards } from '../../../redux/reducers/LeaderboardsReducer';
 
 const Battlegrounds = ({ infoAccount }) => {
     const { accountRs } = infoAccount;
@@ -61,6 +66,7 @@ const Battlegrounds = ({ infoAccount }) => {
         rarity: -1,
         element: -1,
     });
+    const [currentBlock, setCurrentBlock] = useState(null);
 
     const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
     const { isOpen: isOpenGems, onOpen: onOpenGems, onClose: onCloseGems } = useDisclosure();
@@ -75,11 +81,38 @@ const Battlegrounds = ({ infoAccount }) => {
 
     const { battleCount, activePlayers, landLords, omnoGEMsBalance, omnoWethBalance, filteredCards, parseWETH } =
         useSelector(state => state.battlegrounds);
-
     const { cards } = useSelector(state => state.cards);
+    const { prev_height } = useSelector(state => state.blockchain);
+
     useEffect(() => {
         cards && accountRs && dispatch(fetchBattleData({ accountRs, cards }));
     }, [dispatch, accountRs, cards, updateState]);
+
+    const updateBattlegroundStatus = useCallback(() => {
+        if (!currentBlock || currentBlock !== prev_height) {
+            setCurrentBlock(prev_height);
+            setUpdateState(prev => !prev);
+            Promise.all([
+                dispatch(fetchArenasInfo()),
+                dispatch(fetchSoldiers()),
+                accountRs && dispatch(fetchUserBattles(accountRs)),
+                dispatch(fetchLeaderboards()),
+                cards && accountRs && dispatch(fetchBattleData({ accountRs, cards })),
+            ]);
+        }
+    }, [currentBlock, prev_height, dispatch, accountRs, cards]);
+
+    useEffect(() => {
+        prev_height && updateBattlegroundStatus();
+    }, [prev_height, updateBattlegroundStatus]);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            dispatch(getBlockchainBlocks());
+        }, REFRESH_BLOCK_TIME);
+
+        return () => clearInterval(intervalId);
+    }, [dispatch]);
 
     const handleNext = () => {
         setPage(2);
