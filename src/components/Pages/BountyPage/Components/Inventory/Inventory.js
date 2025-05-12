@@ -1,5 +1,4 @@
 import { Box, IconButton, useMediaQuery } from '@chakra-ui/react';
-import React from 'react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { Overlay } from '../../../BattlegroundsPage/Components/BattlegroundsIntro/Overlay';
 import InventoryPage from './InventoryPage';

@@ -8,7 +8,7 @@ import { Box, Center, Image, SimpleGrid, Stack, Text, VStack, useColorModeValue 
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const HCountdown = ({ bountyTimer, numParticipants = 0, bountyBalance = 0, bountyBalanceUSD = 0, cStyle }) => {
+const HCountdown = ({ bountyTimer, totalTickets = 0, bountyBalance = 0, bountyBalanceUSD = 0, cStyle }) => {
     const selectedColor = cStyle === 0 ? '#2f9088' : '#3b5397';
     const textColor = useColorModeValue(selectedColor, 'white');
     const bgColor = cStyle === 0 ? 'rgba(47, 144, 136 ,0.35)' : 'rgba(59, 83, 151, 0.35)';
@@ -88,10 +88,10 @@ const HCountdown = ({ bountyTimer, numParticipants = 0, bountyBalance = 0, bount
                     </Box>
                     <Box p={2} bg={bgColor} rounded="lg" minW="100px">
                         <Text textAlign="center" fontSize="xl" fontWeight="bold">
-                            {numParticipants}
+                            {totalTickets}
                         </Text>
                         <Text textAlign="center" fontSize="xs">
-                            Total claims in this round
+                            Total tickets for this bounty
                         </Text>
                     </Box>
                 </SimpleGrid>

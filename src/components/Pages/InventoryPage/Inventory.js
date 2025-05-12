@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import {
-    Box,
-} from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 
 import GridCards from '../../Cards/GridCards';
 import SortAndFilterCards from '../../SortAndFilters/SortAndFilterCards';
@@ -17,13 +15,12 @@ import SortAndFilterCards from '../../SortAndFilters/SortAndFilterCards';
  * @returns {JSX.Element} - Inventory component
  */
 const Inventory = ({ infoAccount, cards }) => {
-
     // Filtered cards
     const [cardsFiltered, setCardsFiltered] = useState(cards);
 
     return (
         <Box mb={2}>
-            <SortAndFilterCards cards = {cards} setCardsFiltered = {setCardsFiltered} />
+            <SortAndFilterCards cards={cards} setCardsFiltered={setCardsFiltered} />
             <GridCards cards={cardsFiltered} infoAccount={infoAccount} rgbColor="47, 129, 144" />
         </Box>
     );

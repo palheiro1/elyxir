@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import '../BattlegroundMap.css';
 import { MapImage } from '../assets/MapImage';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +21,25 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
         setSelectedArena(id);
     };
 
+    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const scale = useMemo(() => {
+        const minWidth = 480;
+        const maxWidth = 1440;
+        const minScale = 0.7;
+        const maxScale = 1.1;
+
+        const clampedWidth = Math.min(Math.max(windowWidth, minWidth), maxWidth);
+        const ratio = (clampedWidth - minWidth) / (maxWidth - minWidth);
+        return minScale + (maxScale - minScale) * ratio;
+    }, [windowWidth]);
+
     return (
         arenasInfo && (
             <svg
@@ -30,7 +49,7 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 style={{
-                    transform: isMobile ? 'scale(0.7)' : 'scale(1.2)',
+                    transform: `scale(${scale})`,
                     transformOrigin: 'center center',
                 }}
                 xlink="http://www.w3.org/1999/xlink">
