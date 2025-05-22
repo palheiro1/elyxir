@@ -51,21 +51,32 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
 
     const renderBattleRow = useCallback(
         item => {
+            if (!item) return null;
+
             const bgColor = 'transparent';
-            const captured = cards.find(obj => Object.keys(item.capturedAsset).includes(obj.asset));
-            const battleReward = battleRewards[item.battleId] || [];
+            const captured =
+                item?.capturedAsset && cards?.length
+                    ? cards.find(obj => Object.keys(item.capturedAsset || {}).includes(obj.asset))
+                    : null;
+            const battleReward = battleRewards?.[item?.battleId] || [];
+
+            const attackerName = item?.attackerDetails?.name || formatAddress(item?.attackerDetails?.accountRS || '');
+            const defenderName = item?.defenderDetails?.name || formatAddress(item?.defenderDetails?.accountRS || '');
+            const participantName = item?.isUserDefending ? attackerName : defenderName;
+
+            const isWin = item?.isUserDefending === item?.isDefenderWin;
 
             return (
                 <Grid
-                    color={'#FFF'}
-                    key={item.battleId}
+                    color="#FFF"
+                    key={item?.battleId || Math.random()}
                     templateColumns="repeat(6, 1fr)"
                     p={3}
                     alignItems="center"
                     bg="transparent"
                     cursor="pointer"
                     _hover={{ backgroundColor: 'whiteAlpha.300', borderRadius: '25px' }}
-                    onClick={() => handleViewDetails(item.battleId)}>
+                    onClick={() => item?.battleId && handleViewDetails(item.battleId)}>
                     <GridItem textAlign="center">
                         <Box
                             bgColor={bgColor}
@@ -78,14 +89,16 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                             display="flex"
                             alignItems="center"
                             justifyContent="center">
-                            {item.date}
+                            {item?.date || 'N/A'}
                         </Box>
                     </GridItem>
 
                     <GridItem textAlign="center">
                         <Tooltip
                             label={
-                                item.isUserDefending ? item.attackerDetails.accountRS : item.defenderDetails.accountRS
+                                item?.isUserDefending
+                                    ? item?.attackerDetails?.accountRS
+                                    : item?.defenderDetails?.accountRS
                             }
                             hasArrow
                             placement="bottom">
@@ -99,9 +112,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                                 display="flex"
                                 alignItems="center"
                                 justifyContent="center">
-                                {item.isUserDefending
-                                    ? item.attackerDetails.name || formatAddress(item.attackerDetails.accountRS)
-                                    : item.defenderDetails.name || formatAddress(item.defenderDetails.accountRS)}
+                                {participantName}
                             </Box>
                         </Tooltip>
                     </GridItem>
@@ -119,7 +130,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                             display="flex"
                             alignItems="center"
                             justifyContent="center">
-                            {item.arenaName}
+                            {item?.arenaName || 'Unknown Arena'}
                         </Box>
                     </GridItem>
 
@@ -136,7 +147,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                             justifyContent="center">
                             <Image
                                 src={`/images/battlegrounds/${
-                                    item.isUserDefending ? 'defense_icon.svg' : 'attack_icon.svg'
+                                    item?.isUserDefending ? 'defense_icon.svg' : 'attack_icon.svg'
                                 }`}
                                 boxSize="45px"
                             />
@@ -153,21 +164,25 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                             ml={4}
                             p={3}
                             fontSize={isMobile ? 'xs' : 'md'}>
-                            <Image
-                                src={item.isUserDefending === item.isDefenderWin ? victoryIcon : defeatIcon}
-                                boxSize="45px"
-                            />
+                            <Image src={isWin ? victoryIcon : defeatIcon} boxSize="45px" />
                         </Box>
                     </GridItem>
-                    {cards && cards.length > 0 && (
+
+                    {cards?.length > 0 && (
                         <GridItem textAlign="center">
                             <Tooltip
                                 label={
-                                    <Box>
-                                        <Image src={captured?.cardImgUrl} alt={captured?.name} w="200px" />
-                                    </Box>
+                                    captured?.cardImgUrl && (
+                                        <Box>
+                                            <Image
+                                                src={captured.cardImgUrl}
+                                                alt={captured?.name || 'Captured Card'}
+                                                w="200px"
+                                            />
+                                        </Box>
+                                    )
                                 }
-                                aria-label={captured?.name}
+                                aria-label={captured?.name || 'Captured'}
                                 placement="top"
                                 hasArrow>
                                 <Box
@@ -183,15 +198,24 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                                     maxH="45px"
                                     fontSize={isMobile ? 'xs' : 'md'}>
                                     <Text
-                                        color={item.isUserDefending === item.isDefenderWin ? '#7FC0BE' : '#D597B2'}
+                                        color={isWin ? '#7FC0BE' : '#D597B2'}
                                         border="2px solid white"
                                         p={2}
                                         borderRadius="20px"
-                                        w="130px">
-                                        {captured?.name}
-                                        {item.isUserDefending === item.isDefenderWin &&
+                                        w="130px"
+                                        textAlign="center"
+                                        whiteSpace="nowrap"
+                                        overflow="hidden"
+                                        textOverflow="ellipsis">
+                                        {captured?.name || 'No Reward'}
+                                        {isWin &&
                                             battleReward.length > 0 &&
-                                            battleReward.map(({ price, name }) => ` + ${price / NQTDIVIDER} ${name}`)}
+                                            battleReward.map(({ price = 0, name = '' }, i) => (
+                                                <React.Fragment key={i}>
+                                                    {' + '}
+                                                    {price / NQTDIVIDER} {name}
+                                                </React.Fragment>
+                                            ))}
                                     </Text>
                                 </Box>
                             </Tooltip>

@@ -122,6 +122,7 @@ export const MapPoint = React.memo(
             }
         }, [arena.mediumId]);
 
+        if (id === 68) return null; // Fail arena in omno
         return (
             arena &&
             defenderInfo && (

@@ -603,19 +603,28 @@ const Battlegrounds = ({ infoAccount }) => {
                                     border="2px solid #D597B2"
                                     borderRadius="30px"
                                     justifyContent="space-between"
-                                    w="65%"
+                                    w={{ base: '70%', md: '65%' }}
                                     fontFamily="'Chelsea Market', system-ui">
                                     {statistics.map(({ name, value }, index) => (
                                         <Text
                                             key={index}
                                             fontSize={isMobile ? 'xs' : 'lg'}
-                                            color={'#FFF'}
-                                            my={'auto'}
-                                            p={isMobile ? 2 : 3}
+                                            color="#FFF"
+                                            my="auto"
+                                            p={{
+                                                base: 1,
+                                                md: isMobile ? 2 : 3,
+                                            }}
                                             px={5}
-                                            textAlign={'center'}
-                                            cursor={'default'}>
-                                            {name}:<span style={{ color: '#D08FB0' }}> {value}</span>
+                                            textAlign="center"
+                                            cursor="default"
+                                            whiteSpace="nowrap" // <-- evita que se parta el texto
+                                        >
+                                            {name}:
+                                            <Text as="span" color="#D08FB0">
+                                                {' '}
+                                                {value}
+                                            </Text>
                                         </Text>
                                     ))}
                                 </Stack>
