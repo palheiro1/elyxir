@@ -72,12 +72,28 @@ export const BattleWindow = ({
             await getAccount(arenaInfo.defender.account).then(res => {
                 setDefenderInfo(res);
             });
-            const soldiers = await getSoldiers().then(res => {
+            await getSoldiers().then(res => {
                 setSoldiers(res.soldier);
                 return res;
             });
-            const arenaSoldier = soldiers.soldier.find(item => item.arenaId === arenaInfo.id);
-            setDomainName(cards.find(card => card.asset === arenaSoldier.asset).channel);
+
+            const domainName = (() => {
+                switch (arenaInfo.domainId) {
+                    case 1:
+                        return 'Asia';
+                    case 2:
+                        return 'Oceania';
+                    case 3:
+                        return 'America';
+                    case 4:
+                        return 'Africa';
+                    case 5:
+                        return 'Europe';
+                    default:
+                        break;
+                }
+            })();
+            setDomainName(domainName);
 
             const defenderAssets = new Set(arenaInfo.defender.asset);
             const matchingObjects = cards.filter(obj => defenderAssets.has(obj.asset));

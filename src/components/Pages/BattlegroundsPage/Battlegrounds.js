@@ -121,6 +121,7 @@ const Battlegrounds = ({ infoAccount }) => {
     const handleClose = () => {
         setVisible(false);
         setIsScrollLocked(false);
+        localStorage.setItem('showedBattlegroundIntro', 'true');
     };
 
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
@@ -618,8 +619,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                             px={5}
                                             textAlign="center"
                                             cursor="default"
-                                            whiteSpace="nowrap" // <-- evita que se parta el texto
-                                        >
+                                            whiteSpace="nowrap">
                                             {name}:
                                             <Text as="span" color="#D08FB0">
                                                 {' '}
@@ -628,7 +628,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                         </Text>
                                     ))}
                                 </Stack>
-                                <Box
+                                {/* <Box
                                     borderRadius="30px"
                                     p="1"
                                     background="linear-gradient(49deg, rgba(235,178,185,1) 0%, rgba(32,36,36,1) 100%)"
@@ -649,7 +649,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                         onClick={() => setIsModalOpen(true)}>
                                         Start a Battle
                                     </Button>
-                                </Box>
+                                </Box> */}
                             </Stack>
                         </Stack>
                     </Stack>
