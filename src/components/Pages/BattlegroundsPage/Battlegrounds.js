@@ -121,6 +121,7 @@ const Battlegrounds = ({ infoAccount }) => {
     const handleClose = () => {
         setVisible(false);
         setIsScrollLocked(false);
+        localStorage.setItem('showedBattlegroundIntro', 'true');
     };
 
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
@@ -134,6 +135,7 @@ const Battlegrounds = ({ infoAccount }) => {
                 setOpenLeaderboards(true);
                 setIsScrollLocked(true);
             },
+            tooltip: "See who's dominating Battlegrounds and track your global rankings",
         },
         {
             name: 'Battle record',
@@ -141,6 +143,7 @@ const Battlegrounds = ({ infoAccount }) => {
                 setOpenBattleRecord(true);
                 setIsScrollLocked(true);
             },
+            tooltip: 'Review your previous fights - victories, defeats and tactical information',
         },
 
         {
@@ -149,31 +152,36 @@ const Battlegrounds = ({ infoAccount }) => {
                 setOpenEarnings(true);
                 setIsScrollLocked(true);
             },
+            tooltip: 'Check the rewards obtained for your battles and the performance of your pantheons',
         },
         {
-            name: 'Army',
+            name: 'Deploy army',
             onclick: () => {
                 setOpenInventory(true);
                 setIsScrollLocked(true);
             },
+            tooltip: 'Send your creature cards from your NFT wallet to Battlegrounds',
         },
         {
             name: 'FAQ',
             onclick: () => {
                 window.open('https://mythicalbeings.io/how-to-play-battlegrounds.html', '_blank');
             },
+            tooltip: 'Check how the game works and solve your frequently asked questions',
         },
         {
             name: 'Change name',
             onclick: () => {
                 onOpenName();
             },
+            tooltip: 'Customize your in-game name as it appears in the leaderboard and battles',
         },
         {
-            name: 'Exit to the wallet',
+            name: 'Return to wallet',
             onclick: () => {
                 navigate('/home');
             },
+            tooltip: 'Back to your NFT portfolio to manage your collection and cards',
         },
     ];
 
@@ -366,11 +374,12 @@ const Battlegrounds = ({ infoAccount }) => {
                             <Rewards mx={'auto'} />
                             {!isMobile ? (
                                 <Stack direction={'column'} flexWrap={'wrap'} padding={'30px'} mx={'auto'}>
-                                    {buttons.map(({ name, disabled, onclick }, index) => (
+                                    {buttons.map(({ name, disabled, tooltip, onclick }, index) => (
                                         <ListButton
                                             disabled={disabled}
                                             onclick={onclick}
                                             isExit={index === buttons.length - 1}
+                                            tooltip={tooltip}
                                             key={index}>
                                             {name}
                                         </ListButton>
@@ -618,8 +627,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                             px={5}
                                             textAlign="center"
                                             cursor="default"
-                                            whiteSpace="nowrap" // <-- evita que se parta el texto
-                                        >
+                                            whiteSpace="nowrap">
                                             {name}:
                                             <Text as="span" color="#D08FB0">
                                                 {' '}
@@ -628,28 +636,6 @@ const Battlegrounds = ({ infoAccount }) => {
                                         </Text>
                                     ))}
                                 </Stack>
-                                <Box
-                                    borderRadius="30px"
-                                    p="1"
-                                    background="linear-gradient(49deg, rgba(235,178,185,1) 0%, rgba(32,36,36,1) 100%)"
-                                    display="inline-block">
-                                    <Button
-                                        sx={{
-                                            background: 'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
-                                            borderRadius: '30px',
-                                            color: '#FFF',
-                                            textTransform: 'uppercase',
-                                            fontWeight: '400',
-                                            letterSpacing: '1px',
-                                            fontSize: 'lg',
-                                            fontFamily: "'Chelsea Market', system-ui",
-                                            padding: '6',
-                                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                        }}
-                                        onClick={() => setIsModalOpen(true)}>
-                                        Start a Battle
-                                    </Button>
-                                </Box>
                             </Stack>
                         </Stack>
                     </Stack>

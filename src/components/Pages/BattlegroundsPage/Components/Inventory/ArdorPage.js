@@ -234,7 +234,7 @@ const ArdorPage = ({ cards, infoAccount, isMobile, gridColumns }) => {
                                             <Center>
                                                 <Img src={cardImgUrl} w={'90%'} h={'75%'} />
                                             </Center>
-                                            <Stack direction={{ base: 'column', lg: 'row' }} spacing={0} mx={2} mb={1}>
+                                            <Stack direction={'column'} spacing={0} mx={2} mb={1}>
                                                 <Stack
                                                     direction="column"
                                                     spacing={0}
@@ -255,9 +255,9 @@ const ArdorPage = ({ cards, infoAccount, isMobile, gridColumns }) => {
                                                             <Text
                                                                 textAlign="end"
                                                                 minH={{ base: '100%', lg: 'auto' }}
-                                                                fontSize={'x-small'}
+                                                                fontSize={'small'}
                                                                 color={'#000'}>
-                                                                Quantity: {omnoQuantity}
+                                                                Available quantity: {omnoQuantity}
                                                             </Text>
                                                         </Flex>
                                                     </Tooltip>

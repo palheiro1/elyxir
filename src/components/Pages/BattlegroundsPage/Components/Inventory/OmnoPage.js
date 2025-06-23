@@ -1,6 +1,7 @@
 import {
     Box,
     Center,
+    Flex,
     Heading,
     Img,
     Select,
@@ -8,6 +9,7 @@ import {
     Spacer,
     Stack,
     Text,
+    Tooltip,
     useColorModeValue,
 } from '@chakra-ui/react';
 import CardBadges from '../../../../Cards/CardBadges';
@@ -191,7 +193,7 @@ const OmnoPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                             height={'100%'}>
                             {filteredNotSelectedCards.length > 0 &&
                                 filteredNotSelectedCards.map((card, cardIndex) => {
-                                    const { name, cardImgUrl, rarity, channel } = card;
+                                    const { name, cardImgUrl, rarity, channel, quantityQNT } = card;
                                     return (
                                         <Box
                                             key={cardIndex}
@@ -202,7 +204,7 @@ const OmnoPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                                             <Center>
                                                 <Img src={cardImgUrl} w={'90%'} h={'75%'} />
                                             </Center>
-                                            <Stack direction={{ base: 'column', lg: 'row' }} spacing={0} mx={2} mb={1}>
+                                            <Stack direction={'column'} spacing={0} mx={2} mb={1}>
                                                 <Stack
                                                     direction="column"
                                                     spacing={0}
@@ -217,6 +219,19 @@ const OmnoPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                                                     <CardBadges rarity={rarity} continent={channel} size="sm" />
                                                 </Stack>
                                                 <Spacer display={{ base: 'none', lg: 'block' }} />
+                                                <Center minHeight={{ base: 'auto', lg: '100%' }}>
+                                                    <Tooltip display={'flex'} placement="bottom">
+                                                        <Flex w={{ base: 'auto', lg: '100%' }}>
+                                                            <Text
+                                                                textAlign="end"
+                                                                minH={{ base: '100%', lg: 'auto' }}
+                                                                fontSize={'small'}
+                                                                color={'#000'}>
+                                                                Available quantity: {quantityQNT}
+                                                            </Text>
+                                                        </Flex>
+                                                    </Tooltip>
+                                                </Center>
                                             </Stack>
                                         </Box>
                                     );
