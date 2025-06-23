@@ -5,6 +5,8 @@ import { Overlay } from './Overlay';
 import { PageTwo } from './PageTwo';
 
 export const BattlegroundsIntro = ({ visible, page, handleClose, handleNext, isMobile }) => {
+    const showIntro = localStorage.getItem('showedBattlegroundIntro') === 'true';
+    if (showIntro) return null;
     return (
         <>
             <Overlay handleClose={handleClose} isVisible={visible} />

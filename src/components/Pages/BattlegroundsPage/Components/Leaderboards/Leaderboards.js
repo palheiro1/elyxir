@@ -13,6 +13,7 @@ import waterBanner from '../../assets/icons/water_banner.svg';
 import airBanner from '../../assets/icons/air_banner.svg';
 import combativityBanner from '../../assets/icons/combativeness_banner.svg';
 import LeaderboardsRewards from './LeaderboardsRewards';
+import TypesLeaderboardsResetTimer from './TypesLeaderboardsResetTimer';
 
 const Leaderboards = ({ handleClose, isMobile }) => {
     const dispatch = useDispatch();
@@ -268,7 +269,14 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                             )}
                         </Stack>
                         <Stack dir="row" mx={'auto'}>
-                            {option === 5 ? <CombativityResetTimer mb={4} /> : <LeaderboardsRewards option={option} />}
+                            {option === 5 ? (
+                                <CombativityResetTimer mb={4} />
+                            ) : (
+                                <Stack direction={'column'} mb={4}>
+                                    <LeaderboardsRewards option={option} />
+                                    <TypesLeaderboardsResetTimer />
+                                </Stack>
+                            )}
                         </Stack>
                     </Stack>
                 </Stack>
