@@ -150,9 +150,16 @@ export const getAveragesDices = async accountRs => {
     }
 };
 
-export const getLeaderboardsResetBlock = () => {
+export const getLeaderboardsResetBlock = async () => {
     return axios
         .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
         .then(res => res.data.state.leaderboardsResetBlock)
+        .catch(error => error);
+};
+
+export const getTypesLeaderboardsResetBlock = async () => {
+    return axios
+        .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
+        .then(res => res.data.state.typesLeaderboardsResetBlock)
         .catch(error => error);
 };

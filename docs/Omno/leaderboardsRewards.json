@@ -1,0 +1,74 @@
+{
+  "contract": "MBOmno",
+  "operation": [
+    {
+      "service": "rgame",
+      "request": "configureAsMerge",
+      "parameter": {
+        "leaderboardsRewards": {
+          "AquaticLeaderboard": {
+            "top1": {
+              "giftz": 0,
+              "tributePercentage": 0.16,
+              "specialCards": 1,
+              "manaQNT": 200000000000
+            }
+          },
+          "GeneralLeaderboard": {
+            "top5": {
+              "giftz": 0,
+              "tributePercentage": 0.0225,
+              "specialCards": 1,
+              "manaQNT": 100000000000
+            },
+            "top3": {
+              "giftz": 0,
+              "tributePercentage": 0.0625,
+              "specialCards": 1,
+              "manaQNT": 100000000000
+            },
+            "top4": {
+              "giftz": 0,
+              "tributePercentage": 0.04,
+              "specialCards": 1,
+              "manaQNT": 100000000000
+            },
+            "top1": {
+              "giftz": 0,
+              "tributePercentage": 0.25,
+              "specialCards": 1,
+              "manaQNT": 100000000000
+            },
+            "top2": {
+              "giftz": 0,
+              "tributePercentage": 0.125,
+              "specialCards": 1,
+              "manaQNT": 100000000000
+            }
+          },
+          "TerrestrialLeaderboard": {
+            "top1": {
+              "giftz": 0,
+              "tributePercentage": 0.16,
+              "specialCards": 1,
+              "manaQNT": 200000000000
+            }
+          },
+          "AerialLeaderboard": {
+            "top1": {
+              "giftz": 0,
+              "tributePercentage": 0.16,
+              "specialCards": 1,
+              "manaQNT": 200000000000
+            }
+          },
+          "gemAsset": "10230963490193589789",
+          "giftzAsset": "13993107092599641878",
+          "wethAsset": "935701767940516955",
+          "manaAsset": "2188455459770682500",
+          "seasonSpecialCardAsset": "15052794016100653835"
+        }
+      }
+    }
+  ]
+}
