@@ -107,13 +107,12 @@ export const BattleWindow = ({
     }, [handBattleCards]);
 
     const calculateBonus = () => {
-        const arenaSoldier = soldiers.find(item => item.arenaId === arenaInfo.id);
         if (handBattleCards[index] !== '') {
             const cardInfo = soldiers.find(item => item.asset === handBattleCards[index].asset);
             if (cardInfo.mediumId === arenaInfo.mediumId) {
                 setMediumBonus(mediumBonus + 1);
             }
-            if (cardInfo.domainId === arenaSoldier.domainId) {
+            if (cardInfo.domainId === arenaInfo.domainId) {
                 setDomainBonus(domainBonus + 1);
             }
         }
