@@ -20,9 +20,11 @@ const Rewards = ({ ...props }) => {
     return (
         <Stack
             boxSize={'200px'}
-            borderRadius={'20px'}
+            borderRadius={'12px'}
+            p={'12px'}
             color={'#000'}
-            backgroundImage=" linear-gradient(36deg,rgba(88, 108, 160, 1) 0%, rgba(122, 181, 186, 1) 12%, rgba(255, 255, 255, 1) 100%)"
+            bgColor={'#FFF'}
+            // backgroundImage=" linear-gradient(36deg,rgba(88, 108, 160, 1) 0%, rgba(122, 181, 186, 1) 12%, rgba(255, 255, 255, 1) 100%)"
             {...props}>
             <Text textDecoration={'underline'} fontSize={'2xl'} fontFamily={'Chelsea Market, system-ui'} mx={'auto'}>
                 REWARDS
@@ -32,7 +34,7 @@ const Rewards = ({ ...props }) => {
                     <Spinner color="#000" />
                 </Center>
             ) : (
-                <Stack direction={'row'} w={'100%'} px={3} mx={'auto'}>
+                <Stack direction={'row'} w={'100%'} spacing={2} mx={'auto'}>
                     <Stack direction="column" w={'50%'}>
                         {Object.entries(rewards)
                             .reverse()

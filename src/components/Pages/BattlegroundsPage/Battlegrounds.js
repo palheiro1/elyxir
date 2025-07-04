@@ -15,7 +15,7 @@ import {
     useMediaQuery,
 } from '@chakra-ui/react';
 import { Maps } from './Components/Maps';
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { ScrollLock } from './assets/ScrollLock';
 import { BattlegroundsIntro } from './Components/BattlegroundsIntro/BattlegroundsIntro';
 import './BattlegroundMap.css';
@@ -45,9 +45,11 @@ import { fetchArenasInfo } from '../../../redux/reducers/ArenasReducer';
 import { fetchSoldiers } from '../../../redux/reducers/SoldiersReducer';
 import { fetchUserBattles } from '../../../redux/reducers/BattleReducer';
 import { fetchLeaderboards } from '../../../redux/reducers/LeaderboardsReducer';
+import QuickStartModal from './Components/QuickStart';
+import NewPlayersModal from './Components/NewPlayersModal';
 
 const Battlegrounds = ({ infoAccount }) => {
-    const { accountRs } = infoAccount;
+    const { accountRs, IGNISBalance } = infoAccount;
 
     const [visible, setVisible] = useState(true);
     const [page, setPage] = useState(1);
@@ -61,6 +63,7 @@ const Battlegrounds = ({ infoAccount }) => {
     const [openBattleRecord, setOpenBattleRecord] = useState(false);
     const [openLeaderboards, setOpenLeaderboards] = useState(false);
     const [openEarnings, setOpenEarnings] = useState(false);
+    const [openQuickStart, setOpenQuickStart] = useState(false);
     const [updateState, setUpdateState] = useState(false);
     const [filters, setFilters] = useState({
         rarity: -1,
@@ -83,6 +86,8 @@ const Battlegrounds = ({ infoAccount }) => {
         useSelector(state => state.battlegrounds);
     const { cards } = useSelector(state => state.cards);
     const { prev_height } = useSelector(state => state.blockchain);
+
+    const [openNewPlayersModal, setOpenNewPlayersModal] = useState(!filteredCards || filteredCards.length === 0);
 
     useEffect(() => {
         cards && accountRs && dispatch(fetchBattleData({ accountRs, cards }));
@@ -128,60 +133,86 @@ const Battlegrounds = ({ infoAccount }) => {
     const bgColor = useColorModeValue('rgba(234, 234, 234, 0.5)', 'rgba(234, 234, 234, 1)');
 
     /* Buttons menu list */
-    const buttons = [
+    const buttonsGroups = [
         {
-            name: 'Leaderboard',
-            onclick: () => {
-                setOpenLeaderboards(true);
-                setIsScrollLocked(true);
-            },
-            tooltip: "See who's dominating Battlegrounds and track your global rankings",
-        },
-        {
-            name: 'Battle record',
-            onclick: () => {
-                setOpenBattleRecord(true);
-                setIsScrollLocked(true);
-            },
-            tooltip: 'Review your previous fights - victories, defeats and tactical information',
-        },
+            title: 'Combat operations',
+            color: '#56689F',
+            buttons: [
+                {
+                    name: 'Leaderboard',
+                    onclick: () => {
+                        setOpenLeaderboards(true);
+                        setIsScrollLocked(true);
+                    },
+                    tooltip: "See who's dominating Battlegrounds and track your global rankings",
+                },
+                {
+                    name: 'Battle record',
+                    onclick: () => {
+                        setOpenBattleRecord(true);
+                        setIsScrollLocked(true);
+                    },
+                    tooltip: 'Review your previous fights - victories, defeats and tactical information',
+                },
 
-        {
-            name: 'Earnings',
-            onclick: () => {
-                setOpenEarnings(true);
-                setIsScrollLocked(true);
-            },
-            tooltip: 'Check the rewards obtained for your battles and the performance of your pantheons',
+                {
+                    name: 'Earnings',
+                    onclick: () => {
+                        setOpenEarnings(true);
+                        setIsScrollLocked(true);
+                    },
+                    tooltip: 'Check the rewards obtained for your battles and the performance of your pantheons',
+                },
+                {
+                    name: 'Deploy army',
+                    onclick: () => {
+                        setOpenInventory(true);
+                        setIsScrollLocked(true);
+                    },
+                    tooltip: 'Send your creature cards from your NFT wallet to Battlegrounds',
+                },
+            ],
         },
         {
-            name: 'Deploy army',
-            onclick: () => {
-                setOpenInventory(true);
-                setIsScrollLocked(true);
-            },
-            tooltip: 'Send your creature cards from your NFT wallet to Battlegrounds',
+            title: 'Player settings',
+            color: '#7FC0BE',
+            buttons: [
+                {
+                    name: 'Quick start',
+                    onclick: () => {
+                        setOpenQuickStart(true);
+                        setIsScrollLocked(true);
+                    },
+                    tooltip:
+                        'Summary of first steps: deploy some cards to Battlegrounds, select a country, build your army, and battle',
+                },
+                {
+                    name: 'FAQ',
+                    onclick: () => {
+                        window.open('https://mythicalbeings.io/how-to-play-battlegrounds.html', '_blank');
+                    },
+                    tooltip: 'Learn how the game works',
+                },
+                {
+                    name: 'Change name',
+                    onclick: () => {
+                        onOpenName();
+                    },
+                    tooltip: 'Customize your in-game name as it appears in the leaderboard and battles',
+                },
+            ],
         },
         {
-            name: 'FAQ',
-            onclick: () => {
-                window.open('https://mythicalbeings.io/how-to-play-battlegrounds.html', '_blank');
-            },
-            tooltip: 'Check how the game works and solve your frequently asked questions',
-        },
-        {
-            name: 'Change name',
-            onclick: () => {
-                onOpenName();
-            },
-            tooltip: 'Customize your in-game name as it appears in the leaderboard and battles',
-        },
-        {
-            name: 'Return to wallet',
-            onclick: () => {
-                navigate('/home');
-            },
-            tooltip: 'Back to your NFT portfolio to manage your collection and cards',
+            color: '#994068',
+            buttons: [
+                {
+                    name: 'Return to wallet',
+                    onclick: () => {
+                        navigate('/home');
+                    },
+                    tooltip: 'Back to your NFT portfolio to manage your collection and cards',
+                },
+            ],
         },
     ];
 
@@ -226,6 +257,18 @@ const Battlegrounds = ({ infoAccount }) => {
 
     const handleCloseLeaderboards = () => {
         setOpenLeaderboards(false);
+        setIsScrollLocked(false);
+        setUpdateState(prevState => !prevState);
+    };
+
+    const handleCloseQuickStart = () => {
+        setOpenQuickStart(false);
+        setIsScrollLocked(false);
+        setUpdateState(prevState => !prevState);
+    };
+
+    const handleCloseNewPlayers = () => {
+        setOpenNewPlayersModal(false);
         setIsScrollLocked(false);
         setUpdateState(prevState => !prevState);
     };
@@ -296,7 +339,7 @@ const Battlegrounds = ({ infoAccount }) => {
                 className="landscape-only"
                 bgImage="url('/images/battlegrounds/battlegroundsBackground.png')"
                 bgSize="cover"
-                overflow={'hidden'}
+                overflow={'auto'}
                 overflowY={isMobile ? 'auto' : 'hidden'}
                 bgPosition="center"
                 h={'100vh'}
@@ -352,6 +395,10 @@ const Battlegrounds = ({ infoAccount }) => {
                 )}
 
                 {openLeaderboards && <Leaderboards handleClose={handleCloseLeaderboards} isMobile={isMobile} />}
+                {openQuickStart && <QuickStartModal handleClose={handleCloseQuickStart} />}
+                {openNewPlayersModal && (
+                    <NewPlayersModal handleClose={handleCloseNewPlayers} setOpenInventory={setOpenInventory} />
+                )}
                 <BattlegroundsIntro
                     visible={visible}
                     page={page}
@@ -361,28 +408,39 @@ const Battlegrounds = ({ infoAccount }) => {
                 />
                 <AdvertModal isOpen={isModalOpen} onClose={closeModal} />
                 <ScrollLock isLocked={isScrollLocked} />
-                <Box position={'relative'} ml={6} mt={isMobile ? 0 : 5} h={'100%'}>
-                    <Stack direction={'row'} h={'100%'}>
+                <Box position={'relative'} ml={6} mt={isMobile ? 0 : 5} h={'100%'} overflow={'auto'}>
+                    <Stack direction={'row'} h={'100%'} mb={'150px'}>
                         <Stack direction={'column'} w={'20%'}>
                             <Img
                                 src={'/images/battlegrounds/battlegroundsLogo.svg'}
                                 color={'#FFF'}
-                                h={'15%'}
+                                w={'160px'}
                                 mx={'auto'}
                                 mt={isMobile && 2}
                             />
+
                             <Rewards mx={'auto'} />
                             {!isMobile ? (
-                                <Stack direction={'column'} flexWrap={'wrap'} padding={'30px'} mx={'auto'}>
-                                    {buttons.map(({ name, disabled, tooltip, onclick }, index) => (
-                                        <ListButton
-                                            disabled={disabled}
-                                            onclick={onclick}
-                                            isExit={index === buttons.length - 1}
-                                            tooltip={tooltip}
-                                            key={index}>
-                                            {name}
-                                        </ListButton>
+                                <Stack direction={'column'} mx={'auto'}>
+                                    {buttonsGroups.map(({ title, buttons, color }, index) => (
+                                        <Box key={index} mt={3} textAlign={'center'}>
+                                            <Text
+                                                fontFamily="'Chelsea Market', system-ui"
+                                                textTransform={'uppercase'}
+                                                fontSize={'xs'}>
+                                                {title}
+                                            </Text>
+                                            {buttons.map(({ name, disabled, tooltip, onclick }, index) => (
+                                                <ListButton
+                                                    disabled={disabled}
+                                                    onclick={onclick}
+                                                    tooltip={tooltip}
+                                                    color={color}
+                                                    key={index}>
+                                                    {name}
+                                                </ListButton>
+                                            ))}
+                                        </Box>
                                     ))}
                                 </Stack>
                             ) : (
@@ -396,15 +454,19 @@ const Battlegrounds = ({ infoAccount }) => {
                                         Menu
                                     </MenuButton>
                                     <MenuList bg={'#202323'} border={'none'}>
-                                        {buttons.map(({ name, onclick }, index) => (
-                                            <MenuItem
-                                                bg={'#202323'}
-                                                color={'#FFF'}
-                                                key={index}
-                                                onClick={onclick}
-                                                fontFamily={'Chelsea market, system-ui'}>
-                                                {name}
-                                            </MenuItem>
+                                        {buttonsGroups.map(({ buttons }, index) => (
+                                            <Fragment key={index}>
+                                                {buttons.map(({ name, onclick }, index) => (
+                                                    <MenuItem
+                                                        bg={'#202323'}
+                                                        color={'#FFF'}
+                                                        key={index}
+                                                        onClick={onclick}
+                                                        fontFamily={'Chelsea market, system-ui'}>
+                                                        {name}
+                                                    </MenuItem>
+                                                ))}
+                                            </Fragment>
                                         ))}
                                     </MenuList>
                                 </Menu>
@@ -418,7 +480,29 @@ const Battlegrounds = ({ infoAccount }) => {
                                 mt={isMobile && 2}
                                 w={isMobile ? '90%' : '70%'}
                                 justifyContent={'space-between'}>
-                                <Stack direction={'row'} w={'30%'} mx={'auto'} justifyContent={'space-between'} px={10}>
+                                <Stack direction={'row'} w={'40%'} mx={'auto'} justifyContent={'space-between'}>
+                                    <Box
+                                        zIndex={1}
+                                        color={'black'}
+                                        my={'auto'}
+                                        bgColor={bgColor}
+                                        borderColor={borderColor}
+                                        rounded="full"
+                                        w="6rem"
+                                        minW={'68px'}
+                                        ml={isMobile && 3}
+                                        maxH={'1.5rem'}>
+                                        <Stack direction="row" align="center" mt={-2}>
+                                            <Image
+                                                ml={-3}
+                                                src="images/currency/ignis.png"
+                                                alt="wETH Icon"
+                                                w="40px"
+                                                h="40px"
+                                            />
+                                            <Text ml={-2}>{Number(IGNISBalance).toFixed(2)}</Text>
+                                        </Stack>
+                                    </Box>
                                     <Menu>
                                         <MenuButton
                                             zIndex={1}
@@ -589,7 +673,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                 display="flex"
                                 justifyContent="center"
                                 alignItems="center"
-                                overflow="hidden">
+                                mt={5}>
                                 <Maps
                                     handleSelectArena={handleSelectArena}
                                     infoAccount={infoAccount}
@@ -601,6 +685,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                 />
                             </Box>
                             <Stack
+                                mt={5}
                                 direction={'row'}
                                 mx={'auto'}
                                 maxH={'55px'}
@@ -608,6 +693,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                 justifyContent={'space-between'}>
                                 <Stack
                                     direction="row"
+                                    mx={'auto'}
                                     backgroundImage="linear-gradient(180deg, rgba(86, 104, 159, 1) 0%, rgba(72, 71, 110, 1) 100%)"
                                     border="2px solid #D597B2"
                                     borderRadius="30px"
