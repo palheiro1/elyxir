@@ -18,7 +18,7 @@ const LeaderboardRow = ({ index, data, isMobile, type }) => {
     const fiveWinners = index < 5 ? '#D597B2' : '#FFF';
     const oneWiner = index === 0 ? '#D597B2' : '#FFF';
     const color = type === 'general' ? fiveWinners : oneWiner;
-    
+
     return (
         totalPoints > 0 && (
             <Grid templateColumns="repeat(7, 1fr)" gap={4} w="100%" mx="auto" mt={0} bgColor={bg} borderRadius="10px">
@@ -227,7 +227,7 @@ const GeneralLeaderboard = ({ isMobile, color }) => {
                                 </GridItem>
                             </Grid>
                             <Box
-                                maxHeight={'55vh'}
+                                maxHeight={'45vh'}
                                 overflowY="auto"
                                 bgColor={'#323636'}
                                 w={'90%'}

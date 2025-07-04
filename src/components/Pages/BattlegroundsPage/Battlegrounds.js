@@ -46,9 +46,9 @@ import { fetchSoldiers } from '../../../redux/reducers/SoldiersReducer';
 import { fetchUserBattles } from '../../../redux/reducers/BattleReducer';
 import { fetchLeaderboards } from '../../../redux/reducers/LeaderboardsReducer';
 import QuickStartModal from './Components/QuickStart';
+import NewPlayersModal from './Components/NewPlayersModal';
 
 const Battlegrounds = ({ infoAccount }) => {
-    console.log('🚀 ~ Battlegrounds ~ infoAccount:', infoAccount);
     const { accountRs, IGNISBalance } = infoAccount;
 
     const [visible, setVisible] = useState(true);
@@ -86,6 +86,8 @@ const Battlegrounds = ({ infoAccount }) => {
         useSelector(state => state.battlegrounds);
     const { cards } = useSelector(state => state.cards);
     const { prev_height } = useSelector(state => state.blockchain);
+
+    const [openNewPlayersModal, setOpenNewPlayersModal] = useState(!filteredCards || filteredCards.length === 0);
 
     useEffect(() => {
         cards && accountRs && dispatch(fetchBattleData({ accountRs, cards }));
@@ -265,6 +267,12 @@ const Battlegrounds = ({ infoAccount }) => {
         setUpdateState(prevState => !prevState);
     };
 
+    const handleCloseNewPlayers = () => {
+        setOpenNewPlayersModal(false);
+        setIsScrollLocked(false);
+        setUpdateState(prevState => !prevState);
+    };
+
     let wEthDecimals = 4;
 
     const statistics = [
@@ -388,6 +396,9 @@ const Battlegrounds = ({ infoAccount }) => {
 
                 {openLeaderboards && <Leaderboards handleClose={handleCloseLeaderboards} isMobile={isMobile} />}
                 {openQuickStart && <QuickStartModal handleClose={handleCloseQuickStart} />}
+                {openNewPlayersModal && (
+                    <NewPlayersModal handleClose={handleCloseNewPlayers} setOpenInventory={setOpenInventory} />
+                )}
                 <BattlegroundsIntro
                     visible={visible}
                     page={page}
