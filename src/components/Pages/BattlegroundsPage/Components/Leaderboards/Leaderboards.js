@@ -254,14 +254,14 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                             })}
                         </Select>
                     </Stack>
-                    <Stack direction={'column'} color={'#FFF'} mx={'auto'} w={'100%'} textAlign={'center'} h={'85%'}>
+                    <Stack direction={'column'} color={'#FFF'} mx={'auto'} w={'100%'} textAlign={'center'} h={'80%'}>
                         <Stack
                             direction={'column'}
                             my={'auto'}
                             mt={2}
                             fontFamily={'Chelsea Market, System'}
                             mb={0}
-                            h={'85%'}>
+                            h={'80%'}>
                             {option === 5 ? (
                                 <Leaderboard isMobile={isMobile} color={color} />
                             ) : (

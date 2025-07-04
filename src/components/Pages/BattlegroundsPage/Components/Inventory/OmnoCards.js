@@ -78,7 +78,7 @@ const OmnoCards = ({
             setSelectedCards([]);
             setIsSwapping(false);
         } else {
-            errorToast('Swap failed', toast);
+            errorToast('Swap failed', 'Some cards may not have been sent correctly', toast);
         }
     };
 

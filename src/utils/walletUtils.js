@@ -600,8 +600,8 @@ export const sendCardsToOmno = async ({ cards, passPhrase }) => {
 
     try {
         const results = await Promise.all(promises);
-        const success = results.every(result => result.status === 200 || true);
-        if (success) {
+        const allSuccessful = results.every(result => result?.status === 200);
+        if (allSuccessful) {
             return true;
         } else {
             console.error('Error transferring assets: Not all promises resolved successfully');
