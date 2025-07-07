@@ -12,6 +12,8 @@ import {
     Spacer,
     SimpleGrid,
     useToast,
+    Tooltip,
+    Box,
 } from '@chakra-ui/react';
 
 import { useRef, useState } from 'react';
@@ -19,6 +21,7 @@ import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog'
 import { getIgnisFromFaucet } from '../../services/Faucet/faucet';
 import { errorToast, okToast } from '../../utils/alerts';
 import UnStuckGiftz from '../Modals/UnStuckGiftz/UnStuckGiftz';
+import { BsInfoCircle } from 'react-icons/bs';
 
 const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     const {
@@ -197,18 +200,37 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                     w="100%">
                     <Menu>
                         <MenuButton
-                            color={'black'}
+                            color="black"
                             bgColor={bgColor}
                             borderColor={borderColor}
                             rounded="lg"
                             minW={{ base: '100%', md: '5rem' }}
-                            maxH={'2.2rem'}
+                            maxH="2.2rem"
                             _hover={{ bg: hoverColor }}>
-                            <Stack direction="row" align="center">
+                            <Stack direction="row" align="center" pr={2}>
                                 <Image ml={-5} src="images/currency/ignis.png" alt="IGNIS Icon" w="50px" h="50px" />
-                                <Text pr={6} align="center" w="100%" textAlign="center">
+                                <Text align="center" w="100%" textAlign="center">
                                     {Number(IGNISBalance).toFixed(0)}
                                 </Text>
+                                <Box
+                                    onClick={e => e.stopPropagation()}
+                                    onMouseDown={e => e.stopPropagation()}
+                                    pointerEvents="auto">
+                                    <Tooltip
+                                        label="These mystic flames IGNIS hold the essence of mythical beings. Every transaction needs a small portion of it. Obtain some daily using our faucet or exchange on our market (or on other centralized exchanges)."
+                                        placement="bottom"
+                                        hasArrow
+                                        bgColor="#1F2323"
+                                        color="#FFF"
+                                        p={2}
+                                        border={'1px solid #585858'}
+                                        borderRadius={'10px'}
+                                        zIndex="tooltip">
+                                        <Box as="span" cursor="pointer">
+                                            <BsInfoCircle color="#C3C3C3" size="20px" />
+                                        </Box>
+                                    </Tooltip>
+                                </Box>
                             </Stack>
                         </MenuButton>
 
@@ -229,11 +251,30 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             minW="5rem"
                             maxH={'2.2rem'}
                             _hover={{ bg: hoverColor }}>
-                            <Stack direction="row" align="center">
+                            <Stack direction="row" align="center" pr={2}>
                                 <Image ml={-5} src="images/currency/giftz.png" alt="GIFTZ Icon" minW="50px" h="50px" />
-                                <Text pr={6} align="center" textAlign={'center'} w="100%">
+                                <Text align="center" textAlign={'center'} w="100%">
                                     {Number(GIFTZBalance).toFixed(0)}
                                 </Text>
+                                <Box
+                                    onClick={e => e.stopPropagation()}
+                                    onMouseDown={e => e.stopPropagation()}
+                                    pointerEvents="auto">
+                                    <Tooltip
+                                        label="The very essence of generosity. GIFTZ are tokens of appreciation. They enable you to buy card packs."
+                                        placement="bottom"
+                                        hasArrow
+                                        bgColor="#1F2323"
+                                        color="#FFF"
+                                        p={2}
+                                        borderRadius={'10px'}
+                                        border={'1px solid #585858'}
+                                        zIndex="tooltip">
+                                        <Box as="span" cursor="pointer">
+                                            <BsInfoCircle color="#C3C3C3" size="20px" />
+                                        </Box>
+                                    </Tooltip>
+                                </Box>
                             </Stack>
                         </MenuButton>
 
@@ -256,11 +297,30 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             minW="5rem"
                             maxH={'2.2rem'}
                             _hover={{ bg: hoverColor }}>
-                            <Stack direction="row" align="center">
+                            <Stack direction="row" align="center" pr={2}>
                                 <Image ml={-5} src="images/currency/gem.png" alt="GEM Icon" w="55px" h="50px" />
-                                <Text pr={6} w="100%" textAlign="center">
+                                <Text w="100%" textAlign="center">
                                     {GEMBalance.toFixed(0)}
                                 </Text>
+                                <Box
+                                    onClick={e => e.stopPropagation()}
+                                    onMouseDown={e => e.stopPropagation()}
+                                    pointerEvents="auto">
+                                    <Tooltip
+                                        label="Rare gems from forgotten treasure troves, GEM stones open doors to secret realms. They are the lifeblood of crafting and morphing, allowing you to shape your cards into new forms."
+                                        placement="bottom"
+                                        hasArrow
+                                        bgColor="#1F2323"
+                                        color="#FFF"
+                                        p={2}
+                                        borderRadius={'10px'}
+                                        border={'1px solid #585858'}
+                                        zIndex="tooltip">
+                                        <Box as="span" cursor="pointer">
+                                            <BsInfoCircle color="#C3C3C3" size="20px" />
+                                        </Box>
+                                    </Tooltip>
+                                </Box>
                             </Stack>
                         </MenuButton>
 
@@ -281,11 +341,30 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             minW="5rem"
                             maxH={'2.2rem'}
                             _hover={{ bg: hoverColor }}>
-                            <Stack direction="row" align="center">
+                            <Stack direction="row" align="center" pr={2}>
                                 <Image ml={-5} src="images/currency/weth.png" alt="wETH Icon" w="50px" h="50px" />
-                                <Text pr={6} w="100%" textAlign="center">
+                                <Text w="100%" textAlign="center">
                                     {parseWETH.toFixed(Math.max(0, wEthDecimals <= 6 ? wEthDecimals : 6))}
                                 </Text>
+                                <Box
+                                    onClick={e => e.stopPropagation()}
+                                    onMouseDown={e => e.stopPropagation()}
+                                    pointerEvents="auto">
+                                    <Tooltip
+                                        label="WETH are the ethereal threads connecting our world with the mythical blockchain. They act as a bridge, allowing you to exchange them for GIFTZ, other currencies or cards, expanding your collection and influence."
+                                        placement="bottom"
+                                        hasArrow
+                                        bgColor="#1F2323"
+                                        color="#FFF"
+                                        p={2}
+                                        borderRadius={'10px'}
+                                        border={'1px solid #585858'}
+                                        zIndex="tooltip">
+                                        <Box as="span" cursor="pointer">
+                                            <BsInfoCircle color="#C3C3C3" size="20px" />
+                                        </Box>
+                                    </Tooltip>
+                                </Box>
                             </Stack>
                         </MenuButton>
 
@@ -307,7 +386,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             minW="5rem"
                             maxH={'2.2rem'}
                             _hover={{ bg: hoverColor }}>
-                            <Stack direction="row" align="center">
+                            <Stack direction="row" align="center" pr={2}>
                                 <Image
                                     ml={-5}
                                     src="images/currency/mana.png"
@@ -316,9 +395,28 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                     h="55px"
                                     mb={2}
                                 />
-                                <Text pr={6} w="100%" textAlign="center">
+                                <Text w="100%" textAlign="center">
                                     {parseMANA.toFixed(0)}
                                 </Text>
+                                <Box
+                                    onClick={e => e.stopPropagation()}
+                                    onMouseDown={e => e.stopPropagation()}
+                                    pointerEvents="auto">
+                                    <Tooltip
+                                        label="Crystalline sources of mana, MANA crystals are the essence of magic itself. They serve as governance tokens, allowing you to have a say in the destiny of this enchanted realm."
+                                        placement="bottom"
+                                        hasArrow
+                                        bgColor="#1F2323"
+                                        color="#FFF"
+                                        p={2}
+                                        borderRadius={'10px'}
+                                        border={'1px solid #585858'}
+                                        zIndex="tooltip">
+                                        <Box as="span" cursor="pointer">
+                                            <BsInfoCircle color="#C3C3C3" size="20px" />
+                                        </Box>
+                                    </Tooltip>
+                                </Box>
                             </Stack>
                         </MenuButton>
 
