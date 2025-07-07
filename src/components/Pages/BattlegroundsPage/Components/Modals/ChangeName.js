@@ -17,7 +17,7 @@ import {
     Text,
     useToast,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { checkPin } from '../../../../../utils/walletUtils';
 import { changeAccountName } from '../../../../../services/Ardor/ardorInterface';
 import { errorToast, okToast } from '../../../../../utils/alerts';

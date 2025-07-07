@@ -1,5 +1,5 @@
 import { Box, IconButton, Select, Stack, Text, useMediaQuery } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { CloseIcon } from '@chakra-ui/icons';
 import OmnoPage from './OmnoPage';
@@ -52,7 +52,12 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, isMobile }) => {
                     right={2}
                     onClick={() => closeInvetory()}
                 />
-                <Stack direction={'column'} fontFamily={'Chelsea Market, System'} position="absolute" top={8} left={8}>
+                <Stack
+                    direction={'column'}
+                    fontFamily={'Chelsea Market, System'}
+                    position="absolute"
+                    top={isMobile ? 2 : 8}
+                    left={8}>
                     <Text fontSize={'xs'} mx={'auto'}>
                         SEND TO
                     </Text>

@@ -1,5 +1,5 @@
 import { Box, Image, Select, Stack, Text } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import RewardsTable from './RewardsTable';
 import { getJackpotInfo, getJackpotRewards } from '../../../../../services/Bounty/utils';
 import { RewardsDisplay } from './RewardsDisplay';

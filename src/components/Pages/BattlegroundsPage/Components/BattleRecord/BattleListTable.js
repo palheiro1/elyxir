@@ -1,5 +1,5 @@
 import { Box, Image, Grid, GridItem, Tooltip, Text, Spinner } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import { useCallback, useEffect, useState, useMemo, Fragment } from 'react';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getAsset } from '../../../../../utils/cardsUtils';
 import { formatAddress, isEmptyObject } from '../../Utils/BattlegroundsUtils';
@@ -82,7 +82,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                             bgColor={bgColor}
                             fontFamily="Inter, System"
                             fontWeight="700"
-                            fontSize="sm"
+                            fontSize={isMobile ? 'xs' : 'sm'}
                             p={3}
                             maxH="45px"
                             h="100%"
@@ -149,7 +149,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                                 src={`/images/battlegrounds/${
                                     item?.isUserDefending ? 'defense_icon.svg' : 'attack_icon.svg'
                                 }`}
-                                boxSize="45px"
+                                 boxSize={isMobile ? '30px' : '45px'}
                             />
                         </Box>
                     </GridItem>
@@ -164,7 +164,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                             ml={4}
                             p={3}
                             fontSize={isMobile ? 'xs' : 'md'}>
-                            <Image src={isWin ? victoryIcon : defeatIcon} boxSize="45px" />
+                            <Image src={isWin ? victoryIcon : defeatIcon}  boxSize={isMobile ? '30px' : '45px'} />
                         </Box>
                     </GridItem>
 
@@ -187,7 +187,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                                 hasArrow>
                                 <Box
                                     bgColor={bgColor}
-                                    p={3}
+                                    p={!isMobile && 3}
                                     fontFamily="Inter, System"
                                     fontWeight="700"
                                     h="100%"
@@ -202,7 +202,7 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                                         border="2px solid white"
                                         p={2}
                                         borderRadius="20px"
-                                        w="130px"
+                                        w={isMobile ? '100px' : '130px'}
                                         textAlign="center"
                                         whiteSpace="nowrap"
                                         overflow="hidden"
@@ -211,10 +211,10 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
                                         {isWin &&
                                             battleReward.length > 0 &&
                                             battleReward.map(({ price = 0, name = '' }, i) => (
-                                                <React.Fragment key={i}>
+                                                <Fragment key={i}>
                                                     {' + '}
                                                     {price / NQTDIVIDER} {name}
-                                                </React.Fragment>
+                                                </Fragment>
                                             ))}
                                     </Text>
                                 </Box>
@@ -249,37 +249,28 @@ const BattleListTable = ({ battleDetails, handleViewDetails, cards, arenasInfo, 
         );
     }
 
+    const headerItemProps = {
+        fontWeight: '700',
+        fontSize: isMobile ? 'xs' : 'md',
+        textAlign: 'center',
+        color: '#FFF',
+        my: 'auto',
+    };
     return battleDetails.length > 0 ? (
         <Box w="85%" mx="auto">
             <Grid
                 templateColumns="repeat(6, 1fr)"
                 border="2px solid #DB78AA"
-                p={3}
-                py={1}
                 borderRadius="20px"
                 position="relative"
                 bg="inherit"
                 zIndex={1}>
-                <GridItem fontWeight="700" fontSize="md" textAlign="center" color="#FFF">
-                    DATE
-                </GridItem>
-                <GridItem fontWeight="700" fontSize="md" textAlign="center" color="#FFF">
-                    OPPONENT
-                </GridItem>
-                <GridItem fontWeight="700" fontSize="md" textAlign="center" color="#FFF">
-                    LAND
-                </GridItem>
-                <GridItem fontWeight="700" fontSize="md" textAlign="center" color="#FFF">
-                    POSITION
-                </GridItem>
-                <GridItem fontWeight="700" fontSize="md" textAlign="center" color="#FFF">
-                    RESULT
-                </GridItem>
-                {cards && cards.length > 0 && (
-                    <GridItem fontWeight="700" fontSize="md" textAlign="center" color="#FFF">
-                        REWARDS/ LOSSES
-                    </GridItem>
-                )}
+                <GridItem {...headerItemProps}>DATE</GridItem>
+                <GridItem {...headerItemProps}>OPPONENT</GridItem>
+                <GridItem {...headerItemProps}>LAND</GridItem>
+                <GridItem {...headerItemProps}>POSITION</GridItem>
+                <GridItem {...headerItemProps}>RESULT</GridItem>
+                {cards && cards.length > 0 && <GridItem {...headerItemProps}>REWARDS/ LOSSES</GridItem>}
             </Grid>
             <Box maxHeight="700px" overflowY="auto" borderBottomRadius={'20px'}>
                 {gridRows}

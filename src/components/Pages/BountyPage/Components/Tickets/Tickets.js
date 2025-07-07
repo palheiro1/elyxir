@@ -1,5 +1,5 @@
 import { Box, Button, Center, Flex, Image, Stack, Text } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import BountyWidget from '../../../../BountyWidget/BountyWidget';
 import TicketsTable from './TicketsTable';
 import { useState } from 'react';

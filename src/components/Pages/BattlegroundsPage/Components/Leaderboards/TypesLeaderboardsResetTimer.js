@@ -4,7 +4,7 @@ import { getTypesLeaderboardsResetBlock } from '../../../../../services/Battlegr
 import { useSelector } from 'react-redux';
 import { BLOCKTIME } from '../../../../../data/CONSTANTS';
 
-const TypesLeaderboardsResetTimer = props => {
+const TypesLeaderboardsResetTimer = ({ isMobile, ...rest }) => {
     const [leaderboardResetTimer, setLeaderboardResetTimer] = useState({
         days: 0,
         hours: 0,
@@ -55,10 +55,14 @@ const TypesLeaderboardsResetTimer = props => {
     }, [leaderboardResetTimer.days, leaderboardResetTimer.hours, leaderboardResetTimer.minutes]);
 
     return (
-        <Stack fontFamily="Chelsea market, System" {...props}>
+        <Stack fontFamily="Chelsea market, System" {...rest}>
             {leaderboardResetTimer.remainingBlocks !== 'loading' ? (
                 <Stack direction={'column'}>
-                    <Text color="#FFF" fontFamily="Chelsea market, System" textTransform={'uppercase'}>
+                    <Text
+                        color="#FFF"
+                        fontFamily="Chelsea market, System"
+                        textTransform={'uppercase'}
+                        fontSize={isMobile ? 'xs' : 'md'}>
                         Reseting leaderboards in {timeString}.
                     </Text>
                 </Stack>

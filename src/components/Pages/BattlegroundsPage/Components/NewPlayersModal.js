@@ -3,7 +3,7 @@ import { Box, Button, IconButton, Image, Stack, Text } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import logo from '../assets/image.png';
 
-const NewPlayersModal = ({ handleClose, setOpenInventory }) => {
+const NewPlayersModal = ({ handleClose, setOpenInventory, isMobile }) => {
     const handeOpenInventory = () => {
         setOpenInventory(true);
         handleClose();
@@ -21,7 +21,6 @@ const NewPlayersModal = ({ handleClose, setOpenInventory }) => {
                 bg="#1F2323"
                 borderRadius="25px"
                 zIndex={99}
-                overflowY="hidden"
                 className="custom-scrollbar">
                 <IconButton
                     icon={<CloseIcon />}
@@ -41,18 +40,23 @@ const NewPlayersModal = ({ handleClose, setOpenInventory }) => {
                     w="100%"
                     h={'100%'}
                     m="auto"
-                    spacing={8}
+                    spacing={isMobile ? 4 : 8}
                     align="center"
                     justify="center"
+                    overflowY="auto"
                     textAlign="center"
                     fontFamily="'Chelsea Market', system-ui"
                     p={'24px'}>
-                    <Text fontSize={'2xl'}>Welcome to</Text>
-                    <Image src={logo} />
-                    <Text fontSize={'3xl'} textTransform={'uppercase'} fontWeight={'light'} letterSpacing={'wide'}>
+                    <Text fontSize={isMobile ? 'md' : '2xl'}>Welcome to</Text>
+                    <Image src={logo} boxSize={isMobile && '130px'} />
+                    <Text
+                        fontSize={isMobile ? 'xl' : '3xl'}
+                        textTransform={'uppercase'}
+                        fontWeight={'light'}
+                        letterSpacing={'wide'}>
                         You currently have no cards in battlegrounds
                     </Text>
-                    <Text fontSize={'2xl'}>
+                    <Text fontSize={isMobile ? 'md' : '2xl'}>
                         To start you have to deposit some cards to be able to conquer some land
                     </Text>
                     <Button
@@ -61,7 +65,7 @@ const NewPlayersModal = ({ handleClose, setOpenInventory }) => {
                         color="#EBB2B9"
                         bg="transparent"
                         _hover={{ bg: 'transparent', opacity: 0.8 }}
-                        fontSize={'lg'}
+                        fontSize={isMobile ? 'sm' : 'lg'}
                         mt={3}>
                         {'Next >'}
                     </Button>

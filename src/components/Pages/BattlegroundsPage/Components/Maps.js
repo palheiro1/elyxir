@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import '../BattlegroundMap.css';
 import { MapImage } from '../assets/MapImage';
 import { useDispatch, useSelector } from 'react-redux';
@@ -69,6 +69,7 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
                                 infoAccount={infoAccount}
                                 openPopoverId={openPopoverId}
                                 setOpenPopoverId={setOpenPopoverId}
+                                isMobile={isMobile}
                             />
                         ))}
                 </g>

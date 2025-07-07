@@ -1,9 +1,9 @@
 import { Box, Image, Spinner, Stack, Text } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { formatLeaderboardRewards, getCurrencyImage } from '../../Utils/BattlegroundsUtils';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 
-const LeaderboardsRewards = ({ option }) => {
+const LeaderboardsRewards = ({ option, isMobile }) => {
     const [rewards, setRewards] = useState(null);
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const LeaderboardsRewards = ({ option }) => {
             direction="row"
             align="center"
             fontFamily="Inter, system"
-            fontSize="md"
+            fontSize={isMobile ? 'xs' : 'md'}
             w="100%"
             fontWeight={700}
             bgColor={'#FFF'}
@@ -52,9 +52,8 @@ const LeaderboardsRewards = ({ option }) => {
                                 my="auto"
                                 src={getCurrencyImage(key)}
                                 alt={`${key} Icon`}
-                                w="50px"
-                                h="50px"
                                 mt={-2}
+                                boxSize={isMobile ? '30px' : '50px'}
                             />
                         </Stack>
                     );

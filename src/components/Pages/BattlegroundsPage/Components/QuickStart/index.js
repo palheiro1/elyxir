@@ -2,6 +2,7 @@ import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { Box, Button, IconButton, Stack, useSteps } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import QuickStartStep from './QuickStartStep';
+import { useRef } from 'react';
 
 const steps = [
     {
@@ -33,12 +34,22 @@ const steps = [
 
 const QuickStartModal = ({ handleClose }) => {
     const { activeStep: step, goToNext } = useSteps({ index: 0, count: steps.length });
-    const handleNext = () => (step < steps.length - 1 ? goToNext() : handleClose());
+    const modalRef = useRef(null);
+
+    const handleNext = () => {
+        if (step < steps.length - 1) {
+            modalRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+            goToNext();
+        } else {
+            handleClose();
+        }
+    };
 
     return (
         <>
             <Overlay isVisible handleClose={handleClose} />
             <Box
+                ref={modalRef}
                 pos="fixed"
                 top="50%"
                 left="50%"

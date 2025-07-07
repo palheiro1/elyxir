@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, IconButton, Spinner, useToast } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { SelectHandPage } from './SelectHandPage';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
@@ -189,7 +189,7 @@ export const BattleWindow = ({
                 pos={'fixed'}
                 bgColor={'#1F2323'}
                 zIndex={99}
-                w={(!openIventory && !showResults && defenderInfo) || showResults ? '50%' : '80%'}
+                w={isMobile ? '70%' : (!openIventory && !showResults && defenderInfo) || showResults ? '50%' : '80%'}
                 h={'90%'}
                 borderRadius={'25px'}
                 top={'50%'}

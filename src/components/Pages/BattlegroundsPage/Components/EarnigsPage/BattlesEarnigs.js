@@ -1,5 +1,5 @@
 import { Box, Grid, GridItem, Image, Select, Stack, Text, Tooltip } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { isEmptyObject } from '../../Utils/BattlegroundsUtils';
 import { getAsset } from '../../../../../utils/cardsUtils';
 import { fetchUserBattles } from '../../../../../redux/reducers/BattleReducer';

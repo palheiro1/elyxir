@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
 import { Box, Heading, IconButton, Stack, Text, Select, Image, Tooltip } from '@chakra-ui/react';
@@ -156,7 +156,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                         color={'#FFF'}
                         src="/images/battlegrounds/info.svg"
                         position="absolute"
-                        bottom={10}
+                        bottom={isMobile ? 8 : 10}
                         right={10}
                         zIndex={999}
                         boxSize={'40px'}
@@ -188,7 +188,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                             color={'#FFF'}
                             src="/images/currency/multicurrency.png"
                             position="absolute"
-                            bottom={10}
+                            bottom={isMobile ? 8 : 10}
                             left={10}
                             zIndex={999}
                             boxSize={'40px'}
@@ -199,12 +199,16 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                     <Stack
                         direction={'row'}
                         color={'#FFF'}
-                        mt={10}
+                        mt={isMobile ? 3 : 10}
                         mx={'auto'}
                         w={'80%'}
                         textAlign={'center'}
                         justifyContent={'space-between'}>
-                        <Heading fontFamily={'Chelsea Market, System'} fontWeight={100} my={'auto'}>
+                        <Heading
+                            fontFamily={'Chelsea Market, System'}
+                            fontWeight={100}
+                            my={'auto'}
+                            fontSize={isMobile && 'md'}>
                             LEADERBOARDS
                         </Heading>
 
@@ -225,7 +229,7 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                         return null;
                                 }
                             })()}
-                            w={'190px'}
+                            w={isMobile ? '120px' : '190px'}
                             h={'75px'}
                         />
                         <Select
@@ -254,14 +258,20 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                             })}
                         </Select>
                     </Stack>
-                    <Stack direction={'column'} color={'#FFF'} mx={'auto'} w={'100%'} textAlign={'center'} h={'80%'}>
+                    <Stack
+                        direction={'column'}
+                        color={'#FFF'}
+                        mx={'auto'}
+                        w={'100%'}
+                        textAlign={'center'}
+                        h={isMobile ? '100%' : '80%'}>
                         <Stack
                             direction={'column'}
                             my={'auto'}
-                            mt={2}
+                            mt={isMobile ? 0 : 2}
                             fontFamily={'Chelsea Market, System'}
                             mb={0}
-                            h={'80%'}>
+                            h={isMobile ? '70%' : '80%'}>
                             {option === 5 ? (
                                 <Leaderboard isMobile={isMobile} color={color} />
                             ) : (
@@ -270,11 +280,11 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                         </Stack>
                         <Stack dir="row" mx={'auto'}>
                             {option === 5 ? (
-                                <CombativityResetTimer mb={4} />
+                                <CombativityResetTimer isMobile={isMobile} mb={isMobile ? 0 : 4} />
                             ) : (
-                                <Stack direction={'column'} mb={4}>
-                                    <LeaderboardsRewards option={option} />
-                                    <TypesLeaderboardsResetTimer />
+                                <Stack direction={'column'} mb={isMobile ? 0 : 4}>
+                                    <LeaderboardsRewards option={option} isMobile={isMobile} />
+                                    <TypesLeaderboardsResetTimer isMobile={isMobile} />
                                 </Stack>
                             )}
                         </Stack>
