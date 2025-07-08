@@ -1,6 +1,6 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { Box, Heading, IconButton, Image, Select, Stack } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Overlay } from '../BattlegroundsIntro/Overlay';
 import BattlesEarnigs from './BattlesEarnigs';
 import LeaderboardsEarnigs from './LeaderboardsEarnigs';
@@ -8,6 +8,7 @@ import LeaderboardsEarnigs from './LeaderboardsEarnigs';
 const Earnings = ({ infoAccount, isMobile, closeEarnigs, cards }) => {
     const [option, setOption] = useState(1);
 
+    console.log('🚀 ~ Earnings ~ isMobile:', isMobile);
     return (
         <>
             <Overlay isVisible={true} handleClose={closeEarnigs} />
@@ -70,7 +71,7 @@ const Earnings = ({ infoAccount, isMobile, closeEarnigs, cards }) => {
                             PANTHEONS
                         </option>
                     </Select>
-                    <Heading fontFamily={'Chelsea market'} flex="1" fontWeight={400}>
+                    <Heading fontFamily={'Chelsea market'} flex="1" fontWeight={400} size={isMobile ? 'lg' : 'xl'}>
                         EARNINGS
                     </Heading>
                     <Image src={`/images/battlegrounds/coins2.svg`} flex="1" maxW="120px" maxH={'80px'} />

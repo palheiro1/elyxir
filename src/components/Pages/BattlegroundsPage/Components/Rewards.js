@@ -3,6 +3,13 @@ import { useEffect, useState } from 'react';
 import { formatLeaderboardRewards, getCurrencyImage } from '../Utils/BattlegroundsUtils';
 import { NQTDIVIDER } from '../../../../data/CONSTANTS';
 
+/**
+ * @name Rewards
+ * @description Displays the current accumulated leaderboard rewards for the Battlegrounds game. Fetches data from the blockchain and presents a split layout with reward values and corresponding icons. Includes a loading spinner while fetching.
+ * @param {Object} props - Chakra UI-compatible style and layout props passed to the root container.
+ * @returns {JSX.Element} A styled container showing formatted reward values with currency or item icons. Handles loading and data formatting internally.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const Rewards = ({ ...props }) => {
     const [rewards, setRewards] = useState(null);
     useEffect(() => {
@@ -18,14 +25,7 @@ const Rewards = ({ ...props }) => {
         fetchAccumulatedBounty();
     }, []);
     return (
-        <Stack
-            boxSize={'200px'}
-            borderRadius={'12px'}
-            p={'12px'}
-            color={'#000'}
-            bgColor={'#FFF'}
-            // backgroundImage=" linear-gradient(36deg,rgba(88, 108, 160, 1) 0%, rgba(122, 181, 186, 1) 12%, rgba(255, 255, 255, 1) 100%)"
-            {...props}>
+        <Stack boxSize={'200px'} borderRadius={'12px'} p={'12px'} color={'#000'} bgColor={'#FFF'} {...props}>
             <Text textDecoration={'underline'} fontSize={'2xl'} fontFamily={'Chelsea Market, system-ui'} mx={'auto'}>
                 REWARDS
             </Text>

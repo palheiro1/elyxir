@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import {
     Box,
     Button,
@@ -35,8 +35,33 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSoldiers } from '../../../../redux/reducers/SoldiersReducer';
 
-export const MapPoint = React.memo(
-    ({ handleClick, arena, selectedArena, cards, handleStartBattle, infoAccount, openPopoverId, setOpenPopoverId }) => {
+/**
+ * @name MapPoint
+ * @description Interactive SVG point rendered on a battle map. Represents an arena with a defender that the user can challenge. Displays detailed info in a popover, including defender’s cards and metadata.
+ * @param {Function} handleClick - Function triggered when the user selects this arena.
+ * @param {Object} arena - Object representing the arena (id, coordinates, name, defender info, rarity, etc).
+ * @param {Number} selectedArena - ID of the currently selected arena.
+ * @param {Array} cards - Full list of soldier cards available for matching against the defender.
+ * @param {Function} handleStartBattle - Function triggered when the battle is started.
+ * @param {Object} infoAccount - The current user's account info (includes .accountRs).
+ * @param {String|Number} openPopoverId - ID of the currently open popover on the map.
+ * @param {Function} setOpenPopoverId - Setter to change which popover is open.
+ * @param {Boolean} isMobile - Whether the current device is mobile-sized (affects layout).
+ * @returns {JSX.Element|null} A map point rendered as a clickable SVG circle with a Chakra Popover that shows arena and defender details.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const MapPoint = memo(
+    ({
+        handleClick,
+        arena,
+        selectedArena,
+        cards,
+        handleStartBattle,
+        infoAccount,
+        openPopoverId,
+        setOpenPopoverId,
+        isMobile,
+    }) => {
         const dispatch = useDispatch();
         const { soldiers } = useSelector(state => state.soldiers);
 
@@ -167,7 +192,7 @@ export const MapPoint = React.memo(
                         </PopoverTrigger>
                         {isOpen && (
                             <Portal>
-                                <PopoverContent backgroundColor={'#5A679B'} border={'none'}>
+                                <PopoverContent backgroundColor={'#5A679B'} border={'none'} h={isMobile && '300px'}>
                                     <PopoverArrow backgroundColor={'#202323'} />
                                     <PopoverHeader
                                         fontFamily={'Chelsea Market, system-ui'}
@@ -189,7 +214,10 @@ export const MapPoint = React.memo(
                                                 bgColor={'#FFF'}
                                                 borderRadius={'full'}
                                             />
-                                            <Text textTransform={'uppercase'} color={'#EBB2B9'} fontSize={'large'}>
+                                            <Text
+                                                textTransform={'uppercase'}
+                                                color={'#EBB2B9'}
+                                                fontSize={isMobile ? 'sm' : 'lg'}>
                                                 {name}
                                             </Text>
                                             <Image src={getMediumIcon(medium)} w={'10%'} />
@@ -198,6 +226,7 @@ export const MapPoint = React.memo(
                                             <Text
                                                 textTransform={'uppercase'}
                                                 color={'#FFF'}
+                                                fontSize={isMobile ? 'sm' : 'lg'}
                                                 onClick={() => copyToClipboard(defenderInfo.accountRS)}>
                                                 GUARDIAN: {defenderInfo.name || formatAddress(defenderInfo.accountRS)}{' '}
                                             </Text>
@@ -210,9 +239,10 @@ export const MapPoint = React.memo(
                                         justifyContent={'center'}
                                         flexDir={'column'}
                                         gap={5}
+                                        overflowY={isMobile && 'scroll'}
                                         bgColor={'#5A679B'}
                                         mx={'auto'}>
-                                        <Stack direction={'column'} mt={0} mx={'auto'} w={'80%'}>
+                                        <Stack direction={'column'} mt={isMobile && '300px'} mx={'auto'} w={'80%'}>
                                             {defenderCards.map((card, index) => {
                                                 let cardSoldier = soldiers.soldier.find(
                                                     soldier => soldier.asset === card.asset

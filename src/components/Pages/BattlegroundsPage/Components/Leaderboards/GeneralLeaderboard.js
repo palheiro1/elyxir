@@ -160,7 +160,7 @@ const GeneralLeaderboard = ({ isMobile, color }) => {
                                 gap={4}
                                 w={'90%'}
                                 mx={'auto'}
-                                mt={3}
+                                mt={isMobile ? 0 : 3}
                                 p={2}
                                 borderRadius={'10px'}
                                 border={`2px solid ${color}`}
@@ -173,7 +173,7 @@ const GeneralLeaderboard = ({ isMobile, color }) => {
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        fontSize={isMobile ? 'sm' : 'md'}>
+                                        fontSize={isMobile ? 'xs' : 'md'}>
                                         POSITION
                                     </Text>
                                 </GridItem>
@@ -181,7 +181,7 @@ const GeneralLeaderboard = ({ isMobile, color }) => {
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        fontSize={isMobile ? 'sm' : 'md'}>
+                                        fontSize={isMobile ? 'xs' : 'md'}>
                                         NAME/ ADDRESS
                                     </Text>
                                 </GridItem>
@@ -189,7 +189,7 @@ const GeneralLeaderboard = ({ isMobile, color }) => {
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        fontSize={isMobile ? 'sm' : 'md'}>
+                                        fontSize={isMobile ? 'xs' : 'md'}>
                                         LANDS CONQUERED
                                     </Text>
                                 </GridItem>
@@ -197,7 +197,7 @@ const GeneralLeaderboard = ({ isMobile, color }) => {
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        fontSize={isMobile ? 'sm' : 'md'}>
+                                        fontSize={isMobile ? 'xs' : 'md'}>
                                         SUCCESSFUL DEFENSES
                                     </Text>
                                 </GridItem>
@@ -205,7 +205,7 @@ const GeneralLeaderboard = ({ isMobile, color }) => {
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        fontSize={isMobile ? 'sm' : 'md'}>
+                                        fontSize={isMobile ? 'xs' : 'md'}>
                                         BATTLE EFFICIENCY
                                     </Text>
                                 </GridItem>
@@ -213,7 +213,7 @@ const GeneralLeaderboard = ({ isMobile, color }) => {
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        fontSize={isMobile ? 'sm' : 'md'}>
+                                        fontSize={isMobile ? 'xs' : 'md'}>
                                         DEFENSE DURATION
                                     </Text>
                                 </GridItem>
@@ -221,13 +221,13 @@ const GeneralLeaderboard = ({ isMobile, color }) => {
                                     <Text
                                         fontFamily={'Inter, System'}
                                         fontWeight={700}
-                                        fontSize={isMobile ? 'sm' : 'md'}>
+                                        fontSize={isMobile ? 'xs' : 'md'}>
                                         TOTAL POINTS
                                     </Text>
                                 </GridItem>
                             </Grid>
                             <Box
-                                maxHeight={'45vh'}
+                                maxHeight={isMobile ? '30vh' : '45vh'}
                                 overflowY="auto"
                                 bgColor={'#323636'}
                                 w={'90%'}

@@ -339,8 +339,8 @@ const Battlegrounds = ({ infoAccount }) => {
                 className="landscape-only"
                 bgImage="url('/images/battlegrounds/battlegroundsBackground.png')"
                 bgSize="cover"
-                overflow={'auto'}
                 overflowY={isMobile ? 'auto' : 'hidden'}
+                overflowX={'hidden'}
                 bgPosition="center"
                 h={'100vh'}
                 bgRepeat="repeat">
@@ -397,7 +397,11 @@ const Battlegrounds = ({ infoAccount }) => {
                 {openLeaderboards && <Leaderboards handleClose={handleCloseLeaderboards} isMobile={isMobile} />}
                 {openQuickStart && <QuickStartModal handleClose={handleCloseQuickStart} />}
                 {openNewPlayersModal && (
-                    <NewPlayersModal handleClose={handleCloseNewPlayers} setOpenInventory={setOpenInventory} />
+                    <NewPlayersModal
+                        handleClose={handleCloseNewPlayers}
+                        setOpenInventory={setOpenInventory}
+                        isMobile={isMobile}
+                    />
                 )}
                 <BattlegroundsIntro
                     visible={visible}
@@ -408,7 +412,13 @@ const Battlegrounds = ({ infoAccount }) => {
                 />
                 <AdvertModal isOpen={isModalOpen} onClose={closeModal} />
                 <ScrollLock isLocked={isScrollLocked} />
-                <Box position={'relative'} ml={6} mt={isMobile ? 0 : 5} h={'100%'} overflow={'auto'}>
+                <Box
+                    position={'relative'}
+                    ml={6}
+                    mt={isMobile ? 0 : 5}
+                    h={'100%'}
+                    overflow={'auto'}
+                    overflowX={'hidden'}>
                     <Stack direction={'row'} h={'100%'} mb={'150px'}>
                         <Stack direction={'column'} w={'20%'}>
                             <Img
@@ -500,7 +510,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                                 w="40px"
                                                 h="40px"
                                             />
-                                            <Text ml={-2}>{Number(IGNISBalance).toFixed(2)}</Text>
+                                            <Text ml={-2}>{Number(IGNISBalance).toFixed(0)}</Text>
                                         </Stack>
                                     </Box>
                                     <Menu>
@@ -578,12 +588,16 @@ const Battlegrounds = ({ infoAccount }) => {
                                         </Portal>
                                     </Menu>
                                 </Stack>
-                                <Stack direction={'row'} w={isMobile ? '90%' : '50%'} color={'#FFF'}>
+                                <Stack direction={'row'} w={'50%'} color={'#FFF'}>
                                     <Text my={'auto'} fontSize={'md'} fontWeight={500} mx={3}>
                                         Lands
                                     </Text>
                                     <Menu>
-                                        <MenuButton as={Button} w={'fit-content'} minW={'160px'} bg={'transparent'}>
+                                        <MenuButton
+                                            as={Button}
+                                            w={'fit-content'}
+                                            minW={!isMobile && '160px'}
+                                            bg={'transparent'}>
                                             <Stack direction={'row'} justifyContent={'space-between'} w={'100%'}>
                                                 <Stack direction={'row'} color={'#FFF'}>
                                                     <Text fontSize={'md'} fontWeight={500}>
@@ -623,7 +637,11 @@ const Battlegrounds = ({ infoAccount }) => {
                                         </MenuList>
                                     </Menu>
                                     <Menu>
-                                        <MenuButton as={Button} bg={'transparent'} w={'fit-content'} minW={'160px'}>
+                                        <MenuButton
+                                            as={Button}
+                                            bg={'transparent'}
+                                            w={'fit-content'}
+                                            minW={!isMobile && '160px'}>
                                             <Stack direction={'row'} justifyContent={'space-between'} w={'100%'}>
                                                 <Stack direction={'row'} color={'#FFF'}>
                                                     <Text fontSize={'md'} fontWeight={500}>
@@ -698,7 +716,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                     border="2px solid #D597B2"
                                     borderRadius="30px"
                                     justifyContent="space-between"
-                                    w={{ base: '70%', md: '65%' }}
+                                    w={{ base: '70%', md: isMobile ? '80%' : '65%' }}
                                     fontFamily="'Chelsea Market', system-ui">
                                     {statistics.map(({ name, value }, index) => (
                                         <Text

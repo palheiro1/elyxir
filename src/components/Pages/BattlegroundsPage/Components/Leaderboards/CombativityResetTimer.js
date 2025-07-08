@@ -4,7 +4,16 @@ import { getGiftzRewardQNT, getLeaderboardsResetBlock } from '../../../../../ser
 import { useSelector } from 'react-redux';
 import { BLOCKTIME } from '../../../../../data/CONSTANTS';
 
-const CombativityResetTimer = props => {
+/**
+ * @name CombativityResetTimer
+ * @description UI component that shows the time remaining until the Battlegrounds combativity leaderboard resets.
+ * It calculates the reset time using blockchain height and displays the reward (GIFTZ) and remaining time in a human-readable format.
+ * @param {boolean} isMobile - Whether the component is rendered in mobile view (affects font size and image size).
+ * @param {...any} rest - Additional props passed to the Chakra UI Stack container.
+ * @returns {JSX.Element} A responsive timer component showing leaderboard reset countdown and GIFTZ reward.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+const CombativityResetTimer = ({ isMobile, ...rest }) => {
     const [leaderboardResetTimer, setLeaderboardResetTimer] = useState({
         days: 0,
         hours: 0,
@@ -63,7 +72,7 @@ const CombativityResetTimer = props => {
     }, [leaderboardResetTimer.days, leaderboardResetTimer.hours, leaderboardResetTimer.minutes]);
 
     return (
-        <Stack fontFamily="Chelsea market, System" {...props}>
+        <Stack fontFamily="Chelsea market, System" fontSize={isMobile ? 'xs' : 'md'} {...rest}>
             {leaderboardResetTimer.remainingBlocks !== 'loading' ? (
                 <Stack direction={'column'}>
                     <Stack direction={'row'} mx={'auto'}>
@@ -72,8 +81,7 @@ const CombativityResetTimer = props => {
                             my="auto"
                             src={'images/currency/giftz.png'}
                             alt={'GIFTZ Icon (˘･_･˘)'}
-                            w="40px"
-                            h="40px"
+                            boxSize={isMobile ? '30px' : '40px'}
                             mt={-2}
                         />
                     </Stack>

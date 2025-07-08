@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     Box,
     Center,
-    Flex,
     Heading,
     IconButton,
     Img,
@@ -11,7 +10,6 @@ import {
     Spacer,
     Stack,
     Text,
-    Tooltip,
     useMediaQuery,
 } from '@chakra-ui/react';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
@@ -118,7 +116,11 @@ const BattleInventory = ({
                     ARMY CARDS
                 </Heading>
                 <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={'9%'}>
-                    <Select w={'10%'} onChange={handleRarityChange} color={'#FFF'} defaultValue={filters.rarity}>
+                    <Select
+                        w={isMobile ? '25%' : '10%'}
+                        onChange={handleRarityChange}
+                        color={'#FFF'}
+                        defaultValue={filters.rarity}>
                         <option value="-1" style={optionStyle}>
                             Rarity
                         </option>
@@ -158,7 +160,11 @@ const BattleInventory = ({
                         )}
                     </Select>
 
-                    <Select w={'10%'} onChange={handleElementChange} color={'#FFF'} defaultValue={filters.element}>
+                    <Select
+                        w={isMobile ? '25%' : '10%'}
+                        onChange={handleElementChange}
+                        color={'#FFF'}
+                        defaultValue={filters.element}>
                         <option value="-1" style={optionStyle}>
                             Element
                         </option>
@@ -172,7 +178,11 @@ const BattleInventory = ({
                             Aquatic
                         </option>
                     </Select>
-                    <Select w={'10%'} onChange={handleDomainChange} color={'#FFF'} defaultValue={filters.domain}>
+                    <Select
+                        w={isMobile ? '25%' : '10%'}
+                        onChange={handleDomainChange}
+                        color={'#FFF'}
+                        defaultValue={filters.domain}>
                         <option value="-1" style={optionStyle}>
                             Continent
                         </option>
@@ -193,7 +203,7 @@ const BattleInventory = ({
                         </option>
                     </Select>
                 </Stack>
-                <Stack direction={'row'} padding={5} pt={0} height={'90%'}>
+                <Stack direction={'row'} padding={5} pt={0} height={isMobile ? '80%' : '90%'}>
                     <Box
                         mb={2}
                         borderRadius={'20px'}
@@ -220,8 +230,8 @@ const BattleInventory = ({
                                         <Box
                                             key={i}
                                             position="relative"
-                                            w={'214px'}
-                                            h={'333px'}
+                                            w={isMobile ? '128px' : '214px'}
+                                            h={isMobile ? '215px' : '333px'}
                                             cursor={'pointer'}
                                             bg={'white'}
                                             onClick={() => !selected && handleCardClick(card)}
@@ -245,20 +255,13 @@ const BattleInventory = ({
                                                         color={'#000'}>
                                                         {name}
                                                     </Text>
-                                                    <CardBadges rarity={rarity} continent={channel} size="sm" />
+                                                    <CardBadges
+                                                        rarity={rarity}
+                                                        continent={channel}
+                                                        size={isMobile ? '2xs' : 'sm'}
+                                                    />
                                                 </Stack>
                                                 <Spacer display={{ base: 'none', lg: 'block' }} />
-                                                <Center minHeight={{ base: 'auto', lg: '100%' }}>
-                                                    <Tooltip display={'flex'} placement="bottom">
-                                                        <Flex w={{ base: 'auto', lg: '100%' }}>
-                                                            <Text
-                                                                textAlign="end"
-                                                                minH={{ base: '100%', lg: 'auto' }}
-                                                                mb={isMobile && 3}
-                                                                color={'#000'}></Text>
-                                                        </Flex>
-                                                    </Tooltip>
-                                                </Center>
                                             </Stack>
                                             {selected && (
                                                 <Box

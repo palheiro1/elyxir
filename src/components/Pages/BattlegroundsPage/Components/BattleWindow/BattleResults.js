@@ -1,5 +1,5 @@
 import { Box, Stack, Text, Tooltip, Spinner, Image, Square, IconButton } from '@chakra-ui/react';
-import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { addressToAccountId, getAccount } from '../../../../../services/Ardor/ardorInterface';
 import {
     getArenas,

@@ -1,5 +1,5 @@
 import { Box, IconButton, Image, Spinner, Square, Stack, Text, Tooltip, useToast } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useRef, useState, Fragment } from 'react';
+import { useCallback, useEffect, useRef, useState, Fragment } from 'react';
 import { getBattleById, getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 import '@fontsource/chelsea-market';
 import locations from '../../assets/LocationsEnum';
