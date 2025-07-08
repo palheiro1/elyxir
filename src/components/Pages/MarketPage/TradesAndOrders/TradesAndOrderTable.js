@@ -25,13 +25,15 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
     };
 
     return (
-        <Box maxW={"76vw"}>
+        <Box maxW={'76vw'} mx="auto">
             <TableContainer mt={4} bg="blackAlpha">
                 <Table>
                     <Thead>
                         <Tr borderBottom={'2px solid #3b6497'} borderTop={'2px solid #3b6497'}>
                             <Th />
-                            <Th color="#3b6497">Title</Th>
+                            <Th color="#3b6497" textAlign="center">
+                                Title
+                            </Th>
                             <Th color="#3b6497">Amount</Th>
                             <Th color="#3b6497">Price</Th>
                             <Th color="#3b6497">Date and Time</Th>
@@ -51,7 +53,9 @@ const TradesAndOrderTable = ({ account, trades, cards }) => {
 
                                 const { name, quantityQNT } = trade;
                                 const amount =
-                                    name === 'GEM' || name === 'wETH' ? quantityQNT / NQTDIVIDER : quantityQNT;
+                                    name === 'MANA' || name === 'GEM' || name === 'wETH'
+                                        ? quantityQNT / NQTDIVIDER
+                                        : quantityQNT;
 
                                 return (
                                     <TradesOrOrderItem
