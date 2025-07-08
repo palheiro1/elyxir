@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Overlay } from '../BattlegroundsIntro/Overlay';
+import { Overlay } from '../../../../ui/Overlay';
 import { Box, Heading, IconButton, Stack } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import BattleDetails from './BattleDetails';

@@ -1,4 +1,4 @@
-import { Overlay } from '../BattlegroundsIntro/Overlay';
+import { Overlay } from '../../../../ui/Overlay';
 import { Box, Button, IconButton, Stack, useSteps } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import QuickStartStep from './QuickStartStep';
@@ -12,7 +12,7 @@ import { QuickStartSteps } from './data';
  * @returns {JSX.Element} A modal overlay with tutorial steps and navigation controls.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const QuickStartModal = ({ handleClose }) => {
+const QuickStartModal = ({ isMobile, handleClose }) => {
     const steps = QuickStartSteps;
     const { activeStep: step, goToNext } = useSteps({ index: 0, count: steps.length });
     const modalRef = useRef(null);
@@ -26,6 +26,8 @@ const QuickStartModal = ({ handleClose }) => {
         }
     };
 
+    const CurrentStep = steps[step];
+
     return (
         <>
             <Overlay isVisible handleClose={handleClose} />
@@ -36,7 +38,7 @@ const QuickStartModal = ({ handleClose }) => {
                 left="50%"
                 transform="translate(-50%, -50%)"
                 w="65%"
-                h="90%"
+                h="80%"
                 bg="#1F2323"
                 borderRadius="25px"
                 zIndex={99}
@@ -65,20 +67,24 @@ const QuickStartModal = ({ handleClose }) => {
                     justify="space-between"
                     textAlign="center">
                     <Box w="100%" p="24px" fontFamily="Ruina">
-                        <QuickStartStep {...steps[step]} />
-
-                        <Button
-                            onClick={handleNext}
-                            fontFamily="Chelsea Market, system-ui"
-                            color="#EBB2B9"
-                            bg="transparent"
-                            _hover={{ bg: 'transparent', opacity: 0.8 }}
-                            textDecor={step < steps.length - 1 ? 'none' : 'underline'}
-                            fontSize={'lg'}
-                            mt={3}>
-                            {step < steps.length - 1 ? 'Next >' : 'Start game'}
-                        </Button>
+                        {typeof CurrentStep === 'function' ? (
+                            <CurrentStep isMobile={isMobile} />
+                        ) : (
+                            <QuickStartStep {...CurrentStep} />
+                        )}
                     </Box>
+                    <Button
+                        onClick={handleNext}
+                        fontFamily="Chelsea Market, system-ui"
+                        color="#EBB2B9"
+                        bg="transparent"
+                        _hover={{ bg: 'transparent', opacity: 0.8 }}
+                        textDecor={step < steps.length - 1 ? 'none' : 'underline'}
+                        fontSize={'lg'}
+                        position={'absolute'}
+                        bottom={5}>
+                        {step < steps.length - 1 ? 'Next >' : 'Start game'}
+                    </Button>
                 </Stack>
             </Box>
         </>

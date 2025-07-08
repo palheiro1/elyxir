@@ -1,7 +1,7 @@
 import { Box, IconButton, useMediaQuery } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
-import { Overlay } from '../../../BattlegroundsPage/Components/BattlegroundsIntro/Overlay';
 import InventoryPage from './InventoryPage';
+import { Overlay } from '../../../../ui/Overlay';
 
 const Inventory = ({ infoAccount, cards, handleCloseInventory, isMobile }) => {
     const closeInvetory = () => {
@@ -43,7 +43,13 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, isMobile }) => {
                     onClick={() => closeInvetory()}
                 />
 
-                <InventoryPage infoAccount={infoAccount} cards={cards} gridColumns={getColumns} isMobile={isMobile} handleCloseInventory={closeInvetory}/>
+                <InventoryPage
+                    infoAccount={infoAccount}
+                    cards={cards}
+                    gridColumns={getColumns}
+                    isMobile={isMobile}
+                    handleCloseInventory={closeInvetory}
+                />
             </Box>
         </>
     );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Overlay } from '../BattlegroundsIntro/Overlay';
+import { Overlay } from '../../../../ui/Overlay';
 import { Box, Heading, IconButton, Stack, Text, Select, Image, Tooltip } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import Leaderboard from './Leaderboard';

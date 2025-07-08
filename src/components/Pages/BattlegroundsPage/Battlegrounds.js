@@ -17,7 +17,6 @@ import {
 import { Maps } from './Components/Maps';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { ScrollLock } from './assets/ScrollLock';
-import { BattlegroundsIntro } from './Components/BattlegroundsIntro/BattlegroundsIntro';
 import './BattlegroundMap.css';
 import { AdvertModal } from './Components/Modals/AdvertModal';
 import { BattleWindow } from './Components/BattleWindow/BattleWindow';
@@ -51,8 +50,6 @@ import NewPlayersModal from './Components/NewPlayersModal';
 const Battlegrounds = ({ infoAccount }) => {
     const { accountRs, IGNISBalance } = infoAccount;
 
-    const [visible, setVisible] = useState(true);
-    const [page, setPage] = useState(1);
     const [isScrollLocked, setIsScrollLocked] = useState(true);
     const [gemsModalMode, setGemsModalMode] = useState(null); // True send , false withdraw
     const [wethModalMode, setWethModalMode] = useState(null); // True send , false withdraw
@@ -87,7 +84,9 @@ const Battlegrounds = ({ infoAccount }) => {
     const { cards } = useSelector(state => state.cards);
     const { prev_height } = useSelector(state => state.blockchain);
 
-    const [openNewPlayersModal, setOpenNewPlayersModal] = useState(!filteredCards || filteredCards.length === 0);
+    const [openNewPlayersModal, setOpenNewPlayersModal] = useState(
+        cards && (!filteredCards || filteredCards.length === 0)
+    );
 
     useEffect(() => {
         cards && accountRs && dispatch(fetchBattleData({ accountRs, cards }));
@@ -118,16 +117,6 @@ const Battlegrounds = ({ infoAccount }) => {
 
         return () => clearInterval(intervalId);
     }, [dispatch]);
-
-    const handleNext = () => {
-        setPage(2);
-    };
-
-    const handleClose = () => {
-        setVisible(false);
-        setIsScrollLocked(false);
-        localStorage.setItem('showedBattlegroundIntro', 'true');
-    };
 
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
     const bgColor = useColorModeValue('rgba(234, 234, 234, 0.5)', 'rgba(234, 234, 234, 1)');
@@ -304,6 +293,7 @@ const Battlegrounds = ({ infoAccount }) => {
     };
 
     const [isMobile] = useMediaQuery('(max-width: 1190px)');
+    const [isMediumScreen] = useMediaQuery('(min-width: 1190px) and (max-width: 1550px)');
 
     const handleRarityChange = event => {
         setFilters(prevFilters => ({
@@ -332,7 +322,6 @@ const Battlegrounds = ({ infoAccount }) => {
         { name: 'Aerial', value: 2 },
         { name: 'Aquatic', value: 3 },
     ];
-
     return (
         <>
             <Box
@@ -395,7 +384,13 @@ const Battlegrounds = ({ infoAccount }) => {
                 )}
 
                 {openLeaderboards && <Leaderboards handleClose={handleCloseLeaderboards} isMobile={isMobile} />}
-                {openQuickStart && <QuickStartModal handleClose={handleCloseQuickStart} />}
+                {openQuickStart && (
+                    <QuickStartModal
+                        handleClose={handleCloseQuickStart}
+                        isMobile={isMobile}
+                        isMediumScreen={isMediumScreen}
+                    />
+                )}
                 {openNewPlayersModal && (
                     <NewPlayersModal
                         handleClose={handleCloseNewPlayers}
@@ -403,13 +398,7 @@ const Battlegrounds = ({ infoAccount }) => {
                         isMobile={isMobile}
                     />
                 )}
-                <BattlegroundsIntro
-                    visible={visible}
-                    page={page}
-                    handleClose={handleClose}
-                    handleNext={handleNext}
-                    isMobile={isMobile}
-                />
+
                 <AdvertModal isOpen={isModalOpen} onClose={closeModal} />
                 <ScrollLock isLocked={isScrollLocked} />
                 <Box
@@ -482,15 +471,15 @@ const Battlegrounds = ({ infoAccount }) => {
                                 </Menu>
                             )}
                         </Stack>
-                        <Stack mx={'auto'} w={'80%'}>
+                        <Stack mx={'auto'} w={'100%'}>
                             <Stack
                                 direction="row"
                                 fontFamily={'Chelsea Market, system-ui'}
                                 mx={'auto'}
                                 mt={isMobile && 2}
-                                w={isMobile ? '90%' : '70%'}
+                                w={'100%'}
                                 justifyContent={'space-between'}>
-                                <Stack direction={'row'} w={'40%'} mx={'auto'} justifyContent={'space-between'}>
+                                <Stack direction={'row'} ml={'5%'}>
                                     <Box
                                         zIndex={1}
                                         color={'black'}
@@ -524,6 +513,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                             w="6rem"
                                             minW={'68px'}
                                             ml={isMobile && 3}
+                                            mx={4}
                                             maxH={'1.5rem'}>
                                             <Stack direction="row" align="center">
                                                 <Image
@@ -588,7 +578,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                         </Portal>
                                     </Menu>
                                 </Stack>
-                                <Stack direction={'row'} w={'50%'} color={'#FFF'}>
+                                <Stack direction={'row'} color={'#FFF'}>
                                     <Text my={'auto'} fontSize={'md'} fontWeight={500} mx={3}>
                                         Lands
                                     </Text>
@@ -686,12 +676,11 @@ const Battlegrounds = ({ infoAccount }) => {
                                 className="containerMap"
                                 zIndex={0}
                                 mx="auto"
-                                w="100%"
-                                h={'80%'}
+                                w={isMediumScreen ? '80%' : '90%'}
+                                h={!isMobile && '80%'}
                                 display="flex"
                                 justifyContent="center"
-                                alignItems="center"
-                                mt={5}>
+                                alignItems="center">
                                 <Maps
                                     handleSelectArena={handleSelectArena}
                                     infoAccount={infoAccount}
@@ -703,7 +692,6 @@ const Battlegrounds = ({ infoAccount }) => {
                                 />
                             </Box>
                             <Stack
-                                mt={5}
                                 direction={'row'}
                                 mx={'auto'}
                                 maxH={'55px'}

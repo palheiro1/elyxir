@@ -7,7 +7,7 @@ import MapPoint from './MapPoint';
 
 /**
  * @name Maps
- * @description SVG-based interactive map for Battlegrounds, displaying clickable arenas (`MapPoint`) 
+ * @description SVG-based interactive map for Battlegrounds, displaying clickable arenas (`MapPoint`)
  * with dynamic scaling. Applies filters for element and rarity, and enables arena selection and battle initiation. Responsive to window resizing.
  * @param {Function} handleSelectArena - Callback triggered when an arena is selected.
  * @param {Object} infoAccount - Current player account information used in map interactions.
@@ -46,8 +46,8 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
     const scale = useMemo(() => {
         const minWidth = 480;
         const maxWidth = 1440;
-        const minScale = 0.7;
-        const maxScale = 1.1;
+        const minScale = 0.65;
+        const maxScale = 1.3;
 
         const clampedWidth = Math.min(Math.max(windowWidth, minWidth), maxWidth);
         const ratio = (clampedWidth - minWidth) / (maxWidth - minWidth);

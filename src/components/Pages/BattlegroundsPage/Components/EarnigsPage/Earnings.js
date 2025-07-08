@@ -1,7 +1,7 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { Box, Heading, IconButton, Image, Select, Stack } from '@chakra-ui/react';
 import { useState } from 'react';
-import { Overlay } from '../BattlegroundsIntro/Overlay';
+import { Overlay } from '../../../../ui/Overlay';
 import BattlesEarnigs from './BattlesEarnigs';
 import LeaderboardsEarnigs from './LeaderboardsEarnigs';
 

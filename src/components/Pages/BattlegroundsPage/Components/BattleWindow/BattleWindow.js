@@ -3,7 +3,7 @@ import { Box, IconButton, Spinner, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { SelectHandPage } from './SelectHandPage';
-import { Overlay } from '../BattlegroundsIntro/Overlay';
+import { Overlay } from '../../../../ui/Overlay';
 import { getAccount } from '../../../../../services/Ardor/ardorInterface';
 import { getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 import { errorToast } from '../../../../../utils/alerts';
