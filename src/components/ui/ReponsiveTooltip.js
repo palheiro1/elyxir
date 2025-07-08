@@ -9,6 +9,19 @@ import {
     Box,
 } from '@chakra-ui/react';
 
+/**
+ * @name ResponsiveTooltip
+ * @description Tooltip component that automatically adjusts its behavior depending on the device type.
+ * On desktop (non-touch devices), it renders a Chakra UI `Tooltip`.
+ * On mobile or touch-enabled devices, it renders a `Popover` triggered by click,
+ * allowing better usability on touchscreens.
+ * @param {Object} props
+ * @param {React.ReactNode} props.children - The element that triggers the tooltip or popover.
+ * @param {string | React.ReactNode} props.label - The content to show inside the tooltip or popover.
+ * @param {Object} [rest] - Additional props forwarded to the Chakra UI Tooltip component.
+ * @returns {JSX.Element} A responsive tooltip or popover depending on the device type.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const ResponsiveTooltip = ({ children, label, ...rest }) => {
     const isMobile =
         typeof window !== 'undefined' &&
