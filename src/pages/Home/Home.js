@@ -559,7 +559,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const borderColor = MENU_OPTIONS_COLOR[option] || 'whiteAlpha.100';
 
     return (
-        <Box position={'relative'}>
+        <Box position={'relative'} overflowX={'hidden'}>
             {/* MAIN COMPONENT - LATERAL MENU & CHILDREN */}
             <ProfileDropdown setOption={setOption} handleLogout={handleLogout} />
             <Box

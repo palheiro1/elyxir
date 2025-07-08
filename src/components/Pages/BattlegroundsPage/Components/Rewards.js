@@ -34,29 +34,41 @@ const Rewards = ({ ...props }) => {
                     <Spinner color="#000" />
                 </Center>
             ) : (
-                <Stack direction={'row'} w={'100%'} spacing={2} mx={'auto'}>
-                    <Stack direction="column" w={'50%'}>
+                <Stack direction={'row'} w={'100%'} mx={'auto'} pl={2}>
+                    <Stack direction="column" w={'60%'}>
                         {Object.entries(rewards)
                             .reverse()
                             .slice(0, -1)
                             .map(([key, value], index) => {
                                 const formattedValue =
                                     key === 'weth'
-                                        ? (value / NQTDIVIDER).toFixed(4)
+                                        ? (value / NQTDIVIDER).toFixed(3)
                                         : key === 'gem' || key === 'mana'
                                         ? (value / NQTDIVIDER).toFixed(0)
                                         : value;
 
-                                const showImage = key !== 'cards';
-
                                 return (
-                                    <Stack key={index} direction="row" justifyContent={'space-between'} w={'100%'}>
-                                        <Text my="auto" textTransform={'uppercase'} fontSize={'sm'} fontWeight={'bold'}>
+                                    <Stack
+                                        key={index}
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        align="center"
+                                        w="100%">
+                                        <Text
+                                            my="auto"
+                                            textTransform={'uppercase'}
+                                            fontSize={'sm'}
+                                            fontWeight={'bold'}
+                                            w={'50px'}>
                                             {formattedValue}
                                         </Text>
-                                        {showImage && (
-                                            <Image src={getCurrencyImage(key)} alt={`${key} Icon`} w="40px" h="40px" />
-                                        )}
+                                        <Image
+                                            src={getCurrencyImage(key)}
+                                            my="auto"
+                                            alt={`${key} Icon`}
+                                            w="35px"
+                                            h="35px"
+                                        />
                                     </Stack>
                                 );
                             })}
@@ -66,13 +78,6 @@ const Rewards = ({ ...props }) => {
                             .reverse()
                             .slice(-1)
                             .map(([key, value], index) => {
-                                const formattedValue =
-                                    key === 'weth'
-                                        ? (value / NQTDIVIDER).toFixed(4)
-                                        : key === 'gem' || key === 'mana'
-                                        ? (value / NQTDIVIDER).toFixed(0)
-                                        : value;
-
                                 return (
                                     <Stack key={`last-${index}`} direction="column" align="center" mx={4} my={'auto'}>
                                         <Image
@@ -85,7 +90,7 @@ const Rewards = ({ ...props }) => {
                                         />
 
                                         <Text my="auto" textTransform={'uppercase'} fontSize={'sm'} fontWeight={'bold'}>
-                                            {formattedValue}
+                                            {value}
                                         </Text>
                                     </Stack>
                                 );

@@ -1,4 +1,9 @@
+import stepOne from './stepOne';
+import stepTwo from './stepTwo';
+
 export const QuickStartSteps = [
+    stepOne,
+    stepTwo,
     {
         title: 'Deposit your cards and GEM',
         imageSrc: 'images/battlegrounds/tutorial/depositCards.svg',

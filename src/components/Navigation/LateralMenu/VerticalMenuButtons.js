@@ -149,17 +149,18 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
                             _hover={{ background: isActive ? bgColor : hoverBg, color: isActive ? undefined : 'white' }}
                             bgColor={bgColor}
                             textColor={textColor}
-                            display={onlyMobile ? { base: 'flex', md: 'none' } : 'flex'}
                             onClick={isLoading ? null : onClick}>
                             <Stack direction="row" align="center" w="100%">
                                 {icon && text ? (
                                     <>
-                                        <Box minW={'2rem'} ml={isActive ? -1 : 0} mr={isActive ? 1 : 0}>
-                                            <Image src={icon} w={isActive ? '30px' : '25px'} />
-                                        </Box>
-                                        <Text fontSize="sm" fontWeight={fontWeight}>
-                                            {text}
-                                        </Text>
+                                        <Stack mx={'auto'} direction={'row'} align={{ base: 'center', md: null }}>
+                                            <Box minW={'2rem'} ml={isActive ? -1 : 0} mr={isActive ? 1 : 0}>
+                                                <Image src={icon} w={isActive ? '30px' : '25px'} />
+                                            </Box>
+                                            <Text fontSize="sm" fontWeight={fontWeight}>
+                                                {text}
+                                            </Text>
+                                        </Stack>
                                     </>
                                 ) : (
                                     !text && (

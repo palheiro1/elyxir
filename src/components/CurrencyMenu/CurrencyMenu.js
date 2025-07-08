@@ -12,16 +12,15 @@ import {
     Spacer,
     SimpleGrid,
     useToast,
-    Tooltip,
     Box,
 } from '@chakra-ui/react';
-
 import { useRef, useState } from 'react';
 import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog';
 import { getIgnisFromFaucet } from '../../services/Faucet/faucet';
 import { errorToast, okToast } from '../../utils/alerts';
 import UnStuckGiftz from '../Modals/UnStuckGiftz/UnStuckGiftz';
 import { BsInfoCircle } from 'react-icons/bs';
+import ResponsiveTooltip from '../ui/ReponsiveTooltip';
 
 const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
     const {
@@ -216,7 +215,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                     onClick={e => e.stopPropagation()}
                                     onMouseDown={e => e.stopPropagation()}
                                     pointerEvents="auto">
-                                    <Tooltip
+                                    <ResponsiveTooltip
                                         label="These mystic flames IGNIS hold the essence of mythical beings. Every transaction needs a small portion of it. Obtain some daily using our faucet or exchange on our market (or on other centralized exchanges)."
                                         placement="bottom"
                                         hasArrow
@@ -229,7 +228,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                         <Box as="span" cursor="pointer">
                                             <BsInfoCircle color="#C3C3C3" size="20px" />
                                         </Box>
-                                    </Tooltip>
+                                    </ResponsiveTooltip>
                                 </Box>
                             </Stack>
                         </MenuButton>
@@ -260,7 +259,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                     onClick={e => e.stopPropagation()}
                                     onMouseDown={e => e.stopPropagation()}
                                     pointerEvents="auto">
-                                    <Tooltip
+                                    <ResponsiveTooltip
                                         label="The very essence of generosity. GIFTZ are tokens of appreciation. They enable you to buy card packs."
                                         placement="bottom"
                                         hasArrow
@@ -273,7 +272,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                         <Box as="span" cursor="pointer">
                                             <BsInfoCircle color="#C3C3C3" size="20px" />
                                         </Box>
-                                    </Tooltip>
+                                    </ResponsiveTooltip>
                                 </Box>
                             </Stack>
                         </MenuButton>
@@ -306,7 +305,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                     onClick={e => e.stopPropagation()}
                                     onMouseDown={e => e.stopPropagation()}
                                     pointerEvents="auto">
-                                    <Tooltip
+                                    <ResponsiveTooltip
                                         label="Rare gems from forgotten treasure troves, GEM stones open doors to secret realms. They are the lifeblood of crafting and morphing, allowing you to shape your cards into new forms."
                                         placement="bottom"
                                         hasArrow
@@ -319,7 +318,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                         <Box as="span" cursor="pointer">
                                             <BsInfoCircle color="#C3C3C3" size="20px" />
                                         </Box>
-                                    </Tooltip>
+                                    </ResponsiveTooltip>
                                 </Box>
                             </Stack>
                         </MenuButton>
@@ -350,7 +349,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                     onClick={e => e.stopPropagation()}
                                     onMouseDown={e => e.stopPropagation()}
                                     pointerEvents="auto">
-                                    <Tooltip
+                                    <ResponsiveTooltip
                                         label="WETH are the ethereal threads connecting our world with the mythical blockchain. They act as a bridge, allowing you to exchange them for GIFTZ, other currencies or cards, expanding your collection and influence."
                                         placement="bottom"
                                         hasArrow
@@ -363,7 +362,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                         <Box as="span" cursor="pointer">
                                             <BsInfoCircle color="#C3C3C3" size="20px" />
                                         </Box>
-                                    </Tooltip>
+                                    </ResponsiveTooltip>
                                 </Box>
                             </Stack>
                         </MenuButton>
@@ -402,7 +401,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                     onClick={e => e.stopPropagation()}
                                     onMouseDown={e => e.stopPropagation()}
                                     pointerEvents="auto">
-                                    <Tooltip
+                                    <ResponsiveTooltip
                                         label="Crystalline sources of mana, MANA crystals are the essence of magic itself. They serve as governance tokens, allowing you to have a say in the destiny of this enchanted realm."
                                         placement="bottom"
                                         hasArrow
@@ -415,7 +414,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                                         <Box as="span" cursor="pointer">
                                             <BsInfoCircle color="#C3C3C3" size="20px" />
                                         </Box>
-                                    </Tooltip>
+                                    </ResponsiveTooltip>
                                 </Box>
                             </Stack>
                         </MenuButton>
