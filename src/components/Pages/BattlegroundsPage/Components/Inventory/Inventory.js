@@ -1,6 +1,6 @@
 import { Box, IconButton, Select, Stack, Text, useMediaQuery } from '@chakra-ui/react';
 import { useState } from 'react';
-import { Overlay } from '../BattlegroundsIntro/Overlay';
+import { Overlay } from '../../../../ui/Overlay';
 import { CloseIcon } from '@chakra-ui/icons';
 import OmnoPage from './OmnoPage';
 import ArdorPage from './ArdorPage';
