@@ -25,6 +25,22 @@ import { GEMASSET, NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getUsersState } from '../../../../../services/Ardor/omnoInterface';
 import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface';
 
+/**
+ * @name SendGEMsToOmno
+ * @description Modal component that allows users to either send GEM tokens to Omno or withdraw GEM tokens from Omno,
+ * depending on the mode specified by `gemsModalMode`. The user can input the amount to send/withdraw,
+ * verify the operation using a 4-digit PIN, and submit the transaction. The component manages
+ * balances from both the user's account and Omno, validates inputs, and provides toast feedback for success or errors.
+ * @param {Object} props
+ * @param {Object} props.infoAccount - Object containing account information.
+ * @param {number} props.infoAccount.GEMBalance - User's current GEM balance.
+ * @param {string} props.infoAccount.accountRs - User's account RS address.
+ * @param {boolean} props.gemsModalMode - Mode of the modal. If true, modal is for sending GEMs; if false, for withdrawing GEMs.
+ * @param {boolean} props.isOpen - Controls whether the modal is open.
+ * @param {() => void} props.onClose - Function to close the modal.
+ * @returns {JSX.Element} Chakra UI modal with input controls for amount and PIN, and buttons to increment/decrement amount and submit the operation.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const SendGEMsToOmno = ({ infoAccount, gemsModalMode, isOpen, onClose }) => {
     const { GEMBalance, accountRs } = infoAccount;
 

@@ -35,6 +35,21 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSoldiers } from '../../../../redux/reducers/SoldiersReducer';
 
+/**
+ * @name MapPoint
+ * @description Interactive SVG point rendered on a battle map. Represents an arena with a defender that the user can challenge. Displays detailed info in a popover, including defender’s cards and metadata.
+ * @param {Function} handleClick - Function triggered when the user selects this arena.
+ * @param {Object} arena - Object representing the arena (id, coordinates, name, defender info, rarity, etc).
+ * @param {Number} selectedArena - ID of the currently selected arena.
+ * @param {Array} cards - Full list of soldier cards available for matching against the defender.
+ * @param {Function} handleStartBattle - Function triggered when the battle is started.
+ * @param {Object} infoAccount - The current user's account info (includes .accountRs).
+ * @param {String|Number} openPopoverId - ID of the currently open popover on the map.
+ * @param {Function} setOpenPopoverId - Setter to change which popover is open.
+ * @param {Boolean} isMobile - Whether the current device is mobile-sized (affects layout).
+ * @returns {JSX.Element|null} A map point rendered as a clickable SVG circle with a Chakra Popover that shows arena and defender details.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const MapPoint = memo(
     ({
         handleClick,

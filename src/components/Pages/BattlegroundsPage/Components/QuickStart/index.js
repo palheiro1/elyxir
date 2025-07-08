@@ -3,36 +3,17 @@ import { Box, Button, IconButton, Stack, useSteps } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import QuickStartStep from './QuickStartStep';
 import { useRef } from 'react';
+import { QuickStartSteps } from './data';
 
-const steps = [
-    {
-        title: 'Deposit your cards and GEM',
-        imageSrc: 'images/battlegrounds/tutorial/depositCards.svg',
-        texts: [
-            'Choose the best combinations of cards to build your army.',
-            'Tip: use cards from the same environment or continent to get combat bonuses.',
-        ],
-    },
-    {
-        title: 'Decide where to attack',
-        imageSrc: 'images/battlegrounds/tutorial/attack.svg',
-        texts: [
-            'Common lands are easier, but epic lands offer greater rewards.',
-            'Every battle is a strategic challenge, not a matter of brute force.',
-        ],
-    },
-    {
-        title: 'Fight and win',
-        imageSrc: 'images/battlegrounds/tutorial/fight.svg',
-        texts: [
-            'Your army will automatically face the Guardian of the land.',
-            '🏆 If you win, you will gain control of the territory, rewards and prestige.',
-            '⚠️ If you lose, you could lose one of your cards. Plan well!',
-        ],
-    },
-];
-
+/**
+ * @name QuickStartModal
+ * @description Modal component displaying a step-by-step quick start tutorial for the Battlegrounds game. Uses an overlay and a scrollable box with navigation buttons to guide users through deposit, attack, and fight steps. Closes when tutorial is finished or dismissed.
+ * @param {Function} handleClose - Callback function to close the modal.
+ * @returns {JSX.Element} A modal overlay with tutorial steps and navigation controls.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const QuickStartModal = ({ handleClose }) => {
+    const steps = QuickStartSteps;
     const { activeStep: step, goToNext } = useSteps({ index: 0, count: steps.length });
     const modalRef = useRef(null);
 

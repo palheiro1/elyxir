@@ -5,6 +5,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchArenasInfo } from '../../../../redux/reducers/ArenasReducer';
 import MapPoint from './MapPoint';
 
+/**
+ * @name Maps
+ * @description SVG-based interactive map for Battlegrounds, displaying clickable arenas (`MapPoint`) 
+ * with dynamic scaling. Applies filters for element and rarity, and enables arena selection and battle initiation. Responsive to window resizing.
+ * @param {Function} handleSelectArena - Callback triggered when an arena is selected.
+ * @param {Object} infoAccount - Current player account information used in map interactions.
+ * @param {Array} cards - Array of player cards used for battle validation.
+ * @param {Function} handleStartBattle - Function called to initiate a battle with a selected arena.
+ * @param {Number} w - Width value passed to the SVG element.
+ * @param {Object} filters - Filters applied to arenas (`filters.rarity` and `filters.element`).
+ * @param {Boolean} isMobile - Boolean indicating if the view is on a mobile device.
+ * @returns {JSX.Element} An SVG element displaying the interactive Battleground map with filtered `MapPoint` components for available arenas.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle, w, filters, isMobile }) => {
     const [selectedArena, setSelectedArena] = useState();
     const [openPopoverId, setOpenPopoverId] = useState(null);

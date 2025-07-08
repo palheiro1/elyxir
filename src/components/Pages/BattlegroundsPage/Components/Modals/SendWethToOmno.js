@@ -25,6 +25,22 @@ import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface
 import { getUsersState } from '../../../../../services/Ardor/omnoInterface';
 import { NQTDIVIDER, WETHASSET } from '../../../../../data/CONSTANTS';
 
+/**
+ * @name SendWethToOmno
+ * @description Modal component that allows users to send or withdraw WETH tokens to/from Omno.
+ * Depending on the mode (`wethModalMode`), users can input an amount, verify their action via a 4-digit PIN,
+ * and submit the transaction. The component fetches and displays the user's balance either from their account
+ * or from Omno, validates input amounts, and provides success/error toast notifications.
+ * @param {Object} props
+ * @param {boolean} props.isOpen - Controls whether the modal is visible.
+ * @param {() => void} props.onClose - Function to close the modal.
+ * @param {Object} props.infoAccount - User's account info.
+ * @param {number} props.infoAccount.WETHBalance - User's current WETH balance.
+ * @param {string} props.infoAccount.accountRs - User's Ardor account RS address.
+ * @param {boolean} props.wethModalMode - Mode flag: if true, modal is for sending WETH; if false, for withdrawing WETH.
+ * @returns {JSX.Element} A Chakra UI modal with amount input, increment/decrement buttons, PIN input, and submit button.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const SendWethToOmno = ({ isOpen, onClose, infoAccount, wethModalMode }) => {
     const { WETHBalance, accountRs } = infoAccount;
 

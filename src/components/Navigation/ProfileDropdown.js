@@ -2,6 +2,15 @@ import { GoTriangleDown } from 'react-icons/go';
 import { Box, Button, Image, Menu, MenuButton, MenuItem, MenuList, Text, useBreakpointValue } from '@chakra-ui/react';
 import { FaUser } from 'react-icons/fa';
 
+/**
+ * @name ProfileDropdown
+ * @description Dropdown menu for the user's profile, with options for Messages, Account, and Logout.
+ * Handles both mobile and desktop layouts responsively.
+ * @param {Function} setOption - Callback to change the active option in the UI (e.g., navigate to a section).
+ * @param {Function} handleLogout - Callback to execute logout logic.
+ * @returns {JSX.Element} A Chakra UI dropdown menu component for user interactions.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const ProfileDropdown = ({ setOption, handleLogout }) => {
     const menuItemProps = {
         bgColor: '#585858',

@@ -22,6 +22,19 @@ import { checkPin } from '../../../../../utils/walletUtils';
 import { changeAccountName } from '../../../../../services/Ardor/ardorInterface';
 import { errorToast, okToast } from '../../../../../utils/alerts';
 
+/**
+ * @name ChangeName
+ * @description Modal component that allows a user to change their account name by entering
+ *  a new name and verifying with a 4-digit PIN. Validates input, checks PIN correctness,
+ *  and calls the API to update the account name. Provides success and error feedback via toasts.
+ * @param {boolean} isOpen - Controls whether the modal is visible.
+ * @param {() => void} onClose - Function to close the modal.
+ * @param {Object} infoAccount - Object containing current account information.
+ * @param {string} infoAccount.accountRs - Account address in RS format.
+ * @param {string} infoAccount.name - Current account name.
+ * @returns {JSX.Element} A Chakra UI modal with inputs for new name and PIN verification, including submit button and validation feedback.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const ChangeName = ({ isOpen, onClose, infoAccount }) => {
     const [newName, setNewName] = useState('');
     const [passphrase, setPassphrase] = useState('');

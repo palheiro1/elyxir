@@ -4,6 +4,15 @@ import { getGiftzRewardQNT, getLeaderboardsResetBlock } from '../../../../../ser
 import { useSelector } from 'react-redux';
 import { BLOCKTIME } from '../../../../../data/CONSTANTS';
 
+/**
+ * @name CombativityResetTimer
+ * @description UI component that shows the time remaining until the Battlegrounds combativity leaderboard resets.
+ * It calculates the reset time using blockchain height and displays the reward (GIFTZ) and remaining time in a human-readable format.
+ * @param {boolean} isMobile - Whether the component is rendered in mobile view (affects font size and image size).
+ * @param {...any} rest - Additional props passed to the Chakra UI Stack container.
+ * @returns {JSX.Element} A responsive timer component showing leaderboard reset countdown and GIFTZ reward.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const CombativityResetTimer = ({ isMobile, ...rest }) => {
     const [leaderboardResetTimer, setLeaderboardResetTimer] = useState({
         days: 0,

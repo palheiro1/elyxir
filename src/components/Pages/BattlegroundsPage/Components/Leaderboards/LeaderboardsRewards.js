@@ -3,6 +3,16 @@ import { useEffect, useState } from 'react';
 import { formatLeaderboardRewards, getCurrencyImage } from '../../Utils/BattlegroundsUtils';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 
+/**
+ * @name LeaderboardsRewards
+ * @description Displays formatted leaderboard rewards for a given leaderboard option.
+ * It fetches and displays reward quantities along with corresponding currency icons.
+ * Supports formatting for GEM, MANA, and wETH amounts based on `NQTDIVIDER`.
+ * @param {number} option - The leaderboard option to fetch rewards for (used internally by `formatLeaderboardRewards`).
+ * @param {boolean} isMobile - Determines whether to adjust font size and icon size for smaller screens.
+ * @returns {JSX.Element} A Chakra UI `Stack` with reward amounts and icons or a loading spinner.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const LeaderboardsRewards = ({ option, isMobile }) => {
     const [rewards, setRewards] = useState(null);
 

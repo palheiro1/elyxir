@@ -1,5 +1,17 @@
 import { Box, Text, Tooltip } from '@chakra-ui/react';
 
+/**
+ * @name ListButton
+ * @description Reusable styled button with optional tooltip and disabled state, used in selection
+ * lists or action menus. Displays a label and handles click events unless disabled.
+ * @param {ReactNode} children - The text or element displayed inside the button.
+ * @param {Function} onclick - Function executed when the button is clicked (if not disabled).
+ * @param {Boolean} disabled - Whether the button is disabled; if true, the button is dimmed and unclickable.
+ * @param {String} tooltip - Text shown in a tooltip when hovering the button.
+ * @param {String} color - Background color of the button, passed as Chakra-compatible color value.
+ * @returns {JSX.Element} A stylized clickable box with tooltip support and a centered label, reflecting disabled and active states.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const ListButton = ({ children, onclick, disabled, tooltip, color }) => {
     return (
         <Tooltip
