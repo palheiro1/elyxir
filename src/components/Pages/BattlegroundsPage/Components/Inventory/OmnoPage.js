@@ -200,6 +200,7 @@ const OmnoPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                                             bg={'white'}
                                             borderRadius={'10px'}
                                             mx={'auto'}
+                                            maxH={'345px'}
                                             onClick={() => setSelectedCards([...selectedCards, card])}>
                                             <Center>
                                                 <Img src={cardImgUrl} w={'90%'} h={'75%'} />

@@ -89,7 +89,7 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
         },
         {
             icon: !isActive(5) ? '/images/icons/menu/blanco/bounty.png' : '/images/icons/menu/color/bounty.jpg',
-            text: 'Jackpot',
+            text: 'Bounty',
             onClick: () => setOption(5),
             bgColor: isActive(5) ? 'white' : '#C76D8E',
             hoverBg: 'rgba(199, 109, 142, 0.75)',
