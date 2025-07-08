@@ -80,6 +80,7 @@ import { fetchBattleData } from '../../redux/reducers/BattlegroundsReducer';
 import { fetchSoldiers } from '../../redux/reducers/SoldiersReducer';
 import { fetchLeaderboards } from '../../redux/reducers/LeaderboardsReducer';
 import { setCardsManually } from '../../redux/reducers/CardsReducer';
+import ProfileDropdown from '../../components/Navigation/ProfileDropdown';
 
 /**
  * @name Home
@@ -337,12 +338,8 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         };
 
         loadAll();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        infoAccount,
-        needReload,
-        isLoading,
-    ]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [infoAccount, needReload, isLoading]);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -562,10 +559,12 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const borderColor = MENU_OPTIONS_COLOR[option] || 'whiteAlpha.100';
 
     return (
-        <>
+        <Box position={'relative'}>
             {/* MAIN COMPONENT - LATERAL MENU & CHILDREN */}
+            <ProfileDropdown setOption={setOption} handleLogout={handleLogout} />
             <Box
                 bg={bgColor}
+                mt={{ base: 'none', md: 12, lg: 'none' }}
                 m={{ base: 2, lg: 12 }}
                 px={{ base: 2, lg: 8 }}
                 py={4}
@@ -605,7 +604,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     cards={cardsNotification}
                 />
             )}
-        </>
+        </Box>
     );
 });
 

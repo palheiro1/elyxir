@@ -1,4 +1,4 @@
-import { Box, Center, Heading, Image, Stack, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Center, Heading, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import HowToPlay from './HowToPlay/HowToPlay';
 import { ACTUAL_SEASON, IS_BOUNTY_ENABLED } from '../../../data/CONSTANTS';
 
@@ -71,58 +71,6 @@ const Overview = () => {
                         </Text>
                     </Stack>
                 )}
-
-                <Stack
-                    py={8}
-                    px={{ base: 2, md: 12 }}
-                    spacing={6}
-                    color={textColor}
-                    border="1px"
-                    borderColor={borderColor}
-                    bgColor={bgColor}
-                    rounded="md">
-                    <Text fontWeight={'bold'}>Here are the mythical currencies you'll encounter on your journey:</Text>
-                    <Stack direction="row" align={'center'}>
-                        <Image src="/images/currency/ignis.png" alt="Ignis" maxW={'35px'} />
-                        <Text>
-                            These mystic flames IGNIS hold the essence of mythical beings. Every transaction needs a
-                            small portion of it. <br />
-                            Obtain some daily using our faucet or exchange on our market (or on other centralized
-                            exchanges).
-                        </Text>
-                    </Stack>
-                    <Stack direction="row" align={'center'}>
-                        <Image src="/images/currency/giftz.png" alt="GIFTZ" maxW={'35px'} />
-                        <Text>
-                            The very essence of generosity. GIFTZ are tokens of appreciation. <br />
-                            They enable you to buy card packs.
-                        </Text>
-                    </Stack>
-                    <Stack direction="row" align={'center'}>
-                        <Image src="/images/currency/weth.png" alt="wETH" maxW={'35px'} />
-                        <Text>
-                            WETH are the ethereal threads connecting our world with the mythical blockchain.
-                            <br /> They act as a bridge, allowing you to exchange them for GIFTZ, other currencies or
-                            cards, expanding your collection and influence.
-                        </Text>
-                    </Stack>
-                    <Stack direction="row" align={'center'}>
-                        <Image src="/images/currency/gem.png" alt="GEM" maxW={'35px'} />
-                        <Text>
-                            Rare gems from forgotten treasure troves, GEM stones open doors to secret realms. <br />
-                            They are the lifeblood of crafting and morphing, allowing you to shape your cards into new
-                            forms.
-                        </Text>
-                    </Stack>
-                    <Stack direction="row" align={'center'}>
-                        <Image src="/images/currency/mana.png" alt="MANA" maxW={'35px'} />
-                        <Text>
-                            Crystalline sources of mana, MANA crystals are the essence of magic itself. <br />
-                            They serve as governance tokens, allowing you to have a say in the destiny of this enchanted
-                            realm.
-                        </Text>
-                    </Stack>
-                </Stack>
             </Stack>
         </Box>
     );

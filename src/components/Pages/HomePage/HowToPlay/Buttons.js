@@ -6,11 +6,12 @@ import { IS_BOUNTY_ENABLED } from '../../../../data/CONSTANTS';
 import { useSelector } from 'react-redux';
 
 const Buttons = () => {
-    const textBuy = useColorModeValue('#9f3772', 'white');
-    const textOpen = useColorModeValue('#e094b3', 'white');
-    const textHistory = useColorModeValue('#3b7197', 'white');
-    const textInventory = useColorModeValue('#2f8190', 'white');
-    const textBounty = useColorModeValue('#3b5397', 'white');
+    const textBuy = useColorModeValue('#84BBA4', 'white');
+    const textOpen = useColorModeValue('#6EB2BB', 'white');
+    const textHistory = useColorModeValue('#CE99B4', 'white');
+    const textInventory = useColorModeValue('#96A8B9', 'white');
+    const textBounty = useColorModeValue('#C76D8E', 'white');
+    const textBattlegrounds = useColorModeValue('#BEC671', 'white');
 
     const navigate = useNavigate();
 
@@ -26,9 +27,9 @@ const Buttons = () => {
                     color={textBuy}
                     button={
                         <MenuButton
-                            bgColor={'#B60DC4'}
+                            bgColor={'#84BBA4'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(182, 13, 196, 0.75)'}
+                            hoverBg={'rgba(132, 187, 164, 0.75)'}
                             icon={'/images/icons/menu/BuyPack.png'}
                             isActive={false}
                             text={'Buy Pack'}
@@ -43,9 +44,9 @@ const Buttons = () => {
                     color={textOpen}
                     button={
                         <MenuButton
-                            bgColor={'#8E059A'}
+                            bgColor={'#6EB2BB'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(142, 5, 154, 0.75)'}
+                            hoverBg={'rgba(110, 178, 187, 0.75)'}
                             icon={'/images/icons/menu/OpenPack.png'}
                             isActive={false}
                             text={'Open pack'}
@@ -60,9 +61,9 @@ const Buttons = () => {
                     color={textHistory}
                     button={
                         <MenuButton
-                            bgColor={'#E25339'}
+                            bgColor={'#CE99B4'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(226, 83, 57, 0.75)'}
+                            hoverBg={'rgba(206, 153, 180, 0.75)'}
                             icon={'/images/icons/menu/blanco/history.png'}
                             isActive={false}
                             text={'History'}
@@ -77,9 +78,9 @@ const Buttons = () => {
                     color={textInventory}
                     button={
                         <MenuButton
-                            bgColor={'#E1632C'}
+                            bgColor={'#96A8B9'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(225, 99, 44, 0.75)'}
+                            hoverBg={'rgba(150, 168, 185, 0.75)'}
                             icon={'/images/icons/menu/blanco/inventory.png'}
                             isActive={false}
                             text={'Inventory'}
@@ -90,16 +91,16 @@ const Buttons = () => {
 
                 <FlowItem
                     number={5}
-                    title="The Bounty: Win Rewards!"
+                    title="The Jackpot: Win Rewards!"
                     color={textBounty}
                     button={
                         <MenuButton
-                            bgColor={'#E53055'}
+                            bgColor={'#C76D8E'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(229, 48, 85, 0.75)'}
+                            hoverBg={'rgba(199, 109, 142, 0.75)'}
                             icon={'/images/icons/menu/blanco/bounty.png'}
                             isActive={false}
-                            text={'Bounty'}
+                            text={'Jackpot'}
                             onClick={() => navigate('/home?goToSection=5')}
                             isDisabled={!IS_BOUNTY_ENABLED}
                         />
@@ -109,12 +110,12 @@ const Buttons = () => {
                 <FlowItem
                     number={6}
                     title="Battlegrounds: Ultimate Challenge!"
-                    color={textBounty}
+                    color={textBattlegrounds}
                     button={
                         <MenuButton
-                            bgColor={'#DC30EB'}
+                            bgColor={'#BEC671'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(220, 48, 235, 0.75)'}
+                            hoverBg={'rgba(190, 198, 113, 0.75)'}
                             icon={'/images/icons/menu/blanco/battlegrounds.svg'}
                             isActive={false}
                             onClick={() => navigate('/battlegrounds')}

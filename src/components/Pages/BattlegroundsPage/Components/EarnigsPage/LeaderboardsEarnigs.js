@@ -1,5 +1,5 @@
 import { Box, Grid, GridItem, Image, Stack, Text } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GEMASSET, GIFTZASSET, MANAASSET, NQTDIVIDER, WETHASSET } from '../../../../../data/CONSTANTS';
 import { formatTimeStamp } from '../../Utils/BattlegroundsUtils';
 

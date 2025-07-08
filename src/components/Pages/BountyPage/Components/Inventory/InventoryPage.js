@@ -41,8 +41,9 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns, handleCloseI
         setSelectedCards(newSelectedCards);
     };
 
-    const myCards = cards.filter(card => parseInt(card.unconfirmedQuantityQNT) > 0);
-    // .filter(card => card.rarity !== 'Special');
+    const myCards = cards
+        .filter(card => parseInt(card.unconfirmedQuantityQNT) > 0)
+        .filter(card => card.rarity !== 'Special');
 
     const notSelectedCards = myCards.filter(card => !selectedCards.some(selected => selected.asset === card.asset));
 
@@ -73,7 +74,6 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns, handleCloseI
                 1: 'Common',
                 2: 'Rare',
                 3: 'Epic',
-                4: 'Special',
             };
             return filters.rarity && filters.rarity !== '-1' ? card.rarity === rarityMapping[filters.rarity] : true;
         })
@@ -127,9 +127,6 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns, handleCloseI
                         </option>
                         <option value="3" style={optionStyle}>
                             Epic
-                        </option>
-                        <option value="4" style={optionStyle}>
-                            Special
                         </option>
                     </Select>
 
@@ -198,7 +195,8 @@ const InventoryPage = ({ infoAccount, cards, isMobile, gridColumns, handleCloseI
                                             key={cardIndex}
                                             bg={'white'}
                                             borderRadius={'10px'}
-                                            mx={'auto'} 
+                                            mx={'auto'}
+                                            maxH={'400px'}
                                             onClick={() => setSelectedCards([...selectedCards, card])}>
                                             <Center>
                                                 <Img src={cardImgUrl} w={'90%'} h={'75%'} />

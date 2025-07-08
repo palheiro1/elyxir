@@ -231,7 +231,7 @@ export const SelectHandPage = ({
                     fontSize={'md'}
                     justify="space-between"
                     textAlign={'center'}
-                    w={'60%'}>
+                    w={isMobile ? '80%' : '60%'}>
                     {statistics.map(({ name, value }, index) => (
                         <Stack direction={'column'} key={index} textAlign={'center'} my={2} mx={'auto'}>
                             <Stack
@@ -241,22 +241,22 @@ export const SelectHandPage = ({
                                 borderRadius={'40px'}
                                 color={'#FFF'}
                                 letterSpacing={1}
-                                w={isMobile ? '80px' : '155px'}
+                                w={isMobile ? '120px' : '155px'}
                                 fontSize={isMobile ? 'xs' : 'md'}
                                 textAlign={'center'}
                                 textTransform={'uppercase'}
                                 fontFamily={'Chelsea Market, system-ui'}
-                                p={isMobile ? 0 : 2}>
-                                <Image src={getImageSrc(name, value)} boxSize={'30px'} />
+                                p={isMobile ? 1 : 2}>
+                                <Image src={getImageSrc(name, value)} boxSize={isMobile ? '20px' : '30px'} />
                                 <Text m={'auto'}>{value}</Text>
                             </Stack>
                         </Stack>
                     ))}
                 </Stack>
 
-                <Stack bgColor={'#5A679B'} mt={5}>
+                <Stack bgColor={'#5A679B'} mt={5} w={isMobile && '100%'}>
                     <Stack
-                        my={5}
+                        my={!isMobile ? 5 : 2}
                         direction={'column'}
                         fontSize={isMobile ? 'xs' : 'md'}
                         textAlign={'center'}
@@ -434,7 +434,11 @@ export const SelectHandPage = ({
                         </Button>
                     </Box>
                     <Stack direction={'row'} spacing={8} my={'auto'}>
-                        <Text color={'#D597B2'} my={'auto'} fontFamily={'Chelsea Market, system-ui'} fontSize={'lg'}>
+                        <Text
+                            color={'#D597B2'}
+                            my={'auto'}
+                            fontFamily={'Chelsea Market, system-ui'}
+                            fontSize={isMobile ? 'md' : 'lg'}>
                             TRIBUTE
                         </Text>
                         <Stack
@@ -442,8 +446,9 @@ export const SelectHandPage = ({
                             my={'auto'}
                             ml={2}
                             fontFamily={'Inter, system-ui'}
+                            w={isMobile && '100px'}
                             fontWeight={500}
-                            fontSize={'sm'}>
+                            fontSize={isMobile ? 'xs' : 'sm'}>
                             {battleCost && !isEmptyObject(battleCost) ? (
                                 battleCost.map((item, index) => (
                                     <Text key={index} color={checkBalance(item)}>

@@ -135,17 +135,19 @@ const ArdorPage = ({ cards, infoAccount, isMobile, gridColumns }) => {
                 mx={'auto'}
                 textAlign={'center'}
                 maxH={'90%'}>
-                <Heading fontFamily={'Chelsea Market, System'} fontWeight={100}>
+                <Heading fontFamily={'Chelsea Market, System'} fontWeight={100} size={isMobile ? 'md' : 'xl'}>
                     INVENTORY
                 </Heading>
-                <Text>Here you can withdraw your cards from the army to your inventory</Text>
+                <Text fontSize={isMobile ? 'sm' : 'xl'}>
+                    Here you can withdraw your cards from the army to your inventory
+                </Text>
             </Stack>
-            <Stack backgroundColor={'#0F0F0F'} borderRadius={'20px'} h={'85%'}>
+            <Stack backgroundColor={'#0F0F0F'} borderRadius={'20px'} h={isMobile ? '80%' : '85%'}>
                 <Heading fontSize="xl" fontWeight="light" textAlign="center" mt={3}>
                     1. Select cards to send to Inventory
                 </Heading>
                 <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={'10'}>
-                    <Select w={'10%'} onChange={handleRarityChange} color={'#FFF'}>
+                    <Select w={isMobile ? '20%' : '10%'} onChange={handleRarityChange} color={'#FFF'}>
                         <option value="-1" style={optionStyle}>
                             Rarity
                         </option>
@@ -164,7 +166,7 @@ const ArdorPage = ({ cards, infoAccount, isMobile, gridColumns }) => {
                         </option>
                     </Select>
 
-                    <Select w={'10%'} onChange={handleElementChange} color={'#FFF'}>
+                    <Select w={isMobile ? '20%' : '10%'} onChange={handleElementChange} color={'#FFF'}>
                         <option value="-1" style={optionStyle}>
                             Element
                         </option>
@@ -178,7 +180,7 @@ const ArdorPage = ({ cards, infoAccount, isMobile, gridColumns }) => {
                             Aquatic
                         </option>
                     </Select>
-                    <Select w={'10%'} onChange={handleDomainChange} color={'#FFF'}>
+                    <Select w={isMobile ? '20%' : '10%'} onChange={handleDomainChange} color={'#FFF'}>
                         <option value="-1" style={optionStyle}>
                             Continent
                         </option>
@@ -230,6 +232,7 @@ const ArdorPage = ({ cards, infoAccount, isMobile, gridColumns }) => {
                                             bg={'white'}
                                             borderRadius={'10px'}
                                             mx={'auto'}
+                                            maxH={'345px'}
                                             onClick={() => setSelectedCards([...selectedCards, card])}>
                                             <Center>
                                                 <Img src={cardImgUrl} w={'90%'} h={'75%'} />

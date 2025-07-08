@@ -14,10 +14,9 @@ const CardMarket = ({ cards, infoAccount, textColor }) => {
     const accountAsk = infoAccount.currentAsks || [];
     const accountBid = infoAccount.currentBids || [];
     const trades = infoAccount.trades || [];
-    const askWithoutCurrencies = accountAsk.filter((ask) => !Object.keys(CURRENCY_ASSETS).includes(ask.asset));
-    const bidWithoutCurrencies = accountBid.filter((bid) => !Object.keys(CURRENCY_ASSETS).includes(bid.asset));
-    const tradesWithoutCurrencies = trades.filter((trade) => !Object.keys(CURRENCY_ASSETS).includes(trade.asset));
-    
+    const askWithoutCurrencies = accountAsk.filter(ask => !Object.keys(CURRENCY_ASSETS).includes(ask.asset));
+    const bidWithoutCurrencies = accountBid.filter(bid => !Object.keys(CURRENCY_ASSETS).includes(bid.asset));
+    const tradesWithoutCurrencies = trades.filter(trade => Object.keys(CURRENCY_ASSETS).includes(trade.asset));
     // Option
     // 0 -> Market
     // 1 -> Trades
@@ -32,13 +31,13 @@ const CardMarket = ({ cards, infoAccount, textColor }) => {
 
             {option === 0 && (
                 <Box>
-                    <SortAndFilterCards cards={cards} setCardsFiltered={setCardsFiltered} rgbColor={"59,100,151"} />
+                    <SortAndFilterCards cards={cards} setCardsFiltered={setCardsFiltered} rgbColor={'59,100,151'} />
 
                     <GridCards
                         cards={cardsFiltered}
                         isMarket={true}
                         infoAccount={infoAccount}
-                        rgbColor={"59,100,151"}
+                        rgbColor={'59,100,151'}
                     />
                 </Box>
             )}
@@ -66,7 +65,11 @@ const CardMarket = ({ cards, infoAccount, textColor }) => {
                         Trades
                     </Heading>
 
-                    <TradesAndOrderTable account={infoAccount.accountRs} cards={cards} trades={tradesWithoutCurrencies} />
+                    <TradesAndOrderTable
+                        account={infoAccount.accountRs}
+                        cards={cards}
+                        trades={tradesWithoutCurrencies}
+                    />
                 </Box>
             )}
         </>

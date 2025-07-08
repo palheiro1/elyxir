@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { getBountyBalance, swapPriceEthtoUSD } from '../../../../../services/Bounty/utils';
 import { getGemPrice, getManaPrice } from '../../../../../services/Ardor/evmInterface';

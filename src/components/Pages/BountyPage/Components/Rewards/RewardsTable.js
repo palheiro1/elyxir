@@ -1,5 +1,5 @@
 import { Box, Center, Grid, GridItem, Image, Spinner, Stack, Text, useBreakpointValue } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { prepareTableData } from '../../../../../services/Bounty/utils';
 import { GEMASSET, MANAASSET, NQTDIVIDER, SEASONSPECIALCARDASSET, WETHASSET } from '../../../../../data/CONSTANTS';
