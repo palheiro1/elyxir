@@ -1,4 +1,5 @@
-import { Box, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
+import ResponsiveTooltip from '../../../ui/ReponsiveTooltip';
 
 /**
  * @name ListButton
@@ -14,46 +15,46 @@ import { Box, Text, Tooltip } from '@chakra-ui/react';
  */
 const ListButton = ({ children, onclick, disabled, tooltip, color }) => {
     return (
-        <Tooltip
-            label={tooltip}
-            placement="bottom"
-            hasArrow
-            bgColor={'#1F2323'}
-            color={'#FFF'}
-            p={2}
-            borderRadius={'10px'}>
-            <Box
-                m={1}
-                w="180px"
-                h="45px"
-                position="relative"
+        <Box position="relative" w="180px" h="45px" m="1">
+            <Flex
+                as="button"
+                onClick={!disabled ? onclick : undefined}
+                w="100%"
+                h="100%"
                 borderRadius="16px"
-                cursor={disabled ? 'default' : 'pointer'}
-                title={disabled ? 'Coming soon...' : undefined}
-                onClick={disabled ? undefined : onclick}
-                opacity={disabled ? 0.3 : 1}
                 backgroundColor={color}
-                p="3px">
-                <Box
-                    borderRadius="14px"
-                    backgroundColor={color}
-                    w="100%"
-                    h="100%"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    fontFamily="'Chelsea Market', system-ui"
-                    fontWeight="400"
-                    fontSize="16px"
-                    lineHeight="1"
-                    letterSpacing="0.05em"
-                    color="white">
-                    <Text m="auto" fontSize="md">
-                        {children}
-                    </Text>
+                color="white"
+                fontFamily="'Chelsea Market', system-ui"
+                fontSize="16px"
+                fontWeight="400"
+                letterSpacing="0.05em"
+                cursor={disabled ? 'default' : 'pointer'}
+                opacity={disabled ? 0.3 : 1}
+                align="center"
+                justify="center"
+                textAlign="center"
+                _hover={!disabled ? { opacity: 0.8 } : {}}
+                transition={'all 0.1s ease-out'}
+                zIndex="1"
+                position="relative">
+                <Text>{children}</Text>
+            </Flex>
+
+            {tooltip && (
+                <Box position="absolute" top="0" left="0" w="100%" h="100%" zIndex="2" pointerEvents="none">
+                    <ResponsiveTooltip
+                        label={tooltip}
+                        placement="bottom"
+                        hasArrow
+                        bgColor="#1F2323"
+                        color="#FFF"
+                        p={2}
+                        borderRadius="10px">
+                        <Box w="100%" h="100%" />
+                    </ResponsiveTooltip>
                 </Box>
-            </Box>
-        </Tooltip>
+            )}
+        </Box>
     );
 };
 

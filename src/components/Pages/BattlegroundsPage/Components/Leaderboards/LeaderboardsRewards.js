@@ -30,44 +30,45 @@ const LeaderboardsRewards = ({ option, isMobile }) => {
     }, [option]);
 
     return rewards ? (
-        <Stack
-            direction="row"
-            align="center"
-            fontFamily="Inter, system"
-            fontSize={isMobile ? 'xs' : 'md'}
-            w="100%"
-            fontWeight={700}
-            bgColor={'#FFF'}
-            p={2}
-            borderRadius={'20px'}>
-            <Text fontFamily={'Chelsea Market, System-ui'} color={'#D597B2'} fontWeight={500}>
-                REWARDS:
+        <Stack w={'100%'} align="start" maxW={'500px'}>
+            <Text fontFamily={'Chelsea Market, System-ui'} color={'#FFF'} fontWeight={500}>
+                REWARDS
             </Text>
-            {Object.entries(rewards)
-                .reverse()
-                .map(([key, value], index) => {
-                    const formattedValue =
-                        key === 'weth'
-                            ? (value / NQTDIVIDER).toFixed(4)
-                            : key === 'gem' || key === 'mana'
-                            ? (value / NQTDIVIDER).toFixed(0)
-                            : value;
-
-                    return (
-                        <Stack key={index} direction="row" align="center" mx={4}>
-                            <Text my="auto" textTransform={'uppercase'} color={'#5A679B'}>
-                                {formattedValue}
-                            </Text>
-                            <Image
-                                my="auto"
-                                src={getCurrencyImage(key)}
-                                alt={`${key} Icon`}
-                                mt={-2}
-                                boxSize={isMobile ? '30px' : '50px'}
-                            />
-                        </Stack>
-                    );
-                })}
+            <Stack
+                direction="row"
+                align="center"
+                fontFamily="Inter, system"
+                fontSize={isMobile ? 'xs' : 'md'}
+                w="100%"
+                justifyContent={'space-between'}
+                fontWeight={700}
+                bgColor={'#FFF'}
+                py={2}
+                px={4}
+                borderRadius={'20px'}>
+                {Object.entries(rewards)
+                    .reverse()
+                    .map(([key, value], index) => {
+                        const formattedValue =
+                            key === 'weth'
+                                ? (value / NQTDIVIDER).toFixed(4)
+                                : key === 'gem' || key === 'mana'
+                                ? (value / NQTDIVIDER).toFixed(0)
+                                : value;
+                        return (
+                            <Stack key={index} direction="row" align="center">
+                                <Image
+                                    src={getCurrencyImage(key)}
+                                    alt={`${key} Icon`}
+                                    boxSize={isMobile ? '30px' : '50px'}
+                                />
+                                <Text textTransform={'uppercase'} color={'#5A679B'}>
+                                    {formattedValue}
+                                </Text>
+                            </Stack>
+                        );
+                    })}
+            </Stack>
         </Stack>
     ) : (
         <Box mx="auto">

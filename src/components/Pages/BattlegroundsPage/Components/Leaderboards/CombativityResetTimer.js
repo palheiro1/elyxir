@@ -1,4 +1,4 @@
-import { Image, Stack, Text } from '@chakra-ui/react';
+import { Box, Image, Stack, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getGiftzRewardQNT, getLeaderboardsResetBlock } from '../../../../../services/Battlegrounds/Battlegrounds';
 import { useSelector } from 'react-redux';
@@ -6,89 +6,129 @@ import { BLOCKTIME } from '../../../../../data/CONSTANTS';
 
 /**
  * @name CombativityResetTimer
- * @description UI component that shows the time remaining until the Battlegrounds combativity leaderboard resets.
- * It calculates the reset time using blockchain height and displays the reward (GIFTZ) and remaining time in a human-readable format.
- * @param {boolean} isMobile - Whether the component is rendered in mobile view (affects font size and image size).
- * @param {...any} rest - Additional props passed to the Chakra UI Stack container.
- * @returns {JSX.Element} A responsive timer component showing leaderboard reset countdown and GIFTZ reward.
+ * @description Styled countdown showing time until leaderboard reset + GIFTZ reward. Inspired by "blocky" timer layout.
+ * @param {boolean} isMobile - Whether to render mobile-friendly sizing.
+ * @param {object} rest - Extra props passed to Stack container.
+ * @returns {JSX.Element} Stylized countdown timer with reward.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const CombativityResetTimer = ({ isMobile, ...rest }) => {
-    const [leaderboardResetTimer, setLeaderboardResetTimer] = useState({
+    const { prev_height } = useSelector(state => state.blockchain);
+    const [giftzRewardQNT, setGiftzRewardQNT] = useState(null);
+    const [timeLeft, setTimeLeft] = useState({
         days: 0,
         hours: 0,
         minutes: 0,
-        remainingBlocks: 'loading',
+        seconds: 0,
     });
+    const [loading, setLoading] = useState(true);
 
-    const { prev_height } = useSelector(state => state.blockchain);
-    const [timeString, setTimeString] = useState(null);
-    const [giftzRewardQNT, setGiftzRewardQNT] = useState(null);
     useEffect(() => {
-        const calculateLeaderboardsResetTime = async () => {
+        const fetchData = async () => {
+            const reward = await getGiftzRewardQNT();
+            setGiftzRewardQNT(reward);
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        let interval;
+
+        const calculate = async () => {
             const resetBlock = await getLeaderboardsResetBlock();
-            const remainingBlocks = resetBlock - prev_height;
-            const remainingSecs = remainingBlocks * BLOCKTIME;
-            const delta = Number(remainingSecs - BLOCKTIME);
+            const getDelta = () => {
+                const remainingBlocks = resetBlock - prev_height;
+                return remainingBlocks * BLOCKTIME;
+            };
 
-            const days = Math.floor(delta / (24 * 60 * 60));
-            const hours = Math.floor((delta % (24 * 60 * 60)) / (60 * 60));
-            const minutes = Math.floor((delta % (60 * 60)) / 60);
+            const update = () => {
+                const delta = getDelta();
+                const days = Math.floor(delta / (24 * 3600));
+                const hours = Math.floor((delta % (24 * 3600)) / 3600);
+                const minutes = Math.floor((delta % 3600) / 60);
+                const seconds = Math.floor(delta % 60);
+                setTimeLeft({ days, hours, minutes, seconds });
+                setLoading(false);
+            };
 
-            setLeaderboardResetTimer({ days, hours, minutes, remainingBlocks });
+            update();
+            interval = setInterval(update, 1000);
         };
 
-        prev_height && calculateLeaderboardsResetTime();
+        if (prev_height) calculate();
+
+        return () => clearInterval(interval);
     }, [prev_height]);
 
-    useEffect(() => {
-        const fetchGiftzRewardQNT = async () => {
-            const qnt = await getGiftzRewardQNT();
-            setGiftzRewardQNT(qnt);
-        };
-        fetchGiftzRewardQNT();
-    }, []);
-    useEffect(() => {
-        const timeParts = [];
-
-        if (leaderboardResetTimer?.days) {
-            timeParts.push(`${leaderboardResetTimer.days} day${leaderboardResetTimer.days > 1 ? 's' : ''}`);
-        }
-
-        if (leaderboardResetTimer?.hours) {
-            timeParts.push(`${leaderboardResetTimer.hours} hour${leaderboardResetTimer.hours > 1 ? 's' : ''}`);
-        }
-
-        if (leaderboardResetTimer?.minutes) {
-            timeParts.push(`${leaderboardResetTimer.minutes} minute${leaderboardResetTimer.minutes > 1 ? 's' : ''}`);
-        }
-        let timeRes;
-        if (timeParts.length > 1) {
-            timeRes = timeParts.slice(0, -1).join(', ') + ' and ' + timeParts[timeParts.length - 1];
-        } else {
-            timeRes = timeParts[0] || 'less than a minute';
-        }
-        setTimeString(timeRes);
-    }, [leaderboardResetTimer.days, leaderboardResetTimer.hours, leaderboardResetTimer.minutes]);
+    const timeItems = [
+        { label: 'days', value: timeLeft.days },
+        { label: 'hours', value: timeLeft.hours },
+        { label: 'minutes', value: timeLeft.minutes },
+        { label: 'seconds', value: timeLeft.seconds },
+    ];
 
     return (
-        <Stack fontFamily="Chelsea market, System" fontSize={isMobile ? 'xs' : 'md'} {...rest}>
-            {leaderboardResetTimer.remainingBlocks !== 'loading' ? (
-                <Stack direction={'column'}>
-                    <Stack direction={'row'} mx={'auto'}>
-                        <Text>REWARD: {giftzRewardQNT}</Text>{' '}
-                        <Image
-                            my="auto"
-                            src={'images/currency/giftz.png'}
-                            alt={'GIFTZ Icon (˘･_･˘)'}
-                            boxSize={isMobile ? '30px' : '40px'}
-                            mt={-2}
-                        />
+        <Stack
+            direction={'row'}
+            justifyContent={'space-between'}
+            align="center"
+            spacing={3}
+            fontFamily="Chelsea Market, system-ui"
+            fontSize={isMobile ? 'xs' : 'md'}
+            {...rest}>
+            {!loading ? (
+                <>
+                    <Stack direction={'column'} spacing={2} justify="center">
+                        <Text color="white">REWARD</Text>
+                        <Stack
+                            direction="row"
+                            align="start"
+                            fontFamily="Inter, system"
+                            fontSize={isMobile ? 'xs' : 'md'}
+                            w="100%"
+                            justifyContent={'space-between'}
+                            fontWeight={700}
+                            bgColor={'#FFF'}
+                            py={2}
+                            p={4}
+                            borderRadius={'20px'}>
+                            <Image
+                                src={'/images/currency/giftz.png'}
+                                alt="GIFTZ Icon"
+                                boxSize={isMobile ? '25px' : '35px'}
+                                mt={-1}
+                            />
+                            <Text textTransform={'uppercase'} color={'#5A679B'}>
+                                {giftzRewardQNT}
+                            </Text>
+                        </Stack>
                     </Stack>
-                    <Text color="#FFF" fontFamily="Chelsea market, System" textTransform={'uppercase'}>
-                        Reseting combativity leaderboard in {timeString}.
-                    </Text>
-                </Stack>
+
+                    <Stack alignItems={'end'}>
+                        <Text color="white" textTransform="uppercase">
+                            Reseting combativity leaderboard in
+                        </Text>
+                        <Stack direction={'row'} spacing={isMobile ? 2 : 4}>
+                            {timeItems.map(({ value, label }, idx) => (
+                                <Box
+                                    key={idx}
+                                    bg="#2b2b2b"
+                                    px={isMobile ? 3 : 5}
+                                    py={isMobile ? 2 : 3}
+                                    borderRadius="lg"
+                                    textAlign="center"
+                                    minW={isMobile ? '50px' : '60px'}>
+                                    <Text color="white" fontSize={isMobile ? 'md' : 'lg'} fontWeight="bold">
+                                        {value.toString().padStart(2, '0')}
+                                    </Text>
+                                    <Text color="whiteAlpha.700" fontSize={isMobile ? '2xs' : 'xs'}>
+                                        {label}
+                                    </Text>
+                                </Box>
+                            ))}
+                        </Stack>
+                    </Stack>
+                </>
             ) : (
                 <Text color="#FFF">Loading...</Text>
             )}

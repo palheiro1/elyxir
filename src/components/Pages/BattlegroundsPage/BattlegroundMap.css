@@ -45,9 +45,14 @@
     .rotate-device {
         display: block;
         text-align: center;
-        margin-top: 50px;
+        padding-top: 50px;
         font-size: 20px;
-        color: red; /* Puedes cambiar el estilo según tus necesidades */
+        background-color: #000000;
+        color: red;
+        position: absolute;
+        z-index: 999;
+        width: 100vw;
+        height: 100vh;
     }
 }
 

@@ -2,7 +2,6 @@
 import { Box, IconButton, Spinner, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { CloseIcon } from '@chakra-ui/icons';
-import { SelectHandPage } from './SelectHandPage';
 import { Overlay } from '../../../../ui/Overlay';
 import { getAccount } from '../../../../../services/Ardor/ardorInterface';
 import { getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
@@ -10,6 +9,7 @@ import { errorToast } from '../../../../../utils/alerts';
 import BattleResults from './BattleResults';
 import '@fontsource/chelsea-market';
 import BattleInventory from './BattleInventory';
+import { SelectHandPage } from './Components/SelectHandPage';
 
 export const BattleWindow = ({
     arenaInfo,

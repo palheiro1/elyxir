@@ -2,7 +2,7 @@ import { Box, Button, Image, Spinner, Stack, Text, VStack } from '@chakra-ui/rea
 import { IS_BOUNTY_ENABLED } from '../../../data/CONSTANTS';
 import { useNavigate } from 'react-router-dom';
 
-const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, cardsLoaded }) => {
+const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded }) => {
     // ---------------------------------------------
     // ------------------ COLORS ------------------
     // ---------------------------------------------
@@ -123,44 +123,28 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
     // ---------------------------------------------
 
     return (
-        <VStack align="flex-start" spacing={2} width={widthBotones}>
+        <VStack align="flex-start" spacing={2} width={buttonsWidth}>
             {buttons.map(
                 (
-                    {
-                        icon,
-                        text,
-                        onClick,
-                        bgColor,
-                        hoverBg,
-                        textColor,
-                        fontWeight,
-                        isActive,
-                        isDisabled,
-                        isLoading,
-                        onlyMobile,
-                    },
+                    { icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive, isDisabled, isLoading },
                     index
                 ) =>
                     !isDisabled && (
                         <Button
                             key={index}
-                            minW={widthBotones}
+                            minW={buttonsWidth}
                             minH="50px"
                             _hover={{ background: isActive ? bgColor : hoverBg, color: isActive ? undefined : 'white' }}
                             bgColor={bgColor}
                             textColor={textColor}
                             onClick={isLoading ? null : onClick}>
-                            <Stack direction="row" align="center" w="100%">
+                            <Stack direction="row" align="center" w="100px" spacing={3}>
                                 {icon && text ? (
                                     <>
-                                        <Stack mx={'auto'} direction={'row'} align={{ base: 'center', md: null }}>
-                                            <Box minW={'2rem'} ml={isActive ? -1 : 0} mr={isActive ? 1 : 0}>
-                                                <Image src={icon} w={isActive ? '30px' : '25px'} />
-                                            </Box>
-                                            <Text fontSize="sm" fontWeight={fontWeight}>
-                                                {text}
-                                            </Text>
-                                        </Stack>
+                                        <Image src={icon} w="28px" />
+                                        <Text fontSize="sm" fontWeight={fontWeight} whiteSpace="nowrap">
+                                            {text}
+                                        </Text>
                                     </>
                                 ) : (
                                     !text && (

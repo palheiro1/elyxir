@@ -19,7 +19,7 @@ import { Fragment, useCallback, useEffect, useState } from 'react';
 import { ScrollLock } from './assets/ScrollLock';
 import './BattlegroundMap.css';
 import { AdvertModal } from './Components/Modals/AdvertModal';
-import { BattleWindow } from './Components/BattleWindow/BattleWindow';
+import { BattleWindow } from './Components/BattleWindow';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import Inventory from './Components/Inventory/Inventory';
@@ -292,9 +292,8 @@ const Battlegrounds = ({ infoAccount }) => {
         onOpenWeth();
     };
 
-    const [isMobile] = useMediaQuery('(max-width: 1190px)');
-    const [isMediumScreen] = useMediaQuery('(min-width: 1190px) and (max-width: 1550px)');
-
+    const [isMobile] = useMediaQuery('(max-width: 1179px)');
+    const [isMediumScreen] = useMediaQuery('(min-width: 1180px) and (max-width: 1400px)');
     const handleRarityChange = event => {
         setFilters(prevFilters => ({
             ...prevFilters,
@@ -326,13 +325,17 @@ const Battlegrounds = ({ infoAccount }) => {
         <>
             <Box
                 className="landscape-only"
+                maxH="100vh"
+                h="100vh"
+                overflowY={isMobile ? 'auto' : 'hidden'}
+                overflowX="hidden"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
                 bgImage="url('/images/battlegrounds/battlegroundsBackground.png')"
                 bgSize="cover"
-                overflowY={isMobile ? 'auto' : 'hidden'}
-                overflowX={'hidden'}
-                bgPosition="center"
-                h={'100vh'}
-                bgRepeat="repeat">
+                bgRepeat="no-repeat"
+                bgPosition="center">
                 <SendGEMsToOmno
                     gemsModalMode={gemsModalMode}
                     infoAccount={infoAccount}
@@ -401,13 +404,7 @@ const Battlegrounds = ({ infoAccount }) => {
 
                 <AdvertModal isOpen={isModalOpen} onClose={closeModal} />
                 <ScrollLock isLocked={isScrollLocked} />
-                <Box
-                    position={'relative'}
-                    ml={6}
-                    mt={isMobile ? 0 : 5}
-                    h={'100%'}
-                    overflow={'auto'}
-                    overflowX={'hidden'}>
+                <Box position="relative" pl={4} pt={4} boxSize="fit-content" overflow="auto" my="auto" w={'100%'}>
                     <Stack direction={'row'} h={'100%'} mb={'150px'}>
                         <Stack direction={'column'} w={'20%'}>
                             <Img
@@ -679,6 +676,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                 w={isMediumScreen ? '80%' : '90%'}
                                 h={!isMobile && '80%'}
                                 display="flex"
+                                my={isMobile ? -20 : isMediumScreen ? -15 : 20}
                                 justifyContent="center"
                                 alignItems="center">
                                 <Maps
@@ -704,7 +702,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                     border="2px solid #D597B2"
                                     borderRadius="30px"
                                     justifyContent="space-between"
-                                    w={{ base: '70%', md: isMobile ? '80%' : '65%' }}
+                                    w={{ base: '70%', md: isMobile ? '80%' : '70%' }}
                                     fontFamily="'Chelsea Market', system-ui">
                                     {statistics.map(({ name, value }, index) => (
                                         <Text
