@@ -14,6 +14,35 @@ import AttackerCards from './Components/AttackerCards';
 import DefenderCards from './Components/DefenderCards';
 import StatisticsDisplay from './Components/StatisticsDisplay';
 
+/**
+ * @name SelectHandPage
+ * @description This component manages the UI and logic for selecting cards ("handBattleCards") to start a battle
+ * in the arena. It shows attacker and defender cards, battle costs, statistics, and handles
+ * pin validation, battle start logic, and UI modals for user interaction.
+ * Features:
+ * - Fetches and displays battle costs for the current arena.
+ * - Validates user selections and token balances before allowing battle start.
+ * - Handles PIN modal and passphrase validation for security.
+ * - Calculates defender bonuses based on arena medium and domain.
+ * - Responsive UI with Chakra UI, adapting to mobile and viewport height.
+ * @param {Object} arenaInfo - Contains arena details such as id, mediumId, domainId, and battleCost.
+ * @param {Array} handBattleCards - Array representing the current cards selected by the player.
+ * @param {Function} openInventory - Callback to open the card inventory UI.
+ * @param {Object} infoAccount - User account info including name and passphrase.
+ * @param {Object} defenderInfo - Information about the defender player.
+ * @param {Function} deleteCard - Function to delete a card from the hand by index.
+ * @param {number} domainBonus - Current domain bonus value for the player.
+ * @param {number} mediumBonus - Current medium bonus value for the player.
+ * @param {string} domainName - The name of the domain (continent) for display.
+ * @param {number|string} omnoGEMsBalance - User's current GEM token balance.
+ * @param {number|string} omnoWethBalance - User's current wETH token balance.
+ * @param {Function} setShowResults - Setter to toggle display of battle results.
+ * @param {Function} setCurrentTime - Setter to update the current timestamp (used after battle start).
+ * @param {boolean} isMobile - Flag indicating if the UI is in mobile mode.
+ * @param {Array} defenderCards - Array of defender's cards for bonus calculations.
+ * @returns {JSX.Element} The full selection and battle start UI, including modals.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const SelectHandPage = ({
     arenaInfo,
     handBattleCards,

@@ -13,6 +13,22 @@ import {
     PinInputField,
 } from '@chakra-ui/react';
 
+/**
+ * @name PinModal
+ * @description Modal dialog that prompts the user to enter a 4-digit PIN code.
+ * The PIN input masks the characters and validates the input on completion and change.
+ * Shows an invalid state when the PIN is incorrect.
+ * Includes a "Play" button that triggers the battle start handler.
+ * The button can be disabled to prevent multiple submissions.
+ * @param {boolean} isOpen - Controls if the modal is visible.
+ * @param {Function} onClose - Callback to close the modal.
+ * @param {Function} handleCompletePin - Callback triggered when PIN input is completed or changed.
+ * @param {boolean} isValidPin - Flag indicating if the entered PIN is valid.
+ * @param {Function} handleStartBattle - Callback triggered when clicking the "Play" button.
+ * @param {boolean} disableButton - Flag to disable the "Play" button (e.g., while processing).
+ * @returns {JSX.Element} A modal component with masked PIN input and a submit button.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const PinModal = ({ isOpen, onClose, handleCompletePin, isValidPin, handleStartBattle, disableButton }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>

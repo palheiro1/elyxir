@@ -1,6 +1,21 @@
 import { Box, Center, Img, SimpleGrid, Spacer, Stack, Text } from '@chakra-ui/react';
-import CardBadges from '../../../../Cards/CardBadges';
+import CardBadges from '../../../../../../../Cards/CardBadges';
 
+/**
+ * @name CardsGrid
+ * @description Displays a responsive grid of card items with images, names, rarity badges, and selection states.
+ * Each card can be clicked to trigger a selection callback, unless it is already selected.
+ * Supports highlighting a pre-selected card with an overlay.
+ * Shows a message if no cards are available.
+ * @param {Array} cards - Array of card objects to display.
+ * Each card should contain at least: `asset`, `cardImgUrl`, `name`, `rarity`, `channel`, `selected`.
+ * @param {Object|null} preSelectedCard - Card currently pre-selected by the user.
+ * @param {Function} onCardClick - Callback when a card is clicked, receives the clicked card as argument.
+ * @param {boolean} isMobile - Flag indicating if the layout is mobile to adjust sizes.
+ * @param {Function} getColumns - Function returning the number of grid columns based on screen size.
+ * @returns {JSX.Element} A responsive grid with cards rendered inside boxes with badges and overlays.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const CardsGrid = ({ cards, preSelectedCard, onCardClick, isMobile, getColumns }) => (
     <SimpleGrid columns={getColumns()} spacing={3} p={3} h={'100%'} overflowY={'auto'} className="custom-scrollbar">
         {cards.length > 0 ? (

@@ -2,7 +2,27 @@ import { Select, Stack } from '@chakra-ui/react';
 
 const optionStyle = { backgroundColor: '#FFF', color: '#000' };
 
-const FilterSelects = ({
+/**
+ * @name CardsFilter
+ * @description Renders three dropdown selectors for filtering cards by rarity, element, and continent.
+ * The options adapt based on the arena level and player index:
+ * - Rarity filter:
+ *    - If arena level is 1 or player is not the first (index !== 0), options are Common and Rare.
+ *    - If player is the first (index === 0) and arena level > 1, options are Epic and Special.
+ * - Element filter: fixed options for Terrestrial, Aerial, and Aquatic.
+ * - Continent filter: fixed options for Asia, Oceania, America, Africa, and Europe.
+ * Each select triggers a callback when its value changes.
+ * @param {Object} filters - Current filter values { rarity, element, domain }.
+ * @param {Function} handleRarityChange - Callback fired when rarity filter changes.
+ * @param {Function} handleElementChange - Callback fired when element filter changes.
+ * @param {Function} handleDomainChange - Callback fired when continent filter changes.
+ * @param {boolean} isMobile - Flag indicating mobile view to adjust widths.
+ * @param {number} index - Player index to determine rarity options.
+ * @param {number} level - Arena level to determine rarity options.
+ * @returns {JSX.Element} A horizontal stack of three styled Select inputs.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+const CardsFilter = ({
     filters,
     handleRarityChange,
     handleElementChange,
@@ -88,4 +108,4 @@ const FilterSelects = ({
     </Stack>
 );
 
-export default FilterSelects;
+export default CardsFilter;

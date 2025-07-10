@@ -2,6 +2,22 @@ import locations from '../../../../../assets/LocationsEnum';
 import { Image, Stack, Text } from '@chakra-ui/react';
 import { getContinentIcon, getLevelIconString, getMediumIcon } from '../../../../../Utils/BattlegroundsUtils';
 
+/**
+ * @name StatisticsDisplay
+ * @description Displays key arena statistics including Level, Medium, and Continent for the current arena.
+ * Each statistic is shown with a corresponding icon and styled label. The layout adapts
+ * responsively based on the `isMobile` flag.
+ * Uses utility functions to fetch appropriate icons for each statistic:
+ * - Level: shows rarity icon from arena location.
+ * - Medium: shows icon representing the arena's medium (Terrestrial, Aerial, Aquatic).
+ * - Continent: shows icon for the domain/continent.
+ * @param {string} medium - The medium type of the arena (e.g. "Terrestrial").
+ * @param {string} domainName - The name of the domain/continent.
+ * @param {number} arenaId - The arena ID used to fetch location data.
+ * @param {boolean} isMobile - Flag to control responsive styles for mobile.
+ * @returns {JSX.Element} A responsive stack with the three statistics and their icons.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const StatisticsDisplay = ({ medium, domainName, arenaId, isMobile }) => {
     const statistics = [
         { name: 'Level', value: locations[arenaId - 1].rarity },

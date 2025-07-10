@@ -2,9 +2,29 @@ import { useState } from 'react';
 import { Box, Heading, IconButton, Stack, useMediaQuery } from '@chakra-ui/react';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
-import FilterSelects from './FilterSelects';
 import CardsGrid from './Components/CardsGrid';
+import FilterSelects from './Components/CardsFilter';
 
+/**
+ * @name BattleInventory
+ * @description Displays a filtered grid of available battle cards based on arena level and user-selected filters.
+ * Allows the user to preview and select a card to place in the battle hand.
+ * Handles responsive layout logic and adapts the number of grid columns based on screen size.
+ * Pre-selection logic allows users to preview a card before confirming its addition to the battle hand.
+ * @param {Function} setOpenIventory - Toggles the visibility of the inventory drawer.
+ * @param {Array} filteredCards - List of all cards available to the user, filtered by global context.
+ * @param {number} index - Player index (0 = initiator, used to determine card rules).
+ * @param {Array} handBattleCards - Cards already selected for the battle hand.
+ * @param {Function} updateCard - Function called when the user confirms the selected card.
+ * @param {boolean} isMobile - Indicates whether the screen is in mobile mode.
+ * @param {Object} arenaInfo - Arena data including `level` for eligibility filtering.
+ * @param {Object} filters - Current filter values: `{ rarity, element, domain }`.
+ * @param {Function} handleRarityChange - Callback when the rarity filter changes.
+ * @param {Function} handleElementChange - Callback when the element filter changes.
+ * @param {Function} handleDomainChange - Callback when the domain filter changes.
+ * @returns {JSX.Element} A responsive panel showing filters and a grid of eligible cards.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const BattleInventory = ({
     setOpenIventory,
     filteredCards,

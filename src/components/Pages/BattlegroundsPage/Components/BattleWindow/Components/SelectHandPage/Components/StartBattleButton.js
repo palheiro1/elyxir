@@ -1,5 +1,15 @@
 import { Box, Button } from '@chakra-ui/react';
 
+/**
+ * @name StartBattleButton
+ * @description Renders a styled button to initiate the battle start process.
+ * The button has a gradient border and text styling consistent with the app's design.
+ * It adapts font size and padding based on whether the view is mobile or desktop.
+ * @param {Function} handleStartButtonClick - Callback function triggered when the button is clicked.
+ * @param {boolean} isMobile - Flag indicating if the device is mobile, used to adjust styling.
+ * @returns {JSX.Element} A Chakra UI Button wrapped in a styled Box container.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const StartBattleButton = ({ handleStartButtonClick, isMobile }) => {
     return (
         <Box

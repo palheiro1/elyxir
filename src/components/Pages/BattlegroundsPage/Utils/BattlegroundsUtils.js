@@ -261,3 +261,19 @@ export const getCurrencyImage = key => {
             return null;
     }
 };
+
+/**
+ * @name getCapturedCardText
+ * @description Determines the appropriate label text for the captured or obtained card, based on whether
+ * the current user was defending and whether the defender won.
+ * @param {boolean} isUserDefending - Whether the current user is the defender.
+ * @param {boolean} isDefenderWin - Whether the defender won the battle.
+ * @returns {string} The appropriate label text for the captured or obtained card.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const getCapturedCardText = (isUserDefending, isDefenderWin) => {
+    if (isUserDefending) {
+        return isDefenderWin ? 'OBTAINED CARD:' : 'CAPTURED CARD: ';
+    }
+    return isDefenderWin ? 'CAPTURED CARD:' : 'OBTAINED CARD: ';
+};

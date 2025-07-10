@@ -1,5 +1,25 @@
 import { Box, Image, Stack, Text } from '@chakra-ui/react';
 
+/**
+ * @name AttackerCards
+ * @description Displays the attacker's selected hand cards with bonus information.
+ * Shows the current bonus for medium and domain, and renders each card or an empty slot.
+ * Cards can be pre-selected for deletion, showing an overlay "x" indicator.
+ * Empty slots show a clickable box that triggers the inventory opening.
+ * The component adapts layout and sizes for mobile and low height screens.
+ * @param {Array} handBattleCards - Array of cards currently selected for battle (may include empty strings).
+ * @param {Object|null} preSelectedCard - Card currently pre-selected for deletion.
+ * @param {Function} handleDeleteCard - Handler to delete a card when clicked.
+ * @param {Function} openInventory - Handler to open inventory for adding a card.
+ * @param {boolean} isMobile - Flag indicating if the display is on a mobile device.
+ * @param {boolean} isLowHeight - Flag for low height screens to adjust width.
+ * @param {number} mediumBonus - Numeric bonus related to the battle medium.
+ * @param {string} medium - Name of the battle medium (e.g., "Terrestrial").
+ * @param {number} domainBonus - Numeric bonus related to the domain.
+ * @param {string} domainName - Name of the domain.
+ * @returns {JSX.Element} JSX layout displaying the attacker's hand and bonuses.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const AttackerCards = ({
     handBattleCards,
     preSelectedCard,
