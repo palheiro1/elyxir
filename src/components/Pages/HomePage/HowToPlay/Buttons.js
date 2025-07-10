@@ -6,12 +6,12 @@ import { IS_BOUNTY_ENABLED } from '../../../../data/CONSTANTS';
 import { useSelector } from 'react-redux';
 
 const Buttons = () => {
-    const textBuy = useColorModeValue('#84BBA4', 'white');
-    const textOpen = useColorModeValue('#6EB2BB', 'white');
-    const textHistory = useColorModeValue('#CE99B4', 'white');
-    const textInventory = useColorModeValue('#96A8B9', 'white');
-    const textBounty = useColorModeValue('#C76D8E', 'white');
-    const textBattlegrounds = useColorModeValue('#BEC671', 'white');
+    const textBuy = useColorModeValue('#9F3772', 'white');
+    const textOpen = useColorModeValue('#E094B3', 'white');
+    const textHistory = useColorModeValue('#3B7197', 'white');
+    const textInventory = useColorModeValue('#2F8190', 'white');
+    const textBounty = useColorModeValue('#3B6497', 'white');
+    const textBattlegrounds = useColorModeValue('#BCC754', 'white');
 
     const navigate = useNavigate();
 
@@ -27,9 +27,9 @@ const Buttons = () => {
                     color={textBuy}
                     button={
                         <MenuButton
-                            bgColor={'#84BBA4'}
+                            bgColor={'#9F3772'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(132, 187, 164, 0.75)'}
+                            hoverBg={'rgba(159, 55, 114, 0.75)'}
                             icon={'/images/icons/menu/BuyPack.png'}
                             isActive={false}
                             text={'Buy Pack'}
@@ -44,9 +44,9 @@ const Buttons = () => {
                     color={textOpen}
                     button={
                         <MenuButton
-                            bgColor={'#6EB2BB'}
+                            bgColor={'#E094B3'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(110, 178, 187, 0.75)'}
+                            hoverBg={'rgba(224, 148, 179, 0.75)'}
                             icon={'/images/icons/menu/OpenPack.png'}
                             isActive={false}
                             text={'Open pack'}
@@ -61,9 +61,9 @@ const Buttons = () => {
                     color={textHistory}
                     button={
                         <MenuButton
-                            bgColor={'#CE99B4'}
+                            bgColor={'#3B7197'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(206, 153, 180, 0.75)'}
+                            hoverBg={'rgba(59, 113, 151, 0.75)'}
                             icon={'/images/icons/menu/blanco/history.png'}
                             isActive={false}
                             text={'History'}
@@ -78,9 +78,9 @@ const Buttons = () => {
                     color={textInventory}
                     button={
                         <MenuButton
-                            bgColor={'#96A8B9'}
+                            bgColor={'#2F8190'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(150, 168, 185, 0.75)'}
+                            hoverBg={'rgba(47, 129, 144, 0.75)'}
                             icon={'/images/icons/menu/blanco/inventory.png'}
                             isActive={false}
                             text={'Inventory'}
@@ -95,9 +95,9 @@ const Buttons = () => {
                     color={textBounty}
                     button={
                         <MenuButton
-                            bgColor={'#C76D8E'}
+                            bgColor={'#3B6497'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(199, 109, 142, 0.75)'}
+                            hoverBg={'rgba(59, 100, 151, 0.75)'}
                             icon={'/images/icons/menu/blanco/bounty.png'}
                             isActive={false}
                             text={'Jackpot'}
@@ -113,9 +113,9 @@ const Buttons = () => {
                     color={textBattlegrounds}
                     button={
                         <MenuButton
-                            bgColor={'#BEC671'}
+                            bgColor={'#BCC754'}
                             fontWeight={'bold'}
-                            hoverBg={'rgba(190, 198, 113, 0.75)'}
+                            hoverBg={'rgba(188, 199, 84, 0.75)'}
                             icon={'/images/icons/menu/blanco/battlegrounds.svg'}
                             isActive={false}
                             onClick={() => navigate('/battlegrounds')}

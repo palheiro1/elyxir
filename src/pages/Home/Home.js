@@ -567,7 +567,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 mt={{ base: 'none', md: 12, lg: 'none' }}
                 m={{ base: 2, lg: 12 }}
                 px={{ base: 2, lg: 8 }}
+                mb={0}
                 py={4}
+                pb={0}
                 rounded="lg"
                 border="1px"
                 borderColor={borderColor}>

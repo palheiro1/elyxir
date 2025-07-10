@@ -13,7 +13,6 @@ import { FaUser } from 'react-icons/fa';
  */
 const ProfileDropdown = ({ setOption, handleLogout }) => {
     const menuItemProps = {
-        bgColor: '#585858',
         borderRadius: '10px',
         display: 'flex',
         alignItems: 'center',
@@ -34,27 +33,27 @@ const ProfileDropdown = ({ setOption, handleLogout }) => {
                         as={Button}
                         rightIcon={<GoTriangleDown />}
                         leftIcon={<FaUser />}
-                        bgColor={'#E14942'}
+                        bgColor={'#E15083'}
                         fontFamily={'Inter'}
                         fontWeight={'regular'}
-                        _hover={{ bgColor: 'rgba(225, 73, 66, 0.75)' }}
-                        _active={{ bgColor: 'rgba(225, 73, 66, 0.85)' }}>
+                        _hover={{ opacity: '0.75' }}
+                        _active={{ opacity: '0.85' }}>
                         Profile
                     </MenuButton>
                 )}
 
                 <MenuList bgColor="#1F2323" borderRadius="10px" p={2} w="140px" minW="unset">
-                    <MenuItem onClick={() => setOption(9)} {...menuItemProps}>
+                    <MenuItem onClick={() => setOption(9)} bgColor={'#3B4397'} {...menuItemProps}>
                         <Image src="/images/icons/menu/blanco/messages.png" boxSize={'15px'} />
                         <Text left={0} fontWeight={'semibold'}>
                             Messages
                         </Text>
                     </MenuItem>
-                    <MenuItem onClick={() => setOption(6)} {...menuItemProps} mt={2}>
+                    <MenuItem onClick={() => setOption(6)} bgColor={'#4E3B97'} {...menuItemProps} mt={2}>
                         <Image src="/images/icons/menu/blanco/account.png" boxSize={'15px'} />
                         <Text fontWeight={'semibold'}>Account</Text>
                     </MenuItem>
-                    <MenuItem onClick={handleLogout} {...menuItemProps} mt={2}>
+                    <MenuItem onClick={handleLogout} bgColor={'#5D3B97'} {...menuItemProps} mt={2}>
                         <Image src="/images/icons/menu/blanco/logout.png" boxSize={'15px'} />
                         <Text fontWeight={'semibold'}>Logout</Text>
                     </MenuItem>
