@@ -91,7 +91,7 @@ const Buttons = () => {
 
                 <FlowItem
                     number={5}
-                    title="The Jackpot: Win Rewards!"
+                    title="The Bounty: Win Rewards!"
                     color={textBounty}
                     button={
                         <MenuButton
@@ -100,7 +100,7 @@ const Buttons = () => {
                             hoverBg={'rgba(59, 100, 151, 0.75)'}
                             icon={'/images/icons/menu/blanco/bounty.png'}
                             isActive={false}
-                            text={'Jackpot'}
+                            text={'Bounty'}
                             onClick={() => navigate('/home?goToSection=5')}
                             isDisabled={!IS_BOUNTY_ENABLED}
                         />

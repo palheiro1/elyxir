@@ -7,14 +7,8 @@ export const fetchSoldiers = createAsyncThunk('soldiers/fetchSoldiers', async (_
         const response = await axios.get(`${OMNO_API}/index.php?action=getOmnoGameState`);
         return response.data.state.definition.soldier;
     } catch (error) {
-        if (axios.isAxiosError(error)) {
-            return rejectWithValue({
-                message: error.message,
-                code: error.code,
-                data: error.response?.data || null,
-            });
-        }
-        return rejectWithValue({ message: error.message || 'Unknown error' });
+        console.error('🚀 ~ fetchSoldiers ~ error:', error);
+        return rejectWithValue('Unknown error fetching soldiers');
     }
 });
 

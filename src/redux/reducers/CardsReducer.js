@@ -8,12 +8,7 @@ export const fetchCards = createAsyncThunk(
             const cardsData = await fetchAllCards(accountRs, collectionRs, specialRs, false);
             return cardsData;
         } catch (error) {
-            if (error.response?.data?.message) {
-                return rejectWithValue(error.response.data.message);
-            }
-            if (error.message) {
-                return rejectWithValue(error.message);
-            }
+            console.error('🚀 ~ error:', error);
             return rejectWithValue('Unknown error fetching cards');
         }
     }

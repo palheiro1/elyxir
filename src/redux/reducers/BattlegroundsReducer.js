@@ -48,13 +48,7 @@ export const fetchBattleData = createAsyncThunk(
                 filteredCards,
             };
         } catch (error) {
-            // Manejo seguro de error
-            if (error.response?.data?.message) {
-                return rejectWithValue(error.response.data.message);
-            }
-            if (error.message) {
-                return rejectWithValue(error.message);
-            }
+            console.error('🚀 ~ error:', error);
             return rejectWithValue('Unknown error fetching battle data');
         }
     }

@@ -15,7 +15,7 @@ export const fetchArenasInfo = createAsyncThunk('arena/fetchArenasInfo', async (
 
         return arenasInfo;
     } catch (error) {
-        return rejectWithValue(error?.response?.data?.message || error.message || 'Failed to fetch arenas info');
+        return rejectWithValue('Failed to fetch arenas info');
     }
 });
 

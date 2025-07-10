@@ -24,7 +24,8 @@ export const fetchAccountDetails = createAsyncThunk(
             accountsWithDetails.sort((a, b) => (b.points || b.totalPoints) - (a.points || a.totalPoints));
             return accountsWithDetails;
         } catch (error) {
-            return rejectWithValue(error.message || 'Failed to fetch account details');
+            console.error('🚀 ~ error:', error);
+            return rejectWithValue('Failed to fetch account details');
         }
     }
 );

@@ -38,14 +38,8 @@ export const fetchUserBattles = createAsyncThunk('battle/fetchUserBattles', asyn
 
         return { arenas: arenas.arena, details, accountId };
     } catch (error) {
-        // Manejo seguro de error
-        if (error.response?.data?.message) {
-            return rejectWithValue(error.response.data.message);
-        }
-        if (error.message) {
-            return rejectWithValue(error.message);
-        }
-        return rejectWithValue('Unknown error fetching user battles');
+        console.error('🚀 ~ error:', error);
+        return rejectWithValue('Unknown error fetching user battles data');
     }
 });
 
