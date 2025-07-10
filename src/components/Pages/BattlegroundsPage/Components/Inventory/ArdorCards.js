@@ -78,7 +78,7 @@ const ArdorCards = ({
             setSelectedCards([]);
             setIsSwapping(false);
         } else {
-            errorToast('Swap failed', toast);
+            errorToast('Swap failed. Please check if you have enough IGNIs balance to pay transactions fees', toast);
         }
     };
 
