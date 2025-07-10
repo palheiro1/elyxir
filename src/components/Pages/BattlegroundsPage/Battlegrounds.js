@@ -79,14 +79,31 @@ const Battlegrounds = ({ infoAccount }) => {
         if (isNotLogged(infoAccount)) navigate('/login');
     }, [infoAccount, navigate]);
 
-    const { battleCount, activePlayers, landLords, omnoGEMsBalance, omnoWethBalance, filteredCards, parseWETH } =
-        useSelector(state => state.battlegrounds);
+    const {
+        battleCount,
+        activePlayers,
+        landLords,
+        omnoGEMsBalance,
+        omnoWethBalance,
+        filteredCards,
+        parseWETH,
+        loading,
+    } = useSelector(state => state.battlegrounds);
     const { cards } = useSelector(state => state.cards);
     const { prev_height } = useSelector(state => state.blockchain);
 
-    const [openNewPlayersModal, setOpenNewPlayersModal] = useState(
-        cards && (!filteredCards || filteredCards.length === 0)
-    );
+    const [openNewPlayersModal, setOpenNewPlayersModal] = useState(false);
+    const [hasSeenNewPlayersModal, setHasSeenNewPlayersModal] = useState(false);
+
+    useEffect(() => {
+        if (!hasSeenNewPlayersModal && !loading) {
+            if (filteredCards === null || filteredCards?.length === 0) {
+                setOpenNewPlayersModal(true);
+            } else {
+                setHasSeenNewPlayersModal(true);
+            }
+        }
+    }, [filteredCards, loading, hasSeenNewPlayersModal]);
 
     useEffect(() => {
         cards && accountRs && dispatch(fetchBattleData({ accountRs, cards }));
@@ -258,6 +275,7 @@ const Battlegrounds = ({ infoAccount }) => {
 
     const handleCloseNewPlayers = () => {
         setOpenNewPlayersModal(false);
+        setHasSeenNewPlayersModal(true); // ✅ Para que no se vuelva a abrir
         setIsScrollLocked(false);
         setUpdateState(prevState => !prevState);
     };

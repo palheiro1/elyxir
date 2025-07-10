@@ -8,7 +8,9 @@ export const fetchUserBattles = createAsyncThunk('battle/fetchUserBattles', asyn
     try {
         const arenas = await getArenas();
         const accountId = await addressToAccountId(accountRs);
-        const userBattles = (await getUserBattles(accountId))
+        const userBattlesRaw = await getUserBattles(accountId);
+
+        const userBattles = userBattlesRaw
             .map(battle => ({
                 ...battle,
                 isUserDefending: battle.defenderAccount === accountId,
@@ -36,7 +38,14 @@ export const fetchUserBattles = createAsyncThunk('battle/fetchUserBattles', asyn
 
         return { arenas: arenas.arena, details, accountId };
     } catch (error) {
-        return rejectWithValue(error.response.data.message);
+        // Manejo seguro de error
+        if (error.response?.data?.message) {
+            return rejectWithValue(error.response.data.message);
+        }
+        if (error.message) {
+            return rejectWithValue(error.message);
+        }
+        return rejectWithValue('Unknown error fetching user battles');
     }
 });
 
@@ -45,8 +54,8 @@ const getArenaInfo = async (arenaId, defenderAccount, attackerAccount, arenasInf
     const [defender, attacker] = await Promise.all([getAccount(defenderAccount), getAccount(attackerAccount)]);
     let name = locations.find(item => item.id === arenaId);
     return {
-        defender: defender,
-        attacker: attacker,
+        defender,
+        attacker,
         arena: { ...name, ...arena },
     };
 };
@@ -73,10 +82,10 @@ const battleSlice = createSlice({
         builder
             .addCase(fetchUserBattles.pending, state => {
                 state.loading = true;
+                state.error = null;
             })
             .addCase(fetchUserBattles.fulfilled, (state, action) => {
                 state.loading = false;
-
                 if (!action.payload.cached) {
                     state.arenasInfo = action.payload.arenas;
                     state.userBattles = action.payload.details;
@@ -85,7 +94,7 @@ const battleSlice = createSlice({
             })
             .addCase(fetchUserBattles.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = action.payload || 'Failed to fetch user battles';
             });
     },
 });

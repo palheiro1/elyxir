@@ -4,7 +4,6 @@ import { addressToAccountId } from '../../services/Ardor/ardorInterface';
 import { getUsersState } from '../../services/Ardor/omnoInterface';
 import { GEMASSET, WETHASSET } from '../../data/CONSTANTS';
 
-
 // Thunk asíncrono para obtener y procesar los datos
 export const fetchBattleData = createAsyncThunk(
     'battle/fetchBattleData',
@@ -17,29 +16,30 @@ export const fetchBattleData = createAsyncThunk(
             ]);
 
             const accountId = await addressToAccountId(accountRs);
-            const userInfo = await getUsersState().then(res => res.data.find(item => item.id === accountId));
+            const usersStateResponse = await getUsersState();
+            const userInfo = usersStateResponse.data.find(item => item.id === accountId);
 
             let omnoGEMsBalance = 0;
             let omnoWethBalance = 0;
             let parseWETH = 0;
-            let filteredCards = [];
+            let filteredCards = null;
 
-            if (userInfo?.balance) {
+            if (userInfo?.balance?.asset) {
                 const assetIds = Object.keys(userInfo.balance.asset);
                 omnoGEMsBalance = userInfo.balance.asset[GEMASSET] || 0;
                 omnoWethBalance = userInfo.balance.asset[WETHASSET] || 0;
-                parseWETH = parseFloat(userInfo.balance.asset[WETHASSET] || 0);
+                parseWETH = parseFloat(omnoWethBalance) || 0;
 
                 filteredCards = cards
                     .filter(card => assetIds.includes(card.asset))
                     .map(card => ({
                         ...card,
-                        omnoQuantity: userInfo.balance.asset[card.asset],
+                        omnoQuantity: userInfo.balance.asset[card.asset] || 0,
                     }));
             }
 
             return {
-                battleCount,
+                battleCount: battleCount || 0,
                 activePlayers,
                 landLords,
                 omnoGEMsBalance,
@@ -48,7 +48,14 @@ export const fetchBattleData = createAsyncThunk(
                 filteredCards,
             };
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || error.message);
+            // Manejo seguro de error
+            if (error.response?.data?.message) {
+                return rejectWithValue(error.response.data.message);
+            }
+            if (error.message) {
+                return rejectWithValue(error.message);
+            }
+            return rejectWithValue('Unknown error fetching battle data');
         }
     }
 );
@@ -62,7 +69,7 @@ const battleSlice = createSlice({
         omnoGEMsBalance: 0,
         omnoWethBalance: 0,
         parseWETH: 0,
-        filteredCards: [],
+        filteredCards: null,
         loading: false,
         error: null,
     },
@@ -74,7 +81,7 @@ const battleSlice = createSlice({
             state.omnoGEMsBalance = 0;
             state.omnoWethBalance = 0;
             state.parseWETH = 0;
-            state.filteredCards = [];
+            state.filteredCards = null;
             state.loading = false;
             state.error = null;
         },
@@ -83,6 +90,7 @@ const battleSlice = createSlice({
         builder
             .addCase(fetchBattleData.pending, state => {
                 state.loading = true;
+                state.error = null;
             })
             .addCase(fetchBattleData.fulfilled, (state, action) => {
                 state.loading = false;
@@ -96,7 +104,7 @@ const battleSlice = createSlice({
             })
             .addCase(fetchBattleData.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = action.payload || 'Failed to fetch battle data';
             });
     },
 });

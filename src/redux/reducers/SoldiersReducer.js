@@ -7,7 +7,14 @@ export const fetchSoldiers = createAsyncThunk('soldiers/fetchSoldiers', async (_
         const response = await axios.get(`${OMNO_API}/index.php?action=getOmnoGameState`);
         return response.data.state.definition.soldier;
     } catch (error) {
-        return rejectWithValue(error.response ? error.response.data : error.message);
+        if (axios.isAxiosError(error)) {
+            return rejectWithValue({
+                message: error.message,
+                code: error.code,
+                data: error.response?.data || null,
+            });
+        }
+        return rejectWithValue({ message: error.message || 'Unknown error' });
     }
 });
 
@@ -39,7 +46,7 @@ const soldiersSlice = createSlice({
             })
             .addCase(fetchSoldiers.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = action.payload || { message: 'Unknown error' };
             });
     },
 });
