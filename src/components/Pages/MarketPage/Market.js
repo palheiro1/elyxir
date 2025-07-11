@@ -5,18 +5,20 @@ import { useState } from 'react';
 import PairSelector from './PairSelector/PairSelector';
 import CardMarket from './CardMarket';
 import CurrencyMarket from './CurrencyMarket';
+import ItemMarket from './ItemMarket';
 
 /**
  * @name Market
  * @description Market page
  * @param {Object} infoAccount - Info of the account
  * @param {Array} cards - Array with the cards data
+ * @param {Array} items - Array with the items data
  * @param {Object} gemCards - Object with the gem cards data
  * @returns {JSX.Element} - JSX element
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const Market = ({ infoAccount, cards, gemCards, giftzCards, wethCards, manaCards }) => {
+const Market = ({ infoAccount, cards, items = [], gemCards, giftzCards, wethCards, manaCards }) => {
     // Market type
     const [marketCurrency, setMarketCurrency] = useState('CARDS');
 
@@ -28,6 +30,10 @@ const Market = ({ infoAccount, cards, gemCards, giftzCards, wethCards, manaCards
 
             {marketCurrency === 'CARDS' && (
                 <CardMarket cards={cards} infoAccount={infoAccount} marketCurrency={marketCurrency} textColor={textColor} />
+            )}
+
+            {marketCurrency === 'ITEMS' && (
+                <ItemMarket items={items} infoAccount={infoAccount} textColor={textColor} />
             )}
 
             {marketCurrency === 'CURRENCIES' && (

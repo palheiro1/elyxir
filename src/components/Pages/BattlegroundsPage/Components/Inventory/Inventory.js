@@ -4,8 +4,9 @@ import { Overlay } from '../../../../ui/Overlay';
 import { CloseIcon } from '@chakra-ui/icons';
 import OmnoPage from './OmnoPage';
 import ArdorPage from './ArdorPage';
+import ItemsPage from './ItemsPage';
 
-const Inventory = ({ infoAccount, cards, handleCloseInventory, isMobile }) => {
+const Inventory = ({ infoAccount, cards, items = [], handleCloseInventory, isMobile }) => {
     const [selectedOption, setSelectedOption] = useState('battlegrounds');
 
     const handleSelectChange = event => {
@@ -71,6 +72,9 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, isMobile }) => {
                         <option value="battlegrounds" style={{ backgroundColor: '#FFF' }}>
                             Army
                         </option>
+                        <option value="items" style={{ backgroundColor: '#FFF' }}>
+                            Potions
+                        </option>
                         <option value="ardor" style={{ backgroundColor: '#FFF' }}>
                             Inventory
                         </option>
@@ -78,6 +82,9 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, isMobile }) => {
                 </Stack>
                 {selectedOption === 'battlegrounds' && (
                     <OmnoPage infoAccount={infoAccount} cards={cards} gridColumns={getColumns} isMobile={isMobile} />
+                )}
+                {selectedOption === 'items' && (
+                    <ItemsPage infoAccount={infoAccount} items={items} gridColumns={getColumns} isMobile={isMobile} />
                 )}
                 {selectedOption === 'ardor' && (
                     <ArdorPage infoAccount={infoAccount} cards={cards} gridColumns={getColumns} isMobile={isMobile} />

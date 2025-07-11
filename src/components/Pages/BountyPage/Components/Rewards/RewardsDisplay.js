@@ -2,18 +2,26 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { getBountyBalance, swapPriceEthtoUSD } from '../../../../../services/Bounty/utils';
 import { getGemPrice, getManaPrice } from '../../../../../services/Ardor/evmInterface';
-import { Image, Stack, Text } from '@chakra-ui/react';
+import { Image, Stack, Text, SimpleGrid, Box } from '@chakra-ui/react';
 
 export const RewardsDisplay = () => {
     const [bountyBalance, setBountyBalance] = useState({
         wETH: 0,
         GEM: 0,
         Mana: 0,
+        Items: 0, // Added items to bounty balance
     });
 
     const [bountyBalanceUSD, setBountyBalanceUSD] = useState({
         Total: 0,
     });
+
+    // Mock potions in bounty pool
+    const bountyPotions = [
+        { name: 'Terrestrial Elixir', image: '/images/currency/gem.png', quantity: 5 },
+        { name: 'Power Surge Potion', image: '/images/currency/ignis.png', quantity: 2 },
+        { name: 'Asian Spirit Brew', image: '/images/currency/mana.png', quantity: 3 },
+    ];
 
     useEffect(() => {
         const fetchBountyBalance = async () => {
@@ -28,6 +36,7 @@ export const RewardsDisplay = () => {
                     wETH: bountyBalance,
                     GEM: 9000,
                     Mana: 9000,
+                    Items: bountyPotions.reduce((total, potion) => total + potion.quantity, 0),
                 });
 
                 const [wethUsd, cardUsd] = await Promise.all([
@@ -38,9 +47,10 @@ export const RewardsDisplay = () => {
                 const totalGem = gemPrice * 9000;
                 const totalMana = manaPrice * 9000;
                 const totalCard = cardUsd * 7;
+                const totalItems = bountyPotions.length * 10; // Mock item value
 
                 setBountyBalanceUSD({
-                    Total: Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalCard),
+                    Total: Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalCard) + Number(totalItems),
                 });
             } catch (error) {
                 console.error('🚀 ~ file: BountyWidget.js:47 ~ fetchBountyBalance ~ error:', error);
@@ -79,6 +89,13 @@ export const RewardsDisplay = () => {
             value: 7,
             label: 'SPECIAL CARDS',
             customSize: { h: '40px' },
+        },
+        {
+            key: 'items',
+            image: '/images/currency/multicurrency.png',
+            alt: 'potions Icon',
+            value: bountyBalance.Items,
+            label: 'POTIONS',
         },
         {
             key: 'total',
@@ -124,6 +141,28 @@ export const RewardsDisplay = () => {
                     </Stack>
                 ))}
             </Stack>
+            
+            {/* Display available potions in bounty pool */}
+            <Box mt={4} p={4} bg="rgba(255,255,255,0.1)" borderRadius="md" w="100%">
+                <Text fontFamily={'Chelsea market, system-ui'} fontWeight={500} textAlign="center" mb={2}>
+                    POTIONS IN BOUNTY POOL
+                </Text>
+                <SimpleGrid columns={{ base: 1, md: 3 }} spacing={2}>
+                    {bountyPotions.map((potion, index) => (
+                        <Stack key={index} direction={'row'} align="center" justify="center">
+                            <Image
+                                src={potion.image}
+                                alt={potion.name}
+                                w="30px"
+                                h="30px"
+                            />
+                            <Text fontSize="sm">
+                                {potion.quantity}x {potion.name}
+                            </Text>
+                        </Stack>
+                    ))}
+                </SimpleGrid>
+            </Box>
         </Stack>
     );
 };
