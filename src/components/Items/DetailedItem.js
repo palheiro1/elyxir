@@ -24,12 +24,12 @@ import '@darenft/react-3d-hover-card/dist/style.css';
  * @returns {JSX.Element} - JSX element
  */
 const DetailedItem = ({ isOpen, onClose, data }) => {
+    const textColor = useColorModeValue('gray.200', 'gray.200');
+    const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
+
     if (!data) return null;
 
     const { name, image, type, bonus, description, rarity, element, continent } = data;
-
-    const textColor = useColorModeValue('gray.200', 'gray.200');
-    const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
 
     const getRarityColor = (rarity) => {
         const colors = {
