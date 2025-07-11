@@ -18,9 +18,9 @@ export const RewardsDisplay = () => {
 
     // Mock potions in bounty pool
     const bountyPotions = [
-        { name: 'Terrestrial Elixir', image: '/images/currency/gem.png', quantity: 5 },
-        { name: 'Power Surge Potion', image: '/images/currency/ignis.png', quantity: 2 },
-        { name: 'Asian Spirit Brew', image: '/images/currency/mana.png', quantity: 3 },
+        { name: 'Terrestrial Elixir', image: '/images/items/Lava copia.png', quantity: 5 },
+        { name: 'Power Surge Potion', image: '/images/items/Holi Water2 copia.png', quantity: 2 },
+        { name: 'Asian Spirit Brew', image: '/images/items/Blood copia.png', quantity: 3 },
     ];
 
     useEffect(() => {
@@ -58,7 +58,7 @@ export const RewardsDisplay = () => {
         };
 
         fetchBountyBalance();
-    }, []);
+    }, [bountyPotions]);
 
     const rewardsData = [
         {
@@ -92,14 +92,14 @@ export const RewardsDisplay = () => {
         },
         {
             key: 'items',
-            image: '/images/currency/multicurrency.png',
+            image: '/images/items/WaterCristaline copia.png',
             alt: 'potions Icon',
             value: bountyBalance.Items,
             label: 'POTIONS',
         },
         {
             key: 'total',
-            image: '/images/currency/multicurrency.png',
+            image: '/images/items/WaterCristaline copia.png',
             alt: 'total bounty Icon',
             value: bountyBalanceUSD.Total.toFixed(2),
             label: 'USD TOTAL BOUNTY',

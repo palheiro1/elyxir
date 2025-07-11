@@ -35,9 +35,9 @@ const PotionSelector = ({ selectedPotion, setSelectedPotion, isMobile }) => {
     const mockPotions = [
         {
             id: 'pot1',
-            name: 'Terrestrial Boost',
-            image: '/images/items/terrestrial-potion.png',
-            rarity: 'Common',
+            name: 'Lava Elixir',
+            image: '/images/items/Lava copia.png',
+            medium: 'Terrestrial',
             type: 'Buff',
             description: '+1 Power to Terrestrial creatures',
             quantity: 3,
@@ -45,9 +45,9 @@ const PotionSelector = ({ selectedPotion, setSelectedPotion, isMobile }) => {
         },
         {
             id: 'pot2',
-            name: 'Aerial Elixir',
-            image: '/images/items/aerial-potion.png',
-            rarity: 'Rare',
+            name: 'Wind Essence',
+            image: '/images/items/Wind copia.png',
+            medium: 'Aerial',
             type: 'Buff',
             description: '+1 Power to Aerial creatures',
             quantity: 2,
@@ -55,23 +55,42 @@ const PotionSelector = ({ selectedPotion, setSelectedPotion, isMobile }) => {
         },
         {
             id: 'pot3',
-            name: 'Asia Strength',
-            image: '/images/items/asia-potion.png',
-            rarity: 'Epic',
+            name: 'Aquatic Essence',
+            image: '/images/items/Water sea.png',
+            medium: 'Aquatic',
+            type: 'Buff',
+            description: '+1 Power to Aquatic creatures',
+            quantity: 2,
+            bonus: { medium: 'Aquatic', value: 1 }
+        },
+        {
+            id: 'pot4',
+            name: 'Blood of Asia',
+            image: '/images/items/Blood copia.png',
+            continent: 'Asia',
             type: 'Buff',
             description: '+1 Power to Asia creatures',
             quantity: 1,
             bonus: { continent: 'Asia', value: 1 }
         },
         {
-            id: 'pot4',
-            name: 'Universal Power',
-            image: '/images/items/universal-potion.png',
-            rarity: 'Legendary',
-            type: 'Buff',
+            id: 'pot5',
+            name: 'Sacred Water',
+            image: '/images/items/Holi Water2 copia.png',
+            type: 'Universal',
             description: '+1 Power to all creatures',
             quantity: 1,
             bonus: { universal: true, value: 1 }
+        },
+        {
+            id: 'pot6',
+            name: 'Crystal Water',
+            image: '/images/items/WaterCristaline copia.png',
+            medium: 'Aquatic',
+            type: 'Pure',
+            description: '+1 Power to Aquatic creatures',
+            quantity: 4,
+            bonus: { medium: 'Aquatic', value: 1 }
         },
     ];
 
@@ -80,14 +99,24 @@ const PotionSelector = ({ selectedPotion, setSelectedPotion, isMobile }) => {
         onPotionModalClose();
     };
 
-    const getRarityColor = (rarity) => {
+    const getMediumColor = (medium) => {
         const colors = {
-            'Common': 'gray',
-            'Rare': 'blue',
-            'Epic': 'purple',
-            'Legendary': 'orange',
+            'Terrestrial': 'red',
+            'Aerial': 'cyan',
+            'Aquatic': 'blue',
         };
-        return colors[rarity] || 'gray';
+        return colors[medium] || 'gray';
+    };
+
+    const getContinentColor = (continent) => {
+        const colors = {
+            'Asia': 'orange',
+            'Europe': 'green', 
+            'Africa': 'yellow',
+            'America': 'purple',
+            'Oceania': 'teal',
+        };
+        return colors[continent] || 'gray';
     };
 
     return (
@@ -121,7 +150,7 @@ const PotionSelector = ({ selectedPotion, setSelectedPotion, isMobile }) => {
                                     transition="transform 0.2s">
                                     <Image
                                         src={selectedPotion.image}
-                                        fallbackSrc="/images/items/default-potion.png"
+                                        fallbackSrc="/images/items/WaterCristaline copia.png"
                                         boxSize={isMobile ? '50px' : '60px'}
                                         borderRadius="md"
                                         border="3px solid #D597B2"
@@ -131,9 +160,9 @@ const PotionSelector = ({ selectedPotion, setSelectedPotion, isMobile }) => {
                                         position="absolute"
                                         top="-8px"
                                         right="-8px"
-                                        colorScheme={getRarityColor(selectedPotion.rarity)}
+                                        colorScheme={selectedPotion.medium ? getMediumColor(selectedPotion.medium) : selectedPotion.continent ? getContinentColor(selectedPotion.continent) : 'gray'}
                                         fontSize="xs">
-                                        {selectedPotion.rarity}
+                                        {selectedPotion.medium || selectedPotion.continent || selectedPotion.type}
                                     </Badge>
                                 </Box>
                                 <Stack flex={1} spacing={1}>
@@ -242,7 +271,7 @@ const PotionSelector = ({ selectedPotion, setSelectedPotion, isMobile }) => {
                                         <Box position="relative">
                                             <Image
                                                 src={potion.image}
-                                                fallbackSrc="/images/items/default-potion.png"
+                                                fallbackSrc="/images/items/WaterCristaline copia.png"
                                                 boxSize="70px"
                                                 borderRadius="md"
                                                 border="2px solid #D597B2"
@@ -251,9 +280,9 @@ const PotionSelector = ({ selectedPotion, setSelectedPotion, isMobile }) => {
                                                 position="absolute"
                                                 top="-8px"
                                                 right="-8px"
-                                                colorScheme={getRarityColor(potion.rarity)}
+                                                colorScheme={potion.medium ? getMediumColor(potion.medium) : potion.continent ? getContinentColor(potion.continent) : 'gray'}
                                                 fontSize="xs">
-                                                {potion.rarity}
+                                                {potion.medium || potion.continent || potion.type}
                                             </Badge>
                                         </Box>
                                         <Stack flex={1} spacing={1}>
@@ -265,9 +294,16 @@ const PotionSelector = ({ selectedPotion, setSelectedPotion, isMobile }) => {
                                                 {potion.name}
                                             </Text>
                                             <HStack spacing={2}>
-                                                <Badge colorScheme={getRarityColor(potion.rarity)} size="sm">
-                                                    {potion.rarity}
-                                                </Badge>
+                                                {potion.medium && (
+                                                    <Badge colorScheme={getMediumColor(potion.medium)} size="sm">
+                                                        {potion.medium}
+                                                    </Badge>
+                                                )}
+                                                {potion.continent && (
+                                                    <Badge colorScheme={getContinentColor(potion.continent)} size="sm">
+                                                        {potion.continent}
+                                                    </Badge>
+                                                )}
                                                 <Badge colorScheme="gray" size="sm">
                                                     {potion.type}
                                                 </Badge>

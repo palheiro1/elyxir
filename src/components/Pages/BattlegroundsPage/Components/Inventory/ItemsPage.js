@@ -157,7 +157,7 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                                             cursor="pointer"
                                             onClick={() => setSelectedItems([...selectedItems, item])}>
                                             <Center>
-                                                <Img src={image} w={'90%'} h={'75%'} fallbackSrc="/images/items/default-potion.png" />
+                                                <Img src={image} w={'90%'} h={'75%'} fallbackSrc="/images/items/WaterCristaline copia.png" />
                                             </Center>
                                             <Stack direction={'column'} spacing={0} mx={2} mb={1}>
                                                 <Stack

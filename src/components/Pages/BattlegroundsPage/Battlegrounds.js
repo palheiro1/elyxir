@@ -99,9 +99,9 @@ const Battlegrounds = ({ infoAccount }) => {
     const mockItems = [
         {
             id: 'pot1',
-            name: 'Terrestrial Boost',
-            image: '/images/items/terrestrial-potion.png',
-            rarity: 'Common',
+            name: 'Lava Elixir',
+            image: '/images/items/Lava copia.png',
+            medium: 'Terrestrial',
             type: 'Buff',
             description: '+1 Power to Terrestrial creatures',
             quantity: 3,
@@ -109,9 +109,9 @@ const Battlegrounds = ({ infoAccount }) => {
         },
         {
             id: 'pot2',
-            name: 'Aerial Elixir',
-            image: '/images/items/aerial-potion.png',
-            rarity: 'Rare',
+            name: 'Wind Essence',
+            image: '/images/items/Wind copia.png',
+            medium: 'Aerial',
             type: 'Buff',
             description: '+1 Power to Aerial creatures',
             quantity: 2,
@@ -119,13 +119,13 @@ const Battlegrounds = ({ infoAccount }) => {
         },
         {
             id: 'pot3',
-            name: 'Asia Strength',
-            image: '/images/items/asia-potion.png',
-            rarity: 'Epic',
+            name: 'Aquatic Essence',
+            image: '/images/items/Water sea.png',
+            medium: 'Aquatic',
             type: 'Buff',
-            description: '+1 Power to Asia creatures',
-            quantity: 1,
-            bonus: { continent: 'Asia', value: 1 }
+            description: '+1 Power to Aquatic creatures',
+            quantity: 2,
+            bonus: { medium: 'Aquatic', value: 1 }
         },
     ];
 

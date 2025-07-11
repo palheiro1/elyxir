@@ -58,7 +58,7 @@ const BridgeItem = ({ item, canEdit = true, handleDeleteSelectedItem, handleEdit
 
     return (
         <Stack direction={'row'} minWidth="375px" spacing={4}>
-            <Image maxW="75px" src={image} alt={title} shadow="lg" rounded="sm" fallbackSrc="/images/items/default-potion.png" />
+            <Image maxW="75px" src={image} alt={title} shadow="lg" rounded="sm" fallbackSrc="/images/items/WaterCristaline copia.png" />
 
             <Stack direction={'row'} align="center" minW="35%">
                 <Box>

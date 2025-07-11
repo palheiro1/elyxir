@@ -12,66 +12,60 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
         {
             id: 1,
             name: 'Terrestrial Elixir',
-            image: '/images/currency/gem.png',
+            image: '/images/items/Lava copia.png',
             type: 'medium',
             bonus: 1,
             quantity: 0, // User doesn't have this item
             description: 'A mystical potion that enhances the power of terrestrial creatures.',
-            rarity: 'Common',
             element: 'Terrestrial'
         },
         {
             id: 2,
             name: 'Asian Spirit Brew',
-            image: '/images/currency/mana.png',
+            image: '/images/items/Blood copia.png',
             type: 'continent',
             bonus: 1,
             quantity: 0,
             description: 'An ancient brew that strengthens creatures from the Asian continent.',
-            rarity: 'Rare',
             continent: 'Asia'
         },
         {
             id: 3,
             name: 'Power Surge Potion',
-            image: '/images/currency/ignis.png',
+            image: '/images/items/Holi Water2 copia.png',
             type: 'power',
             bonus: 2,
             quantity: 0,
-            description: 'A rare potion that provides raw power boost to any creature.',
-            rarity: 'Epic'
+            description: 'A rare potion that provides raw power boost to any creature.'
         },
         {
             id: 4,
             name: 'Oceanic Essence',
-            image: '/images/currency/weth.png',
+            image: '/images/items/Water sea.png',
             type: 'continent',
             bonus: 1,
             quantity: 0,
             description: 'A rare essence that empowers creatures from Oceania.',
-            rarity: 'Rare',
             continent: 'Oceania'
         },
         {
             id: 5,
             name: 'Aerial Boost Potion',
-            image: '/images/currency/giftz.png',
+            image: '/images/items/Wind copia.png',
             type: 'medium',
             bonus: 1,
             quantity: 0,
             description: 'A light potion that enhances aerial creatures.',
-            rarity: 'Common',
             element: 'Aerial'
         },
         {
             id: 6,
             name: 'Legendary Amplifier',
-            image: '/images/currency/multicurrency.png',
+            image: '/images/items/WaterCristaline copia.png',
             type: 'power',
             bonus: 3,
             quantity: 0,
-            description: 'An extremely rare potion that provides massive power boost.',
-            rarity: 'Special'
+            description: 'An extremely rare potion that provides massive power boost.'
         }
     ];
 

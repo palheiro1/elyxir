@@ -18,7 +18,6 @@ import BountyItems from './BountyItems';
 const ItemsInventoryPage = ({ infoAccount, items, isMobile, gridColumns, handleCloseInventory }) => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [filters, setFilters] = useState({
-        rarity: '',
         type: '',
     });
 
@@ -27,34 +26,31 @@ const ItemsInventoryPage = ({ infoAccount, items, isMobile, gridColumns, handleC
         {
             id: 1,
             name: 'Terrestrial Elixir',
-            image: '/images/currency/gem.png',
+            image: '/images/items/Lava copia.png',
             type: 'medium',
             bonus: 1,
             quantity: 3,
             description: 'A mystical potion that enhances the power of terrestrial creatures.',
-            rarity: 'Common',
             element: 'Terrestrial'
         },
         {
             id: 2,
             name: 'Asian Spirit Brew',
-            image: '/images/currency/mana.png',
+            image: '/images/items/Blood copia.png',
             type: 'continent',
             bonus: 1,
             quantity: 2,
             description: 'An ancient brew that strengthens creatures from the Asian continent.',
-            rarity: 'Rare',
             continent: 'Asia'
         },
         {
             id: 3,
             name: 'Power Surge Potion',
-            image: '/images/currency/ignis.png',
+            image: '/images/items/Holi Water2 copia.png',
             type: 'power',
             bonus: 2,
             quantity: 1,
-            description: 'A rare potion that provides raw power boost to any creature.',
-            rarity: 'Epic'
+            description: 'A rare potion that provides raw power boost to any creature.'
         }
     ];
 
@@ -76,13 +72,6 @@ const ItemsInventoryPage = ({ infoAccount, items, isMobile, gridColumns, handleC
     const myItems = items.length > 0 ? items : mockItems.filter(item => item.quantity > 0);
     const notSelectedItems = myItems.filter(item => !selectedItems.some(selected => selected.id === item.id));
 
-    const handleRarityChange = event => {
-        setFilters(prevFilters => ({
-            ...prevFilters,
-            rarity: event.target.value,
-        }));
-    };
-
     const handleTypeChange = event => {
         setFilters(prevFilters => ({
             ...prevFilters,
@@ -91,15 +80,6 @@ const ItemsInventoryPage = ({ infoAccount, items, isMobile, gridColumns, handleC
     };
 
     const filteredNotSelectedItems = notSelectedItems
-        .filter(item => {
-            const rarityMapping = {
-                1: 'Common',
-                2: 'Rare',
-                3: 'Epic',
-                4: 'Special',
-            };
-            return filters.rarity && filters.rarity !== '-1' ? item.rarity === rarityMapping[filters.rarity] : true;
-        })
         .filter(item => {
             return filters.type && filters.type !== '-1' ? item.type === filters.type : true;
         });
@@ -129,29 +109,6 @@ const ItemsInventoryPage = ({ infoAccount, items, isMobile, gridColumns, handleC
                     1. Select potions to burn for bounty
                 </Heading>
                 <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={'10'}>
-                    <Select
-                        w={isMobile ? '25%' : '10%'}
-                        bg={'#FFF'}
-                        color={'#000'}
-                        fontWeight={100}
-                        value={filters.rarity}
-                        onChange={handleRarityChange}>
-                        <option value="-1" style={optionStyle}>
-                            All Rarities
-                        </option>
-                        <option value="1" style={optionStyle}>
-                            Common
-                        </option>
-                        <option value="2" style={optionStyle}>
-                            Rare
-                        </option>
-                        <option value="3" style={optionStyle}>
-                            Epic
-                        </option>
-                        <option value="4" style={optionStyle}>
-                            Special
-                        </option>
-                    </Select>
                     <Select
                         w={isMobile ? '25%' : '10%'}
                         bg={'#FFF'}
@@ -193,7 +150,7 @@ const ItemsInventoryPage = ({ infoAccount, items, isMobile, gridColumns, handleC
                             className="custom-scrollbar">
                             {filteredNotSelectedItems.length > 0 ? (
                                 filteredNotSelectedItems.map((item, i) => {
-                                    const { name, image, rarity, type, quantity } = item;
+                                    const { name, image, type, quantity, element, continent } = item;
                                     return (
                                         <Box
                                             key={i}
@@ -219,14 +176,26 @@ const ItemsInventoryPage = ({ infoAccount, items, isMobile, gridColumns, handleC
                                                         {name}
                                                     </Text>
                                                     <Stack direction="row" spacing={1}>
-                                                        <Text
-                                                            px={1}
-                                                            fontSize="xs"
-                                                            bgColor="gray.600"
-                                                            rounded="md"
-                                                            color="white">
-                                                            {rarity}
-                                                        </Text>
+                                                        {element && (
+                                                            <Text
+                                                                px={1}
+                                                                fontSize="xs"
+                                                                bgColor="green.600"
+                                                                rounded="md"
+                                                                color="white">
+                                                                {element}
+                                                            </Text>
+                                                        )}
+                                                        {continent && (
+                                                            <Text
+                                                                px={1}
+                                                                fontSize="xs"
+                                                                bgColor="orange.600"
+                                                                rounded="md"
+                                                                color="white">
+                                                                {continent}
+                                                            </Text>
+                                                        )}
                                                         <Text
                                                             px={1}
                                                             fontSize="xs"

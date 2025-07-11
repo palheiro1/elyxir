@@ -24,22 +24,12 @@ import '@darenft/react-3d-hover-card/dist/style.css';
  * @returns {JSX.Element} - JSX element
  */
 const DetailedItem = ({ isOpen, onClose, data }) => {
-    if (!data) return null;
-
-    const { name, image, type, bonus, description, rarity, element, continent } = data;
-
     const textColor = useColorModeValue('gray.200', 'gray.200');
     const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
 
-    const getRarityColor = (rarity) => {
-        const colors = {
-            'Common': '#8B8B8B',
-            'Rare': '#4A90E2',
-            'Epic': '#9B59B6',
-            'Special': '#F39C12',
-        };
-        return colors[rarity] || colors['Common'];
-    };
+    if (!data) return null;
+
+    const { name, image, type, bonus, description, element, continent } = data;
 
     return (
         <>
@@ -67,20 +57,6 @@ const DetailedItem = ({ isOpen, onClose, data }) => {
                                 </Text>
 
                                 <Stack direction="row" mb={2} justify="space-between">
-                                    <Stack direction="column" spacing={0}>
-                                        <Text fontSize="md" color="gray">
-                                            Rarity
-                                        </Text>
-                                        <Text
-                                            fontSize="md"
-                                            bgColor={getRarityColor(rarity)}
-                                            rounded="lg"
-                                            color="white"
-                                            px={2}>
-                                            {rarity}
-                                        </Text>
-                                    </Stack>
-
                                     <Stack direction="column" spacing={0}>
                                         <Text fontSize="md" color="gray">
                                             Type

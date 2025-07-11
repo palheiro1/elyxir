@@ -30,34 +30,31 @@ const Inventory = ({ infoAccount, cards, items = [] }) => {
         {
             id: 1,
             name: 'Terrestrial Elixir',
-            image: '/images/currency/gem.png',
+            image: '/images/items/Lava copia.png',
             type: 'medium',
             bonus: 1,
             quantity: 3,
             description: 'A mystical potion that enhances the power of terrestrial creatures.',
-            rarity: 'Common',
             element: 'Terrestrial'
         },
         {
             id: 2,
             name: 'Asian Spirit Brew',
-            image: '/images/currency/mana.png',
+            image: '/images/items/Blood copia.png',
             type: 'continent',
             bonus: 1,
             quantity: 2,
             description: 'An ancient brew that strengthens creatures from the Asian continent.',
-            rarity: 'Rare',
             continent: 'Asia'
         },
         {
             id: 3,
             name: 'Power Surge Potion',
-            image: '/images/currency/ignis.png',
+            image: '/images/items/Holi Water2 copia.png',
             type: 'power',
             bonus: 2,
             quantity: 1,
-            description: 'A rare potion that provides raw power boost to any creature.',
-            rarity: 'Epic'
+            description: 'A rare potion that provides raw power boost to any creature.'
         }
     ];
 

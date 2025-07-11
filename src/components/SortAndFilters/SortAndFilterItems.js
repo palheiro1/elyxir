@@ -16,7 +16,6 @@ const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129,
     const bgButtons = `rgba(${rgbColor}, 0.35)`;
     const borderButtons = `rgba(${rgbColor}, 1)`;
 
-    const [rarity, setRarity] = useState('All');
     const [type, setType] = useState('All');
     const [sort, setSort] = useState('moreQuantity');
     const [needReload, setNeedReload] = useState(true);
@@ -24,16 +23,12 @@ const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129,
     const [itemsHash, setItemsHash] = useState('');
 
     /**
-     * @description Filter items by rarity and type
+     * @description Filter items by type
      */
     useEffect(() => {
         const filterItems = () => {
             setNeedReload(false);
             let filteredItems = [...items];
-
-            if (rarity !== 'All') {
-                filteredItems = filteredItems.filter(item => item.rarity === rarity);
-            }
 
             if (type !== 'All') {
                 filteredItems = filteredItems.filter(item => item.type === type);
@@ -45,9 +40,8 @@ const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129,
                 filteredItems = filteredItems.sort((a, b) => a.quantity - b.quantity);
             } else if (sort === 'name') {
                 filteredItems = filteredItems.sort((a, b) => a.name.localeCompare(b.name));
-            } else if (sort === 'rarity') {
-                const rarityOrder = { 'Common': 1, 'Rare': 2, 'Epic': 3, 'Special': 4 };
-                filteredItems = filteredItems.sort((a, b) => rarityOrder[a.rarity] - rarityOrder[b.rarity]);
+            } else if (sort === 'bonus') {
+                filteredItems = filteredItems.sort((a, b) => (b.bonus || 0) - (a.bonus || 0));
             }
 
             setItemsFiltered(filteredItems);
@@ -67,11 +61,7 @@ const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129,
         if (needReload) {
             filterItems();
         }
-    }, [items, rarity, type, sort, needReload, itemsHash, setItemsFiltered]);
-
-    const handleRarityChange = event => {
-        setRarity(event.target.value);
-    };
+    }, [items, type, sort, needReload, itemsHash, setItemsFiltered]);
 
     const handleTypeChange = event => {
         setType(event.target.value);
@@ -84,19 +74,6 @@ const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129,
     return (
         <Box>
             <Stack direction={{ base: 'column', lg: 'row' }} spacing={4} mb={4}>
-                <Box>
-                    <Text fontSize="sm" mb={2} color="gray">
-                        Filter by Rarity
-                    </Text>
-                    <Select value={rarity} onChange={handleRarityChange} bg={bgButtons} border={`1px solid ${borderButtons}`}>
-                        <option value="All">All Rarities</option>
-                        <option value="Common">Common</option>
-                        <option value="Rare">Rare</option>
-                        <option value="Epic">Epic</option>
-                        <option value="Special">Special</option>
-                    </Select>
-                </Box>
-
                 <Box>
                     <Text fontSize="sm" mb={2} color="gray">
                         Filter by Type
@@ -117,7 +94,7 @@ const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129,
                         <option value="moreQuantity">More Quantity</option>
                         <option value="lessQuantity">Less Quantity</option>
                         <option value="name">Name</option>
-                        <option value="rarity">Rarity</option>
+                        <option value="bonus">Bonus</option>
                     </Select>
                 </Box>
             </Stack>
