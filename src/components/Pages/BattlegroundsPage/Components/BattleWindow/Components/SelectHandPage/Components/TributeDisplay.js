@@ -1,6 +1,6 @@
 import { Stack, Text } from '@chakra-ui/react';
-import { isEmptyObject } from '../../../../../Utils/BattlegroundsUtils';
 import { NQTDIVIDER } from '../../../../../../../../data/CONSTANTS';
+import { isEmptyObject } from '../../../../../../../../utils/utils';
 
 /**
  * @name TributeDisplay

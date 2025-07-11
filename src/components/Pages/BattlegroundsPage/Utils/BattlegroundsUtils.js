@@ -1,5 +1,6 @@
 import { getAsset } from '../../../../services/Ardor/ardorInterface';
 import { getAccumulatedBounty, getLeaderboardsRewards } from '../../../../services/Battlegrounds/Battlegrounds';
+import { isEmptyObject } from '../../../../utils/utils';
 
 export const formatTimeStamp = timestamp => {
     const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
@@ -83,11 +84,6 @@ export const formatAddress = address => {
     return `${firstPart}...${lastPart}`;
 };
 
-export const isEmptyObject = object => {
-    if (Object.keys(object).length === 0 && object.constructor === Object) return true;
-    return false;
-};
-
 export const getBattleRoundInfo = (defenderAsset, attackerAsset, cards, battleInfo, soldiers) => {
     let attackerCard = cards.find(card => {
         return card.asset === String(attackerAsset);
@@ -114,11 +110,14 @@ export const getBattleRoundInfo = (defenderAsset, attackerAsset, cards, battleIn
     };
 };
 
-export const capitalize = string => {
-    if (string.length === 0) return string;
-    return string.charAt(0).toUpperCase() + string.slice(1);
-};
-
+/**
+ * @name getLevelIconString
+ * @description Returns the image path for a given rarity level (by string name).
+ * @param {string} value - Rarity level ("Common", "Rare", "Epic", "Special").
+ * @returns {string|null} The corresponding image path or null if not found.
+ * @example getLevelIconString("Epic") => "/images/battlegrounds/rarity/epic.png"
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const getLevelIconString = value => {
     let path = '/images/battlegrounds/rarity/';
     switch (value) {
@@ -135,6 +134,14 @@ export const getLevelIconString = value => {
     }
 };
 
+/**
+ * @name getLevelIconInt
+ * @description Returns the image path for a given rarity level (by numeric ID).
+ * @param {number} value - Rarity ID (1 = Common, 2 = Rare, 3 = Epic, 4 = Special).
+ * @returns {string|null} The corresponding image path or null if not found.
+ * @example getLevelIconInt(2) => "/images/battlegrounds/rarity/rare.png"
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const getLevelIconInt = value => {
     let path = '/images/battlegrounds/rarity/';
     switch (value) {
@@ -151,6 +158,14 @@ export const getLevelIconInt = value => {
     }
 };
 
+/**
+ * @name getMediumIcon
+ * @description Returns the image path for a given medium type (by string name).
+ * @param {string} value - Medium type name ("Aquatic", "Aerial", or "Terrestrial").
+ * @returns {string|null} The corresponding image path or null if not found.
+ * @example getMediumIcon("Aquatic") => "/images/battlegrounds/medium/water.png"
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const getMediumIcon = value => {
     let path = '/images/battlegrounds/medium/';
     switch (value) {
@@ -164,12 +179,29 @@ export const getMediumIcon = value => {
             return null;
     }
 };
+
+/**
+ * @name getDiceIcon
+ * @description Returns the image path for a dice icon given a number from 1 to 6.
+ * @param {number} value - Dice number (integer between 1 and 6).
+ * @returns {string|null} The corresponding dice image path or null if invalid.
+ * @example getDiceIcon(3) => "/images/cards/dices/dice3.png"
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const getDiceIcon = value => {
     let path = '/images/cards/dices/';
     if (value < 1 || value > 6 || !value) return null;
     return `${path}dice${value}.png`;
 };
 
+/**
+ * @name getMediumIconInt
+ * @description Returns the image path for a given medium type (by numeric ID).
+ * @param {number} value - Medium type ID (1 = Terrestrial, 2 = Aerial, 3 = Aquatic).
+ * @returns {string|null} The corresponding image path or null if not found.
+ * @example getMediumIconInt(2) => "/images/battlegrounds/medium/air.png"
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const getMediumIconInt = value => {
     let path = '/images/battlegrounds/medium/';
     switch (value) {
@@ -184,6 +216,14 @@ export const getMediumIconInt = value => {
     }
 };
 
+/**
+ * @name getContinentIcon
+ * @description Returns the image path for a given continent name.
+ * @param {string} value - Continent name ("Europe", "Asia", "Africa", "America", "Oceania").
+ * @returns {string|null} The corresponding image path or null if not found.
+ * @example getContinentIcon("Europe") => "/images/battlegrounds/continent/europa.png"
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const getContinentIcon = value => {
     let path = '/images/battlegrounds/continent/';
     switch (value) {
@@ -202,6 +242,32 @@ export const getContinentIcon = value => {
     }
 };
 
+/**
+ * @name formatLeaderboardRewards
+ * @description
+ * Formats and calculates the leaderboard rewards based on the selected leaderboard type.
+ * Fetches the current accumulated bounty and static reward configuration, merges the data
+ * with asset details, and returns the reward structure including cards, mana, wETH and GEM.
+ * Option modes:
+ * - `1` (default): General Leaderboard rewards with tribute percentages applied.
+ * - `'gen'`: General Leaderboard rewards without applying tribute percentages.
+ * - Any other value: Terrestrial Leaderboard Top 1 rewards with tribute percentages.
+ *
+ * @param {number|string} [option=1] - Selector for the type of reward formatting to return.
+ * @returns {Promise<Object|undefined>} Object with formatted rewards:
+ *  {
+ *    cards: number,
+ *    mana: number,
+ *    weth: number,
+ *    gem: number
+ *  }
+ * Returns `undefined` if data is incomplete or unavailable.
+ * @example
+ * const rewards = await formatLeaderboardRewards(); // General with tribute %
+ * const rewards = await formatLeaderboardRewards('gen'); // General without tribute
+ * const rewards = await formatLeaderboardRewards(2); // Terrestrial Top 1
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const formatLeaderboardRewards = async (option = 1) => {
     const accumulatedBounty = await getAccumulatedBounty();
     const rewards = await getLeaderboardsRewards();
@@ -242,7 +308,7 @@ export const formatLeaderboardRewards = async (option = 1) => {
             }
         };
 
-        return reward;
+        return reward();
     }
 };
 

@@ -1,7 +1,6 @@
 import { Box, Heading, Stack, useDisclosure, useMediaQuery, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import locations from '../../../../assets/LocationsEnum';
-import { isEmptyObject } from '../../../../Utils/BattlegroundsUtils';
 import { getAsset } from '../../../../../../../services/Ardor/ardorInterface';
 import { errorToast } from '../../../../../../../utils/alerts';
 import { sendCardsToBattle } from '../../../../../../../services/Ardor/omnoInterface';
@@ -13,6 +12,7 @@ import StartBattleButton from './Components/StartBattleButton';
 import AttackerCards from './Components/AttackerCards';
 import DefenderCards from './Components/DefenderCards';
 import StatisticsDisplay from './Components/StatisticsDisplay';
+import { isEmptyObject } from '../../../../../../../utils/utils';
 
 /**
  * @name SelectHandPage

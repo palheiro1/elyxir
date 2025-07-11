@@ -275,7 +275,7 @@ const Battlegrounds = ({ infoAccount }) => {
 
     const handleCloseNewPlayers = () => {
         setOpenNewPlayersModal(false);
-        setHasSeenNewPlayersModal(true); // ✅ Para que no se vuelva a abrir
+        setHasSeenNewPlayersModal(true); 
         setIsScrollLocked(false);
         setUpdateState(prevState => !prevState);
     };
