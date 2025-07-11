@@ -64,6 +64,11 @@ const BridgeSelector = ({ setBridgeType }) => {
                     text="GEM"
                     description="Use the bridge to trade your GEM in Polygon."
                 />
+                <BridgeButton
+                    bridgeType="ERC1155ITEMS"
+                    text="POTIONS"
+                    description="Bridge your potions to Polygon to sell them on NFT marketplaces, or bring them to Ardor to use in battles."
+                />
             </SimpleGrid>
             <Box
                 w="100%"

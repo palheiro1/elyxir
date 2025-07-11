@@ -95,6 +95,40 @@ const Battlegrounds = ({ infoAccount }) => {
     const [openNewPlayersModal, setOpenNewPlayersModal] = useState(false);
     const [hasSeenNewPlayersModal, setHasSeenNewPlayersModal] = useState(false);
 
+    // Mock items for battlegrounds
+    const mockItems = [
+        {
+            id: 'pot1',
+            name: 'Terrestrial Boost',
+            image: '/images/items/terrestrial-potion.png',
+            rarity: 'Common',
+            type: 'Buff',
+            description: '+1 Power to Terrestrial creatures',
+            quantity: 3,
+            bonus: { medium: 'Terrestrial', value: 1 }
+        },
+        {
+            id: 'pot2',
+            name: 'Aerial Elixir',
+            image: '/images/items/aerial-potion.png',
+            rarity: 'Rare',
+            type: 'Buff',
+            description: '+1 Power to Aerial creatures',
+            quantity: 2,
+            bonus: { medium: 'Aerial', value: 1 }
+        },
+        {
+            id: 'pot3',
+            name: 'Asia Strength',
+            image: '/images/items/asia-potion.png',
+            rarity: 'Epic',
+            type: 'Buff',
+            description: '+1 Power to Asia creatures',
+            quantity: 1,
+            bonus: { continent: 'Asia', value: 1 }
+        },
+    ];
+
     useEffect(() => {
         if (!hasSeenNewPlayersModal && !loading) {
             if (filteredCards === null || filteredCards?.length === 0) {
@@ -377,12 +411,14 @@ const Battlegrounds = ({ infoAccount }) => {
                         omnoGEMsBalance={omnoGEMsBalance}
                         omnoWethBalance={omnoWethBalance}
                         isMobile={isMobile}
+                        items={mockItems}
                     />
                 )}
                 {openInventory && (
                     <Inventory
                         infoAccount={infoAccount}
                         cards={cards}
+                        items={mockItems}
                         handleCloseInventory={handleCloseInventory}
                         isMobile={isMobile}
                     />

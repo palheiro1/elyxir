@@ -13,6 +13,7 @@ import StartBattleButton from './Components/StartBattleButton';
 import AttackerCards from './Components/AttackerCards';
 import DefenderCards from './Components/DefenderCards';
 import StatisticsDisplay from './Components/StatisticsDisplay';
+import PotionSelector from './Components/PotionSelector';
 
 /**
  * @name SelectHandPage
@@ -59,6 +60,8 @@ export const SelectHandPage = ({
     setCurrentTime,
     isMobile,
     defenderCards,
+    selectedPotion,
+    setSelectedPotion,
 }) => {
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -252,6 +255,12 @@ export const SelectHandPage = ({
                     medium={medium}
                     domainBonus={domainBonus}
                     domainName={domainName}
+                />
+
+                <PotionSelector
+                    selectedPotion={selectedPotion}
+                    setSelectedPotion={setSelectedPotion}
+                    isMobile={isMobile}
                 />
 
                 <Stack direction={'row'} w={'50%'} mx={'auto'} mt={isMobile ? 3 : 6}>

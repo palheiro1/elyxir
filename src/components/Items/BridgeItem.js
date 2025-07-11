@@ -16,14 +16,14 @@ import { AiFillDelete } from 'react-icons/ai';
 
 /**
  * @name BridgeItem
- * @description Item component for battlegrounds transfer
+ * @description Item component for battlegrounds inventory
  * @param {Object} item - Item object
- * @param {Boolean} isMobile - Boolean to know if it's mobile view
+ * @param {Boolean} canEdit - Boolean to know if the item can be edited
  * @param {Function} handleDeleteSelectedItem - Function to handle delete selected item
  * @param {Function} handleEdit - Function to handle edit
  * @returns {JSX.Element} - JSX element
  */
-const BridgeItem = ({ item, isMobile, handleDeleteSelectedItem, handleEdit }) => {
+const BridgeItem = ({ item, canEdit = true, handleDeleteSelectedItem, handleEdit }) => {
     const {
         id,
         name: title,
@@ -35,7 +35,7 @@ const BridgeItem = ({ item, isMobile, handleDeleteSelectedItem, handleEdit }) =>
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: 1,
-        defaultValue: 1,
+        defaultValue: item.selectQuantity || 1,
         min: 1,
         max: quantity,
     });
@@ -43,7 +43,7 @@ const BridgeItem = ({ item, isMobile, handleDeleteSelectedItem, handleEdit }) =>
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
     const input = getInputProps();
-    const textColor = useColorModeValue('white', 'white');
+    const textColor = useColorModeValue(!canEdit ? 'black' : 'white', canEdit ? 'white' : 'white');
 
     const getRarityColor = (rarity) => {
         const colors = {
@@ -51,24 +51,18 @@ const BridgeItem = ({ item, isMobile, handleDeleteSelectedItem, handleEdit }) =>
             'Rare': '#4A90E2',
             'Epic': '#9B59B6',
             'Legendary': '#F39C12',
+            'Special': '#F39C12',
         };
         return colors[rarity] || colors['Common'];
     };
 
     return (
-        <Stack direction={'row'} minWidth={isMobile ? "300px" : "375px"} spacing={4}>
-            <Image 
-                maxW={isMobile ? "60px" : "75px"} 
-                src={image} 
-                alt={title} 
-                shadow="lg" 
-                rounded="sm"
-                fallbackSrc="/images/items/default-potion.png"
-            />
+        <Stack direction={'row'} minWidth="375px" spacing={4}>
+            <Image maxW="75px" src={image} alt={title} shadow="lg" rounded="sm" fallbackSrc="/images/items/default-potion.png" />
 
             <Stack direction={'row'} align="center" minW="35%">
                 <Box>
-                    <Text fontWeight="bold" fontSize={isMobile ? "lg" : "2xl"} textColor={textColor}>
+                    <Text fontWeight="bold" fontSize="2xl" textColor={textColor}>
                         {title}
                     </Text>
                     <Stack direction="row" spacing={1}>
@@ -93,31 +87,35 @@ const BridgeItem = ({ item, isMobile, handleDeleteSelectedItem, handleEdit }) =>
                 </Box>
             </Stack>
 
-            <HStack ml={2}>
-                <HStack maxW={isMobile ? "150px" : "200px"} spacing={0}>
-                    <Button rounded="none" {...dec} onClick={() => handleEdit(item, input.value)}>
-                        -
-                    </Button>
-                    <Input
-                        rounded="none"
-                        border="none"
-                        textAlign="center"
-                        disabled={true}
-                        {...input}
-                        onChange={() => handleEdit(item, input.value)}
-                    />
-                    <Button rounded="none" {...inc} onClick={() => handleEdit(item, input.value)}>
-                        +
-                    </Button>
-                </HStack>
-                <Center>
-                    <IconButton
-                        aria-label="Delete"
-                        onClick={() => handleDeleteSelectedItem(item)}
-                        icon={<AiFillDelete color="red" />}
-                    />
-                </Center>
-            </HStack>
+            {canEdit && (
+                <>
+                    <HStack ml={2}>
+                        <HStack maxW="200px" spacing={0}>
+                            <Button rounded="none" {...dec} onClick={() => handleEdit(item, input.value)}>
+                                -
+                            </Button>
+                            <Input
+                                rounded="none"
+                                border="none"
+                                textAlign="center"
+                                disabled={true}
+                                {...input}
+                                onChange={() => handleEdit(item, input.value)}
+                            />
+                            <Button rounded="none" {...inc} onClick={() => handleEdit(item, input.value)}>
+                                +
+                            </Button>
+                        </HStack>
+                        <Center>
+                            <IconButton
+                                aria-label="Delete"
+                                onClick={() => handleDeleteSelectedItem(item)}
+                                icon={<AiFillDelete color="red" />}
+                            />
+                        </Center>
+                    </HStack>
+                </>
+            )}
         </Stack>
     );
 };

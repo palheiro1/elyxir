@@ -1,41 +1,6 @@
 # Gameplay and UX
 
-Elyxir is an extension of the* [x] **Create an item component**
-
-  ## 🛒 Marketplace
-
-* [x] **Add an "ITEMS" option to the market## 🛠️ Additional Notes
-
-* [x] Reuse styling from existing components (cards, buttons, grids) to maintain a consistent look and feel.
-* [x] Ensure new components follow the project's React/Chakra UI patterns.
-* [x] Backend/blockchain integration is out of scope here—UI components may use mock data or existing state management.ctor**
-
-  * Modify `src/components/Pages/MarketPage/PairSelector/PairSelector.js` so the user can choose `ITEMS` alongside `CARD` and `CURRENCIES`.
-
-* [x] **Create an ItemMarket component**
-
-  * Base it on `CardMarket.js` (or a similar file).
-  * Display available potions for buy/sell and adapt the order grid to handle item-specific data.
-
-* [x] **Render ItemMarket when selected**
-
-  * In `src/components/Pages/MarketPage/Market.js`, detect when `marketCurrency === 'ITEMS'` and show `ItemMarket`.rc/components/Cards/Card.js` or build a similar file (`ItemCard.js`).
-  * Display the potion image, name, and basic details.
-
-* [x] **Add an Item grid**
-
-  * In `src/components/Items`, create `GridItems.js` mirroring `GridCards.js`.
-  * Handle responsive column counts the same way.
-
-* [x] **Extend Inventory page with a switch**
-
-  * Update `src/components/Pages/InventoryPage/Inventory.js`.
-  * Introduce state to toggle between "Cards," "Items," and optionally "All."
-  * Use a switch component (e.g. `SectionSwitch.js`) to change which grid is shown.
-
-* [x] **Integrate item filters (optional)**
-
-  * If cards have filters via `SortAndFilterCards`, create a simplified `SortAndFilterItems` to filter potions by type or bonus.* trading-card universe focused on potion creation and use. In its MVP form, players can obtain pre-made potions—no crafting or ingredient system yet—and deploy them to gain small advantages in Battlegrounds.
+Elyxir is an extension of the trading-card universe focused on potion creation and use. In its MVP form, players can obtain pre-made potions—no crafting or ingredient system yet—and deploy them to gain small advantages in Battlegrounds.
 
 ## Core Concepts
 
@@ -64,7 +29,7 @@ Elyxir is an extension of the* [x] **Create an item component**
    * Displayed in inventory grid alongside cards.
 2. **Trading Potions**
 
-   * “ITEMS” option on Marketplace to list/bid/offers.
+   * "ITEMS" option on Marketplace to list/bid/offers.
    * Market UI mirrors card trading experience.
 3. **Using Potions**
 
@@ -81,38 +46,38 @@ Elyxir is an extension of the* [x] **Create an item component**
 
 ## 🧪 Inventory
 
-* [ ] **Create an item component**
+* [x] **Create an item component**
 
   * Duplicate `src/components/Cards/Card.js` or build a similar file (`ItemCard.js`).
   * Display the potion image, name, and basic details.
 
-* [ ] **Add an Item grid**
+* [x] **Add an Item grid**
 
   * In `src/components/Items`, create `GridItems.js` mirroring `GridCards.js`.
   * Handle responsive column counts the same way.
 
-* [ ] **Extend Inventory page with a switch**
+* [x] **Extend Inventory page with a switch**
 
   * Update `src/components/Pages/InventoryPage/Inventory.js`.
-  * Introduce state to toggle between “Cards,” “Items,” and optionally “All.”
+  * Introduce state to toggle between "Cards," "Items," and optionally "All."
   * Use a switch component (e.g. `SectionSwitch.js`) to change which grid is shown.
 
-* [ ] **Integrate item filters (optional)**
+* [x] **Integrate item filters (optional)**
 
   * If cards have filters via `SortAndFilterCards`, create a simplified `SortAndFilterItems` to filter potions by type or bonus.
 
 ## 🛒 Marketplace
 
-* [ ] **Add an “ITEMS” option to the market selector**
+* [x] **Add an "ITEMS" option to the market selector**
 
   * Modify `src/components/Pages/MarketPage/PairSelector/PairSelector.js` so the user can choose `ITEMS` alongside `CARD` and `CURRENCIES`.
 
-* [ ] **Create an ItemMarket component**
+* [x] **Create an ItemMarket component**
 
   * Base it on `CardMarket.js` (or a similar file).
   * Display available potions for buy/sell and adapt the order grid to handle item-specific data.
 
-* [ ] **Render ItemMarket when selected**
+* [x] **Render ItemMarket when selected**
 
   * In `src/components/Pages/MarketPage/Market.js`, detect when `marketCurrency === 'ITEMS'` and show `ItemMarket`.
 
@@ -152,9 +117,9 @@ Elyxir is an extension of the* [x] **Create an item component**
 
 ## 🛠️ Additional Notes
 
-* [ ] Reuse styling from existing components (cards, buttons, grids) to maintain a consistent look and feel.
-* [ ] Ensure new components follow the project’s React/Chakra UI patterns.
-* [ ] Backend/blockchain integration is out of scope here—UI components may use mock data or existing state management.
+* [x] Reuse styling from existing components (cards, buttons, grids) to maintain a consistent look and feel.
+* [x] Ensure new components follow the project's React/Chakra UI patterns.
+* [x] Backend/blockchain integration is out of scope here—UI components may use mock data or existing state management.
 
 ---
 
