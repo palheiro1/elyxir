@@ -36,7 +36,7 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
     const needChangeColor = !isHeader ? false : true;
 
     return (
-        <Box mt={needTarascaLogo ? 24 : 0} w={'100%'}>
+        <Box mt={needTarascaLogo ? 14 : 0} w={'100%'}>
             <Flex
                 display={{ md: 'flex' }}
                 color={useColorModeValue('gray.600', 'white')}

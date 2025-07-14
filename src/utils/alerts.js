@@ -82,12 +82,12 @@ export const okToast = (text, toast) => {
  * @returns {void}
  * @description This function is used to display an error toast
  */
-export const errorToast = (title = 'Error', text, toast) => {
+export const errorToast = (text, toast) => {
     const id = 'errorToast';
     if (toast.isActive(id)) return;
 
     toast({
-        title,
+        title: 'Error',
         description: text,
         status: 'error',
         duration: 9000,

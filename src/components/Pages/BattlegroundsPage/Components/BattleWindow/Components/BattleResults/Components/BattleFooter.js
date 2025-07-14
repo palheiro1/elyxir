@@ -1,0 +1,64 @@
+import { Stack, Text, Tooltip, Box, Image } from '@chakra-ui/react';
+import { TriangleUpIcon } from '@chakra-ui/icons';
+import { formatAddress, getCapturedCardText } from '../../../../../Utils/BattlegroundsUtils';
+
+/**
+ * @name BattleFooter
+ * @description Displays the footer of a battle screen showing the winner/loser label, defender's name, score,
+ * and a tooltip preview of the card that was obtained or captured during the battle.
+ * It dynamically shows whether the user is the defender and adjusts the text and card accordingly.
+ * @param {Object} props
+ * @param {boolean} props.isDefenderWin - Indicates whether the defender won the battle.
+ * @param {Object} props.defenderInfo - Object containing information about the defender (name, accountRS).
+ * @param {number} props.defenderPoints - Total battle points scored by the defender.
+ * @param {Object} props.capturedCard - The card object that was either captured or obtained (includes image and name).
+ * @param {boolean} props.isUserDefending - Indicates whether the current user is the defender (used to label the card action).
+ * @returns {JSX.Element} A styled footer showing battle results, score, and captured/obtained card preview.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+const BattleFooter = ({ isDefenderWin, defenderInfo, defenderPoints, capturedCard, isUserDefending }) => (
+    <Stack
+        direction="row"
+        bgColor="#BFD1ED"
+        w="100%"
+        h="7%"
+        mb={-2}
+        fontFamily="Chelsea Market, system-ui"
+        borderBottomRadius="25px"
+        justifyContent="space-between"
+        alignItems="center"
+        px={4}>
+        <Stack direction="row" w="100%">
+            <Text color="#000" my="auto" fontSize="large" ml={10}>
+                {isDefenderWin ? 'WINNER: ' : 'LOSER: '}
+                <Tooltip label={defenderInfo.accountRS} hasArrow>
+                    {defenderInfo.name || formatAddress(defenderInfo.accountRS)}
+                </Tooltip>
+            </Text>
+            <Text color="#000" my="auto" fontSize="large" border="1px solid #2ba39c" p={1} borderRadius="8px">
+                {defenderPoints}
+            </Text>
+        </Stack>
+        <Stack></Stack>
+        <Stack direction="row" spacing={1} alignItems="end" mx="auto" w="30%" h="100%">
+            <Tooltip
+                label={
+                    <Box>
+                        <Image src={capturedCard?.cardImgUrl} alt={capturedCard?.name} w="200px" />
+                    </Box>
+                }
+                aria-label={capturedCard?.name}
+                placement="top"
+                hasArrow>
+                <Stack direction="row" mx="auto" my="auto">
+                    <Text color="#000" fontSize="large">
+                        {getCapturedCardText(isUserDefending, isDefenderWin)}
+                    </Text>
+                    <TriangleUpIcon color="#000" my="auto" />
+                </Stack>
+            </Tooltip>
+        </Stack>
+    </Stack>
+);
+
+export default BattleFooter;

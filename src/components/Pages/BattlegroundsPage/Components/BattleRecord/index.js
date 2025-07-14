@@ -3,28 +3,40 @@ import { Overlay } from '../../../../ui/Overlay';
 import { Box, Heading, IconButton, Stack } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import BattleDetails from './BattleDetails';
-import BattleListTable from './BattleListTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserBattles } from '../../../../../redux/reducers/BattleReducer';
+import BattleListTable from './BattleListTable';
 
-const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
+/**
+ * @name BattleRecord
+ * @description
+ * React component that displays a modal-like battle record overlay. It fetches and shows
+ * the user's battles with options to view detailed information of a selected battle.
+ * @param {Object} props - React props.
+ * @param {function} props.handleClose - Callback to close the battle record overlay.
+ * @param {Object} props.infoAccount - User account information, includes `accountRs` (address).
+ * @param {Array} props.cards - Cards data passed down to child components.
+ * @param {boolean} props.isMobile - Flag indicating if the UI is in mobile mode.
+ * @returns {JSX.Element} JSX element rendering the battle record modal.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+const BattleRecord = ({ handleClose, infoAccount, cards, isMobile }) => {
     const { accountRs } = infoAccount;
+    const dispatch = useDispatch();
 
-    const { arenasInfo, userBattles } = useSelector(state => state.battle);
+    const { arenasInfo, userBattles, battleRewards } = useSelector(state => state.battle);
     const [viewDetails, setViewDetails] = useState(false);
     const [selectedBattle, setSelectedBattle] = useState(null);
     const [selectedArena, setSelectedArena] = useState(null);
-    const dispatch = useDispatch();
 
     useEffect(() => {
-        accountRs && dispatch(fetchUserBattles(accountRs));
+        if (accountRs) dispatch(fetchUserBattles(accountRs));
     }, [accountRs, dispatch]);
 
     const handleViewDetails = battleId => {
+        const selected = userBattles.find(battle => battle.battleId === battleId);
+        const arena = arenasInfo.find(arena => arena.id === selected.arenaId);
         setSelectedBattle(battleId);
-
-        let arenaId = userBattles.find(battle => battle.battleId === battleId).arenaId;
-        let arena = arenasInfo.find(arena => arena.id === arenaId);
         setSelectedArena(arena);
         setViewDetails(true);
     };
@@ -36,27 +48,27 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
 
     const closeRecord = () => {
         setSelectedBattle(null);
-        handleClose();
         setViewDetails(false);
+        handleClose();
     };
 
     return (
         <>
             <Overlay isVisible={true} handleClose={closeRecord} />
             <Box
-                pos={'fixed'}
-                bgColor={'#1F2323'}
+                pos="fixed"
+                bgColor="#1F2323"
                 zIndex={99}
                 w={isMobile ? '80%' : viewDetails ? '50%' : '70%'}
                 h={viewDetails ? '95%' : '90%'}
-                borderRadius={'25px'}
-                overflowY={'hidden'}
+                borderRadius="25px"
+                overflowY="hidden"
                 className="custom-scrollbar"
-                top={'50%'}
-                left={'50%'}
-                transform={'translate(-50%, -50%)'}>
+                top="50%"
+                left="50%"
+                transform="translate(-50%, -50%)">
                 <IconButton
-                    background={'transparent'}
+                    background="transparent"
                     color={viewDetails ? '#000' : '#FFF'}
                     icon={<CloseIcon />}
                     _hover={{ background: 'transparent' }}
@@ -66,31 +78,31 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
                     zIndex={999}
                     onClick={closeRecord}
                 />
-                {!viewDetails && (
+
+                {!viewDetails ? (
                     <>
-                        <Stack direction={'column'} color={'#FFF'} my={5} mx={'auto'} textAlign={'center'} maxH={'90%'}>
-                            <Heading fontFamily={'Chelsea Market, System'} fontWeight={100} fontSize={'2xl'}>
+                        <Stack direction="column" color="#FFF" my={5} mx="auto" textAlign="center" maxH="90%">
+                            <Heading fontFamily="Chelsea Market, System" fontWeight={100} fontSize="2xl">
                                 BATTLE RECORD
                             </Heading>
                         </Stack>
                         <BattleListTable
-                            arenasInfo={arenasInfo}
-                            handleViewDetails={handleViewDetails}
                             battleDetails={userBattles}
+                            handleViewDetails={handleViewDetails}
                             cards={cards}
                             isMobile={isMobile}
+                            battleRewards={battleRewards}
                         />
                     </>
-                )}
-
-                {viewDetails && (
+                ) : (
                     <BattleDetails
                         battleId={selectedBattle}
                         cards={cards}
                         arenaInfo={selectedArena}
                         infoAccount={infoAccount}
-                        battleDetails={userBattles.find(battle => battle.battleId === selectedBattle)}
+                        battleDetails={userBattles.find(b => b.battleId === selectedBattle)}
                         handleGoBack={handleGoBack}
+                        battleRewards={battleRewards?.[selectedBattle]}
                     />
                 )}
             </Box>
@@ -98,4 +110,4 @@ const BattleList = ({ handleClose, infoAccount, cards, isMobile }) => {
     );
 };
 
-export default BattleList;
+export default BattleRecord;

@@ -36,7 +36,7 @@ const MobileMenu = ({
                         setOption={setOption}
                         option={option}
                         handleLogout={handleLogout}
-                        widthBotones="100%"
+                        buttonsWidth="100%"
                         cardsLoaded={cardsLoaded}
                     />
                 </Center>

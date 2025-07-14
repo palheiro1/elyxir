@@ -78,7 +78,10 @@ const OmnoCards = ({
             setSelectedCards([]);
             setIsSwapping(false);
         } else {
-            errorToast('Swap failed', 'Some cards may not have been sent correctly', toast);
+            errorToast(
+                'Swap failed. Some cards may not have been sent correctly. Please check if you have enough IGNIs balance to pay transactions fees',
+                toast
+            );
         }
     };
 

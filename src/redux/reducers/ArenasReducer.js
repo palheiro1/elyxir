@@ -15,7 +15,7 @@ export const fetchArenasInfo = createAsyncThunk('arena/fetchArenasInfo', async (
 
         return arenasInfo;
     } catch (error) {
-        return rejectWithValue(error.response.data.message);
+        return rejectWithValue('Failed to fetch arenas info');
     }
 });
 
@@ -37,6 +37,7 @@ const arenaSlice = createSlice({
         builder
             .addCase(fetchArenasInfo.pending, state => {
                 state.loading = true;
+                state.error = null;
             })
             .addCase(fetchArenasInfo.fulfilled, (state, action) => {
                 state.loading = false;

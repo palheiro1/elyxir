@@ -1,11 +1,11 @@
 import { Box, Grid, GridItem, Image, Select, Stack, Text, Tooltip } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
-import { isEmptyObject } from '../../Utils/BattlegroundsUtils';
 import { getAsset } from '../../../../../utils/cardsUtils';
 import { fetchUserBattles } from '../../../../../redux/reducers/BattleReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import locations from '../../assets/LocationsEnum';
+import { isEmptyObject } from '../../../../../utils/utils';
 
 const EarningsRow = ({ isMobile, date, arenaName, capturedAsset, rewards, cards }) => {
     const GemRewards = rewards?.find(item => item.name === 'GEM');

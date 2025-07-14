@@ -32,7 +32,7 @@ const NormalMenu = memo(({ option, setOption, handleLogout, showAllCards, handle
                     setOption={setOption}
                     option={option}
                     handleLogout={handleLogout}
-                    widthBotones="150px"
+                    buttonsWidth="150px"
                     cardsLoaded={cardsLoaded}
                 />
 

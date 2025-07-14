@@ -2,26 +2,38 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getAccount } from '../../services/Ardor/ardorInterface';
 import { getLeaderboards } from '../../services/Battlegrounds/Battlegrounds';
 
-export const fetchLeaderboards = createAsyncThunk('leaderboards/fetchLeaderboards', async () => {
-    const res = await getLeaderboards();
-    return res;
+export const fetchLeaderboards = createAsyncThunk('leaderboards/fetchLeaderboards', async (_, { rejectWithValue }) => {
+    try {
+        const res = await getLeaderboards();
+        return res;
+    } catch (error) {
+        return rejectWithValue(error.message || 'Failed to fetch leaderboards');
+    }
 });
 
-export const fetchAccountDetails = createAsyncThunk('leaderboards/fetchAccountDetails', async accounts => {
-    let accountsWithDetails = await Promise.all(
-        accounts.map(async item => {
-            const accountInfo = await getAccount(item.accountId);
-            return { ...item, ...accountInfo };
-        })
-    );
-    accountsWithDetails.sort((a, b) => (b.points || b.totalPoints) - (a.points || a.totalPoints));
-    return accountsWithDetails;
-});
+export const fetchAccountDetails = createAsyncThunk(
+    'leaderboards/fetchAccountDetails',
+    async (accounts, { rejectWithValue }) => {
+        try {
+            let accountsWithDetails = await Promise.all(
+                accounts.map(async item => {
+                    const accountInfo = await getAccount(item.accountId);
+                    return { ...item, ...accountInfo };
+                })
+            );
+            accountsWithDetails.sort((a, b) => (b.points || b.totalPoints) - (a.points || a.totalPoints));
+            return accountsWithDetails;
+        } catch (error) {
+            console.error('🚀 ~ error:', error);
+            return rejectWithValue('Failed to fetch account details');
+        }
+    }
+);
 
 const leaderboardsSlice = createSlice({
     name: 'leaderboards',
     initialState: {
-        leaderboards: null, 
+        leaderboards: null,
         viewData: true,
         data: null,
         entries: null,
@@ -37,23 +49,27 @@ const leaderboardsSlice = createSlice({
             state.viewData = true;
             state.data = null;
             state.entries = null;
+            state.status = 'idle';
+            state.error = null;
         },
     },
     extraReducers: builder => {
         builder
             .addCase(fetchLeaderboards.pending, state => {
                 state.status = 'loading';
+                state.error = null;
             })
             .addCase(fetchLeaderboards.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.leaderboards = action.payload.length === 0 ? [] : action.payload; 
+                state.leaderboards = action.payload.length === 0 ? [] : action.payload;
             })
             .addCase(fetchLeaderboards.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message;
+                state.error = action.payload || action.error.message || 'Unknown error';
             })
             .addCase(fetchAccountDetails.pending, state => {
                 state.status = 'loading';
+                state.error = null;
             })
             .addCase(fetchAccountDetails.fulfilled, (state, action) => {
                 state.status = 'succeeded';
@@ -61,7 +77,7 @@ const leaderboardsSlice = createSlice({
             })
             .addCase(fetchAccountDetails.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message;
+                state.error = action.payload || action.error.message || 'Unknown error';
             });
     },
 });

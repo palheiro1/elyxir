@@ -309,15 +309,17 @@ export const MapPoint = memo(
                                                 mx="auto"
                                                 borderRadius="30px"
                                                 p="3px"
+                                                _hover={
+                                                    myArena
+                                                        ? { backgroundColor: '#484848' }
+                                                        : { backgroundColor: 'whiteAlpha.100' }
+                                                }
                                                 background="linear-gradient(49deg, rgba(235,178,185,1) 0%, rgba(32,36,36,1) 100%)"
                                                 display="inline-block">
                                                 <Button
                                                     color={'#FFF'}
                                                     isDisabled={myArena}
                                                     sx={{
-                                                        _hover: myArena
-                                                            ? { backgroundColor: '#484848' }
-                                                            : { backgroundColor: 'whiteAlpha.100' },
                                                         background:
                                                             'linear-gradient(224.72deg, #5A679B 12.32%, #5A679B 87.76%)',
                                                         borderRadius: '30px',

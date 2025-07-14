@@ -2,15 +2,33 @@
 import { Box, IconButton, Spinner, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { CloseIcon } from '@chakra-ui/icons';
-import { SelectHandPage } from './SelectHandPage';
 import { Overlay } from '../../../../ui/Overlay';
 import { getAccount } from '../../../../../services/Ardor/ardorInterface';
 import { getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 import { errorToast } from '../../../../../utils/alerts';
-import BattleResults from './BattleResults';
 import '@fontsource/chelsea-market';
-import BattleInventory from './BattleInventory';
+import { SelectHandPage } from './Components/SelectHandPage';
+import BattleResults from './Components/BattleResults';
+import BattleInventory from './Components/BattleInventory';
 
+/**
+ * @name BattleWindow
+ * @description Main battle interface for the Battlegrounds game.
+ * Handles selection of cards for battle, displays defender information,
+ * manages bonuses based on battle medium and domain, and shows battle results.
+ * Allows opening an inventory modal to pick cards, validates card selection rules,
+ * and controls UI layout adapting for mobile screens.
+ * @param {Object} arenaInfo - Information about the current battle arena (including defender, domain, medium).
+ * @param {Function} handleCloseBattle - Function to close the battle window.
+ * @param {Object} infoAccount - Information about the current user/account.
+ * @param {Array} cards - Array of all available cards.
+ * @param {Array} filteredCards - Cards filtered based on user selection criteria.
+ * @param {number} omnoGEMsBalance - User's balance of GEM tokens.
+ * @param {number} omnoWethBalance - User's balance of wETH tokens.
+ * @param {boolean} isMobile - Flag indicating if the user is on a mobile device.
+ * @returns {JSX.Element} JSX representing the battle window UI.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const BattleWindow = ({
     arenaInfo,
     handleCloseBattle,
@@ -35,9 +53,9 @@ export const BattleWindow = ({
     const [rank1Count, setRank1Count] = useState(1);
     const [defenderCards, setDefenderCards] = useState(null);
     const [filters, setFilters] = useState({
-        rarity: '',
-        element: '',
-        domain: '',
+        rarity: '-1',
+        element: '-1',
+        domain: '-1',
     });
 
     const handleRarityChange = event => {
