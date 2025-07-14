@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Overlay } from '../../../../ui/Overlay';
-import { Box, Heading, IconButton, Stack, Text, Select, Image, Tooltip } from '@chakra-ui/react';
+import { Box, IconButton, Stack, Select, Image, Text } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import Leaderboard from './Leaderboard';
 import { fetchAccountDetails, fetchLeaderboards, setViewData } from '../../../../../redux/reducers/LeaderboardsReducer';
@@ -133,68 +133,6 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                     zIndex={999}
                     onClick={closeLeaderboards}
                 />
-                <Tooltip
-                    bgColor={color()}
-                    borderRadius={'10px'}
-                    w={'300px'}
-                    h={'300px'}
-                    label={
-                        <Box m={'auto'} boxSize={'90%'}>
-                            <Text fontFamily={'Chelsea Market, System'} mt={1} textAlign={'center'}>
-                                {availableLeaderboards.find(item => item.value === option).name}
-                            </Text>
-                            <Text fontWeight={'100'}>
-                                {availableLeaderboards.find(item => item.value === option).description}
-                            </Text>
-                        </Box>
-                    }
-                    fontSize="md"
-                    placement="top"
-                    hasArrow>
-                    <Image
-                        background={'transparent'}
-                        color={'#FFF'}
-                        src="/images/battlegrounds/info.svg"
-                        position="absolute"
-                        bottom={isMobile ? 8 : 10}
-                        right={10}
-                        zIndex={999}
-                        boxSize={'40px'}
-                        display={
-                            availableLeaderboards.find(item => item.value === option).description ? 'block' : 'none'
-                        }
-                    />
-                </Tooltip>
-                {option === 1 && (
-                    <Tooltip
-                        bgColor={color()}
-                        borderRadius={'10px'}
-                        w={'200px'}
-                        h={'250px'}
-                        label={
-                            <Box m={'auto'} boxSize={'90%'}>
-                                <Text fontWeight={'100'}>
-                                    The top five finishers will each receive a Sumangâ special card and 1000 MANA. GEM
-                                    and wETH sums will be distributed as follows: 1st place, 50%. 2nd place, 25%. 3rd
-                                    place, 12.5%. 4th place, 8%. 5th place, 4.5%.
-                                </Text>
-                            </Box>
-                        }
-                        fontSize="md"
-                        placement="top"
-                        hasArrow>
-                        <Image
-                            background={'transparent'}
-                            color={'#FFF'}
-                            src="/images/currency/multicurrency.png"
-                            position="absolute"
-                            bottom={isMobile ? 8 : 10}
-                            left={10}
-                            zIndex={999}
-                            boxSize={'40px'}
-                        />
-                    </Tooltip>
-                )}
                 <Stack boxSize={'100%'}>
                     <Stack
                         direction={'row'}
@@ -204,13 +142,13 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                         w={'80%'}
                         textAlign={'center'}
                         justifyContent={'space-between'}>
-                        <Heading
+                        <Text
                             fontFamily={'Chelsea Market, System'}
                             fontWeight={100}
                             my={'auto'}
-                            fontSize={isMobile && 'md'}>
+                            fontSize={isMobile ? 'md' : '3xl'}>
                             LEADERBOARDS
-                        </Heading>
+                        </Text>
 
                         <Image
                             src={(() => {
@@ -278,11 +216,15 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                                 <GeneralLeaderboard isMobile={isMobile} color={color} />
                             )}
                         </Stack>
-                        <Stack dir="row" mx={'auto'}>
+                        <Stack dir="row" mx={'auto'} w={'90%'}>
                             {option === 5 ? (
                                 <CombativityResetTimer isMobile={isMobile} mb={isMobile ? 0 : 4} />
                             ) : (
-                                <Stack direction={'column'} mb={isMobile ? 0 : 4}>
+                                <Stack
+                                    direction={'row'}
+                                    mb={isMobile ? 0 : 4}
+                                    align={'baseline'}
+                                    justifyContent={'space-between'}>
                                     <LeaderboardsRewards option={option} isMobile={isMobile} />
                                     <TypesLeaderboardsResetTimer isMobile={isMobile} />
                                 </Stack>

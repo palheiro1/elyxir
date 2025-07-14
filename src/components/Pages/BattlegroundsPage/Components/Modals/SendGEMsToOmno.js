@@ -24,6 +24,7 @@ import { errorToast, okToast } from '../../../../../utils/alerts';
 import { GEMASSET, NQTDIVIDER } from '../../../../../data/CONSTANTS';
 import { getUsersState } from '../../../../../services/Ardor/omnoInterface';
 import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface';
+import { GemMode } from '../../data';
 
 /**
  * @name SendGEMsToOmno
@@ -44,6 +45,7 @@ import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface
 const SendGEMsToOmno = ({ infoAccount, gemsModalMode, isOpen, onClose }) => {
     const { GEMBalance, accountRs } = infoAccount;
 
+    const gemMode = GemMode[gemsModalMode];
     const toast = useToast();
 
     const [omnoGEMsBalance, setOmnoGEMsBalance] = useState(null);
@@ -139,14 +141,14 @@ const SendGEMsToOmno = ({ infoAccount, gemsModalMode, isOpen, onClose }) => {
         onClose();
     };
 
-    const maxAmount = gemsModalMode ? GEMBalance : omnoGEMsBalance;
+    const maxAmount = gemMode ? GEMBalance : omnoGEMsBalance;
 
     return (
         <Modal isOpen={isOpen} onClose={handleClose}>
             <ModalOverlay onClose={handleClose} />
             <ModalContent bgColor={'#ebb2b9'} border={'2px solid #F48794'}>
                 <ModalHeader mx={'auto'} color={'black'}>
-                    {gemsModalMode ? 'SEND' : 'WITHDRAW'} GEMs
+                    {gemMode ? 'SEND' : 'WITHDRAW'} GEMs
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody display={'flex'}>
@@ -216,7 +218,7 @@ const SendGEMsToOmno = ({ infoAccount, gemsModalMode, isOpen, onClose }) => {
                         mr={3}
                         mx={'auto'}
                         w={'80%'}
-                        onClick={gemsModalMode ? handleSendSGEMS : handleWithdrawGems}>
+                        onClick={gemMode ? handleSendSGEMS : handleWithdrawGems}>
                         Submit
                     </Button>
                 </ModalFooter>

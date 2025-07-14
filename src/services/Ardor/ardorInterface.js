@@ -76,6 +76,7 @@ const getRequestToIgnisByAccount = async (type, account) => {
         return response.data;
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js:68 ~ getRequestToIgnisByAccount ~ error', error);
+        return false;
     }
 };
 

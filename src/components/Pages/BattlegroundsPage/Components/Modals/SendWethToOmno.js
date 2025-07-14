@@ -24,6 +24,7 @@ import { errorToast, okToast } from '../../../../../utils/alerts';
 import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface';
 import { getUsersState } from '../../../../../services/Ardor/omnoInterface';
 import { NQTDIVIDER, WETHASSET } from '../../../../../data/CONSTANTS';
+import { WethMode } from '../../data';
 
 /**
  * @name SendWethToOmno
@@ -44,6 +45,7 @@ import { NQTDIVIDER, WETHASSET } from '../../../../../data/CONSTANTS';
 const SendWethToOmno = ({ isOpen, onClose, infoAccount, wethModalMode }) => {
     const { WETHBalance, accountRs } = infoAccount;
 
+    const wethMode = WethMode[wethModalMode];
     const toast = useToast();
 
     const [amount, setAmount] = useState(0);
@@ -141,14 +143,14 @@ const SendWethToOmno = ({ isOpen, onClose, infoAccount, wethModalMode }) => {
         onClose();
     };
 
-    const maxAmount = wethModalMode ? WETHBalance : omnoWETHBalance;
+    const maxAmount = wethMode ? WETHBalance : omnoWETHBalance;
 
     return (
         <Modal isOpen={isOpen} onClose={handleClose}>
             <ModalOverlay onClose={handleClose} />
             <ModalContent bgColor={'#ebb2b9'} border={'2px solid #F48794'}>
                 <ModalHeader mx={'auto'} color={'#000'}>
-                    {wethModalMode ? 'SEND' : 'WITHDRAW'} WETH
+                    {wethMode ? 'SEND' : 'WITHDRAW'} WETH
                 </ModalHeader>
                 <ModalCloseButton onClick={handleClose} />
                 <ModalBody display={'flex'}>
@@ -218,7 +220,7 @@ const SendWethToOmno = ({ isOpen, onClose, infoAccount, wethModalMode }) => {
                         mr={3}
                         mx={'auto'}
                         w={'80%'}
-                        onClick={wethModalMode ? handleSendWeth : handleWithdrawWeth}>
+                        onClick={wethMode ? handleSendWeth : handleWithdrawWeth}>
                         Submit
                     </Button>
                 </ModalFooter>

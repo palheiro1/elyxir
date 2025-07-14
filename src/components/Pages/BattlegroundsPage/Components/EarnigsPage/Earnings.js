@@ -8,7 +8,6 @@ import LeaderboardsEarnigs from './LeaderboardsEarnigs';
 const Earnings = ({ infoAccount, isMobile, closeEarnigs, cards }) => {
     const [option, setOption] = useState(1);
 
-    console.log('🚀 ~ Earnings ~ isMobile:', isMobile);
     return (
         <>
             <Overlay isVisible={true} handleClose={closeEarnigs} />

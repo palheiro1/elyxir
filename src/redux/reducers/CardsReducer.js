@@ -8,7 +8,8 @@ export const fetchCards = createAsyncThunk(
             const cardsData = await fetchAllCards(accountRs, collectionRs, specialRs, false);
             return cardsData;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || error.message);
+            console.error('🚀 ~ error:', error);
+            return rejectWithValue('Unknown error fetching cards');
         }
     }
 );
@@ -34,6 +35,7 @@ const cardsSlice = createSlice({
         builder
             .addCase(fetchCards.pending, state => {
                 state.loading = true;
+                state.error = null;
             })
             .addCase(fetchCards.fulfilled, (state, action) => {
                 state.loading = false;
@@ -41,7 +43,7 @@ const cardsSlice = createSlice({
             })
             .addCase(fetchCards.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = action.payload || 'Failed to fetch cards';
             });
     },
 });

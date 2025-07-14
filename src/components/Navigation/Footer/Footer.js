@@ -7,7 +7,7 @@ import Navigation from '../Navigation';
  * @author Jesús Sánchez Fernández
  */
 const Footer = ({ isLogged }) => {
-    return(<Navigation isHeader={false} isLogged={isLogged} />);
-}
+    return <Navigation isHeader={false} isLogged={isLogged} />;
+};
 
 export default Footer;

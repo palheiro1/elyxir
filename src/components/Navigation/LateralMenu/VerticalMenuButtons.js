@@ -2,7 +2,7 @@ import { Box, Button, Image, Spinner, Stack, Text, VStack } from '@chakra-ui/rea
 import { IS_BOUNTY_ENABLED } from '../../../data/CONSTANTS';
 import { useNavigate } from 'react-router-dom';
 
-const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, cardsLoaded }) => {
+const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded }) => {
     // ---------------------------------------------
     // ------------------ COLORS ------------------
     // ---------------------------------------------
@@ -22,9 +22,9 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
             icon: !isActive(0) ? '/images/icons/menu/blanco/overview.png' : '/images/icons/menu/color/overview.jpg',
             text: 'Overview',
             onClick: () => setOption(0),
-            bgColor: isActive(0) ? 'white' : '#E5CF51',
-            hoverBg: 'rgba(229, 207, 81, 0.75)',
-            textColor: isActive(0) ? '#E5CF51' : 'white',
+            bgColor: isActive(0) ? 'white' : '#7E9246',
+            hoverBg: 'rgba(126, 146, 70, 0.75)',
+            textColor: isActive(0) ? '#7E9246' : 'white',
             fontWeight: isActive(0) ? 'bolder' : 'normal',
             isActive: isActive(0),
         },
@@ -33,9 +33,9 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
                 ? '/images/icons/menu/blanco/battlegrounds.svg'
                 : '/images/icons/menu/color/battlegrounds.svg',
             onClick: () => navigate('/battlegrounds'),
-            hoverBg: 'rgba(190, 198, 113, 0.75)',
-            bgColor: isActive(12) ? 'white' : '#BEC671',
-            textColor: isActive(12) ? '#BEC671' : 'white',
+            hoverBg: 'rgba(188, 199, 84, 0.75)',
+            bgColor: isActive(12) ? 'white' : '#BCC754',
+            textColor: isActive(12) ? '#BCC754' : 'white',
             fontWeight: isActive(12) ? 'bolder' : 'normal',
             isActive: isActive(12),
             isLoading: !cardsLoaded,
@@ -44,8 +44,8 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
             icon: '/images/icons/menu/BuyPack.png',
             text: 'Buy pack',
             onClick: () => setOption(7),
-            hoverBg: 'rgba(132, 187, 164, 0.75)',
-            bgColor: '#84BBA4',
+            hoverBg: 'rgba(159, 55, 114, 0.75)',
+            bgColor: '#9F3772',
             textColor: textColor(7),
             isDisabled: false,
         },
@@ -53,17 +53,17 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
             icon: '/images/icons/menu/OpenPack.png',
             text: 'Open pack',
             onClick: () => setOption(11),
-            hoverBg: 'rgba(110, 178, 187, 0.75)',
-            bgColor: '#6EB2BB',
+            hoverBg: 'rgba(224, 148, 179, 0.75)',
+            bgColor: '#E094B3',
             textColor: textColor(11),
         },
         {
             icon: !isActive(1) ? '/images/icons/menu/blanco/inventory.png' : '/images/icons/menu/color/inventory.jpg',
             text: 'Inventory',
             onClick: () => setOption(1),
-            bgColor: isActive(1) ? 'white' : '#96A8B9',
-            hoverBg: 'rgba(150, 168, 185, 0.75)',
-            textColor: isActive(1) ? '#96A8B9' : 'white',
+            bgColor: isActive(1) ? 'white' : '#2F8190',
+            hoverBg: 'rgba(47, 129, 144, 0.75)',
+            textColor: isActive(1) ? '#2F8190' : 'white',
             fontWeight: isActive(1) ? 'bolder' : 'normal',
             isActive: isActive(1),
         },
@@ -71,9 +71,9 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
             icon: !isActive(2) ? '/images/icons/menu/blanco/history.png' : '/images/icons/menu/color/history.jpg',
             text: 'History',
             onClick: () => setOption(2),
-            bgColor: isActive(2) ? 'white' : '#CE99B4',
-            hoverBg: 'rgba(206, 153, 180, 0.75)',
-            textColor: isActive(2) ? '#CE99B4' : 'white',
+            bgColor: isActive(2) ? 'white' : '#3B7197',
+            hoverBg: 'rgba(59, 113, 151, 0.75)',
+            textColor: isActive(2) ? '#3B7197' : 'white',
             fontWeight: isActive(2) ? 'bolder' : 'normal',
             isActive: isActive(2),
         },
@@ -81,9 +81,9 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
             icon: !isActive(3) ? '/images/icons/menu/blanco/market.png' : '/images/icons/menu/color/market.jpg',
             text: 'Market',
             onClick: () => setOption(3),
-            bgColor: isActive(3) ? 'white' : '#D688A6',
-            hoverBg: 'rgba(214, 136, 166, 0.75)',
-            textColor: isActive(3) ? '#D688A6' : 'white',
+            bgColor: isActive(3) ? 'white' : '#3B6497',
+            hoverBg: 'rgba(59, 100, 151, 0.75   )',
+            textColor: isActive(3) ? '#3B6497' : 'white',
             fontWeight: isActive(3) ? 'bolder' : 'normal',
             isActive: isActive(3),
         },
@@ -91,9 +91,9 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
             icon: !isActive(5) ? '/images/icons/menu/blanco/bounty.png' : '/images/icons/menu/color/bounty.jpg',
             text: 'Bounty',
             onClick: () => setOption(5),
-            bgColor: isActive(5) ? 'white' : '#C76D8E',
-            hoverBg: 'rgba(199, 109, 142, 0.75)',
-            textColor: isActive(5) ? '#C76D8E' : 'white',
+            bgColor: isActive(5) ? 'white' : '#3B6497',
+            hoverBg: 'rgba(59, 100, 151, 0.75)',
+            textColor: isActive(5) ? '#3B6497' : 'white',
             fontWeight: isActive(5) ? 'bolder' : 'normal',
             isActive: isActive(5),
             isDisabled: !IS_BOUNTY_ENABLED,
@@ -102,9 +102,9 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
             icon: !isActive(10) ? '/images/icons/menu/blanco/book.png' : '/images/icons/menu/color/book.jpg',
             text: 'Book',
             onClick: () => setOption(10),
-            bgColor: isActive(10) ? 'white' : '#BA5779',
-            hoverBg: 'rgba(186, 87, 121, 0.75)',
-            textColor: isActive(10) ? '#BA5779' : 'white',
+            bgColor: isActive(10) ? 'white' : '#413B97',
+            hoverBg: 'rgba(65, 59, 151, 0.75)',
+            textColor: isActive(10) ? '#413B97' : 'white',
             fontWeight: isActive(10) ? 'bolder' : 'normal',
             isActive: isActive(10),
         },
@@ -112,9 +112,9 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
             icon: !isActive(4) ? '/images/icons/menu/blanco/bridge.png' : '/images/icons/menu/color/bridge.jpg',
             text: 'Bridge',
             onClick: () => setOption(4),
-            bgColor: isActive(4) ? 'white' : '#B2496C',
-            hoverBg: 'rgba(178, 73, 108, 0.75)',
-            textColor: isActive(4) ? '#B2496C' : 'white',
+            bgColor: isActive(4) ? 'white' : '#573B97',
+            hoverBg: 'rgba(87, 59, 151, 0.75)',
+            textColor: isActive(4) ? '#573B97' : 'white',
             fontWeight: isActive(4) ? 'bolder' : 'normal',
             isActive: isActive(4),
         },
@@ -123,44 +123,28 @@ const VerticalMenuButtons = ({ setOption, option, handleLogout, widthBotones, ca
     // ---------------------------------------------
 
     return (
-        <VStack align="flex-start" spacing={2} width={widthBotones}>
+        <VStack align="flex-start" spacing={2} width={buttonsWidth}>
             {buttons.map(
                 (
-                    {
-                        icon,
-                        text,
-                        onClick,
-                        bgColor,
-                        hoverBg,
-                        textColor,
-                        fontWeight,
-                        isActive,
-                        isDisabled,
-                        isLoading,
-                        onlyMobile,
-                    },
+                    { icon, text, onClick, bgColor, hoverBg, textColor, fontWeight, isActive, isDisabled, isLoading },
                     index
                 ) =>
                     !isDisabled && (
                         <Button
                             key={index}
-                            minW={widthBotones}
+                            minW={buttonsWidth}
                             minH="50px"
                             _hover={{ background: isActive ? bgColor : hoverBg, color: isActive ? undefined : 'white' }}
                             bgColor={bgColor}
                             textColor={textColor}
                             onClick={isLoading ? null : onClick}>
-                            <Stack direction="row" align="center" w="100%">
+                            <Stack direction="row" align="center" w="100px" spacing={3}>
                                 {icon && text ? (
                                     <>
-                                        <Stack mx={'auto'} direction={'row'} align={{ base: 'center', md: null }}>
-                                            <Box minW={'2rem'} ml={isActive ? -1 : 0} mr={isActive ? 1 : 0}>
-                                                <Image src={icon} w={isActive ? '30px' : '25px'} />
-                                            </Box>
-                                            <Text fontSize="sm" fontWeight={fontWeight}>
-                                                {text}
-                                            </Text>
-                                        </Stack>
+                                        <Image src={icon} w="28px" />
+                                        <Text fontSize="sm" fontWeight={fontWeight} whiteSpace="nowrap">
+                                            {text}
+                                        </Text>
                                     </>
                                 ) : (
                                     !text && (

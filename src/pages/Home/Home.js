@@ -1,7 +1,7 @@
 import { useEffect, useState, memo, useCallback, useMemo, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // -----------------------------------------------------------------
 // ------------------------- Components ----------------------------
@@ -96,6 +96,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const toast = useToast();
     const dispatch = useDispatch();
 
+    // Get cards from Redux store
+    const { cards } = useSelector(state => state.cards);
+
     // Refs
     const newTransactionRef = useRef();
     const confirmedTransactionRef = useRef();
@@ -128,16 +131,12 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // MANA Cards
     const [manaCards, setManaCards] = useState([]);
 
-    // All cards
-    const [cards, setCards] = useState([]);
-
     // Hashes
     const [infoAccountHash, setInfoAccountHash] = useState(cleanInfoAccount);
     const [gemCardsHash, setGemCardsHash] = useState('');
     const [giftzCardsHash, setGiftzCardsHash] = useState('');
     const [wethCardsHash, setWethCardsHash] = useState('');
     const [manaCardsHash, setManaCardsHash] = useState('');
-    const [cardsHash, setCardsHash] = useState('');
 
     // Filtered cards
     const [cardsFiltered, setCardsFiltered] = useState(cards);
@@ -165,7 +164,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // ------------------------- Functions -----------------------------
     // -----------------------------------------------------------------
     // Stack of cards to notify
-    const [cardsNotification, setCardsNotification] = useState(cards);
+    const [cardsNotification, setCardsNotification] = useState([]);
 
     // Show all cards - Toggle button
     const [showAllCards, setShowAllCards] = useState(true);
@@ -269,7 +268,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 const giftzAsset = currencyAssets[2].find(asset => asset.asset === GIFTZASSET);
                 const mana = currencyAssets[3].find(asset => asset.asset === MANAASSET);
 
-                dispatch(setCardsManually(loadCards));
+                if (firstTime || cards.length === 0) {
+                    dispatch(setCardsManually(loadCards));
+                }
                 if (txs.transactions.length === 0) {
                     firstTimeToast(toast);
                 }
@@ -325,7 +326,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
                 });
 
-                checkDataChange('Cards', cardsHash, setCards, setCardsHash, loadCards);
                 checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems);
                 checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset);
                 checkDataChange('wETH', wethCardsHash, setWethCards, setWethCardsHash, weth);
@@ -567,7 +567,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 mt={{ base: 'none', md: 12, lg: 'none' }}
                 m={{ base: 2, lg: 12 }}
                 px={{ base: 2, lg: 8 }}
+                mb={0}
                 py={4}
+                pb={0}
                 rounded="lg"
                 border="1px"
                 borderColor={borderColor}>
