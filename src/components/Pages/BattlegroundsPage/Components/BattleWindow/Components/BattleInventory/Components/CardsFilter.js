@@ -1,45 +1,7 @@
 import { Select, Stack } from '@chakra-ui/react';
 import { memo, useMemo } from 'react';
-
-const optionStyle = { backgroundColor: '#FFF', color: '#000' };
-
-const RARITY_OPTIONS = {
-    basic: [
-        { value: '1', label: 'Common' },
-        { value: '2', label: 'Rare' },
-    ],
-    advanced: [
-        { value: '3', label: 'Epic' },
-        { value: '4', label: 'Special' },
-    ],
-};
-
-const ELEMENT_OPTIONS = [
-    { value: '1', label: 'Terrestrial' },
-    { value: '2', label: 'Aerial' },
-    { value: '3', label: 'Aquatic' },
-];
-
-const DOMAIN_OPTIONS = [
-    { value: '1', label: 'Asia' },
-    { value: '2', label: 'Oceania' },
-    { value: '3', label: 'America' },
-    { value: '4', label: 'Africa' },
-    { value: '5', label: 'Europe' },
-];
-
-const renderOptions = (defaultLabel, options) => (
-    <>
-        <option value="-1" style={optionStyle}>
-            {defaultLabel}
-        </option>
-        {options.map(({ value, label }) => (
-            <option key={value} value={value} style={optionStyle}>
-                {label}
-            </option>
-        ))}
-    </>
-);
+import { DOMAIN_OPTIONS, ELEMENT_OPTIONS, RARITY_OPTIONS } from '../data';
+import { renderOptions } from './renderOptions';
 
 /**
  * @name CardsFilter

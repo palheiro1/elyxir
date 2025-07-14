@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Overlay } from '../../../../ui/Overlay';
 import { Box, Heading, IconButton, Stack } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
@@ -6,74 +6,32 @@ import BattleDetails from './BattleDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserBattles } from '../../../../../redux/reducers/BattleReducer';
 import BattleListTable from './BattleListTable';
-import { getAsset } from '../../../../../utils/cardsUtils';
-import { isEmptyObject } from '../../../../../utils/utils';
 
 /**
- * @name BattleList
- * @description Container for user battle history, fetching data, computing rewards, and managing battle detail views.
- * @param {Function} handleClose - Function to close the overlay.
- * @param {Object} infoAccount - User account information.
- * @param {Array<Object>} cards - List of user's cards.
- * @param {boolean} isMobile - Flag indicating mobile view.
- * @returns {JSX.Element} Battle list overlay with detail panel.
+ * @name BattleRecord
+ * @description
+ * React component that displays a modal-like battle record overlay. It fetches and shows
+ * the user's battles with options to view detailed information of a selected battle.
+ * @param {Object} props - React props.
+ * @param {function} props.handleClose - Callback to close the battle record overlay.
+ * @param {Object} props.infoAccount - User account information, includes `accountRs` (address).
+ * @param {Array} props.cards - Cards data passed down to child components.
+ * @param {boolean} props.isMobile - Flag indicating if the UI is in mobile mode.
+ * @returns {JSX.Element} JSX element rendering the battle record modal.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const BattleRecord = ({ handleClose, infoAccount, cards, isMobile }) => {
     const { accountRs } = infoAccount;
     const dispatch = useDispatch();
 
-    const { arenasInfo, userBattles } = useSelector(state => state.battle);
+    const { arenasInfo, userBattles, battleRewards } = useSelector(state => state.battle);
     const [viewDetails, setViewDetails] = useState(false);
     const [selectedBattle, setSelectedBattle] = useState(null);
     const [selectedArena, setSelectedArena] = useState(null);
-    const [battleRewards, setBattleRewards] = useState({});
 
     useEffect(() => {
         if (accountRs) dispatch(fetchUserBattles(accountRs));
     }, [accountRs, dispatch]);
-
-    const getBattleReward = useCallback(async (arenaInfo, battle) => {
-        try {
-            const rewardFraction = battle.isWinnerLowerPower ? 0.9 : 0.8;
-            if (!isEmptyObject(arenaInfo.battleCost)) {
-                const assets = Object.entries(arenaInfo.battleCost.asset);
-                const results = await Promise.all(
-                    assets.map(async ([asset, price]) => {
-                        const assetDetails = await getAsset(asset);
-                        return { name: assetDetails, price: price * rewardFraction };
-                    })
-                );
-                return results;
-            }
-        } catch (error) {
-            console.error('🚀 ~ getBattleReward ~ error:', error);
-        }
-    }, []);
-
-    useEffect(() => {
-        const fetchBattleRewards = async () => {
-            try {
-                const rewards = {};
-                await Promise.all(
-                    userBattles.map(async item => {
-                        const arena = arenasInfo.find(arena => arena.id === item.arenaId);
-                        if (arena) {
-                            const reward = await getBattleReward(arena, item);
-                            rewards[item.battleId] = reward;
-                        }
-                    })
-                );
-                setBattleRewards(rewards);
-            } catch (error) {
-                console.error('🚀 ~ fetchBattleRewards ~ error:', error);
-            }
-        };
-
-        if (userBattles.length && arenasInfo.length) {
-            fetchBattleRewards();
-        }
-    }, [userBattles, arenasInfo, getBattleReward]);
 
     const handleViewDetails = battleId => {
         const selected = userBattles.find(battle => battle.battleId === battleId);
@@ -144,6 +102,7 @@ const BattleRecord = ({ handleClose, infoAccount, cards, isMobile }) => {
                         infoAccount={infoAccount}
                         battleDetails={userBattles.find(b => b.battleId === selectedBattle)}
                         handleGoBack={handleGoBack}
+                        battleRewards={battleRewards?.[selectedBattle]}
                     />
                 )}
             </Box>
