@@ -1,76 +1,88 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getArenas, getUserBattles } from '../../services/Battlegrounds/Battlegrounds';
-import { formatTimeStamp } from '../../components/Pages/BattlegroundsPage/Utils/BattlegroundsUtils';
 import { addressToAccountId, getAccount } from '../../services/Ardor/ardorInterface';
+import { formatTimeStamp } from '../../components/Pages/BattlegroundsPage/Utils/BattlegroundsUtils';
 import locations from '../../components/Pages/BattlegroundsPage/assets/LocationsEnum';
+
+const prepareArenaAndLocationMaps = arenas => {
+    const arenaMap = new Map(arenas.map(arena => [arena.id, arena]));
+    const locationMap = new Map(locations.map(loc => [loc.id, loc]));
+    return { arenaMap, locationMap };
+};
+
+const fetchAccountsInParallel = async battles => {
+    const accountSet = new Set();
+    battles.forEach(b => {
+        accountSet.add(b.attackerAccount);
+        accountSet.add(b.defenderAccount);
+    });
+
+    const uniqueAccounts = Array.from(accountSet);
+    const accountResponses = await Promise.all(uniqueAccounts.map(accountId => getAccount(accountId)));
+    const accountMap = new Map(uniqueAccounts.map((id, i) => [id, accountResponses[i]]));
+    return accountMap;
+};
+
+const parseBattles = async (battles, arenas, accountId) => {
+    const { locationMap } = prepareArenaAndLocationMaps(arenas);
+    const accountMap = await fetchAccountsInParallel(battles);
+
+    return battles.map(battle => {
+        const isUserDefending = battle.defenderAccount === accountId;
+        const timestamp = formatTimeStamp(battle.timestamp);
+
+        const location = locationMap.get(battle.arenaId) || {};
+        const defender = accountMap.get(battle.defenderAccount);
+        const attacker = accountMap.get(battle.attackerAccount);
+
+        return {
+            ...battle,
+            isUserDefending,
+            date: timestamp,
+            arenaName: location.name || 'Unknown',
+            defenderDetails: defender,
+            attackerDetails: attacker,
+        };
+    });
+};
 
 export const fetchUserBattles = createAsyncThunk('battle/fetchUserBattles', async (accountRs, { rejectWithValue }) => {
     try {
-        const arenas = await getArenas();
-        const accountId = await addressToAccountId(accountRs);
-        const userBattlesRaw = await getUserBattles(accountId);
+        const [arenasResponse, accountId] = await Promise.all([getArenas(), addressToAccountId(accountRs)]);
 
-        const userBattles = userBattlesRaw
-            .map(battle => ({
-                ...battle,
-                isUserDefending: battle.defenderAccount === accountId,
-            }))
-            .reverse();
+        const arenas = arenasResponse.arena;
+        const rawBattles = await getUserBattles(accountId);
 
-        const details = await Promise.all(
-            userBattles.map(async battle => {
-                const arenaInfo = await getArenaInfo(
-                    battle.arenaId,
-                    battle.defenderAccount,
-                    battle.attackerAccount,
-                    arenas.arena
-                );
+        const enrichedBattles = await parseBattles(rawBattles.reverse(), arenas, accountId);
 
-                return {
-                    ...battle,
-                    date: formatTimeStamp(battle.timestamp),
-                    arenaName: arenaInfo.arena.name,
-                    defenderDetails: arenaInfo.defender,
-                    attackerDetails: arenaInfo.attacker,
-                };
-            })
-        );
-
-        return { arenas: arenas.arena, details, accountId };
+        return {
+            arenas,
+            details: enrichedBattles,
+            accountId,
+        };
     } catch (error) {
-        console.error('🚀 ~ error:', error);
+        console.error('❌ Error fetching user battles:', error);
         return rejectWithValue('Unknown error fetching user battles data');
     }
 });
 
-const getArenaInfo = async (arenaId, defenderAccount, attackerAccount, arenasInfo) => {
-    let arena = arenasInfo.find(arena => arena.id === arenaId);
-    const [defender, attacker] = await Promise.all([getAccount(defenderAccount), getAccount(attackerAccount)]);
-    let name = locations.find(item => item.id === arenaId);
-    return {
-        defender,
-        attacker,
-        arena: { ...name, ...arena },
-    };
+// --------------------------------------------------
+// Redux slice
+// --------------------------------------------------
+
+const initialState = {
+    arenasInfo: null,
+    userBattles: null,
+    battleDetails: null,
+    loading: false,
+    error: null,
 };
 
 const battleSlice = createSlice({
     name: 'battle',
-    initialState: {
-        arenasInfo: null,
-        userBattles: null,
-        battleDetails: null,
-        loading: false,
-        error: null,
-    },
+    initialState,
     reducers: {
-        resetBattleState: state => {
-            state.arenasInfo = null;
-            state.userBattles = null;
-            state.battleDetails = null;
-            state.loading = false;
-            state.error = null;
-        },
+        resetBattleState: () => initialState,
     },
     extraReducers: builder => {
         builder
@@ -78,21 +90,18 @@ const battleSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchUserBattles.fulfilled, (state, action) => {
+            .addCase(fetchUserBattles.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                if (!action.payload.cached) {
-                    state.arenasInfo = action.payload.arenas;
-                    state.userBattles = action.payload.details;
-                }
-                state.battleDetails = action.payload.details;
+                state.arenasInfo = payload.arenas;
+                state.userBattles = payload.details;
+                state.battleDetails = payload.details;
             })
-            .addCase(fetchUserBattles.rejected, (state, action) => {
+            .addCase(fetchUserBattles.rejected, (state, { payload }) => {
                 state.loading = false;
-                state.error = action.payload || 'Failed to fetch user battles';
+                state.error = payload || 'Failed to fetch user battles';
             });
     },
 });
 
 export const { resetBattleState } = battleSlice.actions;
-
 export default battleSlice.reducer;

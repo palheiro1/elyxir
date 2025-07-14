@@ -1,8 +1,6 @@
 import { Box, Stack, Text } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 import { getTypesLeaderboardsResetBlock } from '../../../../../services/Battlegrounds/Battlegrounds';
-import { useSelector } from 'react-redux';
-import { BLOCKTIME } from '../../../../../data/CONSTANTS';
+import { useBlockCountdown } from '../../../../../hooks/useBlockCountDown';
 
 /**
  * @name TypesLeaderboardsResetTimer
@@ -12,36 +10,7 @@ import { BLOCKTIME } from '../../../../../data/CONSTANTS';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const TypesLeaderboardsResetTimer = ({ isMobile }) => {
-    const { prev_height } = useSelector(state => state.blockchain);
-    const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-
-    useEffect(() => {
-        let interval;
-
-        const calculate = async () => {
-            const resetBlock = await getTypesLeaderboardsResetBlock();
-            const getDelta = () => {
-                const remainingBlocks = resetBlock - prev_height;
-                return remainingBlocks * BLOCKTIME;
-            };
-
-            const update = () => {
-                const delta = getDelta();
-                const days = Math.floor(delta / (24 * 3600));
-                const hours = Math.floor((delta % (24 * 3600)) / 3600);
-                const minutes = Math.floor((delta % 3600) / 60);
-                const seconds = Math.floor(delta % 60);
-                setTimeLeft({ days, hours, minutes, seconds });
-            };
-
-            update();
-            interval = setInterval(update, 1000);
-        };
-
-        if (prev_height) calculate();
-
-        return () => clearInterval(interval);
-    }, [prev_height]);
+    const timeLeft = useBlockCountdown(getTypesLeaderboardsResetBlock);
 
     const timeItems = [
         { label: 'days', value: timeLeft.days },

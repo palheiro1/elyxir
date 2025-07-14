@@ -137,7 +137,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const [giftzCardsHash, setGiftzCardsHash] = useState('');
     const [wethCardsHash, setWethCardsHash] = useState('');
     const [manaCardsHash, setManaCardsHash] = useState('');
-    const [cardsHash, setCardsHash] = useState('');
 
     // Filtered cards
     const [cardsFiltered, setCardsFiltered] = useState(cards);

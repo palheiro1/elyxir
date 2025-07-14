@@ -3,6 +3,12 @@ import { useEffect, useState } from 'react';
 import { formatLeaderboardRewards, getCurrencyImage } from '../../Utils/BattlegroundsUtils';
 import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
 
+const CURRENCY_PRECISION = {
+    weth: 4,
+    gem: 0,
+    mana: 0,
+};
+
 /**
  * @name LeaderboardsRewards
  * @description Displays formatted leaderboard rewards for a given leaderboard option.
@@ -17,63 +23,66 @@ const LeaderboardsRewards = ({ option, isMobile }) => {
     const [rewards, setRewards] = useState(null);
 
     useEffect(() => {
-        const fetchAccumulatedBounty = async () => {
+        const fetchRewards = async () => {
             try {
-                const reward = await formatLeaderboardRewards(option);
-                setRewards(reward);
+                const data = await formatLeaderboardRewards(option);
+                setRewards(data);
             } catch (error) {
-                console.error('Error fetching accumulated bounty or rewards:', error);
+                console.error('Error fetching leaderboard rewards:', error);
             }
         };
 
-        fetchAccumulatedBounty();
+        fetchRewards();
     }, [option]);
 
-    return rewards ? (
-        <Stack w={'100%'} align="start" maxW={'500px'}>
-            <Text fontFamily={'Chelsea Market, System-ui'} color={'#FFF'} fontWeight={500}>
+    const formatValue = (key, value) => {
+        const precision = CURRENCY_PRECISION[key];
+        return precision !== undefined ? (value / NQTDIVIDER).toFixed(precision) : value;
+    };
+
+    if (!rewards) {
+        return (
+            <Box mx="auto">
+                <Spinner />
+            </Box>
+        );
+    }
+
+    const rewardEntries = Object.entries(rewards).reverse();
+
+    return (
+        <Stack w="100%" align="start" maxW="500px">
+            <Text fontFamily="Chelsea Market, system-ui" color="#FFF" fontWeight={500}>
                 REWARDS
             </Text>
+
             <Stack
                 direction="row"
                 align="center"
-                fontFamily="Inter, system"
+                fontFamily="Inter, system-ui"
                 fontSize={isMobile ? 'xs' : 'md'}
                 w="100%"
-                justifyContent={'space-between'}
+                justify="space-between"
                 fontWeight={700}
-                bgColor={'#FFF'}
+                bg="#FFF"
                 py={2}
                 px={4}
-                borderRadius={'20px'}>
-                {Object.entries(rewards)
-                    .reverse()
-                    .map(([key, value], index) => {
-                        const formattedValue =
-                            key === 'weth'
-                                ? (value / NQTDIVIDER).toFixed(4)
-                                : key === 'gem' || key === 'mana'
-                                ? (value / NQTDIVIDER).toFixed(0)
-                                : value;
-                        return (
-                            <Stack key={index} direction="row" align="center">
-                                <Image
-                                    src={getCurrencyImage(key)}
-                                    alt={`${key} Icon`}
-                                    boxSize={isMobile ? '30px' : '50px'}
-                                />
-                                <Text textTransform={'uppercase'} color={'#5A679B'}>
-                                    {formattedValue}
-                                </Text>
-                            </Stack>
-                        );
-                    })}
+                borderRadius="20px">
+                {rewardEntries.map(([key, value]) => {
+                    const formatted = formatValue(key, value);
+                    const icon = getCurrencyImage(key);
+
+                    return (
+                        <Stack key={key} direction="row" align="center">
+                            <Image src={icon} alt={`${key} Icon`} boxSize={isMobile ? '30px' : '50px'} />
+                            <Text textTransform="uppercase" color="#5A679B">
+                                {formatted}
+                            </Text>
+                        </Stack>
+                    );
+                })}
             </Stack>
         </Stack>
-    ) : (
-        <Box mx="auto">
-            <Spinner />
-        </Box>
     );
 };
 

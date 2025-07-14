@@ -53,9 +53,9 @@ export const BattleWindow = ({
     const [rank1Count, setRank1Count] = useState(1);
     const [defenderCards, setDefenderCards] = useState(null);
     const [filters, setFilters] = useState({
-        rarity: '',
-        element: '',
-        domain: '',
+        rarity: '-1',
+        element: '-1',
+        domain: '-1',
     });
 
     const handleRarityChange = event => {

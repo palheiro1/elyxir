@@ -1,7 +1,7 @@
-import { Overlay } from '../../../ui/Overlay';
+import { Overlay } from '../../../../ui/Overlay';
 import { Box, Button, IconButton, Image, Stack, Text } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
-import logo from '../assets/image.png';
+import logo from '../../assets/image.png';
 
 /**
  * @name NewPlayersModal

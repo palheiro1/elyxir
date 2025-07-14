@@ -33,6 +33,7 @@ const BattleListRow = ({ item, handleViewDetails, cards, isMobile, battleReward 
             color="#FFF"
             templateColumns="repeat(6, 1fr)"
             p={3}
+            my={4}
             alignItems="center"
             bg="transparent"
             cursor="pointer"

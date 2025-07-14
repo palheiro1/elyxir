@@ -5,7 +5,7 @@ import logo from '../../assets/logoS06Trans.svg';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 
-export const AdvertModal = ({ isOpen, onClose }) => {
+const AdvertModal = ({ isOpen, onClose }) => {
     useEffect(() => {
         if (isOpen) {
             onOpen();
@@ -52,3 +52,5 @@ export const AdvertModal = ({ isOpen, onClose }) => {
         </>
     );
 };
+
+export default AdvertModal;

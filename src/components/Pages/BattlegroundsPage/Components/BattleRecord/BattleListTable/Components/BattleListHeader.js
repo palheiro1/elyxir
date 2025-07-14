@@ -24,6 +24,7 @@ const BattleListHeader = ({ cards, isMobile }) => {
             borderRadius="20px"
             position="relative"
             bg="inherit"
+            py={2}
             zIndex={1}>
             <GridItem {...headerItemProps}>DATE</GridItem>
             <GridItem {...headerItemProps}>OPPONENT</GridItem>
