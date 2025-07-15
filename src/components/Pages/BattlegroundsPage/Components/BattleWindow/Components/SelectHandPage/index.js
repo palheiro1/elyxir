@@ -73,19 +73,31 @@ export const SelectHandPage = ({
 
     useEffect(() => {
         if (!arenaInfo) return;
-        const medium = getMediumName(arenaInfo.mediumId);
+
+        const medium = getMediumName(arenaInfo?.mediumId);
         setMedium(medium);
 
-        if (!isEmptyObject(arenaInfo.battleCost)) return;
+        if (
+            !arenaInfo.battleCost ||
+            !arenaInfo.battleCost.asset ||
+            Object.keys(arenaInfo.battleCost.asset).length === 0
+        ) {
+            return;
+        }
+
         const fetchCostAndMedium = async () => {
-            const assets = Object.entries(arenaInfo.battleCost.asset);
-            const costData = await Promise.all(
-                assets.map(async ([asset, price]) => {
-                    const details = await getAsset(asset);
-                    return { ...details, price };
-                })
-            );
-            setBattleCost(costData);
+            try {
+                const assets = Object.entries(arenaInfo.battleCost.asset || {});
+                const costData = await Promise.all(
+                    assets.map(async ([asset, price]) => {
+                        const details = await getAsset(asset);
+                        return { ...details, price };
+                    })
+                );
+                setBattleCost(costData);
+            } catch (error) {
+                console.error('Error fetching battle cost details:', error);
+            }
         };
 
         fetchCostAndMedium();

@@ -90,6 +90,10 @@ const calculateBattleRewards = async (battles, arenas) => {
             }
 
             try {
+                if (!arena.battleCost || !arena.battleCost.asset || Object.keys(arena.battleCost.asset).length === 0) {
+                    rewards[battle.battleId] = null;
+                    return;
+                }
                 const rewardFraction = battle.isWinnerLowerPower ? 0.9 : 0.8;
                 const assets = Object.entries(arena.battleCost.asset);
 

@@ -72,7 +72,7 @@ const BattlegroundModals = ({
             {modals.battle && (
                 <BattleWindow
                     arenaInfo={selectedArena}
-                    handleCloseBattle={handleCloseModal}
+                    handleCloseBattle={() => handleCloseModal('battle')}
                     infoAccount={infoAccount}
                     cards={cards}
                     filteredCards={filteredCards}
