@@ -13,11 +13,17 @@ import tarasca from '../../assets/tarasca.svg';
  * @returns {JSX.Element} A responsive layout with a left-side image and a right-side text block describing the game's goal.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const stepTwo = ({ isMobile }) => {
+const stepTwo = ({ isMobile, setImagesLoaded }) => {
     return (
         <>
             <Stack direction={'row'} m={'auto'} mt={!isMobile ? '5%' : 0}>
-                <Image src={tarasca} w={'40%'} />
+                <Image
+                    key={tarasca}
+                    src={tarasca}
+                    w={'40%'}
+                    onLoad={() => setImagesLoaded(true)}
+                    onError={() => setImagesLoaded(true)}
+                />
                 <Stack direction={'column'} w={'60%'} my={'auto'}>
                     <Text
                         color={'#FFF'}
