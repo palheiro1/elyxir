@@ -3,10 +3,11 @@ import { ChevronUpIcon } from '@chakra-ui/icons';
 import { Fragment } from 'react';
 import ListButton from './ListButton';
 import { buttonsGroups } from '../data';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * @name BattlegroundMenu
- * @description Responsive menu component that displays grouped buttons for interacting with the Battlegrounds section. 
+ * @description Responsive menu component that displays grouped buttons for interacting with the Battlegrounds section.
  * On desktop, it renders stacked buttons with titles; on mobile, a dropdown menu is shown.
  * @param {Object} props - Props object.
  * @param {boolean} props.isMobile - Determines whether to show the compact mobile dropdown or the full desktop button stack.
@@ -15,11 +16,12 @@ import { buttonsGroups } from '../data';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const BattlegroundMenu = ({ isMobile, setOpenModal }) => {
+    const navigate = useNavigate();
     const handleClick = (modal, action) => {
         if (modal) {
             setOpenModal(modal);
         } else if (action) {
-            action();
+            action(navigate);
         }
     };
 

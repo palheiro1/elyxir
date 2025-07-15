@@ -12,14 +12,21 @@ import logo from '../../assets/image.png';
  * @returns {JSX.Element} A styled modal with instructions for new players and a button to open the inventory.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const NewPlayersModal = ({ handleClose, setOpenInventory, isMobile }) => {
+const NewPlayersModal = ({ handleClose, setOpenInventory, isMobile, setHasSeenNewPlayersModal }) => {
     const handeOpenInventory = () => {
         setOpenInventory(true);
         handleClose();
+        setHasSeenNewPlayersModal(true);
     };
+
+    const handleCloseButtonClick = () => {
+        handleClose();
+        setHasSeenNewPlayersModal(true);
+    };
+    
     return (
         <>
-            <Overlay isVisible handleClose={handleClose} />
+            <Overlay isVisible handleClose={handleCloseButtonClick} />
             <Box
                 pos="fixed"
                 top="50%"
@@ -33,7 +40,7 @@ const NewPlayersModal = ({ handleClose, setOpenInventory, isMobile }) => {
                 className="custom-scrollbar">
                 <IconButton
                     icon={<CloseIcon />}
-                    onClick={handleClose}
+                    onClick={handleCloseButtonClick}
                     aria-label="Close Quick Start Modal"
                     position="absolute"
                     top={2}

@@ -74,7 +74,6 @@ export const useBattlegroundState = infoAccount => {
     const [wethModalMode, setWethModalMode] = useState(null);
 
     const [hasSeenNewPlayersModal, setHasSeenNewPlayersModal] = useState(false);
-
     const {
         battleCount,
         activePlayers,
@@ -197,5 +196,6 @@ export const useBattlegroundState = infoAccount => {
         filteredCards,
         parseWETH,
         IGNISBalance,
+        setHasSeenNewPlayersModal,
     };
 };

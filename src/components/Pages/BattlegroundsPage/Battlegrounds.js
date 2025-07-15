@@ -46,6 +46,7 @@ const Battlegrounds = ({ infoAccount }) => {
         parseWETH,
         filteredCards,
         IGNISBalance,
+        setHasSeenNewPlayersModal,
     } = useBattlegroundState(infoAccount);
 
     const { cards } = useSelector(state => state.cards);
@@ -83,6 +84,7 @@ const Battlegrounds = ({ infoAccount }) => {
                     handleOpenModal={handleOpenModal}
                     onCloseGems={onCloseGems}
                     onCloseWeth={onCloseWeth}
+                    setHasSeenNewPlayersModal={setHasSeenNewPlayersModal}
                 />
 
                 <ScrollLock isLocked={isScrollLocked} />
