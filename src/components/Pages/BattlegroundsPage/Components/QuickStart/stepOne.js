@@ -6,7 +6,16 @@ import locations from '../../assets/LocationsEnum';
 import welcome1 from '../../assets/wellcome1.svg';
 import welcome2 from '../../assets/wellcome2.svg';
 
-const stepOne = ({ handleNext, isMobile }) => {
+/**
+ * @name StepOne
+ * @description Onboarding welcome screen component for Battlegrounds. Displays introductory text,
+ *              logo, background images and description of the game, adapting layout for mobile or desktop.
+ * @param {Object} props - Component props.
+ * @param {boolean} props.isMobile - Flag indicating whether the component is being rendered on a mobile screen.
+ * @returns {JSX.Element} The rendered onboarding step component.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+const stepOne = ({ isMobile }) => {
     return (
         <>
             <Image src={welcome1} position={'absolute'} top={0} left={0} h={'50%'} />

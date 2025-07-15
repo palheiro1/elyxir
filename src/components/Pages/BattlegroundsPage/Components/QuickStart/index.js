@@ -48,7 +48,7 @@ const QuickStartModal = ({ isMobile, handleClose }) => {
                     icon={<CloseIcon />}
                     onClick={handleClose}
                     aria-label="Close Quick Start Modal"
-                    position="absolute"
+                    position="sticky"
                     top={2}
                     right={2}
                     zIndex={999}
@@ -56,7 +56,6 @@ const QuickStartModal = ({ isMobile, handleClose }) => {
                     bg="transparent"
                     _hover={{ bg: 'transparent' }}
                 />
-
                 <Stack
                     direction="column"
                     w="90%"
@@ -77,11 +76,11 @@ const QuickStartModal = ({ isMobile, handleClose }) => {
                         onClick={handleNext}
                         fontFamily="Chelsea Market, system-ui"
                         color="#EBB2B9"
-                        bg="transparent"
-                        _hover={{ bg: 'transparent', opacity: 0.8 }}
+                        bgColor="#1F2323"
+                        _hover={{ opacity: 0.8 }}
                         textDecor={step < steps.length - 1 ? 'none' : 'underline'}
                         fontSize={'lg'}
-                        position={'absolute'}
+                        position={'sticky'}
                         bottom={5}>
                         {step < steps.length - 1 ? 'Next >' : 'Start game'}
                     </Button>

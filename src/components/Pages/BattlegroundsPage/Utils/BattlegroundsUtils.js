@@ -271,44 +271,37 @@ export const getContinentIcon = value => {
 export const formatLeaderboardRewards = async (option = 1) => {
     const accumulatedBounty = await getAccumulatedBounty();
     const rewards = await getLeaderboardsRewards();
+
     if (accumulatedBounty && !isEmptyObject(accumulatedBounty) && rewards && !isEmptyObject(rewards)) {
-        const assets = Object.entries(accumulatedBounty.asset);
-        const results = await Promise.all(
-            assets.map(async ([asset, price]) => {
-                const assetDetails = await getAsset(asset);
-                return { ...assetDetails, price };
-            })
-        );
-        const generalTributePercetage = rewards.GeneralLeaderboard.totalRewards.tributePercentage;
-        const tributePercetage = rewards.TerrestrialLeaderboard.top1.tributePercentage;
+        const results = await fetchAssetsWithPricing(accumulatedBounty.asset);
 
-        const reward = () => {
-            switch (option) {
-                case 1:
-                    return {
-                        cards: rewards.GeneralLeaderboard.totalRewards.specialCards,
-                        mana: rewards.GeneralLeaderboard.totalRewards.manaQNT,
-                        weth: Number(results.find(item => item.name === 'wETH').price) * generalTributePercetage,
-                        gem: Number(results.find(item => item.name === 'GEM').price) * generalTributePercetage,
-                    };
-                case 'gen':
-                    return {
-                        cards: rewards.GeneralLeaderboard.totalRewards.specialCards,
-                        mana: rewards.GeneralLeaderboard.totalRewards.manaQNT,
-                        weth: Number(results.find(item => item.name === 'wETH').price),
-                        gem: Number(results.find(item => item.name === 'GEM').price),
-                    };
-                default:
-                    return {
-                        cards: rewards.TerrestrialLeaderboard.top1.specialCards,
-                        mana: rewards.TerrestrialLeaderboard.top1.manaQNT,
-                        weth: Number(results.find(item => item.name === 'wETH').price) * tributePercetage,
-                        gem: Number(results.find(item => item.name === 'GEM').price) * tributePercetage,
-                    };
-            }
-        };
+        const getPrice = name => Number(results.find(item => item.name === name)?.price || 0);
+        const genPercentage = rewards.GeneralLeaderboard.totalRewards.tributePercentage;
+        const terPercentage = rewards.TerrestrialLeaderboard.top1.tributePercentage;
 
-        return reward();
+        switch (option) {
+            case 1:
+                return {
+                    cards: rewards.GeneralLeaderboard.totalRewards.specialCards,
+                    mana: rewards.GeneralLeaderboard.totalRewards.manaQNT,
+                    weth: getPrice('wETH') * genPercentage,
+                    gem: getPrice('GEM') * genPercentage,
+                };
+            case 'gen':
+                return {
+                    cards: rewards.GeneralLeaderboard.totalRewards.specialCards,
+                    mana: rewards.GeneralLeaderboard.totalRewards.manaQNT,
+                    weth: getPrice('wETH'),
+                    gem: getPrice('GEM'),
+                };
+            default:
+                return {
+                    cards: rewards.TerrestrialLeaderboard.top1.specialCards,
+                    mana: rewards.TerrestrialLeaderboard.top1.manaQNT,
+                    weth: getPrice('wETH') * terPercentage,
+                    gem: getPrice('GEM') * terPercentage,
+                };
+        }
     }
 };
 
@@ -342,4 +335,25 @@ export const getCapturedCardText = (isUserDefending, isDefenderWin) => {
         return isDefenderWin ? 'OBTAINED CARD:' : 'CAPTURED CARD: ';
     }
     return isDefenderWin ? 'CAPTURED CARD:' : 'OBTAINED CARD: ';
+};
+
+/**
+ * @name fetchAssetsWithPricing
+ * @description Enriches a plain asset-price object with asset details fetched asynchronously.
+ * @param {Record<string, any>} assetMap - An object where keys are asset IDs and values are prices.
+ * @returns {Promise<Array<{ name: string, price: number }>>} Enriched assets with details and price.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company.
+ */
+export const fetchAssetsWithPricing = async (assetMap = {}) => {
+    if (!assetMap || Object.keys(assetMap).length === 0) return [];
+
+    const entries = Object.entries(assetMap);
+    const enriched = await Promise.all(
+        entries.map(async ([assetId, price]) => {
+            const details = await getAsset(assetId);
+            return { ...details, price };
+        })
+    );
+
+    return enriched;
 };
