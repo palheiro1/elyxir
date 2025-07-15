@@ -15,11 +15,29 @@ import welcome2 from '../../assets/wellcome2.svg';
  * @returns {JSX.Element} The rendered onboarding step component.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const stepOne = ({ isMobile }) => {
+const stepOne = ({ isMobile, setImagesLoaded }) => {
     return (
         <>
-            <Image src={welcome1} position={'absolute'} top={0} left={0} h={'50%'} />
-            <Image src={welcome2} position={'absolute'} bottom={0} right={0} h={'60%'} />
+            <Image
+                key={welcome1}
+                src={welcome1}
+                position={'absolute'}
+                top={0}
+                left={0}
+                h={'50%'}
+                onLoad={() => setImagesLoaded(true)}
+                onError={() => setImagesLoaded(true)}
+            />
+            <Image
+                src={welcome2}
+                key={welcome2}
+                position={'absolute'}
+                bottom={0}
+                right={0}
+                h={'60%'}
+                onLoad={() => setImagesLoaded(true)}
+                onError={() => setImagesLoaded(true)}
+            />
             <Stack
                 h={'100%'}
                 fontFamily={'Chelsea Market, system-ui'}

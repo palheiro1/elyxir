@@ -1,8 +1,8 @@
 import { Overlay } from '../../../../ui/Overlay';
-import { Box, Button, IconButton, Stack, useSteps } from '@chakra-ui/react';
+import { Box, Button, Center, IconButton, Spinner, Stack, useSteps } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import QuickStartStep from './QuickStartStep';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { QuickStartSteps } from './data';
 
 /**
@@ -16,10 +16,12 @@ const QuickStartModal = ({ isMobile, handleClose }) => {
     const steps = QuickStartSteps;
     const { activeStep: step, goToNext } = useSteps({ index: 0, count: steps.length });
     const modalRef = useRef(null);
+    const [imagesLoaded, setImagesLoaded] = useState(false);
 
     const handleNext = () => {
         if (step < steps.length - 1) {
             modalRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+            setImagesLoaded(false);
             goToNext();
         } else {
             handleClose();
@@ -38,53 +40,73 @@ const QuickStartModal = ({ isMobile, handleClose }) => {
                 left="50%"
                 transform="translate(-50%, -50%)"
                 w="65%"
+                maxH="600px"
                 h="80%"
                 bg="#1F2323"
                 borderRadius="25px"
                 zIndex={99}
-                overflowY="scroll"
+                overflowY="auto"
                 className="custom-scrollbar">
-                <IconButton
-                    icon={<CloseIcon />}
-                    onClick={handleClose}
-                    aria-label="Close Quick Start Modal"
+                <Box
                     position="sticky"
-                    top={2}
-                    right={2}
+                    top={0}
                     zIndex={999}
-                    color="#FFF"
-                    bg="transparent"
-                    _hover={{ bg: 'transparent' }}
-                />
+                    display="flex"
+                    justifyContent="flex-end"
+                    px={2}
+                    pt={1}
+                    bg={'transparent'}>
+                    <IconButton
+                        icon={<CloseIcon />}
+                        onClick={handleClose}
+                        aria-label="Close Quick Start Modal"
+                        color="#FFF"
+                        bg="transparent"
+                        _hover={{ bg: 'transparent' }}
+                    />
+                </Box>
+
+                {!imagesLoaded && (
+                    <Center boxSize={'100%'} pos="fixed" top={0} left={0} zIndex={99} bgColor={'#1F2323'}>
+                        <Spinner size="xl" thickness="4px" speed="0.65s" color="pink.400" />
+                    </Center>
+                )}
+
                 <Stack
                     direction="column"
                     w="90%"
                     mx="auto"
-                    mt={5}
+                    pt={2}
+                    pb="80px"
                     spacing={8}
+                    minH={'520px'}
                     align="center"
-                    justify="space-between"
-                    textAlign="center">
-                    <Box w="100%" p="24px" fontFamily="Ruina">
+                    textAlign="center"
+                    fontFamily="Ruina">
+                    <Box w="100%" p="24px">
                         {typeof CurrentStep === 'function' ? (
-                            <CurrentStep isMobile={isMobile} />
+                            <CurrentStep isMobile={isMobile} setImagesLoaded={setImagesLoaded} />
                         ) : (
-                            <QuickStartStep {...CurrentStep} />
+                            <QuickStartStep {...CurrentStep} setImagesLoaded={setImagesLoaded} />
                         )}
                     </Box>
-                    <Button
-                        onClick={handleNext}
-                        fontFamily="Chelsea Market, system-ui"
-                        color="#EBB2B9"
-                        bgColor="#1F2323"
-                        _hover={{ opacity: 0.8 }}
-                        textDecor={step < steps.length - 1 ? 'none' : 'underline'}
-                        fontSize={'lg'}
-                        position={'sticky'}
-                        bottom={5}>
-                        {step < steps.length - 1 ? 'Next >' : 'Start game'}
-                    </Button>
                 </Stack>
+
+                <Button
+                    onClick={handleNext}
+                    fontFamily="Chelsea Market, system-ui"
+                    color="#EBB2B9"
+                    bgColor="#1F2323"
+                    _hover={{ opacity: 0.8 }}
+                    textDecor={step < steps.length - 1 ? 'none' : 'underline'}
+                    fontSize={'lg'}
+                    position="sticky"
+                    bottom="20px"
+                    left="50%"
+                    transform="translateX(-50%)"
+                    zIndex={100}>
+                    {step < steps.length - 1 ? 'Next >' : 'Start game'}
+                </Button>
             </Box>
         </>
     );
