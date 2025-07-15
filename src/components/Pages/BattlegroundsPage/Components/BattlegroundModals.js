@@ -52,6 +52,7 @@ const BattlegroundModals = ({
     handleOpenModal,
     onCloseGems,
     onCloseWeth,
+    setHasSeenNewPlayersModal,
 }) => {
     return (
         <>
@@ -119,6 +120,7 @@ const BattlegroundModals = ({
                     handleClose={() => handleCloseModal('newPlayers')}
                     setOpenInventory={() => handleOpenModal('inventory')}
                     isMobile={isMobile}
+                    setHasSeenNewPlayersModal={setHasSeenNewPlayersModal}
                 />
             )}
             <AdvertModal isOpen={modals.advert} onClose={() => handleCloseModal('advert')} />
