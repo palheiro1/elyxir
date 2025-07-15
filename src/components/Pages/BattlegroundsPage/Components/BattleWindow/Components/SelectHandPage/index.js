@@ -1,7 +1,6 @@
 import { Box, Heading, Stack, useDisclosure, useMediaQuery, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import locations from '../../../../assets/LocationsEnum';
-import { getAsset } from '../../../../../../../services/Ardor/ardorInterface';
 import { errorToast } from '../../../../../../../utils/alerts';
 import { sendCardsToBattle } from '../../../../../../../services/Ardor/omnoInterface';
 import { checkPin } from '../../../../../../../utils/walletUtils';
@@ -13,6 +12,7 @@ import AttackerCards from './Components/AttackerCards';
 import DefenderCards from './Components/DefenderCards';
 import StatisticsDisplay from './Components/StatisticsDisplay';
 import { isEmptyObject } from '../../../../../../../utils/utils';
+import { fetchAssetsWithPricing } from '../../../../Utils/BattlegroundsUtils';
 
 /**
  * @name SelectHandPage
@@ -74,33 +74,21 @@ export const SelectHandPage = ({
     useEffect(() => {
         if (!arenaInfo) return;
 
-        const medium = getMediumName(arenaInfo?.mediumId);
-        setMedium(medium);
+        setMedium(getMediumName(arenaInfo?.mediumId));
 
-        if (
-            !arenaInfo.battleCost ||
-            !arenaInfo.battleCost.asset ||
-            Object.keys(arenaInfo.battleCost.asset).length === 0
-        ) {
-            return;
-        }
+        const assetMap = arenaInfo?.battleCost?.asset;
+        if (!assetMap || Object.keys(assetMap).length === 0) return;
 
-        const fetchCostAndMedium = async () => {
+        const fetchCost = async () => {
             try {
-                const assets = Object.entries(arenaInfo.battleCost.asset || {});
-                const costData = await Promise.all(
-                    assets.map(async ([asset, price]) => {
-                        const details = await getAsset(asset);
-                        return { ...details, price };
-                    })
-                );
-                setBattleCost(costData);
-            } catch (error) {
-                console.error('Error fetching battle cost details:', error);
+                const enriched = await fetchAssetsWithPricing(assetMap);
+                setBattleCost(enriched);
+            } catch (err) {
+                console.error('Error fetching enriched battle cost:', err);
             }
         };
 
-        fetchCostAndMedium();
+        fetchCost();
     }, [arenaInfo]);
 
     useEffect(() => {
