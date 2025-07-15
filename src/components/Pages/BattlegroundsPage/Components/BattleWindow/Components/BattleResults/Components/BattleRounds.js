@@ -43,17 +43,7 @@ const BattleRounds = ({ battleResults, ...props }) => {
     };
 
     return (
-        <Stack
-            direction="row"
-            mx="auto"
-            w="90%"
-            h="60%"
-            className="custom-scrollbar"
-            overflowX="scroll"
-            overflowY="hidden"
-            ref={elementRef}
-            spacing={4}
-            position="relative">
+        <>
             <IconButton
                 position="absolute"
                 left="2"
@@ -68,11 +58,21 @@ const BattleRounds = ({ battleResults, ...props }) => {
                 _hover={{ bg: 'rgba(255, 255, 255, 1)' }}
                 borderRadius="full"
             />
-
-            {battleResults.map((round, index) => (
-                <BattleRound key={index} round={round} index={index} {...props} />
-            ))}
-
+            <Stack
+                direction="row"
+                mx="auto"
+                w="90%"
+                h="60%"
+                className="custom-scrollbar"
+                overflowX="scroll"
+                overflowY="hidden"
+                ref={elementRef}
+                spacing={4}
+                position="relative">
+                {battleResults.map((round, index) => (
+                    <BattleRound key={index} round={round} index={index} {...props} />
+                ))}
+            </Stack>
             <IconButton
                 position="absolute"
                 right="2"
@@ -87,7 +87,7 @@ const BattleRounds = ({ battleResults, ...props }) => {
                 bg="rgba(255, 255, 255, 0.8)"
                 _hover={{ bg: 'rgba(255, 255, 255, 1)' }}
             />
-        </Stack>
+        </>
     );
 };
 
