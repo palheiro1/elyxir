@@ -4,7 +4,7 @@ import { useDisclosure, useMediaQuery } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { isNotLogged } from '../utils/validators';
 import { fetchArenasInfo } from '../redux/reducers/ArenasReducer';
-import { fetchBattleData } from '../redux/reducers/BattlegroundsReducer';
+import { fetchBattleData, updateFilteredCards } from '../redux/reducers/BattlegroundsReducer';
 import { fetchSoldiers } from '../redux/reducers/SoldiersReducer';
 import { fetchUserBattles } from '../redux/reducers/BattleReducer';
 import { fetchLeaderboards } from '../redux/reducers/LeaderboardsReducer';
@@ -117,6 +117,7 @@ export const useBattlegroundState = infoAccount => {
                 accountRs && dispatch(fetchUserBattles(accountRs)),
                 dispatch(fetchLeaderboards()),
                 cards && accountRs && dispatch(fetchBattleData({ accountRs, cards })),
+                updateFilteredCards(accountRs, cards, dispatch)
             ]);
         }
     }, [currentBlock, prev_height, dispatch, accountRs, cards]);

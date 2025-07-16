@@ -32,7 +32,12 @@ import {
     transferGEM,
 } from '../services/Ardor/ardorInterface';
 import { getAsset, isMBAsset } from './cardsUtils';
-import { handleConfirmateNotification, handleNewIncomingNotification, handleNewOutcomingNotification } from './alerts';
+import {
+    errorToast,
+    handleConfirmateNotification,
+    handleNewIncomingNotification,
+    handleNewOutcomingNotification,
+} from './alerts';
 import { generateHash } from './hash';
 import { v4 as uuid } from 'uuid';
 
@@ -582,35 +587,34 @@ export function roundNumberWithMaxDecimals(number, maxDecimals) {
     return isNaN(roundedNumber) ? 0 : roundedNumber;
 }
 
-export const sendCardsToOmno = async ({ cards, passPhrase }) => {
+export const sendCardsToOmno = async ({ cards, passPhrase, toast }) => {
     const message = JSON.stringify({ contract: OMNO_CONTRACT });
+    let allSuccessful = true;
 
-    const promises = cards.map(card =>
-        transferAsset({
-            asset: card.asset,
-            quantityQNT: card.quantity,
-            recipient: OMNO_ACCOUNT,
-            passPhrase: passPhrase,
-            message: message,
-            messagePrunable: true,
-            deadline: 361,
-            priority: 'HIGH',
-        })
-    );
+    for (const card of cards) {
+        try {
+            const result = await transferAsset({
+                asset: card.asset,
+                quantityQNT: card.quantity,
+                recipient: OMNO_ACCOUNT,
+                passPhrase,
+                message,
+                messagePrunable: true,
+                deadline: 361,
+                priority: 'HIGH',
+            });
 
-    try {
-        const results = await Promise.all(promises);
-        const allSuccessful = results.every(result => result?.status === 200);
-        if (allSuccessful) {
-            return true;
-        } else {
-            console.error('Error transferring assets: Not all promises resolved successfully');
-            return false;
+            if (result !== true) {
+                allSuccessful = false;
+                errorToast(`❌ Failed to send card "${card.name}"`, toast);
+            }
+        } catch (err) {
+            allSuccessful = false;
+            errorToast(`❌ Error sending card "${card.name}": ${err.message}`, toast);
         }
-    } catch (error) {
-        console.error(`Error transferring assets: ${error.message}`);
-        return false;
     }
+
+    return allSuccessful;
 };
 
 export const sendCardsToBurn = async ({ cards, passPhrase }) => {

@@ -76,7 +76,7 @@ import { getOmnoGiftzBalance } from '../../services/Ardor/omnoInterface';
 import Battlegrounds from '../../components/Pages/BattlegroundsPage/Battlegrounds';
 import { fetchUserBattles } from '../../redux/reducers/BattleReducer';
 import { fetchArenasInfo } from '../../redux/reducers/ArenasReducer';
-import { fetchBattleData } from '../../redux/reducers/BattlegroundsReducer';
+import { fetchBattleData, updateFilteredCards } from '../../redux/reducers/BattlegroundsReducer';
 import { fetchSoldiers } from '../../redux/reducers/SoldiersReducer';
 import { fetchLeaderboards } from '../../redux/reducers/LeaderboardsReducer';
 import { setCardsManually } from '../../redux/reducers/CardsReducer';
@@ -412,7 +412,11 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     useEffect(() => {
         let { accountRs } = infoAccount;
-        cards && accountRs && dispatch(fetchBattleData({ accountRs, cards }));
+        if (cards && accountRs) {
+            dispatch(fetchBattleData({ accountRs }));
+            updateFilteredCards(accountRs, cards, dispatch);
+        }
+
         dispatch(fetchArenasInfo());
         infoAccount && dispatch(fetchUserBattles(infoAccount.accountRs));
         dispatch(fetchSoldiers());

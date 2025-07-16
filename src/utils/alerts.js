@@ -64,7 +64,7 @@ export const handleConfirmateNotification = (tx, isIncoming, toast, ref) => {
  * @description This function is used to display a success toast
  */
 export const okToast = (text, toast) => {
-    const id = 'okToast';
+    const id = text;
     if (toast.isActive(id)) return;
 
     toast({
@@ -73,6 +73,7 @@ export const okToast = (text, toast) => {
         status: 'success',
         duration: 9000,
         isClosable: true,
+        id,
     });
 };
 
@@ -83,15 +84,28 @@ export const okToast = (text, toast) => {
  * @description This function is used to display an error toast
  */
 export const errorToast = (text, toast) => {
-    const id = 'errorToast';
-    if (toast.isActive(id)) return;
-
+    const id = text;
+    if (toast.isActive(id)) {
+        toast.close(id);
+        setTimeout(() => {
+            toast({
+                title: 'Error',
+                description: text,
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
+                id,
+            });
+        }, 50);
+        return;
+    }
     toast({
         title: 'Error',
         description: text,
         status: 'error',
         duration: 9000,
         isClosable: true,
+        id,
     });
 };
 
@@ -102,15 +116,28 @@ export const errorToast = (text, toast) => {
  * @description This function is used to display a warning toast
  */
 export const warningToast = (text, toast) => {
-    const id = 'warningToast';
-    if (toast.isActive(id)) return;
-
+    const id = text;
+    if (toast.isActive(id)) {
+        toast.close(id);
+        setTimeout(() => {
+            toast({
+                title: 'Warning',
+                description: text,
+                status: 'warning',
+                duration: 9000,
+                isClosable: true,
+                id,
+            });
+        }, 50);
+        return;
+    }
     toast({
         title: 'Warning',
         description: text,
         status: 'warning',
         duration: 9000,
         isClosable: true,
+        id,
     });
 };
 
@@ -121,8 +148,21 @@ export const warningToast = (text, toast) => {
  * @description This function is used to display an info toast
  */
 export const infoToast = (text, toast) => {
-    const id = 'infoToast';
-    if (toast.isActive(id)) return;
+    const id = text;
+    if (toast.isActive(id)) {
+        toast.close(id);
+        setTimeout(() => {
+            toast({
+                title: 'Info',
+                description: text,
+                status: 'info',
+                duration: 9000,
+                isClosable: true,
+                id,
+            });
+        }, 50);
+        return;
+    }
 
     toast({
         title: 'Info',
@@ -130,6 +170,7 @@ export const infoToast = (text, toast) => {
         status: 'info',
         duration: 9000,
         isClosable: true,
+        id,
     });
 };
 

@@ -16,9 +16,18 @@ const getFilteredCards = (cards, userAssets) => {
         }));
 };
 
+export const updateFilteredCards = async (accountRs, cards, dispatch) => {
+    const [accountId, { data: usersState }] = await Promise.all([addressToAccountId(accountRs), getUsersState()]);
+    const userInfo = extractUserInfo(usersState, accountId);
+    const assets = userInfo?.balance?.asset ?? {};
+
+    const filteredCards = getFilteredCards(cards, assets);
+    dispatch(setFilteredCards(filteredCards));
+};
+
 export const fetchBattleData = createAsyncThunk(
     'battle/fetchBattleData',
-    async ({ accountRs, cards }, { rejectWithValue }) => {
+    async ({ accountRs }, { rejectWithValue }) => {
         try {
             const [[battleCount, activePlayers, landLords], accountId, { data: usersState }] = await Promise.all([
                 Promise.all([getBattleCount(), getActivePlayers(), getLandLords()]),
@@ -36,7 +45,6 @@ export const fetchBattleData = createAsyncThunk(
                 omnoGEMsBalance: assets[GEMASSET] ?? 0,
                 omnoWethBalance: assets[WETHASSET] ?? 0,
                 parseWETH: parseFloat(assets[WETHASSET] ?? 0),
-                filteredCards: getFilteredCards(cards, assets),
             };
         } catch (error) {
             console.error('Error fetching battle data:', error);
@@ -62,6 +70,9 @@ const battleSlice = createSlice({
     initialState,
     reducers: {
         resetBattleState: () => initialState,
+        setFilteredCards: (state, action) => {
+            state.filteredCards = action.payload;
+        },
     },
     extraReducers: builder => {
         builder
@@ -82,5 +93,5 @@ const battleSlice = createSlice({
     },
 });
 
-export const { resetBattleState } = battleSlice.actions;
+export const { resetBattleState, setFilteredCards } = battleSlice.actions;
 export default battleSlice.reducer;
