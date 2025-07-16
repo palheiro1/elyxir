@@ -23,6 +23,7 @@ import { checkPin, sendCardsToOmno } from '../../../../../utils/walletUtils';
 import { errorToast, infoToast, okToast } from '../../../../../utils/alerts';
 import { setFilteredCards } from '../../../../../redux/reducers/BattlegroundsReducer';
 import { setCardsManually } from '../../../../../redux/reducers/CardsReducer';
+import { applyCardSwapUpdates, mergeUpdatedCards } from '../../Utils/BattlegroundsUtils';
 
 /**
  * @name OmnoCards
@@ -93,21 +94,8 @@ const OmnoCards = ({
         });
 
         if (success) {
-            const updatedCards = cards.map(card => {
-                const match = cardsToSwap.find(c => c.asset === card.asset);
-                if (!match) return card;
-
-                return {
-                    ...card,
-                    quantityQNT: Math.max(0, Number(card.quantityQNT) - match.quantity),
-                    omnoQuantity: Math.max(0, Number(card.omnoQuantity) + match.quantity),
-                };
-            });
-
-            const updatedFilteredCards = filteredCards.map(card => {
-                const updated = updatedCards.find(c => c.asset === card.asset);
-                return updated ?? card;
-            });
+            const updatedCards = applyCardSwapUpdates(cards, cardsToSwap);
+            const updatedFilteredCards = mergeUpdatedCards(filteredCards, updatedCards);
 
             okToast('Swap completed successfully. Wait for the next block and refresh the page.', toast);
             setSelectedCards([]);

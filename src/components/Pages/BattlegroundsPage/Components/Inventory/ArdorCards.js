@@ -24,6 +24,7 @@ import { withdrawCardsFromOmno } from '../../../../../services/Ardor/omnoInterfa
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilteredCards } from '../../../../../redux/reducers/BattlegroundsReducer';
 import { setCardsManually } from '../../../../../redux/reducers/CardsReducer';
+import { applyCardSwapUpdates, mergeUpdatedCards } from '../../Utils/BattlegroundsUtils';
 
 /**
  * @name ArdorCards
@@ -89,27 +90,11 @@ const ArdorCards = ({
         });
 
         if (success) {
-            const updatedFilteredCards = filteredCards
-                .map(card => {
-                    const match = cardsToSwap.find(c => c.asset === card.asset);
-                    if (!match) return card;
+            const updatedFilteredCards = applyCardSwapUpdates(filteredCards, cardsToSwap, true).filter(
+                card => Number(card.omnoQuantity) > 0
+            );
 
-                    const updatedOmnoQty = Math.max(0, Number(card.omnoQuantity) - match.quantity);
-                    const updatedQNT = Number(card.quantityQNT || 0) + match.quantity;
-
-                    return {
-                        ...card,
-                        omnoQuantity: updatedOmnoQty.toString(),
-                        quantityQNT: updatedQNT.toString(),
-                    };
-                })
-                .filter(card => Number(card.omnoQuantity) > 0);
-
-            const mergedCards = cards.map(card => {
-                const updated = updatedFilteredCards.find(c => c.asset === card.asset);
-                return updated ?? card;
-            });
-
+            const mergedCards = mergeUpdatedCards(cards, updatedFilteredCards);
             okToast('Swap completed successfully', toast);
             setSelectedCards([]);
             dispatch(setFilteredCards(updatedFilteredCards));

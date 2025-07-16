@@ -589,32 +589,37 @@ export function roundNumberWithMaxDecimals(number, maxDecimals) {
 
 export const sendCardsToOmno = async ({ cards, passPhrase, toast }) => {
     const message = JSON.stringify({ contract: OMNO_CONTRACT });
-    let allSuccessful = true;
 
-    for (const card of cards) {
-        try {
-            const result = await transferAsset({
-                asset: card.asset,
-                quantityQNT: card.quantity,
-                recipient: OMNO_ACCOUNT,
-                passPhrase,
-                message,
-                messagePrunable: true,
-                deadline: 361,
-                priority: 'HIGH',
-            });
+    const transferPromises = cards.map(card =>
+        transferAsset({
+            asset: card.asset,
+            quantityQNT: card.quantity,
+            recipient: OMNO_ACCOUNT,
+            passPhrase,
+            message,
+            messagePrunable: true,
+            deadline: 361,
+            priority: 'HIGH',
+        })
+            .then(result => ({ card, result }))
+            .catch(err => ({ card, error: err }))
+    );
 
-            if (result !== true) {
-                allSuccessful = false;
-                errorToast(`❌ Failed to send card "${card.name}"`, toast);
-            }
-        } catch (err) {
-            allSuccessful = false;
-            errorToast(`❌ Error sending card "${card.name}": ${err.message}`, toast);
-        }
-    }
+    const results = await Promise.allSettled(transferPromises);
 
-    return allSuccessful;
+    const failedTransfers = results.filter(res => (res.status === 'fulfilled' ? res.value.result !== true : true));
+
+    failedTransfers.forEach(res => {
+        const { card, error } = res.status === 'fulfilled' ? res.value : res.reason;
+
+        const message = error
+            ? `❌ Error sending card "${card.name}": ${error.message}`
+            : `❌ Failed to send card "${card.name}"`;
+
+        errorToast(message, toast);
+    });
+
+    return failedTransfers.length === 0;
 };
 
 export const sendCardsToBurn = async ({ cards, passPhrase }) => {
