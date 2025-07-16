@@ -5,6 +5,20 @@ import { CloseIcon } from '@chakra-ui/icons';
 import OmnoPage from './OmnoPage';
 import ArdorPage from './ArdorPage';
 
+/**
+ * @name Inventory
+ * @description Modal component that displays an inventory interface allowing users to switch between two different 
+ * views ("Army" and "Inventory") for managing cards. It renders an overlay and a centered modal box with a close 
+ * button and a selector to toggle between the OmnoPage (Battlegrounds) and ArdorPage views.
+ * The layout adapts responsively based on screen size and mobile status, adjusting the grid columns accordingly.
+ * @param {Object} props - Component props.
+ * @param {Object} props.infoAccount - User account information passed down to child pages.
+ * @param {Array} props.cards - Array of user cards passed to child pages.
+ * @param {Function} props.handleCloseInventory - Function to close the inventory modal.
+ * @param {boolean} props.isMobile - Flag indicating if the device is mobile, to adjust layout responsively.
+ * @returns {JSX.Element} The rendered inventory modal with selectable pages.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company.
+ */
 const Inventory = ({ infoAccount, cards, handleCloseInventory, isMobile }) => {
     const [selectedOption, setSelectedOption] = useState('battlegrounds');
 
