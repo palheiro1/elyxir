@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo, memo } from 'react';
 import {
     Box,
     Button,
@@ -13,6 +13,7 @@ import {
     useColorModeValue,
     useToast,
 } from '@chakra-ui/react';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Components
 import BridgeCard from '../../../../Cards/BridgeCard';
@@ -20,16 +21,24 @@ import BridgeCard from '../../../../Cards/BridgeCard';
 // Utils
 import { checkPin, sendCardsToOmno } from '../../../../../utils/walletUtils';
 import { errorToast, infoToast, okToast } from '../../../../../utils/alerts';
+import { setFilteredCards } from '../../../../../redux/reducers/BattlegroundsReducer';
+import { setCardsManually } from '../../../../../redux/reducers/CardsReducer';
+import { applyCardSwapUpdates, mergeUpdatedCards } from '../../Utils/BattlegroundsUtils';
 
 /**
  * @name OmnoCards
- * @description This component is used to send cards to the OMNO inventory
- * @author Darío Maza Berdugo
- * @version 0.1
- * @param {Object} infoAccount - Account info
- * @param {Array} cards - Cards
- * @param {Boolean} isMobile - Boolean used for controll the mobile view
- * @returns {JSX.Element} - JSX element
+ * @description React component that allows users to select cards and send ("recruit") them to Omno via a blockchain transaction.
+ * The component handles PIN authentication, card selection display, and executes the swap logic using `sendCardsToOmno`.
+ * It updates the Redux store with the new state of cards and filtered cards after a successful transaction.
+ * @param {Object} infoAccount - User account object containing name used to validate PIN.
+ * @param {boolean} isMobile - Determines mobile layout (e.g. for spacing).
+ * @param {Array} selectedCards - Array of selected card objects to send.
+ * @param {Function} setSelectedCards - Callback to update selected cards.
+ * @param {Function} handleEdit - Callback for editing a selected card's quantity.
+ * @param {Function} handleDeleteSelectedCard - Callback to remove a selected card from the list.
+ * @param {Function} handleCloseInventory - Callback to close the inventory modal after successful action.
+ * @returns {JSX.Element} OmnoCards UI component.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const OmnoCards = ({
     infoAccount,
@@ -38,65 +47,93 @@ const OmnoCards = ({
     setSelectedCards,
     handleEdit,
     handleDeleteSelectedCard,
+    handleCloseInventory,
 }) => {
+    const dispatch = useDispatch();
     const toast = useToast();
 
-    const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
+    const { cards } = useSelector(state => state.cards);
+    const { filteredCards } = useSelector(state => state.battlegrounds);
 
+    const [isValidPin, setIsValidPin] = useState(false);
     const [isSwapping, setIsSwapping] = useState(false);
-
     const [passphrase, setPassphrase] = useState('');
+    const cardsToSwap = useMemo(
+        () =>
+            selectedCards.map(card => ({
+                asset: card.asset,
+                quantity: Number(card.selectQuantity) || 1,
+                name: card.name,
+            })),
+        [selectedCards]
+    );
 
-    const handleCompletePin = pin => {
-        isValidPin && setIsValidPin(false); // reset invalid pin flag
+    const handleCompletePin = useCallback(
+        pin => {
+            if (isValidPin) setIsValidPin(false); // reset flag
+            const { name } = infoAccount;
+            const account = checkPin(name, pin);
+            if (account) {
+                setIsValidPin(true);
+                setPassphrase(account.passphrase);
+            }
+        },
+        [infoAccount, isValidPin]
+    );
 
-        const { name } = infoAccount;
-        const account = checkPin(name, pin);
-        if (account) {
-            setIsValidPin(true);
-            setPassphrase(account.passphrase);
-        }
-    };
+    const handleSwap = useCallback(async () => {
+        if (!isValidPin || cardsToSwap.length === 0) return;
 
-    const handleSwap = async () => {
-        if (!isValidPin || selectedCards.length === 0) return;
         infoToast('Swapping cards...', toast);
         setIsSwapping(true);
-
-        const cardsToSwap = selectedCards.map(card => ({
-            asset: card.asset,
-            quantity: card.selectQuantity || 1,
-        }));
 
         const success = await sendCardsToOmno({
             cards: cardsToSwap,
             passPhrase: passphrase,
+            toast,
         });
 
         if (success) {
-            okToast('Swap completed successfully. Wait to the next block and refresh the page.', toast);
+            const updatedCards = applyCardSwapUpdates(cards, cardsToSwap);
+            const updatedFilteredCards = mergeUpdatedCards(filteredCards, updatedCards);
+
+            okToast('Swap completed successfully. Wait for the next block and refresh the page.', toast);
             setSelectedCards([]);
-            setIsSwapping(false);
+            dispatch(setCardsManually(updatedCards));
+            dispatch(setFilteredCards(updatedFilteredCards));
+            handleCloseInventory();
         } else {
             errorToast(
-                'Swap failed. Some cards may not have been sent correctly. Please check if you have enough IGNIs balance to pay transactions fees',
+                'Swap failed. Some cards may not have been sent correctly. Please check if you have enough IGNIS balance to pay transaction fees.',
                 toast
             );
         }
-    };
+
+        setIsSwapping(false);
+    }, [
+        isValidPin,
+        cardsToSwap,
+        passphrase,
+        cards,
+        filteredCards,
+        toast,
+        dispatch,
+        setSelectedCards,
+        handleCloseInventory,
+    ]);
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
 
     return (
-        <Center color={'#FFF'}>
-            <Stack direction="column" spacing={8} w={'30rem'}>
+        <Center color="#FFF">
+            <Stack direction="column" spacing={8} w="30rem">
                 <Box mb={8}>
                     <Heading fontSize="xl" fontWeight="light" mb={4} ml={isMobile && 4}>
                         Choosen
                     </Heading>
+
                     {selectedCards.length > 0 ? (
                         <Stack
-                            direction="column"
                             spacing={4}
                             bgColor={bgColor}
                             py={4}
@@ -104,19 +141,19 @@ const OmnoCards = ({
                             rounded="lg"
                             maxH="20rem"
                             className="custom-scrollbar"
-                            overflowX={'scroll'}>
+                            overflowX="scroll">
                             {selectedCards.map(card => (
                                 <BridgeCard
                                     key={card.asset}
                                     card={card}
-                                    canEdit={true}
+                                    canEdit
                                     handleDeleteSelectedCard={handleDeleteSelectedCard}
                                     handleEdit={handleEdit}
                                 />
                             ))}
                         </Stack>
                     ) : (
-                        <Text fontWeight="light" my={'auto'}>
+                        <Text fontWeight="light" my="auto">
                             No cards selected
                         </Text>
                     )}
@@ -133,7 +170,6 @@ const OmnoCards = ({
                             isDisabled={selectedCards.length === 0}
                             size="lg"
                             onComplete={handleCompletePin}
-                            onChange={handleCompletePin}
                             isInvalid={!isValidPin}
                             variant="filled"
                             mask>
@@ -148,7 +184,7 @@ const OmnoCards = ({
                 <Button
                     w="100%"
                     variant="bridge"
-                    disabled={!isValidPin || selectedCards.length === 0 || isSwapping}
+                    isDisabled={!isValidPin || selectedCards.length === 0 || isSwapping}
                     onClick={handleSwap}
                     letterSpacing="widest">
                     RECRUIT
@@ -158,4 +194,4 @@ const OmnoCards = ({
     );
 };
 
-export default OmnoCards;
+export default memo(OmnoCards);

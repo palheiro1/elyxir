@@ -357,3 +357,54 @@ export const fetchAssetsWithPricing = async (assetMap = {}) => {
 
     return enriched;
 };
+
+/**
+ * @name applyCardSwapUpdates
+ * @description Applies quantity updates to a list of cards based on a list of swap changes.
+ * @param {Array} cards - The original list of cards to be updated.
+ * @param {Array} cardsToSwap - List of cards with swap instructions (must include asset and quantity).
+ * @param {boolean} reverse - If true, reverses the update (adds to quantityQNT, subtracts from omnoQuantity).
+ * @returns {Array} The updated list of cards.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const applyCardSwapUpdates = (cards, cardsToSwap, reverse = false) => {
+    return cards.map(card => {
+        const match = cardsToSwap.find(c => c.asset === card.asset);
+        if (!match) return card;
+
+        const quantity = match.quantity;
+        const quantityQNT = Number(card.quantityQNT || 0);
+        const omnoQuantity = Number(card.omnoQuantity || 0);
+
+        const updated = reverse
+            ? {
+                  quantityQNT: quantityQNT + quantity,
+                  omnoQuantity: Math.max(0, omnoQuantity - quantity),
+              }
+            : {
+                  quantityQNT: Math.max(0, quantityQNT - quantity),
+                  omnoQuantity: omnoQuantity + quantity,
+              };
+
+        return {
+            ...card,
+            quantityQNT: updated.quantityQNT.toString(),
+            omnoQuantity: updated.omnoQuantity.toString(),
+        };
+    });
+};
+
+/**
+ * @name mergeUpdatedCards
+ * @description Merges updated cards into the original list, overriding matched cards by asset.
+ * @param {Array} originalCards - The original array of cards.
+ * @param {Array} updatedCards - The array of cards with updated values.
+ * @returns {Array} The merged array of cards.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const mergeUpdatedCards = (originalCards, updatedCards) => {
+    return originalCards.map(card => {
+        const updated = updatedCards.find(c => c.asset === card.asset);
+        return updated ?? card;
+    });
+};

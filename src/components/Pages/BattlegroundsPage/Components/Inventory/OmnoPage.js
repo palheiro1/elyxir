@@ -17,7 +17,22 @@ import OmnoCards from './OmnoCards';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const OmnoPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
+/**
+ * @name OmnoPage
+ * @description Component that renders the Battlegrounds card selection interface.
+ * Allows the user to filter available cards by rarity, element, and continent, and select cards to send to the Army.
+ * The selected cards are displayed in a dedicated list (`OmnoCards`) with options to edit or remove them.
+ * Filters are applied based on the `soldiers` state and user's owned cards (with unconfirmed quantity > 0).
+ * Responsive layout adjusts between mobile and desktop, and uses gridColumns to determine layout size.
+ * @param {Object} props - Component props.
+ * @param {Object} props.infoAccount - Info about the user's account (e.g., accountRs).
+ * @param {boolean} props.isMobile - Whether the user is on a mobile device.
+ * @param {Function} props.gridColumns - Function that returns the number of grid columns depending on screen size.
+ * @param {Function} props.handleCloseInventory - Callback to close the inventory modal.
+ * @returns {JSX.Element} Army card selector interface with filters, selectable cards and selected card panel.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+const OmnoPage = ({ infoAccount, isMobile, gridColumns, handleCloseInventory }) => {
     const [selectedCards, setSelectedCards] = useState([]);
     const [filters, setFilters] = useState({
         rarity: '',
@@ -41,7 +56,8 @@ const OmnoPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
         setSelectedCards(newSelectedCards);
     };
 
-    const myCards = cards.filter(card => parseInt(card.unconfirmedQuantityQNT) > 0);
+    const { cards } = useSelector(state => state.cards);
+    const myCards = cards.filter(card => parseInt(card.quantityQNT) > 0);
     const notSelectedCards = myCards.filter(card => !selectedCards.some(selected => selected.asset === card.asset));
 
     const handleRarityChange = event => {
@@ -182,7 +198,7 @@ const OmnoPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                         justifyContent="center">
                         {' '}
                         <SimpleGrid
-                            columns={gridColumns()}
+                            columns={gridColumns}
                             gap={4}
                             align={'center'}
                             overflowY={'auto'}
@@ -264,6 +280,7 @@ const OmnoPage = ({ infoAccount, cards, isMobile, gridColumns }) => {
                             setSelectedCards={setSelectedCards}
                             handleEdit={handleEdit}
                             handleDeleteSelectedCard={handleDeleteSelectedCard}
+                            handleCloseInventory={handleCloseInventory}
                         />
                     </Box>
                 </Stack>

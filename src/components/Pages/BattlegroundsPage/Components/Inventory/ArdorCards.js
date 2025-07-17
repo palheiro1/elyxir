@@ -21,16 +21,26 @@ import BridgeCard from '../../../../Cards/BridgeCard';
 import { checkPin } from '../../../../../utils/walletUtils';
 import { errorToast, infoToast, okToast } from '../../../../../utils/alerts';
 import { withdrawCardsFromOmno } from '../../../../../services/Ardor/omnoInterface';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilteredCards } from '../../../../../redux/reducers/BattlegroundsReducer';
+import { setCardsManually } from '../../../../../redux/reducers/CardsReducer';
+import { applyCardSwapUpdates, mergeUpdatedCards } from '../../Utils/BattlegroundsUtils';
 
 /**
  * @name ArdorCards
- * @description This component is used to withdraw cards from the OMNO inventory
- * @author Darío Maza Berdugo
- * @version 0.1
- * @param {Object} infoAccount - Account info
- * @param {Array} cards - Cards
- * @param {Boolean} isMobile - Boolean used for controll the mobile view
- * @returns {JSX.Element} - JSX element
+ * @description React component that allows users to withdraw selected OMNO cards from their
+ * Ardor account by validating a 4-digit PIN and signing the transaction.
+ * Handles the visual selection of cards, PIN verification, swap execution, and Redux state updates.
+ * @param {Object} props - Component props.
+ * @param {Object} props.infoAccount - User account information including the name (used to validate PIN).
+ * @param {boolean} props.isMobile - Flag to adjust layout styles on mobile devices.
+ * @param {Array} props.selectedCards - Array of currently selected cards for withdrawal.
+ * @param {Function} props.setSelectedCards - Function to update selected cards.
+ * @param {Function} props.handleEdit - Function to handle editing a selected card.
+ * @param {Function} props.handleDeleteSelectedCard - Function to delete a card from the selection.
+ * @param {Function} props.handleCloseInventory - Function to close the inventory view after successful swap.
+ * @returns {JSX.Element} The rendered component displaying selected cards, PIN input, and swap action.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company.
  */
 const ArdorCards = ({
     infoAccount,
@@ -39,6 +49,7 @@ const ArdorCards = ({
     setSelectedCards,
     handleEdit,
     handleDeleteSelectedCard,
+    handleCloseInventory,
 }) => {
     const toast = useToast();
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
@@ -46,6 +57,10 @@ const ArdorCards = ({
     const [isSwapping, setIsSwapping] = useState(false);
 
     const [passphrase, setPassphrase] = useState('');
+
+    const { filteredCards } = useSelector(state => state.battlegrounds);
+    const { cards } = useSelector(state => state.cards);
+    const dispatch = useDispatch();
 
     const handleCompletePin = pin => {
         isValidPin && setIsValidPin(false); // reset invalid pin flag
@@ -60,26 +75,36 @@ const ArdorCards = ({
 
     const handleSwap = async () => {
         if (!isValidPin || selectedCards.length === 0) return;
+
         infoToast('Swapping cards...', toast);
         setIsSwapping(true);
 
         const cardsToSwap = selectedCards.map(card => ({
             asset: card.asset,
-            quantity: card.selectQuantity || 1,
+            quantity: Number(card.selectQuantity) || 1,
         }));
 
-        const success = withdrawCardsFromOmno({
+        const success = await withdrawCardsFromOmno({
             cards: cardsToSwap,
             passPhrase: passphrase,
         });
 
         if (success) {
+            const updatedFilteredCards = applyCardSwapUpdates(filteredCards, cardsToSwap, true).filter(
+                card => Number(card.omnoQuantity) > 0
+            );
+
+            const mergedCards = mergeUpdatedCards(cards, updatedFilteredCards);
             okToast('Swap completed successfully', toast);
             setSelectedCards([]);
-            setIsSwapping(false);
+            dispatch(setFilteredCards(updatedFilteredCards));
+            dispatch(setCardsManually(mergedCards));
+            handleCloseInventory();
         } else {
-            errorToast('Swap failed. Please check if you have enough IGNIs balance to pay transactions fees', toast);
+            errorToast('Swap failed. Please check if you have enough IGNIS balance to pay transaction fees.', toast);
         }
+
+        setIsSwapping(false);
     };
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
