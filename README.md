@@ -10,6 +10,7 @@
 ## 🎮 About
 
 Mythical Beings is a digital trading card game featuring legendary creatures from global mythology. This wallet application provides a comprehensive interface for managing your NFT collection, trading cards, playing battles, and interacting with the decentralized ecosystem.
+Build on Ardor.
 
 ### 🌟 Key Features
 
