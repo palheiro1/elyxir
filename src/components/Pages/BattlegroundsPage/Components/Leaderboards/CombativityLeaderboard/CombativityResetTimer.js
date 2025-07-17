@@ -1,7 +1,8 @@
 import { Box, Image, Stack, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { getGiftzRewardQNT, getLeaderboardsResetBlock } from '../../../../../services/Battlegrounds/Battlegrounds';
-import { useBlockCountdown } from '../../../../../hooks/useBlockCountDown';
+import { getGiftzRewardQNT, getLeaderboardsResetBlock } from '../../../../../../services/Battlegrounds/Battlegrounds';
+import { useBlockCountdown } from '../../../../../../hooks/useBlockCountDown';
+import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name CombativityResetTimer
@@ -11,10 +12,12 @@ import { useBlockCountdown } from '../../../../../hooks/useBlockCountDown';
  * @returns {JSX.Element} Stylized countdown timer with reward.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const CombativityResetTimer = ({ isMobile, ...rest }) => {
+const CombativityResetTimer = ({ ...rest }) => {
     const [giftzRewardQNT, setGiftzRewardQNT] = useState(null);
     const timeLeft = useBlockCountdown(getLeaderboardsResetBlock);
     const [loading, setLoading] = useState(true);
+
+    const { isMobile } = useBattlegroundBreakpoints();
     useEffect(() => {
         try {
             const fetchData = async () => {
@@ -58,8 +61,8 @@ const CombativityResetTimer = ({ isMobile, ...rest }) => {
                             justifyContent={'space-between'}
                             fontWeight={700}
                             bgColor={'#FFF'}
-                            py={2}
-                            p={4}
+                            px={isMobile ? 3 : 4}
+                            py={isMobile ? 2 : 4}
                             borderRadius={'20px'}>
                             <Image
                                 src={'/images/currency/giftz.png'}
@@ -82,12 +85,12 @@ const CombativityResetTimer = ({ isMobile, ...rest }) => {
                                 <Box
                                     key={idx}
                                     bg="#2b2b2b"
-                                    px={isMobile ? 3 : 5}
-                                    py={isMobile ? 2 : 3}
+                                    px={isMobile ? 3 : 4}
+                                    py={isMobile ? 2 : 4}
                                     borderRadius="lg"
                                     textAlign="center"
                                     minW={isMobile ? '50px' : '60px'}>
-                                    <Text color="white" fontSize={isMobile ? 'md' : 'lg'} fontWeight="bold">
+                                    <Text color="white" fontSize={isMobile ? 'sm' : 'lg'} fontWeight="bold">
                                         {value.toString().padStart(2, '0')}
                                     </Text>
                                     <Text color="whiteAlpha.700" fontSize={isMobile ? '2xs' : 'xs'}>

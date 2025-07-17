@@ -4,33 +4,34 @@ import { Overlay } from '../../../../ui/Overlay';
 import { CloseIcon } from '@chakra-ui/icons';
 import OmnoPage from './OmnoPage';
 import ArdorPage from './ArdorPage';
+import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name Inventory
- * @description Modal component that displays an inventory interface allowing users to switch between two different 
- * views ("Army" and "Inventory") for managing cards. It renders an overlay and a centered modal box with a close 
+ * @description Modal component that displays an inventory interface allowing users to switch between two different
+ * views ("Army" and "Inventory") for managing cards. It renders an overlay and a centered modal box with a close
  * button and a selector to toggle between the OmnoPage (Battlegrounds) and ArdorPage views.
  * The layout adapts responsively based on screen size and mobile status, adjusting the grid columns accordingly.
  * @param {Object} props - Component props.
  * @param {Object} props.infoAccount - User account information passed down to child pages.
  * @param {Array} props.cards - Array of user cards passed to child pages.
  * @param {Function} props.handleCloseInventory - Function to close the inventory modal.
- * @param {boolean} props.isMobile - Flag indicating if the device is mobile, to adjust layout responsively.
  * @returns {JSX.Element} The rendered inventory modal with selectable pages.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company.
  */
-const Inventory = ({ infoAccount, cards, handleCloseInventory, isMobile }) => {
+const Inventory = ({ infoAccount, cards, handleCloseInventory }) => {
     const [selectedOption, setSelectedOption] = useState('battlegrounds');
 
     const handleSelectChange = useCallback(event => {
         setSelectedOption(event.target.value);
     }, []);
 
+    const { isMobile } = useBattlegroundBreakpoints();
     const [isLittleScreen] = useMediaQuery('(min-width: 1180px) and (max-width: 1399px)');
     const [isMediumScreen] = useMediaQuery('(min-width: 1400px) and (max-width: 1550px)');
 
     const gridColumns = useMemo(() => {
-        if (isMobile) return 1;
+        if (isMobile) return 2;
         if (isMediumScreen) return 4;
         if (isLittleScreen) return 3;
         return 5;
@@ -66,11 +67,11 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory, isMobile }) => {
                 transform="translate(-50%, -50%)"
                 bgColor="#1F2323"
                 zIndex={99}
-                w={isMobile ? '90%' : '98%'}
+                w={isMobile ? '100%' : '98%'}
                 p={4}
                 display="flex"
                 flexDir="column"
-                h={isMobile ? '85%' : '90%'}
+                h={isMobile ? '100%' : '90%'}
                 borderRadius="25px">
                 <IconButton
                     background="transparent"

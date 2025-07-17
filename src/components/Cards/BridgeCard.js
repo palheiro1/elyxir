@@ -27,7 +27,14 @@ import CardBadges from './CardBadges';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdit, omnoQuantity }) => {
+const BridgeCard = ({
+    card,
+    canEdit = false,
+    handleDeleteSelectedCard,
+    handleEdit,
+    omnoQuantity,
+    isMobile = false,
+}) => {
     const {
         cardImgUrl: image,
         name: title,
@@ -52,48 +59,49 @@ const BridgeCard = ({ card, canEdit = false, handleDeleteSelectedCard, handleEdi
     return (
         <Stack direction={'row'} minWidth="375px" spacing={4}>
             <Image maxW="75px" src={image} alt={title} shadow="lg" rounded="sm" />
+            <Stack direction={isMobile ? 'column' : 'row'}>
+                <Stack direction={'row'} align="center" minW="35%">
+                    <Box>
+                        <Text fontWeight="bold" fontSize="2xl" textColor={textColor}>
+                            {title}
+                        </Text>
 
-            <Stack direction={'row'} align="center" minW="35%">
-                <Box>
-                    <Text fontWeight="bold" fontSize="2xl" textColor={textColor}>
-                        {title}
-                    </Text>
+                        <CardBadges continent={continent} rarity={rarity} />
 
-                    <CardBadges continent={continent} rarity={rarity} />
+                        <Text color="grey">Available: {omnoQuantity || quantity}</Text>
+                    </Box>
+                </Stack>
 
-                    <Text color="grey">Available: {omnoQuantity || quantity}</Text>
-                </Box>
-            </Stack>
-
-            {canEdit && (
-                <>
-                    <HStack ml={2}>
-                        <HStack maxW="200px" spacing={0}>
-                            <Button rounded="none" {...dec} onClick={() => handleEdit(card.asset, input.value)}>
-                                -
-                            </Button>
-                            <Input
-                                rounded="none"
-                                border="none"
-                                textAlign="center"
-                                disabled={true}
-                                {...input}
-                                onChange={() => handleEdit(card.asset, input.value)}
-                            />
-                            <Button rounded="none" {...inc} onClick={() => handleEdit(card.asset, input.value)}>
-                                +
-                            </Button>
+                {canEdit && (
+                    <>
+                        <HStack ml={2}>
+                            <HStack maxW="200px" spacing={0}>
+                                <Button rounded="none" {...dec} onClick={() => handleEdit(card.asset, input.value)}>
+                                    -
+                                </Button>
+                                <Input
+                                    rounded="none"
+                                    border="none"
+                                    textAlign="center"
+                                    disabled={true}
+                                    {...input}
+                                    onChange={() => handleEdit(card.asset, input.value)}
+                                />
+                                <Button rounded="none" {...inc} onClick={() => handleEdit(card.asset, input.value)}>
+                                    +
+                                </Button>
+                            </HStack>
+                            <Center>
+                                <IconButton
+                                    aria-label="Delete"
+                                    onClick={() => handleDeleteSelectedCard(asset)}
+                                    icon={<AiFillDelete color="red" />}
+                                />
+                            </Center>
                         </HStack>
-                        <Center>
-                            <IconButton
-                                aria-label="Delete"
-                                onClick={() => handleDeleteSelectedCard(asset)}
-                                icon={<AiFillDelete color="red" />}
-                            />
-                        </Center>
-                    </HStack>
-                </>
-            )}
+                    </>
+                )}
+            </Stack>
         </Stack>
     );
 };

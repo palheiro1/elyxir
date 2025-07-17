@@ -111,7 +111,7 @@ const ArdorCards = ({
 
     return (
         <Center color={'#FFF'}>
-            <Stack direction="column" spacing={8} w={'30rem'}>
+            <Stack direction="column" spacing={8} w={isMobile ? '22rem' : '30rem'}>
                 <Box mb={8}>
                     <Heading fontSize="xl" fontWeight="light" mb={4} ml={isMobile && 4}>
                         Choosen
@@ -135,6 +135,7 @@ const ArdorCards = ({
                                     handleDeleteSelectedCard={handleDeleteSelectedCard}
                                     handleEdit={handleEdit}
                                     omnoQuantity={card.omnoQuantity}
+                                    isMobile={isMobile}
                                 />
                             ))}
                         </Stack>

@@ -4,20 +4,24 @@ import { CloseIcon } from '@chakra-ui/icons';
 import QuickStartStep from './QuickStartStep';
 import { useRef, useState } from 'react';
 import { QuickStartSteps } from './data';
+import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name QuickStartModal
- * @description Modal component displaying a step-by-step quick start tutorial for the Battlegrounds game. Uses an overlay and a scrollable box with navigation buttons to guide users through deposit, attack, and fight steps. Closes when tutorial is finished or dismissed.
+ * @description Modal component displaying a step-by-step quick start tutorial for the Battlegrounds game. 
+ * Uses an overlay and a scrollable box with navigation buttons to guide users through deposit, attack, 
+ * and fight steps. Closes when tutorial is finished or dismissed.
  * @param {Function} handleClose - Callback function to close the modal.
  * @returns {JSX.Element} A modal overlay with tutorial steps and navigation controls.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const QuickStartModal = ({ isMobile, handleClose }) => {
+const QuickStartModal = ({ handleClose }) => {
     const steps = QuickStartSteps;
     const { activeStep: step, goToNext } = useSteps({ index: 0, count: steps.length });
     const modalRef = useRef(null);
     const [imagesLoaded, setImagesLoaded] = useState(false);
 
+    const { isMobile } = useBattlegroundBreakpoints();
     const handleNext = () => {
         if (step < steps.length - 1) {
             modalRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
@@ -39,9 +43,8 @@ const QuickStartModal = ({ isMobile, handleClose }) => {
                 top="50%"
                 left="50%"
                 transform="translate(-50%, -50%)"
-                w="65%"
-                maxH="600px"
-                h="80%"
+                w={isMobile ? '95%' : '50%'}
+                h={isMobile ? '90%' : '60%'}
                 bg="#1F2323"
                 borderRadius="25px"
                 zIndex={99}
@@ -72,41 +75,35 @@ const QuickStartModal = ({ isMobile, handleClose }) => {
                     </Center>
                 )}
 
-                <Stack
-                    direction="column"
-                    w="90%"
-                    mx="auto"
-                    pt={2}
-                    pb="80px"
-                    spacing={8}
-                    minH={'520px'}
-                    align="center"
-                    textAlign="center"
-                    fontFamily="Ruina">
-                    <Box w="100%" p="24px">
+                <Stack direction="column" w="90%" mx="auto" align="center" textAlign="center" fontFamily="Ruina">
+                    <Box w="100%">
                         {typeof CurrentStep === 'function' ? (
                             <CurrentStep isMobile={isMobile} setImagesLoaded={setImagesLoaded} />
                         ) : (
-                            <QuickStartStep {...CurrentStep} setImagesLoaded={setImagesLoaded} />
+                            <QuickStartStep {...CurrentStep} isMobile={isMobile} setImagesLoaded={setImagesLoaded} />
                         )}
                     </Box>
                 </Stack>
 
-                <Button
-                    onClick={handleNext}
-                    fontFamily="Chelsea Market, system-ui"
-                    color="#EBB2B9"
-                    bgColor="#1F2323"
-                    _hover={{ opacity: 0.8 }}
-                    textDecor={step < steps.length - 1 ? 'none' : 'underline'}
-                    fontSize={'lg'}
+                <Box
                     position="sticky"
-                    bottom="20px"
-                    left="50%"
-                    transform="translateX(-50%)"
-                    zIndex={100}>
-                    {step < steps.length - 1 ? 'Next >' : 'Start game'}
-                </Button>
+                    bottom="0"
+                    bg="transparent"
+                    py={4}
+                    zIndex={98}
+                    display="flex"
+                    justifyContent="center">
+                    <Button
+                        onClick={handleNext}
+                        fontFamily="Chelsea Market, system-ui"
+                        color="#EBB2B9"
+                        bgColor="#1F2323"
+                        _hover={{ opacity: 0.8 }}
+                        textDecor={step < steps.length - 1 ? 'none' : 'underline'}
+                        fontSize="lg">
+                        {step < steps.length - 1 ? 'Next >' : 'Start game'}
+                    </Button>
+                </Box>
             </Box>
         </>
     );

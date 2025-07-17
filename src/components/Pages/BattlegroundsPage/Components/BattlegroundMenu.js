@@ -4,19 +4,20 @@ import { Fragment } from 'react';
 import ListButton from './ListButton';
 import { buttonsGroups } from '../data';
 import { useNavigate } from 'react-router-dom';
+import { useBattlegroundBreakpoints } from '../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name BattlegroundMenu
  * @description Responsive menu component that displays grouped buttons for interacting with the Battlegrounds section.
  * On desktop, it renders stacked buttons with titles; on mobile, a dropdown menu is shown.
  * @param {Object} props - Props object.
- * @param {boolean} props.isMobile - Determines whether to show the compact mobile dropdown or the full desktop button stack.
  * @param {Function} props.setOpenModal - Callback used to open a modal by name.
  * @returns {JSX.Element} A responsive menu with grouped action buttons for opening modals or triggering actions.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const BattlegroundMenu = ({ isMobile, setOpenModal }) => {
+const BattlegroundMenu = ({ setOpenModal }) => {
     const navigate = useNavigate();
+    const { isMobile } = useBattlegroundBreakpoints();
     const handleClick = (modal, action) => {
         if (modal) {
             setOpenModal(modal);

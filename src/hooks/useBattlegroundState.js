@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useDisclosure, useMediaQuery } from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { isNotLogged } from '../utils/validators';
 import { fetchArenasInfo } from '../redux/reducers/ArenasReducer';
@@ -35,8 +35,6 @@ import { REFRESH_BLOCK_TIME } from '../data/CONSTANTS';
  * @returns {Function} return.handleOpenWethModal - Opens WETH modal and sets its mode.
  * @returns {Object} return.filters - Current filter values for rarity and element.
  * @returns {Function} return.handleFilterChange - Updates filter state.
- * @returns {boolean} return.isMobile - Indicates if current screen is mobile (<1180px).
- * @returns {boolean} return.isMediumScreen - Indicates if screen is between 1180px and 1400px.
  * @returns {Array} return.statistics - Stats object array for display: Guardians, Active Players, Battles disputed.
  * @returns {number} return.omnoGEMsBalance - Current balance of GEMs in Omno.
  * @returns {number} return.omnoWethBalance - Current balance of WETH in Omno.
@@ -117,7 +115,7 @@ export const useBattlegroundState = infoAccount => {
                 accountRs && dispatch(fetchUserBattles(accountRs)),
                 dispatch(fetchLeaderboards()),
                 cards && accountRs && dispatch(fetchBattleData({ accountRs, cards })),
-                updateFilteredCards(accountRs, cards, dispatch)
+                updateFilteredCards(accountRs, cards, dispatch),
             ]);
         }
     }, [currentBlock, prev_height, dispatch, accountRs, cards]);
@@ -154,9 +152,6 @@ export const useBattlegroundState = infoAccount => {
         onOpenWeth();
     };
 
-    const [isMobile] = useMediaQuery('(max-width: 1179px)');
-    const [isMediumScreen] = useMediaQuery('(min-width: 1180px) and (max-width: 1400px)');
-
     const handleFilterChange = (type, value) => {
         setFilters(prev => ({ ...prev, [type]: Number(value) }));
     };
@@ -189,8 +184,6 @@ export const useBattlegroundState = infoAccount => {
         handleOpenWethModal,
         filters,
         handleFilterChange,
-        isMobile,
-        isMediumScreen,
         statistics,
         omnoGEMsBalance,
         omnoWethBalance,
