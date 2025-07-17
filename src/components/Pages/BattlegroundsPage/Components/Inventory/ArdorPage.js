@@ -14,49 +14,31 @@ import {
 } from '@chakra-ui/react';
 import CardBadges from '../../../../Cards/CardBadges';
 import ArdorCards from './ArdorCards';
-import { useEffect, useState } from 'react';
-import { addressToAccountId } from '../../../../../services/Ardor/ardorInterface';
-import { getUsersState } from '../../../../../services/Ardor/omnoInterface';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const ArdorPage = ({ cards, infoAccount, isMobile, gridColumns }) => {
-    const { accountRs } = infoAccount;
+/**
+ * @name ArdorPage
+ * @description UI component that renders the user's available cards to send back to the inventory from the army (Omno).
+ * It allows filtering cards by rarity, element, and continent, and lets the user select cards to be sent.
+ * Includes a preview of selected cards and integrates the `ArdorCards` component for confirmation and dispatch.
+ * The component manages selected cards and filters locally, uses Redux to retrieve card data, and is responsive to mobile layout.
+ * @param {Object} infoAccount - Object with user account info, used for PIN validation and transactions.
+ * @param {boolean} isMobile - Whether the layout is mobile-sized; affects layout and spacing.
+ * @param {Function} gridColumns - Callback that returns number of columns for responsive card grid layout.
+ * @param {Function} handleCloseInventory - Callback to close the inventory modal after a successful action.
+ * @returns {JSX.Element} ArdorPage card selection interface.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+const ArdorPage = ({ infoAccount, isMobile, gridColumns, handleCloseInventory }) => {
     const [selectedCards, setSelectedCards] = useState([]);
-    const [filteredCards, setFilteredCards] = useState([]);
     const [filters, setFilters] = useState({
         rarity: '',
         element: '',
         domain: '',
     });
     const { soldiers } = useSelector(state => state.soldiers);
-
-    useEffect(() => {
-        const filterCards = async () => {
-            const userInfo = await getUserState();
-            if (userInfo?.balance) {
-                const assetIds = Object.keys(userInfo?.balance?.asset);
-
-                const matchingCards = cards
-                    .filter(card => assetIds.includes(card.asset))
-                    .map(card => ({
-                        ...card,
-                        omnoQuantity: userInfo?.balance?.asset[card.asset],
-                    }));
-
-                setFilteredCards(matchingCards);
-            }
-        };
-        filterCards();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cards, infoAccount]);
-
-    const getUserState = async () => {
-        const accountId = addressToAccountId(accountRs);
-        let res = await getUsersState().then(res => {
-            return res.data.find(item => item.id === accountId);
-        });
-        return res;
-    };
+    const { filteredCards } = useSelector(state => state.battlegrounds);
 
     const handleDeleteSelectedCard = card => {
         const newSelectedCards = selectedCards.filter(selectedCard => selectedCard.asset !== card);
@@ -214,7 +196,7 @@ const ArdorPage = ({ cards, infoAccount, isMobile, gridColumns }) => {
                         display="flex"
                         justifyContent="center">
                         <SimpleGrid
-                            columns={gridColumns()}
+                            columns={gridColumns}
                             gap={4}
                             align={'center'}
                             overflowY={'auto'}
@@ -298,6 +280,7 @@ const ArdorPage = ({ cards, infoAccount, isMobile, gridColumns }) => {
                             notSelectedCards={notSelectedCards}
                             handleEdit={handleEdit}
                             handleDeleteSelectedCard={handleDeleteSelectedCard}
+                            handleCloseInventory={handleCloseInventory}
                         />
                     </Box>
                 </Stack>
