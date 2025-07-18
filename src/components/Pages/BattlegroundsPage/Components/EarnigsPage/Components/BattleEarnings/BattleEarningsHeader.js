@@ -1,4 +1,7 @@
-import { Grid, GridItem, Image, Select, Stack, Text } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
+import ArenaSelect from './ArenaSelect';
+import RewardColumn from '../RewardColumn';
+import ColumnLabel from '../../../ColumnLabel';
 
 /**
  * @name BattleEarningsHeader
@@ -20,69 +23,27 @@ const BattleEarningsHeader = ({ isMobile, selectedArena, setSelectedArena, arena
         <Grid
             templateColumns="repeat(5, 1fr)"
             gap={4}
-            w={'90%'}
-            mx={'auto'}
+            w="90%"
+            mx="auto"
             mt={3}
             p={1}
-            borderRadius={'10px'}
-            border={'2px solid #C1A34C'}
-            color={'#FFF'}
-            bgColor={'inherit'}
+            borderRadius="10px"
+            border="2px solid #C1A34C"
+            color="#FFF"
+            bgColor="inherit"
             position="sticky"
             top="0"
             zIndex={1}>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Text fontFamily={'Inter, System'} fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
-                    DATE
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Select
-                    variant={'unstyled'}
-                    value={selectedArena}
-                    onChange={e => setSelectedArena(Number(e.target.value))}
-                    textAlign={'center'}
-                    textTransform={'uppercase'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    fontSize={isMobile ? 'sm' : 'md'}
-                    mx="auto">
-                    {arenas
-                        ? arenas.map(arena => (
-                              <option
-                                  key={arena.arenaId}
-                                  value={arena.arenaId}
-                                  style={{
-                                      backgroundColor: '#FFF',
-                                      color: '#000',
-                                  }}>
-                                  {arena.name}
-                              </option>
-                          ))
-                        : 'ALL LANDS'}
-                </Select>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Stack direction={'row'} w={'fit-content'} mx={'auto'}>
-                    <Text fontFamily={'Inter, System'} my={'auto'} fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
-                        GEM
-                    </Text>
-                    <Image src="/images/currency/gem.png" boxSize={'30px'} />
-                </Stack>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Stack direction={'row'} w={'fit-content'} mx={'auto'}>
-                    <Text fontFamily={'Inter, System'} my={'auto'} fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
-                        WETH
-                    </Text>
-                    <Image src="/images/currency/weth.png" boxSize={'30px'} />
-                </Stack>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Text fontFamily={'Inter, System'} fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
-                    CARDS
-                </Text>
-            </GridItem>
+            <ColumnLabel label="DATE" isMobile={isMobile} />
+            <ArenaSelect
+                selectedArena={selectedArena}
+                setSelectedArena={setSelectedArena}
+                arenas={arenas}
+                isMobile={isMobile}
+            />
+            <RewardColumn label="GEM" imageSrc="/images/currency/gem.png" isMobile={isMobile} />
+            <RewardColumn label="WETH" imageSrc="/images/currency/weth.png" isMobile={isMobile} />
+            <ColumnLabel label="CARDS" isMobile={isMobile} />
         </Grid>
     );
 };

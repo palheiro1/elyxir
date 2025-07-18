@@ -1,5 +1,6 @@
-import { Grid, GridItem, Text } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
 import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
+import CustomCell from '../../CustomCell';
 
 /**
  * @name CombativityLeaderboardRow
@@ -19,49 +20,9 @@ const CombativityLeaderboardRow = ({ index, accountRS, points, name }) => {
     return (
         points > 0 && (
             <Grid templateColumns="repeat(3, 1fr)" gap={4} w="100%" mx="auto" mt={0} borderRadius="10px" color={color}>
-                <GridItem colSpan={1} textAlign="center">
-                    <Text
-                        p={3}
-                        maxH={'45px'}
-                        fontFamily={'Inter, System'}
-                        fontWeight={700}
-                        h="100%"
-                        fontSize={isMobile ? 'xs' : 'md'}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center">
-                        {`#${index + 1}`}
-                    </Text>
-                </GridItem>
-                <GridItem colSpan={1} textAlign="center">
-                    <Text
-                        p={3}
-                        maxH={'45px'}
-                        fontFamily={'Inter, System'}
-                        fontWeight={700}
-                        h="100%"
-                        fontSize={isMobile ? 'xs' : 'md'}
-                        display="flex"
-                        alignItems="center"
-                        textTransform={'uppercase'}
-                        justifyContent="center">
-                        {name ? name : accountRS}
-                    </Text>
-                </GridItem>
-                <GridItem colSpan={1} textAlign="center">
-                    <Text
-                        p={3}
-                        maxH={'45px'}
-                        fontFamily={'Inter, System'}
-                        fontWeight={700}
-                        h="100%"
-                        fontSize={isMobile ? 'xs' : 'md'}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center">
-                        {points ? Math.floor(points).toLocaleString('de-DE') : 0}
-                    </Text>
-                </GridItem>
+                <CustomCell value={`#${index + 1}`} isMobile={isMobile} />
+                <CustomCell value={name ? name : accountRS} isMobile={isMobile} />
+                <CustomCell value={points ? Math.floor(points).toLocaleString('de-DE') : 0} isMobile={isMobile} />
             </Grid>
         )
     );

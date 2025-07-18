@@ -17,66 +17,68 @@ import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegro
 const TypesLeaderboard = ({ color }) => {
     const { entries, data } = useSelector(state => state.leaderboards);
     const { isMobile } = useBattlegroundBreakpoints();
-    return (
-        <Stack className="custom-scrollbar">
-            {entries === null ? (
-                <Box
-                    h={'100%'}
-                    position={'absolute'}
-                    color={'#FFF'}
-                    alignContent={'center'}
-                    top={'50%'}
-                    left={'50%'}
-                    w={'100%'}
-                    textAlign={'center'}
-                    transform={'translate(-50%, -50%)'}>
-                    <Spinner color="#FFF" w={20} h={20} />
-                </Box>
-            ) : (
-                <>
-                    {entries.length > 0 ? (
-                        <>
-                            {/* Header fijo */}
-                            <TypesLeaderboardsHeader color={color} />
-                            <Box
-                                maxHeight={isMobile ? '30vh' : '45vh'}
-                                overflowY="auto"
-                                bgColor={'#323636'}
-                                w={'90%'}
-                                mx={'auto'}
-                                borderRadius={'10px'}
-                                p={2}>
-                                {entries.map((entry, index) => (
-                                    <TypesLeaderboardRow
-                                        key={index}
-                                        index={index}
-                                        data={entry}
-                                        isMobile={isMobile}
-                                        type={data.type}
-                                    />
-                                ))}
-                            </Box>
-                        </>
-                    ) : (
-                        <Box
-                            h={'100%'}
-                            position={'absolute'}
-                            color={'#FFF'}
-                            alignContent={'center'}
-                            top={'50%'}
-                            left={'50%'}
-                            w={'100%'}
-                            textAlign={'center'}
-                            transform={'translate(-50%, -50%)'}>
-                            <Text fontFamily={'Chelsea Market, System'} fontWeight={100} fontSize={'medium'}>
-                                No participants yet
-                            </Text>
-                        </Box>
-                    )}
-                </>
-            )}
-        </Stack>
+
+    const renderLoading = () => (
+        <Box
+            h="100%"
+            position="absolute"
+            color="#FFF"
+            alignContent="center"
+            top="50%"
+            left="50%"
+            w="100%"
+            textAlign="center"
+            transform="translate(-50%, -50%)">
+            <Spinner color="#FFF" w={20} h={20} />
+        </Box>
     );
+
+    const renderEmpty = () => (
+        <Box
+            h="100%"
+            position="absolute"
+            color="#FFF"
+            alignContent="center"
+            top="50%"
+            left="50%"
+            w="100%"
+            textAlign="center"
+            transform="translate(-50%, -50%)">
+            <Text fontFamily="Chelsea Market, System" fontWeight={100} fontSize="medium">
+                No participants yet
+            </Text>
+        </Box>
+    );
+
+    const renderTable = () => (
+        <>
+            <TypesLeaderboardsHeader color={color} />
+            <Box
+                maxHeight={isMobile ? '30vh' : '45vh'}
+                overflowY="auto"
+                bgColor="#323636"
+                w="90%"
+                mx="auto"
+                borderRadius="10px"
+                p={2}>
+                {entries.map((entry, index) => (
+                    <TypesLeaderboardRow key={index} index={index} data={entry} isMobile={isMobile} type={data.type} />
+                ))}
+            </Box>
+        </>
+    );
+
+    let content;
+
+    if (entries === null) {
+        content = renderLoading();
+    } else if (entries.length === 0) {
+        content = renderEmpty();
+    } else {
+        content = renderTable();
+    }
+
+    return <Stack className="custom-scrollbar">{content}</Stack>;
 };
 
 export default TypesLeaderboard;

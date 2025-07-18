@@ -1,5 +1,6 @@
 import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
-import { Grid, GridItem, Text } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
+import ColumnLabel from '../../ColumnLabel';
 
 /**
  * @name CombativityLeaderboardHeader
@@ -22,21 +23,9 @@ const CombativityLeaderboardHeader = ({ color }) => {
             p={5}
             borderRadius="10px"
             bgColor={color}>
-            <GridItem colSpan={1} textAlign="center" my="auto">
-                <Text fontFamily="Inter, System" fontWeight={700} color="#FFF" fontSize={isMobile ? 'sm' : 'md'}>
-                    POSITION
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my="auto">
-                <Text fontFamily="Inter, System" fontWeight={700} color="#FFF" fontSize={isMobile ? 'sm' : 'md'}>
-                    NAME/ ADDRESS
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my="auto">
-                <Text fontFamily="Inter, System" fontWeight={700} color="#FFF" fontSize={isMobile ? 'sm' : 'md'}>
-                    POINTS
-                </Text>
-            </GridItem>
+            <ColumnLabel label="POSITION" color="#FFF" isMobile={isMobile} />
+            <ColumnLabel label="NAME/ ADDRESS" color="#FFF" isMobile={isMobile} />
+            <ColumnLabel label="POINTS" color="#FFF" isMobile={isMobile} />
         </Grid>
     );
 };

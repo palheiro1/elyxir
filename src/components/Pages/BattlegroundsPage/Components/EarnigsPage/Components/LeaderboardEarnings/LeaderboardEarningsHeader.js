@@ -1,4 +1,6 @@
-import { Grid, GridItem, Image, Stack, Text } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
+import RewardColumn from '../RewardColumn';
+import ColumnLabel from '../../../ColumnLabel';
 
 /**
  * @name LeaderboardEarningsHeader
@@ -27,53 +29,13 @@ const LeaderboardEarningsHeader = ({ isMobile }) => {
             position="sticky"
             top="0"
             zIndex={1}>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Text fontFamily={'Inter, System'} fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
-                    DATE
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Text fontFamily={'Inter, System'} fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
-                    PHANTEON
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Stack direction={'row'} w={'fit-content'} mx={'auto'}>
-                    <Text fontFamily={'Inter, System'} my={'auto'} fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
-                        GEM
-                    </Text>
-                    <Image src="/images/currency/gem.png" boxSize={'30px'} />
-                </Stack>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Stack direction={'row'} w={'fit-content'} mx={'auto'}>
-                    <Text fontFamily={'Inter, System'} my={'auto'} fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
-                        WETH
-                    </Text>
-                    <Image src="/images/currency/weth.png" boxSize={'30px'} />
-                </Stack>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Stack direction={'row'} w={'fit-content'} mx={'auto'}>
-                    <Text fontFamily={'Inter, System'} my={'auto'} fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
-                        MANA
-                    </Text>
-                    <Image src="/images/currency/mana.png" boxSize={'30px'} />
-                </Stack>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Stack direction={'row'} w={'fit-content'} mx={'auto'}>
-                    <Text fontFamily={'Inter, System'} my={'auto'} fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
-                        GIFTZ
-                    </Text>
-                    <Image src="/images/currency/giftz.png" boxSize={'30px'} />
-                </Stack>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Text fontFamily={'Inter, System'} fontWeight={700} fontSize={isMobile ? 'sm' : 'md'}>
-                    SPECIAL CARDS
-                </Text>
-            </GridItem>
+            <ColumnLabel label="DATE" isMobile={isMobile} />
+            <ColumnLabel label="PHANTEON" isMobile={isMobile} />
+            <RewardColumn label="GEM" imageSrc="/images/currency/gem.png" isMobile={isMobile} />
+            <RewardColumn label="WETH" imageSrc="/images/currency/weth.png" isMobile={isMobile} />
+            <RewardColumn label="MANA" imageSrc="/images/currency/mana.png" isMobile={isMobile} />
+            <RewardColumn label="GIFTZ" imageSrc="/images/currency/giftz.png" isMobile={isMobile} />
+            <ColumnLabel label="SPECIAL CARDS" isMobile={isMobile} />
         </Grid>
     );
 };

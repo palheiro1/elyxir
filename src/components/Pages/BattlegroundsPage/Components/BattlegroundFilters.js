@@ -20,7 +20,7 @@ import { getLevelIconInt, getMediumIconInt } from '../Utils/BattlegroundsUtils';
  */
 const BattlegroundFilters = ({ isMobile, filters, handleFilterChange }) => {
     return (
-        <Stack direction="row" color="#FFF" zIndex={10} mt={isMobile && 3}>
+        <Stack direction="row" color="#FFF" zIndex={3} mt={isMobile && 3}>
             {/* Rarity Filter */}
             <Text my="auto" fontSize="md" fontWeight={500} mx={3}>
                 Lands

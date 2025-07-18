@@ -1,5 +1,6 @@
-import { Grid, GridItem, Text } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
 import { formatAddress } from '../../../Utils/BattlegroundsUtils';
+import CustomCell from '../../CustomCell';
 
 /**
  * @name TypesLeaderboardRow
@@ -31,122 +32,33 @@ const TypesLeaderboardRow = ({ index, data, isMobile, type }) => {
         defenseDurationPoints,
     } = data;
 
+    if (totalPoints <= 0) return null;
+
     const bg = index % 2 === 0 ? '#2A2E2E' : '#323636';
     const fiveWinners = index < 5 ? '#D597B2' : '#FFF';
-    const oneWiner = index === 0 ? '#D597B2' : '#FFF';
-    const color = type === 'general' ? fiveWinners : oneWiner;
+    const oneWinner = index === 0 ? '#D597B2' : '#FFF';
+    const color = type === 'general' ? fiveWinners : oneWinner;
+
+    const displayName = name || formatAddress(accountRS);
+
+    const formatPoints = points => (points ? (points * 1000).toFixed(0).toLocaleString('de-DE') : 0);
+
+    const conquered = formatPoints(landsConqueredPoints);
+    const defenses = formatPoints(successfullDefensesPoints);
+    const efficiency = formatPoints(battleEfficiencyPoints);
+    const duration = formatPoints(defenseDurationPoints);
+    const total = formatPoints(totalPoints);
 
     return (
-        totalPoints > 0 && (
-            <Grid templateColumns="repeat(7, 1fr)" gap={4} w="100%" mx="auto" mt={0} bgColor={bg} borderRadius="10px">
-                <GridItem colSpan={1} textAlign="center">
-                    <Text
-                        p={1}
-                        maxH={'45px'}
-                        fontFamily={'Inter, System'}
-                        fontWeight={700}
-                        color={color}
-                        h="100%"
-                        fontSize={isMobile ? 'xs' : 'md'}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center">
-                        {`#${index + 1}`}
-                    </Text>
-                </GridItem>
-                <GridItem colSpan={1} textAlign="center">
-                    <Text
-                        p={1}
-                        maxH={'45px'}
-                        fontFamily={'Inter, System'}
-                        fontWeight={700}
-                        color={color}
-                        h="100%"
-                        fontSize={isMobile ? 'xs' : 'md'}
-                        display="flex"
-                        alignItems="center"
-                        textTransform={'uppercase'}
-                        justifyContent="center">
-                        {name ? name : formatAddress(accountRS)}
-                    </Text>
-                </GridItem>
-                <GridItem colSpan={1} textAlign="center">
-                    <Text
-                        p={1}
-                        maxH={'45px'}
-                        fontFamily={'Inter, System'}
-                        fontWeight={700}
-                        h="100%"
-                        fontSize={isMobile ? 'xs' : 'md'}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center">
-                        {landsConqueredPoints ? (landsConqueredPoints * 1000).toFixed(0).toLocaleString('de-DE') : 0}
-                    </Text>
-                </GridItem>
-                <GridItem colSpan={1} textAlign="center">
-                    <Text
-                        p={1}
-                        maxH={'45px'}
-                        fontFamily={'Inter, System'}
-                        fontWeight={700}
-                        h="100%"
-                        fontSize={isMobile ? 'xs' : 'md'}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center">
-                        {successfullDefensesPoints
-                            ? (successfullDefensesPoints * 1000).toFixed(0).toLocaleString('de-DE')
-                            : 0}
-                    </Text>
-                </GridItem>
-                <GridItem colSpan={1} textAlign="center">
-                    <Text
-                        p={1}
-                        maxH={'45px'}
-                        fontFamily={'Inter, System'}
-                        fontWeight={700}
-                        h="100%"
-                        fontSize={isMobile ? 'xs' : 'md'}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center">
-                        {battleEfficiencyPoints
-                            ? (battleEfficiencyPoints * 1000).toFixed(0).toLocaleString('de-DE')
-                            : 0}
-                    </Text>
-                </GridItem>
-                <GridItem colSpan={1} textAlign="center">
-                    <Text
-                        p={1}
-                        maxH={'45px'}
-                        fontFamily={'Inter, System'}
-                        fontWeight={700}
-                        h="100%"
-                        fontSize={isMobile ? 'xs' : 'md'}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center">
-                        {defenseDurationPoints ? (defenseDurationPoints * 1000).toFixed(0).toLocaleString('de-DE') : 0}
-                    </Text>
-                </GridItem>
-                <GridItem colSpan={1} textAlign="center">
-                    <Text
-                        p={1}
-                        maxH={'45px'}
-                        fontFamily={'Inter, System'}
-                        fontWeight={700}
-                        h="100%"
-                        fontSize={isMobile ? 'xs' : 'md'}
-                        display="flex"
-                        alignItems="center"
-                        color={'#7FC0BE'}
-                        justifyContent="center">
-                        {totalPoints ? (totalPoints * 1000).toFixed(0).toLocaleString('de-DE') : 0}
-                    </Text>
-                </GridItem>
-            </Grid>
-        )
+        <Grid templateColumns="repeat(7, 1fr)" gap={4} w="100%" mx="auto" mt={0} bgColor={bg} borderRadius="10px">
+            <CustomCell value={`#${index + 1}`} isMobile={isMobile} color={color} padding={1} />
+            <CustomCell value={displayName} isMobile={isMobile} color={color} padding={1} isUppercase />
+            <CustomCell value={conquered} isMobile={isMobile} padding={1} />
+            <CustomCell value={defenses} isMobile={isMobile} padding={1} />
+            <CustomCell value={efficiency} isMobile={isMobile} padding={1} />
+            <CustomCell value={duration} isMobile={isMobile} padding={1} />
+            <CustomCell value={total} isMobile={isMobile} padding={1} color={'#7FC0BE'} />
+        </Grid>
     );
 };
 

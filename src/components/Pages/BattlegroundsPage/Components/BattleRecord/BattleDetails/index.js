@@ -6,11 +6,10 @@ import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { errorToast } from '../../../../../../utils/alerts';
 import locations from '../../../assets/LocationsEnum';
 import BattleDetailsHeader from './Components/BattleDetailsHeader';
-import AttackerCardsSummary from './Components/AttackerCardsSummary';
 import BattleRounds from './Components/BattleRounds';
-import DefenderCardsSummary from './Components/DefenderCardsSummary';
 import BattleDetailsFooter from './Components/BattleDetailsFooter';
 import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
+import BattleCardsSummary from './Components/BattleCardsSummary';
 
 /**
  * @name BattleDetails
@@ -198,14 +197,16 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                 domainName={domainName}
             />
 
-            <AttackerCardsSummary
+            <BattleCardsSummary
                 infoAccount={infoAccount}
-                attackerInfo={attackerInfo}
+                playerInfo={attackerInfo}
                 cards={cards}
-                attackerArmy={battleInfo.attackerArmy}
+                army={battleInfo.attackerArmy}
                 battleInfo={battleInfo}
                 battleResults={battleResults}
+                role="attacker"
             />
+
             <BattleRounds
                 battleResults={battleResults}
                 battleInfo={battleInfo}
@@ -218,14 +219,16 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                 isMediumScreen={isMediumScreen}
             />
 
-            <DefenderCardsSummary
+            <BattleCardsSummary
                 infoAccount={infoAccount}
-                defenderInfo={defenderInfo}
+                playerInfo={defenderInfo}
                 cards={cards}
-                defenderArmy={battleInfo.defenderArmy}
+                army={battleInfo.defenderArmy}
                 battleInfo={battleInfo}
                 battleResults={battleResults}
+                role="defender"
             />
+
             <BattleDetailsFooter
                 isDefenderWin={battleInfo.isDefenderWin}
                 defenderInfo={defenderInfo}

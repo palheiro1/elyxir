@@ -14,6 +14,8 @@ import { Box, Image, Stack, Text, Tooltip } from '@chakra-ui/react';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const CapturedCard = ({ capturedCard, isUserDefending, isDefenderWin }) => {
+    const labelText = isUserDefending === isDefenderWin ? 'OBTAINED CARD:' : 'CAPTURED CARD:';
+
     return (
         <Stack direction={'row'} spacing={1} alignItems={'end'} mx={'auto'} w={'30%'} h={'100%'}>
             <Tooltip
@@ -27,13 +29,7 @@ const CapturedCard = ({ capturedCard, isUserDefending, isDefenderWin }) => {
                 hasArrow>
                 <Stack direction={'row'} mx={'auto'} my={'auto'}>
                     <Text color={'#000'} fontSize={'large'}>
-                        {isUserDefending
-                            ? isDefenderWin
-                                ? 'OBTAINED CARD:'
-                                : 'CAPTURED CARD: '
-                            : isDefenderWin
-                            ? 'CAPTURED CARD:'
-                            : 'OBTAINED CARD: '}
+                        {labelText}
                     </Text>
                     <TriangleUpIcon color={'#000'} my={'auto'} />
                 </Stack>

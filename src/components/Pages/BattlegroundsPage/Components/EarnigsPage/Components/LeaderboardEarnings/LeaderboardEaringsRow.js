@@ -1,7 +1,8 @@
-import { Grid, GridItem, Text } from '@chakra-ui/react';
+import { Grid, Text } from '@chakra-ui/react';
 import { GEMASSET, GIFTZASSET, MANAASSET, NQTDIVIDER, WETHASSET } from '../../../../../../../data/CONSTANTS';
 import { formatTimeStamp } from '../../../../Utils/BattlegroundsUtils';
 import { useEffect, useState } from 'react';
+import CustomCell from '../../../CustomCell';
 
 /**
  * @name LeaderboardEarningsRow
@@ -100,109 +101,45 @@ const LeaderboardEaringsRow = ({ isMobile, leaderboardData, cards, setAllTimeRew
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const rowData = [
+        {
+            key: 'timestamp',
+            value: formatTimeStamp(leaderboardData[0]?.timestamp),
+        },
+        {
+            key: 'type',
+            value: leaderboardsMapping[leaderboardData[0]?.leaderboardType] || 'Unknown',
+        },
+        {
+            key: 'gem',
+            value: rewards.gemReward > 0 ? rewards.gemReward / NQTDIVIDER : 0,
+        },
+        {
+            key: 'weth',
+            value: rewards.wethReward > 0 ? rewards.wethReward / NQTDIVIDER : 0,
+        },
+        {
+            key: 'mana',
+            value: rewards.manaReward > 0 ? rewards.manaReward / NQTDIVIDER : 0,
+        },
+        {
+            key: 'giftz',
+            value: rewards.giftzReward,
+        },
+        {
+            key: 'cards',
+            value:
+                cardsRewards && cardsRewards.length > 0
+                    ? cardsRewards.map((card, i) => <Text key={i}>{card.name}</Text>)
+                    : ' - ',
+        },
+    ];
+
     return (
-        <Grid templateColumns="repeat(7, 1fr)" gap={4} w="100%" mx="auto" mt={2} borderRadius="10px" color={'#FFF'}>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={3}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {formatTimeStamp(leaderboardData[0].timestamp)}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={3}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {leaderboardsMapping[leaderboardData[0].leaderboardType]}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={3}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    textTransform={'uppercase'}
-                    justifyContent="center">
-                    {rewards.gemReward > 0 ? rewards.gemReward / NQTDIVIDER : 0}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={3}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {rewards.wethReward > 0 ? rewards.wethReward / NQTDIVIDER : 0}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={3}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {rewards.manaReward > 0 ? rewards.manaReward / NQTDIVIDER : 0}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={3}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {rewards.giftzReward}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={3}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={700}
-                    h="100%"
-                    fontSize={isMobile ? 'xs' : 'md'}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {cardsRewards && cardsRewards.length > 0
-                        ? cardsRewards.map(card => <Text>{card.name}</Text>)
-                        : ' - '}
-                </Text>
-            </GridItem>
+        <Grid templateColumns="repeat(7, 1fr)" gap={4} w="100%" mx="auto" mt={2} borderRadius="10px" color="#FFF">
+            {rowData.map(col => (
+                <CustomCell key={col.key} value={col.value} isMobile={isMobile} />
+            ))}
         </Grid>
     );
 };

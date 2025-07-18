@@ -1,5 +1,6 @@
 import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
-import { Grid, GridItem, Text } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
+import ColumnLabel from '../../ColumnLabel';
 
 /**
  * @name TypesLeaderboardsHeader
@@ -27,41 +28,13 @@ const TypesLeaderboardsHeader = ({ color }) => {
             position="sticky"
             top="0"
             zIndex={1}>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Text fontFamily={'Inter, System'} fontWeight={700} fontSize={isMobile ? 'xs' : 'md'}>
-                    POSITION
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Text fontFamily={'Inter, System'} fontWeight={700} fontSize={isMobile ? 'xs' : 'md'}>
-                    NAME/ ADDRESS
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Text fontFamily={'Inter, System'} fontWeight={700} fontSize={isMobile ? 'xs' : 'md'}>
-                    LANDS CONQUERED
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Text fontFamily={'Inter, System'} fontWeight={700} fontSize={isMobile ? 'xs' : 'md'}>
-                    SUCCESSFUL DEFENSES
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Text fontFamily={'Inter, System'} fontWeight={700} fontSize={isMobile ? 'xs' : 'md'}>
-                    BATTLE EFFICIENCY
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Text fontFamily={'Inter, System'} fontWeight={700} fontSize={isMobile ? 'xs' : 'md'}>
-                    DEFENSE DURATION
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center" my={'auto'}>
-                <Text fontFamily={'Inter, System'} fontWeight={700} fontSize={isMobile ? 'xs' : 'md'}>
-                    TOTAL POINTS
-                </Text>
-            </GridItem>
+            <ColumnLabel label="POSITION" isMobile={isMobile} />
+            <ColumnLabel label="NAME/ ADDRESS" isMobile={isMobile} />
+            <ColumnLabel label="LANDS CONQUERED" isMobile={isMobile} />
+            <ColumnLabel label="SUCCESSFUL DEFENSES" isMobile={isMobile} />
+            <ColumnLabel label="BATTLE EFFICIENCY" isMobile={isMobile} />
+            <ColumnLabel label="DEFENSE DURATION" isMobile={isMobile} />
+            <ColumnLabel label="TOTAL POINTS" isMobile={isMobile} />
         </Grid>
     );
 };
