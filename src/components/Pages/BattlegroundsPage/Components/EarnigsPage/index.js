@@ -2,12 +2,26 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { Box, Heading, IconButton, Image, Select, Stack } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Overlay } from '../../../../ui/Overlay';
-import BattlesEarnigs from './BattlesEarnigs';
-import LeaderboardsEarnigs from './LeaderboardsEarnigs';
+import BattlesEarnigs from './Components/BattleEarnings';
+import LeaderboardsEarnigs from './Components/LeaderboardEarnings';
+import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
 
-const Earnings = ({ infoAccount, isMobile, closeEarnigs, cards }) => {
+/**
+ * @name Earnings
+ * @description Main earnings modal component that displays either battle earnings or pantheon leaderboard earnings
+ * based on user selection. It renders a modal overlay with a close button, a select dropdown to switch
+ * between "Battles" and "Pantheons", and the corresponding earnings component below.
+ * The modal is centered and scrollable with responsive styling for mobile.
+ * @param {Object} props - Component props.
+ * @param {Object} props.infoAccount - User account information.
+ * @param {Function} props.closeEarnigs - Function to close the earnings modal.
+ * @param {Array} props.cards - Array of user cards for display in earnings components.
+ * @returns {JSX.Element} Earnings modal component.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+const Earnings = ({ infoAccount, closeEarnigs, cards }) => {
     const [option, setOption] = useState(1);
-
+    const { isMobile } = useBattlegroundBreakpoints();
     return (
         <>
             <Overlay isVisible={true} handleClose={closeEarnigs} />
@@ -15,8 +29,8 @@ const Earnings = ({ infoAccount, isMobile, closeEarnigs, cards }) => {
                 pos={'fixed'}
                 bgColor={'#1F2323'}
                 zIndex={99}
-                w={'80%'}
-                h={'90%'}
+                w={isMobile ? '90%' : '80%'}
+                h={isMobile ? '95%' : '90%'}
                 borderRadius={'25px'}
                 overflowY={'scroll'}
                 className="custom-scrollbar"

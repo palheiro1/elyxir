@@ -10,6 +10,7 @@ import '@fontsource/chelsea-market';
 import { SelectHandPage } from './Components/SelectHandPage';
 import BattleResults from './Components/BattleResults';
 import BattleInventory from './Components/BattleInventory';
+import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name BattleWindow
@@ -25,7 +26,6 @@ import BattleInventory from './Components/BattleInventory';
  * @param {Array} filteredCards - Cards filtered based on user selection criteria.
  * @param {number} omnoGEMsBalance - User's balance of GEM tokens.
  * @param {number} omnoWethBalance - User's balance of wETH tokens.
- * @param {boolean} isMobile - Flag indicating if the user is on a mobile device.
  * @returns {JSX.Element} JSX representing the battle window UI.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
@@ -37,7 +37,6 @@ export const BattleWindow = ({
     filteredCards,
     omnoGEMsBalance,
     omnoWethBalance,
-    isMobile,
 }) => {
     const [openIventory, setOpenIventory] = useState(false);
     const [index, setIndex] = useState('');
@@ -57,6 +56,8 @@ export const BattleWindow = ({
         element: '-1',
         domain: '-1',
     });
+
+    const { isMobile } = useBattlegroundBreakpoints();
 
     const handleRarityChange = event => {
         setFilters(prevFilters => ({

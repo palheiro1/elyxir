@@ -43,11 +43,11 @@ const stepOne = ({ isMobile, setImagesLoaded }) => {
                 fontFamily={'Chelsea Market, system-ui'}
                 color={'#FFF'}
                 display={'flex'}
-                mt={'5%'}
+                mt={!isMobile && '5%'}
                 direction={'column'}
                 fontWeight={'100'}
                 fontSize={isMobile ? 'small' : 'large'}>
-                <Text mt={8}>Welcome to</Text> <Img src={logo} w={'30%'} mx={'auto'} />
+                <Text mt={8}>Welcome to</Text> <Img src={logo} w={!isMobile ? '30%' : '20%'} mx={'auto'} />
             </Stack>
             <Box w={'100%'}>
                 <Heading
@@ -68,10 +68,10 @@ const stepOne = ({ isMobile, setImagesLoaded }) => {
                         fontFamily={'Inter, sans-serif'}
                         fontWeight={'400'}
                         fontSize={isMobile ? 'xs' : 'md'}
-                        mx={!isMobile && 'auto'}
                         ml={isMobile && '0'}
-                        mt={6}
+                        mt={!isMobile ? 6 : 3}
                         w={isMobile ? '400px' : '500px'}
+                        mx={'auto'}
                         textAlign={'justify'}>
                         <strong>Battlegrounds</strong> is the playground for Mythical Beings NFTs. The world is divided
                         into {locations.length} territories, each of which can be conquered and defended by a battalion

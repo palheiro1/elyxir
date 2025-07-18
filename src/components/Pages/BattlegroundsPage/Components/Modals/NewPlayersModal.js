@@ -2,17 +2,18 @@ import { Overlay } from '../../../../ui/Overlay';
 import { Box, Button, IconButton, Image, Stack, Text } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import logo from '../../assets/image.png';
+import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name NewPlayersModal
  * @description Modal component shown to new players who don't have any cards in Battlegrounds. Encourages them to deposit cards by opening the inventory.
  * @param {Function} handleClose - Function to close the modal.
  * @param {Function} setOpenInventory - Setter to open the inventory interface.
- * @param {Boolean} isMobile - Indicates whether the device is a mobile screen (adjusts layout and font sizes).
  * @returns {JSX.Element} A styled modal with instructions for new players and a button to open the inventory.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const NewPlayersModal = ({ handleClose, setOpenInventory, isMobile, setHasSeenNewPlayersModal }) => {
+const NewPlayersModal = ({ handleClose, setOpenInventory, setHasSeenNewPlayersModal }) => {
+    const { isMobile } = useBattlegroundBreakpoints();
     const handeOpenInventory = () => {
         setOpenInventory(true);
         handleClose();
@@ -23,7 +24,7 @@ const NewPlayersModal = ({ handleClose, setOpenInventory, isMobile, setHasSeenNe
         handleClose();
         setHasSeenNewPlayersModal(true);
     };
-    
+
     return (
         <>
             <Overlay isVisible handleClose={handleCloseButtonClick} />

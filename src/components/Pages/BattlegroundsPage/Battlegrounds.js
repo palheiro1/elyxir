@@ -12,6 +12,7 @@ import BattlegroundMenu from './Components/BattlegroundMenu';
 import BattlegroundStatistics from './Components/BattlegroundStatistics';
 import BattlegroundModals from './Components/BattlegroundModals';
 import Rewards from './Components/Rewards';
+import { useBattlegroundBreakpoints } from '../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name Battlegrounds
@@ -38,8 +39,6 @@ const Battlegrounds = ({ infoAccount }) => {
         handleOpenWethModal,
         filters,
         handleFilterChange,
-        isMobile,
-        isMediumScreen,
         statistics,
         omnoGEMsBalance,
         omnoWethBalance,
@@ -48,9 +47,9 @@ const Battlegrounds = ({ infoAccount }) => {
         IGNISBalance,
         setHasSeenNewPlayersModal,
     } = useBattlegroundState(infoAccount);
-
     const { cards } = useSelector(state => state.cards);
 
+    const { isMobile, isMediumScreen } = useBattlegroundBreakpoints();
     return (
         <>
             <Box
@@ -74,8 +73,6 @@ const Battlegrounds = ({ infoAccount }) => {
                     filteredCards={filteredCards}
                     omnoGEMsBalance={omnoGEMsBalance}
                     omnoWethBalance={omnoWethBalance}
-                    isMobile={isMobile}
-                    isMediumScreen={isMediumScreen}
                     isOpenGems={isOpenGems}
                     isOpenWeth={isOpenWeth}
                     gemsModalMode={gemsModalMode}
@@ -98,15 +95,18 @@ const Battlegrounds = ({ infoAccount }) => {
                                 mt={isMobile && 2}
                             />
                             <Rewards mx="auto" />
-                            <BattlegroundMenu setOpenModal={handleOpenModal} isMobile={isMobile} />
+                            <BattlegroundMenu setOpenModal={handleOpenModal} />
                         </Stack>
                         <Stack mx="auto" w="100%">
                             <Stack
-                                direction="row"
+                                direction={isMobile ? 'row' : 'row'}
                                 fontFamily="Chelsea Market, system-ui"
                                 mx="auto"
+                                flexWrap={'wrap'}
                                 mt={isMobile && 2}
-                                w={isMediumScreen ? '100%' : '90%'}
+                                ml={isMobile && 5}
+                                w={isMediumScreen || isMobile ? '90%' : '85%'}
+                                align={'center'}
                                 justifyContent="space-between">
                                 <BattlegroundCurrencies
                                     isMobile={isMobile}
@@ -116,11 +116,7 @@ const Battlegrounds = ({ infoAccount }) => {
                                     handleOpenWethModal={handleOpenWethModal}
                                     handleOpenGemsModal={handleOpenGemsModal}
                                 />
-                                <BattlegroundFilters
-                                    isMobile={isMobile}
-                                    filters={filters}
-                                    handleFilterChange={handleFilterChange}
-                                />
+                                <BattlegroundFilters filters={filters} handleFilterChange={handleFilterChange} />
                             </Stack>
 
                             <Maps
@@ -130,7 +126,6 @@ const Battlegrounds = ({ infoAccount }) => {
                                 handleStartBattle={() => handleOpenModal('battle')}
                                 filters={filters}
                                 w="100%"
-                                isMobile={isMobile}
                                 isMediumScreen={isMediumScreen}
                             />
 

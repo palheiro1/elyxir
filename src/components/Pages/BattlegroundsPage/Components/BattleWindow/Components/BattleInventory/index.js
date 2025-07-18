@@ -50,7 +50,7 @@ const BattleInventory = ({
     const [isMediumScreen] = useMediaQuery('(min-width: 1330px) and (max-width: 1600px)');
 
     const getColumns = useCallback(() => {
-        if (isMobile || isLittleScreen) return 3;
+        if (isMobile || isLittleScreen) return 4;
         if (isMediumScreen) return 4;
         return 5;
     }, [isMobile, isLittleScreen, isMediumScreen]);
@@ -83,7 +83,7 @@ const BattleInventory = ({
             })
             .filter(card => filters.domain === '-1' || card.channel === domainMap[filters.domain]);
     }, [availableCards, filters, soldiers]);
-    
+
     const handleCardClick = useCallback(
         card => {
             if (preSelectedCard?.asset === card.asset) {

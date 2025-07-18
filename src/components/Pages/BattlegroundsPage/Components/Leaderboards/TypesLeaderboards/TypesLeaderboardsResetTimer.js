@@ -1,6 +1,7 @@
 import { Box, Stack, Text } from '@chakra-ui/react';
-import { getTypesLeaderboardsResetBlock } from '../../../../../services/Battlegrounds/Battlegrounds';
-import { useBlockCountdown } from '../../../../../hooks/useBlockCountDown';
+import { getTypesLeaderboardsResetBlock } from '../../../../../../services/Battlegrounds/Battlegrounds';
+import { useBlockCountdown } from '../../../../../../hooks/useBlockCountDown';
+import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name TypesLeaderboardsResetTimer
@@ -9,9 +10,9 @@ import { useBlockCountdown } from '../../../../../hooks/useBlockCountDown';
  * @returns {JSX.Element} Styled countdown timer.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const TypesLeaderboardsResetTimer = ({ isMobile }) => {
+const TypesLeaderboardsResetTimer = () => {
     const timeLeft = useBlockCountdown(getTypesLeaderboardsResetBlock);
-
+    const { isMobile } = useBattlegroundBreakpoints();
     const timeItems = [
         { label: 'days', value: timeLeft.days },
         { label: 'hours', value: timeLeft.hours },
@@ -21,7 +22,7 @@ const TypesLeaderboardsResetTimer = ({ isMobile }) => {
 
     return (
         <Stack align="end" fontFamily="Chelsea Market, system-ui">
-            <Text color="white" textTransform="uppercase" letterSpacing="wide">
+            <Text color="white" textTransform="uppercase" letterSpacing="wide" fontSize={isMobile ? 'sm' : 'md'}>
                 Reset leaderboards in
             </Text>
 
@@ -31,11 +32,11 @@ const TypesLeaderboardsResetTimer = ({ isMobile }) => {
                         key={idx}
                         bg="#2b2b2b"
                         px={isMobile ? 3 : 5}
-                        py={isMobile ? 2 : 3}
+                        py={isMobile ? 1 : 3}
                         borderRadius="lg"
                         textAlign="center"
                         minW={isMobile ? '50px' : '60px'}>
-                        <Text color="white" fontSize={isMobile ? 'md' : 'lg'} fontWeight="bold">
+                        <Text color="white" fontSize={isMobile ? 'sm' : 'lg'} fontWeight="bold">
                             {item.value.toString().padStart(2, '0')}
                         </Text>
                         <Text color="whiteAlpha.700" fontSize={isMobile ? '2xs' : 'xs'}>
