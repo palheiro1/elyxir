@@ -23,7 +23,7 @@ const CapturedCardCell = ({ card, isMobile }) => (
                 placement="top"
                 hasArrow>
                 <Box
-                    p={3}
+                    p={isMobile ? 1 : 3}
                     fontFamily="Inter, System"
                     fontWeight={700}
                     h="100%"
@@ -36,8 +36,8 @@ const CapturedCardCell = ({ card, isMobile }) => (
                     <Text
                         border="2px solid #C1A34C"
                         borderRadius="20px"
-                        w="150px"
-                        p={3}
+                        w={isMobile ? '100px' : '150px'}
+                        p={isMobile ? 2 : 3}
                         maxH="45px"
                         fontFamily="Inter, System"
                         color="#C1A34C"

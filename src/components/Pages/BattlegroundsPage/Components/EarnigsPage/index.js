@@ -29,8 +29,8 @@ const Earnings = ({ infoAccount, closeEarnigs, cards }) => {
                 pos={'fixed'}
                 bgColor={'#1F2323'}
                 zIndex={99}
-                w={'80%'}
-                h={'90%'}
+                w={isMobile ? '90%' : '80%'}
+                h={isMobile ? '95%' : '90%'}
                 borderRadius={'25px'}
                 overflowY={'scroll'}
                 className="custom-scrollbar"
