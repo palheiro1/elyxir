@@ -11,6 +11,7 @@ const MobileMenu = ({
     handleShowAllCards,
     goToSection,
     cardsLoaded,
+    setSelectedBridgeType,
 }) => {
     const { name: username, accountRs: account } = infoAccount;
     return (
@@ -27,7 +28,11 @@ const MobileMenu = ({
 
                 {infoAccount && (
                     <Center my={2}>
-                        <CurrencyMenu infoAccount={infoAccount} goToSection={goToSection} />
+                        <CurrencyMenu
+                            infoAccount={infoAccount}
+                            goToSection={goToSection}
+                            setSelectedBridgeType={setSelectedBridgeType}
+                        />
                     </Center>
                 )}
 
@@ -38,6 +43,7 @@ const MobileMenu = ({
                         handleLogout={handleLogout}
                         buttonsWidth="100%"
                         cardsLoaded={cardsLoaded}
+                        setSelectedBridgeType={setSelectedBridgeType}
                     />
                 </Center>
 

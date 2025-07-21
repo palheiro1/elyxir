@@ -22,7 +22,7 @@ import UnStuckGiftz from '../Modals/UnStuckGiftz/UnStuckGiftz';
 import { BsInfoCircle } from 'react-icons/bs';
 import ResponsiveTooltip from '../ui/ReponsiveTooltip';
 
-const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
+const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) => {
     const {
         IGNISBalance,
         GIFTZBalance,
@@ -71,21 +71,25 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
             name: 'GIFTZ',
             balance: GIFTZBalance,
             handler: () => goToSection(7),
+            bridge: 'ERC1155GIFTZ',
         },
         GEM: {
             name: 'GEM',
             balance: GEMBalance,
             handler: () => goToSection(3),
+            bridge: 'ERC20GEM',
         },
         WETH: {
             name: 'wETH',
             balance: WETHBalance,
             handler: () => goToSection(3),
+            bridge: 'ERC20wETH',
         },
         MANA: {
             name: 'MANA',
             balance: MANABalance,
             handler: () => goToSection(3),
+            bridge: 'ERC20Mana',
         },
     };
 
@@ -103,6 +107,13 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
         }
     };
 
+    const handleSwapCurrencyToArdor = currencyName => {
+        const { bridge } = currencies[currencyName];
+        if (bridge) {
+            setSelectedBridgeType(bridge);
+            goToSection(4);
+        }
+    };
     const hoverColor = useColorModeValue('blackAlpha.100', 'white');
 
     const handleClaim = async () => {
@@ -281,6 +292,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             <MenuList>
                                 <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
                                 <MenuItem onClick={() => handleOpenGetMoreCurrency('GIFTZ')}>Get GIFTZ</MenuItem>
+                                <MenuItem onClick={() => handleSwapCurrencyToArdor('GIFTZ')}>Swap to ARDOR</MenuItem>
                                 {infoAccount.stuckedGiftz > 0 && (
                                     <MenuItem onClick={() => onOpenUnstuckGiftz()}>Unstuck GIFTZ</MenuItem>
                                 )}
@@ -327,6 +339,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             <MenuList>
                                 <MenuItem onClick={() => handleOpenSendCurrency('GEM')}>Send GEM</MenuItem>
                                 <MenuItem onClick={() => handleOpenGetMoreCurrency('GEM')}>Get GEM</MenuItem>
+                                <MenuItem onClick={() => handleSwapCurrencyToArdor('GEM')}>Swap to ARDOR</MenuItem>
                                 <MenuItem onClick={() => addToMetamask('GEM')}>Add to Metamask</MenuItem>
                             </MenuList>
                         </Portal>
@@ -371,6 +384,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             <MenuList>
                                 <MenuItem onClick={() => handleOpenSendCurrency('WETH')}>Send wETH</MenuItem>
                                 <MenuItem onClick={() => handleOpenGetMoreCurrency('WETH')}>Get wETH</MenuItem>
+                                <MenuItem onClick={() => handleSwapCurrencyToArdor('WETH')}>Swap to ARDOR</MenuItem>
                                 <MenuItem onClick={() => addToMetamask('WETH')}>Add to Metamask</MenuItem>
                             </MenuList>
                         </Portal>
@@ -423,6 +437,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection }) => {
                             <MenuList>
                                 <MenuItem onClick={() => handleOpenSendCurrency('MANA')}>Send MANA</MenuItem>
                                 <MenuItem onClick={() => handleOpenGetMoreCurrency('MANA')}>Get MANA</MenuItem>
+                                <MenuItem onClick={() => handleSwapCurrencyToArdor('MANA')}>Swap to ARDOR</MenuItem>
                                 <MenuItem onClick={() => addToMetamask('MANA')}>Add to Metamask</MenuItem>
                             </MenuList>
                         </Portal>

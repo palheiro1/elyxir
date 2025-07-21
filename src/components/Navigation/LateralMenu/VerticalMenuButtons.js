@@ -2,7 +2,7 @@ import { Box, Button, Image, Spinner, Stack, Text, VStack } from '@chakra-ui/rea
 import { IS_BOUNTY_ENABLED } from '../../../data/CONSTANTS';
 import { useNavigate } from 'react-router-dom';
 
-const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded }) => {
+const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, setSelectedBridgeType }) => {
     // ---------------------------------------------
     // ------------------ COLORS ------------------
     // ---------------------------------------------
@@ -111,7 +111,10 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded }) =
         {
             icon: !isActive(4) ? '/images/icons/menu/blanco/bridge.png' : '/images/icons/menu/color/bridge.jpg',
             text: 'Bridge',
-            onClick: () => setOption(4),
+            onClick: () => {
+                setSelectedBridgeType(null);
+                setOption(4);
+            },
             bgColor: isActive(4) ? 'white' : '#573B97',
             hoverBg: 'rgba(87, 59, 151, 0.75)',
             textColor: isActive(4) ? '#573B97' : 'white',

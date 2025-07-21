@@ -2,7 +2,7 @@ import { Flex, Spacer, Stack, Text, Tooltip, useToast } from '@chakra-ui/react';
 import CurrencyMenu from '../../components/CurrencyMenu/CurrencyMenu';
 import { copyToast } from '../../utils/alerts';
 
-const TopMenu = ({ infoAccount, goToSection }) => {
+const TopMenu = ({ infoAccount, goToSection, setSelectedBridgeType }) => {
     const toast = useToast();
 
     const copyToClipboard = () => {
@@ -27,7 +27,11 @@ const TopMenu = ({ infoAccount, goToSection }) => {
                 <Spacer />
 
                 {infoAccount.GEMBalance !== undefined && infoAccount.GEMBalance !== null && (
-                    <CurrencyMenu infoAccount={infoAccount} goToSection={goToSection} />
+                    <CurrencyMenu
+                        infoAccount={infoAccount}
+                        goToSection={goToSection}
+                        setSelectedBridgeType={setSelectedBridgeType}
+                    />
                 )}
             </Flex>
         </>
