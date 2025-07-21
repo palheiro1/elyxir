@@ -3,22 +3,35 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Overlay } from '../../../../ui/Overlay';
 import { Box, IconButton, Stack, Select, Image, Text } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
-import Leaderboard from './Leaderboard';
 import { fetchAccountDetails, fetchLeaderboards, setViewData } from '../../../../../redux/reducers/LeaderboardsReducer';
-import GeneralLeaderboard from './GeneralLeaderboard';
-import CombativityResetTimer from './CombativityResetTimer';
+import CombativityResetTimer from './CombativityLeaderboard/CombativityResetTimer';
 import panteon from '../../assets/icons/panteon_banner.svg';
 import landsBanner from '../../assets/icons/lands_banner.svg';
 import waterBanner from '../../assets/icons/water_banner.svg';
 import airBanner from '../../assets/icons/air_banner.svg';
 import combativityBanner from '../../assets/icons/combativeness_banner.svg';
-import LeaderboardsRewards from './LeaderboardsRewards';
-import TypesLeaderboardsResetTimer from './TypesLeaderboardsResetTimer';
+import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
+import TypesLeaderboardsRewards from './TypesLeaderboards/TypesLeaderboardsRewards';
+import TypesLeaderboardsResetTimer from './TypesLeaderboards/TypesLeaderboardsResetTimer';
+import TypesLeaderboard from './TypesLeaderboards';
+import CombativityLeaderboard from './CombativityLeaderboard/CombativityLeaderboard';
 
-const Leaderboards = ({ handleClose, isMobile }) => {
+/**
+ * @name Leaderboards
+ * @description Main container component for displaying various leaderboards.
+ * Fetches leaderboard data on mount, allows user to select between
+ * different leaderboard types, displays relevant leaderboard UI,
+ * banners, descriptions, and reset timers.
+ * @param {Object} props - Component props.
+ * @param {Function} props.handleClose - Function to close the leaderboard overlay.
+ * @returns {JSX.Element} The leaderboards component UI.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+const Leaderboards = ({ handleClose }) => {
     const dispatch = useDispatch();
     const { leaderboards, data } = useSelector(state => state.leaderboards);
     const [option, setOption] = useState(1);
+    const { isMobile } = useBattlegroundBreakpoints();
 
     useEffect(() => {
         dispatch(fetchLeaderboards());
@@ -211,22 +224,22 @@ const Leaderboards = ({ handleClose, isMobile }) => {
                             mb={0}
                             h={isMobile ? '70%' : '80%'}>
                             {option === 5 ? (
-                                <Leaderboard isMobile={isMobile} color={color} />
+                                <CombativityLeaderboard color={color} />
                             ) : (
-                                <GeneralLeaderboard isMobile={isMobile} color={color} />
+                                <TypesLeaderboard color={color} />
                             )}
                         </Stack>
                         <Stack dir="row" mx={'auto'} w={'90%'}>
                             {option === 5 ? (
-                                <CombativityResetTimer isMobile={isMobile} mb={isMobile ? 0 : 4} />
+                                <CombativityResetTimer mb={isMobile ? 0 : 4} />
                             ) : (
                                 <Stack
                                     direction={'row'}
                                     mb={isMobile ? 0 : 4}
                                     align={'baseline'}
                                     justifyContent={'space-between'}>
-                                    <LeaderboardsRewards option={option} isMobile={isMobile} />
-                                    <TypesLeaderboardsResetTimer isMobile={isMobile} />
+                                    <TypesLeaderboardsRewards option={option} />
+                                    <TypesLeaderboardsResetTimer />
                                 </Stack>
                             )}
                         </Stack>

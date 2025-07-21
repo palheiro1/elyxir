@@ -1,5 +1,4 @@
 import { Button, Image, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from '@chakra-ui/react';
-import React from 'react';
 import { mediumFilterOptions, rarityFilterOptions } from '../data';
 import { MdOutlineArrowDropDown } from 'react-icons/md';
 import { getLevelIconInt, getMediumIconInt } from '../Utils/BattlegroundsUtils';
@@ -21,16 +20,16 @@ import { getLevelIconInt, getMediumIconInt } from '../Utils/BattlegroundsUtils';
  */
 const BattlegroundFilters = ({ isMobile, filters, handleFilterChange }) => {
     return (
-        <Stack direction="row" color="#FFF">
+        <Stack direction="row" color="#FFF" zIndex={3} mt={isMobile && 3}>
             {/* Rarity Filter */}
             <Text my="auto" fontSize="md" fontWeight={500} mx={3}>
                 Lands
             </Text>
             <Menu>
-                <MenuButton as={Button} w="fit-content" minW={!isMobile && '160px'} bg="transparent">
-                    <Stack direction="row" justifyContent="space-between" w="100%">
+                <MenuButton as={Button} w="160px" bg="transparent" pr={0}>
+                    <Stack direction="row" justifyContent="end" w="100%">
                         <Stack direction="row" color="#FFF">
-                            <Text fontSize="md" fontWeight={500}>
+                            <Text fontSize="md" fontWeight={500} w="80px">
                                 {rarityFilterOptions[filters.rarity]?.name || 'Rarity'}
                             </Text>
                             <MdOutlineArrowDropDown size={20} />
@@ -57,10 +56,10 @@ const BattlegroundFilters = ({ isMobile, filters, handleFilterChange }) => {
 
             {/* Element Filter */}
             <Menu>
-                <MenuButton as={Button} bg="transparent" w="fit-content" minW={!isMobile && '160px'}>
-                    <Stack direction="row" justifyContent="space-between" w="100%">
+                <MenuButton as={Button} bg="transparent" w={'160px'} pr={0}>
+                    <Stack direction="row" justifyContent="end" w="100%">
                         <Stack direction="row" color="#FFF">
-                            <Text fontSize="md" fontWeight={500}>
+                            <Text fontSize="md" fontWeight={500} w={'80px'}>
                                 {mediumFilterOptions[filters.element]?.name || 'Medium'}
                             </Text>
                             <MdOutlineArrowDropDown size={20} />

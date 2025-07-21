@@ -1,7 +1,8 @@
 import { Box, Image, Spinner, Stack, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { formatLeaderboardRewards, getCurrencyImage } from '../../Utils/BattlegroundsUtils';
-import { NQTDIVIDER } from '../../../../../data/CONSTANTS';
+import { formatLeaderboardRewards, getCurrencyImage } from '../../../Utils/BattlegroundsUtils';
+import { NQTDIVIDER } from '../../../../../../data/CONSTANTS';
+import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
 
 const CURRENCY_PRECISION = {
     weth: 4,
@@ -10,18 +11,17 @@ const CURRENCY_PRECISION = {
 };
 
 /**
- * @name LeaderboardsRewards
+ * @name TypesLeaderboardsRewards
  * @description Displays formatted leaderboard rewards for a given leaderboard option.
  * It fetches and displays reward quantities along with corresponding currency icons.
  * Supports formatting for GEM, MANA, and wETH amounts based on `NQTDIVIDER`.
  * @param {number} option - The leaderboard option to fetch rewards for (used internally by `formatLeaderboardRewards`).
- * @param {boolean} isMobile - Determines whether to adjust font size and icon size for smaller screens.
  * @returns {JSX.Element} A Chakra UI `Stack` with reward amounts and icons or a loading spinner.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const LeaderboardsRewards = ({ option, isMobile }) => {
+const TypesLeaderboardsRewards = ({ option }) => {
     const [rewards, setRewards] = useState(null);
-
+    const { isMobile } = useBattlegroundBreakpoints();
     useEffect(() => {
         const fetchRewards = async () => {
             try {
@@ -52,7 +52,11 @@ const LeaderboardsRewards = ({ option, isMobile }) => {
 
     return (
         <Stack w="100%" align="start" maxW="500px">
-            <Text fontFamily="Chelsea Market, system-ui" color="#FFF" fontWeight={500}>
+            <Text
+                fontFamily="Chelsea Market, system-ui"
+                color="#FFF"
+                fontWeight={500}
+                fontSize={isMobile ? 'sm' : 'md'}>
                 REWARDS
             </Text>
 
@@ -86,4 +90,4 @@ const LeaderboardsRewards = ({ option, isMobile }) => {
     );
 };
 
-export default LeaderboardsRewards;
+export default TypesLeaderboardsRewards;

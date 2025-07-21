@@ -1,6 +1,6 @@
 import BattleRecord from './BattleRecord';
 import { BattleWindow } from './BattleWindow';
-import Earnings from './EarnigsPage/Earnings';
+import Earnings from './EarnigsPage';
 import Inventory from './Inventory';
 import Leaderboards from './Leaderboards';
 import AdvertModal from './Modals/AdvertModal';
@@ -21,8 +21,6 @@ import QuickStartModal from './QuickStart';
  * @param {Array} props.filteredCards - Filtered cards based on current filters.
  * @param {number} props.omnoGEMsBalance - Current GEM balance in Omno.
  * @param {number} props.omnoWethBalance - Current WETH balance in Omno.
- * @param {boolean} props.isMobile - Flag indicating if the viewport is mobile.
- * @param {boolean} props.isMediumScreen - Flag indicating if the viewport is medium-sized.
  * @param {boolean} props.isOpenGems - Chakra state for the GEM modal.
  * @param {boolean} props.isOpenWeth - Chakra state for the WETH modal.
  * @param {string|null} props.gemsModalMode - Operation mode for GEM modal (e.g., 'deposit', 'withdraw').
@@ -42,8 +40,6 @@ const BattlegroundModals = ({
     filteredCards,
     omnoGEMsBalance,
     omnoWethBalance,
-    isMobile,
-    isMediumScreen,
     isOpenGems,
     isOpenWeth,
     gemsModalMode,
@@ -78,7 +74,6 @@ const BattlegroundModals = ({
                     filteredCards={filteredCards}
                     omnoGEMsBalance={omnoGEMsBalance}
                     omnoWethBalance={omnoWethBalance}
-                    isMobile={isMobile}
                 />
             )}
             {modals.inventory && (
@@ -86,7 +81,6 @@ const BattlegroundModals = ({
                     infoAccount={infoAccount}
                     cards={cards}
                     handleCloseInventory={() => handleCloseModal('inventory')}
-                    isMobile={isMobile}
                 />
             )}
             {modals.battleRecord && (
@@ -94,32 +88,17 @@ const BattlegroundModals = ({
                     handleClose={() => handleCloseModal('battleRecord')}
                     infoAccount={infoAccount}
                     cards={cards}
-                    isMobile={isMobile}
                 />
             )}
             {modals.earnings && (
-                <Earnings
-                    isMobile={isMobile}
-                    closeEarnigs={() => handleCloseModal('earnings')}
-                    infoAccount={infoAccount}
-                    cards={cards}
-                />
+                <Earnings closeEarnigs={() => handleCloseModal('earnings')} infoAccount={infoAccount} cards={cards} />
             )}
-            {modals.leaderboards && (
-                <Leaderboards handleClose={() => handleCloseModal('leaderboards')} isMobile={isMobile} />
-            )}
-            {modals.quickStart && (
-                <QuickStartModal
-                    handleClose={() => handleCloseModal('quickStart')}
-                    isMobile={isMobile}
-                    isMediumScreen={isMediumScreen}
-                />
-            )}
+            {modals.leaderboards && <Leaderboards handleClose={() => handleCloseModal('leaderboards')} />}
+            {modals.quickStart && <QuickStartModal handleClose={() => handleCloseModal('quickStart')} />}
             {modals.newPlayers && (
                 <NewPlayersModal
                     handleClose={() => handleCloseModal('newPlayers')}
                     setOpenInventory={() => handleOpenModal('inventory')}
-                    isMobile={isMobile}
                     setHasSeenNewPlayersModal={setHasSeenNewPlayersModal}
                 />
             )}

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchArenasInfo } from '../../../../redux/reducers/ArenasReducer';
 import MapPoint from './MapPoint';
 import { Box } from '@chakra-ui/react';
+import { useBattlegroundBreakpoints } from '../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name Maps
@@ -16,19 +17,10 @@ import { Box } from '@chakra-ui/react';
  * @param {Function} handleStartBattle - Function called to initiate a battle with a selected arena.
  * @param {Number} w - Width value passed to the SVG element.
  * @param {Object} filters - Filters applied to arenas (`filters.rarity` and `filters.element`).
- * @param {Boolean} isMobile - Boolean indicating if the view is on a mobile device.
  * @returns {JSX.Element} An SVG element displaying the interactive Battleground map with filtered `MapPoint` components for available arenas.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-export const Maps = ({
-    handleSelectArena,
-    infoAccount,
-    cards,
-    handleStartBattle,
-    filters,
-    isMobile,
-    isMediumScreen,
-}) => {
+export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle, filters }) => {
     const [selectedArena, setSelectedArena] = useState();
     const [openPopoverId, setOpenPopoverId] = useState(null);
     const { arenasInfo } = useSelector(state => state.arenas);
@@ -56,13 +48,14 @@ export const Maps = ({
         const minWidth = 480;
         const maxWidth = 1440;
         const minScale = 0.65;
-        const maxScale = 1.3;
+        const maxScale = 1.4;
 
         const clampedWidth = Math.min(Math.max(windowWidth, minWidth), maxWidth);
         const ratio = (clampedWidth - minWidth) / (maxWidth - minWidth);
         return minScale + (maxScale - minScale) * ratio;
     }, [windowWidth]);
 
+    const { isMobile, isMediumScreen } = useBattlegroundBreakpoints();
     return (
         <Box
             className="containerMap"

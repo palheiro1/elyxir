@@ -38,7 +38,7 @@ const BattlegroundCurrencies = ({
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
     const bgColor = useColorModeValue('rgba(234, 234, 234, 0.5)', 'rgba(234, 234, 234, 1)');
     return (
-        <Stack direction="row" ml="5%">
+        <Stack direction="row">
             {/* IGNIS */}
             <Box
                 zIndex={1}
@@ -49,7 +49,6 @@ const BattlegroundCurrencies = ({
                 rounded="full"
                 w="6rem"
                 minW="68px"
-                ml={isMobile && 3}
                 maxH="1.5rem">
                 <Stack direction="row" align="center" mt={-2}>
                     <Image ml={-3} src="images/currency/ignis.png" alt="IGNIS Icon" w="40px" h="40px" />

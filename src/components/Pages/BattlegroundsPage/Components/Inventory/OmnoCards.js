@@ -126,7 +126,7 @@ const OmnoCards = ({
 
     return (
         <Center color="#FFF">
-            <Stack direction="column" spacing={8} w="30rem">
+            <Stack direction="column" spacing={8} w={isMobile ? '22rem' : '30rem'}>
                 <Box mb={8}>
                     <Heading fontSize="xl" fontWeight="light" mb={4} ml={isMobile && 4}>
                         Choosen
@@ -149,6 +149,7 @@ const OmnoCards = ({
                                     canEdit
                                     handleDeleteSelectedCard={handleDeleteSelectedCard}
                                     handleEdit={handleEdit}
+                                    isMobile={isMobile}
                                 />
                             ))}
                         </Stack>

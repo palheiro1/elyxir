@@ -10,18 +10,23 @@ import { Text, Image, Stack } from '@chakra-ui/react';
  * @returns {JSX.Element} A vertical stack with the step's title, image, and description texts.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const QuickStartStep = ({ title, imageSrc, texts, setImagesLoaded }) => {
+const QuickStartStep = ({ title, imageSrc, texts, setImagesLoaded, isMobile }) => {
+    const imageWidth = title === 'Fight and win' ? (isMobile ? '33%' : '90%') : isMobile ? '38%' : '80%';
     return (
         <Stack direction="column" spacing={4} overflow="hidden" align="center">
-            <Text fontSize="42px">{title}</Text>
-            <Image
-                key={imageSrc}
-                src={imageSrc}
-                w={title === 'Fight and win' ? '45%' : '70%'}
-                mx="auto"
-                onLoad={() => setImagesLoaded(true)}
-                onError={() => setImagesLoaded(true)}
-            />
+            <Stack direction={!isMobile ? 'column' : 'row-reverse'}>
+                <Text fontSize={isMobile ? '35px' : '42px'} my={isMobile && 'auto'}>
+                    {title}
+                </Text>
+                <Image
+                    key={imageSrc}
+                    src={imageSrc}
+                    mx="auto"
+                    w={imageWidth}
+                    onLoad={() => setImagesLoaded(true)}
+                    onError={() => setImagesLoaded(true)}
+                />
+            </Stack>
             {texts.map((text, index) => (
                 <Text key={index} fontSize={index === 0 ? '26px' : 'md'} fontFamily={index === 0 ? undefined : 'Inter'}>
                     {text}

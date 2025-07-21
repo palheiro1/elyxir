@@ -6,6 +6,7 @@ import BattleDetails from './BattleDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserBattles } from '../../../../../redux/reducers/BattleReducer';
 import BattleListTable from './BattleListTable';
+import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name BattleRecord
@@ -20,7 +21,7 @@ import BattleListTable from './BattleListTable';
  * @returns {JSX.Element} JSX element rendering the battle record modal.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const BattleRecord = ({ handleClose, infoAccount, cards, isMobile }) => {
+const BattleRecord = ({ handleClose, infoAccount, cards }) => {
     const { accountRs } = infoAccount;
     const dispatch = useDispatch();
 
@@ -28,6 +29,8 @@ const BattleRecord = ({ handleClose, infoAccount, cards, isMobile }) => {
     const [viewDetails, setViewDetails] = useState(false);
     const [selectedBattle, setSelectedBattle] = useState(null);
     const [selectedArena, setSelectedArena] = useState(null);
+
+    const { isMobile, isMediumScreen } = useBattlegroundBreakpoints();
 
     useEffect(() => {
         if (accountRs) dispatch(fetchUserBattles(accountRs));
@@ -59,8 +62,8 @@ const BattleRecord = ({ handleClose, infoAccount, cards, isMobile }) => {
                 pos="fixed"
                 bgColor="#1F2323"
                 zIndex={99}
-                w={isMobile ? '80%' : viewDetails ? '50%' : '70%'}
-                h={viewDetails ? '95%' : '90%'}
+                w={isMobile || isMediumScreen ? '100%' : viewDetails ? '50%' : '70%'}
+                h={isMobile || isMediumScreen ? '100%' : viewDetails ? '95%' : '90%'}
                 borderRadius="25px"
                 overflowY="hidden"
                 className="custom-scrollbar"
@@ -103,6 +106,8 @@ const BattleRecord = ({ handleClose, infoAccount, cards, isMobile }) => {
                         battleDetails={userBattles.find(b => b.battleId === selectedBattle)}
                         handleGoBack={handleGoBack}
                         battleRewards={battleRewards?.[selectedBattle]}
+                        isMobile={isMobile}
+                        isMediumScreen={isMediumScreen}
                     />
                 )}
             </Box>
