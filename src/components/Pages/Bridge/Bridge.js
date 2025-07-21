@@ -23,7 +23,7 @@ import BridgeERC20Mana from './ERC20Mana/BridgeERC20';
  * @param {Array} cards - Cards
  * @returns {JSX.Element} - JSX element
  */
-const Bridge = ({ infoAccount, cards, gemCards, giftzCards, wethCards, manaCards }) => {
+const Bridge = ({ infoAccount, cards, gemCards, giftzCards, wethCards, manaCards, selectedBridgeType }) => {
     const [swapAddresses, setSwapAddresses] = useState({
         OLD_BRIDGE: { eth: '' },
         ERC20: { eth: '', ardor: '' },
@@ -32,8 +32,7 @@ const Bridge = ({ infoAccount, cards, gemCards, giftzCards, wethCards, manaCards
     });
     const [needReload, setNeedReload] = useState(true); // Flag to reload the page [true -> reload
     const [isLoading, setIsLoading] = useState(false);
-    const [bridgeType, setBridgeType] = useState(); // ERC20 or ERC1155
-
+    const [bridgeType, setBridgeType] = useState(selectedBridgeType); // ERC20 or ERC1155
     const [isError, setIsError] = useState(false); // Flag to show error message
 
     useEffect(() => {
@@ -96,7 +95,11 @@ const Bridge = ({ infoAccount, cards, gemCards, giftzCards, wethCards, manaCards
                 <BridgeERC1155 infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC1155} cards={cards} />
             )}
             {bridgeType === 'ERC1155GIFTZ' && (
-                <BridgeERC1155GIFTZ infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC1155} giftzCards={giftzCards} />
+                <BridgeERC1155GIFTZ
+                    infoAccount={infoAccount}
+                    swapAddresses={swapAddresses?.ERC1155}
+                    giftzCards={giftzCards}
+                />
             )}
             {bridgeType === 'OLD' && <OldBridge infoAccount={infoAccount} swapAddresses={swapAddresses?.OLD_BRIDGE} />}
         </Box>
