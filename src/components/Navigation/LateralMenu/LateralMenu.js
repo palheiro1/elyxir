@@ -31,6 +31,7 @@ const LateralMenu = memo(
         handleLogout,
         goToSection,
         cardsLoaded,
+        setSelectedBridgeType,
     }) => {
         const { isOpen, onToggle, onClose } = useDisclosure();
 
@@ -52,7 +53,11 @@ const LateralMenu = memo(
                     <ColorModeSwitcher justifySelf="flex-end" />
                 </Flex>
                 <Flex display={{ base: 'none', md: 'unset' }}>
-                    <TopMenu infoAccount={infoAccount} goToSection={goToSection} />
+                    <TopMenu
+                        infoAccount={infoAccount}
+                        goToSection={goToSection}
+                        setSelectedBridgeType={setSelectedBridgeType}
+                    />
                 </Flex>
                 <Flex display={{ base: 'none', md: 'unset' }}>
                     <NormalMenu
@@ -63,6 +68,7 @@ const LateralMenu = memo(
                         handleShowAllCards={handleShowAllCards}
                         children={children}
                         cardsLoaded={cardsLoaded}
+                        setSelectedBridgeType={setSelectedBridgeType}
                     />
                 </Flex>
                 <Collapse in={isOpen} animateOpacity>
@@ -76,6 +82,7 @@ const LateralMenu = memo(
                             handleShowAllCards={handleShowAllCards}
                             goToSection={goToSection}
                             cardsLoaded={cardsLoaded}
+                            setSelectedBridgeType={setSelectedBridgeType}
                         />
                     )}
                 </Collapse>

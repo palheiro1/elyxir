@@ -152,6 +152,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const [option, setOption] = useState(0);
     const [lastOption, setLastOption] = useState(0);
 
+    // Selected bridge type
+    const [selectedBridgeType, setSelectedBridgeType] = useState(null);
+
     // Component to render
     const [renderComponent, setRenderComponent] = useState(<Overview />);
 
@@ -500,12 +503,14 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 manaCards={manaCards}
             />, // OPTION 3 - Market
             <Bridge
+                key={`bridge-${selectedBridgeType}`}
                 infoAccount={infoAccount}
                 cards={cardsFiltered}
                 gemCards={gemCards}
                 giftzCards={giftzCards}
                 wethCards={wethCards}
                 manaCards={manaCards}
+                selectedBridgeType={selectedBridgeType}
             />, // OPTION 4 - Bridge
             <Bounty infoAccount={infoAccount} />, // OPTION 5 - Bounty
             <Account infoAccount={infoAccount} />, // OPTION 6 - Account
@@ -516,7 +521,17 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             '', // OPTION 11 - OPEN PACK
             <Battlegrounds infoAccount={infoAccount} />,
         ],
-        [infoAccount, cards, cardsFiltered, gemCards, haveUnconfirmed, giftzCards, wethCards, manaCards]
+        [
+            infoAccount,
+            cards,
+            cardsFiltered,
+            gemCards,
+            haveUnconfirmed,
+            giftzCards,
+            wethCards,
+            manaCards,
+            selectedBridgeType,
+        ]
     );
 
     useEffect(() => {
@@ -534,7 +549,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
         loadComponent();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [option, lastOption]);
+    }, [option, lastOption, selectedBridgeType]);
 
     useEffect(() => {
         const checkAndGo = () => {
@@ -587,6 +602,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     handleShowAllCards={handleShowAllCards}
                     goToSection={handleChangeOption}
                     cardsLoaded={cards.length > 0 ? true : false}
+                    setSelectedBridgeType={setSelectedBridgeType}
                 />
             </Box>
 
