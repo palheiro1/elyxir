@@ -1,12 +1,24 @@
-// components/CardFilters.js
-import { Select, Stack } from '@chakra-ui/react';
-
-const selectStyle = { backgroundColor: '#FFF', color: '#000' };
+import { CloseIcon } from '@chakra-ui/icons';
+import {
+    Box,
+    Button,
+    Drawer,
+    DrawerBody,
+    DrawerContent,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerOverlay,
+    IconButton,
+    Select,
+    Stack,
+    useDisclosure,
+} from '@chakra-ui/react';
+import { domainFilterOptions, elementFilterOptions, rarityFilterOptions } from '../data';
 
 /**
  * @name CardFilters
  * @description Renders a responsive set of dropdown filters for card selection based on rarity, element, and domain.
- * Adapts layout width for mobile and desktop. Calls corresponding handler functions when filters change.
+ * Shows a filter button on mobile that opens a drawer with the filter options. On desktop, filters are shown inline.
  * @param {Object} props - Component props.
  * @param {boolean} props.isMobile - Whether the component is rendered in mobile view.
  * @param {function} props.handleRarityChange - Callback to handle rarity selection changes.
@@ -15,30 +27,80 @@ const selectStyle = { backgroundColor: '#FFF', color: '#000' };
  * @returns {JSX.Element} Filter controls for card browsing by rarity, element, and domain.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const CardFilters = ({ isMobile, handleRarityChange, handleElementChange, handleDomainChange }) => (
-  <Stack direction="row" fontFamily="Chelsea Market, system-ui" ml={!isMobile && '10'}>
-    <Select w={isMobile ? '15%' : '10%'} onChange={handleRarityChange} color="#FFF">
-      <option value="-1" style={selectStyle}>Rarity</option>
-      <option value="1" style={selectStyle}>Common</option>
-      <option value="2" style={selectStyle}>Rare</option>
-      <option value="3" style={selectStyle}>Epic</option>
-      <option value="4" style={selectStyle}>Special</option>
-    </Select>
-    <Select w={isMobile ? '20%' : '10%'} onChange={handleElementChange} color="#FFF">
-      <option value="-1" style={selectStyle}>Element</option>
-      <option value="1" style={selectStyle}>Terrestrial</option>
-      <option value="2" style={selectStyle}>Aerial</option>
-      <option value="3" style={selectStyle}>Aquatic</option>
-    </Select>
-    <Select w={isMobile ? '20%' : '10%'} onChange={handleDomainChange} color="#FFF">
-      <option value="-1" style={selectStyle}>Continent</option>
-      <option value="1" style={selectStyle}>Asia</option>
-      <option value="2" style={selectStyle}>Oceania</option>
-      <option value="3" style={selectStyle}>America</option>
-      <option value="4" style={selectStyle}>Africa</option>
-      <option value="5" style={selectStyle}>Europe</option>
-    </Select>
-  </Stack>
-);
+const CardFilters = ({
+    isMobile,
+    filters,
+    handleRarityChange,
+    handleElementChange,
+    handleDomainChange,
+    handleResetFilters,
+}) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const selectStyle = {
+        backgroundColor: '#FFF',
+        color: '#000',
+    };
+
+    const Filters = () => (
+        <Stack direction={isMobile ? 'column' : 'row'} spacing={2} fontFamily="Chelsea Market, system-ui">
+            <Select w={isMobile && '100%'} value={filters.rarity} onChange={handleRarityChange} color="#FFF">
+                {rarityFilterOptions.map(({ name, value }, index) => (
+                    <option value={value} style={selectStyle} key={index}>
+                        {name}
+                    </option>
+                ))}
+            </Select>
+            <Select w={isMobile && '100%'} value={filters.element} onChange={handleElementChange} color="#FFF">
+                {elementFilterOptions.map(({ name, value }, index) => (
+                    <option value={value} style={selectStyle} key={index}>
+                        {name}
+                    </option>
+                ))}
+            </Select>
+            <Select w={isMobile && '100%'} value={filters.domain} onChange={handleDomainChange} color="#FFF">
+                {domainFilterOptions.map(({ name, value }, index) => (
+                    <option value={value} style={selectStyle} key={index}>
+                        {name}
+                    </option>
+                ))}
+            </Select>
+        </Stack>
+    );
+
+    return isMobile ? (
+        <>
+            <Button
+                onClick={onOpen}
+                size="sm"
+                fontFamily="Chelsea Market, system-ui"
+                p={1}
+                w="100px"
+                top={2}
+                left={2}
+                position="absolute">
+                Filters
+            </Button>
+            <Drawer isOpen={isOpen} placement="right" onClose={onClose} trapFocus={false}>
+                <DrawerOverlay />
+                <DrawerContent bg="#1F2323" color="#FFF" fontFamily="Chelsea Market, system-ui">
+                    <DrawerHeader>Filters</DrawerHeader>
+                    <DrawerBody>
+                        <Filters />
+                    </DrawerBody>
+                    <DrawerFooter>
+                        <Button color={'#FFF'} onClick={handleResetFilters}>
+                            Reset
+                        </Button>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
+        </>
+    ) : (
+        <Box ml="10" display={'flex'} flexDirection={'row'} fontFamily="Chelsea Market, system-ui">
+            <Filters />
+            <IconButton color={'#FFF'} icon={<CloseIcon />} onClick={handleResetFilters} ml={2} />
+        </Box>
+    );
+};
 
 export default CardFilters;

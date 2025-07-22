@@ -20,11 +20,18 @@ import ArdorCards from './ArdorCards';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const ArdorPage = ({ infoAccount, isMobile, gridColumns, handleCloseInventory }) => {
-    const [selectedCards, setSelectedCards] = useState([]);
     const { filteredCards: baseCards } = useSelector(state => state.battlegrounds);
 
-    const { filteredNotSelectedCards, notSelectedCards, handleRarityChange, handleElementChange, handleDomainChange } =
-        useCardsFilters(selectedCards, baseCards);
+    const [selectedCards, setSelectedCards] = useState([]);
+
+    const {
+        filters,
+        filteredNotSelectedCards,
+        handleRarityChange,
+        handleElementChange,
+        handleDomainChange,
+        handleReset,
+    } = useCardsFilters(selectedCards, baseCards);
 
     const handleSelectCard = card => {
         setSelectedCards([...selectedCards, card]);
@@ -55,22 +62,25 @@ const ArdorPage = ({ infoAccount, isMobile, gridColumns, handleCloseInventory })
                 </Text>
             </Stack>
 
-            <Stack backgroundColor="#0F0F0F" borderRadius="20px" h={isMobile ? '78%' : '85%'}>
+            <Stack backgroundColor="#0F0F0F" borderRadius="20px" h={isMobile ? '78%' : '85%'} position={'relative'}>
                 <Heading fontSize={isMobile ? 'md' : 'xl'} fontWeight="light" textAlign="center" mt={3}>
                     1. Select cards to send to Inventory
                 </Heading>
 
                 <CardFilters
                     isMobile={isMobile}
+                    filters={filters}
                     handleRarityChange={handleRarityChange}
                     handleElementChange={handleElementChange}
                     handleDomainChange={handleDomainChange}
+                    handleResetFilters={handleReset}
                 />
 
-                <Stack direction="row" pt={2} padding={5} height="inherit">
+                <Stack direction="row" pt={isMobile ? 0 : 2} padding={isMobile ? 0 : 5} height="inherit">
                     <Box
                         backgroundColor="#0F0F0F"
                         borderRadius="20px"
+                        pt={isMobile && 0}
                         p={2}
                         w={isMobile ? '45%' : '65%'}
                         overflowY="scroll"
@@ -101,7 +111,6 @@ const ArdorPage = ({ infoAccount, isMobile, gridColumns, handleCloseInventory })
                             isMobile={isMobile}
                             selectedCards={selectedCards}
                             setSelectedCards={setSelectedCards}
-                            notSelectedCards={notSelectedCards}
                             handleEdit={handleEdit}
                             handleDeleteSelectedCard={handleDeleteSelectedCard}
                             handleCloseInventory={handleCloseInventory}

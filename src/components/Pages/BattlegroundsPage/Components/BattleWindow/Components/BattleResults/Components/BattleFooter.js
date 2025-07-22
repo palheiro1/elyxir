@@ -1,6 +1,7 @@
-import { Stack, Text, Tooltip, Box, Image } from '@chakra-ui/react';
-import { TriangleUpIcon } from '@chakra-ui/icons';
-import { formatAddress, getCapturedCardText } from '../../../../../Utils/BattlegroundsUtils';
+import { Stack, Text, Tooltip } from '@chakra-ui/react';
+import { formatAddress } from '../../../../../Utils/BattlegroundsUtils';
+import { useBattlegroundBreakpoints } from '../../../../../../../../hooks/useBattlegroundBreakpoints';
+import CapturedCard from '../../../../BattleRecord/BattleDetails/Components/CapturedCard';
 
 /**
  * @name BattleFooter
@@ -16,49 +17,35 @@ import { formatAddress, getCapturedCardText } from '../../../../../Utils/Battleg
  * @returns {JSX.Element} A styled footer showing battle results, score, and captured/obtained card preview.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const BattleFooter = ({ isDefenderWin, defenderInfo, defenderPoints, capturedCard, isUserDefending }) => (
-    <Stack
-        direction="row"
-        bgColor="#BFD1ED"
-        w="100%"
-        h="7%"
-        mb={-2}
-        fontFamily="Chelsea Market, system-ui"
-        borderBottomRadius="25px"
-        justifyContent="space-between"
-        alignItems="center"
-        px={4}>
-        <Stack direction="row" w="100%">
-            <Text color="#000" my="auto" fontSize="large" ml={10}>
-                {isDefenderWin ? 'WINNER: ' : 'LOSER: '}
-                <Tooltip label={defenderInfo.accountRS} hasArrow>
-                    {defenderInfo.name || formatAddress(defenderInfo.accountRS)}
-                </Tooltip>
-            </Text>
-            <Text color="#000" my="auto" fontSize="large" border="1px solid #2ba39c" p={1} borderRadius="8px">
-                {defenderPoints}
-            </Text>
+const BattleFooter = ({ isDefenderWin, defenderInfo, defenderPoints, capturedCard, isUserDefending }) => {
+    const { isMobile } = useBattlegroundBreakpoints();
+    return (
+        <Stack
+            direction="row"
+            bgColor="#BFD1ED"
+            w="100%"
+            h={isMobile ? '10%' : '7%'}
+            mt={isMobile ? 0 : 10}
+            mb={-2}
+            fontFamily="Chelsea Market, system-ui"
+            borderBottomRadius="25px"
+            justifyContent="space-between"
+            alignItems="center"
+            px={4}>
+            <Stack direction="row" w="100%">
+                <Text color="#000" my="auto" fontSize="large" ml={10}>
+                    {isDefenderWin ? 'WINNER: ' : 'LOSER: '}
+                    <Tooltip label={defenderInfo.accountRS} hasArrow>
+                        {defenderInfo.name || formatAddress(defenderInfo.accountRS)}
+                    </Tooltip>
+                </Text>
+                <Text color="#000" my="auto" fontSize="large" border="1px solid #2ba39c" p={1} borderRadius="8px">
+                    {defenderPoints}
+                </Text>
+            </Stack>
+            <CapturedCard capturedCard={capturedCard} isDefenderWin={isDefenderWin} isUserDefending={isUserDefending} />
         </Stack>
-        <Stack></Stack>
-        <Stack direction="row" spacing={1} alignItems="end" mx="auto" w="30%" h="100%">
-            <Tooltip
-                label={
-                    <Box>
-                        <Image src={capturedCard?.cardImgUrl} alt={capturedCard?.name} w="200px" />
-                    </Box>
-                }
-                aria-label={capturedCard?.name}
-                placement="top"
-                hasArrow>
-                <Stack direction="row" mx="auto" my="auto">
-                    <Text color="#000" fontSize="large">
-                        {getCapturedCardText(isUserDefending, isDefenderWin)}
-                    </Text>
-                    <TriangleUpIcon color="#000" my="auto" />
-                </Stack>
-            </Tooltip>
-        </Stack>
-    </Stack>
-);
+    );
+};
 
 export default BattleFooter;

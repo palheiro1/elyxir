@@ -4,6 +4,7 @@ import victoryIcon from '../../../../assets/icons/victory_icon.svg';
 import defeatIcon from '../../../../assets/icons/defeat_icon.svg';
 import { formatAddress } from '../../../../Utils/BattlegroundsUtils';
 import { NQTDIVIDER } from '../../../../../../../data/CONSTANTS';
+import ResponsiveTooltip from '../../../../../../ui/ReponsiveTooltip';
 
 /**
  * @name BattleListRow
@@ -74,16 +75,14 @@ const BattleListRow = ({ item, handleViewDetails, cards, isMobile, battleReward 
             </GridItem>
 
             {cards?.length > 0 && (
-                <GridItem textAlign="center">
-                    <Tooltip
+                <GridItem textAlign="center" onClick={e => e.stopPropagation()}>
+                    <ResponsiveTooltip
                         label={
                             captured?.cardImgUrl && (
-                                <Box>
-                                    <Image src={captured.cardImgUrl} w="200px" alt={captured?.name || 'Captured'} />
-                                </Box>
+                                <Image src={captured.cardImgUrl} w="150px" alt={captured?.name || 'Captured'} />
                             )
                         }
-                        placement="top"
+                        placement={isMobile ? 'auto' : 'top'}
                         hasArrow>
                         <Box {...cellProps(isMobile)} cursor="pointer">
                             <Text
@@ -107,7 +106,7 @@ const BattleListRow = ({ item, handleViewDetails, cards, isMobile, battleReward 
                                     ))}
                             </Text>
                         </Box>
-                    </Tooltip>
+                    </ResponsiveTooltip>
                 </GridItem>
             )}
         </Grid>

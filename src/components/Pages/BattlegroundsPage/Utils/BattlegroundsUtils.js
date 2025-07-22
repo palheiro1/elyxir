@@ -276,28 +276,28 @@ export const formatLeaderboardRewards = async (option = 1) => {
         const results = await fetchAssetsWithPricing(accumulatedBounty.asset);
 
         const getPrice = name => Number(results.find(item => item.name === name)?.price || 0);
-        const genPercentage = rewards.GeneralLeaderboard.totalRewards.tributePercentage;
-        const terPercentage = rewards.TerrestrialLeaderboard.top1.tributePercentage;
+        const genPercentage = rewards.general.totalRewards.tributePercentage;
+        const terPercentage = rewards.terrestrial.top1.tributePercentage;
 
         switch (option) {
             case 1:
                 return {
-                    cards: rewards.GeneralLeaderboard.totalRewards.specialCards,
-                    mana: rewards.GeneralLeaderboard.totalRewards.manaQNT,
+                    cards: rewards.general.totalRewards.specialCards,
+                    mana: rewards.general.totalRewards.manaQNT,
                     weth: getPrice('wETH') * genPercentage,
                     gem: getPrice('GEM') * genPercentage,
                 };
             case 'gen':
                 return {
-                    cards: rewards.GeneralLeaderboard.totalRewards.specialCards,
-                    mana: rewards.GeneralLeaderboard.totalRewards.manaQNT,
+                    cards: rewards.general.totalRewards.specialCards,
+                    mana: rewards.general.totalRewards.manaQNT,
                     weth: getPrice('wETH'),
                     gem: getPrice('GEM'),
                 };
             default:
                 return {
-                    cards: rewards.TerrestrialLeaderboard.top1.specialCards,
-                    mana: rewards.TerrestrialLeaderboard.top1.manaQNT,
+                    cards: rewards.terrestrial.top1.specialCards,
+                    mana: rewards.terrestrial.top1.manaQNT,
                     weth: getPrice('wETH') * terPercentage,
                     gem: getPrice('GEM') * terPercentage,
                 };

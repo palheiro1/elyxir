@@ -1,6 +1,7 @@
 import { Box, Image, Stack, Text } from '@chakra-ui/react';
 import defeatIcon from '../../../../assets/icons/defeat_icon.svg';
 import victoryIcon from '../../../../assets/icons/victory_icon.svg';
+import { useBattlegroundBreakpoints } from '../../../../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name BattleCardsSummary
@@ -23,6 +24,8 @@ const BattleCardsSummary = ({ infoAccount, playerInfo, cards, army, battleInfo, 
 
     const lastBattleAsset = battleResults.battleResult[battleResults.battleResult.length - 1][`${role}Asset`];
 
+    const { isMobile } = useBattlegroundBreakpoints();
+
     return (
         <Stack direction="row" mx="auto" w="45%" justifyContent="space-between" mt={role === 'attacker' ? 2 : 0}>
             <Text fontSize="x-small" color="#FFF" fontFamily="Inter, system-ui" my="auto">
@@ -42,8 +45,9 @@ const BattleCardsSummary = ({ infoAccount, playerInfo, cards, army, battleInfo, 
                         {isOverlayVisible && (
                             <Box
                                 position="absolute"
-                                top="0"
-                                left="0"
+                                top="50%"
+                                left="50%"
+                                transform="translate(-50%, -50%)"
                                 width="100%"
                                 height="100%"
                                 display="flex"
@@ -51,7 +55,7 @@ const BattleCardsSummary = ({ infoAccount, playerInfo, cards, army, battleInfo, 
                                 justifyContent="center"
                                 bg="rgba(0, 0, 0, 0.3)">
                                 <Text
-                                    fontSize="4rem"
+                                    fontSize={isMobile ? '3rem' : '4rem'}
                                     color="#E14942"
                                     opacity="0.8"
                                     fontFamily="'Aagaz', sans-serif">

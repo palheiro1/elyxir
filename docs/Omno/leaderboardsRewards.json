@@ -6,7 +6,7 @@
       "request": "configureAsMerge",
       "parameter": {
         "leaderboardsRewards": {
-          "AquaticLeaderboard": {
+          "aquatic": {
             "top1": {
               "giftz": 0,
               "tributePercentage": 0.16,
@@ -14,7 +14,7 @@
               "manaQNT": 200000000000
             }
           },
-          "GeneralLeaderboard": {
+          "general": {
             "top5": {
               "giftz": 0,
               "tributePercentage": 0.0225,
@@ -46,7 +46,7 @@
               "manaQNT": 100000000000
             }
           },
-          "TerrestrialLeaderboard": {
+          "terrestrial": {
             "top1": {
               "giftz": 0,
               "tributePercentage": 0.16,
@@ -54,7 +54,7 @@
               "manaQNT": 200000000000
             }
           },
-          "AerialLeaderboard": {
+          "aerial": {
             "top1": {
               "giftz": 0,
               "tributePercentage": 0.16,

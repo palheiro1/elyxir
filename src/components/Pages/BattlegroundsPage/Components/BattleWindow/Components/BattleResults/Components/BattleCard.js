@@ -7,7 +7,8 @@ import {
     getMediumIconInt,
 } from '../../../../../Utils/BattlegroundsUtils';
 import CardImage from './CardImage';
-import ValueBox from './ValueBox';
+import { useBattlegroundBreakpoints } from '../../../../../../../../hooks/useBattlegroundBreakpoints';
+import ScoreBox from '../../../../BattleRecord/BattleDetails/Components/ScoreBox';
 
 /**
  * @name BattleCard
@@ -39,32 +40,44 @@ const BattleCard = ({
     color,
     isDefender = false,
     defenderBonus = 0,
-}) => (
-    <Stack direction="row" color="#FFF" h="50%" spacing={4}>
-        <Stack direction="column" fontSize="xs" align="flex-start" my="auto" w="90%">
-            <Text fontSize="large" letterSpacing={2} fontFamily="'Aagaz', sans-serif" color={color}>
-                {card.name} {isHero ? '(Alpha)' : null}
-            </Text>
-            <Stack direction="row" w="95%">
-                <Stack direction="column" m="auto">
-                    <StatRow icon={getContinentIcon(card.channel)} value={bonuses?.domainBonus ?? 0} />
-                    <StatRow icon={getMediumIconInt(soldier.mediumId)} value={bonuses?.mediumBonus ?? 0} />
-                    <StatRow icon={getLevelIconInt(soldier.power)} value={soldier.power} />
-                    {!isHero && <StatRow icon="/images/battlegrounds/alpha_icon.svg" value={bonuses?.heroBonus ?? 0} />}
-                    <StatRow icon={getDiceIcon(roll)} value={roll} />
-                    {isDefender && isHero && (
-                        <StatRow icon="/images/battlegrounds/defense_icon.svg" value={defenderBonus || 2} />
-                    )}
+}) => {
+    const { isMobile } = useBattlegroundBreakpoints();
+    const isRowReversed = isMobile && isDefender;
+
+    return (
+        <Stack
+            direction={isRowReversed ? 'row-reverse' : 'row'}
+            w={isMobile ? '70%' : '95%'}
+            mr={!isDefender && isMobile && 3}
+            ml={isDefender && isMobile && 3}>
+            <Stack
+                direction="column"
+                fontSize="xs"
+                align={isDefender && isMobile ? 'flex-end' : 'flex-start'}
+                my="auto"
+                w="90%">
+                <Text fontSize="large" letterSpacing={2} fontFamily="'Aagaz', sans-serif" color={color}>
+                    {card.name} {isHero ? '(Alpha)' : null}
+                </Text>
+                <Stack direction="row" w="95%">
+                    <Stack direction="column" m="auto">
+                        <StatRow icon={getContinentIcon(card.channel)} value={bonuses?.domainBonus ?? 0} />
+                        <StatRow icon={getMediumIconInt(soldier.mediumId)} value={bonuses?.mediumBonus ?? 0} />
+                        <StatRow icon={getLevelIconInt(soldier.power)} value={soldier.power} />
+                        {!isHero && (
+                            <StatRow icon="/images/battlegrounds/alpha_icon.svg" value={bonuses?.heroBonus ?? 0} />
+                        )}
+                        <StatRow icon={getDiceIcon(roll)} value={roll} />
+                        {isDefender && isHero && (
+                            <StatRow icon="/images/battlegrounds/defense_icon.svg" value={defenderBonus || 2} />
+                        )}
+                    </Stack>
+                    <CardImage card={card} isHero={isHero} isDefeated={value <= opponentValue} />
                 </Stack>
-                <CardImage
-                    card={card}
-                    isHero={isHero}
-                    isDefeated={isDefender ? value <= opponentValue : value >= opponentValue}
-                />
             </Stack>
+            <ScoreBox value={value} isWinner={value >= opponentValue} />
         </Stack>
-        <ValueBox value={value} isWinner={isDefender ? value > opponentValue : value < opponentValue} />
-    </Stack>
-);
+    );
+};
 
 export default BattleCard;

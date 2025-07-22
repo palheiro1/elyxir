@@ -48,7 +48,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     const [soldiers, setSoldiers] = useState(null);
 
     const getLastBattle = useCallback(async () => {
-        if (!currentTime || !arenaInfo) return;
+        // if (!currentTime || !arenaInfo) return;
 
         // Configurar medium y nombre de arena
         switch (arenaInfo.mediumId) {
@@ -68,6 +68,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
 
         const accountId = addressToAccountId(infoAccount.accountRs);
         const res = await getLastUserBattle(accountId, currentTime);
+        console.log('🚀 ~ getLastBattle ~ res:', res);
 
         if (res) {
             clearInterval(intervalRef.current);
@@ -129,10 +130,10 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     );
 
     useEffect(() => {
-        if (currentTime) {
+        // if (currentTime) {
             intervalRef.current = setInterval(getLastBattle, 5000);
             return () => clearInterval(intervalRef.current);
-        }
+        // }
     }, [currentTime, getLastBattle]);
 
     useEffect(() => {
@@ -172,7 +173,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     }
 
     return (
-        <Stack h="100%" w="100%" direction="column">
+        <Stack h="100%" w="100%" direction="column" overflowY={'hidden'}>
             <BattleHeader
                 isDefenderWin={battleInfo.isDefenderWin}
                 attackerInfo={attackerInfo}

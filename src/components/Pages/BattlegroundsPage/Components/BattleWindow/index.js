@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, IconButton, Spinner, useToast } from '@chakra-ui/react';
+import { Box, Spinner, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { CloseIcon } from '@chakra-ui/icons';
-import { Overlay } from '../../../../ui/Overlay';
 import { getAccount } from '../../../../../services/Ardor/ardorInterface';
 import { getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 import { errorToast } from '../../../../../utils/alerts';
@@ -11,6 +9,7 @@ import { SelectHandPage } from './Components/SelectHandPage';
 import BattleResults from './Components/BattleResults';
 import BattleInventory from './Components/BattleInventory';
 import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
+import Modal from '../../../../ui/Modal';
 
 /**
  * @name BattleWindow
@@ -56,7 +55,6 @@ export const BattleWindow = ({
         element: '-1',
         domain: '-1',
     });
-
     const { isMobile } = useBattlegroundBreakpoints();
 
     const handleRarityChange = event => {
@@ -78,6 +76,14 @@ export const BattleWindow = ({
             ...prevFilters,
             domain: event.target.value,
         }));
+    };
+
+    const handleResetFilters = () => {
+        setFilters({
+            rarity: '-1',
+            element: '-1',
+            domain: '-1',
+        });
     };
     const toast = useToast();
 
@@ -201,94 +207,75 @@ export const BattleWindow = ({
     };
 
     return (
-        <>
-            <Overlay isVisible={true} handleClose={handleClose} />
-
-            <Box
-                pos={'fixed'}
-                bgColor={'#1F2323'}
-                zIndex={99}
-                w={isMobile ? '70%' : (!openIventory && !showResults && defenderInfo) || showResults ? '50%' : '80%'}
-                h={'90%'}
-                borderRadius={'25px'}
-                top={'50%'}
-                left={'50%'}
-                transform={'translate(-50%, -50%)'}>
-                <IconButton
-                    background={'transparent'}
-                    color={showResults ? '#000' : '#FFF'}
-                    icon={<CloseIcon />}
-                    _hover={{ background: 'transparent' }}
-                    position="absolute"
-                    top={2}
-                    right={2}
-                    zIndex={999}
-                    onClick={handleClose}
-                />
-                {!soldiers && (
-                    <Box
-                        h={'100%'}
-                        position={'absolute'}
-                        color={'#FFF'}
-                        alignContent={'center'}
-                        top={'50%'}
-                        left={'50%'}
-                        w={'100%'}
-                        textAlign={'center'}
-                        transform={'translate(-50%, -50%)'}>
-                        <Spinner color="#FFF" w={20} h={20} />
-                    </Box>
-                )}
-                {soldiers && (
-                    <>
-                        {!openIventory && !showResults && defenderInfo && (
-                            <SelectHandPage
-                                arenaInfo={arenaInfo}
-                                handleOpenInventory={handleOpenInventory}
-                                handBattleCards={handBattleCards}
-                                openInventory={handleOpenInventory}
-                                defenderInfo={defenderInfo}
-                                defenderCards={defenderCards}
-                                deleteCard={deleteCard}
-                                domainBonus={domainBonus}
-                                mediumBonus={mediumBonus}
-                                domainName={domainName}
-                                infoAccount={infoAccount}
-                                omnoGEMsBalance={omnoGEMsBalance}
-                                omnoWethBalance={omnoWethBalance}
-                                setShowResults={setShowResults}
-                                setCurrentTime={setCurrentTime}
-                                isMobile={isMobile}
-                            />
-                        )}
-                        {openIventory && (
-                            <BattleInventory
-                                setOpenIventory={setOpenIventory}
-                                filteredCards={filteredCards}
-                                index={index}
-                                handBattleCards={handBattleCards}
-                                updateCard={updateCard}
-                                isMobile={isMobile}
-                                arenaInfo={arenaInfo}
-                                filters={filters}
-                                handleRarityChange={handleRarityChange}
-                                handleElementChange={handleElementChange}
-                                handleDomainChange={handleDomainChange}
-                            />
-                        )}
-                        {showResults && (
-                            <BattleResults
-                                infoAccount={infoAccount}
-                                currentTime={currentTime}
-                                cards={cards}
-                                arenaInfo={arenaInfo}
-                                domainName={domainName}
-                                defenderInfo={defenderInfo}
-                            />
-                        )}
-                    </>
-                )}
-            </Box>
-        </>
+        <Modal
+            isVisible
+            width={isMobile ? '100%' : (!openIventory && !showResults && defenderInfo) || showResults ? '50%' : '80%'}
+            height={isMobile ? '100%' : '90%'}
+            onClose={handleClose}>
+            {!soldiers && (
+                <Box
+                    h={'100%'}
+                    position={'absolute'}
+                    color={'#FFF'}
+                    alignContent={'center'}
+                    top={'50%'}
+                    left={'50%'}
+                    w={'100%'}
+                    textAlign={'center'}
+                    transform={'translate(-50%, -50%)'}>
+                    <Spinner color="#FFF" w={20} h={20} />
+                </Box>
+            )}
+            {soldiers && (
+                <>
+                    {!openIventory && !showResults && defenderInfo && (
+                        <SelectHandPage
+                            arenaInfo={arenaInfo}
+                            handleOpenInventory={handleOpenInventory}
+                            handBattleCards={handBattleCards}
+                            openInventory={handleOpenInventory}
+                            defenderInfo={defenderInfo}
+                            defenderCards={defenderCards}
+                            deleteCard={deleteCard}
+                            domainBonus={domainBonus}
+                            mediumBonus={mediumBonus}
+                            domainName={domainName}
+                            infoAccount={infoAccount}
+                            omnoGEMsBalance={omnoGEMsBalance}
+                            omnoWethBalance={omnoWethBalance}
+                            setShowResults={setShowResults}
+                            setCurrentTime={setCurrentTime}
+                            isMobile={isMobile}
+                        />
+                    )}
+                    {openIventory && (
+                        <BattleInventory
+                            setOpenIventory={setOpenIventory}
+                            filteredCards={filteredCards}
+                            index={index}
+                            handBattleCards={handBattleCards}
+                            updateCard={updateCard}
+                            isMobile={isMobile}
+                            arenaInfo={arenaInfo}
+                            filters={filters}
+                            handleRarityChange={handleRarityChange}
+                            handleElementChange={handleElementChange}
+                            handleDomainChange={handleDomainChange}
+                            handleResetFilters={handleResetFilters}
+                        />
+                    )}
+                    {showResults && (
+                        <BattleResults
+                            infoAccount={infoAccount}
+                            currentTime={currentTime}
+                            cards={cards}
+                            arenaInfo={arenaInfo}
+                            domainName={domainName}
+                            defenderInfo={defenderInfo}
+                        />
+                    )}
+                </>
+            )}
+        </Modal>
     );
 };
