@@ -95,7 +95,7 @@ const RoundCard = ({
                 <Box display="flex" justifyContent="center" alignItems="center" height="100%">
                     <Image src={cardImgUrl} width={isHero ? '90%' : '100%'} m="auto" />
                 </Box>
-                {isWinner === false && (
+                {!isWinner && (
                     <Box
                         position="absolute"
                         top="50%"

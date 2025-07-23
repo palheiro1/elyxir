@@ -54,13 +54,11 @@ const BattleRecord = ({ handleClose, infoAccount, cards }) => {
         handleClose();
     };
 
+    const ModalWidth = isMobile || isMediumScreen ? '100%' : viewDetails ? '50%' : '70%';
+    const ModalHeight = isMobile || isMediumScreen ? '100%' : viewDetails ? '95%' : '90%';
+
     return (
-        <Modal
-            isVisible
-            width={isMobile || isMediumScreen ? '100%' : viewDetails ? '50%' : '70%'}
-            height={isMobile || isMediumScreen ? '100%' : viewDetails ? '95%' : '90%'}
-            overflowY={'hidden'}
-            onClose={closeRecord}>
+        <Modal isVisible width={ModalWidth} height={ModalHeight} overflowY={'hidden'} onClose={closeRecord}>
             {!viewDetails ? (
                 <>
                     <Stack direction="column" color="#FFF" my={5} mx="auto" textAlign="center" maxH="90%">

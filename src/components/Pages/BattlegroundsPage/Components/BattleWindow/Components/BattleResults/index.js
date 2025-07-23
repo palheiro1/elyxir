@@ -68,8 +68,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
 
         const accountId = addressToAccountId(infoAccount.accountRs);
         const res = await getLastUserBattle(accountId, currentTime);
-        console.log('🚀 ~ getLastBattle ~ res:', res);
-
         if (res) {
             clearInterval(intervalRef.current);
             const capturedCard = cards.find(card => Object.keys(res.capturedAsset).includes(card.asset));
@@ -130,10 +128,10 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     );
 
     useEffect(() => {
-        // if (currentTime) {
+        if (currentTime) {
             intervalRef.current = setInterval(getLastBattle, 5000);
             return () => clearInterval(intervalRef.current);
-        // }
+        }
     }, [currentTime, getLastBattle]);
 
     useEffect(() => {
