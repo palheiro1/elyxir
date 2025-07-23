@@ -22,17 +22,15 @@ const CardItem = ({ card, isMobile, onClick, isPreSelected }) => {
         <Box
             key={card.asset}
             position="relative"
-            w={isMobile ? '128px' : '214px'}
-            h={isMobile ? '215px' : '333px'}
-            cursor="pointer"
             bg="white"
             borderRadius="10px"
+            mx="auto"
+            cursor="pointer"
             onClick={handleClick}>
             <Center>
                 <Img src={cardImgUrl} w="90%" h="75%" />
             </Center>
-
-            <Stack direction={{ base: 'column', lg: 'row' }} spacing={0} mx={2}>
+            <Stack direction="column" spacing={0} mx={2} mb={1}>
                 <Stack direction="column" spacing={0} align={{ base: 'center', lg: 'start' }}>
                     <Text fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }} noOfLines={1} fontWeight="bold" color="#000">
                         {name}

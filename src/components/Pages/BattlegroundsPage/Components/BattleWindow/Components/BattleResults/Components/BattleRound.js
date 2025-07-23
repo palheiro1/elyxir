@@ -1,6 +1,7 @@
 import { Square, Stack } from '@chakra-ui/react';
 import BattleCard from './BattleCard';
 import { Fragment } from 'react';
+import { useBattlegroundBreakpoints } from '../../../../../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name BattleRound
@@ -39,9 +40,18 @@ const BattleRound = ({
     const attackerSoldier = soldiers.find(s => s.asset === attackerAsset);
     const defenderSoldier = soldiers.find(s => s.asset === defenderAsset);
 
+    const { isMobile } = useBattlegroundBreakpoints();
+
     return (
         <Fragment key={index}>
-            <Stack direction="column" minW="250px" w="250px" h="100%" flexShrink={0}>
+            <Stack
+                direction={isMobile ? 'row' : 'column'}
+                minW="250px"
+                w={isMobile ? '90%' : '250px'}
+                h={isMobile ? '250px' : '100%'}
+                mx={'auto'}
+                justifyContent={isMobile && 'space-between'}
+                flexShrink={0}>
                 <BattleCard
                     card={attackerCard}
                     soldier={attackerSoldier}
@@ -67,7 +77,7 @@ const BattleRound = ({
                     defenderBonus={battleInfo.defenderBonus}
                 />
             </Stack>
-            <Square bgColor="#FFF" height="95%" width="1px" my="auto" />
+            <Square bgColor="#FFF" height={isMobile ? '1px' : '95%'} width={isMobile ? '90%' : '1px'} m="auto" />
         </Fragment>
     );
 };

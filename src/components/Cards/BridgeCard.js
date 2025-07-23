@@ -57,8 +57,8 @@ const BridgeCard = ({
     const textColor = useColorModeValue(!canEdit ? 'black' : 'white', canEdit ? 'white' : 'white');
 
     return (
-        <Stack direction={'row'} minWidth="375px" spacing={4}>
-            <Image maxW="75px" src={image} alt={title} shadow="lg" rounded="sm" />
+        <Stack direction={'row'} minWidth={isMobile ? '200px' : '375px'} spacing={4}>
+            <Image maxW={isMobile ? '90px' : '75px'} src={image} alt={title} shadow="lg" rounded="sm" />
             <Stack direction={isMobile ? 'column' : 'row'}>
                 <Stack direction={'row'} align="center" minW="35%">
                     <Box>
@@ -75,7 +75,7 @@ const BridgeCard = ({
                 {canEdit && (
                     <>
                         <HStack ml={2}>
-                            <HStack maxW="200px" spacing={0}>
+                            <HStack maxW={isMobile ? '150px' : '200px'} spacing={0}>
                                 <Button rounded="none" {...dec} onClick={() => handleEdit(card.asset, input.value)}>
                                     -
                                 </Button>

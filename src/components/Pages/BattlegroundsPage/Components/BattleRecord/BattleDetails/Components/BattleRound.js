@@ -53,9 +53,22 @@ const BattleRound = ({
 
     return (
         <Fragment key={index}>
-            <Stack direction="column" minW="250px" w="250px" h="100%" flexShrink={0}>
-                <Stack direction="row" color="#FFF" h="50%" spacing={4}>
-                    <Stack direction="column" fontSize="xs" align="flex-start" my="auto" w="90%">
+            <Stack
+                direction={isMobile ? 'row' : 'column'}
+                minW="250px"
+                w={isMobile ? '90%' : '250px'}
+                h={isMobile ? '250px' : '100%'}
+                mx={'auto'}
+                justifyContent={isMobile && 'space-between'}
+                flexShrink={0}>
+                <Stack
+                    direction="row"
+                    color="#FFF"
+                    h={!isMobile && '50%'}
+                    mr={isMobile && 2}
+                    w={isMobile && '50%'}
+                    spacing={4}>
+                    <Stack direction="column" fontSize="xs" align="flex-start" my="auto" w={'90%'}>
                         <Text fontSize="large" letterSpacing={2} fontFamily="'Aagaz', sans-serif" color="#D597B2">
                             {attackerCard.name} {attackerHero.asset === attackerCard.asset ? '(Alpha)' : null}
                         </Text>
@@ -74,8 +87,14 @@ const BattleRound = ({
                     <ScoreBox value={attackerValue} isWinner={isAttackerWinner} />
                 </Stack>
 
-                <Stack direction="row" color="#FFF" h="50%" spacing={4} mt={isMobile && '60px'}>
-                    <Stack direction="column" fontSize="xs" align="flex-start" my="auto" w="90%">
+                <Stack
+                    direction={isMobile ? 'row-reverse' : 'row'}
+                    color="#FFF"
+                    w={isMobile && '50%'}
+                    h={!isMobile && '50%'}
+                    spacing={4}
+                    ml={isMobile && 2}>
+                    <Stack direction="column" fontSize="xs" align="flex-end" my="auto" w="90%">
                         <Text fontSize="large" letterSpacing={2} fontFamily="'Aagaz', sans-serif" color="#D597B2">
                             {defenderCard.name} {defenderHero.asset === defenderCard.asset ? '(Alpha)' : null}
                         </Text>
@@ -94,12 +113,13 @@ const BattleRound = ({
                                     ? battleInfo.defenderBonus || 2
                                     : undefined
                             }
+                            isDefender
                         />
                     </Stack>
                     <ScoreBox value={defenderValue} isWinner={isDefenderWinner} />
                 </Stack>
             </Stack>
-            <Square bgColor="#FFF" height={isMobile ? '180%' : '95%'} width="1px" my="auto" />
+            <Square bgColor="#FFF" height={isMobile ? '1px' : '95%'} width={isMobile ? '90%' : '1px'} m="auto" />
         </Fragment>
     );
 };

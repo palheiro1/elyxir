@@ -41,6 +41,7 @@ const BattleInventory = ({
     handleRarityChange,
     handleElementChange,
     handleDomainChange,
+    handleResetFilters,
 }) => {
     const { soldiers } = useSelector(state => state.soldiers);
     const { level } = arenaInfo;
@@ -119,6 +120,7 @@ const BattleInventory = ({
                     handleRarityChange={handleRarityChange}
                     handleElementChange={handleElementChange}
                     handleDomainChange={handleDomainChange}
+                    handleResetFilters={handleResetFilters}
                     isMobile={isMobile}
                     index={index}
                     level={level}

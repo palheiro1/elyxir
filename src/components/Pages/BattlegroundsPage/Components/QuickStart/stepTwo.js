@@ -20,7 +20,7 @@ const stepTwo = ({ isMobile, setImagesLoaded }) => {
                 <Image
                     key={tarasca}
                     src={tarasca}
-                    w={'40%'}
+                    w={isMobile ? '35%' : '40%'}
                     onLoad={() => setImagesLoaded(true)}
                     onError={() => setImagesLoaded(true)}
                 />

@@ -1,10 +1,9 @@
-import { Box, IconButton, Select, Stack, Text, useMediaQuery } from '@chakra-ui/react';
+import { Select, Stack, Text } from '@chakra-ui/react';
 import { useState, useMemo, useCallback, memo } from 'react';
-import { Overlay } from '../../../../ui/Overlay';
-import { CloseIcon } from '@chakra-ui/icons';
 import OmnoPage from './OmnoPage';
 import ArdorPage from './ArdorPage';
 import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
+import Modal from '../../../../ui/Modal';
 
 /**
  * @name Inventory
@@ -26,9 +25,7 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory }) => {
         setSelectedOption(event.target.value);
     }, []);
 
-    const { isMobile } = useBattlegroundBreakpoints();
-    const [isLittleScreen] = useMediaQuery('(min-width: 1180px) and (max-width: 1399px)');
-    const [isMediumScreen] = useMediaQuery('(min-width: 1400px) and (max-width: 1550px)');
+    const { isMobile, isMediumScreen, isLittleScreen } = useBattlegroundBreakpoints();
 
     const gridColumns = useMemo(() => {
         if (isMobile) return 2;
@@ -58,60 +55,39 @@ const Inventory = ({ infoAccount, cards, handleCloseInventory }) => {
     }, [selectedOption, infoAccount, cards, gridColumns, isMobile, handleCloseInventory]);
 
     return (
-        <>
-            <Overlay isVisible handleClose={handleCloseInventory} />
-            <Box
-                pos="fixed"
-                top="50%"
-                left="50%"
-                transform="translate(-50%, -50%)"
-                bgColor="#1F2323"
-                zIndex={99}
-                w={isMobile ? '100%' : '98%'}
-                p={4}
-                display="flex"
-                flexDir="column"
-                h={isMobile ? '100%' : '90%'}
-                borderRadius="25px">
-                <IconButton
-                    background="transparent"
-                    color="#FFF"
-                    icon={<CloseIcon />}
-                    _hover={{ background: 'transparent' }}
-                    position="absolute"
-                    top={2}
-                    right={2}
-                    onClick={handleCloseInventory}
-                    aria-label="Close inventory"
-                />
-                <Stack
-                    direction="column"
-                    fontFamily="Chelsea Market, System"
-                    position="absolute"
-                    top={isMobile ? 2 : 8}
-                    left={8}>
-                    <Text fontSize="xs" mx="auto">
-                        SEND TO
-                    </Text>
-                    <Select
-                        w="fit-content"
-                        bg="#FFF"
-                        color="#000"
-                        fontWeight={100}
-                        value={selectedOption}
-                        onChange={handleSelectChange}>
-                        <option value="battlegrounds" style={{ backgroundColor: '#FFF' }}>
-                            Army
-                        </option>
-                        <option value="ardor" style={{ backgroundColor: '#FFF' }}>
-                            Inventory
-                        </option>
-                    </Select>
-                </Stack>
+        <Modal
+            isVisible
+            onClose={handleCloseInventory}
+            width={isMobile ? '100%' : '98%'}
+            height={isMobile ? '100%' : '90%'}
+            p={4}>
+            <Stack
+                direction="column"
+                fontFamily="Chelsea Market, System"
+                position="absolute"
+                top={isMobile ? 2 : 8}
+                left={8}>
+                <Text fontSize="xs" mx="auto">
+                    SEND TO
+                </Text>
+                <Select
+                    w="fit-content"
+                    bg="#FFF"
+                    color="#000"
+                    fontWeight={100}
+                    value={selectedOption}
+                    onChange={handleSelectChange}>
+                    <option value="battlegrounds" style={{ backgroundColor: '#FFF' }}>
+                        Army
+                    </option>
+                    <option value="ardor" style={{ backgroundColor: '#FFF' }}>
+                        Inventory
+                    </option>
+                </Select>
+            </Stack>
 
-                {SelectedPage}
-            </Box>
-        </>
+            {SelectedPage}
+        </Modal>
     );
 };
 

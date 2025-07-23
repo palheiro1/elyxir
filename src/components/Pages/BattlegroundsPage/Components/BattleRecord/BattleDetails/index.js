@@ -174,7 +174,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
     }
 
     return cards && cards.length > 0 && battleInfo ? (
-        <Stack boxSize="100%" height={'105%'}>
+        <Stack boxSize="100%">
             <IconButton
                 background={'transparent'}
                 color={'#000'}

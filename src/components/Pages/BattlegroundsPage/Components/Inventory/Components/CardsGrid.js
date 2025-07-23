@@ -1,5 +1,6 @@
-import { Box, Center, Img, SimpleGrid, Stack, Text, Tooltip, Flex, Spacer, useColorModeValue } from '@chakra-ui/react';
+import { Box, Center, Img, SimpleGrid, Stack, Text, Flex, Spacer, useColorModeValue } from '@chakra-ui/react';
 import CardBadges from '../../../../../Cards/CardBadges';
+import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name CardGrid
@@ -22,6 +23,7 @@ const CardGrid = ({
     emptyText = 'No cards available',
 }) => {
     const textColor = useColorModeValue('black', 'white');
+    const { isMobile } = useBattlegroundBreakpoints();
 
     if (!cards.length) {
         return (
@@ -59,17 +61,15 @@ const CardGrid = ({
                                     color="#000">
                                     {name}
                                 </Text>
-                                <CardBadges rarity={rarity} continent={channel} size="sm" />
+                                <CardBadges rarity={rarity} continent={channel} size={isMobile ? '2xs' : 'sm'} />
                             </Stack>
                             <Spacer display={{ base: 'none', lg: 'block' }} />
                             <Center minHeight={{ base: 'auto', lg: '100%' }}>
-                                <Tooltip label={`${quantityLabel}: ${quantity}`} placement="bottom">
-                                    <Flex w={{ base: 'auto', lg: '100%' }}>
-                                        <Text fontSize="small" color="#000">
-                                            {quantityLabel}: {quantity}
-                                        </Text>
-                                    </Flex>
-                                </Tooltip>
+                                <Flex w={{ base: 'auto', lg: '100%' }}>
+                                    <Text fontSize="small" color="#000">
+                                        {quantityLabel}: {quantity}
+                                    </Text>
+                                </Flex>
                             </Center>
                         </Stack>
                     </Box>

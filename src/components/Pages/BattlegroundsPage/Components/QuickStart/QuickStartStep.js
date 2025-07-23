@@ -11,11 +11,11 @@ import { Text, Image, Stack } from '@chakra-ui/react';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const QuickStartStep = ({ title, imageSrc, texts, setImagesLoaded, isMobile }) => {
-    const imageWidth = title === 'Fight and win' ? (isMobile ? '33%' : '90%') : isMobile ? '38%' : '80%';
+    const imageWidth = title === 'Fight and win' ? (isMobile ? '30%' : '90%') : isMobile ? '35%' : '80%';
     return (
         <Stack direction="column" spacing={4} overflow="hidden" align="center">
             <Stack direction={!isMobile ? 'column' : 'row-reverse'}>
-                <Text fontSize={isMobile ? '35px' : '42px'} my={isMobile && 'auto'}>
+                <Text fontSize={isMobile ? '32px' : '42px'} my={isMobile && 'auto'}>
                     {title}
                 </Text>
                 <Image
