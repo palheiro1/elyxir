@@ -1,5 +1,6 @@
 import { TriangleUpIcon } from '@chakra-ui/icons';
-import { Box, Image, Stack, Text, Tooltip } from '@chakra-ui/react';
+import { Image, Stack, Text } from '@chakra-ui/react';
+import ResponsiveTooltip from '../../../../../../ui/ReponsiveTooltip';
 
 /**
  * @name CapturedCard
@@ -17,13 +18,9 @@ const CapturedCard = ({ capturedCard, isUserDefending, isDefenderWin }) => {
     const labelText = isUserDefending === isDefenderWin ? 'OBTAINED CARD:' : 'CAPTURED CARD:';
 
     return (
-        <Stack direction={'row'} spacing={1} alignItems={'end'} mx={'auto'} w={'30%'} h={'100%'}>
-            <Tooltip
-                label={
-                    <Box>
-                        <Image src={capturedCard?.cardImgUrl} alt={capturedCard?.name} w="200px" />
-                    </Box>
-                }
+        <Stack direction={'row'} spacing={1} alignItems={'end'} mx={'auto'} w={'30%'}>
+            <ResponsiveTooltip
+                label={<Image src={capturedCard?.cardImgUrl} alt={capturedCard?.name} w="200px" />}
                 aria-label={capturedCard?.name}
                 placement="top"
                 hasArrow>
@@ -33,7 +30,7 @@ const CapturedCard = ({ capturedCard, isUserDefending, isDefenderWin }) => {
                     </Text>
                     <TriangleUpIcon color={'#000'} my={'auto'} />
                 </Stack>
-            </Tooltip>
+            </ResponsiveTooltip>
         </Stack>
     );
 };

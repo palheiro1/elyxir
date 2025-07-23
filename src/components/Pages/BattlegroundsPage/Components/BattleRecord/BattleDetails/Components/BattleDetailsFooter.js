@@ -1,6 +1,7 @@
 import { Stack, Text, Tooltip } from '@chakra-ui/react';
 import { formatAddress } from '../../../../Utils/BattlegroundsUtils';
 import CapturedCard from './CapturedCard';
+import { useBattlegroundBreakpoints } from '../../../../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name BattleDetailsFooter
@@ -17,16 +18,18 @@ import CapturedCard from './CapturedCard';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const BattleDetailsFooter = ({ isDefenderWin, defenderInfo, defenderPoints, capturedCard, isUserDefending }) => {
+    const { isMobile } = useBattlegroundBreakpoints();
     return (
         <Stack
             direction={'row'}
             bgColor={'#BFD1ED'}
             w={'100%'}
-            h={'7%'}
+            h={isMobile ? '10%' : '7%'}
             fontFamily={'Chelsea Market, system-ui'}
             borderBottomRadius={'25px'}
             justifyContent={'space-between'}
             alignItems={'center'}
+            mt={isMobile ? 0 : 10}
             px={4}>
             <Stack direction={'row'} w={'100%'}>
                 <Text color={'#000'} my={'auto'} fontSize={'large'} ml={10}>

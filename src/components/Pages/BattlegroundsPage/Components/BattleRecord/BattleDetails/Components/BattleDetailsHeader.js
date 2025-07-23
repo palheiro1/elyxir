@@ -1,5 +1,6 @@
 import { Image, Stack, Text, Tooltip } from '@chakra-ui/react';
 import { formatAddress, getContinentIcon, getLevelIconInt, getMediumIcon } from '../../../../Utils/BattlegroundsUtils';
+import { useBattlegroundBreakpoints } from '../../../../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name BattleDetailsHeader
@@ -26,12 +27,13 @@ const BattleDetailsHeader = ({
     medium,
     arenaLevel,
 }) => {
+    const { isMobile } = useBattlegroundBreakpoints();
     return (
         <Stack
             direction={'row'}
             bgColor={'#BFD1ED'}
             w={'100%'}
-            h={'7%'}
+            h={isMobile ? '10%' : '7%'}
             fontFamily={'Chelsea Market, system-ui'}
             borderTopRadius={'25px'}
             justifyContent={'space-between'}

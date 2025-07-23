@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Overlay } from '../../../../ui/Overlay';
-import { Box, IconButton, Stack, Select, Image, Text } from '@chakra-ui/react';
-import { CloseIcon } from '@chakra-ui/icons';
+import { Stack, Select, Image, Text } from '@chakra-ui/react';
 import { fetchAccountDetails, fetchLeaderboards, setViewData } from '../../../../../redux/reducers/LeaderboardsReducer';
 import CombativityResetTimer from './CombativityLeaderboard/CombativityResetTimer';
 import panteon from '../../assets/icons/panteon_banner.svg';
@@ -15,6 +13,7 @@ import TypesLeaderboardsRewards from './TypesLeaderboards/TypesLeaderboardsRewar
 import TypesLeaderboardsResetTimer from './TypesLeaderboards/TypesLeaderboardsResetTimer';
 import TypesLeaderboard from './TypesLeaderboards';
 import CombativityLeaderboard from './CombativityLeaderboard/CombativityLeaderboard';
+import Modal from '../../../../ui/Modal';
 
 /**
  * @name Leaderboards
@@ -123,130 +122,107 @@ const Leaderboards = ({ handleClose }) => {
     ];
 
     return (
-        <>
-            <Overlay isVisible={true} handleClose={closeLeaderboards} />
-            <Box
-                pos={'fixed'}
-                bgColor={'#1F2323'}
-                zIndex={99}
-                w={isMobile ? '80%' : '70%'}
-                h={'90%'}
-                borderRadius={'25px'}
-                top={'50%'}
-                left={'50%'}
-                transform={'translate(-50%, -50%)'}>
-                <IconButton
-                    background={'transparent'}
+        <Modal
+            isVisible
+            onClose={closeLeaderboards}
+            width={isMobile ? '100%' : '70%'}
+            height={isMobile ? '100%' : '90%'}>
+            <Stack boxSize={'100%'}>
+                <Stack
+                    direction={'row'}
                     color={'#FFF'}
-                    icon={<CloseIcon />}
-                    _hover={{ background: 'transparent' }}
-                    position="absolute"
-                    top={2}
-                    right={2}
-                    zIndex={999}
-                    onClick={closeLeaderboards}
-                />
-                <Stack boxSize={'100%'}>
-                    <Stack
-                        direction={'row'}
-                        color={'#FFF'}
-                        mt={isMobile ? 3 : 10}
-                        mx={'auto'}
-                        w={'80%'}
-                        textAlign={'center'}
-                        justifyContent={'space-between'}>
-                        <Text
-                            fontFamily={'Chelsea Market, System'}
-                            fontWeight={100}
-                            my={'auto'}
-                            fontSize={isMobile ? 'md' : '3xl'}>
-                            LEADERBOARDS
-                        </Text>
+                    mt={isMobile ? 3 : 10}
+                    mx={'auto'}
+                    w={'80%'}
+                    textAlign={'center'}
+                    justifyContent={'space-between'}>
+                    <Text
+                        fontFamily={'Chelsea Market, System'}
+                        fontWeight={100}
+                        my={'auto'}
+                        fontSize={isMobile ? 'md' : '3xl'}>
+                        LEADERBOARDS
+                    </Text>
 
-                        <Image
-                            src={(() => {
-                                switch (option) {
-                                    case 1:
-                                        return panteon;
-                                    case 2:
-                                        return landsBanner;
-                                    case 3:
-                                        return airBanner;
-                                    case 4:
-                                        return waterBanner;
-                                    case 5:
-                                        return combativityBanner;
-                                    default:
-                                        return null;
-                                }
-                            })()}
-                            w={isMobile ? '120px' : '190px'}
-                            h={'75px'}
-                        />
-                        <Select
-                            value={option}
-                            onChange={e => changeData(Number(e.target.value))}
-                            color={color()}
-                            bgColor={'transparent'}
-                            my={'auto'}
-                            zIndex={999}
-                            border={'none'}
-                            fontFamily={'Chelsea Market, System'}
-                            _hover={{ borderColor: '#555' }}
-                            maxW={'270px'}>
-                            {availableLeaderboards.map(({ name, value }, index) => {
-                                return (
-                                    <option
-                                        key={index}
-                                        value={value}
-                                        style={{
-                                            backgroundColor: '#FFF',
-                                            color: '#000',
-                                        }}>
-                                        {name}
-                                    </option>
-                                );
-                            })}
-                        </Select>
-                    </Stack>
+                    <Image
+                        src={(() => {
+                            switch (option) {
+                                case 1:
+                                    return panteon;
+                                case 2:
+                                    return landsBanner;
+                                case 3:
+                                    return airBanner;
+                                case 4:
+                                    return waterBanner;
+                                case 5:
+                                    return combativityBanner;
+                                default:
+                                    return null;
+                            }
+                        })()}
+                        w={isMobile ? '120px' : '190px'}
+                        h={'75px'}
+                    />
+                    <Select
+                        value={option}
+                        onChange={e => changeData(Number(e.target.value))}
+                        color={color()}
+                        bgColor={'transparent'}
+                        my={'auto'}
+                        zIndex={999}
+                        border={'none'}
+                        fontFamily={'Chelsea Market, System'}
+                        _hover={{ borderColor: '#555' }}
+                        maxW={'270px'}>
+                        {availableLeaderboards.map(({ name, value }, index) => {
+                            return (
+                                <option
+                                    key={index}
+                                    value={value}
+                                    style={{
+                                        backgroundColor: '#FFF',
+                                        color: '#000',
+                                    }}>
+                                    {name}
+                                </option>
+                            );
+                        })}
+                    </Select>
+                </Stack>
+                <Stack
+                    direction={'column'}
+                    color={'#FFF'}
+                    mx={'auto'}
+                    w={'100%'}
+                    textAlign={'center'}
+                    h={isMobile ? '100%' : '80%'}>
                     <Stack
                         direction={'column'}
-                        color={'#FFF'}
-                        mx={'auto'}
-                        w={'100%'}
-                        textAlign={'center'}
-                        h={isMobile ? '100%' : '80%'}>
-                        <Stack
-                            direction={'column'}
-                            my={'auto'}
-                            mt={isMobile ? 0 : 2}
-                            fontFamily={'Chelsea Market, System'}
-                            mb={0}
-                            h={isMobile ? '70%' : '80%'}>
-                            {option === 5 ? (
-                                <CombativityLeaderboard color={color} />
-                            ) : (
-                                <TypesLeaderboard color={color} />
-                            )}
-                        </Stack>
-                        <Stack dir="row" mx={'auto'} w={'90%'}>
-                            {option === 5 ? (
-                                <CombativityResetTimer mb={isMobile ? 0 : 4} />
-                            ) : (
-                                <Stack
-                                    direction={'row'}
-                                    mb={isMobile ? 0 : 4}
-                                    align={'baseline'}
-                                    justifyContent={'space-between'}>
-                                    <TypesLeaderboardsRewards option={option} />
-                                    <TypesLeaderboardsResetTimer />
-                                </Stack>
-                            )}
-                        </Stack>
+                        my={'auto'}
+                        mt={isMobile ? 0 : 2}
+                        fontFamily={'Chelsea Market, System'}
+                        mb={0}
+                        h={isMobile ? '70%' : '80%'}>
+                        {option === 5 ? <CombativityLeaderboard color={color} /> : <TypesLeaderboard color={color} />}
+                    </Stack>
+                    <Stack dir="row" mx={'auto'} w={'90%'}>
+                        {option === 5 ? (
+                            <CombativityResetTimer mb={isMobile ? 0 : 4} />
+                        ) : (
+                            <Stack
+                                direction={'row'}
+                                mb={isMobile ? 0 : 4}
+                                align={'baseline'}
+                                justifyContent={'space-between'}>
+                                <TypesLeaderboardsRewards option={option} />
+                                <TypesLeaderboardsResetTimer />
+                            </Stack>
+                        )}
                     </Stack>
                 </Stack>
-            </Box>
-        </>
+            </Stack>
+        </Modal>
     );
 };
 

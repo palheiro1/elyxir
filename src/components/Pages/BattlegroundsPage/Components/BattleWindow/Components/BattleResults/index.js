@@ -48,7 +48,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     const [soldiers, setSoldiers] = useState(null);
 
     const getLastBattle = useCallback(async () => {
-        if (!currentTime || !arenaInfo) return;
+        // if (!currentTime || !arenaInfo) return;
 
         // Configurar medium y nombre de arena
         switch (arenaInfo.mediumId) {
@@ -68,7 +68,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
 
         const accountId = addressToAccountId(infoAccount.accountRs);
         const res = await getLastUserBattle(accountId, currentTime);
-
         if (res) {
             clearInterval(intervalRef.current);
             const capturedCard = cards.find(card => Object.keys(res.capturedAsset).includes(card.asset));
@@ -172,7 +171,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     }
 
     return (
-        <Stack h="100%" w="100%" direction="column">
+        <Stack h="100%" w="100%" direction="column" overflowY={'hidden'}>
             <BattleHeader
                 isDefenderWin={battleInfo.isDefenderWin}
                 attackerInfo={attackerInfo}

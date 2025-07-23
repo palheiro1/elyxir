@@ -12,9 +12,10 @@ import { useMediaQuery } from '@chakra-ui/react';
 export const useBattlegroundBreakpoints = () => {
     const [isMobile] = useMediaQuery('(max-width: 1179px)');
     const [isMediumScreen] = useMediaQuery('(min-width: 1180px) and (max-width: 1400px)');
-
+    const [isLittleScreen] = useMediaQuery('(min-width: 1180px) and (max-width: 1399px)');
     return {
         isMobile,
         isMediumScreen,
+        isLittleScreen,
     };
 };

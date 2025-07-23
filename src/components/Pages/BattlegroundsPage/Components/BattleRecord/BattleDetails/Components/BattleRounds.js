@@ -5,7 +5,7 @@ import BattleRound from './BattleRound';
 
 /**
  * @name BattleRounds
- * @description Renders a horizontally scrollable list of all battle rounds for a given battle. 
+ * @description Renders a horizontally scrollable list of all battle rounds for a given battle.
  * Includes navigation arrows to scroll left or right and dynamically enables/disables them based on scroll position.
  * @param {Object} props - Component props.
  * @param {Object} props.battleResults - Object containing all battle round data, including `battleResult` array.
@@ -60,7 +60,7 @@ const BattleRounds = ({
     };
     return (
         <Stack
-            direction={'row'}
+            direction={isMobile ? 'column' : 'row'}
             mx={'auto'}
             w={'90%'}
             h={'60%'}
@@ -79,11 +79,12 @@ const BattleRounds = ({
                 transform="translateY(-50%)"
                 zIndex="1"
                 onClick={() => {
-                    handleHorizantalScroll(elementRef.current, 10, 200, -5);
+                    handleHorizantalScroll(elementRef.current, 10, 400, -5);
                 }}
                 bg="rgba(255, 255, 255, 0.8)"
                 _hover={{ bg: 'rgba(255, 255, 255, 1)' }}
                 borderRadius={'full'}
+                display={isMobile ? 'none' : 'block'}
             />
 
             {battleResults &&
@@ -117,6 +118,7 @@ const BattleRounds = ({
                 }}
                 bg="rgba(255, 255, 255, 0.8)"
                 _hover={{ bg: 'rgba(255, 255, 255, 1)' }}
+                display={isMobile ? 'none' : 'block'}
             />
         </Stack>
     );

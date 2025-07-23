@@ -126,7 +126,6 @@ const Battlegrounds = ({ infoAccount }) => {
                                 handleStartBattle={() => handleOpenModal('battle')}
                                 filters={filters}
                                 w="100%"
-                                isMediumScreen={isMediumScreen}
                             />
 
                             <BattlegroundStatistics statistics={statistics} isMobile={isMobile} />

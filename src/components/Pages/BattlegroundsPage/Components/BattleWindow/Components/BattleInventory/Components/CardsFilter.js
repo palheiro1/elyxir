@@ -1,7 +1,8 @@
-import { Select, Stack } from '@chakra-ui/react';
+import { IconButton, Select, Stack } from '@chakra-ui/react';
 import { memo, useMemo } from 'react';
 import { DOMAIN_OPTIONS, ELEMENT_OPTIONS, RARITY_OPTIONS } from '../data';
 import { renderOptions } from './renderOptions';
+import { CloseIcon } from '@chakra-ui/icons';
 
 /**
  * @name CardsFilter
@@ -28,6 +29,7 @@ const CardsFilter = ({
     handleRarityChange,
     handleElementChange,
     handleDomainChange,
+    handleResetFilters,
     isMobile,
     index,
     level,
@@ -41,17 +43,18 @@ const CardsFilter = ({
 
     return (
         <Stack direction="row" fontFamily="Chelsea Market, system-ui" ml="9%">
-            <Select w={width} onChange={handleRarityChange} color="#FFF" defaultValue={filters.rarity}>
+            <Select w={width} onChange={handleRarityChange} color="#FFF" value={filters.rarity}>
                 {renderOptions('Rarity', rarityOptions)}
             </Select>
 
-            <Select w={width} onChange={handleElementChange} color="#FFF" defaultValue={filters.element}>
+            <Select w={width} onChange={handleElementChange} color="#FFF" value={filters.element}>
                 {renderOptions('Element', ELEMENT_OPTIONS)}
             </Select>
 
-            <Select w={width} onChange={handleDomainChange} color="#FFF" defaultValue={filters.domain}>
+            <Select w={width} onChange={handleDomainChange} color="#FFF" value={filters.domain}>
                 {renderOptions('Continent', DOMAIN_OPTIONS)}
             </Select>
+            <IconButton color={'#FFF'} icon={<CloseIcon />} onClick={handleResetFilters} ml={2} />
         </Stack>
     );
 };

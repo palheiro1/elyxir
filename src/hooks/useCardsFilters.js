@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 /**
@@ -18,7 +18,7 @@ import { useSelector } from 'react-redux';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 export const useCardsFilters = (selectedCards, cards) => {
-    const [filters, setFilters] = useState({ rarity: '', element: '', domain: '' });
+    const [filters, setFilters] = useState({ rarity: '-1', element: '-1', domain: '-1' });
 
     const { soldiers } = useSelector(state => state.soldiers);
 
@@ -34,26 +34,31 @@ export const useCardsFilters = (selectedCards, cards) => {
 
         return notSelectedCards
             .filter(card => {
-                return filters.rarity && filters.rarity !== '-1' ? card.rarity === rarityMap[filters.rarity] : true;
+                return filters.rarity !== '-1' ? card.rarity === rarityMap[filters.rarity] : true;
             })
             .filter(card => {
                 const cardInfo = soldiers.soldier.find(s => s.asset === card.asset);
-                return filters.element && filters.element !== '-1'
-                    ? cardInfo?.mediumId === Number(filters.element)
-                    : true;
+                return filters.element !== '-1' ? cardInfo?.mediumId === Number(filters.element) : true;
             })
             .filter(card => {
-                return filters.domain && filters.domain !== '-1' ? card.channel === domainMap[filters.domain] : true;
+                return filters.domain !== '-1' ? card.channel === domainMap[filters.domain] : true;
             });
     }, [notSelectedCards, filters, soldiers]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const memoizedFilters = useMemo(() => filters, [filters, filters.rarity, filters.element, filters.domain]);
     const handleChange = key => e => setFilters(prev => ({ ...prev, [key]: e.target.value }));
 
+    const handleReset = () => {
+        setFilters({ rarity: '-1', element: '-1', domain: '-1' });
+    };
+
     return {
-        filters,
+        filters: memoizedFilters,
         filteredNotSelectedCards,
         handleRarityChange: handleChange('rarity'),
         handleElementChange: handleChange('element'),
         handleDomainChange: handleChange('domain'),
+        handleReset,
     };
 };
