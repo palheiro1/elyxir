@@ -5,7 +5,7 @@ export const fetchCards = createAsyncThunk(
     'cards/fetchCards',
     async ({ accountRs, collectionRs, specialRs }, { rejectWithValue }) => {
         try {
-            const cardsData = await fetchAllCards(accountRs, collectionRs, specialRs, false);
+            const cardsData = await fetchAllCards(accountRs, collectionRs, specialRs, true);
             return cardsData;
         } catch (error) {
             console.error('🚀 ~ error:', error);
