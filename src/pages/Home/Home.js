@@ -246,7 +246,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     dividends,
                     giftzOmnoBalance,
                 ] = await Promise.all([
-                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, firstTime ? false : true),
+                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
                     fetchCurrencyAssets(
                         accountRs,
                         [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT],
