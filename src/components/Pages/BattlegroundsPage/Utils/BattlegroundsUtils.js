@@ -408,3 +408,24 @@ export const mergeUpdatedCards = (originalCards, updatedCards) => {
         return updated ?? card;
     });
 };
+
+/**
+ * @name getMapPointIcon
+ * @description Returns the file path for a battleground map point icon based on rarity and medium.
+ * @param {string} rarity - The rarity level of the arena/card (e.g., 'Common', 'Rare', 'Epic', etc.).
+ * @param {number} medium - The medium identifier (1: Earth, 2: Air, 3: Water).
+ * @returns {string} The full path to the corresponding icon image.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const getMapPointIcon = (rarity, medium) => {
+    const src = '/images/battlegrounds/BattleMapIcons';
+    const mediumMapping = {
+        1: 'Earth',
+        2: 'Air',
+        3: 'Water',
+    };
+
+    const formattedMedium = mediumMapping[medium];
+
+    return `${src}/${rarity}-${formattedMedium}.png`;
+};
