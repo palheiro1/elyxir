@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Stack, Select, Image, Text } from '@chakra-ui/react';
+import { Stack, Image, Text, MenuItem, MenuList, Flex, Button, MenuButton, Menu } from '@chakra-ui/react';
 import { fetchAccountDetails, fetchLeaderboards, setViewData } from '../../../../../redux/reducers/LeaderboardsReducer';
 import CombativityResetTimer from './CombativityLeaderboard/CombativityResetTimer';
 import panteon from '../../assets/icons/panteon_banner.svg';
@@ -14,6 +14,8 @@ import TypesLeaderboardsResetTimer from './TypesLeaderboards/TypesLeaderboardsRe
 import TypesLeaderboard from './TypesLeaderboards';
 import CombativityLeaderboard from './CombativityLeaderboard/CombativityLeaderboard';
 import Modal from '../../../../ui/Modal';
+import { ChevronDownIcon, InfoOutlineIcon } from '@chakra-ui/icons';
+import ResponsiveTooltip from '../../../../ui/ReponsiveTooltip';
 
 /**
  * @name Leaderboards
@@ -165,31 +167,44 @@ const Leaderboards = ({ handleClose, handleFilterChange }) => {
                         w={isMobile ? '120px' : '190px'}
                         h={'75px'}
                     />
-                    <Select
-                        value={option}
-                        onChange={e => changeData(Number(e.target.value))}
-                        color={color()}
-                        bgColor={'transparent'}
-                        my={'auto'}
-                        zIndex={999}
-                        border={'none'}
-                        fontFamily={'Chelsea Market, System'}
-                        _hover={{ borderColor: '#555' }}
-                        maxW={'270px'}>
-                        {availableLeaderboards.map(({ name, value }, index) => {
-                            return (
-                                <option
-                                    key={index}
-                                    value={value}
-                                    style={{
-                                        backgroundColor: '#FFF',
-                                        color: '#000',
-                                    }}>
-                                    {name}
-                                </option>
-                            );
-                        })}
-                    </Select>
+                    <Flex align="center" gap={2}>
+                        <Menu>
+                            <MenuButton
+                                as={Button}
+                                mt={1}
+                                rightIcon={<ChevronDownIcon />}
+                                fontFamily="Chelsea Market, System"
+                                bg="transparent"
+                                border="none"
+                                color={color()}
+                                fontSize={'lg'}
+                                maxW="300px"
+                                _hover={{ borderColor: '#555' }}>
+                                {availableLeaderboards.find(lb => lb.value === option)?.name}
+                            </MenuButton>
+                            <MenuList zIndex={9999} bgColor={'#FFF'}>
+                                {availableLeaderboards.map(({ name, value }, index) => (
+                                    <MenuItem
+                                        key={index}
+                                        onClick={() => changeData(value)}
+                                        fontFamily="Chelsea Market, System"
+                                        bgColor={'#FFF'}
+                                        _hover={{ bgColor: 'rgba(0, 0, 0, 0.4)' }}
+                                        color={'#000'}>
+                                        {name}
+                                    </MenuItem>
+                                ))}
+                            </MenuList>
+                        </Menu>
+
+                        <ResponsiveTooltip
+                            label={availableLeaderboards.find(lb => lb.value === option)?.description}
+                            mt="-2">
+                            <span>
+                                <InfoOutlineIcon cursor="pointer" color={'#C3C3C3'} />
+                            </span>
+                        </ResponsiveTooltip>
+                    </Flex>
                 </Stack>
                 <Stack
                     direction={'column'}
