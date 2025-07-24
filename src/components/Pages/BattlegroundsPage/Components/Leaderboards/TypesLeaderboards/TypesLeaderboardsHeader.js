@@ -1,6 +1,7 @@
 import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
 import { Grid } from '@chakra-ui/react';
 import ColumnLabel from '../../ColumnLabel';
+import { TypesLeaderboardsHeaders } from '../data';
 
 /**
  * @name TypesLeaderboardsHeader
@@ -13,9 +14,10 @@ import ColumnLabel from '../../ColumnLabel';
  */
 const TypesLeaderboardsHeader = ({ color }) => {
     const { isMobile } = useBattlegroundBreakpoints();
+
     return (
         <Grid
-            templateColumns="repeat(7, 1fr)"
+            templateColumns={`repeat(${TypesLeaderboardsHeaders.length}, 1fr)`}
             gap={4}
             w={'90%'}
             mx={'auto'}
@@ -28,13 +30,9 @@ const TypesLeaderboardsHeader = ({ color }) => {
             position="sticky"
             top="0"
             zIndex={1}>
-            <ColumnLabel label="POSITION" isMobile={isMobile} />
-            <ColumnLabel label="NAME/ ADDRESS" isMobile={isMobile} />
-            <ColumnLabel label="LANDS CONQUERED" isMobile={isMobile} />
-            <ColumnLabel label="SUCCESSFUL DEFENSES" isMobile={isMobile} />
-            <ColumnLabel label="BATTLE EFFICIENCY" isMobile={isMobile} />
-            <ColumnLabel label="DEFENSE DURATION" isMobile={isMobile} />
-            <ColumnLabel label="TOTAL POINTS" isMobile={isMobile} />
+            {TypesLeaderboardsHeaders.map(item => (
+                <ColumnLabel label={item} isMobile={isMobile} />
+            ))}
         </Grid>
     );
 };

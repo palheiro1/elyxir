@@ -13,12 +13,31 @@ export const fetchLeaderboards = createAsyncThunk('leaderboards/fetchLeaderboard
 
 export const fetchAccountDetails = createAsyncThunk(
     'leaderboards/fetchAccountDetails',
-    async (accounts, { rejectWithValue }) => {
+    async ({ accounts, arenas }, { rejectWithValue }) => {
         try {
             let accountsWithDetails = await Promise.all(
                 accounts.map(async item => {
                     const accountInfo = await getAccount(item.accountId);
-                    return { ...item, ...accountInfo };
+
+                    const conqueredArenas = arenas.filter(arena => arena.defender?.account === item.accountId);
+                    const conqueredTerrestrialArenas = conqueredArenas.filter(a => a.mediumId === 1).length;
+                    const conqueredAerialAreanas = conqueredArenas.filter(a => a.mediumId === 2).length;
+                    const conqueredAquaticArenas = conqueredArenas.filter(a => a.mediumId === 3).length;
+                    const totalArenasConquered =
+                        conqueredTerrestrialArenas + conqueredAerialAreanas + conqueredAquaticArenas;
+
+                    const conquestStats = {
+                        general: totalArenasConquered,
+                        terrestrial: conqueredTerrestrialArenas,
+                        aerial: conqueredAerialAreanas,
+                        aquatic: conqueredAquaticArenas,
+                    };
+
+                    return {
+                        ...item,
+                        ...accountInfo,
+                        conqueredArenas: conquestStats,
+                    };
                 })
             );
             accountsWithDetails.sort((a, b) => (b.points || b.totalPoints) - (a.points || a.totalPoints));

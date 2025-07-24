@@ -39,6 +39,7 @@ const Battlegrounds = ({ infoAccount }) => {
         handleOpenWethModal,
         filters,
         handleFilterChange,
+        handleResetFilters,
         statistics,
         omnoGEMsBalance,
         omnoWethBalance,
@@ -82,6 +83,7 @@ const Battlegrounds = ({ infoAccount }) => {
                     onCloseGems={onCloseGems}
                     onCloseWeth={onCloseWeth}
                     setHasSeenNewPlayersModal={setHasSeenNewPlayersModal}
+                    handleFilterChange={handleFilterChange}
                 />
 
                 <ScrollLock isLocked={isScrollLocked} />
@@ -116,7 +118,11 @@ const Battlegrounds = ({ infoAccount }) => {
                                     handleOpenWethModal={handleOpenWethModal}
                                     handleOpenGemsModal={handleOpenGemsModal}
                                 />
-                                <BattlegroundFilters filters={filters} handleFilterChange={handleFilterChange} />
+                                <BattlegroundFilters
+                                    filters={filters}
+                                    handleFilterChange={handleFilterChange}
+                                    handleResetFilters={handleResetFilters}
+                                />
                             </Stack>
 
                             <Maps
