@@ -24,8 +24,6 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
     const [selectedArena, setSelectedArena] = useState();
     const [openPopoverId, setOpenPopoverId] = useState(null);
     const { arenasInfo } = useSelector(state => state.arenas);
-    console.log('🚀 ~ Maps ~ arenasInfo:', arenasInfo);
-
     const dispatch = useDispatch();
 
     useEffect(() => {
