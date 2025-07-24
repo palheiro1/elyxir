@@ -17,7 +17,7 @@ const TypesLeaderboardsHeader = ({ color }) => {
 
     return (
         <Grid
-            templateColumns={`repeat(${headers.length}, 1fr)`}
+            templateColumns={`repeat(${TypesLeaderboardsHeaders.length}, 1fr)`}
             gap={4}
             w={'90%'}
             mx={'auto'}
