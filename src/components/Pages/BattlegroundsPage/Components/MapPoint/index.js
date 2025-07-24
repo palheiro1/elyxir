@@ -48,7 +48,7 @@ export const MapPoint = memo(
                     setMyArena(true);
                 }
             };
-            getDefenderInfo();
+            arena.defender?.account && infoAccount.accountRs && getDefenderInfo();
         }, [arena.defender.account, arena.defender.asset, cards, infoAccount.accountRs]);
 
         useEffect(() => {

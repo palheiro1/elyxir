@@ -1,6 +1,7 @@
 import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
 import { Grid } from '@chakra-ui/react';
 import ColumnLabel from '../../ColumnLabel';
+import { TypesLeaderboardsHeaders } from '../data';
 
 /**
  * @name TypesLeaderboardsHeader
@@ -13,16 +14,7 @@ import ColumnLabel from '../../ColumnLabel';
  */
 const TypesLeaderboardsHeader = ({ color }) => {
     const { isMobile } = useBattlegroundBreakpoints();
-    const headers = [
-        'POSITION',
-        'NAME/ ADDRESS',
-        'CONQUERED LANDS',
-        'CONQUEST POINTS',
-        'SUCCESSFUL DEFENSES',
-        'BATTLE EFFICIENCY',
-        'DEFENSE DURATION',
-        'TOTAL POINTS',
-    ];
+
     return (
         <Grid
             templateColumns={`repeat(${headers.length}, 1fr)`}
@@ -38,7 +30,7 @@ const TypesLeaderboardsHeader = ({ color }) => {
             position="sticky"
             top="0"
             zIndex={1}>
-            {headers.map(item => (
+            {TypesLeaderboardsHeaders.map(item => (
                 <ColumnLabel label={item} isMobile={isMobile} />
             ))}
         </Grid>
