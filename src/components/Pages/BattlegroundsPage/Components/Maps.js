@@ -24,6 +24,7 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
     const [selectedArena, setSelectedArena] = useState();
     const [openPopoverId, setOpenPopoverId] = useState(null);
     const { arenasInfo } = useSelector(state => state.arenas);
+    console.log('🚀 ~ Maps ~ arenasInfo:', arenasInfo);
 
     const dispatch = useDispatch();
 
@@ -84,6 +85,7 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
                         {arenasInfo
                             .filter(arena => filters.rarity === -1 || arena.level === filters.rarity)
                             .filter(arena => filters.element === -1 || arena.mediumId === filters.element)
+                            .filter(arena => filters.defender === '' || arena.defender.account === filters.defender)
                             .map(arena => (
                                 <MapPoint
                                     key={arena.id}

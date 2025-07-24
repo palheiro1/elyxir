@@ -1,6 +1,7 @@
 import { Grid } from '@chakra-ui/react';
 import { formatAddress } from '../../../Utils/BattlegroundsUtils';
 import CustomCell from '../../CustomCell';
+import FilterLandsCell from './FilterLandsCell';
 
 /**
  * @name TypesLeaderboardRow
@@ -21,7 +22,7 @@ import CustomCell from '../../CustomCell';
  * @returns {JSX.Element|null} The leaderboard row or null if totalPoints is zero or less.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const TypesLeaderboardRow = ({ index, data, isMobile, type }) => {
+const TypesLeaderboardRow = ({ index, data, isMobile, type, handleSetDefenderFilter }) => {
     const {
         accountRS,
         totalPoints,
@@ -30,8 +31,9 @@ const TypesLeaderboardRow = ({ index, data, isMobile, type }) => {
         successfullDefensesPoints,
         battleEfficiencyPoints,
         defenseDurationPoints,
+        conqueredArenas,
+        accountId,
     } = data;
-
     if (totalPoints <= 0) return null;
 
     const bg = index % 2 === 0 ? '#2A2E2E' : '#323636';
@@ -50,9 +52,15 @@ const TypesLeaderboardRow = ({ index, data, isMobile, type }) => {
     const total = formatPoints(totalPoints);
 
     return (
-        <Grid templateColumns="repeat(7, 1fr)" gap={4} w="100%" mx="auto" mt={0} bgColor={bg} borderRadius="10px">
+        <Grid templateColumns="repeat(8, 1fr)" gap={4} w="100%" mx="auto" mt={0} bgColor={bg} borderRadius="10px">
             <CustomCell value={`#${index + 1}`} isMobile={isMobile} color={color} padding={1} />
             <CustomCell value={displayName} isMobile={isMobile} color={color} padding={1} isUppercase />
+            <FilterLandsCell
+                value={conqueredArenas[type]}
+                isMobile={isMobile}
+                padding={1}
+                onclick={() => handleSetDefenderFilter(accountId)}
+            />
             <CustomCell value={conquered} isMobile={isMobile} padding={1} />
             <CustomCell value={defenses} isMobile={isMobile} padding={1} />
             <CustomCell value={efficiency} isMobile={isMobile} padding={1} />

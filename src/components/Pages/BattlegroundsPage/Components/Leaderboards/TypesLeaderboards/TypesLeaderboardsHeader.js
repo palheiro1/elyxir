@@ -13,9 +13,19 @@ import ColumnLabel from '../../ColumnLabel';
  */
 const TypesLeaderboardsHeader = ({ color }) => {
     const { isMobile } = useBattlegroundBreakpoints();
+    const headers = [
+        'POSITION',
+        'NAME/ ADDRESS',
+        'CONQUERED LANDS',
+        'CONQUEST POINTS',
+        'SUCCESSFUL DEFENSES',
+        'BATTLE EFFICIENCY',
+        'DEFENSE DURATION',
+        'TOTAL POINTS',
+    ];
     return (
         <Grid
-            templateColumns="repeat(7, 1fr)"
+            templateColumns={`repeat(${headers.length}, 1fr)`}
             gap={4}
             w={'90%'}
             mx={'auto'}
@@ -28,13 +38,9 @@ const TypesLeaderboardsHeader = ({ color }) => {
             position="sticky"
             top="0"
             zIndex={1}>
-            <ColumnLabel label="POSITION" isMobile={isMobile} />
-            <ColumnLabel label="NAME/ ADDRESS" isMobile={isMobile} />
-            <ColumnLabel label="LANDS CONQUERED" isMobile={isMobile} />
-            <ColumnLabel label="SUCCESSFUL DEFENSES" isMobile={isMobile} />
-            <ColumnLabel label="BATTLE EFFICIENCY" isMobile={isMobile} />
-            <ColumnLabel label="DEFENSE DURATION" isMobile={isMobile} />
-            <ColumnLabel label="TOTAL POINTS" isMobile={isMobile} />
+            {headers.map(item => (
+                <ColumnLabel label={item} isMobile={isMobile} />
+            ))}
         </Grid>
     );
 };

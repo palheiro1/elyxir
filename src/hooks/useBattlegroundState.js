@@ -63,7 +63,7 @@ export const useBattlegroundState = infoAccount => {
     const [updateState, setUpdateState] = useState(false);
     const [selectedArena, setSelectedArena] = useState('');
     const [currentBlock, setCurrentBlock] = useState(null);
-    const [filters, setFilters] = useState({ rarity: -1, element: -1 });
+    const [filters, setFilters] = useState({ rarity: -1, element: -1, defender: '' });
 
     const { isOpen: isOpenGems, onOpen: onOpenGems, onClose: onCloseGems } = useDisclosure();
     const { isOpen: isOpenWeth, onOpen: onOpenWeth, onClose: onCloseWeth } = useDisclosure();
@@ -153,7 +153,14 @@ export const useBattlegroundState = infoAccount => {
     };
 
     const handleFilterChange = (type, value) => {
-        setFilters(prev => ({ ...prev, [type]: Number(value) }));
+        let formattedValue;
+        if (type === 'defender') formattedValue = value;
+        else formattedValue = Number(value);
+        setFilters(prev => ({ ...prev, [type]: formattedValue }));
+    };
+
+    const handleResetFilters = () => {
+        setFilters({ rarity: -1, element: -1, defender: '' });
     };
 
     const statistics = useMemo(
@@ -184,6 +191,7 @@ export const useBattlegroundState = infoAccount => {
         handleOpenWethModal,
         filters,
         handleFilterChange,
+        handleResetFilters,
         statistics,
         omnoGEMsBalance,
         omnoWethBalance,

@@ -26,11 +26,12 @@ import Modal from '../../../../ui/Modal';
  * @returns {JSX.Element} The leaderboards component UI.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const Leaderboards = ({ handleClose }) => {
+const Leaderboards = ({ handleClose, handleFilterChange }) => {
     const dispatch = useDispatch();
     const { leaderboards, data } = useSelector(state => state.leaderboards);
     const [option, setOption] = useState(1);
     const { isMobile } = useBattlegroundBreakpoints();
+    const { arenasInfo } = useSelector(state => state.arenas);
 
     useEffect(() => {
         dispatch(fetchLeaderboards());
@@ -93,7 +94,7 @@ const Leaderboards = ({ handleClose }) => {
             setOption(option);
             if (option !== 0) {
                 dispatch(setViewData({ viewData: true, data }));
-                dispatch(fetchAccountDetails(data.info));
+                dispatch(fetchAccountDetails({ accounts: data.info, arenas: arenasInfo }));
             }
         }
     };
@@ -204,7 +205,15 @@ const Leaderboards = ({ handleClose }) => {
                         fontFamily={'Chelsea Market, System'}
                         mb={0}
                         h={isMobile ? '70%' : '80%'}>
-                        {option === 5 ? <CombativityLeaderboard color={color} /> : <TypesLeaderboard color={color} />}
+                        {option === 5 ? (
+                            <CombativityLeaderboard color={color} />
+                        ) : (
+                            <TypesLeaderboard
+                                color={color}
+                                handleFilterChange={handleFilterChange}
+                                handleClose={handleClose}
+                            />
+                        )}
                     </Stack>
                     <Stack dir="row" mx={'auto'} w={'90%'}>
                         {option === 5 ? (
