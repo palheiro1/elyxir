@@ -1,6 +1,6 @@
 # Mythical Beings Card Game Wallet v2
 
-> A decentralized wallet and game interface for the Mythical Beings NFT trading card game, built on Ardor blockchain with cross-chain capabilities.
+> A decentralized wallet and game interface for the Mythical Beings NFT trading card game, built on **Ardor** blockchain with cross-chain capabilities.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![React](https://img.shields.io/badge/react-18.2.0-blue.svg)](https://reactjs.org/)
