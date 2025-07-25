@@ -30,8 +30,8 @@ const TypesLeaderboardsHeader = ({ color }) => {
             position="sticky"
             top="0"
             zIndex={1}>
-            {TypesLeaderboardsHeaders.map(item => (
-                <ColumnLabel label={item} isMobile={isMobile} />
+            {TypesLeaderboardsHeaders.map(({ label, info }) => (
+                <ColumnLabel label={label} isMobile={isMobile} info={info} />
             ))}
         </Grid>
     );

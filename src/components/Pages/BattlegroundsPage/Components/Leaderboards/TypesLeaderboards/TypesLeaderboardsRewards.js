@@ -3,12 +3,7 @@ import { useEffect, useState } from 'react';
 import { formatLeaderboardRewards, getCurrencyImage } from '../../../Utils/BattlegroundsUtils';
 import { NQTDIVIDER } from '../../../../../../data/CONSTANTS';
 import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
-
-const CURRENCY_PRECISION = {
-    weth: 4,
-    gem: 0,
-    mana: 0,
-};
+import { CURRENCY_PRECISION } from '../data';
 
 /**
  * @name TypesLeaderboardsRewards
