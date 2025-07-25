@@ -14,9 +14,23 @@ import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegro
  * @returns {JSX.Element} A stacked view of the leaderboard with header and scrollable participant rows.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const TypesLeaderboard = ({ color }) => {
+const TypesLeaderboard = ({ color, handleFilterChange, handleClose }) => {
     const { entries, data } = useSelector(state => state.leaderboards);
     const { isMobile } = useBattlegroundBreakpoints();
+
+    const handleSetDefenderFilter = value => {
+        const typesMapping = {
+            terrestrial: 1,
+            aerial: 2,
+            aquatic: 3,
+        };
+        handleFilterChange('defender', value);
+        if (data.type !== 'general') {
+            handleFilterChange('element', typesMapping[data.type]);
+        }
+
+        handleClose();
+    };
 
     const renderLoading = () => (
         <Box
@@ -62,7 +76,14 @@ const TypesLeaderboard = ({ color }) => {
                 borderRadius="10px"
                 p={2}>
                 {entries.map((entry, index) => (
-                    <TypesLeaderboardRow key={index} index={index} data={entry} isMobile={isMobile} type={data.type} />
+                    <TypesLeaderboardRow
+                        key={index}
+                        index={index}
+                        data={entry}
+                        isMobile={isMobile}
+                        type={data.type}
+                        handleSetDefenderFilter={handleSetDefenderFilter}
+                    />
                 ))}
             </Box>
         </>

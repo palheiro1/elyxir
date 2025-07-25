@@ -49,6 +49,7 @@ const BattlegroundModals = ({
     onCloseGems,
     onCloseWeth,
     setHasSeenNewPlayersModal,
+    handleFilterChange,
 }) => {
     return (
         <>
@@ -93,7 +94,12 @@ const BattlegroundModals = ({
             {modals.earnings && (
                 <Earnings closeEarnigs={() => handleCloseModal('earnings')} infoAccount={infoAccount} cards={cards} />
             )}
-            {modals.leaderboards && <Leaderboards handleClose={() => handleCloseModal('leaderboards')} />}
+            {modals.leaderboards && (
+                <Leaderboards
+                    handleClose={() => handleCloseModal('leaderboards')}
+                    handleFilterChange={handleFilterChange}
+                />
+            )}
             {modals.quickStart && <QuickStartModal handleClose={() => handleCloseModal('quickStart')} />}
             {modals.newPlayers && (
                 <NewPlayersModal
