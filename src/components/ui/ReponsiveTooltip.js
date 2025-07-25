@@ -38,7 +38,8 @@ const ResponsiveTooltip = ({ children, label, placement = 'bottom', ...rest }) =
                     borderRadius="10px"
                     border="1px solid #585858"
                     maxW="xs"
-                    p={3}>
+                    p={3}
+                    {...rest}>
                     <PopoverArrow />
                     <PopoverCloseButton />
                     <PopoverBody whiteSpace="normal">{label}</PopoverBody>
