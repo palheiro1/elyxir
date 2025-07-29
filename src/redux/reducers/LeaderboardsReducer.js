@@ -21,15 +21,14 @@ export const fetchAccountDetails = createAsyncThunk(
 
                     const conqueredArenas = arenas.filter(arena => arena.defender?.account === item.accountId);
                     const conqueredTerrestrialArenas = conqueredArenas.filter(a => a.mediumId === 1).length;
-                    const conqueredAerialAreanas = conqueredArenas.filter(a => a.mediumId === 2).length;
+                    const conqueredAerialArenas = conqueredArenas.filter(a => a.mediumId === 2).length;
                     const conqueredAquaticArenas = conqueredArenas.filter(a => a.mediumId === 3).length;
-                    const totalArenasConquered =
-                        conqueredTerrestrialArenas + conqueredAerialAreanas + conqueredAquaticArenas;
+                    const totalArenasConquered = conqueredArenas.length;
 
                     const conquestStats = {
                         general: totalArenasConquered,
                         terrestrial: conqueredTerrestrialArenas,
-                        aerial: conqueredAerialAreanas,
+                        aerial: conqueredAerialArenas,
                         aquatic: conqueredAquaticArenas,
                     };
 
@@ -54,7 +53,8 @@ const leaderboardsSlice = createSlice({
     initialState: {
         leaderboards: null,
         viewData: true,
-        data: null,
+        data: { type: null, info: [] },
+        rewardsByOption: {},
         entries: null,
         status: 'idle',
         error: null,
@@ -66,10 +66,16 @@ const leaderboardsSlice = createSlice({
         },
         resetState: state => {
             state.viewData = true;
-            state.data = null;
+            state.data = { type: null, info: [] };
             state.entries = null;
             state.status = 'idle';
             state.error = null;
+        },
+        setLeaderboardRewards: (state, action) => {
+            const { option, rewards } = action.payload;
+            if (!state.rewardsByOption[option]) {
+                state.rewardsByOption[option] = rewards;
+            }
         },
     },
     extraReducers: builder => {
@@ -101,6 +107,6 @@ const leaderboardsSlice = createSlice({
     },
 });
 
-export const { setViewData, resetState } = leaderboardsSlice.actions;
+export const { setViewData, resetState, setLeaderboardRewards } = leaderboardsSlice.actions;
 
 export default leaderboardsSlice.reducer;

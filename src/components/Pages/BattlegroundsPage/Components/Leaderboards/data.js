@@ -6,23 +6,24 @@ import combativityBanner from '../../assets/icons/combativeness_banner.svg';
 
 export const rewardsTextByType = {
     general: {
-        0: 'Top 1 gets 25% tribute, 1 Special Card, and 100 MANA.',
-        1: 'Top 2 gets 12.5% tribute, 1 Special Card, and 100 MANA.',
-        2: 'Top 3 gets 6.25% tribute, 1 Special Card, and 100 MANA.',
-        3: 'Top 4 gets 4% tribute, 1 Special Card, and 100 MANA.',
-        4: 'Top 5 gets 2.25% tribute, 1 Special Card, and 100 MANA.',
+        0: 'Top 1 gets 25% tribute, 1 Special Card, and 1000 MANA.',
+        1: 'Top 2 gets 12.5% tribute, 1 Special Card, and 1000 MANA.',
+        2: 'Top 3 gets 6.25% tribute, 1 Special Card, and 1000 MANA.',
+        3: 'Top 4 gets 4% tribute, 1 Special Card, and 1000 MANA.',
+        4: 'Top 5 gets 2.25% tribute, 1 Special Card, and 1000 MANA.',
     },
     aquatic: {
-        0: 'Top 1 gets 16% tribute, 1 Special Card, and 200 MANA.',
+        0: 'Top 1 gets 16% tribute, 1 Special Card, and 2000 MANA.',
     },
     terrestrial: {
-        0: 'Top 1 gets 16% tribute, 1 Special Card, and 200 MANA.',
+        0: 'Top 1 gets 16% tribute, 1 Special Card, and 2000 MANA.',
     },
     aerial: {
-        0: 'Top 1 gets 16% tribute, 1 Special Card, and 200 MANA.',
+        0: 'Top 1 gets 16% tribute, 1 Special Card, and 2000 MANA.',
     },
 };
 
+export const CombativityLeaderboardHeaders = ['POSITION', 'NAME/ ADDRESS', 'POINTS'];
 export const TypesLeaderboardsHeaders = [
     {
         label: 'POSITION',

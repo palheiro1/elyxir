@@ -17,12 +17,12 @@ import { useSelector } from 'react-redux';
  *
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-export const useCardsFilters = (selectedCards, cards) => {
+export const useCardsFilters = ({ selectedCards, cards, quantityKey = 'quantityQNT' }) => {
     const [filters, setFilters] = useState({ rarity: '-1', element: '-1', domain: '-1' });
 
     const { soldiers } = useSelector(state => state.soldiers);
 
-    const myCards = useMemo(() => cards.filter(card => parseInt(card.quantityQNT) > 0), [cards]);
+    const myCards = useMemo(() => cards.filter(card => parseInt(card[quantityKey]) > 0), [cards, quantityKey]);
     const notSelectedCards = useMemo(
         () => myCards.filter(card => !selectedCards.some(selected => selected.asset === card.asset)),
         [myCards, selectedCards]
@@ -45,8 +45,6 @@ export const useCardsFilters = (selectedCards, cards) => {
             });
     }, [notSelectedCards, filters, soldiers]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const memoizedFilters = useMemo(() => filters, [filters, filters.rarity, filters.element, filters.domain]);
     const handleChange = key => e => setFilters(prev => ({ ...prev, [key]: e.target.value }));
 
     const handleReset = () => {
@@ -54,7 +52,7 @@ export const useCardsFilters = (selectedCards, cards) => {
     };
 
     return {
-        filters: memoizedFilters,
+        filters,
         filteredNotSelectedCards,
         handleRarityChange: handleChange('rarity'),
         handleElementChange: handleChange('element'),

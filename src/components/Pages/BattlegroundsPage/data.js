@@ -31,7 +31,7 @@ export const buttonsGroups = [
         color: '#56689F',
         buttons: [
             {
-                name: 'Leaderboard',
+                name: 'Leaderboards',
                 modal: 'leaderboards',
                 tooltip: "See who's dominating Battlegrounds and track your global rankings",
             },

@@ -23,21 +23,24 @@ import { getAccount } from '../../../../services/Ardor/ardorInterface';
  */
 const BattlegroundFilters = ({ isMobile, filters, handleFilterChange, handleResetFilters }) => {
     const [defenderFilter, setDefenderFilter] = useState(null);
+    const { rarity, element, defender } = filters;
+
     useEffect(() => {
         const fetchAccount = async () => {
-            if (filters.defender !== '') {
-                const account = await getAccount(filters.defender);
+            if (defender !== '') {
+                const account = await getAccount(defender);
                 const displayName = account.name || formatAddress(account.accountRS);
                 setDefenderFilter(displayName);
             }
         };
         fetchAccount();
-    }, [filters.defender]);
+    }, [defender]);
 
     const handleFullReset = () => {
         setDefenderFilter(null);
         handleResetFilters();
     };
+    const showResetButton = rarity !== -1 || element !== -1 || defender !== '';
 
     return (
         <Stack direction="row" color="#FFF" zIndex={3} mt={isMobile && 3}>
@@ -45,7 +48,9 @@ const BattlegroundFilters = ({ isMobile, filters, handleFilterChange, handleRese
             <Text my="auto" fontSize="md" fontWeight={500} mx={3}>
                 Lands
             </Text>
-            <IconButton color={'#FFF'} bg={'transparent'} icon={<CloseIcon />} onClick={handleFullReset} pr={0} />
+            {showResetButton && (
+                <IconButton color={'#FFF'} bg={'transparent'} icon={<CloseIcon />} onClick={handleFullReset} pr={0} />
+            )}
             {defenderFilter && (
                 <Text fontSize="md" my="auto" fontWeight={500} color="#FFF">
                     Defender: {defenderFilter}
@@ -56,14 +61,11 @@ const BattlegroundFilters = ({ isMobile, filters, handleFilterChange, handleRese
                     <Stack direction="row" justifyContent="end" w="100%">
                         <Stack direction="row" color="#FFF">
                             <Text fontSize="md" fontWeight={500} w="80px">
-                                {rarityFilterOptions[filters.rarity]?.name || 'Rarity'}
+                                {rarityFilterOptions[rarity]?.name || 'Rarity'}
                             </Text>
                             <MdOutlineArrowDropDown size={20} />
-                            {filters.rarity !== -1 && (
-                                <Image
-                                    boxSize="20px"
-                                    src={getLevelIconInt(rarityFilterOptions[filters.rarity]?.value)}
-                                />
+                            {rarity !== -1 && (
+                                <Image boxSize="20px" src={getLevelIconInt(rarityFilterOptions[rarity]?.value)} />
                             )}
                         </Stack>
                     </Stack>
@@ -86,14 +88,11 @@ const BattlegroundFilters = ({ isMobile, filters, handleFilterChange, handleRese
                     <Stack direction="row" justifyContent="end" w="100%">
                         <Stack direction="row" color="#FFF">
                             <Text fontSize="md" fontWeight={500} w={'80px'}>
-                                {mediumFilterOptions[filters.element]?.name || 'Medium'}
+                                {mediumFilterOptions[element]?.name || 'Medium'}
                             </Text>
                             <MdOutlineArrowDropDown size={20} />
-                            {filters.element !== -1 && (
-                                <Image
-                                    boxSize="20px"
-                                    src={getMediumIconInt(mediumFilterOptions[filters.element]?.value)}
-                                />
+                            {element !== -1 && (
+                                <Image boxSize="20px" src={getMediumIconInt(mediumFilterOptions[element]?.value)} />
                             )}
                         </Stack>
                     </Stack>

@@ -31,7 +31,7 @@ const ArdorPage = ({ infoAccount, isMobile, gridColumns, handleCloseInventory })
         handleElementChange,
         handleDomainChange,
         handleReset,
-    } = useCardsFilters(selectedCards, baseCards);
+    } = useCardsFilters({ selectedCards, cards: baseCards, quantityKey: 'omnoQuantity' });
 
     const handleSelectCard = card => {
         setSelectedCards([...selectedCards, card]);
