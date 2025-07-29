@@ -1,28 +1,41 @@
-import { Box, Image, Stack, Text } from '@chakra-ui/react';
+import { Box, Image, Skeleton, SkeletonText, Stack, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getGiftzRewardQNT, getLeaderboardsResetBlock } from '../../../../../../services/Battlegrounds/Battlegrounds';
 import { useBlockCountdown } from '../../../../../../hooks/useBlockCountDown';
 import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLeaderboardRewards } from '../../../../../../redux/reducers/LeaderboardsReducer';
 
 /**
  * @name CombativityResetTimer
  * @description Styled countdown showing time until leaderboard reset + GIFTZ reward. Inspired by "blocky" timer layout.
- * @param {boolean} isMobile - Whether to render mobile-friendly sizing.
+ * @param {Object} props - Component props.
+ * @param {number} props.option - Leaderboard option to store rewards.
  * @param {object} rest - Extra props passed to Stack container.
  * @returns {JSX.Element} Stylized countdown timer with reward.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const CombativityResetTimer = ({ ...rest }) => {
+const CombativityResetTimer = ({ option, ...rest }) => {
     const [giftzRewardQNT, setGiftzRewardQNT] = useState(null);
     const timeLeft = useBlockCountdown(getLeaderboardsResetBlock);
     const [loading, setLoading] = useState(true);
 
+    const dispatch = useDispatch();
     const { isMobile } = useBattlegroundBreakpoints();
+
+    const { rewardsByOption } = useSelector(state => state.leaderboards);
+    const cachedRewards = rewardsByOption?.[option];
+
     useEffect(() => {
         try {
+            if (cachedRewards) {
+                setGiftzRewardQNT(cachedRewards);
+                return;
+            }
             const fetchData = async () => {
                 const reward = await getGiftzRewardQNT();
                 setGiftzRewardQNT(reward);
+                dispatch(setLeaderboardRewards({ option, rewards: reward }));
             };
             fetchData();
         } catch (error) {
@@ -30,7 +43,7 @@ const CombativityResetTimer = ({ ...rest }) => {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [cachedRewards, dispatch, option]);
 
     const timeItems = [
         { label: 'days', value: timeLeft.days },
@@ -52,30 +65,47 @@ const CombativityResetTimer = ({ ...rest }) => {
                 <>
                     <Stack direction={'column'} spacing={2} justify="center">
                         <Text color="white">REWARD</Text>
-                        <Stack
-                            direction="row"
-                            align="start"
-                            fontFamily="Inter, system"
-                            fontSize={isMobile ? 'xs' : 'md'}
-                            w="100%"
-                            justifyContent={'space-between'}
-                            fontWeight={700}
-                            bgColor={'#FFF'}
-                            px={isMobile ? 3 : 4}
-                            py={isMobile ? 2 : 4}
-                            borderRadius={'20px'}>
-                            <Image
-                                src={'/images/currency/giftz.png'}
-                                alt="GIFTZ Icon"
-                                boxSize={isMobile ? '25px' : '35px'}
-                                mt={-1}
-                            />
-                            <Text textTransform={'uppercase'} color={'#5A679B'}>
-                                {giftzRewardQNT}
-                            </Text>
-                        </Stack>
+                        {giftzRewardQNT ? (
+                            <Stack
+                                direction="row"
+                                align="start"
+                                fontFamily="Inter, system"
+                                fontSize={isMobile ? 'xs' : 'md'}
+                                w="100%"
+                                justifyContent={'space-between'}
+                                fontWeight={700}
+                                bgColor={'#FFF'}
+                                px={isMobile ? 3 : 4}
+                                py={isMobile ? 2 : 4}
+                                borderRadius={'20px'}>
+                                <Image
+                                    src={'/images/currency/giftz.png'}
+                                    alt="GIFTZ Icon"
+                                    boxSize={isMobile ? '25px' : '35px'}
+                                    mt={-1}
+                                />
+                                <Text textTransform={'uppercase'} color={'#5A679B'}>
+                                    {giftzRewardQNT}
+                                </Text>
+                            </Stack>
+                        ) : (
+                            <Stack
+                                direction="row"
+                                align="start"
+                                fontFamily="Inter, system"
+                                fontSize={isMobile ? 'xs' : 'md'}
+                                w="100%"
+                                justifyContent="space-between"
+                                fontWeight={700}
+                                bgColor="#FFF"
+                                px={isMobile ? 3 : 4}
+                                py={isMobile ? 2 : 4}
+                                borderRadius="20px">
+                                <Skeleton boxSize={isMobile ? '25px' : '35px'} mt={-1} borderRadius="full" />
+                                <SkeletonText noOfLines={1} width={isMobile ? '20px' : '30px'} my={'auto'} />
+                            </Stack>
+                        )}
                     </Stack>
-
                     <Stack alignItems={'end'}>
                         <Text color="white" textTransform="uppercase">
                             Reseting combativity leaderboard in

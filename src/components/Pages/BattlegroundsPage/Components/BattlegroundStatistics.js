@@ -12,7 +12,12 @@ import { Stack, Text } from '@chakra-ui/react';
  */
 const BattlegroundStatistics = ({ statistics, isMobile }) => {
     return (
-        <Stack direction="row" mx="auto" maxH="55px" w="85%" justifyContent="space-between">
+        <Stack
+            direction="row"
+            mx="auto"
+            maxH={{ base: '', md: '55px' }}
+            w={isMobile ? '100%' : '85%'}
+            justifyContent="space-between">
             <Stack
                 direction="row"
                 mx="auto"
@@ -23,19 +28,20 @@ const BattlegroundStatistics = ({ statistics, isMobile }) => {
                 w={{ base: '70%', md: isMobile ? '80%' : '70%' }}
                 fontFamily="'Chelsea Market', system-ui">
                 {statistics.map(({ name, value }, index) => (
-                    <Text
+                    <Stack
                         key={index}
                         fontSize={isMobile ? 'xs' : 'lg'}
-                        color="#FFF"
                         p={{ base: 1, md: isMobile ? 2 : 3 }}
-                        px={5}
+                        px={isMobile ? 5 : 2}
+                        direction={{ base: 'column', md: 'row' }}
                         textAlign="center"
-                        whiteSpace="nowrap">
-                        {name}:{' '}
-                        <Text as="span" color="#D08FB0">
-                            {value}
+                        my="auto"
+                        align="center">
+                        <Text color="#FFF" flexWrap={'nowrap'}>
+                            {name}:{' '}
                         </Text>
-                    </Text>
+                        <Text color="#D08FB0">{value}</Text>
+                    </Stack>
                 ))}
             </Stack>
         </Stack>

@@ -1,6 +1,7 @@
 import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
 import { Grid } from '@chakra-ui/react';
 import ColumnLabel from '../../ColumnLabel';
+import { CombativityLeaderboardHeaders } from '../data';
 
 /**
  * @name CombativityLeaderboardHeader
@@ -15,7 +16,7 @@ const CombativityLeaderboardHeader = ({ color }) => {
     const { isMobile } = useBattlegroundBreakpoints();
     return (
         <Grid
-            templateColumns="repeat(3, 1fr)"
+            templateColumns={`repeat(${CombativityLeaderboardHeaders.length}, 1fr)`}
             gap={4}
             w="90%"
             mx="auto"
@@ -23,9 +24,9 @@ const CombativityLeaderboardHeader = ({ color }) => {
             p={5}
             borderRadius="10px"
             bgColor={color}>
-            <ColumnLabel label="POSITION" color="#FFF" isMobile={isMobile} />
-            <ColumnLabel label="NAME/ ADDRESS" color="#FFF" isMobile={isMobile} />
-            <ColumnLabel label="POINTS" color="#FFF" isMobile={isMobile} />
+            {CombativityLeaderboardHeaders.map((lb, index) => (
+                <ColumnLabel key={index} label={lb} color="#FFF" isMobile={isMobile} />
+            ))}
         </Grid>
     );
 };

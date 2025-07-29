@@ -20,10 +20,9 @@ const ColumnLabel = ({ label, isMobile, info = null, ...rest }) => (
         display={'flex'}
         flexDirection={'row'}
         alignItems={'center'}
-        justifyContent={info ? 'space-between' : 'center'}
-        // mx={info && 3}
-    >
-        <Text fontFamily="Inter, System" fontWeight={700} fontSize={isMobile ? 'sm' : 'md'} {...rest}>
+        fontFamily="Inter, System"
+        justifyContent={info ? 'space-between' : 'center'}>
+        <Text fontWeight={700} fontSize={{ base: '3xs', md: isMobile ? '2xs' : 'md' }} {...rest}>
             {label}
         </Text>
         {info && (

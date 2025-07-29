@@ -2,6 +2,7 @@ import { IconButton } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { Box } from '@chakra-ui/react';
 import { Overlay } from './Overlay';
+import { useKeyClose } from '../../hooks/useKeyClose';
 
 /**
  * @name Modal
@@ -19,6 +20,7 @@ import { Overlay } from './Overlay';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const Modal = ({ isVisible, onClose, children, width, height, showCloseIcon = true, bgColor = '#1F2323', ...rest }) => {
+    useKeyClose(onClose, isVisible);
     return (
         <>
             <Overlay isVisible={isVisible} handleClose={onClose} />

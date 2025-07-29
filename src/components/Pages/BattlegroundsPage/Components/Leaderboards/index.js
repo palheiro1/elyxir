@@ -177,11 +177,11 @@ const Leaderboards = ({ handleClose, handleFilterChange }) => {
                     </Stack>
                     <Stack dir="row" mx={'auto'} w={'90%'}>
                         {option === 5 ? (
-                            <CombativityResetTimer mb={isMobile ? 0 : 4} />
+                            <CombativityResetTimer option={option} mb={isMobile ? 0 : 4} />
                         ) : (
                             <Stack
                                 direction={'row'}
-                                mb={isMobile ? 0 : 4}
+                                mb={isMobile ? 0 : 4} 
                                 align={'baseline'}
                                 justifyContent={'space-between'}>
                                 <TypesLeaderboardsRewards option={option} />

@@ -32,7 +32,7 @@ const OmnoPage = ({ infoAccount, isMobile, gridColumns, handleCloseInventory }) 
         handleElementChange,
         handleDomainChange,
         handleReset,
-    } = useCardsFilters(selectedCards, cards);
+    } = useCardsFilters({ selectedCards, cards });
     const handleSelectCard = card => setSelectedCards([...selectedCards, card]);
 
     const handleEdit = (card, quantity) => {
