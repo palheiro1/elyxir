@@ -1,14 +1,11 @@
-import { Box, Image, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Image, Skeleton, SkeletonText, Stack, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { formatLeaderboardRewards, getCurrencyImage } from '../../../Utils/BattlegroundsUtils';
 import { NQTDIVIDER } from '../../../../../../data/CONSTANTS';
 import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
-
-const CURRENCY_PRECISION = {
-    weth: 4,
-    gem: 0,
-    mana: 0,
-};
+import { CURRENCY_PRECISION } from '../data';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLeaderboardRewards } from '../../../../../../redux/reducers/LeaderboardsReducer';
 
 /**
  * @name TypesLeaderboardsRewards
@@ -22,33 +19,36 @@ const CURRENCY_PRECISION = {
 const TypesLeaderboardsRewards = ({ option }) => {
     const [rewards, setRewards] = useState(null);
     const { isMobile } = useBattlegroundBreakpoints();
+    const dispatch = useDispatch();
+
+    const { rewardsByOption } = useSelector(state => state.leaderboards);
+    const cachedRewards = rewardsByOption?.[option];
+
     useEffect(() => {
-        const fetchRewards = async () => {
+        const getRewards = async () => {
+            if (cachedRewards) {
+                setRewards(cachedRewards);
+                return;
+            }
+
             try {
                 const data = await formatLeaderboardRewards(option);
                 setRewards(data);
+                dispatch(setLeaderboardRewards({ option, rewards: data }));
             } catch (error) {
                 console.error('Error fetching leaderboard rewards:', error);
             }
         };
 
-        fetchRewards();
-    }, [option]);
+        getRewards();
+    }, [option, cachedRewards, dispatch]);
 
     const formatValue = (key, value) => {
         const precision = CURRENCY_PRECISION[key];
         return precision !== undefined ? (value / NQTDIVIDER).toFixed(precision) : value;
     };
 
-    if (!rewards) {
-        return (
-            <Box mx="auto">
-                <Spinner />
-            </Box>
-        );
-    }
-
-    const rewardEntries = Object.entries(rewards).reverse();
+    const rewardEntries = rewards && Object.entries(rewards).reverse();
 
     return (
         <Stack w="100%" align="start" maxW="500px">
@@ -60,32 +60,53 @@ const TypesLeaderboardsRewards = ({ option }) => {
                 REWARDS
             </Text>
 
-            <Stack
-                direction="row"
-                align="center"
-                fontFamily="Inter, system-ui"
-                fontSize={isMobile ? 'xs' : 'md'}
-                w="100%"
-                justify="space-between"
-                fontWeight={700}
-                bg="#FFF"
-                py={2}
-                px={4}
-                borderRadius="20px">
-                {rewardEntries.map(([key, value]) => {
-                    const formatted = formatValue(key, value);
-                    const icon = getCurrencyImage(key);
+            {rewards ? (
+                <Stack
+                    direction="row"
+                    align="center"
+                    fontFamily="Inter, system-ui"
+                    fontSize={isMobile ? 'xs' : 'md'}
+                    w="100%"
+                    justify="space-between"
+                    fontWeight={700}
+                    bg="#FFF"
+                    py={2}
+                    px={4}
+                    borderRadius="20px">
+                    {rewardEntries.map(([key, value]) => {
+                        const formatted = formatValue(key, value);
+                        const icon = getCurrencyImage(key);
 
-                    return (
-                        <Stack key={key} direction="row" align="center">
-                            <Image src={icon} alt={`${key} Icon`} boxSize={isMobile ? '30px' : '50px'} />
-                            <Text textTransform="uppercase" color="#5A679B">
-                                {formatted}
-                            </Text>
+                        return (
+                            <Stack key={key} direction="row" align="center">
+                                <Image src={icon} alt={`${key} Icon`} boxSize={isMobile ? '30px' : '50px'} />
+                                <Text textTransform="uppercase" color="#5A679B">
+                                    {formatted}
+                                </Text>
+                            </Stack>
+                        );
+                    })}
+                </Stack>
+            ) : (
+                <Stack
+                    direction="row"
+                    align="center"
+                    fontSize={isMobile ? 'xs' : 'md'}
+                    w="100%"
+                    justify="space-between"
+                    fontWeight={700}
+                    bg="#FFF"
+                    py={2}
+                    px={4}
+                    borderRadius="20px">
+                    {[1, 2, 3].map(i => (
+                        <Stack key={i} direction="row" align="center">
+                            <Skeleton boxSize={isMobile ? '30px' : '50px'} borderRadius="full" />
+                            <SkeletonText noOfLines={1} width={isMobile ? '40px' : '60px'} />
                         </Stack>
-                    );
-                })}
-            </Stack>
+                    ))}
+                </Stack>
+            )}
         </Stack>
     );
 };

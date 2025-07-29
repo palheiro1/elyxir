@@ -1,11 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Stack } from '@chakra-ui/react';
-import {
-    getLastUserBattle,
-    getBattleById,
-    getSoldiers,
-    getArenas,
-} from '../../../../../../../services/Battlegrounds/Battlegrounds';
+import { getLastUserBattle, getBattleById, getArenas } from '../../../../../../../services/Battlegrounds/Battlegrounds';
 import { addressToAccountId, getAccount } from '../../../../../../../services/Ardor/ardorInterface';
 import locations from '../../../../assets/LocationsEnum';
 import BattleHeader from './Components/BattleHeader';
@@ -13,6 +8,7 @@ import BattleCardsSummary from './Components/BattleCardSummary';
 import BattleRounds from './Components/BattleRounds';
 import BattleFooter from './Components/BattleFooter';
 import BattleLoading from './Components/BattleLoading';
+import { useSelector } from 'react-redux';
 
 /**
  * @name BattleResults
@@ -45,10 +41,11 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     const [defenderInfo, setDefenderInfo] = useState(null);
     const [attackerHero, setAttackerHero] = useState(null);
     const [defenderHero, setDefenderHero] = useState(null);
-    const [soldiers, setSoldiers] = useState(null);
+
+    const { soldier: soldiers } = useSelector(state => state.soldiers.soldiers);
 
     const getLastBattle = useCallback(async () => {
-        // if (!currentTime || !arenaInfo) return;
+        if (!currentTime || !arenaInfo) return;
 
         // Configurar medium y nombre de arena
         switch (arenaInfo.mediumId) {
@@ -76,9 +73,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             const battle = await getBattleById(res.battleId);
             setAttackerHero(cards.find(card => card.asset === battle.attackerArmy.heroAsset));
             setDefenderHero(cards.find(card => card.asset === battle.defenderArmy.heroAsset));
-
-            const soldiersData = await getSoldiers();
-            setSoldiers(soldiersData.soldier);
 
             setIsUserDefending(res.defenderAccount === accountId);
             setBattleResults(battle.battleResult);

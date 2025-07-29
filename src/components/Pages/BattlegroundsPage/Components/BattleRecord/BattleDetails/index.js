@@ -1,6 +1,6 @@
 import { Box, IconButton, Spinner, Stack, useToast } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
-import { getBattleById, getSoldiers } from '../../../../../../services/Battlegrounds/Battlegrounds';
+import { getBattleById } from '../../../../../../services/Battlegrounds/Battlegrounds';
 import '@fontsource/chelsea-market';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { errorToast } from '../../../../../../utils/alerts';
@@ -10,6 +10,7 @@ import BattleRounds from './Components/BattleRounds';
 import BattleDetailsFooter from './Components/BattleDetailsFooter';
 import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
 import BattleCardsSummary from './Components/BattleCardsSummary';
+import { useSelector } from 'react-redux';
 
 /**
  * @name BattleDetails
@@ -40,9 +41,9 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
     const [domainName, setDomainName] = useState(null);
     const [attackerHero, setAttackerHero] = useState(null);
     const [defenderHero, setDefenderHero] = useState(null);
-    const [soldiers, setSoldiers] = useState(null);
 
     const { isMobile, isMediumScreen } = useBattlegroundBreakpoints();
+    const { soldier: soldiers } = useSelector(state => state.soldiers.soldiers);
 
     const getLastBattle = useCallback(async () => {
         if (arenaInfo) {
@@ -76,8 +77,6 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
         setDefenderHero(defenderHero);
         setCapturedCard(capturedCard);
 
-        const soldiers = await getSoldiers();
-        setSoldiers(soldiers.soldier);
         setBattleResults(res);
 
         setBattleInfo(res);

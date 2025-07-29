@@ -41,6 +41,8 @@ const CardFilters = ({
         color: '#000',
     };
 
+    const showResetButton = filters.rarity !== '-1' || filters.element !== '-1' || filters.domain !== '-1';
+
     const Filters = () => (
         <Stack direction={isMobile ? 'column' : 'row'} spacing={2} fontFamily="Chelsea Market, system-ui">
             <Select w={isMobile && '100%'} value={filters.rarity} onChange={handleRarityChange} color="#FFF">
@@ -88,9 +90,11 @@ const CardFilters = ({
                         <Filters />
                     </DrawerBody>
                     <DrawerFooter>
-                        <Button color={'#FFF'} onClick={handleResetFilters}>
-                            Reset
-                        </Button>
+                        {showResetButton && (
+                            <Button color={'#FFF'} onClick={handleResetFilters}>
+                                Reset
+                            </Button>
+                        )}
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
@@ -98,7 +102,7 @@ const CardFilters = ({
     ) : (
         <Box ml="10" display={'flex'} flexDirection={'row'} fontFamily="Chelsea Market, system-ui">
             <Filters />
-            <IconButton color={'#FFF'} icon={<CloseIcon />} onClick={handleResetFilters} ml={2} />
+            {showResetButton && <IconButton color={'#FFF'} icon={<CloseIcon />} onClick={handleResetFilters} ml={2} />}
         </Box>
     );
 };

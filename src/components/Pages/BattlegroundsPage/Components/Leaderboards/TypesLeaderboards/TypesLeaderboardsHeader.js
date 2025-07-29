@@ -6,7 +6,7 @@ import { TypesLeaderboardsHeaders } from '../data';
 /**
  * @name TypesLeaderboardsHeader
  * @description Displays the column headers for the leaderboard table, adapting layout and typography for mobile and desktop views.
- * Uses a 7-column grid to represent leaderboard categories such as position, name, lands conquered, and more.
+ * Uses a grid to represent leaderboard categories such as position, name, lands conquered, and more.
  * @param {Object} props - Component props.
  * @param {string} props.color - Hex color used for border and background styling of the header.
  * @returns {JSX.Element} A styled and responsive header row for the leaderboard.
@@ -24,14 +24,13 @@ const TypesLeaderboardsHeader = ({ color }) => {
             mt={isMobile ? 0 : 3}
             p={2}
             borderRadius={'10px'}
-            border={`2px solid ${color}`}
             color={'#000'}
             bgColor={color}
             position="sticky"
             top="0"
             zIndex={1}>
-            {TypesLeaderboardsHeaders.map(item => (
-                <ColumnLabel label={item} isMobile={isMobile} />
+            {TypesLeaderboardsHeaders.map(({ label, info }, index) => (
+                <ColumnLabel key={index} label={label} isMobile={isMobile} info={info} />
             ))}
         </Grid>
     );

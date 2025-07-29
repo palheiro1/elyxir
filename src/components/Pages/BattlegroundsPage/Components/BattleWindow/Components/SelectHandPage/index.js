@@ -4,7 +4,6 @@ import locations from '../../../../assets/LocationsEnum';
 import { errorToast } from '../../../../../../../utils/alerts';
 import { sendCardsToBattle } from '../../../../../../../services/Ardor/omnoInterface';
 import { checkPin } from '../../../../../../../utils/walletUtils';
-import { getSoldiers } from '../../../../../../../services/Battlegrounds/Battlegrounds';
 import PinModal from './Components/PinModal';
 import TributeDisplay from './Components/TributeDisplay';
 import StartBattleButton from './Components/StartBattleButton';
@@ -13,6 +12,7 @@ import DefenderCards from './Components/DefenderCards';
 import StatisticsDisplay from './Components/StatisticsDisplay';
 import { isEmptyObject } from '../../../../../../../utils/utils';
 import { fetchAssetsWithPricing } from '../../../../Utils/BattlegroundsUtils';
+import { useSelector } from 'react-redux';
 
 /**
  * @name SelectHandPage
@@ -71,6 +71,7 @@ export const SelectHandPage = ({
     const [defenderBonus, setDefenderBonus] = useState({ medium: 0, domain: 0 });
     const [isLowHeight] = useMediaQuery('(max-height: 700px)');
 
+    const { soldier: soldiers } = useSelector(state => state.soldiers.soldiers);
     useEffect(() => {
         if (!arenaInfo) return;
 
@@ -94,10 +95,7 @@ export const SelectHandPage = ({
     useEffect(() => {
         const fetchDefenderBonus = async () => {
             try {
-                const allSoldiers = await getSoldiers();
-                const matchingSoldiers = allSoldiers.soldier.filter(s =>
-                    defenderCards.some(card => card.asset === s.asset)
-                );
+                const matchingSoldiers = soldiers.filter(s => defenderCards.some(card => card.asset === s.asset));
 
                 const domain = matchingSoldiers.filter(s => s.domainId === arenaInfo.domainId).length;
                 const medium = matchingSoldiers.filter(s => s.mediumId === arenaInfo.mediumId).length;
@@ -109,7 +107,7 @@ export const SelectHandPage = ({
         };
 
         fetchDefenderBonus();
-    }, [arenaInfo.domainId, arenaInfo.mediumId, defenderCards]);
+    }, [arenaInfo.domainId, arenaInfo.mediumId, defenderCards, soldiers]);
 
     const getMediumName = id => {
         return (

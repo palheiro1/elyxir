@@ -51,6 +51,9 @@ const Battlegrounds = ({ infoAccount }) => {
     const { cards } = useSelector(state => state.cards);
 
     const { isMobile, isMediumScreen } = useBattlegroundBreakpoints();
+
+    document.title = 'Mythical Beings | Battlegrounds';
+
     return (
         <>
             <Box

@@ -473,6 +473,8 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         );
     }, [infoAccount]);
 
+    document.title = 'Mythical Beings | Wallet';
+
     const MENU_OPTIONS_COLOR = [
         '#2f9088', // Overview
         '#2f8190', // Inventory

@@ -2,7 +2,6 @@
 import { Box, Spinner, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getAccount } from '../../../../../services/Ardor/ardorInterface';
-import { getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 import { errorToast } from '../../../../../utils/alerts';
 import '@fontsource/chelsea-market';
 import { SelectHandPage } from './Components/SelectHandPage';
@@ -10,6 +9,7 @@ import BattleResults from './Components/BattleResults';
 import BattleInventory from './Components/BattleInventory';
 import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
 import Modal from '../../../../ui/Modal';
+import { useSelector } from 'react-redux';
 
 /**
  * @name BattleWindow
@@ -41,7 +41,6 @@ export const BattleWindow = ({
     const [index, setIndex] = useState('');
     const [defenderInfo, setDefenderInfo] = useState(null);
     const [handBattleCards, setHandBattleCards] = useState(Array(5).fill(''));
-    const [soldiers, setSoldiers] = useState(null);
     const [mediumBonus, setMediumBonus] = useState(0);
     const [domainBonus, setDomainBonus] = useState(0);
     const [domainName, setDomainName] = useState();
@@ -56,6 +55,8 @@ export const BattleWindow = ({
         domain: '-1',
     });
     const { isMobile } = useBattlegroundBreakpoints();
+
+    const { soldier: soldiers } = useSelector(state => state.soldiers.soldiers);
 
     const handleRarityChange = event => {
         setFilters(prevFilters => ({
@@ -97,10 +98,6 @@ export const BattleWindow = ({
             await getAccount(arenaInfo.defender.account).then(res => {
                 setDefenderInfo(res);
             });
-            await getSoldiers().then(res => {
-                setSoldiers(res.soldier);
-                return res;
-            });
 
             const domainName = (() => {
                 switch (arenaInfo.domainId) {
@@ -132,14 +129,17 @@ export const BattleWindow = ({
     }, [handBattleCards]);
 
     const calculateBonus = () => {
-        if (handBattleCards[index] !== '') {
-            const cardInfo = soldiers.find(item => item.asset === handBattleCards[index].asset);
-            if (cardInfo.mediumId === arenaInfo.mediumId) {
-                setMediumBonus(mediumBonus + 1);
-            }
-            if (cardInfo.domainId === arenaInfo.domainId) {
-                setDomainBonus(domainBonus + 1);
-            }
+        const currentCard = handBattleCards[index];
+        if (!currentCard) return;
+
+        const cardInfo = soldiers.find(item => item.asset === currentCard.asset);
+        if (!cardInfo) return;
+
+        if (cardInfo.mediumId === arenaInfo.mediumId) {
+            setMediumBonus(prev => prev + 1);
+        }
+        if (cardInfo.domainId === arenaInfo.domainId) {
+            setDomainBonus(prev => prev + 1);
         }
     };
 

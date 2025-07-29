@@ -3,11 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Stack, Image, Text, MenuItem, MenuList, Flex, Button, MenuButton, Menu } from '@chakra-ui/react';
 import { fetchAccountDetails, fetchLeaderboards, setViewData } from '../../../../../redux/reducers/LeaderboardsReducer';
 import CombativityResetTimer from './CombativityLeaderboard/CombativityResetTimer';
-import panteon from '../../assets/icons/panteon_banner.svg';
-import landsBanner from '../../assets/icons/lands_banner.svg';
-import waterBanner from '../../assets/icons/water_banner.svg';
-import airBanner from '../../assets/icons/air_banner.svg';
-import combativityBanner from '../../assets/icons/combativeness_banner.svg';
+
 import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
 import TypesLeaderboardsRewards from './TypesLeaderboards/TypesLeaderboardsRewards';
 import TypesLeaderboardsResetTimer from './TypesLeaderboards/TypesLeaderboardsResetTimer';
@@ -16,6 +12,7 @@ import CombativityLeaderboard from './CombativityLeaderboard/CombativityLeaderbo
 import Modal from '../../../../ui/Modal';
 import { ChevronDownIcon, InfoOutlineIcon } from '@chakra-ui/icons';
 import ResponsiveTooltip from '../../../../ui/ReponsiveTooltip';
+import { availableLeaderboards, bannerImages, leaderboardsColors } from './data';
 
 /**
  * @name Leaderboards
@@ -40,24 +37,6 @@ const Leaderboards = ({ handleClose, handleFilterChange }) => {
         changeData(1);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
-
-    const color = () => {
-        if (!data) return;
-        switch (data.type) {
-            case 'terrestrial':
-                return '#866678';
-            case 'aquatic':
-                return '#393CC1';
-            case 'aerial':
-                return '#5E67A2';
-            case 'combativity':
-                return '#FF4B85';
-            case 'general':
-                return '#FFD900';
-            default:
-                return null;
-        }
-    };
 
     const changeData = option => {
         if (leaderboards && option !== 0) {
@@ -106,23 +85,8 @@ const Leaderboards = ({ handleClose, handleFilterChange }) => {
         changeData(0);
     };
 
-    const availableLeaderboards = [
-        {
-            name: 'CHAMPIONS PANTHEON',
-            value: 1,
-            description:
-                "The players' scores are calculated as the weighted sum of four elements. Each element is normalized using the formula (player score / highest score recorded), ensuring that the weighted value of every metric falls within the range of 0 to 1. Finally, the normalized values are summed to produce the total score, which will always range between 0 and 4.",
-        },
-        { name: 'TERRESTRIAL PANTHEON', value: 2 },
-        { name: 'AERIAL PANTHEON', value: 3 },
-        { name: 'AQUATIC PANTHEON', value: 4 },
-        {
-            name: 'CHAMPION OF FIERCENESS',
-            value: 5,
-            description:
-                '1 point per battle initiated on common territory. 2 points per battle initiated on rare territory. 3 points per battle initiated on epic territory. 4 points per battle initiated on special territory.',
-        },
-    ];
+    const bannerSrc = bannerImages[option - 1];
+    const leaderboardColor = leaderboardsColors[data.type];
 
     return (
         <Modal
@@ -147,26 +111,7 @@ const Leaderboards = ({ handleClose, handleFilterChange }) => {
                         LEADERBOARDS
                     </Text>
 
-                    <Image
-                        src={(() => {
-                            switch (option) {
-                                case 1:
-                                    return panteon;
-                                case 2:
-                                    return landsBanner;
-                                case 3:
-                                    return airBanner;
-                                case 4:
-                                    return waterBanner;
-                                case 5:
-                                    return combativityBanner;
-                                default:
-                                    return null;
-                            }
-                        })()}
-                        w={isMobile ? '120px' : '190px'}
-                        h={'75px'}
-                    />
+                    <Image src={bannerSrc} w={isMobile ? '120px' : '190px'} h={'75px'} />
                     <Flex align="center" gap={2}>
                         <Menu>
                             <MenuButton
@@ -176,7 +121,7 @@ const Leaderboards = ({ handleClose, handleFilterChange }) => {
                                 fontFamily="Chelsea Market, System"
                                 bg="transparent"
                                 border="none"
-                                color={color()}
+                                color={leaderboardColor}
                                 fontSize={'lg'}
                                 maxW="300px"
                                 _hover={{ borderColor: '#555' }}>
@@ -221,10 +166,10 @@ const Leaderboards = ({ handleClose, handleFilterChange }) => {
                         mb={0}
                         h={isMobile ? '70%' : '80%'}>
                         {option === 5 ? (
-                            <CombativityLeaderboard color={color} />
+                            <CombativityLeaderboard color={leaderboardColor} />
                         ) : (
                             <TypesLeaderboard
-                                color={color}
+                                color={leaderboardColor}
                                 handleFilterChange={handleFilterChange}
                                 handleClose={handleClose}
                             />
@@ -232,11 +177,11 @@ const Leaderboards = ({ handleClose, handleFilterChange }) => {
                     </Stack>
                     <Stack dir="row" mx={'auto'} w={'90%'}>
                         {option === 5 ? (
-                            <CombativityResetTimer mb={isMobile ? 0 : 4} />
+                            <CombativityResetTimer option={option} mb={isMobile ? 0 : 4} />
                         ) : (
                             <Stack
                                 direction={'row'}
-                                mb={isMobile ? 0 : 4}
+                                mb={isMobile ? 0 : 4} 
                                 align={'baseline'}
                                 justifyContent={'space-between'}>
                                 <TypesLeaderboardsRewards option={option} />
