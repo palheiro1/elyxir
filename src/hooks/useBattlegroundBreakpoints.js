@@ -7,6 +7,7 @@ import { useMediaQuery } from '@chakra-ui/react';
  * @returns {Object} Object containing:
  * - `isMobile`: {boolean} True if the viewport width is less than or equal to 1179px.
  * - `isMediumScreen`: {boolean} True if the viewport width is between 1180px and 1400px.
+ * - `isLittleScreen`: {boolean} True if the viewport width is between 1180px and 1399px.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 export const useBattlegroundBreakpoints = () => {

@@ -29,6 +29,8 @@ import QuickStartModal from './QuickStart';
  * @param {Function} props.handleOpenModal - Opens a modal by name.
  * @param {Function} props.onCloseGems - Closes the GEM modal using Chakra.
  * @param {Function} props.onCloseWeth - Closes the WETH modal using Chakra.
+ * @param {Function} props.setHasSeenNewPlayersModal - Setter to track if the new players modal has been seen.
+ * @param {Function} props.handleFilterChange - Function to update arenas filters.
  * @returns {JSX.Element} The rendered modals, based on the currently active modal flags.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */

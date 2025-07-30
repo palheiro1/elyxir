@@ -3,6 +3,7 @@ import { getActivePlayers, getBattleCount, getLandLords } from '../../services/B
 import { addressToAccountId } from '../../services/Ardor/ardorInterface';
 import { getUsersState } from '../../services/Ardor/omnoInterface';
 import { GEMASSET, WETHASSET } from '../../data/CONSTANTS';
+import { getStuckedBattleCards } from '../../components/Pages/BattlegroundsPage/Utils/BattlegroundsUtils';
 
 /**
  * @name extractUserInfo
@@ -24,12 +25,16 @@ const extractUserInfo = (users, accountId) => users.find(user => user.id === acc
  */
 const getFilteredCards = (cards, userAssets) => {
     const assetIds = Object.keys(userAssets);
+    const { stuckedCards } = getStuckedBattleCards();
     return cards
         .filter(card => assetIds.includes(card.asset))
-        .map(card => ({
-            ...card,
-            omnoQuantity: userAssets[card.asset] || 0,
-        }));
+        .map(card => {
+            const stuckedQnt = stuckedCards?.[card.asset] || 0;
+            return {
+                ...card,
+                omnoQuantity: userAssets[card.asset] - stuckedQnt || 0,
+            };
+        });
 };
 
 /**

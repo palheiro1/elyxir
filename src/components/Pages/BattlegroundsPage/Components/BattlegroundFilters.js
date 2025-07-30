@@ -16,6 +16,7 @@ import { getAccount } from '../../../../services/Ardor/ardorInterface';
  * @param {number} filters.rarity - Selected rarity filter value. `-1` means "All".
  * @param {number} filters.element - Selected element (medium) filter value. `-1` means "All".
  * @param {Function} props.handleFilterChange - Callback triggered when the user selects a new filter.
+ * @param {Function} props.handleResetFilters - Callback to reset all filters to their default state.
  * @param {string} key - Filter key ('rarity' or 'element').
  * @param {number} value - New selected value.
  * @returns {JSX.Element} A horizontal `Stack` of dropdown menus to filter battleground lands by rarity and element.

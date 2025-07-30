@@ -10,6 +10,7 @@ import { fetchUserBattles } from '../redux/reducers/BattleReducer';
 import { fetchLeaderboards } from '../redux/reducers/LeaderboardsReducer';
 import { getBlockchainBlocks } from '../redux/reducers/BlockchainReducer';
 import { REFRESH_BLOCK_TIME } from '../data/CONSTANTS';
+import { cleanStuckedBattleCards } from '../components/Pages/BattlegroundsPage/Utils/BattlegroundsUtils';
 
 /**
  * @name useBattlegroundState
@@ -109,6 +110,7 @@ export const useBattlegroundState = infoAccount => {
         if (!currentBlock || currentBlock !== prev_height) {
             setCurrentBlock(prev_height);
             setUpdateState(prev => !prev);
+            cleanStuckedBattleCards(prev_height);
             Promise.all([
                 dispatch(fetchArenasInfo()),
                 dispatch(fetchSoldiers()),

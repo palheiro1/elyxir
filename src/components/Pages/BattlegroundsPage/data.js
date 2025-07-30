@@ -85,3 +85,5 @@ export const buttonsGroups = [
         ],
     },
 ];
+
+export const STUCKED_CARDS_KEY = 'stuckedBattleCards';
