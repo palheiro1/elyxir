@@ -25,11 +25,11 @@ const extractUserInfo = (users, accountId) => users.find(user => user.id === acc
  */
 const getFilteredCards = (cards, userAssets) => {
     const assetIds = Object.keys(userAssets);
-    const stuckedCardsObj = getStuckedBattleCards();
+    const { stuckedCards } = getStuckedBattleCards();
     return cards
         .filter(card => assetIds.includes(card.asset))
         .map(card => {
-            const stuckedQnt = stuckedCardsObj?.stuckedCards?.[card.asset] || 0;
+            const stuckedQnt = stuckedCards?.[card.asset] || 0;
             return {
                 ...card,
                 omnoQuantity: userAssets[card.asset] - stuckedQnt || 0,

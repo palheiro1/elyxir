@@ -163,7 +163,6 @@ export const fetchUserBattles = createAsyncThunk('battle/fetchUserBattles', asyn
 const initialState = {
     arenasInfo: null,
     userBattles: null,
-    battleDetails: null,
     battleRewards: null,
     loading: false,
     error: null,
@@ -174,7 +173,6 @@ const battleSlice = createSlice({
     initialState,
     reducers: {
         resetBattleState: () => initialState,
-        // Reducer adicional para actualizar recompensas si es necesario
         updateBattleReward: (state, action) => {
             const { battleId, reward } = action.payload;
             if (state.battleRewards) {
@@ -192,7 +190,6 @@ const battleSlice = createSlice({
                 state.loading = false;
                 state.arenasInfo = payload.arenas;
                 state.userBattles = payload.details;
-                state.battleDetails = payload.details;
                 state.battleRewards = payload.rewards;
             })
             .addCase(fetchUserBattles.rejected, (state, { payload }) => {

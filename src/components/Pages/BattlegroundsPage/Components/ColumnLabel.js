@@ -9,6 +9,8 @@ import { InfoOutlineIcon } from '@chakra-ui/icons';
  * @param {Object} props - Component props.
  * @param {string} props.label - Text to be displayed as the column label.
  * @param {boolean} props.isMobile - Determines whether to use small or medium font size.
+ * @param {string} [props.info] - Optional tooltip information to display next to the label.
+ * @param {Object} rest - Additional props to be passed to the `GridItem`.
  * @returns {JSX.Element} A styled Chakra UI `GridItem` containing the label text.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */

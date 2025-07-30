@@ -26,6 +26,7 @@ const domainMap = { 1: 'Asia', 2: 'Oceania', 3: 'America', 4: 'Africa', 5: 'Euro
  * @param {Function} handleRarityChange - Callback when the rarity filter changes.
  * @param {Function} handleElementChange - Callback when the element filter changes.
  * @param {Function} handleDomainChange - Callback when the domain filter changes.
+ * @param {Function} handleResetFilters - Callback to reset all filters to default values.
  * @returns {JSX.Element} A responsive panel showing filters and a grid of eligible cards.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
@@ -66,13 +67,15 @@ const BattleInventory = ({
     );
 
     const availableCards = useMemo(() => {
-        const condition = card =>
-            card.omnoQuantity > 0 &&
-            ((level === 1 && ['Common', 'Rare'].includes(card.rarity)) ||
-                (level > 1 &&
-                    ((index === 0 && ['Epic', 'Special'].includes(card.rarity)) ||
-                        (index !== 0 && ['Common', 'Rare'].includes(card.rarity)))));
-        return enhanceCards(filteredCards.filter(condition));
+        const isValidRarity = rarity => {
+            if (level === 1) return ['Common', 'Rare'].includes(rarity);
+            if (index === 0) return ['Epic', 'Special'].includes(rarity);
+            return ['Common', 'Rare'].includes(rarity);
+        };
+        const condition = card => card.omnoQuantity > 0 && isValidRarity(card.rarity);
+
+        const validCards = filteredCards.filter(condition);
+        return enhanceCards(validCards);
     }, [filteredCards, index, level, enhanceCards]);
 
     const filteredAvailableCards = useMemo(() => {
