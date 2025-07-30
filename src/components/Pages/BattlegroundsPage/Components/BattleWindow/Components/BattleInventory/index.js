@@ -67,10 +67,11 @@ const BattleInventory = ({
 
     const availableCards = useMemo(() => {
         const condition = card =>
-            (level === 1 && ['Common', 'Rare'].includes(card.rarity)) ||
-            (level > 1 &&
-                ((index === 0 && ['Epic', 'Special'].includes(card.rarity)) ||
-                    (index !== 0 && ['Common', 'Rare'].includes(card.rarity))));
+            card.omnoQuantity > 0 &&
+            ((level === 1 && ['Common', 'Rare'].includes(card.rarity)) ||
+                (level > 1 &&
+                    ((index === 0 && ['Epic', 'Special'].includes(card.rarity)) ||
+                        (index !== 0 && ['Common', 'Rare'].includes(card.rarity)))));
         return enhanceCards(filteredCards.filter(condition));
     }, [filteredCards, index, level, enhanceCards]);
 

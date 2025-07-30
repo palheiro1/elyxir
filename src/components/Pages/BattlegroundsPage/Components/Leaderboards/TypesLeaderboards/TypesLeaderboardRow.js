@@ -61,7 +61,7 @@ const TypesLeaderboardRow = ({ index, data, isMobile, type, handleSetDefenderFil
     return (
         <Grid templateColumns="repeat(8, 1fr)" gap={4} w="100%" mx="auto" mt={0} bgColor={bg} borderRadius="10px">
             <CustomCell isMobile={isMobile} color={color} padding={1}>
-                <Stack direction="row" my={'auto'} ml={index < 5 && -5}>
+                <Stack direction="row" my={'auto'} ml={index < winnersNumbers && '-21px'}>
                     {index < winnersNumbers && (
                         <ResponsiveTooltip label={rewardText} mr={2} mt={-1}>
                             <span>

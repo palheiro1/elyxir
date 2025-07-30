@@ -52,7 +52,7 @@ const Battlegrounds = ({ infoAccount }) => {
 
     const { isMobile, isMediumScreen } = useBattlegroundBreakpoints();
 
-    document.title = 'Mythical Beings | Battlegrounds';
+    document.title = 'Mythical Beings | BattlegrouFnds';
 
     return (
         <>

@@ -13,7 +13,7 @@ import { GridItem, Text } from '@chakra-ui/react';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const CustomCell = ({ value, isMobile, isUppercase = false, padding = 3, children = null, ...rest }) => (
-    <GridItem colSpan={1} textAlign="center">
+    <GridItem colSpan={1} textAlign="center" maxW={'150px'} mx={'auto'}>
         <Text
             p={padding}
             maxH="45px"

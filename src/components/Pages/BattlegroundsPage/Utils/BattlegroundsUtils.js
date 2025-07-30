@@ -1,6 +1,7 @@
 import { getAsset } from '../../../../services/Ardor/ardorInterface';
 import { getAccumulatedBounty, getLeaderboardsRewards } from '../../../../services/Battlegrounds/Battlegrounds';
 import { isEmptyObject } from '../../../../utils/utils';
+import { STUCKED_CARDS_KEY } from '../data';
 
 export const formatTimeStamp = timestamp => {
     const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
@@ -428,4 +429,73 @@ export const getMapPointIcon = (rarity, medium) => {
     const formattedMedium = mediumMapping[medium];
 
     return `${src}/${rarity}-${formattedMedium}.png`;
+};
+
+/**
+ * @name setStuckedBattleCards
+ * @description Stores a snapshot of the currently selected battle cards in localStorage under the `stuckedCards` key.
+ * Each card is counted by its `asset` ID to support duplicate cards. Also stores the current block height
+ * to later verify if the data is outdated.
+ * @param {Array<Object>} cards - An array of card objects, each containing at least an `asset` property.
+ * @param {number} height - The current block height, used to detect outdated stored data.
+ * @returns {Object} The stored payload object containing `stuckedCards` and `height`.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const setStuckedBattleCards = (cards, height) => {
+    try {
+        if (!Array.isArray(cards)) {
+            return {};
+        }
+
+        const stuckedCards = {};
+        for (const card of cards) {
+            stuckedCards[card.asset] = (stuckedCards[card.asset] || 0) + 1;
+        }
+
+        const payload = { stuckedCards, height };
+
+        localStorage.setItem(STUCKED_CARDS_KEY, JSON.stringify(payload));
+
+        return payload;
+    } catch (error) {
+        console.error('Failed to save stucked cards to localStorage:', error);
+    }
+};
+
+/**
+ * @name getStuckedBattleCards
+ * @description Retrieves the `stuckedCards` object from localStorage. If the data is missing
+ * or fails to parse, returns an empty object as fallback. This function is used
+ * to restore potentially stuck battle card selections from previous sessions.
+ * @returns {Object} The parsed `stuckedCards` object from localStorage, or an empty object on failure.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const getStuckedBattleCards = () => {
+    try {
+        const stored = localStorage.getItem(STUCKED_CARDS_KEY);
+        return stored ? JSON.parse(stored) : {};
+    } catch (error) {
+        console.error('Failed to parse stucked cards from localStorage:', error);
+        return {};
+    }
+};
+
+/**
+ * @name cleanStuckedBattleCards
+ * @description Removes the `stuckedCards` entry from localStorage if its stored `height`
+ * does not match the current provided block height. Used to prevent outdated or
+ * stuck battle card data from persisting across sessions.
+ * @param {number} height - The current block height to compare against the stored one.
+ * @returns {void}
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const cleanStuckedBattleCards = height => {
+    try {
+        const stored = JSON.parse(localStorage.getItem(STUCKED_CARDS_KEY));
+        if (stored && stored.height !== height) {
+            localStorage.removeItem(STUCKED_CARDS_KEY);
+        }
+    } catch (error) {
+        console.error('Failed to clean stucked cards from localStorage:', error);
+    }
 };
