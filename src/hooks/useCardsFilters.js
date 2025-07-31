@@ -47,9 +47,7 @@ export const useCardsFilters = ({ selectedCards, cards, quantityKey = 'quantityQ
 
     const handleChange = key => e => setFilters(prev => ({ ...prev, [key]: e.target.value }));
 
-    const handleReset = () => {
-        setFilters({ rarity: '-1', element: '-1', domain: '-1' });
-    };
+    const handleReset = () => setFilters({ rarity: '-1', element: '-1', domain: '-1' });
 
     return {
         filters,

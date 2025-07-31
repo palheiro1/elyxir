@@ -16,7 +16,6 @@ import Modal from '../../../../ui/Modal';
  * @param {function} props.handleClose - Callback to close the battle record overlay.
  * @param {Object} props.infoAccount - User account information, includes `accountRs` (address).
  * @param {Array} props.cards - Cards data passed down to child components.
- * @param {boolean} props.isMobile - Flag indicating if the UI is in mobile mode.
  * @returns {JSX.Element} JSX element rendering the battle record modal.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */

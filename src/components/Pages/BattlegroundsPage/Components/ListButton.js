@@ -5,11 +5,12 @@ import ResponsiveTooltip from '../../../ui/ReponsiveTooltip';
  * @name ListButton
  * @description Reusable styled button with optional tooltip and disabled state, used in selection
  * lists or action menus. Displays a label and handles click events unless disabled.
- * @param {ReactNode} children - The text or element displayed inside the button.
- * @param {Function} onclick - Function executed when the button is clicked (if not disabled).
- * @param {Boolean} disabled - Whether the button is disabled; if true, the button is dimmed and unclickable.
- * @param {String} tooltip - Text shown in a tooltip when hovering the button.
- * @param {String} color - Background color of the button, passed as Chakra-compatible color value.
+ * @param {Object} props - Component props.
+ * @param {ReactNode} props.children - The text or element displayed inside the button.
+ * @param {Function} props.onclick - Function executed when the button is clicked (if not disabled).
+ * @param {Boolean} props.disabled - Whether the button is disabled; if true, the button is dimmed and unclickable.
+ * @param {String} props.tooltip - Text shown in a tooltip when hovering the button.
+ * @param {String} props.color - Background color of the button, passed as Chakra-compatible color value.
  * @returns {JSX.Element} A stylized clickable box with tooltip support and a centered label, reflecting disabled and active states.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */

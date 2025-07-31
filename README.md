@@ -139,24 +139,6 @@ src/
 └── themes/            # UI themes and styling
 ```
 
-## 🔧 Configuration
-
-### Environment Variables
-Create a `.env` file in the root directory:
-
-```bash
-# API Endpoints
-REACT_APP_ARDOR_API_URL=your_ardor_api_url
-REACT_APP_OMNO_API_URL=your_omno_api_url
-
-# Asset Configuration
-REACT_APP_COLLECTION_RS=your_collection_rs
-REACT_APP_SPECIAL_RS=your_special_rs
-
-# Network Configuration
-REACT_APP_NETWORK=testnet # or mainnet
-```
-
 ### Build Configuration
 The project uses `react-app-rewired` for custom webpack configuration to handle blockchain-specific polyfills.
 

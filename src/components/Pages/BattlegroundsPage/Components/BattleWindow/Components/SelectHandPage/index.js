@@ -11,8 +11,9 @@ import AttackerCards from './Components/AttackerCards';
 import DefenderCards from './Components/DefenderCards';
 import StatisticsDisplay from './Components/StatisticsDisplay';
 import { isEmptyObject } from '../../../../../../../utils/utils';
-import { fetchAssetsWithPricing } from '../../../../Utils/BattlegroundsUtils';
-import { useSelector } from 'react-redux';
+import { fetchAssetsWithPricing, setStuckedBattleCards } from '../../../../Utils/BattlegroundsUtils';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateFilteredCards } from '../../../../../../../redux/reducers/BattlegroundsReducer';
 
 /**
  * @name SelectHandPage
@@ -154,6 +155,10 @@ export const SelectHandPage = ({
         }
     };
 
+    const dispatch = useDispatch();
+    const { cards } = useSelector(state => state.cards);
+    const { prev_height } = useSelector(state => state.blockchain);
+
     const handleStartBattle = async () => {
         if (!isValidPin || !passphrase) {
             return errorToast('The pin is not correct', toast);
@@ -171,6 +176,8 @@ export const SelectHandPage = ({
         onClose();
         setCurrentTime(new Date().toISOString());
         setShowResults(true);
+        setStuckedBattleCards(handBattleCards, prev_height);
+        updateFilteredCards(infoAccount.accountRs, cards, dispatch);
     };
 
     const handleCompletePin = pin => {

@@ -41,6 +41,8 @@ const CardsFilter = ({
         return useBasic ? RARITY_OPTIONS.basic : RARITY_OPTIONS.advanced;
     }, [index, level]);
 
+    const showResetButton = filters.rarity !== '-1' || filters.element !== '-1' || filters.domain !== '-1';
+
     return (
         <Stack direction="row" fontFamily="Chelsea Market, system-ui" ml="9%">
             <Select w={width} onChange={handleRarityChange} color="#FFF" value={filters.rarity}>
@@ -54,7 +56,7 @@ const CardsFilter = ({
             <Select w={width} onChange={handleDomainChange} color="#FFF" value={filters.domain}>
                 {renderOptions('Continent', DOMAIN_OPTIONS)}
             </Select>
-            <IconButton color={'#FFF'} icon={<CloseIcon />} onClick={handleResetFilters} ml={2} />
+            {showResetButton && <IconButton color={'#FFF'} icon={<CloseIcon />} onClick={handleResetFilters} ml={2} />}
         </Stack>
     );
 };
