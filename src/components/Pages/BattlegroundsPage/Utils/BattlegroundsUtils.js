@@ -444,21 +444,35 @@ export const getMapPointIcon = (rarity, medium) => {
 export const setStuckedBattleCards = (cards, height) => {
     try {
         if (!Array.isArray(cards)) {
+            console.warn('Expected an array of cards.');
             return {};
         }
 
-        const stuckedCards = {};
+        const newStucked = {};
         for (const card of cards) {
-            stuckedCards[card.asset] = (stuckedCards[card.asset] || 0) + 1;
+            if (card?.asset) {
+                newStucked[card.asset] = (newStucked[card.asset] || 0) + 1;
+            }
         }
 
-        const payload = { stuckedCards, height };
+        const existingData = JSON.parse(localStorage.getItem(STUCKED_CARDS_KEY)) || {};
+        const existingStucked = existingData.stuckedCards || {};
+        const existingHeight = existingData.height || 0;
 
+        const mergedStucked = { ...existingStucked };
+        for (const asset in newStucked) {
+            mergedStucked[asset] = (mergedStucked[asset] || 0) + newStucked[asset];
+        }
+
+        const finalHeight = Math.max(existingHeight || 0, height || 0);
+
+        const payload = { stuckedCards: mergedStucked, height: finalHeight };
         localStorage.setItem(STUCKED_CARDS_KEY, JSON.stringify(payload));
 
         return payload;
     } catch (error) {
         console.error('Failed to save stucked cards to localStorage:', error);
+        return {};
     }
 };
 
