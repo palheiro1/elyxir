@@ -1,5 +1,4 @@
 import { Stack, Text } from '@chakra-ui/react';
-import { isEmptyObject } from '../../../../../Utils/BattlegroundsUtils';
 import { NQTDIVIDER } from '../../../../../../../../data/CONSTANTS';
 
 /**
@@ -33,7 +32,7 @@ const TributeDisplay = ({ isMobile, battleCost, checkBalance }) => {
                 w={isMobile && '100px'}
                 fontWeight={500}
                 fontSize={isMobile ? 'xs' : 'sm'}>
-                {battleCost && !isEmptyObject(battleCost) ? (
+                {battleCost && battleCost.length > 0 ? (
                     battleCost.map((item, index) => (
                         <Text key={index} color={checkBalance(item)}>
                             {item.price / NQTDIVIDER} {item.name}

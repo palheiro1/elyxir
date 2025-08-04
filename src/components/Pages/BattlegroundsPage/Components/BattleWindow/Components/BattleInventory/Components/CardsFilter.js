@@ -1,6 +1,8 @@
-import { Select, Stack } from '@chakra-ui/react';
-
-const optionStyle = { backgroundColor: '#FFF', color: '#000' };
+import { IconButton, Select, Stack } from '@chakra-ui/react';
+import { memo, useMemo } from 'react';
+import { DOMAIN_OPTIONS, ELEMENT_OPTIONS, RARITY_OPTIONS } from '../data';
+import { renderOptions } from './renderOptions';
+import { CloseIcon } from '@chakra-ui/icons';
 
 /**
  * @name CardsFilter
@@ -27,85 +29,36 @@ const CardsFilter = ({
     handleRarityChange,
     handleElementChange,
     handleDomainChange,
+    handleResetFilters,
     isMobile,
     index,
     level,
-}) => (
-    <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={'9%'}>
-        <Select w={isMobile ? '25%' : '10%'} onChange={handleRarityChange} color={'#FFF'} defaultValue={filters.rarity}>
-            <option value="-1" style={optionStyle}>
-                Rarity
-            </option>
-            {level === 1 ? (
-                <>
-                    <option value="1" style={optionStyle}>
-                        Common
-                    </option>
-                    <option value="2" style={optionStyle}>
-                        Rare
-                    </option>
-                </>
-            ) : index !== 0 ? (
-                <>
-                    <option value="1" style={optionStyle}>
-                        Common
-                    </option>
-                    <option value="2" style={optionStyle}>
-                        Rare
-                    </option>
-                </>
-            ) : (
-                <>
-                    <option value="3" style={optionStyle}>
-                        Epic
-                    </option>
-                    <option value="4" style={optionStyle}>
-                        Special
-                    </option>
-                </>
-            )}
-        </Select>
+}) => {
+    const width = isMobile ? '25%' : '10%';
 
-        <Select
-            w={isMobile ? '25%' : '10%'}
-            onChange={handleElementChange}
-            color={'#FFF'}
-            defaultValue={filters.element}>
-            <option value="-1" style={optionStyle}>
-                Element
-            </option>
-            <option value="1" style={optionStyle}>
-                Terrestrial
-            </option>
-            <option value="2" style={optionStyle}>
-                Aerial
-            </option>
-            <option value="3" style={optionStyle}>
-                Aquatic
-            </option>
-        </Select>
+    const rarityOptions = useMemo(() => {
+        const useBasic = level === 1 || index !== 0;
+        return useBasic ? RARITY_OPTIONS.basic : RARITY_OPTIONS.advanced;
+    }, [index, level]);
 
-        <Select w={isMobile ? '25%' : '10%'} onChange={handleDomainChange} color={'#FFF'} defaultValue={filters.domain}>
-            <option value="-1" style={optionStyle}>
-                Continent
-            </option>
-            <option value="1" style={optionStyle}>
-                Asia
-            </option>
-            <option value="2" style={optionStyle}>
-                Oceania
-            </option>
-            <option value="3" style={optionStyle}>
-                America
-            </option>
-            <option value="4" style={optionStyle}>
-                Africa
-            </option>
-            <option value="5" style={optionStyle}>
-                Europe
-            </option>
-        </Select>
-    </Stack>
-);
+    const showResetButton = filters.rarity !== '-1' || filters.element !== '-1' || filters.domain !== '-1';
 
-export default CardsFilter;
+    return (
+        <Stack direction="row" fontFamily="Chelsea Market, system-ui" ml="9%">
+            <Select w={width} onChange={handleRarityChange} color="#FFF" value={filters.rarity}>
+                {renderOptions('Rarity', rarityOptions)}
+            </Select>
+
+            <Select w={width} onChange={handleElementChange} color="#FFF" value={filters.element}>
+                {renderOptions('Element', ELEMENT_OPTIONS)}
+            </Select>
+
+            <Select w={width} onChange={handleDomainChange} color="#FFF" value={filters.domain}>
+                {renderOptions('Continent', DOMAIN_OPTIONS)}
+            </Select>
+            {showResetButton && <IconButton color={'#FFF'} icon={<CloseIcon />} onClick={handleResetFilters} ml={2} />}
+        </Stack>
+    );
+};
+
+export default memo(CardsFilter);

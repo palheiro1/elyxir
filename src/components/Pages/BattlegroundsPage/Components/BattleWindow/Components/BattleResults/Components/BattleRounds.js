@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Stack, IconButton } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import BattleRound from './BattleRound';
+import { useBattlegroundBreakpoints } from '../../../../../../../../hooks/useBattlegroundBreakpoints';
 
 /**
  * @name BattleRounds
@@ -25,6 +26,7 @@ const BattleRounds = ({ battleResults, ...props }) => {
     const [arrowLeftDisable, setArrowLeftDisable] = useState(true);
     const [arrowRightDisable, setArrowRightDisable] = useState(false);
 
+    const { isMobile } = useBattlegroundBreakpoints();
     const handleScroll = (element, speed, distance, step) => {
         const maxScrollLeft = element.scrollWidth - element.clientWidth;
         let scrollAmount = 0;
@@ -43,17 +45,7 @@ const BattleRounds = ({ battleResults, ...props }) => {
     };
 
     return (
-        <Stack
-            direction="row"
-            mx="auto"
-            w="90%"
-            h="60%"
-            className="custom-scrollbar"
-            overflowX="scroll"
-            overflowY="hidden"
-            ref={elementRef}
-            spacing={4}
-            position="relative">
+        <>
             <IconButton
                 position="absolute"
                 left="2"
@@ -67,12 +59,23 @@ const BattleRounds = ({ battleResults, ...props }) => {
                 bg="rgba(255, 255, 255, 0.8)"
                 _hover={{ bg: 'rgba(255, 255, 255, 1)' }}
                 borderRadius="full"
+                display={isMobile ? 'none' : 'block'}
             />
-
-            {battleResults.map((round, index) => (
-                <BattleRound key={index} round={round} index={index} {...props} />
-            ))}
-
+            <Stack
+                direction={isMobile ? 'column' : 'row'}
+                mx="auto"
+                w="90%"
+                h="60%"
+                className="custom-scrollbar"
+                overflowX={isMobile ? 'hidden' : 'scroll'}
+                overflowY={isMobile ? 'scroll' : 'hidden'}
+                ref={elementRef}
+                spacing={4}
+                position="relative">
+                {battleResults.map((round, index) => (
+                    <BattleRound key={index} round={round} index={index} {...props} />
+                ))}
+            </Stack>
             <IconButton
                 position="absolute"
                 right="2"
@@ -86,8 +89,9 @@ const BattleRounds = ({ battleResults, ...props }) => {
                 onClick={() => handleScroll(elementRef.current, 10, 200, 5)}
                 bg="rgba(255, 255, 255, 0.8)"
                 _hover={{ bg: 'rgba(255, 255, 255, 1)' }}
+                display={isMobile ? 'none' : 'block'}
             />
-        </Stack>
+        </>
     );
 };
 

@@ -19,7 +19,7 @@ const Login = ({ setInfoAccount }) => {
     const navigate = useNavigate();
 
     return (
-        <Box px={8}>
+        <Box px={8} mb={4}>
             <Center>
                 <Stack direction={{ base: 'column' }} spacing={8} pt={8} align="center" w={'100%'}>
                     <Image

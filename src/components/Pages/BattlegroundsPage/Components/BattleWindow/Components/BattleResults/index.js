@@ -1,18 +1,14 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Stack } from '@chakra-ui/react';
-import {
-    getLastUserBattle,
-    getBattleById,
-    getSoldiers,
-    getArenas,
-} from '../../../../../../../services/Battlegrounds/Battlegrounds';
+import { getLastUserBattle, getBattleById, getArenas } from '../../../../../../../services/Battlegrounds/Battlegrounds';
 import { addressToAccountId, getAccount } from '../../../../../../../services/Ardor/ardorInterface';
 import locations from '../../../../assets/LocationsEnum';
 import BattleHeader from './Components/BattleHeader';
-import BattleCardsSummary from './Components/BattleCardSummary';
 import BattleRounds from './Components/BattleRounds';
 import BattleFooter from './Components/BattleFooter';
 import BattleLoading from './Components/BattleLoading';
+import { useSelector } from 'react-redux';
+import BattleCardsSummary from '../../../BattleRecord/BattleDetails/Components/BattleCardsSummary';
 
 /**
  * @name BattleResults
@@ -23,7 +19,6 @@ import BattleLoading from './Components/BattleLoading';
  * @param {Object} props
  * @param {Object} props.infoAccount - Current user's account object (must contain `accountRs`).
  * @param {number} props.currentTime - Current blockchain timestamp (used to fetch latest battle).
- * @param {Array} props.cards - List of user cards participating in the battle.
  * @param {Object} props.arenaInfo - Current arena metadata (contains `id`, `mediumId`, etc.).
  * @param {string} props.domainName - Name of the domain involved in the battle.
  * @returns {JSX.Element} A full battle results layout with header, summary, rounds, and footer.
@@ -45,7 +40,8 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     const [defenderInfo, setDefenderInfo] = useState(null);
     const [attackerHero, setAttackerHero] = useState(null);
     const [defenderHero, setDefenderHero] = useState(null);
-    const [soldiers, setSoldiers] = useState(null);
+
+    const { soldier: soldiers } = useSelector(state => state.soldiers.soldiers);
 
     const getLastBattle = useCallback(async () => {
         if (!currentTime || !arenaInfo) return;
@@ -68,7 +64,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
 
         const accountId = addressToAccountId(infoAccount.accountRs);
         const res = await getLastUserBattle(accountId, currentTime);
-
         if (res) {
             clearInterval(intervalRef.current);
             const capturedCard = cards.find(card => Object.keys(res.capturedAsset).includes(card.asset));
@@ -78,11 +73,8 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             setAttackerHero(cards.find(card => card.asset === battle.attackerArmy.heroAsset));
             setDefenderHero(cards.find(card => card.asset === battle.defenderArmy.heroAsset));
 
-            const soldiersData = await getSoldiers();
-            setSoldiers(soldiersData.soldier);
-
             setIsUserDefending(res.defenderAccount === accountId);
-            setBattleResults(battle.battleResult);
+            setBattleResults(battle);
 
             const info = await getArenaInfo(arenaInfo.id, res.defenderAccount, res.attackerAccount);
             setAttackerInfo(info.attacker);
@@ -145,7 +137,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             const defenderResults = [];
 
             await Promise.all(
-                battleResults.map(async (item, index) => {
+                battleResults.battleResult.map(async (item, index) => {
                     const attackerCard = cards.find(card => String(card.asset) === String(item.attackerAsset));
                     const defenderCard = cards.find(card => String(card.asset) === String(item.defenderAsset));
 
@@ -172,7 +164,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     }
 
     return (
-        <Stack h="100%" w="100%" direction="column">
+        <Stack h="100%" w="100%" direction="column" overflowY={'hidden'}>
             <BattleHeader
                 isDefenderWin={battleInfo.isDefenderWin}
                 attackerInfo={attackerInfo}
@@ -184,15 +176,17 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             />
 
             <BattleCardsSummary
+                infoAccount={infoAccount}
+                playerInfo={attackerInfo}
                 cards={cards}
-                armyAssets={battleInfo.attackerArmy.asset}
+                army={battleInfo.attackerArmy}
+                battleInfo={battleInfo}
                 battleResults={battleResults}
-                isWinner={!battleInfo.isDefenderWin}
-                isUser={infoAccount.accountRs === attackerInfo.accountRS}
+                role="attacker"
             />
 
             <BattleRounds
-                battleResults={battleResults}
+                battleResults={battleResults.battleResult}
                 cards={cards}
                 battleInfo={battleInfo}
                 soldiers={soldiers}
@@ -203,11 +197,13 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             />
 
             <BattleCardsSummary
+                infoAccount={infoAccount}
+                playerInfo={defenderInfo}
                 cards={cards}
-                armyAssets={battleInfo.defenderArmy.asset}
+                army={battleInfo.defenderArmy}
+                battleInfo={battleInfo}
                 battleResults={battleResults}
-                isWinner={battleInfo.isDefenderWin}
-                isUser={infoAccount.accountRs === defenderInfo.accountRS}
+                role="defender"
             />
 
             <BattleFooter

@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, IconButton, Spinner, useToast } from '@chakra-ui/react';
+import { Box, Spinner, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { CloseIcon } from '@chakra-ui/icons';
-import { Overlay } from '../../../../ui/Overlay';
 import { getAccount } from '../../../../../services/Ardor/ardorInterface';
-import { getSoldiers } from '../../../../../services/Battlegrounds/Battlegrounds';
 import { errorToast } from '../../../../../utils/alerts';
 import '@fontsource/chelsea-market';
 import { SelectHandPage } from './Components/SelectHandPage';
 import BattleResults from './Components/BattleResults';
 import BattleInventory from './Components/BattleInventory';
+import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
+import Modal from '../../../../ui/Modal';
+import { useSelector } from 'react-redux';
 
 /**
  * @name BattleWindow
@@ -25,7 +25,6 @@ import BattleInventory from './Components/BattleInventory';
  * @param {Array} filteredCards - Cards filtered based on user selection criteria.
  * @param {number} omnoGEMsBalance - User's balance of GEM tokens.
  * @param {number} omnoWethBalance - User's balance of wETH tokens.
- * @param {boolean} isMobile - Flag indicating if the user is on a mobile device.
  * @returns {JSX.Element} JSX representing the battle window UI.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
@@ -44,7 +43,6 @@ export const BattleWindow = ({
     const [index, setIndex] = useState('');
     const [defenderInfo, setDefenderInfo] = useState(null);
     const [handBattleCards, setHandBattleCards] = useState(Array(5).fill(''));
-    const [soldiers, setSoldiers] = useState(null);
     const [mediumBonus, setMediumBonus] = useState(0);
     const [domainBonus, setDomainBonus] = useState(0);
     const [domainName, setDomainName] = useState();
@@ -55,10 +53,13 @@ export const BattleWindow = ({
     const [defenderCards, setDefenderCards] = useState(null);
     const [selectedPotion, setSelectedPotion] = useState(null);
     const [filters, setFilters] = useState({
-        rarity: '',
-        element: '',
-        domain: '',
+        rarity: '-1',
+        element: '-1',
+        domain: '-1',
     });
+    const { isMobile } = useBattlegroundBreakpoints();
+
+    const { soldier: soldiers } = useSelector(state => state.soldiers.soldiers);
 
     const handleRarityChange = event => {
         setFilters(prevFilters => ({
@@ -80,6 +81,14 @@ export const BattleWindow = ({
             domain: event.target.value,
         }));
     };
+
+    const handleResetFilters = () => {
+        setFilters({
+            rarity: '-1',
+            element: '-1',
+            domain: '-1',
+        });
+    };
     const toast = useToast();
 
     const handleOpenInventory = index => {
@@ -91,10 +100,6 @@ export const BattleWindow = ({
         const getDefenderInfo = async () => {
             await getAccount(arenaInfo.defender.account).then(res => {
                 setDefenderInfo(res);
-            });
-            await getSoldiers().then(res => {
-                setSoldiers(res.soldier);
-                return res;
             });
 
             const domainName = (() => {
@@ -127,14 +132,17 @@ export const BattleWindow = ({
     }, [handBattleCards]);
 
     const calculateBonus = () => {
-        if (handBattleCards[index] !== '') {
-            const cardInfo = soldiers.find(item => item.asset === handBattleCards[index].asset);
-            if (cardInfo.mediumId === arenaInfo.mediumId) {
-                setMediumBonus(mediumBonus + 1);
-            }
-            if (cardInfo.domainId === arenaInfo.domainId) {
-                setDomainBonus(domainBonus + 1);
-            }
+        const currentCard = handBattleCards[index];
+        if (!currentCard) return;
+
+        const cardInfo = soldiers.find(item => item.asset === currentCard.asset);
+        if (!cardInfo) return;
+
+        if (cardInfo.mediumId === arenaInfo.mediumId) {
+            setMediumBonus(prev => prev + 1);
+        }
+        if (cardInfo.domainId === arenaInfo.domainId) {
+            setDomainBonus(prev => prev + 1);
         }
     };
 
@@ -202,97 +210,75 @@ export const BattleWindow = ({
     };
 
     return (
-        <>
-            <Overlay isVisible={true} handleClose={handleClose} />
-
-            <Box
-                pos={'fixed'}
-                bgColor={'#1F2323'}
-                zIndex={99}
-                w={isMobile ? '70%' : (!openIventory && !showResults && defenderInfo) || showResults ? '50%' : '80%'}
-                h={'90%'}
-                borderRadius={'25px'}
-                top={'50%'}
-                left={'50%'}
-                transform={'translate(-50%, -50%)'}>
-                <IconButton
-                    background={'transparent'}
-                    color={showResults ? '#000' : '#FFF'}
-                    icon={<CloseIcon />}
-                    _hover={{ background: 'transparent' }}
-                    position="absolute"
-                    top={2}
-                    right={2}
-                    zIndex={999}
-                    onClick={handleClose}
-                />
-                {!soldiers && (
-                    <Box
-                        h={'100%'}
-                        position={'absolute'}
-                        color={'#FFF'}
-                        alignContent={'center'}
-                        top={'50%'}
-                        left={'50%'}
-                        w={'100%'}
-                        textAlign={'center'}
-                        transform={'translate(-50%, -50%)'}>
-                        <Spinner color="#FFF" w={20} h={20} />
-                    </Box>
-                )}
-                {soldiers && (
-                    <>
-                        {!openIventory && !showResults && defenderInfo && (
-                            <SelectHandPage
-                                arenaInfo={arenaInfo}
-                                handleOpenInventory={handleOpenInventory}
-                                handBattleCards={handBattleCards}
-                                openInventory={handleOpenInventory}
-                                defenderInfo={defenderInfo}
-                                defenderCards={defenderCards}
-                                deleteCard={deleteCard}
-                                domainBonus={domainBonus}
-                                mediumBonus={mediumBonus}
-                                domainName={domainName}
-                                infoAccount={infoAccount}
-                                omnoGEMsBalance={omnoGEMsBalance}
-                                omnoWethBalance={omnoWethBalance}
-                                setShowResults={setShowResults}
-                                setCurrentTime={setCurrentTime}
-                                isMobile={isMobile}
-                                selectedPotion={selectedPotion}
-                                setSelectedPotion={setSelectedPotion}
-                                items={items}
-                            />
-                        )}
-                        {openIventory && (
-                            <BattleInventory
-                                setOpenIventory={setOpenIventory}
-                                filteredCards={filteredCards}
-                                index={index}
-                                handBattleCards={handBattleCards}
-                                updateCard={updateCard}
-                                isMobile={isMobile}
-                                arenaInfo={arenaInfo}
-                                filters={filters}
-                                handleRarityChange={handleRarityChange}
-                                handleElementChange={handleElementChange}
-                                handleDomainChange={handleDomainChange}
-                            />
-                        )}
-                        {showResults && (
-                            <BattleResults
-                                infoAccount={infoAccount}
-                                currentTime={currentTime}
-                                cards={cards}
-                                arenaInfo={arenaInfo}
-                                domainName={domainName}
-                                defenderInfo={defenderInfo}
-                            />
-                        )}
-                    </>
-                )}
-            </Box>
-        </>
+        <Modal
+            isVisible
+            width={isMobile ? '100%' : (!openIventory && !showResults && defenderInfo) || showResults ? '50%' : '80%'}
+            height={isMobile ? '100%' : '90%'}
+            onClose={handleClose}>
+            {!soldiers && (
+                <Box
+                    h={'100%'}
+                    position={'absolute'}
+                    color={'#FFF'}
+                    alignContent={'center'}
+                    top={'50%'}
+                    left={'50%'}
+                    w={'100%'}
+                    textAlign={'center'}
+                    transform={'translate(-50%, -50%)'}>
+                    <Spinner color="#FFF" w={20} h={20} />
+                </Box>
+            )}
+            {soldiers && (
+                <>
+                    {!openIventory && !showResults && defenderInfo && (
+                        <SelectHandPage
+                            arenaInfo={arenaInfo}
+                            handleOpenInventory={handleOpenInventory}
+                            handBattleCards={handBattleCards}
+                            openInventory={handleOpenInventory}
+                            defenderInfo={defenderInfo}
+                            defenderCards={defenderCards}
+                            deleteCard={deleteCard}
+                            domainBonus={domainBonus}
+                            mediumBonus={mediumBonus}
+                            domainName={domainName}
+                            infoAccount={infoAccount}
+                            omnoGEMsBalance={omnoGEMsBalance}
+                            omnoWethBalance={omnoWethBalance}
+                            setShowResults={setShowResults}
+                            setCurrentTime={setCurrentTime}
+                            isMobile={isMobile}
+                        />
+                    )}
+                    {openIventory && (
+                        <BattleInventory
+                            setOpenIventory={setOpenIventory}
+                            filteredCards={filteredCards}
+                            index={index}
+                            handBattleCards={handBattleCards}
+                            updateCard={updateCard}
+                            isMobile={isMobile}
+                            arenaInfo={arenaInfo}
+                            filters={filters}
+                            handleRarityChange={handleRarityChange}
+                            handleElementChange={handleElementChange}
+                            handleDomainChange={handleDomainChange}
+                            handleResetFilters={handleResetFilters}
+                        />
+                    )}
+                    {showResults && (
+                        <BattleResults
+                            infoAccount={infoAccount}
+                            currentTime={currentTime}
+                            cards={cards}
+                            arenaInfo={arenaInfo}
+                            domainName={domainName}
+                            defenderInfo={defenderInfo}
+                        />
+                    )}
+                </>
+            )}
+        </Modal>
     );
 };

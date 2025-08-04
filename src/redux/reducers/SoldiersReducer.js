@@ -1,11 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { OMNO_API } from '../../data/CONSTANTS';
+import { getSoldiers } from '../../services/Battlegrounds/Battlegrounds';
 
 export const fetchSoldiers = createAsyncThunk('soldiers/fetchSoldiers', async (_, { rejectWithValue }) => {
     try {
-        const response = await axios.get(`${OMNO_API}/index.php?action=getOmnoGameState`);
-        return response.data.state.definition.soldier;
+        const soldiers = await getSoldiers();
+        return soldiers;
     } catch (error) {
         console.error('🚀 ~ fetchSoldiers ~ error:', error);
         return rejectWithValue('Unknown error fetching soldiers');

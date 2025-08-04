@@ -103,14 +103,11 @@ export const withdrawAllGiftzFromOmno = async passphrase => {
     });
 };
 
-// Suponien que trae cardAssetId y amount
 export const withdrawCardsFromOmno = async ({ cards, passPhrase }) => {
     const assets = {};
 
     for (let index = 0; index < cards.length; index++) {
         const card = cards[index];
-        console.log('🚀 ~ withdrawCardsFromOmno ~ card:', card);
-
         assets[card.asset] = card.quantity.toString();
     }
 
@@ -138,7 +135,6 @@ export const withdrawCardsFromOmno = async ({ cards, passPhrase }) => {
             },
         ],
     });
-    console.log('🚀 ~ withdrawCardsFromOmno ~ message:', message);
 
     return await sendMessage({
         recipient: OMNO_ACCOUNT,

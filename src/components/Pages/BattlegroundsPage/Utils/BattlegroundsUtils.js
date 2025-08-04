@@ -1,5 +1,7 @@
 import { getAsset } from '../../../../services/Ardor/ardorInterface';
 import { getAccumulatedBounty, getLeaderboardsRewards } from '../../../../services/Battlegrounds/Battlegrounds';
+import { isEmptyObject } from '../../../../utils/utils';
+import { STUCKED_CARDS_KEY } from '../data';
 
 export const formatTimeStamp = timestamp => {
     const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
@@ -83,11 +85,6 @@ export const formatAddress = address => {
     return `${firstPart}...${lastPart}`;
 };
 
-export const isEmptyObject = object => {
-    if (Object.keys(object).length === 0 && object.constructor === Object) return true;
-    return false;
-};
-
 export const getBattleRoundInfo = (defenderAsset, attackerAsset, cards, battleInfo, soldiers) => {
     let attackerCard = cards.find(card => {
         return card.asset === String(attackerAsset);
@@ -114,11 +111,14 @@ export const getBattleRoundInfo = (defenderAsset, attackerAsset, cards, battleIn
     };
 };
 
-export const capitalize = string => {
-    if (string.length === 0) return string;
-    return string.charAt(0).toUpperCase() + string.slice(1);
-};
-
+/**
+ * @name getLevelIconString
+ * @description Returns the image path for a given rarity level (by string name).
+ * @param {string} value - Rarity level ("Common", "Rare", "Epic", "Special").
+ * @returns {string|null} The corresponding image path or null if not found.
+ * @example getLevelIconString("Epic") => "/images/battlegrounds/rarity/epic.png"
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const getLevelIconString = value => {
     let path = '/images/battlegrounds/rarity/';
     switch (value) {
@@ -135,6 +135,14 @@ export const getLevelIconString = value => {
     }
 };
 
+/**
+ * @name getLevelIconInt
+ * @description Returns the image path for a given rarity level (by numeric ID).
+ * @param {number} value - Rarity ID (1 = Common, 2 = Rare, 3 = Epic, 4 = Special).
+ * @returns {string|null} The corresponding image path or null if not found.
+ * @example getLevelIconInt(2) => "/images/battlegrounds/rarity/rare.png"
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const getLevelIconInt = value => {
     let path = '/images/battlegrounds/rarity/';
     switch (value) {
@@ -151,6 +159,14 @@ export const getLevelIconInt = value => {
     }
 };
 
+/**
+ * @name getMediumIcon
+ * @description Returns the image path for a given medium type (by string name).
+ * @param {string} value - Medium type name ("Aquatic", "Aerial", or "Terrestrial").
+ * @returns {string|null} The corresponding image path or null if not found.
+ * @example getMediumIcon("Aquatic") => "/images/battlegrounds/medium/water.png"
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const getMediumIcon = value => {
     let path = '/images/battlegrounds/medium/';
     switch (value) {
@@ -164,12 +180,29 @@ export const getMediumIcon = value => {
             return null;
     }
 };
+
+/**
+ * @name getDiceIcon
+ * @description Returns the image path for a dice icon given a number from 1 to 6.
+ * @param {number} value - Dice number (integer between 1 and 6).
+ * @returns {string|null} The corresponding dice image path or null if invalid.
+ * @example getDiceIcon(3) => "/images/cards/dices/dice3.png"
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const getDiceIcon = value => {
     let path = '/images/cards/dices/';
     if (value < 1 || value > 6 || !value) return null;
     return `${path}dice${value}.png`;
 };
 
+/**
+ * @name getMediumIconInt
+ * @description Returns the image path for a given medium type (by numeric ID).
+ * @param {number} value - Medium type ID (1 = Terrestrial, 2 = Aerial, 3 = Aquatic).
+ * @returns {string|null} The corresponding image path or null if not found.
+ * @example getMediumIconInt(2) => "/images/battlegrounds/medium/air.png"
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const getMediumIconInt = value => {
     let path = '/images/battlegrounds/medium/';
     switch (value) {
@@ -184,6 +217,14 @@ export const getMediumIconInt = value => {
     }
 };
 
+/**
+ * @name getContinentIcon
+ * @description Returns the image path for a given continent name.
+ * @param {string} value - Continent name ("Europe", "Asia", "Africa", "America", "Oceania").
+ * @returns {string|null} The corresponding image path or null if not found.
+ * @example getContinentIcon("Europe") => "/images/battlegrounds/continent/europa.png"
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const getContinentIcon = value => {
     let path = '/images/battlegrounds/continent/';
     switch (value) {
@@ -202,47 +243,66 @@ export const getContinentIcon = value => {
     }
 };
 
+/**
+ * @name formatLeaderboardRewards
+ * @description
+ * Formats and calculates the leaderboard rewards based on the selected leaderboard type.
+ * Fetches the current accumulated bounty and static reward configuration, merges the data
+ * with asset details, and returns the reward structure including cards, mana, wETH and GEM.
+ * Option modes:
+ * - `1` (default): General Leaderboard rewards with tribute percentages applied.
+ * - `'gen'`: General Leaderboard rewards without applying tribute percentages.
+ * - Any other value: Terrestrial Leaderboard Top 1 rewards with tribute percentages.
+ *
+ * @param {number|string} [option=1] - Selector for the type of reward formatting to return.
+ * @returns {Promise<Object|undefined>} Object with formatted rewards:
+ *  {
+ *    cards: number,
+ *    mana: number,
+ *    weth: number,
+ *    gem: number
+ *  }
+ * Returns `undefined` if data is incomplete or unavailable.
+ * @example
+ * const rewards = await formatLeaderboardRewards(); // General with tribute %
+ * const rewards = await formatLeaderboardRewards('gen'); // General without tribute
+ * const rewards = await formatLeaderboardRewards(2); // Terrestrial Top 1
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 export const formatLeaderboardRewards = async (option = 1) => {
     const accumulatedBounty = await getAccumulatedBounty();
     const rewards = await getLeaderboardsRewards();
+
     if (accumulatedBounty && !isEmptyObject(accumulatedBounty) && rewards && !isEmptyObject(rewards)) {
-        const assets = Object.entries(accumulatedBounty.asset);
-        const results = await Promise.all(
-            assets.map(async ([asset, price]) => {
-                const assetDetails = await getAsset(asset);
-                return { ...assetDetails, price };
-            })
-        );
-        const generalTributePercetage = rewards.GeneralLeaderboard.totalRewards.tributePercentage;
-        const tributePercetage = rewards.TerrestrialLeaderboard.top1.tributePercentage;
+        const results = await fetchAssetsWithPricing(accumulatedBounty.asset);
 
-        const reward = () => {
-            switch (option) {
-                case 1:
-                    return {
-                        cards: rewards.GeneralLeaderboard.totalRewards.specialCards,
-                        mana: rewards.GeneralLeaderboard.totalRewards.manaQNT,
-                        weth: Number(results.find(item => item.name === 'wETH').price) * generalTributePercetage,
-                        gem: Number(results.find(item => item.name === 'GEM').price) * generalTributePercetage,
-                    };
-                case 'gen':
-                    return {
-                        cards: rewards.GeneralLeaderboard.totalRewards.specialCards,
-                        mana: rewards.GeneralLeaderboard.totalRewards.manaQNT,
-                        weth: Number(results.find(item => item.name === 'wETH').price),
-                        gem: Number(results.find(item => item.name === 'GEM').price),
-                    };
-                default:
-                    return {
-                        cards: rewards.TerrestrialLeaderboard.top1.specialCards,
-                        mana: rewards.TerrestrialLeaderboard.top1.manaQNT,
-                        weth: Number(results.find(item => item.name === 'wETH').price) * tributePercetage,
-                        gem: Number(results.find(item => item.name === 'GEM').price) * tributePercetage,
-                    };
-            }
-        };
+        const getPrice = name => Number(results.find(item => item.name === name)?.price || 0);
+        const genPercentage = rewards.general.totalRewards.tributePercentage;
+        const terPercentage = rewards.terrestrial.top1.tributePercentage;
 
-        return reward;
+        switch (option) {
+            case 1:
+                return {
+                    cards: rewards.general.totalRewards.specialCards,
+                    mana: rewards.general.totalRewards.manaQNT,
+                    weth: getPrice('wETH') * genPercentage,
+                    gem: getPrice('GEM') * genPercentage,
+                };
+            case 'gen':
+                return {
+                    cards: rewards.general.totalRewards.specialCards,
+                    mana: rewards.general.totalRewards.manaQNT,
+                    weth: getPrice('wETH'),
+                    gem: getPrice('GEM'),
+                };
+            default:
+                return {
+                    cards: rewards.terrestrial.top1.specialCards,
+                    mana: rewards.terrestrial.top1.manaQNT,
+                    weth: getPrice('wETH') * terPercentage,
+                    gem: getPrice('GEM') * terPercentage,
+                };
+        }
     }
 };
 
@@ -276,4 +336,180 @@ export const getCapturedCardText = (isUserDefending, isDefenderWin) => {
         return isDefenderWin ? 'OBTAINED CARD:' : 'CAPTURED CARD: ';
     }
     return isDefenderWin ? 'CAPTURED CARD:' : 'OBTAINED CARD: ';
+};
+
+/**
+ * @name fetchAssetsWithPricing
+ * @description Enriches a plain asset-price object with asset details fetched asynchronously.
+ * @param {Record<string, any>} assetMap - An object where keys are asset IDs and values are prices.
+ * @returns {Promise<Array<{ name: string, price: number }>>} Enriched assets with details and price.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company.
+ */
+export const fetchAssetsWithPricing = async (assetMap = {}) => {
+    if (!assetMap || Object.keys(assetMap).length === 0) return [];
+
+    const entries = Object.entries(assetMap);
+    const enriched = await Promise.all(
+        entries.map(async ([assetId, price]) => {
+            const details = await getAsset(assetId);
+            return { ...details, price };
+        })
+    );
+
+    return enriched;
+};
+
+/**
+ * @name applyCardSwapUpdates
+ * @description Applies quantity updates to a list of cards based on a list of swap changes.
+ * @param {Array} cards - The original list of cards to be updated.
+ * @param {Array} cardsToSwap - List of cards with swap instructions (must include asset and quantity).
+ * @param {boolean} reverse - If true, reverses the update (adds to quantityQNT, subtracts from omnoQuantity).
+ * @returns {Array} The updated list of cards.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const applyCardSwapUpdates = (cards, cardsToSwap, reverse = false) => {
+    return cards.map(card => {
+        const match = cardsToSwap.find(c => c.asset === card.asset);
+        if (!match) return card;
+
+        const quantity = match.quantity;
+        const quantityQNT = Number(card.quantityQNT || 0);
+        const omnoQuantity = Number(card.omnoQuantity || 0);
+
+        const updated = reverse
+            ? {
+                  quantityQNT: quantityQNT + quantity,
+                  omnoQuantity: Math.max(0, omnoQuantity - quantity),
+              }
+            : {
+                  quantityQNT: Math.max(0, quantityQNT - quantity),
+                  omnoQuantity: omnoQuantity + quantity,
+              };
+
+        return {
+            ...card,
+            quantityQNT: updated.quantityQNT.toString(),
+            omnoQuantity: updated.omnoQuantity.toString(),
+        };
+    });
+};
+
+/**
+ * @name mergeUpdatedCards
+ * @description Merges updated cards into the original list, overriding matched cards by asset.
+ * @param {Array} originalCards - The original array of cards.
+ * @param {Array} updatedCards - The array of cards with updated values.
+ * @returns {Array} The merged array of cards.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const mergeUpdatedCards = (originalCards, updatedCards) => {
+    return originalCards.map(card => {
+        const updated = updatedCards.find(c => c.asset === card.asset);
+        return updated ?? card;
+    });
+};
+
+/**
+ * @name getMapPointIcon
+ * @description Returns the file path for a battleground map point icon based on rarity and medium.
+ * @param {string} rarity - The rarity level of the arena/card (e.g., 'Common', 'Rare', 'Epic', etc.).
+ * @param {number} medium - The medium identifier (1: Earth, 2: Air, 3: Water).
+ * @returns {string} The full path to the corresponding icon image.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const getMapPointIcon = (rarity, medium) => {
+    const src = '/images/battlegrounds/BattleMapIcons';
+    const mediumMapping = {
+        1: 'Earth',
+        2: 'Air',
+        3: 'Water',
+    };
+
+    const formattedMedium = mediumMapping[medium];
+
+    return `${src}/${rarity}-${formattedMedium}.png`;
+};
+
+/**
+ * @name setStuckedBattleCards
+ * @description Stores a snapshot of the currently selected battle cards in localStorage under the `stuckedCards` key.
+ * Each card is counted by its `asset` ID to support duplicate cards. Also stores the current block height
+ * to later verify if the data is outdated.
+ * @param {Array<Object>} cards - An array of card objects, each containing at least an `asset` property.
+ * @param {number} height - The current block height, used to detect outdated stored data.
+ * @returns {Object} The stored payload object containing `stuckedCards` and `height`.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const setStuckedBattleCards = (cards, height) => {
+    try {
+        if (!Array.isArray(cards)) {
+            console.warn('Expected an array of cards.');
+            return {};
+        }
+
+        const newStucked = {};
+        for (const card of cards) {
+            if (card?.asset) {
+                newStucked[card.asset] = (newStucked[card.asset] || 0) + 1;
+            }
+        }
+
+        const existingData = JSON.parse(localStorage.getItem(STUCKED_CARDS_KEY)) || {};
+        const existingStucked = existingData.stuckedCards || {};
+        const existingHeight = existingData.height || 0;
+
+        const mergedStucked = { ...existingStucked };
+        for (const asset in newStucked) {
+            mergedStucked[asset] = (mergedStucked[asset] || 0) + newStucked[asset];
+        }
+
+        const finalHeight = Math.max(existingHeight || 0, height || 0);
+
+        const payload = { stuckedCards: mergedStucked, height: finalHeight };
+        localStorage.setItem(STUCKED_CARDS_KEY, JSON.stringify(payload));
+
+        return payload;
+    } catch (error) {
+        console.error('Failed to save stucked cards to localStorage:', error);
+        return {};
+    }
+};
+
+/**
+ * @name getStuckedBattleCards
+ * @description Retrieves the `stuckedCards` object from localStorage. If the data is missing
+ * or fails to parse, returns an empty object as fallback. This function is used
+ * to restore potentially stuck battle card selections from previous sessions.
+ * @returns {Object} The parsed `stuckedCards` object from localStorage, or an empty object on failure.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const getStuckedBattleCards = () => {
+    try {
+        const stored = localStorage.getItem(STUCKED_CARDS_KEY);
+        return stored ? JSON.parse(stored) : {};
+    } catch (error) {
+        console.error('Failed to parse stucked cards from localStorage:', error);
+        return {};
+    }
+};
+
+/**
+ * @name cleanStuckedBattleCards
+ * @description Removes the `stuckedCards` entry from localStorage if its stored `height`
+ * does not match the current provided block height. Used to prevent outdated or
+ * stuck battle card data from persisting across sessions.
+ * @param {number} height - The current block height to compare against the stored one.
+ * @returns {void}
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const cleanStuckedBattleCards = height => {
+    try {
+        const stored = JSON.parse(localStorage.getItem(STUCKED_CARDS_KEY));
+        if (stored && stored.height !== height) {
+            localStorage.removeItem(STUCKED_CARDS_KEY);
+        }
+    } catch (error) {
+        console.error('Failed to clean stucked cards from localStorage:', error);
+    }
 };

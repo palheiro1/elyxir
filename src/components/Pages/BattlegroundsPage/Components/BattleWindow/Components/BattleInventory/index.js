@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Box, Heading, IconButton, Stack, useMediaQuery } from '@chakra-ui/react';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
 import CardsGrid from './Components/CardsGrid';
-import FilterSelects from './Components/CardsFilter';
+import CardsFilter from './Components/CardsFilter';
+import { useMemo } from 'react';
+
+const rarityMap = { 1: 'Common', 2: 'Rare', 3: 'Epic', 4: 'Special' };
+const domainMap = { 1: 'Asia', 2: 'Oceania', 3: 'America', 4: 'Africa', 5: 'Europe' };
 
 /**
  * @name BattleInventory
@@ -22,6 +26,7 @@ import FilterSelects from './Components/CardsFilter';
  * @param {Function} handleRarityChange - Callback when the rarity filter changes.
  * @param {Function} handleElementChange - Callback when the element filter changes.
  * @param {Function} handleDomainChange - Callback when the domain filter changes.
+ * @param {Function} handleResetFilters - Callback to reset all filters to default values.
  * @returns {JSX.Element} A responsive panel showing filters and a grid of eligible cards.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
@@ -37,6 +42,7 @@ const BattleInventory = ({
     handleRarityChange,
     handleElementChange,
     handleDomainChange,
+    handleResetFilters,
 }) => {
     const { soldiers } = useSelector(state => state.soldiers);
     const { level } = arenaInfo;
@@ -45,49 +51,56 @@ const BattleInventory = ({
     const [isLittleScreen] = useMediaQuery('(min-width: 1190px) and (max-width: 1330px)');
     const [isMediumScreen] = useMediaQuery('(min-width: 1330px) and (max-width: 1600px)');
 
-    const getColumns = () => {
-        if (isMobile || isLittleScreen) return 3;
+    const getColumns = useCallback(() => {
+        if (isMobile || isLittleScreen) return 4;
         if (isMediumScreen) return 4;
         return 5;
-    };
+    }, [isMobile, isLittleScreen, isMediumScreen]);
 
-    const commonHand = filteredCards
-        .filter(card => ['Common', 'Rare'].includes(card.rarity))
-        .map(card => ({ ...card, selected: handBattleCards.some(item => item.asset === card.asset) }));
+    const enhanceCards = useCallback(
+        cards =>
+            cards.map(card => ({
+                ...card,
+                selected: handBattleCards.some(item => item.asset === card.asset),
+            })),
+        [handBattleCards]
+    );
 
-    const normalHand = filteredCards
-        .filter(
-            card =>
-                (index === 0 && ['Epic', 'Special'].includes(card.rarity)) ||
-                (index !== 0 && ['Common', 'Rare'].includes(card.rarity))
-        )
-        .map(card => ({ ...card, selected: handBattleCards.some(item => item.asset === card.asset) }));
+    const availableCards = useMemo(() => {
+        const isValidRarity = rarity => {
+            if (level === 1) return ['Common', 'Rare'].includes(rarity);
+            if (index === 0) return ['Epic', 'Special'].includes(rarity);
+            return ['Common', 'Rare'].includes(rarity);
+        };
+        const condition = card => card.omnoQuantity > 0 && isValidRarity(card.rarity);
 
-    const availableCards = level === 1 ? commonHand : normalHand;
+        const validCards = filteredCards.filter(condition);
+        return enhanceCards(validCards);
+    }, [filteredCards, index, level, enhanceCards]);
 
-    const filteredAvailableCards = availableCards
-        .filter(card => {
-            const rarityMap = { 1: 'Common', 2: 'Rare', 3: 'Epic', 4: 'Special' };
-            return filters.rarity !== '-1' ? card.rarity === rarityMap[filters.rarity] : true;
-        })
-        .filter(card => {
-            const cardInfo = soldiers.soldier.find(s => s.asset === card.asset);
-            return filters.element !== '-1' ? cardInfo?.mediumId === Number(filters.element) : true;
-        })
-        .filter(card => {
-            const domainMap = { 1: 'Asia', 2: 'Oceania', 3: 'America', 4: 'Africa', 5: 'Europe' };
-            return filters.domain !== '-1' ? card.channel === domainMap[filters.domain] : true;
-        });
+    const filteredAvailableCards = useMemo(() => {
+        return availableCards
+            .filter(card => filters.rarity === '-1' || card.rarity === rarityMap[filters.rarity])
+            .filter(card => {
+                if (filters.element === '-1') return true;
+                const cardInfo = soldiers.soldier.find(s => s.asset === card.asset);
+                return cardInfo?.mediumId === Number(filters.element);
+            })
+            .filter(card => filters.domain === '-1' || card.channel === domainMap[filters.domain]);
+    }, [availableCards, filters, soldiers]);
 
-    const handleCardClick = card => {
-        if (preSelectedCard?.asset === card.asset) {
-            updateCard(card);
-            setOpenIventory(false);
-            setPreSelectedCard(null);
-        } else {
-            setPreSelectedCard(card);
-        }
-    };
+    const handleCardClick = useCallback(
+        card => {
+            if (preSelectedCard?.asset === card.asset) {
+                updateCard(card);
+                setOpenIventory(false);
+                setPreSelectedCard(null);
+            } else {
+                setPreSelectedCard(card);
+            }
+        },
+        [preSelectedCard, updateCard, setOpenIventory]
+    );
 
     return (
         <>
@@ -100,19 +113,23 @@ const BattleInventory = ({
                 _hover={{ bg: 'transparent' }}
                 onClick={() => setOpenIventory(false)}
             />
+
             <Stack h="90%">
                 <Heading fontFamily="Chelsea Market, system-ui" fontSize="large" fontWeight={400} ml="9%">
                     ARMY CARDS
                 </Heading>
-                <FilterSelects
+
+                <CardsFilter
                     filters={filters}
                     handleRarityChange={handleRarityChange}
                     handleElementChange={handleElementChange}
                     handleDomainChange={handleDomainChange}
+                    handleResetFilters={handleResetFilters}
                     isMobile={isMobile}
                     index={index}
                     level={level}
                 />
+
                 <Stack direction="row" padding={5} pt={0} height={isMobile ? '80%' : '90%'}>
                     <Box
                         mb={2}

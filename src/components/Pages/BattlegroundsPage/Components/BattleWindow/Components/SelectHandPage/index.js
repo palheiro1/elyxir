@@ -1,12 +1,9 @@
 import { Box, Heading, Stack, useDisclosure, useMediaQuery, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import locations from '../../../../assets/LocationsEnum';
-import { isEmptyObject } from '../../../../Utils/BattlegroundsUtils';
-import { getAsset } from '../../../../../../../services/Ardor/ardorInterface';
 import { errorToast } from '../../../../../../../utils/alerts';
 import { sendCardsToBattle } from '../../../../../../../services/Ardor/omnoInterface';
 import { checkPin } from '../../../../../../../utils/walletUtils';
-import { getSoldiers } from '../../../../../../../services/Battlegrounds/Battlegrounds';
 import PinModal from './Components/PinModal';
 import TributeDisplay from './Components/TributeDisplay';
 import StartBattleButton from './Components/StartBattleButton';
@@ -14,6 +11,10 @@ import AttackerCards from './Components/AttackerCards';
 import DefenderCards from './Components/DefenderCards';
 import StatisticsDisplay from './Components/StatisticsDisplay';
 import PotionSelector from './Components/PotionSelector';
+import { isEmptyObject } from '../../../../../../../utils/utils';
+import { fetchAssetsWithPricing, setStuckedBattleCards } from '../../../../Utils/BattlegroundsUtils';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateFilteredCards } from '../../../../../../../redux/reducers/BattlegroundsReducer';
 
 /**
  * @name SelectHandPage
@@ -65,118 +66,91 @@ export const SelectHandPage = ({
 }) => {
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [battleCost, setBattleCost] = useState({});
-    const [medium, setMedium] = useState();
-    const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
+    const [battleCost, setBattleCost] = useState([]);
+    const [medium, setMedium] = useState('');
+    const [isValidPin, setIsValidPin] = useState(false);
     const [passphrase, setPassphrase] = useState('');
     const [disableButton, setDisableButton] = useState(false);
     const [preSelectedCard, setPreSelectedCard] = useState(null);
-    const [defenderBonus, setDefenderBonus] = useState({
-        medium: 0,
-        domain: 0,
-    });
+    const [defenderBonus, setDefenderBonus] = useState({ medium: 0, domain: 0 });
+    const [isLowHeight] = useMediaQuery('(max-height: 700px)');
 
+    const { soldier: soldiers } = useSelector(state => state.soldiers.soldiers);
     useEffect(() => {
-        const getBattleCost = async () => {
-            const assets = Object.entries(arenaInfo.battleCost.asset);
+        if (!arenaInfo) return;
 
-            const results = await Promise.all(
-                assets.map(async ([asset, price]) => {
-                    const assetDetails = await getAsset(asset);
-                    return { ...assetDetails, price };
-                })
-            );
+        setMedium(getMediumName(arenaInfo?.mediumId));
 
-            setBattleCost(results);
+        const assetMap = arenaInfo?.battleCost?.asset;
+        if (!assetMap || Object.keys(assetMap).length === 0) return;
+
+        const fetchCost = async () => {
+            try {
+                const enriched = await fetchAssetsWithPricing(assetMap);
+                setBattleCost(enriched);
+            } catch (err) {
+                console.error('Error fetching enriched battle cost:', err);
+            }
         };
 
-        if (arenaInfo) {
-            if (!isEmptyObject(arenaInfo.battleCost)) {
-                getBattleCost();
-            }
-        }
-
-        if (arenaInfo) {
-            (() => {
-                switch (arenaInfo.mediumId) {
-                    case 1:
-                        setMedium('Terrestrial');
-                        break;
-                    case 2:
-                        setMedium('Aerial');
-                        break;
-                    case 3:
-                        setMedium('Aquatic');
-                        break;
-                    default:
-                        setMedium('Unknown');
-                }
-            })();
-        }
+        fetchCost();
     }, [arenaInfo]);
 
-    const validateBattleStart = () => {
-        let allEmpty = true;
-        for (let i = 0; i < handBattleCards.length; i++) {
-            if (handBattleCards[i] !== '') {
-                allEmpty = false;
-                break;
-            }
-        }
+    useEffect(() => {
+        const fetchDefenderBonus = async () => {
+            try {
+                const matchingSoldiers = soldiers.filter(s => defenderCards.some(card => card.asset === s.asset));
 
-        if (allEmpty) {
+                const domain = matchingSoldiers.filter(s => s.domainId === arenaInfo.domainId).length;
+                const medium = matchingSoldiers.filter(s => s.mediumId === arenaInfo.mediumId).length;
+
+                setDefenderBonus({ domain, medium });
+            } catch (e) {
+                console.error(e);
+            }
+        };
+
+        fetchDefenderBonus();
+    }, [arenaInfo.domainId, arenaInfo.mediumId, defenderCards, soldiers]);
+
+    const getMediumName = id => {
+        return (
+            {
+                1: 'Terrestrial',
+                2: 'Aerial',
+                3: 'Aquatic',
+            }[id] || 'Unknown'
+        );
+    };
+
+    const validateBattleStart = () => {
+        const hasCard = handBattleCards.some(card => card !== '');
+        if (!hasCard) {
             errorToast('Select at least one card to start a battle', toast);
             return false;
         }
 
-        if (!isEmptyObject(battleCost)) {
-            const gemBalance = parseInt(omnoGEMsBalance);
-            const wethBalance = parseInt(omnoWethBalance);
-            const battleCostGems = parseInt(battleCost[0].price);
-            const battleCostWeth = battleCost.length > 1 ? parseInt(battleCost[1].price) : 0;
+        if (isEmptyObject(battleCost)) return true;
 
-            if (battleCostGems > gemBalance) {
-                errorToast('Insuficient GEM balance', toast);
-                return false;
-            }
+        const gemCost = Number(battleCost[0]?.price || 0);
+        const wethCost = Number(battleCost[1]?.price || 0);
 
-            if (battleCost.length > 1 && battleCostWeth > wethBalance) {
-                errorToast('Insuficient wETH balance', toast);
-                return false;
-            }
+        if (gemCost > Number(omnoGEMsBalance)) {
+            errorToast('Insufficient GEM balance', toast);
+            return false;
+        }
+
+        if (battleCost.length > 1 && wethCost > Number(omnoWethBalance)) {
+            errorToast('Insufficient wETH balance', toast);
+            return false;
         }
 
         return true;
     };
 
-    const handleStartBattle = async () => {
-        if (!isValidPin || !passphrase) return errorToast('The pin is not correct', toast);
-
-        const valid = validateBattleStart();
-        if (!valid) return;
-
-        setDisableButton(true);
-        await sendCardsToBattle({ cards: handBattleCards, passPhrase: passphrase, arenaId: arenaInfo.id });
-        onClose();
-        setCurrentTime(new Date().toISOString());
-        setShowResults(true);
-    };
-
-    const handleCompletePin = pin => {
-        isValidPin && setIsValidPin(false); // reset invalid pin flag
-
-        const { name } = infoAccount;
-        const account = checkPin(name, pin);
-        if (account) {
-            setIsValidPin(true);
-            setPassphrase(account.passphrase);
-        }
-    };
-
-    const [isLowHeight] = useMediaQuery('(max-height: 700px)');
-
     const handleDeleteCard = (card, index) => {
-        if (preSelectedCard && preSelectedCard.asset === card.asset) {
+        const isSame = preSelectedCard?.asset === card.asset;
+        if (isSame) {
             deleteCard(index);
             setPreSelectedCard(null);
         } else {
@@ -184,57 +158,67 @@ export const SelectHandPage = ({
         }
     };
 
-    const handleStartButtonClick = () => {
-        const valid = validateBattleStart();
-        valid && onOpen();
+    const dispatch = useDispatch();
+    const { cards } = useSelector(state => state.cards);
+    const { prev_height } = useSelector(state => state.blockchain);
+
+    const handleStartBattle = async () => {
+        if (!isValidPin || !passphrase) {
+            return errorToast('The pin is not correct', toast);
+        }
+
+        if (!validateBattleStart()) return;
+
+        setDisableButton(true);
+        await sendCardsToBattle({
+            cards: handBattleCards,
+            passPhrase: passphrase,
+            arenaId: arenaInfo.id,
+        });
+
+        onClose();
+        setCurrentTime(new Date().toISOString());
+        setShowResults(true);
+        setStuckedBattleCards(handBattleCards, prev_height);
+        updateFilteredCards(infoAccount.accountRs, cards, dispatch);
     };
 
-    useEffect(() => {
-        const getDefenderBonus = async () => {
-            const defenderSoldiers = await getSoldiers()
-                .then(res => res.soldier)
-                .then(soldiers => soldiers.filter(soldier => defenderCards.some(card => card.asset === soldier.asset)))
-                .catch(error => console.error(error));
-            let domainBonus = 0;
-            let mediumBonus = 0;
-            defenderSoldiers.forEach(soldier => {
-                if (soldier.mediumId === arenaInfo.mediumId) mediumBonus++;
-                if (soldier.domainId === arenaInfo.domainId) domainBonus++;
-            });
-            setDefenderBonus({
-                medium: mediumBonus,
-                domain: domainBonus,
-            });
-        };
-        getDefenderBonus();
-    }, [arenaInfo.domainId, arenaInfo.mediumId, defenderCards]);
+    const handleCompletePin = pin => {
+        setIsValidPin(false); // reset
+        const account = checkPin(infoAccount.name, pin);
+        if (account) {
+            setIsValidPin(true);
+            setPassphrase(account.passphrase);
+        }
+    };
+
+    const handleStartButtonClick = () => {
+        if (validateBattleStart()) onOpen();
+    };
 
     const checkBalance = asset => {
-        if (asset.name === 'GEM') {
-            if (Number(asset.price) < Number(omnoGEMsBalance)) return '#FFF';
-            return 'red';
-        }
-        if (asset.name === 'wETH') {
-            if (Number(asset.price) < Number(omnoWethBalance)) return '#FFF';
-            return 'red';
-        }
+        const balance = asset.name === 'GEM' ? omnoGEMsBalance : omnoWethBalance;
+        return Number(asset.price) <= Number(balance) ? '#FFF' : 'red';
     };
+
     return (
         <>
-            <Box display={'flex'} flexDir={'column'} overflowY={'scroll'} maxH={'95%'} className="custom-scrollbar">
-                <Stack direction={'column'} mx={'auto'} mt={isMobile ? 4 : 8}>
+            <Box display="flex" flexDirection="column" overflowY="scroll" maxH="95%" className="custom-scrollbar">
+                <Stack direction="column" mx="auto" mt={isMobile ? 4 : 8}>
                     <Heading
-                        color={'#FFF'}
+                        color="#FFF"
                         size={isMobile ? 'md' : 'lg'}
-                        fontFamily={'Chelsea Market, system-ui'}
-                        fontWeight={'300'}>
+                        fontFamily="Chelsea Market, system-ui"
+                        fontWeight="300">
                         CONQUER{' '}
                         <span style={{ color: '#D08FB0', textTransform: 'uppercase' }}>
-                            {locations[arenaInfo.id - 1].name}
+                            {locations[arenaInfo.id - 1]?.name}
                         </span>
                     </Heading>
                 </Stack>
+
                 <StatisticsDisplay isMobile={isMobile} medium={medium} domainName={domainName} arenaId={arenaInfo.id} />
+
                 <DefenderCards
                     isMobile={isMobile}
                     defenderInfo={defenderInfo}
@@ -256,18 +240,17 @@ export const SelectHandPage = ({
                     domainBonus={domainBonus}
                     domainName={domainName}
                 />
-
                 <PotionSelector
                     selectedPotion={selectedPotion}
                     setSelectedPotion={setSelectedPotion}
                     isMobile={isMobile}
                 />
-
-                <Stack direction={'row'} w={'50%'} mx={'auto'} mt={isMobile ? 3 : 6}>
+                <Stack direction="row" w="50%" mx="auto" mt={isMobile ? 3 : 6}>
                     <StartBattleButton handleStartButtonClick={handleStartButtonClick} isMobile={isMobile} />
                     <TributeDisplay isMobile={isMobile} battleCost={battleCost} checkBalance={checkBalance} />
                 </Stack>
             </Box>
+
             <PinModal
                 isOpen={isOpen}
                 onClose={onClose}

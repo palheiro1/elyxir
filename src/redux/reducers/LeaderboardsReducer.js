@@ -13,12 +13,30 @@ export const fetchLeaderboards = createAsyncThunk('leaderboards/fetchLeaderboard
 
 export const fetchAccountDetails = createAsyncThunk(
     'leaderboards/fetchAccountDetails',
-    async (accounts, { rejectWithValue }) => {
+    async ({ accounts, arenas }, { rejectWithValue }) => {
         try {
             let accountsWithDetails = await Promise.all(
                 accounts.map(async item => {
                     const accountInfo = await getAccount(item.accountId);
-                    return { ...item, ...accountInfo };
+
+                    const conqueredArenas = arenas.filter(arena => arena.defender?.account === item.accountId);
+                    const conqueredTerrestrialArenas = conqueredArenas.filter(a => a.mediumId === 1).length;
+                    const conqueredAerialArenas = conqueredArenas.filter(a => a.mediumId === 2).length;
+                    const conqueredAquaticArenas = conqueredArenas.filter(a => a.mediumId === 3).length;
+                    const totalArenasConquered = conqueredArenas.length;
+
+                    const conquestStats = {
+                        general: totalArenasConquered,
+                        terrestrial: conqueredTerrestrialArenas,
+                        aerial: conqueredAerialArenas,
+                        aquatic: conqueredAquaticArenas,
+                    };
+
+                    return {
+                        ...item,
+                        ...accountInfo,
+                        conqueredArenas: conquestStats,
+                    };
                 })
             );
             accountsWithDetails.sort((a, b) => (b.points || b.totalPoints) - (a.points || a.totalPoints));
@@ -35,7 +53,8 @@ const leaderboardsSlice = createSlice({
     initialState: {
         leaderboards: null,
         viewData: true,
-        data: null,
+        data: { type: null, info: [] },
+        rewardsByOption: {},
         entries: null,
         status: 'idle',
         error: null,
@@ -47,10 +66,16 @@ const leaderboardsSlice = createSlice({
         },
         resetState: state => {
             state.viewData = true;
-            state.data = null;
+            state.data = { type: null, info: [] };
             state.entries = null;
             state.status = 'idle';
             state.error = null;
+        },
+        setLeaderboardRewards: (state, action) => {
+            const { option, rewards } = action.payload;
+            if (!state.rewardsByOption[option]) {
+                state.rewardsByOption[option] = rewards;
+            }
         },
     },
     extraReducers: builder => {
@@ -82,6 +107,6 @@ const leaderboardsSlice = createSlice({
     },
 });
 
-export const { setViewData, resetState } = leaderboardsSlice.actions;
+export const { setViewData, resetState, setLeaderboardRewards } = leaderboardsSlice.actions;
 
 export default leaderboardsSlice.reducer;

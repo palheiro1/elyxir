@@ -76,7 +76,7 @@ import { getOmnoGiftzBalance } from '../../services/Ardor/omnoInterface';
 import Battlegrounds from '../../components/Pages/BattlegroundsPage/Battlegrounds';
 import { fetchUserBattles } from '../../redux/reducers/BattleReducer';
 import { fetchArenasInfo } from '../../redux/reducers/ArenasReducer';
-import { fetchBattleData } from '../../redux/reducers/BattlegroundsReducer';
+import { fetchBattleData, updateFilteredCards } from '../../redux/reducers/BattlegroundsReducer';
 import { fetchSoldiers } from '../../redux/reducers/SoldiersReducer';
 import { fetchLeaderboards } from '../../redux/reducers/LeaderboardsReducer';
 import { setCardsManually } from '../../redux/reducers/CardsReducer';
@@ -151,6 +151,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Menu
     const [option, setOption] = useState(0);
     const [lastOption, setLastOption] = useState(0);
+
+    // Selected bridge type
+    const [selectedBridgeType, setSelectedBridgeType] = useState(null);
 
     // Component to render
     const [renderComponent, setRenderComponent] = useState(<Overview />);
@@ -243,7 +246,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     dividends,
                     giftzOmnoBalance,
                 ] = await Promise.all([
-                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, firstTime ? false : true),
+                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
                     fetchCurrencyAssets(
                         accountRs,
                         [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT],
@@ -412,7 +415,11 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     useEffect(() => {
         let { accountRs } = infoAccount;
-        cards && accountRs && dispatch(fetchBattleData({ accountRs, cards }));
+        if (cards && accountRs) {
+            dispatch(fetchBattleData({ accountRs }));
+            updateFilteredCards(accountRs, cards, dispatch);
+        }
+
         dispatch(fetchArenasInfo());
         infoAccount && dispatch(fetchUserBattles(infoAccount.accountRs));
         dispatch(fetchSoldiers());
@@ -466,6 +473,8 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         );
     }, [infoAccount]);
 
+    document.title = 'Mythical Beings | Wallet';
+
     const MENU_OPTIONS_COLOR = [
         '#2f9088', // Overview
         '#2f8190', // Inventory
@@ -496,12 +505,14 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 manaCards={manaCards}
             />, // OPTION 3 - Market
             <Bridge
+                key={`bridge-${selectedBridgeType}`}
                 infoAccount={infoAccount}
                 cards={cardsFiltered}
                 gemCards={gemCards}
                 giftzCards={giftzCards}
                 wethCards={wethCards}
                 manaCards={manaCards}
+                selectedBridgeType={selectedBridgeType}
             />, // OPTION 4 - Bridge
             <Bounty infoAccount={infoAccount} />, // OPTION 5 - Bounty
             <Account infoAccount={infoAccount} />, // OPTION 6 - Account
@@ -512,7 +523,17 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             '', // OPTION 11 - OPEN PACK
             <Battlegrounds infoAccount={infoAccount} />,
         ],
-        [infoAccount, cards, cardsFiltered, gemCards, haveUnconfirmed, giftzCards, wethCards, manaCards]
+        [
+            infoAccount,
+            cards,
+            cardsFiltered,
+            gemCards,
+            haveUnconfirmed,
+            giftzCards,
+            wethCards,
+            manaCards,
+            selectedBridgeType,
+        ]
     );
 
     useEffect(() => {
@@ -530,7 +551,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
         loadComponent();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [option, lastOption]);
+    }, [option, lastOption, selectedBridgeType]);
 
     useEffect(() => {
         const checkAndGo = () => {
@@ -583,6 +604,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     handleShowAllCards={handleShowAllCards}
                     goToSection={handleChangeOption}
                     cardsLoaded={cards.length > 0 ? true : false}
+                    setSelectedBridgeType={setSelectedBridgeType}
                 />
             </Box>
 

@@ -22,7 +22,7 @@ import {
  * @returns {JSX.Element} A responsive tooltip or popover depending on the device type.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const ResponsiveTooltip = ({ children, label, ...rest }) => {
+const ResponsiveTooltip = ({ children, label, placement = 'bottom', ...rest }) => {
     const isMobile =
         typeof window !== 'undefined' &&
         (window.matchMedia('(pointer: coarse)').matches ||
@@ -30,7 +30,7 @@ const ResponsiveTooltip = ({ children, label, ...rest }) => {
 
     if (isMobile) {
         return (
-            <Popover trigger="click" placement="bottom">
+            <Popover trigger="click" placement={placement}>
                 <PopoverTrigger>{children}</PopoverTrigger>
                 <PopoverContent
                     bg="#1F2323"
@@ -38,7 +38,8 @@ const ResponsiveTooltip = ({ children, label, ...rest }) => {
                     borderRadius="10px"
                     border="1px solid #585858"
                     maxW="xs"
-                    p={3}>
+                    p={3}
+                    {...rest}>
                     <PopoverArrow />
                     <PopoverCloseButton />
                     <PopoverBody whiteSpace="normal">{label}</PopoverBody>
@@ -50,7 +51,7 @@ const ResponsiveTooltip = ({ children, label, ...rest }) => {
     return (
         <Tooltip
             label={label}
-            placement="bottom"
+            placement={placement}
             hasArrow
             bgColor="#1F2323"
             color="#FFF"
