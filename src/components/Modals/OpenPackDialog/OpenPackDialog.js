@@ -154,6 +154,9 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                         <Text textAlign="center" my={2} border="1px solid #f7e4ec" rounded="lg" p={2}>
                                             Number of GIFTZ
                                         </Text>
+                                        <Text textAlign="center" fontSize="xs" color="yellow.200" mb={2}>
+                                            💡 Every 10th pack has a chance to contain a bonus potion!
+                                        </Text>
                                         <Center>
                                             <HStack spacing={0} border="1px" rounded="lg" borderColor="#f7e4ec">
                                                 <Button

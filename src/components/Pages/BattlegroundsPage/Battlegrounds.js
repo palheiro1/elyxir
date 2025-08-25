@@ -88,6 +88,44 @@ const Battlegrounds = ({ infoAccount }) => {
                     setHasSeenNewPlayersModal={setHasSeenNewPlayersModal}
                     handleFilterChange={handleFilterChange}
                 />
+                <ChangeName isOpen={isOpenName} onClose={onCloseName} infoAccount={infoAccount} />
+                {openBattle && (
+                    <BattleWindow
+                        arenaInfo={selectedArena}
+                        handleCloseBattle={handleCloseBattle}
+                        infoAccount={infoAccount}
+                        cards={cards}
+                        filteredCards={filteredCards}
+                        omnoGEMsBalance={omnoGEMsBalance}
+                        omnoWethBalance={omnoWethBalance}
+                        isMobile={isMobile}
+                    />
+                )}
+                {openInventory && (
+                    <Inventory
+                        infoAccount={infoAccount}
+                        cards={cards}
+                        items={mockItems}
+                        handleCloseInventory={handleCloseInventory}
+                        isMobile={isMobile}
+                    />
+                )}
+                {openBattleRecord && (
+                    <BattleList
+                        handleClose={handleCloseBattleRecord}
+                        infoAccount={infoAccount}
+                        cards={cards}
+                        isMobile={isMobile}
+                    />
+                )}
+                {openEarnings && (
+                    <Earnings
+                        isMobile={isMobile}
+                        closeEarnigs={handleCloseEarnings}
+                        infoAccount={infoAccount}
+                        cards={cards}
+                    />
+                )}
 
                 <ScrollLock isLocked={isScrollLocked} />
                 <Box position="relative" pl={4} pt={4} boxSize="fit-content" my="auto" w={'100%'}>

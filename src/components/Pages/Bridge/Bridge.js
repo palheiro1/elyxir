@@ -8,6 +8,7 @@ import {
 } from '../../../services/Ardor/ardorInterface';
 import BridgeERC1155 from './ERC1155/BridgeERC1155';
 import BridgeERC1155GIFTZ from './GIFTZ/BridgeERC1155GIFTZ';
+import BridgeERC1155Items from './ERC1155Items/BridgeERC1155Items';
 import BridgeSelector from './BridgeSelector';
 import BridgeERC20 from './ERC20wETH/BridgeERC20';
 import OldBridge from './OldBridge/OldBridge';

@@ -60,6 +60,8 @@ export const SelectHandPage = ({
     setCurrentTime,
     isMobile,
     defenderCards,
+    selectedPotion,
+    setSelectedPotion,
 }) => {
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
