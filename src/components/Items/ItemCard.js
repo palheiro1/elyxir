@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import {
     Box,
@@ -12,11 +12,8 @@ import {
     Text,
     Tooltip,
     useColorModeValue,
-    useDisclosure,
     useMediaQuery,
 } from '@chakra-ui/react';
-
-import { BiLockAlt } from 'react-icons/bi';
 
 /**
  * @name ItemCard
@@ -47,17 +44,7 @@ const ItemCard = ({
     const newBorderColor = 'rgba(47, 129, 144, 1)';
     const separatorColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
-    const {
-        name,
-        image,
-        type,
-        bonus,
-        quantity = 0,
-        description,
-        rarity = 'Common',
-        element,
-        continent,
-    } = item;
+    const { name, image, type, bonus, quantity = 0, description, rarity = 'Common' } = item;
 
     const handleClick = ({ item }) => {
         setItemClicked(item);
@@ -83,7 +70,6 @@ const ItemCard = ({
     const haveThisItem = quantity > 0;
     const itemOpacity = haveThisItem ? 1 : 0.25;
 
-    // Check if "md" is the correct breakpoint
     const [canUseIcon] = useMediaQuery('(min-width: 1200px)');
 
     const ItemButton = ({ text, onClick, isDisabled = false, icon }) => (
@@ -102,21 +88,21 @@ const ItemCard = ({
         </Button>
     );
 
-    const getRarityColor = (rarity) => {
+    const getRarityColor = rarity => {
         const colors = {
-            'Common': '#8B8B8B',
-            'Rare': '#4A90E2',
-            'Epic': '#9B59B6',
-            'Special': '#F39C12',
+            Common: '#8B8B8B',
+            Rare: '#4A90E2',
+            Epic: '#9B59B6',
+            Special: '#F39C12',
         };
         return colors[rarity] || colors['Common'];
     };
 
-    const getTypeIcon = (type) => {
+    const getTypeIcon = type => {
         const icons = {
-            'medium': '/images/battlegrounds/medium/',
-            'continent': '/images/battlegrounds/continent/',
-            'power': '/images/battlegrounds/alpha_icon.svg',
+            medium: '/images/battlegrounds/medium/',
+            continent: '/images/battlegrounds/continent/',
+            power: '/images/battlegrounds/alpha_icon.svg',
         };
         return icons[type] || '/images/battlegrounds/alpha_icon.svg';
     };
@@ -149,20 +135,10 @@ const ItemCard = ({
                                 {name}
                             </Text>
                             <Stack direction="row" spacing={1}>
-                                <Text
-                                    px={2}
-                                    fontSize="sm"
-                                    bgColor={getRarityColor(rarity)}
-                                    rounded="lg"
-                                    color="white">
+                                <Text px={2} fontSize="sm" bgColor={getRarityColor(rarity)} rounded="lg" color="white">
                                     {rarity}
                                 </Text>
-                                <Text
-                                    px={2}
-                                    fontSize="sm"
-                                    bgColor="gray.600"
-                                    rounded="lg"
-                                    color="white">
+                                <Text px={2} fontSize="sm" bgColor="gray.600" rounded="lg" color="white">
                                     {type}
                                 </Text>
                             </Stack>

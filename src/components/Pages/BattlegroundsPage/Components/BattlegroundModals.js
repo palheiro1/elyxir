@@ -2,6 +2,7 @@ import BattleRecord from './BattleRecord';
 import { BattleWindow } from './BattleWindow';
 import Earnings from './EarnigsPage';
 import Inventory from './Inventory';
+import ItemsInventory from './Items';
 import Leaderboards from './Leaderboards';
 import AdvertModal from './Modals/AdvertModal';
 import ChangeName from './Modals/ChangeName';
@@ -110,6 +111,7 @@ const BattlegroundModals = ({
                     setHasSeenNewPlayersModal={setHasSeenNewPlayersModal}
                 />
             )}
+            {modals.items && <ItemsInventory infoAccount={infoAccount} onClose={() => handleCloseModal('items')} />}
             <AdvertModal isOpen={modals.advert} onClose={() => handleCloseModal('advert')} />
         </>
     );

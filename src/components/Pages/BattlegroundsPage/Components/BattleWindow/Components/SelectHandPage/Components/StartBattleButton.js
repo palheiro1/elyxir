@@ -16,6 +16,8 @@ const StartBattleButton = ({ handleStartButtonClick, isMobile }) => {
             m="auto"
             borderRadius="30px"
             p="3px"
+            _hover={{ transform: 'scale(1.05)' }}
+            transition="transform 0.2s"
             background="linear-gradient(49deg, rgba(235,178,185,1) 0%, rgba(32,36,36,1) 100%)"
             display="inline-block">
             <Button

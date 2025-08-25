@@ -63,6 +63,7 @@ export const SelectHandPage = ({
     defenderCards,
     selectedPotion,
     setSelectedPotion,
+    handleResetHandBattleCards
 }) => {
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -239,6 +240,7 @@ export const SelectHandPage = ({
                     medium={medium}
                     domainBonus={domainBonus}
                     domainName={domainName}
+                    handleResetHandBattleCards={handleResetHandBattleCards}
                 />
                 <PotionSelector
                     selectedPotion={selectedPotion}

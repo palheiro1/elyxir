@@ -3,20 +3,22 @@ import { useSelector } from 'react-redux';
 import './BattlegroundMap.css';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
-import { Maps } from './Components/Maps';
 import { ScrollLock } from './assets/ScrollLock';
+import { Maps } from './Components/Maps'; 
 import BattlegroundCurrencies from './Components/BattlegroundCurrencies';
 import BattlegroundFilters from './Components/BattlegroundFilters';
-import { useBattlegroundState } from '../../../hooks/useBattlegroundState';
 import BattlegroundMenu from './Components/BattlegroundMenu';
 import BattlegroundStatistics from './Components/BattlegroundStatistics';
 import BattlegroundModals from './Components/BattlegroundModals';
 import Rewards from './Components/Rewards';
-import { useBattlegroundBreakpoints } from '../../../hooks/useBattlegroundBreakpoints';
+
+import { useBattlegroundState } from '@hooks/useBattlegroundState';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 
 /**
  * @name Battlegrounds
- * @description Main component for the Battlegrounds section. It handles the layout and state for displaying the interactive battle map, currencies, filters, statistics, modals, and rewards.
+ * @description Main component for the Battlegrounds section. It handles the layout and state for displaying the 
+ * interactive battle map, currencies, filters, statistics, modals, and rewards.
  * @param {Object} infoAccount - User account information used to configure modals and card filtering logic.
  * @returns {JSX.Element} The main UI for the battlegrounds feature, including maps, card filters, modals, and statistics.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
@@ -51,50 +53,6 @@ const Battlegrounds = ({ infoAccount }) => {
     const { cards } = useSelector(state => state.cards);
 
     const { isMobile, isMediumScreen } = useBattlegroundBreakpoints();
-
-    // Mock items for battlegrounds
-    const mockItems = [
-        {
-            id: 'pot1',
-            name: 'Lava Elixir',
-            image: '/images/items/Lava copia.png',
-            medium: 'Terrestrial',
-            type: 'Buff',
-            description: '+1 Power to Terrestrial creatures',
-            quantity: 3,
-            bonus: { medium: 'Terrestrial', value: 1 },
-        },
-        {
-            id: 'pot2',
-            name: 'Wind Essence',
-            image: '/images/items/Wind copia.png',
-            medium: 'Aerial',
-            type: 'Buff',
-            description: '+1 Power to Aerial creatures',
-            quantity: 2,
-            bonus: { medium: 'Aerial', value: 1 },
-        },
-        {
-            id: 'pot3',
-            name: 'Aquatic Essence',
-            image: '/images/items/Water sea.png',
-            medium: 'Aquatic',
-            type: 'Buff',
-            description: '+1 Power to Aquatic creatures',
-            quantity: 2,
-            bonus: { medium: 'Aquatic', value: 1 },
-        },
-    ];
-
-    useEffect(() => {
-        if (!hasSeenNewPlayersModal && !loading) {
-            if (filteredCards === null || filteredCards?.length === 0) {
-                setOpenNewPlayersModal(true);
-            } else {
-                setHasSeenNewPlayersModal(true);
-            }
-        }
-    }, [filteredCards, loading, hasSeenNewPlayersModal]);
 
     document.title = 'Mythical Beings | Battlegrounds';
 
@@ -135,7 +93,7 @@ const Battlegrounds = ({ infoAccount }) => {
 
                 <ScrollLock isLocked={isScrollLocked} />
                 <Box position="relative" pl={4} pt={4} boxSize="fit-content" my="auto" w={'100%'}>
-                    <Stack direction="row" h="100%" mb="50px">
+                    <Stack direction="row" h="100%">
                         <Stack direction="column" w="20%">
                             <Img
                                 src="/images/battlegrounds/battlegroundsLogo.svg"
@@ -148,7 +106,7 @@ const Battlegrounds = ({ infoAccount }) => {
                         </Stack>
                         <Stack mx="auto" w="100%">
                             <Stack
-                                direction={isMobile ? 'row' : 'row'}
+                                direction={'row'}
                                 fontFamily="Chelsea Market, system-ui"
                                 mx="auto"
                                 flexWrap={'wrap'}
@@ -178,7 +136,6 @@ const Battlegrounds = ({ infoAccount }) => {
                                 cards={cards}
                                 handleStartBattle={() => handleOpenModal('battle')}
                                 filters={filters}
-                                w="100%"
                             />
 
                             <BattlegroundStatistics statistics={statistics} isMobile={isMobile} />

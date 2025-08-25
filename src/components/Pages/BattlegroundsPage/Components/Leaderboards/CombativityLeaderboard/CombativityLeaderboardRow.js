@@ -1,5 +1,5 @@
 import { Grid } from '@chakra-ui/react';
-import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import CustomCell from '../../CustomCell';
 
 /**

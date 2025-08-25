@@ -2,7 +2,7 @@ import { Select, Stack, Text } from '@chakra-ui/react';
 import { useState, useMemo, useCallback, memo } from 'react';
 import OmnoPage from './OmnoPage';
 import ArdorPage from './ArdorPage';
-import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import Modal from '../../../../ui/Modal';
 
 /**

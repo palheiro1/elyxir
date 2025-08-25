@@ -11,7 +11,7 @@ export const Overlay = ({ isVisible, handleClose }) => {
                     width: '100%',
                     height: '100%',
                     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    zIndex: 6,
+                    zIndex: 10,
                 }}
                 onClick={handleClose}
             />

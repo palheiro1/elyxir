@@ -1,7 +1,7 @@
 import { Square, Stack } from '@chakra-ui/react';
 import BattleCard from './BattleCard';
 import { Fragment } from 'react';
-import { useBattlegroundBreakpoints } from '../../../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 
 /**
  * @name BattleRound

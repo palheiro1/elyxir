@@ -25,6 +25,8 @@ const CardItem = ({ card, isMobile, onClick, isPreSelected }) => {
             bg="white"
             borderRadius="10px"
             mx="auto"
+            _hover={!selected && { transform: 'scale(1.05)' }}
+            transition="transform 0.2s"
             cursor="pointer"
             onClick={handleClick}>
             <Center>

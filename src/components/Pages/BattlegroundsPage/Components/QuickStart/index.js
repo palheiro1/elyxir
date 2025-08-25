@@ -3,7 +3,7 @@ import { CloseIcon } from '@chakra-ui/icons';
 import QuickStartStep from './QuickStartStep';
 import { useRef, useState } from 'react';
 import { QuickStartSteps } from './data';
-import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import Modal from '../../../../ui/Modal';
 
 /**

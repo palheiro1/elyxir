@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import ListButton from './ListButton';
 import { buttonsGroups } from '../data';
 import { useNavigate } from 'react-router-dom';
-import { useBattlegroundBreakpoints } from '../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 
 /**
  * @name BattlegroundMenu
@@ -29,7 +29,7 @@ const BattlegroundMenu = ({ setOpenModal }) => {
     return !isMobile ? (
         <Stack direction="column" mx="auto">
             {buttonsGroups.map(({ title, buttons, color }, groupIdx) => (
-                <Box key={groupIdx} mt={3} textAlign="center">
+                <Box key={groupIdx} mt={2} textAlign="center">
                     {title && (
                         <Text fontFamily="'Chelsea Market', system-ui" textTransform="uppercase" fontSize="xs">
                             {title}

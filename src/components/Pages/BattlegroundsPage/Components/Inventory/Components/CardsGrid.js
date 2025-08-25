@@ -1,6 +1,6 @@
 import { Box, Center, Img, SimpleGrid, Stack, Text, Flex, Spacer, useColorModeValue } from '@chakra-ui/react';
 import CardBadges from '../../../../../Cards/CardBadges';
-import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 
 /**
  * @name CardGrid

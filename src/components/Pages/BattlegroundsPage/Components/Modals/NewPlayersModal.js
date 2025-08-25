@@ -1,6 +1,6 @@
 import { Button, Image, Stack, Text } from '@chakra-ui/react';
 import logo from '../../assets/image.png';
-import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import Modal from '../../../../ui/Modal';
 
 /**

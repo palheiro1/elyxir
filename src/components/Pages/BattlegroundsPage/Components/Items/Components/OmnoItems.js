@@ -15,11 +15,11 @@ import {
 } from '@chakra-ui/react';
 
 // Components
-import BridgeItem from '../../../../Items/BridgeItem';
+import BridgeItem from '../../../../../Items/BridgeItem';
 
 // Utils
-import { checkPin } from '../../../../../utils/walletUtils';
-import { errorToast, infoToast, okToast } from '../../../../../utils/alerts';
+import { checkPin } from '../../../../../../utils/walletUtils';
+import { infoToast, okToast } from '../../../../../../utils/alerts';
 
 /**
  * @name OmnoItems
@@ -61,19 +61,24 @@ const OmnoItems = ({
         }
     };
 
-    const handleSwap = async () => {
+    const handleSwap = async () => { 
         if (!isValidPin || selectedItems.length === 0) return;
         infoToast('Sending potions to battlegrounds...', toast);
         setIsSwapping(true);
 
         // Mock implementation for now - in real app this would call the blockchain
-        // const itemsToSwap = selectedItems.map(item => ({
-        //     id: item.id,
-        //     quantity: item.selectQuantity || 1,
-        // }));
+        const itemsToSwap = selectedItems.map(item => ({
+            id: item.id,
+            quantity: item.selectQuantity || 1,
+        }));
 
         // Simulate API call
         setTimeout(() => {
+            const mock = {
+                itemsToSwap,
+                passphrase,
+            };
+            console.log('🚀 ~ handleSwap ~ mock:', mock);
             okToast('Potions sent successfully to battlegrounds. Wait for the next block and refresh the page.', toast);
             setSelectedItems([]);
             setIsSwapping(false);
@@ -124,8 +129,8 @@ const OmnoItems = ({
                     </Heading>
                     <HStack spacing={4}>
                         <PinInput
-                            placeholder="•"
                             size="lg"
+                            mask
                             onComplete={handleCompletePin}
                             isInvalid={!isValidPin && selectedItems.length > 0}>
                             <PinInputField />

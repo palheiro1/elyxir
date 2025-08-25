@@ -15,7 +15,7 @@ import {
     Tooltip,
     useToast,
 } from '@chakra-ui/react';
-import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import {
     formatAddress,
     getContinentIcon,

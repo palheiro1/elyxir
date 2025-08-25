@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import { getBountyBalance, swapPriceEthtoUSD } from '../../../../../services/Bounty/utils';
 import { getGemPrice, getManaPrice } from '../../../../../services/Ardor/evmInterface';
 import { Image, Stack, Text, SimpleGrid, Box } from '@chakra-ui/react';
+import { getRewardsData } from './data';
 
 export const RewardsDisplay = () => {
     const [bountyBalance, setBountyBalance] = useState({
@@ -17,11 +18,14 @@ export const RewardsDisplay = () => {
     });
 
     // Mock potions in bounty pool
-    const bountyPotions = [
-        { name: 'Terrestrial Elixir', image: '/images/items/Lava copia.png', quantity: 5 },
-        { name: 'Power Surge Potion', image: '/images/items/Holi Water2 copia.png', quantity: 2 },
-        { name: 'Asian Spirit Brew', image: '/images/items/Blood copia.png', quantity: 3 },
-    ];
+    const bountyPotions = useMemo(
+        () => [
+            { name: 'Terrestrial Elixir', image: '/images/items/Lava copia.png', quantity: 5 },
+            { name: 'Power Surge Potion', image: '/images/items/Holi Water2 copia.png', quantity: 2 },
+            { name: 'Asian Spirit Brew', image: '/images/items/Blood copia.png', quantity: 3 },
+        ],
+        []
+    );
 
     useEffect(() => {
         const fetchBountyBalance = async () => {
@@ -50,7 +54,8 @@ export const RewardsDisplay = () => {
                 const totalItems = bountyPotions.length * 10; // Mock item value
 
                 setBountyBalanceUSD({
-                    Total: Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalCard) + Number(totalItems),
+                    Total:
+                        Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalCard) + Number(totalItems),
                 });
             } catch (error) {
                 console.error('🚀 ~ file: BountyWidget.js:47 ~ fetchBountyBalance ~ error:', error);
@@ -60,51 +65,7 @@ export const RewardsDisplay = () => {
         fetchBountyBalance();
     }, [bountyPotions]);
 
-    const rewardsData = [
-        {
-            key: 'wETH',
-            image: 'images/currency/weth.png',
-            alt: 'wETH Icon',
-            value: bountyBalance.wETH,
-            label: 'WETH',
-        },
-        {
-            key: 'Mana',
-            image: 'images/currency/mana.png',
-            alt: 'mana Icon',
-            value: bountyBalance.Mana,
-            label: 'MANA',
-        },
-        {
-            key: 'GEM',
-            image: 'images/currency/gem.png',
-            alt: 'gem Icon',
-            value: bountyBalance.GEM,
-            label: 'GEMs',
-        },
-        {
-            key: 'cards',
-            image: 'https://media.mythicalbeings.io/sm/mythical62.jpg',
-            alt: 'special cards Icon',
-            value: 7,
-            label: 'SPECIAL CARDS',
-            customSize: { h: '40px' },
-        },
-        {
-            key: 'items',
-            image: '/images/items/WaterCristaline copia.png',
-            alt: 'potions Icon',
-            value: bountyBalance.Items,
-            label: 'POTIONS',
-        },
-        {
-            key: 'total',
-            image: '/images/items/WaterCristaline copia.png',
-            alt: 'total bounty Icon',
-            value: bountyBalanceUSD.Total.toFixed(2),
-            label: 'USD TOTAL BOUNTY',
-        },
-    ];
+    const rewardsData = getRewardsData(bountyBalance, bountyBalanceUSD);
 
     return (
         <Stack
@@ -141,21 +102,15 @@ export const RewardsDisplay = () => {
                     </Stack>
                 ))}
             </Stack>
-            
-            {/* Display available potions in bounty pool */}
-            <Box mt={4} p={4} bg="rgba(255,255,255,0.1)" borderRadius="md" w="100%">
+
+            <Box mt={4} p={4} bg="rgba(255, 255, 255, 0.1)" borderRadius="md" w="100%">
                 <Text fontFamily={'Chelsea market, system-ui'} fontWeight={500} textAlign="center" mb={2}>
                     POTIONS IN BOUNTY POOL
                 </Text>
                 <SimpleGrid columns={{ base: 1, md: 3 }} spacing={2}>
                     {bountyPotions.map((potion, index) => (
                         <Stack key={index} direction={'row'} align="center" justify="center">
-                            <Image
-                                src={potion.image}
-                                alt={potion.name}
-                                w="30px"
-                                h="30px"
-                            />
+                            <Image src={potion.image} alt={potion.name} w="30px" h="30px" />
                             <Text fontSize="sm">
                                 {potion.quantity}x {potion.name}
                             </Text>

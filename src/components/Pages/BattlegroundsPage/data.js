@@ -50,6 +50,11 @@ export const buttonsGroups = [
                 modal: 'inventory',
                 tooltip: 'Send your creature cards from your NFT wallet to Battlegrounds',
             },
+            {
+                name: 'Items',
+                modal: 'items',
+                tooltip: '',
+            },
         ],
     },
     {

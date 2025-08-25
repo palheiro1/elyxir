@@ -1,7 +1,7 @@
 import { Stack, Text, Tooltip, Image } from '@chakra-ui/react';
 import { getContinentIcon, getMediumIcon, getLevelIconInt } from '../../../../../Utils/BattlegroundsUtils';
 import { formatAddress } from '../../../../../Utils/BattlegroundsUtils';
-import { useBattlegroundBreakpoints } from '../../../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 
 /**
  * @name BattleHeader

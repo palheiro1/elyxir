@@ -13,6 +13,7 @@ import { Stack, Text } from '@chakra-ui/react';
 const BattlegroundStatistics = ({ statistics, isMobile }) => {
     return (
         <Stack
+            mt={'40px'}
             direction="row"
             mx="auto"
             maxH={{ base: '', md: '55px' }}

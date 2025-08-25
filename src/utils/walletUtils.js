@@ -40,6 +40,7 @@ import {
 } from './alerts';
 import { generateHash } from './hash';
 import { v4 as uuid } from 'uuid';
+import { setCardsManually } from '../redux/reducers/CardsReducer';
 
 export function waitForRefresh() {
     return new Promise(resolve => setTimeout(resolve, REFRESH_DATA_TIME));
@@ -62,6 +63,25 @@ export function checkDataChange(name, currentHash, setState, setHash, newData) {
         console.log(`Mythical Beings: ${name} changed`);
         setState(newData);
         setHash(newHash);
+    }
+}
+
+/** 
+ * @name checkCardsChange
+ * @description Check if cards have changed and update them
+ * @param {String} currentHash - Current hash of the cards
+ * @param {Function} setCardsHash - Function to update the cards hash
+ * @param {Function} dispatch - Dispatch function to update the cards in the store
+ * @param {Array} newCards - New cards data
+ * @returns {void} - Nothing
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export function checkCardsChange(currentHash, setCardsHash, dispatch, newCards) {
+    const newHash = generateHash(newCards);
+    if (!equal(currentHash, newHash)) {
+        console.log('Mythical Beings: Cards changed');
+        setCardsHash(newHash);
+        dispatch(setCardsManually(newCards));
     }
 }
 

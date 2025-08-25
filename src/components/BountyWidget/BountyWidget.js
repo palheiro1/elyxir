@@ -19,12 +19,12 @@ import { useSelector } from 'react-redux';
  * @author Jesús Sánchez Fernández
  * @version 0.1
  * @param {Number} cStyle - Style of the component
- * @param {Number} numParticipants - Number of participants in the bounty
  * @returns {JSX.Element} - JSX element
  */
-const BountyWidget = ({ cStyle = 0, totalParticipants }) => {
+const BountyWidget = ({ cStyle = 0 }) => {
     const { prev_height } = useSelector(state => state.blockchain);
     const [totalTickets, setTotalTickets] = useState(0);
+    const [totalParticipants, setTotalParticipants] = useState(0);
 
     const [bountyTimer, setBountyTimer] = useState({
         days: 0,
@@ -37,6 +37,7 @@ const BountyWidget = ({ cStyle = 0, totalParticipants }) => {
         wETH: 0,
         GEM: 0,
         Mana: 0,
+        Items: 0,
     });
 
     const [bountyBalanceUSD, setBountyBalanceUSD] = useState({
@@ -44,6 +45,7 @@ const BountyWidget = ({ cStyle = 0, totalParticipants }) => {
         GEM: 0,
         Mana: 0,
         Sumanga: 0,
+        Items: 0,
         Total: 0,
     });
 
@@ -63,6 +65,7 @@ const BountyWidget = ({ cStyle = 0, totalParticipants }) => {
                     wETH: bountyBalance,
                     GEM: 9000,
                     Mana: 9000,
+                    Potions: 10,
                 });
 
                 const [wethUsd, cardUsd] = await Promise.all([
@@ -73,17 +76,20 @@ const BountyWidget = ({ cStyle = 0, totalParticipants }) => {
                 const totalGem = gemPrice * 9000;
                 const totalMana = manaPrice * 9000;
                 const totalCard = cardUsd * 7;
+                const totalPotions = 30;
 
                 setBountyBalanceUSD({
                     wETH: wethUsd,
                     GEM: totalGem,
                     Mana: totalMana,
                     SpecialCard: totalCard, // 7 cartas
-                    Total: Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalCard),
+                    Potions: totalPotions,
+                    Total: Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalCard) + totalPotions,
                 });
 
-                const { allTickets: tickets } = await getJackpotFormattedTickets();
+                const { allTickets: tickets, participants } = await getJackpotFormattedTickets();
                 setTotalTickets(tickets.length);
+                setTotalParticipants(participants);
             } catch (error) {
                 console.error('🚀 ~ file: BountyWidget.js:47 ~ fetchBountyBalance ~ error:', error);
             }

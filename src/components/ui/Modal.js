@@ -2,7 +2,7 @@ import { IconButton } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { Box } from '@chakra-ui/react';
 import { Overlay } from './Overlay';
-import { useKeyClose } from '../../hooks/useKeyClose';
+import { useKeyClose } from '@hooks/useKeyClose';
 
 /**
  * @name Modal

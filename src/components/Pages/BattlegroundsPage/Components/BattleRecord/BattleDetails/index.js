@@ -8,7 +8,7 @@ import locations from '../../../assets/LocationsEnum';
 import BattleDetailsHeader from './Components/BattleDetailsHeader';
 import BattleRounds from './Components/BattleRounds';
 import BattleDetailsFooter from './Components/BattleDetailsFooter';
-import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import BattleCardsSummary from './Components/BattleCardsSummary';
 import { useSelector } from 'react-redux';
 

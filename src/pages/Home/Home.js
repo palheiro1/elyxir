@@ -55,7 +55,13 @@ import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 // Services
 import { fetchAllCards, fetchCurrencyAssets, isMBAsset } from '../../utils/cardsUtils';
 
-import { checkDataChange, getCurrentAskAndBids, getIGNISBalance, handleNotifications } from '../../utils/walletUtils';
+import {
+    checkCardsChange,
+    checkDataChange,
+    getCurrentAskAndBids,
+    getIGNISBalance,
+    handleNotifications,
+} from '../../utils/walletUtils';
 
 import {
     getAccountLedger,
@@ -137,6 +143,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const [giftzCardsHash, setGiftzCardsHash] = useState('');
     const [wethCardsHash, setWethCardsHash] = useState('');
     const [manaCardsHash, setManaCardsHash] = useState('');
+    const [cardsHash, setCardsHash] = useState('');
 
     // Filtered cards
     const [cardsFiltered, setCardsFiltered] = useState(cards);
@@ -333,6 +340,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset);
                 checkDataChange('wETH', wethCardsHash, setWethCards, setWethCardsHash, weth);
                 checkDataChange('MANA', manaCardsHash, setManaCards, setManaCardsHash, mana);
+                checkCardsChange(cardsHash, setCardsHash, dispatch, loadCards);
             } catch (error) {
                 console.error('Mythical Beings: Error loading data', error);
             } finally {

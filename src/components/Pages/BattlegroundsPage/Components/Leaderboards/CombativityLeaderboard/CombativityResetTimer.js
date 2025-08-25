@@ -1,8 +1,8 @@
 import { Box, Image, Skeleton, SkeletonText, Stack, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getGiftzRewardQNT, getLeaderboardsResetBlock } from '../../../../../../services/Battlegrounds/Battlegrounds';
-import { useBlockCountdown } from '../../../../../../hooks/useBlockCountDown';
-import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBlockCountdown } from '@hooks/useBlockCountDown';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLeaderboardRewards } from '../../../../../../redux/reducers/LeaderboardsReducer';
 

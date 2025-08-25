@@ -1,96 +1,9 @@
-import { Box, Center, Grid, GridItem, Image, Spinner, Stack, Text, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Center, Grid, GridItem, Image, Spinner, Stack, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { prepareTableData } from '../../../../../services/Bounty/utils';
 import { GEMASSET, MANAASSET, NQTDIVIDER, SEASONSPECIALCARDASSET, WETHASSET } from '../../../../../data/CONSTANTS';
-import { formatAddress } from '../../../BattlegroundsPage/Utils/BattlegroundsUtils';
-
-const RewardsTableRow = ({ index, data, accountRs, filter, getCurrencyImage }) => {
-    const { address, accountName, quantity, ticketNumber, assetId, assetName } = data;
-    let assetDetails = null;
-    let name = null;
-    let formattedQNT = quantity;
-    try {
-        assetDetails = JSON.parse(data.assetDetails.description);
-        name = assetDetails.name;
-    } catch (error) {
-        name = assetName;
-        formattedQNT = quantity / NQTDIVIDER;
-    }
-
-    const bg = filter
-        ? index % 2 === 0
-            ? '#323636'
-            : '#202323'
-        : accountRs === address
-        ? '#73DDE8'
-        : index % 2 === 0
-        ? '#323636'
-        : '#202323';
-
-    const color = filter ? '#7FC0BE' : accountRs === address ? '#193235' : '#7FC0BE';
-    const formattedAddress = useBreakpointValue({
-        base: formatAddress(address),
-        md: address,
-    });
-
-    return (
-        <Grid templateColumns="repeat(3, 1fr)" gap={4} w="100%" mx="auto" mt={0} bgColor={bg} borderRadius="10px" p={2}>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={1}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={500}
-                    color={color}
-                    h="100%"
-                    fontSize={{ base: 'xs', md: 'md' }}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">
-                    {Number(ticketNumber) === 0 ? 'Distribution' : `#${ticketNumber}`}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} textAlign="center">
-                <Text
-                    p={1}
-                    maxH={'45px'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={500}
-                    color={color}
-                    h="100%"
-                    fontSize={{ base: 'xs', md: 'md' }}
-                    display="flex"
-                    alignItems="center"
-                    textTransform={'capitalize'}
-                    justifyContent="center">
-                    {accountRs === address ? 'You' : accountName || formattedAddress}
-                </Text>
-            </GridItem>
-            <GridItem colSpan={1} justifyContent="center" display={'flex'}>
-                <Box
-                    h={assetId === SEASONSPECIALCARDASSET ? '20px' : '30px'}
-                    w={assetId === SEASONSPECIALCARDASSET ? '20px' : '30px'}
-                    mr={2}
-                    my={'auto'}>
-                    <Image src={getCurrencyImage(assetId)} w={'100%'} />
-                </Box>
-                <Text
-                    p={1}
-                    maxH={'45px'}
-                    my={'auto'}
-                    fontFamily={'Inter, System'}
-                    fontWeight={500}
-                    h="100%"
-                    fontSize={{ base: 'xs', md: 'md' }}
-                    color={color}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center">{`x${formattedQNT} ${name}`}</Text>
-            </GridItem>
-        </Grid>
-    );
-};
+import RewardsTableRow from './RewardsTableRow';
 
 const RewardsTable = ({ rewards, accountRs, filter }) => {
     const [rewardsData, setRewardsData] = useState(null);
@@ -106,6 +19,8 @@ const RewardsTable = ({ rewards, accountRs, filter }) => {
                 return '/images/currency/mana.png';
             case '15052794016100653835':
                 return 'https://media.mythicalbeings.io/sm/mythical62.jpg';
+            case '17992331071615561028':
+                return 'https://media.mythicalbeings.io/sm/mythical68.jpg';
             default:
                 return '/images/items/WaterCristaline copia.png';
         }

@@ -2,7 +2,7 @@ import { Heading, Image, Select, Stack } from '@chakra-ui/react';
 import { useState } from 'react';
 import BattlesEarnigs from './Components/BattleEarnings';
 import LeaderboardsEarnigs from './Components/LeaderboardEarnings';
-import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import Modal from '../../../../ui/Modal';
 
 /**

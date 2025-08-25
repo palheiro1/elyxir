@@ -2,7 +2,7 @@ import { Image, Skeleton, SkeletonText, Stack, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { formatLeaderboardRewards, getCurrencyImage } from '../../../Utils/BattlegroundsUtils';
 import { NQTDIVIDER } from '../../../../../../data/CONSTANTS';
-import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import { CURRENCY_PRECISION } from '../data';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLeaderboardRewards } from '../../../../../../redux/reducers/LeaderboardsReducer';

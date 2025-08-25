@@ -7,7 +7,7 @@ import {
     getMediumIconInt,
 } from '../../../../../Utils/BattlegroundsUtils';
 import CardImage from './CardImage';
-import { useBattlegroundBreakpoints } from '../../../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import ScoreBox from '../../../../BattleRecord/BattleDetails/Components/ScoreBox';
 
 /**

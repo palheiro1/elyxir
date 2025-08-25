@@ -1,5 +1,5 @@
 import { Box, Text, Image } from '@chakra-ui/react';
-import { useBattlegroundBreakpoints } from '../../../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 
 /**
  * @name CardWithOverlay

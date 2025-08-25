@@ -67,7 +67,9 @@ const Tickets = ({ accountRs, setOption }) => {
                         </Button>
                     </Box>
                 </Stack>
-                <BountyWidget cStyle={2} totalParticipants={participants} />
+                <Box px={4}>
+                    <BountyWidget cStyle={1} />
+                </Box>
             </Center>
             <Stack
                 mx={2}

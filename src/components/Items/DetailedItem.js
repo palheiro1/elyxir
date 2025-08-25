@@ -1,6 +1,5 @@
 import {
     Box,
-    Center,
     Image,
     Modal,
     ModalBody,
@@ -29,7 +28,7 @@ const DetailedItem = ({ isOpen, onClose, data }) => {
 
     if (!data) return null;
 
-    const { name, image, type, bonus, description, element, continent } = data;
+    const { name, image, type, bonus, description } = data;
 
     return (
         <>

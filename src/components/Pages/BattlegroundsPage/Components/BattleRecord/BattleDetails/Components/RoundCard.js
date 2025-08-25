@@ -1,6 +1,6 @@
 import { Box, Image, Stack, Text } from '@chakra-ui/react';
 import { getContinentIcon, getLevelIconInt, getMediumIconInt } from '../../../../Utils/BattlegroundsUtils';
-import { useBattlegroundBreakpoints } from '../../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 
 /**
  * @name RoundCard

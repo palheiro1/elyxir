@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Stack, IconButton } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import BattleRound from './BattleRound';
-import { useBattlegroundBreakpoints } from '../../../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 
 /**
  * @name BattleRounds

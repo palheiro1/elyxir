@@ -4,7 +4,7 @@ import BattleDetails from './BattleDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserBattles } from '../../../../../redux/reducers/BattleReducer';
 import BattleListTable from './BattleListTable';
-import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import Modal from '../../../../ui/Modal';
 
 /**

@@ -1,4 +1,4 @@
-import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import { Grid } from '@chakra-ui/react';
 import ColumnLabel from '../../ColumnLabel';
 import { TypesLeaderboardsHeaders } from '../data';

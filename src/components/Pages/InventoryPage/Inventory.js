@@ -18,9 +18,8 @@ import SortAndFilterItems from '../../SortAndFilters/SortAndFilterItems';
  * @returns {JSX.Element} - Inventory component
  */
 const Inventory = ({ infoAccount, cards, items = [] }) => {
-    // View state: 'cards', 'items', or 'all'
     const [viewMode, setViewMode] = useState('cards');
-    
+
     // Filtered cards and items
     const [cardsFiltered, setCardsFiltered] = useState(cards);
     const [itemsFiltered, setItemsFiltered] = useState(items);
@@ -35,7 +34,7 @@ const Inventory = ({ infoAccount, cards, items = [] }) => {
             bonus: 1,
             quantity: 3,
             description: 'A mystical potion that enhances the power of terrestrial creatures.',
-            element: 'Terrestrial'
+            element: 'Terrestrial',
         },
         {
             id: 2,
@@ -45,7 +44,7 @@ const Inventory = ({ infoAccount, cards, items = [] }) => {
             bonus: 1,
             quantity: 2,
             description: 'An ancient brew that strengthens creatures from the Asian continent.',
-            continent: 'Asia'
+            continent: 'Asia',
         },
         {
             id: 3,
@@ -54,8 +53,8 @@ const Inventory = ({ infoAccount, cards, items = [] }) => {
             type: 'power',
             bonus: 2,
             quantity: 1,
-            description: 'A rare potion that provides raw power boost to any creature.'
-        }
+            description: 'A rare potion that provides raw power boost to any creature.',
+        },
     ];
 
     const actualItems = items.length > 0 ? items : mockItems;
@@ -69,7 +68,7 @@ const Inventory = ({ infoAccount, cards, items = [] }) => {
                     _active={{ bgColor: 'rgba(47, 129, 144, 1)', color: 'white' }}
                     bgColor={'rgba(47, 129, 144, 0.5)'}
                     _hover={{ bgColor: 'rgba(47, 129, 144, 0.7)' }}
-                    w="33.333%"
+                    w="50%"
                     size="lg"
                     fontWeight="medium"
                     fontSize="md"
@@ -81,21 +80,8 @@ const Inventory = ({ infoAccount, cards, items = [] }) => {
 
         return (
             <ButtonGroup w="100%" my={6} shadow="md" isAttached>
-                <ButtonSwitch 
-                    isActive={viewMode === 'cards'} 
-                    onClick={() => setViewMode('cards')} 
-                    text={'Cards'} 
-                />
-                <ButtonSwitch 
-                    isActive={viewMode === 'items'} 
-                    onClick={() => setViewMode('items')} 
-                    text={'Items'} 
-                />
-                <ButtonSwitch 
-                    isActive={viewMode === 'all'} 
-                    onClick={() => setViewMode('all')} 
-                    text={'All'} 
-                />
+                <ButtonSwitch isActive={viewMode === 'cards'} onClick={() => setViewMode('cards')} text={'Cards'} />
+                <ButtonSwitch isActive={viewMode === 'items'} onClick={() => setViewMode('items')} text={'Items'} />
             </ButtonGroup>
         );
     };
@@ -103,25 +89,16 @@ const Inventory = ({ infoAccount, cards, items = [] }) => {
     return (
         <Box mb={2}>
             <SectionSwitch />
-            
+
             {viewMode === 'cards' && (
                 <>
                     <SortAndFilterCards cards={cards} setCardsFiltered={setCardsFiltered} />
                     <GridCards cards={cardsFiltered} infoAccount={infoAccount} rgbColor="47, 129, 144" />
                 </>
             )}
-            
+
             {viewMode === 'items' && (
                 <>
-                    <SortAndFilterItems items={actualItems} setItemsFiltered={setItemsFiltered} />
-                    <GridItems items={itemsFiltered} infoAccount={infoAccount} rgbColor="47, 129, 144" />
-                </>
-            )}
-            
-            {viewMode === 'all' && (
-                <>
-                    <SortAndFilterCards cards={cards} setCardsFiltered={setCardsFiltered} />
-                    <GridCards cards={cardsFiltered} infoAccount={infoAccount} rgbColor="47, 129, 144" />
                     <SortAndFilterItems items={actualItems} setItemsFiltered={setItemsFiltered} />
                     <GridItems items={itemsFiltered} infoAccount={infoAccount} rgbColor="47, 129, 144" />
                 </>

@@ -1,7 +1,7 @@
 import { Box, Heading, Stack, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useCardsFilters } from '../../../../../hooks/useCardsFilters';
+import { useCardsFilters } from '@hooks/useCardsFilters';
 import CardFilters from './Components/CardsFilters';
 import CardGrid from './Components/CardsGrid';
 import ArdorCards from './ArdorCards';

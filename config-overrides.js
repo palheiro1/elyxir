@@ -1,24 +1,33 @@
 const webpack = require('webpack');
+const path = require('path');
 
 module.exports = function override(config) {
     const fallback = config.resolve.fallback || {};
     Object.assign(fallback, {
-        "crypto": require.resolve("crypto-browserify"),
-        "stream": require.resolve("stream-browserify"),
-        "assert": require.resolve("assert"),
-        "http": require.resolve("stream-http"),
-        "https": require.resolve("https-browserify"),
-        "os": require.resolve("os-browserify"),
-        "vm": require.resolve("vm-browserify"),
-        "url": require.resolve("url")
-    })
+        crypto: require.resolve('crypto-browserify'),
+        stream: require.resolve('stream-browserify'),
+        assert: require.resolve('assert'),
+        http: require.resolve('stream-http'),
+        https: require.resolve('https-browserify'),
+        os: require.resolve('os-browserify'),
+        vm: require.resolve('vm-browserify'),
+        url: require.resolve('url'),
+    });
     config.resolve.fallback = fallback;
     config.plugins = (config.plugins || []).concat([
         new webpack.ProvidePlugin({
             process: 'process/browser',
-            Buffer: ['buffer', 'Buffer']
-        })
-    ])
-    config.module.rules.unshift({ test: /\.m?js$/, resolve: { fullySpecified: false, }, });
+            Buffer: ['buffer', 'Buffer'],
+        }),
+    ]);
+
+    config.resolve.alias = {
+        ...(config.resolve.alias || {}),
+        '@hooks': path.resolve(__dirname, 'src/hooks'),
+        // '@components': path.resolve(__dirname, 'src/components'),
+        // '@utils': path.resolve(__dirname, 'src/utils'),
+    };
+
+    config.module.rules.unshift({ test: /\.m?js$/, resolve: { fullySpecified: false } });
     return config;
-}
+};

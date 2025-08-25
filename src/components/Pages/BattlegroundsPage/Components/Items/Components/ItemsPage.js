@@ -78,9 +78,7 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                 <Heading fontFamily={'Chelsea Market, System'} fontWeight={100} size={isMobile ? 'md' : 'xl'}>
                     POTIONS
                 </Heading>
-                <Text fontSize={isMobile ? 'sm' : 'xl'}>
-                    Send your potions to battlegrounds to use them in combat
-                </Text>
+                <Text fontSize={isMobile ? 'sm' : 'xl'}>Send your potions to battlegrounds to use them in combat</Text>
             </Stack>
             <Stack backgroundColor={'#0F0F0F'} borderRadius={'20px'} h={isMobile ? '80%' : '85%'}>
                 <Heading fontSize={isMobile ? 'md' : 'xl'} fontWeight="light" textAlign="center" mt={3}>
@@ -135,7 +133,7 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                         display="flex"
                         justifyContent="center">
                         <SimpleGrid
-                            columns={gridColumns()}
+                            columns={gridColumns}
                             gap={4}
                             align={'center'}
                             overflowY={'auto'}
@@ -146,7 +144,7 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                             height={'100%'}>
                             {filteredNotSelectedItems.length > 0 &&
                                 filteredNotSelectedItems.map((item, itemIndex) => {
-                                    const { name, image, rarity, type, quantity, description } = item;
+                                    const { name, image, rarity, target, quantity, description } = item;
                                     return (
                                         <Box
                                             key={itemIndex}
@@ -157,7 +155,12 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                                             cursor="pointer"
                                             onClick={() => setSelectedItems([...selectedItems, item])}>
                                             <Center>
-                                                <Img src={image} w={'90%'} h={'75%'} fallbackSrc="/images/items/WaterCristaline copia.png" />
+                                                <Img
+                                                    src={image}
+                                                    w={'90%'}
+                                                    h={'75%'}
+                                                    fallbackSrc="/images/items/WaterCristaline copia.png"
+                                                />
                                             </Center>
                                             <Stack direction={'column'} spacing={0} mx={2} mb={1}>
                                                 <Stack
@@ -174,13 +177,11 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                                                     <Text
                                                         fontSize="xs"
                                                         color="gray.600"
-                                                        noOfLines={1}>
-                                                        {type} • {rarity}
+                                                        noOfLines={1}
+                                                        textTransform={'capitalize'}>
+                                                        {target} • {rarity}
                                                     </Text>
-                                                    <Text
-                                                        fontSize="xs"
-                                                        color="gray.500"
-                                                        noOfLines={2}>
+                                                    <Text fontSize="xs" color="gray.500" noOfLines={2}>
                                                         {description}
                                                     </Text>
                                                 </Stack>

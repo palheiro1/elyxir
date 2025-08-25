@@ -1,7 +1,7 @@
 import { Box, Stack, Text } from '@chakra-ui/react';
 import { getTypesLeaderboardsResetBlock } from '../../../../../../services/Battlegrounds/Battlegrounds';
-import { useBlockCountdown } from '../../../../../../hooks/useBlockCountDown';
-import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBlockCountdown } from '@hooks/useBlockCountDown';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 
 /**
  * @name TypesLeaderboardsResetTimer

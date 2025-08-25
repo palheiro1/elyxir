@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchArenasInfo } from '../../../../redux/reducers/ArenasReducer';
 import MapPoint from './MapPoint';
 import { Box } from '@chakra-ui/react';
-import { useBattlegroundBreakpoints } from '../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 
 /**
  * @name Maps
@@ -60,10 +60,10 @@ export const Maps = ({ handleSelectArena, infoAccount, cards, handleStartBattle,
             className="containerMap"
             zIndex={0}
             mx="auto"
-            w={isMediumScreen ? '80%' : '90%'}
+            w={isMediumScreen ? '78%' : '90%'}
             h={!isMobile && '80%'}
             display="flex"
-            my={isMobile ? -20 : isMediumScreen ? -15 : 20}
+            my={isMobile ? -20 : isMediumScreen ? -15 : 2}
             justifyContent="center"
             alignItems="center">
             {arenasInfo && (

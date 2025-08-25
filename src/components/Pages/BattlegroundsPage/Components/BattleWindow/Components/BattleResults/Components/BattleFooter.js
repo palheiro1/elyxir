@@ -1,6 +1,6 @@
 import { Stack, Text, Tooltip } from '@chakra-ui/react';
 import { formatAddress } from '../../../../../Utils/BattlegroundsUtils';
-import { useBattlegroundBreakpoints } from '../../../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import CapturedCard from '../../../../BattleRecord/BattleDetails/Components/CapturedCard';
 
 /**

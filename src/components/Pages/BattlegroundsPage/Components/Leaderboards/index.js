@@ -4,7 +4,7 @@ import { Stack, Image, Text, MenuItem, MenuList, Flex, Button, MenuButton, Menu 
 import { fetchAccountDetails, fetchLeaderboards, setViewData } from '../../../../../redux/reducers/LeaderboardsReducer';
 import CombativityResetTimer from './CombativityLeaderboard/CombativityResetTimer';
 
-import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import TypesLeaderboardsRewards from './TypesLeaderboards/TypesLeaderboardsRewards';
 import TypesLeaderboardsResetTimer from './TypesLeaderboards/TypesLeaderboardsResetTimer';
 import TypesLeaderboard from './TypesLeaderboards';

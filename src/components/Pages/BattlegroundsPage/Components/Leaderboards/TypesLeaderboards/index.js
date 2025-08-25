@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { Box, Spinner, Stack, Text } from '@chakra-ui/react';
 import TypesLeaderboardRow from './TypesLeaderboardRow';
 import TypesLeaderboardsHeader from './TypesLeaderboardsHeader';
-import { useBattlegroundBreakpoints } from '../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 
 /**
  * @name TypesLeaderboard

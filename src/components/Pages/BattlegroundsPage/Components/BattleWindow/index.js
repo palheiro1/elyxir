@@ -7,7 +7,7 @@ import '@fontsource/chelsea-market';
 import { SelectHandPage } from './Components/SelectHandPage';
 import BattleResults from './Components/BattleResults';
 import BattleInventory from './Components/BattleInventory';
-import { useBattlegroundBreakpoints } from '../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import Modal from '../../../../ui/Modal';
 import { useSelector } from 'react-redux';
 
@@ -36,7 +36,6 @@ export const BattleWindow = ({
     filteredCards,
     omnoGEMsBalance,
     omnoWethBalance,
-    isMobile,
     items = [],
 }) => {
     const [openIventory, setOpenIventory] = useState(false);
@@ -209,6 +208,14 @@ export const BattleWindow = ({
         });
     };
 
+    const handleResetHandBattleCards = () => {
+        setRank0Count(0);
+        setRank1Count(1);
+        setMediumBonus(0);
+        setDomainBonus(0);
+        setHandBattleCards(Array(5).fill(''));
+    };
+
     return (
         <Modal
             isVisible
@@ -249,6 +256,9 @@ export const BattleWindow = ({
                             setShowResults={setShowResults}
                             setCurrentTime={setCurrentTime}
                             isMobile={isMobile}
+                            setSelectedPotion={setSelectedPotion}
+                            selectedPotion={selectedPotion}
+                            handleResetHandBattleCards={handleResetHandBattleCards}
                         />
                     )}
                     {openIventory && (

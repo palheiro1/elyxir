@@ -58,6 +58,7 @@ export const useBattlegroundState = infoAccount => {
         quickStart: false,
         newPlayers: false,
         advert: false,
+        items: false,
     });
 
     const [isScrollLocked, setIsScrollLocked] = useState(false);

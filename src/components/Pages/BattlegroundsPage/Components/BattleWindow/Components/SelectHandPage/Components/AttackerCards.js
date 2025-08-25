@@ -1,4 +1,5 @@
-import { Box, Image, Stack, Text } from '@chakra-ui/react';
+import { CloseIcon } from '@chakra-ui/icons';
+import { Box, IconButton, Image, Stack, Text } from '@chakra-ui/react';
 
 /**
  * @name AttackerCards
@@ -31,7 +32,9 @@ const AttackerCards = ({
     medium,
     domainBonus,
     domainName,
+    handleResetHandBattleCards,
 }) => {
+    const showResetButton = handBattleCards.some(card => card !== '');
     return (
         <>
             <Stack
@@ -68,12 +71,17 @@ const AttackerCards = ({
                     </Text>
                 </Stack>
             </Stack>
-            <Stack direction={'row'} mx={'auto'} mt={3}>
+            <Stack direction={'row'} mx={'auto'} mt={3} position={'relative'}>
                 {handBattleCards.map((card, index) => {
                     const isPreSelected = preSelectedCard?.asset === card.asset;
 
                     return card !== '' ? (
-                        <Box key={index} position="relative" onClick={() => handleDeleteCard(card, index)}>
+                        <Box
+                            key={index}
+                            position="relative"
+                            onClick={() => handleDeleteCard(card, index)}
+                            _hover={{ transform: 'scale(1.05)' }}
+                            transition="transform 0.2s">
                             {isPreSelected && (
                                 <Box
                                     position="absolute"
@@ -109,6 +117,8 @@ const AttackerCards = ({
                             position="relative"
                             gap="15px"
                             display="flex"
+                            _hover={{ transform: 'scale(1.05)' }}
+                            transition="transform 0.2s"
                             sx={{
                                 border: index === 0 ? '2px solid #D08FB0' : 'none',
                             }}
@@ -129,7 +139,17 @@ const AttackerCards = ({
                             ) : null}
                         </Box>
                     );
-                })}
+                })}{' '}
+                {showResetButton && (
+                    <IconButton
+                        color={'#FFF'}
+                        position={'absolute'}
+                        icon={<CloseIcon />}
+                        onClick={handleResetHandBattleCards}
+                        bottom={0}
+                        right={-12}
+                    />
+                )}
             </Stack>
         </>
     );

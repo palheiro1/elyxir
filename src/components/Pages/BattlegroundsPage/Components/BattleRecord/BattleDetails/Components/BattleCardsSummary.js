@@ -1,7 +1,7 @@
 import { Box, Image, Stack, Text } from '@chakra-ui/react';
 import defeatIcon from '../../../../assets/icons/defeat_icon.svg';
 import victoryIcon from '../../../../assets/icons/victory_icon.svg';
-import { useBattlegroundBreakpoints } from '../../../../../../../hooks/useBattlegroundBreakpoints';
+import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 
 /**
  * @name BattleCardsSummary
