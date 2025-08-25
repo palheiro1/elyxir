@@ -36,7 +36,6 @@ export const BattleWindow = ({
     filteredCards,
     omnoGEMsBalance,
     omnoWethBalance,
-    isMobile,
 }) => {
     const [openIventory, setOpenIventory] = useState(false);
     const [index, setIndex] = useState('');
@@ -50,7 +49,6 @@ export const BattleWindow = ({
     const [rank0Count, setRank0Count] = useState(0);
     const [rank1Count, setRank1Count] = useState(1);
     const [defenderCards, setDefenderCards] = useState(null);
-    const [selectedPotion, setSelectedPotion] = useState(null);
     const [filters, setFilters] = useState({
         rarity: '-1',
         element: '-1',
