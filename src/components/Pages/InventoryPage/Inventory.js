@@ -16,7 +16,6 @@ import SortAndFilterCards from '../../SortAndFilters/SortAndFilterCards';
  * @returns {JSX.Element} - Inventory component
  */
 const Inventory = ({ infoAccount, cards }) => {
-    // Filtered cards and items
     const [cardsFiltered, setCardsFiltered] = useState(cards);
 
     return (

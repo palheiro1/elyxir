@@ -26,8 +26,8 @@ import { errorToast, okToast } from '../../../utils/alerts';
 import { checkPin } from '../../../utils/walletUtils';
 import { openPackWithGiftz } from '../../../utils/cardsUtils';
 
-import HoverCard from "@darenft/react-3d-hover-card";
-import "@darenft/react-3d-hover-card/dist/style.css";
+import HoverCard from '@darenft/react-3d-hover-card';
+import '@darenft/react-3d-hover-card/dist/style.css';
 
 const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const [value, setValue] = useState('1');
@@ -143,7 +143,11 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                             <GridItem w="100%">
                                 <Center w="100%">
                                     <HoverCard scaleFactor={1.4}>
-                                        <Image src="/images/cardPacks/cardPack.png" alt="Card Pack" maxH={{ base: '15rem', md: '30rem' }} />
+                                        <Image
+                                            src="/images/cardPacks/cardPack.png"
+                                            alt="Card Pack"
+                                            maxH={{ base: '15rem', md: '30rem' }}
+                                        />
                                     </HoverCard>
                                 </Center>
                             </GridItem>
@@ -153,9 +157,6 @@ const OpenPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                     <Box mt={6}>
                                         <Text textAlign="center" my={2} border="1px solid #f7e4ec" rounded="lg" p={2}>
                                             Number of GIFTZ
-                                        </Text>
-                                        <Text textAlign="center" fontSize="xs" color="yellow.200" mb={2}>
-                                            💡 Every 10th pack has a chance to contain a bonus potion!
                                         </Text>
                                         <Center>
                                             <HStack spacing={0} border="1px" rounded="lg" borderColor="#f7e4ec">
