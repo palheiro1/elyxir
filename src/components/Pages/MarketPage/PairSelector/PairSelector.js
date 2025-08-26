@@ -6,17 +6,10 @@ const PairSelector = ({ marketCurrency, setMarketCurrency, textColor }) => {
     return (
         <Center>
             <Box minW="44%" mb={2}>
-                <SimpleGrid columns={3} spacing={2}>
+                <SimpleGrid columns={2} spacing={2}>
                     <PairButton
                         text="CARD"
                         value="CARDS"
-                        marketCurrency={marketCurrency}
-                        setMarketCurrency={setMarketCurrency}
-                        textColor={textColor}
-                    />
-                    <PairButton
-                        text="ITEMS"
-                        value="ITEMS"
                         marketCurrency={marketCurrency}
                         setMarketCurrency={setMarketCurrency}
                         textColor={textColor}
