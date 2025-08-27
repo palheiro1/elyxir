@@ -8,7 +8,6 @@ import {
 } from '../../../services/Ardor/ardorInterface';
 import BridgeERC1155 from './ERC1155/BridgeERC1155';
 import BridgeERC1155GIFTZ from './GIFTZ/BridgeERC1155GIFTZ';
-import BridgeERC1155Items from './ERC1155Items/BridgeERC1155Items';
 import BridgeSelector from './BridgeSelector';
 import BridgeERC20 from './ERC20wETH/BridgeERC20';
 import OldBridge from './OldBridge/OldBridge';
@@ -101,9 +100,6 @@ const Bridge = ({ infoAccount, cards, gemCards, giftzCards, wethCards, manaCards
                     swapAddresses={swapAddresses?.ERC1155}
                     giftzCards={giftzCards}
                 />
-            )}
-            {bridgeType === 'ERC1155ITEMS' && (
-                <BridgeERC1155Items infoAccount={infoAccount} swapAddresses={swapAddresses?.ERC1155} items={items} />
             )}
             {bridgeType === 'OLD' && <OldBridge infoAccount={infoAccount} swapAddresses={swapAddresses?.OLD_BRIDGE} />}
         </Box>

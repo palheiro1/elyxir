@@ -56,6 +56,7 @@ export const BattleWindow = ({
         element: '-1',
         domain: '-1',
     });
+
     const { isMobile } = useBattlegroundBreakpoints();
 
     const { soldier: soldiers } = useSelector(state => state.soldiers.soldiers);

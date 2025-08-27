@@ -5,7 +5,6 @@ import { useState } from 'react';
 import PairSelector from './PairSelector/PairSelector';
 import CardMarket from './CardMarket';
 import CurrencyMarket from './CurrencyMarket';
-import ItemMarket from './ItemMarket';
 
 /**
  * @name Market
@@ -25,15 +24,16 @@ const Market = ({ infoAccount, cards, items = [], gemCards, giftzCards, wethCard
     const textColor = '#3b6497';
 
     return (
-        <Box maxW={{ base: '100%', lg: '70vw', xl: '77.5vw', '2xl': "100%" }}>
+        <Box maxW={{ base: '100%', lg: '70vw', xl: '77.5vw', '2xl': '100%' }}>
             <PairSelector marketCurrency={marketCurrency} setMarketCurrency={setMarketCurrency} textColor={textColor} />
 
             {marketCurrency === 'CARDS' && (
-                <CardMarket cards={cards} infoAccount={infoAccount} marketCurrency={marketCurrency} textColor={textColor} />
-            )}
-
-            {marketCurrency === 'ITEMS' && (
-                <ItemMarket items={items} infoAccount={infoAccount} textColor={textColor} />
+                <CardMarket
+                    cards={cards}
+                    infoAccount={infoAccount}
+                    marketCurrency={marketCurrency}
+                    textColor={textColor}
+                />
             )}
 
             {marketCurrency === 'CURRENCIES' && (

@@ -1,4 +1,4 @@
-import { Box, Center, Img, Spacer, Stack, Text } from '@chakra-ui/react';
+import { Box, Center, Flex, Img, Spacer, Stack, Text } from '@chakra-ui/react';
 import CardBadges from '../../../../../../../Cards/CardBadges';
 
 /**
@@ -12,7 +12,7 @@ import CardBadges from '../../../../../../../Cards/CardBadges';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const CardItem = ({ card, isMobile, onClick, isPreSelected }) => {
-    const { cardImgUrl, name, rarity, channel, selected } = card;
+    const { cardImgUrl, name, rarity, channel, selected, omnoQuantity } = card;
 
     const handleClick = () => {
         if (!selected) onClick(card);
@@ -32,7 +32,7 @@ const CardItem = ({ card, isMobile, onClick, isPreSelected }) => {
             <Center>
                 <Img src={cardImgUrl} w="90%" h="75%" />
             </Center>
-            <Stack direction="column" spacing={0} mx={2} mb={1}>
+            <Stack direction="row" spacing={0} mx={2} mb={1}>
                 <Stack direction="column" spacing={0} align={{ base: 'center', lg: 'start' }}>
                     <Text fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }} noOfLines={1} fontWeight="bold" color="#000">
                         {name}
@@ -40,6 +40,13 @@ const CardItem = ({ card, isMobile, onClick, isPreSelected }) => {
                     <CardBadges rarity={rarity} continent={channel} size={isMobile ? '2xs' : 'sm'} />
                 </Stack>
                 <Spacer display={{ base: 'none', lg: 'block' }} />
+                <Center minHeight={{ base: 'auto', lg: '100%' }}>
+                    <Flex w={{ base: 'auto', lg: '100%' }}>
+                        <Text fontSize="small" color="#000">
+                            Available: {omnoQuantity}
+                        </Text>
+                    </Flex>
+                </Center>
             </Stack>
 
             {selected && (

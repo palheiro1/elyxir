@@ -22,7 +22,7 @@ const RewardsTable = ({ rewards, accountRs, filter }) => {
             case '17992331071615561028':
                 return 'https://media.mythicalbeings.io/sm/mythical68.jpg';
             default:
-                return '/images/items/WaterCristaline copia.png';
+                return '/images/currency/multicurrency.png';
         }
     };
 
