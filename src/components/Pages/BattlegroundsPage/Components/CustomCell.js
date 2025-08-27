@@ -15,8 +15,16 @@ import { GridItem, Text } from '@chakra-ui/react';
  * @returns {JSX.Element} A styled Chakra UI `GridItem` with centered content.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const CustomCell = ({ value, isMobile, isUppercase = false, padding = 3, children = null, ...rest }) => (
-    <GridItem colSpan={1} textAlign="center" maxW={'150px'} mx={'auto'}>
+const CustomCell = ({
+    value,
+    isMobile,
+    isUppercase = false,
+    padding = 3,
+    children = null,
+    maxW = '150px',
+    ...rest
+}) => (
+    <GridItem colSpan={1} textAlign="center" maxW={maxW} mx={'auto'}>
         <Text
             p={padding}
             maxH="45px"

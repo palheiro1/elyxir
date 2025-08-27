@@ -21,7 +21,7 @@ const CombativityLeaderboardRow = ({ index, accountRS, points, name }) => {
         points > 0 && (
             <Grid templateColumns="repeat(3, 1fr)" gap={4} w="100%" mx="auto" mt={0} borderRadius="10px" color={color}>
                 <CustomCell value={`#${index + 1}`} isMobile={isMobile} />
-                <CustomCell value={name ? name : accountRS} isMobile={isMobile} />
+                <CustomCell value={name ? name : accountRS} isMobile={isMobile} maxW="" />
                 <CustomCell value={points ? Math.floor(points).toLocaleString('de-DE') : 0} isMobile={isMobile} />
             </Grid>
         )
