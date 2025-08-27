@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import OmnoItems from './OmnoItems';
+import { getTypeValue } from '../../../../../Items/data';
 
 const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
     const [selectedItems, setSelectedItems] = useState([]);
@@ -24,7 +25,7 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
 
     const handleEdit = (item, quantity) => {
         const newSelectedItems = selectedItems.map(selectedItem => {
-            if (selectedItem.id === item.id) {
+            if (selectedItem.asset === item.asset) {
                 return { ...selectedItem, selectQuantity: Number(quantity) };
             }
             return selectedItem;
@@ -33,19 +34,12 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
     };
 
     const handleDeleteSelectedItem = item => {
-        const newSelectedItems = selectedItems.filter(selectedItem => selectedItem.id !== item.id);
+        const newSelectedItems = selectedItems.filter(selectedItem => selectedItem.asset !== item.asset);
         setSelectedItems(newSelectedItems);
     };
 
-    const myItems = items.filter(item => parseInt(item.quantity) > 0);
-    const notSelectedItems = myItems.filter(item => !selectedItems.some(selected => selected.id === item.id));
-
-    const handleRarityChange = event => {
-        setFilters(prevFilters => ({
-            ...prevFilters,
-            rarity: event.target.value,
-        }));
-    };
+    const myItems = items.filter(item => parseInt(item.quantityQNT) > 0);
+    const notSelectedItems = myItems.filter(item => !selectedItems.some(selected => selected.asset === item.asset));
 
     const handleTypeChange = event => {
         setFilters(prevFilters => ({
@@ -54,13 +48,9 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
         }));
     };
 
-    const filteredNotSelectedItems = notSelectedItems
-        .filter(item => {
-            return filters.rarity && filters.rarity !== '-1' ? item.rarity === filters.rarity : true;
-        })
-        .filter(item => {
-            return filters.type && filters.type !== '-1' ? item.type === filters.type : true;
-        });
+    const filteredNotSelectedItems = notSelectedItems.filter(item => {
+        return filters.type && filters.type !== '-1' ? item.bonus.type === filters.type : true;
+    });
 
     const optionStyle = { backgroundColor: '#FFF', color: '#000' };
     const textColor = useColorModeValue('black', 'white');
@@ -85,39 +75,15 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                     1. Select potions to send to Battlegrounds
                 </Heading>
                 <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={!isMobile && '10'}>
-                    <Select w={isMobile ? '20%' : '10%'} onChange={handleRarityChange} color={'#FFF'}>
-                        <option value="-1" style={optionStyle}>
-                            Rarity
-                        </option>
-                        <option value="Common" style={optionStyle}>
-                            Common
-                        </option>
-                        <option value="Rare" style={optionStyle}>
-                            Rare
-                        </option>
-                        <option value="Epic" style={optionStyle}>
-                            Epic
-                        </option>
-                        <option value="Legendary" style={optionStyle}>
-                            Legendary
-                        </option>
-                    </Select>
-
                     <Select w={isMobile ? '20%' : '10%'} onChange={handleTypeChange} color={'#FFF'}>
                         <option value="-1" style={optionStyle}>
                             Type
                         </option>
-                        <option value="Healing" style={optionStyle}>
-                            Healing
+                        <option value="medium" style={optionStyle}>
+                            Medium
                         </option>
-                        <option value="Buff" style={optionStyle}>
-                            Buff
-                        </option>
-                        <option value="Debuff" style={optionStyle}>
-                            Debuff
-                        </option>
-                        <option value="Utility" style={optionStyle}>
-                            Utility
+                        <option value="domain" style={optionStyle}>
+                            Continent
                         </option>
                     </Select>
                 </Stack>
@@ -144,19 +110,19 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                             height={'100%'}>
                             {filteredNotSelectedItems.length > 0 &&
                                 filteredNotSelectedItems.map((item, itemIndex) => {
-                                    const { name, image, rarity, target, quantity, description } = item;
+                                    const { imgUrl, bonus, quantityQNT, description } = item;
                                     return (
                                         <Box
                                             key={itemIndex}
                                             bg={'white'}
                                             borderRadius={'10px'}
                                             mx={'auto'}
-                                            maxH={'345px'}
+                                            maxH={'296px'}
                                             cursor="pointer"
                                             onClick={() => setSelectedItems([...selectedItems, item])}>
                                             <Center>
                                                 <Img
-                                                    src={image}
+                                                    src={imgUrl}
                                                     w={'90%'}
                                                     h={'75%'}
                                                     fallbackSrc="/images/items/WaterCristaline copia.png"
@@ -169,20 +135,20 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                                                     align={{ base: 'center', lg: 'start' }}>
                                                     <Text
                                                         fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }}
-                                                        noOfLines={1}
                                                         fontWeight="bold"
+                                                        h={'60px'}
+                                                        textAlign={'start'}
                                                         color={'#000'}>
-                                                        {name}
+                                                        {description}
                                                     </Text>
                                                     <Text
-                                                        fontSize="xs"
-                                                        color="gray.600"
-                                                        noOfLines={1}
+                                                        px={2}
+                                                        fontSize="sm"
+                                                        bgColor="gray.600"
+                                                        rounded="lg"
+                                                        color="white"
                                                         textTransform={'capitalize'}>
-                                                        {target} • {rarity}
-                                                    </Text>
-                                                    <Text fontSize="xs" color="gray.500" noOfLines={2}>
-                                                        {description}
+                                                        {bonus.type} ({getTypeValue(bonus)})
                                                     </Text>
                                                 </Stack>
                                                 <Spacer display={{ base: 'none', lg: 'block' }} />
@@ -194,7 +160,7 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                                                                 minH={{ base: '100%', lg: 'auto' }}
                                                                 fontSize={'small'}
                                                                 color={'#000'}>
-                                                                Available quantity: {quantity}
+                                                                Available quantity: {quantityQNT}
                                                             </Text>
                                                         </Flex>
                                                     </Tooltip>

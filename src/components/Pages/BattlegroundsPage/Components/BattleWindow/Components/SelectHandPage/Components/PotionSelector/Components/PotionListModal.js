@@ -44,8 +44,8 @@ const PotionListModal = ({ onPotionModalClose, potions, selectedPotion, handleSe
                         <SimpleGrid columns={2} spacing={4}>
                             {potions.map(potion => (
                                 <PotionListItem
-                                    key={potion.id}
-                                    selectedPotionId={selectedPotion?.id}
+                                    key={potion.asset}
+                                    selectedPotionAsset={selectedPotion?.asset}
                                     potion={potion}
                                     handleSelectPotion={handleSelectPotion}
                                 />

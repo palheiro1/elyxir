@@ -5,6 +5,7 @@ import { useState } from 'react';
 import PairSelector from './PairSelector/PairSelector';
 import CardMarket from './CardMarket';
 import CurrencyMarket from './CurrencyMarket';
+import ItemMarket from './ItemMarket';
 
 /**
  * @name Market
@@ -49,6 +50,8 @@ const Market = ({ infoAccount, cards, items = [], gemCards, giftzCards, wethCard
                     textColor={textColor}
                 />
             )}
+
+            {marketCurrency === 'ITEMS' && <ItemMarket items={items} />}
         </Box>
     );
 };

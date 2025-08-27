@@ -1,8 +1,8 @@
 import { Box, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import SelectedPotion from './Components/SelectedPotion';
-import { mockPotions } from './data';
 import PotionPlaceholder from './Components/PotionPlaceholder';
 import PotionListModal from './Components/PotionListModal';
+import { useSelector } from 'react-redux';
 
 /**
  * @name PotionSelector
@@ -17,6 +17,9 @@ import PotionListModal from './Components/PotionListModal';
  */
 const PotionSelector = ({ selectedPotion, setSelectedPotion, isMobile }) => {
     const { isOpen: isPotionModalOpen, onOpen: onPotionModalOpen, onClose: onPotionModalClose } = useDisclosure();
+
+    const { items } = useSelector(state => state.items);
+    const potions = items.filter(item => item.omnoQuantity > 0);
 
     const handleSelectPotion = potion => {
         setSelectedPotion(potion);
@@ -59,7 +62,7 @@ const PotionSelector = ({ selectedPotion, setSelectedPotion, isMobile }) => {
             {isPotionModalOpen && (
                 <PotionListModal
                     onPotionModalClose={onPotionModalClose}
-                    potions={mockPotions}
+                    potions={potions}
                     selectedPotion={selectedPotion}
                     handleSelectPotion={handleSelectPotion}
                 />

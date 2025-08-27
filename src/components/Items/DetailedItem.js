@@ -13,6 +13,7 @@ import {
 
 import HoverCard from '@darenft/react-3d-hover-card';
 import '@darenft/react-3d-hover-card/dist/style.css';
+import { getTypeValue, getColor } from './data';
 
 /**
  * @name DetailedItem
@@ -24,11 +25,10 @@ import '@darenft/react-3d-hover-card/dist/style.css';
  */
 const DetailedItem = ({ isOpen, onClose, data }) => {
     const textColor = useColorModeValue('gray.200', 'gray.200');
-    const badgeColor = useColorModeValue('blackAlpha.600', 'whiteAlpha.300');
 
     if (!data) return null;
 
-    const { name, image, type, bonus, description } = data;
+    const { name, imgUrl, bonus, description } = data;
 
     return (
         <>
@@ -45,14 +45,20 @@ const DetailedItem = ({ isOpen, onClose, data }) => {
                     <Stack direction={{ base: 'column', lg: 'row' }}>
                         <Box mt="6%">
                             <HoverCard scaleFactor={1.4}>
-                                <Image src={image} alt={name} maxH={{ base: '21rem', lg: '42rem' }} rounded="lg" mx={"auto"} />
+                                <Image
+                                    src={imgUrl}
+                                    alt={name}
+                                    maxH={{ base: '21rem', lg: '42rem' }}
+                                    rounded="lg"
+                                    mx={'auto'}
+                                />
                             </HoverCard>
                         </Box>
 
                         <Stack direction="column" align="center" w="100%">
                             <ModalBody color={textColor} w="100%">
                                 <Text color="white" fontSize="4xl" fontWeight="bolder">
-                                    {name}
+                                    {description}
                                 </Text>
 
                                 <Stack direction="row" mb={2} justify="space-between">
@@ -62,12 +68,13 @@ const DetailedItem = ({ isOpen, onClose, data }) => {
                                         </Text>
                                         <Text
                                             fontSize="md"
-                                            bgColor={badgeColor}
+                                            bgColor={getColor(bonus)}
                                             rounded="lg"
                                             color="white"
+                                            textTransform={'capitalize'}
                                             px={2}
                                             textAlign="center">
-                                            {type}
+                                            {bonus.type} ({getTypeValue(bonus)})
                                         </Text>
                                     </Stack>
 
@@ -82,26 +89,19 @@ const DetailedItem = ({ isOpen, onClose, data }) => {
                                             color="white"
                                             px={2}
                                             textAlign="center">
-                                            +{bonus} Power
+                                            +{bonus.power} Power
                                         </Text>
                                     </Stack>
                                 </Stack>
 
                                 <Box mt={4}>
                                     <Text fontSize="lg" fontWeight="bold" color="white" mb={2}>
-                                        Description
-                                    </Text>
-                                    <Text fontSize="md" color="gray" textAlign="justify">
-                                        {description}
-                                    </Text>
-                                </Box>
-
-                                <Box mt={4}>
-                                    <Text fontSize="lg" fontWeight="bold" color="white" mb={2}>
                                         Usage
                                     </Text>
                                     <Text fontSize="md" color="gray" textAlign="justify">
-                                        This potion can be equipped before battle to provide a +{bonus} power bonus to creatures that match the {type} condition. Single use only - the potion is consumed after the battle.
+                                        This potion can be equipped before battle to provide a +{bonus.power} power
+                                        bonus to creatures that match the {bonus.type} condition. Single use only - the
+                                        potion is consumed after the battle.
                                     </Text>
                                 </Box>
                             </ModalBody>

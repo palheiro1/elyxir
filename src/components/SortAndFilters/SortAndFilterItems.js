@@ -1,8 +1,6 @@
 import { Box, Button, Select, Stack, Text } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { BsArrowDownUp } from 'react-icons/bs';
-import equal from 'fast-deep-equal';
-import Crypto from 'crypto-browserify';
 
 /**
  * @name SortAndFilterItems
@@ -18,58 +16,51 @@ const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129,
 
     const [type, setType] = useState('All');
     const [sort, setSort] = useState('moreQuantity');
-    const [needReload, setNeedReload] = useState(true);
-    const [actualItems, setActualItems] = useState(items);
-    const [itemsHash, setItemsHash] = useState('');
 
-    /**
-     * @description Filter items by type
-     */
-    useEffect(() => {
-        const filterItems = () => {
-            setNeedReload(false);
-            let filteredItems = [...items];
+    const computed = useMemo(() => {
+        let out = [...items];
 
-            if (type !== 'All') {
-                filteredItems = filteredItems.filter(item => item.type === type);
-            }
-
-            if (sort === 'moreQuantity') {
-                filteredItems = filteredItems.sort((a, b) => b.quantity - a.quantity);
-            } else if (sort === 'lessQuantity') {
-                filteredItems = filteredItems.sort((a, b) => a.quantity - b.quantity);
-            } else if (sort === 'name') {
-                filteredItems = filteredItems.sort((a, b) => a.name.localeCompare(b.name));
-            } else if (sort === 'bonus') {
-                filteredItems = filteredItems.sort((a, b) => (b.bonus || 0) - (a.bonus || 0));
-            }
-
-            setItemsFiltered(filteredItems);
-            setActualItems(filteredItems);
-        };
-
-        const checkForChanges = () => {
-            const hash = Crypto.createHash('sha256').update(JSON.stringify(items)).digest('hex');
-            if (!equal(itemsHash, hash)) {
-                setItemsHash(hash);
-                setNeedReload(true);
-            }
-        };
-
-        checkForChanges();
-
-        if (needReload) {
-            filterItems();
+        if (type !== 'All') {
+            out = out.filter(it => (it?.bonus?.type || '').toLowerCase() === type);
         }
-    }, [items, type, sort, needReload, itemsHash, setItemsFiltered]);
 
-    const handleTypeChange = event => {
-        setType(event.target.value);
-    };
+        const byNumber = v => Number(v ?? 0);
 
-    const handleSortChange = event => {
-        setSort(event.target.value);
-    };
+        switch (sort) {
+            case 'moreQuantity':
+                out.sort(
+                    (a, b) =>
+                        byNumber(b.quantityQNT) - byNumber(a.quantityQNT) || (a.name || '').localeCompare(b.name || '')
+                );
+                break;
+            case 'lessQuantity':
+                out.sort(
+                    (a, b) =>
+                        byNumber(a.quantityQNT) - byNumber(b.quantityQNT) || (a.name || '').localeCompare(b.name || '')
+                );
+                break;
+            case 'name':
+                out.sort((a, b) => (a.description || '').localeCompare(b.description || ''));
+                break;
+            case 'bonus':
+                out.sort(
+                    (a, b) =>
+                        (b?.bonus?.value ?? 0) - (a?.bonus?.value ?? 0) || (a.name || '').localeCompare(b.name || '')
+                );
+                break;
+            default:
+                break;
+        }
+
+        return out;
+    }, [items, type, sort]);
+
+    useEffect(() => {
+        setItemsFiltered(computed);
+    }, [computed, setItemsFiltered]);
+
+    const handleTypeChange = e => setType(e.target.value);
+    const handleSortChange = e => setSort(e.target.value);
 
     return (
         <Box>
@@ -78,11 +69,14 @@ const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129,
                     <Text fontSize="sm" mb={2} color="gray">
                         Filter by Type
                     </Text>
-                    <Select value={type} onChange={handleTypeChange} bg={bgButtons} border={`1px solid ${borderButtons}`}>
+                    <Select
+                        value={type}
+                        onChange={handleTypeChange}
+                        bg={bgButtons}
+                        border={`1px solid ${borderButtons}`}>
                         <option value="All">All Types</option>
                         <option value="medium">Medium Bonus</option>
-                        <option value="continent">Continent Bonus</option>
-                        <option value="power">Power Bonus</option>
+                        <option value="domain">Continent Bonus</option>
                     </Select>
                 </Box>
 
@@ -90,7 +84,11 @@ const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129,
                     <Text fontSize="sm" mb={2} color="gray">
                         Sort by
                     </Text>
-                    <Select value={sort} onChange={handleSortChange} bg={bgButtons} border={`1px solid ${borderButtons}`}>
+                    <Select
+                        value={sort}
+                        onChange={handleSortChange}
+                        bg={bgButtons}
+                        border={`1px solid ${borderButtons}`}>
                         <option value="moreQuantity">More Quantity</option>
                         <option value="lessQuantity">Less Quantity</option>
                         <option value="name">Name</option>
@@ -106,7 +104,7 @@ const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129,
                     border={`1px solid ${borderButtons}`}
                     _hover={{ bg: borderButtons }}
                     leftIcon={<BsArrowDownUp />}
-                    onClick={() => setSort(sort === 'moreQuantity' ? 'lessQuantity' : 'moreQuantity')}>
+                    onClick={() => setSort(prev => (prev === 'moreQuantity' ? 'lessQuantity' : 'moreQuantity'))}>
                     Toggle Quantity
                 </Button>
             </Stack>

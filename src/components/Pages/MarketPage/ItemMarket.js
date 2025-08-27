@@ -17,7 +17,7 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
             bonus: 1,
             quantity: 0, // User doesn't have this item
             description: 'A mystical potion that enhances the power of terrestrial creatures.',
-            element: 'Terrestrial'
+            element: 'Terrestrial',
         },
         {
             id: 2,
@@ -27,7 +27,7 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
             bonus: 1,
             quantity: 0,
             description: 'An ancient brew that strengthens creatures from the Asian continent.',
-            continent: 'Asia'
+            continent: 'Asia',
         },
         {
             id: 3,
@@ -36,7 +36,7 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
             type: 'power',
             bonus: 2,
             quantity: 0,
-            description: 'A rare potion that provides raw power boost to any creature.'
+            description: 'A rare potion that provides raw power boost to any creature.',
         },
         {
             id: 4,
@@ -46,7 +46,7 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
             bonus: 1,
             quantity: 0,
             description: 'A rare essence that empowers creatures from Oceania.',
-            continent: 'Oceania'
+            continent: 'Oceania',
         },
         {
             id: 5,
@@ -56,7 +56,7 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
             bonus: 1,
             quantity: 0,
             description: 'A light potion that enhances aerial creatures.',
-            element: 'Aerial'
+            element: 'Aerial',
         },
         {
             id: 6,
@@ -65,8 +65,8 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
             type: 'power',
             bonus: 3,
             quantity: 0,
-            description: 'An extremely rare potion that provides massive power boost.'
-        }
+            description: 'An extremely rare potion that provides massive power boost.',
+        },
     ];
 
     // Option
@@ -83,10 +83,10 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
 
             {option === 0 && (
                 <Box>
-                    <SortAndFilterItems 
-                        items={items.length > 0 ? items : mockItems} 
-                        setItemsFiltered={setItemsFiltered} 
-                        rgbColor={'59,100,151'} 
+                    <SortAndFilterItems
+                        items={items.length > 0 ? items : mockItems}
+                        setItemsFiltered={setItemsFiltered}
+                        rgbColor={'59,100,151'}
                     />
 
                     <GridItems

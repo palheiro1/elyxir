@@ -87,6 +87,8 @@ import { fetchSoldiers } from '../../redux/reducers/SoldiersReducer';
 import { fetchLeaderboards } from '../../redux/reducers/LeaderboardsReducer';
 import { setCardsManually } from '../../redux/reducers/CardsReducer';
 import ProfileDropdown from '../../components/Navigation/ProfileDropdown';
+import { fetchAllItems } from '../../utils/itemsUtils';
+import { setItemsManually } from '../../redux/reducers/ItemsReducer';
 
 /**
  * @name Home
@@ -104,6 +106,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     // Get cards from Redux store
     const { cards } = useSelector(state => state.cards);
+    const { items } = useSelector(state => state.items);
 
     // Refs
     const newTransactionRef = useRef();
@@ -144,6 +147,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const [wethCardsHash, setWethCardsHash] = useState('');
     const [manaCardsHash, setManaCardsHash] = useState('');
     const [cardsHash, setCardsHash] = useState('');
+    const [itemsHash, setItemsHash] = useState('');
 
     // Filtered cards
     const [cardsFiltered, setCardsFiltered] = useState(cards);
@@ -252,6 +256,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     trades,
                     dividends,
                     giftzOmnoBalance,
+                    loadItems,
                 ] = await Promise.all([
                     fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
                     fetchCurrencyAssets(
@@ -271,6 +276,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                         eventType: 'ASSET_DIVIDEND_PAYMENT',
                     }),
                     getOmnoGiftzBalance(accountRs),
+                    fetchAllItems(accountRs),
                 ]);
 
                 const gems = currencyAssets[0].find(asset => asset.asset === GEMASSET);
@@ -280,6 +286,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
                 if (firstTime || cards.length === 0) {
                     dispatch(setCardsManually(loadCards));
+                }
+                if (firstTime || items.length === 0) {
+                    dispatch(setItemsManually(loadItems));
                 }
                 if (txs.transactions.length === 0) {
                     firstTimeToast(toast);
@@ -340,7 +349,8 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset);
                 checkDataChange('wETH', wethCardsHash, setWethCards, setWethCardsHash, weth);
                 checkDataChange('MANA', manaCardsHash, setManaCards, setManaCardsHash, mana);
-                checkCardsChange(cardsHash, setCardsHash, dispatch, loadCards);
+                checkCardsChange('Cards', cardsHash, setCardsHash, dispatch, loadCards, setCardsManually);
+                checkCardsChange('Items', itemsHash, setItemsHash, dispatch, loadItems, setItemsManually);
             } catch (error) {
                 console.error('Mythical Beings: Error loading data', error);
             } finally {

@@ -18,7 +18,7 @@ import {
 import BridgeItem from '../../../../../Items/BridgeItem';
 
 // Utils
-import { checkPin } from '../../../../../../utils/walletUtils';
+import { checkPin, sendCardsToOmno } from '../../../../../../utils/walletUtils';
 import { infoToast, okToast } from '../../../../../../utils/alerts';
 
 /**
@@ -61,28 +61,22 @@ const OmnoItems = ({
         }
     };
 
-    const handleSwap = async () => { 
+    const handleSwap = async () => {
         if (!isValidPin || selectedItems.length === 0) return;
         infoToast('Sending potions to battlegrounds...', toast);
         setIsSwapping(true);
 
-        // Mock implementation for now - in real app this would call the blockchain
         const itemsToSwap = selectedItems.map(item => ({
-            id: item.id,
+            asset: item.asset,
             quantity: item.selectQuantity || 1,
         }));
 
-        // Simulate API call
-        setTimeout(() => {
-            const mock = {
-                itemsToSwap,
-                passphrase,
-            };
-            console.log('🚀 ~ handleSwap ~ mock:', mock);
+        const success = await sendCardsToOmno({ cards: itemsToSwap, passPhrase: passphrase, toast });
+        if (success) {
             okToast('Potions sent successfully to battlegrounds. Wait for the next block and refresh the page.', toast);
             setSelectedItems([]);
             setIsSwapping(false);
-        }, 2000);
+        }
     };
 
     const bgColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
@@ -130,16 +124,17 @@ const OmnoItems = ({
                     <HStack spacing={4}>
                         <PinInput
                             size="lg"
+                            isDisabled={selectedItems.length === 0}
                             mask
                             onComplete={handleCompletePin}
-                            isInvalid={!isValidPin && selectedItems.length > 0}>
+                            isInvalid={!isValidPin}>
                             <PinInputField />
                             <PinInputField />
                             <PinInputField />
                             <PinInputField />
                         </PinInput>
                     </HStack>
-                    {!isValidPin && selectedItems.length > 0 && (
+                    {!isValidPin && (
                         <Text color="red.400" fontSize="sm">
                             Invalid PIN. Please try again.
                         </Text>

@@ -1,6 +1,6 @@
 import { Badge, Box, Button, Image, Stack, Text } from '@chakra-ui/react';
 import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
-import { getContinentColor, getMediumColor } from '../data';
+import { getColor, getTypeValue } from '../../../../../../../../../Items/data';
 
 /**
  * @name SelectedPotion
@@ -17,6 +17,7 @@ import { getContinentColor, getMediumColor } from '../data';
  */
 const SelectedPotion = ({ onPotionModalOpen, selectedPotion, setSelectedPotion }) => {
     const { isMobile } = useBattlegroundBreakpoints();
+    const { imgUrl, bonus, description } = selectedPotion;
     return (
         <>
             <Box
@@ -26,27 +27,13 @@ const SelectedPotion = ({ onPotionModalOpen, selectedPotion, setSelectedPotion }
                 _hover={{ transform: 'scale(1.05)' }}
                 transition="transform 0.2s">
                 <Image
-                    src={selectedPotion.image}
+                    src={imgUrl}
                     fallbackSrc="/images/items/WaterCristaline copia.png"
                     boxSize={isMobile ? '50px' : '60px'}
                     borderRadius="md"
                     border="3px solid #D597B2"
                     shadow="0 0 10px rgba(213, 151, 178, 0.5)"
                 />
-                <Badge
-                    position="absolute"
-                    top="-8px"
-                    right="-8px"
-                    colorScheme={
-                        selectedPotion.medium
-                            ? getMediumColor(selectedPotion.medium)
-                            : selectedPotion.continent
-                            ? getContinentColor(selectedPotion.continent)
-                            : 'gray'
-                    }
-                    fontSize="xs">
-                    {selectedPotion.medium || selectedPotion.continent || selectedPotion.type}
-                </Badge>
             </Box>
             <Stack flex={1} spacing={1}>
                 <Text
@@ -54,11 +41,16 @@ const SelectedPotion = ({ onPotionModalOpen, selectedPotion, setSelectedPotion }
                     fontFamily={'Chelsea Market, system-ui'}
                     fontSize={isMobile ? 'sm' : 'md'}
                     fontWeight={'bold'}>
-                    {selectedPotion.name}
+                    {description}
                 </Text>
-                <Text color={'#D597B2'} fontSize={isMobile ? 'xs' : 'sm'} fontFamily={'Inter, system-ui'}>
-                    {selectedPotion.description}
-                </Text>
+                <Stack direction={'row'} align={'center'}>
+                    <Text color={'#D597B2'} fontSize={isMobile ? 'xs' : 'sm'} fontFamily={'Inter, system-ui'}>
+                        +{bonus.power} power
+                    </Text>
+                    <Badge colorScheme={getColor(bonus)} fontSize="xs" rounded={'md'}>
+                        {bonus.type} ({getTypeValue(bonus)})
+                    </Badge>
+                </Stack>
             </Stack>
             <Stack spacing={2}>
                 <Button size="sm" variant="outline" colorScheme="purple" onClick={onPotionModalOpen}>

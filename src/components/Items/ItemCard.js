@@ -14,6 +14,7 @@ import {
     useColorModeValue,
     useMediaQuery,
 } from '@chakra-ui/react';
+import { getTypeValue, getColor } from './data';
 
 /**
  * @name ItemCard
@@ -44,7 +45,7 @@ const ItemCard = ({
     const newBorderColor = 'rgba(47, 129, 144, 1)';
     const separatorColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
-    const { name, image, type, bonus, quantity = 0, description, rarity = 'Common' } = item;
+    const { name, imgUrl, bonus, quantityQNT = 0, description } = item;
 
     const handleClick = ({ item }) => {
         setItemClicked(item);
@@ -67,7 +68,7 @@ const ItemCard = ({
         shadow: 'xl',
     };
 
-    const haveThisItem = quantity > 0;
+    const haveThisItem = quantityQNT > 0;
     const itemOpacity = haveThisItem ? 1 : 0.25;
 
     const [canUseIcon] = useMediaQuery('(min-width: 1200px)');
@@ -88,25 +89,6 @@ const ItemCard = ({
         </Button>
     );
 
-    const getRarityColor = rarity => {
-        const colors = {
-            Common: '#8B8B8B',
-            Rare: '#4A90E2',
-            Epic: '#9B59B6',
-            Special: '#F39C12',
-        };
-        return colors[rarity] || colors['Common'];
-    };
-
-    const getTypeIcon = type => {
-        const icons = {
-            medium: '/images/battlegrounds/medium/',
-            continent: '/images/battlegrounds/continent/',
-            power: '/images/battlegrounds/alpha_icon.svg',
-        };
-        return icons[type] || '/images/battlegrounds/alpha_icon.svg';
-    };
-
     return (
         <Box
             p={3}
@@ -119,7 +101,7 @@ const ItemCard = ({
                 <SimpleGrid columns={1} spacing={{ base: 2, lg: 4 }}>
                     <Image
                         minH="20rem"
-                        src={image}
+                        src={imgUrl}
                         alt={name}
                         rounded="lg"
                         onClick={() => (haveThisItem ? handleClick({ item: item }) : null)}
@@ -132,21 +114,24 @@ const ItemCard = ({
                     <Stack direction={{ base: 'column', lg: 'row' }} spacing={0}>
                         <Stack direction="column" spacing={0} align={{ base: 'center', lg: 'start' }}>
                             <Text fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }} noOfLines={1} fontWeight="bold">
-                                {name}
+                                {description}
                             </Text>
                             <Stack direction="row" spacing={1}>
-                                <Text px={2} fontSize="sm" bgColor={getRarityColor(rarity)} rounded="lg" color="white">
-                                    {rarity}
-                                </Text>
-                                <Text px={2} fontSize="sm" bgColor="gray.600" rounded="lg" color="white">
-                                    {type}
+                                <Text
+                                    px={2}
+                                    fontSize="sm"
+                                    bgColor={getColor(bonus)}
+                                    rounded="lg"
+                                    color="white"
+                                    textTransform={'capitalize'}>
+                                    {bonus.type} ({getTypeValue(bonus)})
                                 </Text>
                             </Stack>
                             <Text fontSize="xs" color="gray.400" noOfLines={2}>
                                 {description}
                             </Text>
                             <Text fontSize="sm" color="green.400">
-                                +{bonus} Power
+                                +{bonus.power} Power
                             </Text>
                         </Stack>
                         <Spacer display={{ base: 'none', lg: 'block' }} />
@@ -154,7 +139,7 @@ const ItemCard = ({
                             <Tooltip placement="bottom">
                                 <Flex w={{ base: 'auto', lg: '100%' }}>
                                     <Text textAlign="end" minH={{ base: '100%', lg: 'auto' }}>
-                                        <small>Quantity:</small> {quantity}
+                                        <small>Quantity:</small> {quantityQNT}
                                     </Text>
                                 </Flex>
                             </Tooltip>

@@ -59,6 +59,7 @@ export const WETHASSETACCOUNT = 'ARDOR-QXKT-JR64-SAWJ-3LM64';
 export const GIFTZASSETACCOUNT = 'ARDOR-TU3S-47Y5-6GSM-8ZSJ8';
 export const BURNACCOUNT = 'ARDOR-Q9KZ-74XD-WERK-CV6GB';
 export const REFERRALCONTRACTACCOUNT = 'ARDOR-YAAE-KL8S-28Y4-BNQW3';
+export const ITEMSACCOUNT = 'ARDOR-U7BG-R9E2-YTWZ-884AU';
 
 // ---------------------------------------------
 // -------------- GAME PARAMETERS --------------

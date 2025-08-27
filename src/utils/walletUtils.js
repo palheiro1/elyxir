@@ -40,7 +40,6 @@ import {
 } from './alerts';
 import { generateHash } from './hash';
 import { v4 as uuid } from 'uuid';
-import { setCardsManually } from '../redux/reducers/CardsReducer';
 
 export function waitForRefresh() {
     return new Promise(resolve => setTimeout(resolve, REFRESH_DATA_TIME));
@@ -66,7 +65,7 @@ export function checkDataChange(name, currentHash, setState, setHash, newData) {
     }
 }
 
-/** 
+/**
  * @name checkCardsChange
  * @description Check if cards have changed and update them
  * @param {String} currentHash - Current hash of the cards
@@ -76,12 +75,12 @@ export function checkDataChange(name, currentHash, setState, setHash, newData) {
  * @returns {void} - Nothing
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-export function checkCardsChange(currentHash, setCardsHash, dispatch, newCards) {
+export function checkCardsChange(name, currentHash, setCardsHash, dispatch, newCards, setterFn) {
     const newHash = generateHash(newCards);
     if (!equal(currentHash, newHash)) {
-        console.log('Mythical Beings: Cards changed');
+        console.log(`Mythical Beings: ${name} changed`);
         setCardsHash(newHash);
-        dispatch(setCardsManually(newCards));
+        dispatch(setterFn(newCards));
     }
 }
 
@@ -199,7 +198,6 @@ export const getCurrentAskAndBids = async account => {
         const bidOrders = bidOrdersResponse.bidOrders;
         return { askOrders, bidOrders };
     } catch (error) {
-        console.error('🚀 ~ file: walletUtils.js:141 ~ error', error);
         return { askOrders: [], bidOrders: [] };
     }
 };
@@ -221,7 +219,6 @@ export const getAskAndBids = async asset => {
         const bidOrdersResponse = bidOrders.bidOrders;
         return { askOrders: askOrdersResponse, bidOrders: bidOrdersResponse, assetCount };
     } catch (error) {
-        console.error('🚀 ~ file: walletUtils.js:167 ~ getAskAndBids ~ error', error);
         return { askOrders: [], bidOrders: [], assetCount: 0 };
     }
 };
@@ -237,7 +234,6 @@ export const getGIFTZBalance = async address => {
         const balanceData = await getAccountCurrencies(address, CURRENCY);
         return Object.keys(balanceData).length > 0 ? balanceData : 0;
     } catch (error) {
-        console.error('🚀 ~ file: walletUtils.js:183 ~ getGIFTZBalance ~ error', error);
         return 0;
     }
 };
@@ -315,7 +311,6 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
         deadline: 1440,
         priority: 'HIGH',
     }).catch(error => {
-        console.error('🚀 ~ file: walletUtils.js:260 ~ sendToMorph ~ transferAsset', error);
         success = false;
     });
 
@@ -331,7 +326,6 @@ export const sendToMorph = async ({ asset, noCards, passPhrase, cost }) => {
         deadline: 1440,
         priority: 'HIGH',
     }).catch(error => {
-        console.error('🚀 ~ file: walletUtils.js:277 ~ sendToMorph ~ transferGEM', error);
         success = false;
     });
 
@@ -366,7 +360,6 @@ export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
         deadline: 1440,
         priority: 'HIGH',
     }).catch(function (error) {
-        console.error('🚀 ~ file: ardorInterface.js:669 ~ sendToCraft ~ error', error);
         success = false;
     });
 
@@ -381,7 +374,6 @@ export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
     //     deadline: 1440,
     //     priority: 'HIGH',
     // }).catch(function (error) {
-    //     console.error('🚀 ~ file: ardorInterface.js:685 ~ sendToCraft ~ error', error);
     //     success = false;
     // });
 
@@ -394,7 +386,6 @@ export const sendToCraft = async ({ asset, noCards, passPhrase, cost }) => {
         deadline: 1440,
         priority: 'HIGH',
     }).catch(function (error) {
-        console.error('🚀 ~ file: ardorInterface.js:685 ~ sendToCraft ~ error', error);
         success = false;
     });
 
@@ -429,7 +420,6 @@ export const sendGiftzAsset = async ({ passphrase, amountNQT, recipient }) => {
             passPhrase: passphrase,
         });
     } catch (error) {
-        console.error('🚀 ~ file: walletUtils.js:389 ~ sendGiftzAsset ~ error:', error);
     }
 
     return response;

@@ -4,7 +4,7 @@ import './BattlegroundMap.css';
 import '@fontsource/chelsea-market';
 import '@fontsource/inter';
 import { ScrollLock } from './assets/ScrollLock';
-import { Maps } from './Components/Maps'; 
+import { Maps } from './Components/Maps';
 import BattlegroundCurrencies from './Components/BattlegroundCurrencies';
 import BattlegroundFilters from './Components/BattlegroundFilters';
 import BattlegroundMenu from './Components/BattlegroundMenu';

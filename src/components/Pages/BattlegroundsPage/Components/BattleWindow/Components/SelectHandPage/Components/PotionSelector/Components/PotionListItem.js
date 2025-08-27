@@ -1,5 +1,5 @@
 import { Badge, Box, Image, Stack, Text } from '@chakra-ui/react';
-import { getContinentColor, getMediumColor } from '../data';
+import { getColor, getTypeValue } from '../../../../../../../../../Items/data';
 
 /**
  * @name PotionListItem
@@ -13,72 +13,52 @@ import { getContinentColor, getMediumColor } from '../data';
  * @returns {JSX.Element} Clickable item representing a potion for selection in the modal.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const PotionListItem = ({ potion, selectedPotionId, handleSelectPotion }) => {
-    const { id, medium, continent, name, description, quantity, image } = potion;
+const PotionListItem = ({ potion, selectedPotionAsset, handleSelectPotion }) => {
+    const { asset, bonus, description, omnoQuantity, imgUrl } = potion;
     return (
         <Box
             position={'relative'}
-            key={id}
-            bg={selectedPotionId === id ? 'rgba(213, 151, 178, 1)' : '#465A5A'}
+            key={asset}
+            bg={'#465A5A'}
             borderRadius={'10px'}
             p={4}
             cursor={'pointer'}
-            border={selectedPotionId === id ? '3px solid #D597B2' : '2px solid transparent'}
+            border={selectedPotionAsset === asset ? '3px solid #D597B2' : '2px solid transparent'}
             onClick={() => handleSelectPotion(potion)}
             transition="all 0.2s"
             _hover={{
-                bg: selectedPotionId === id ? 'rgba(213, 151, 178, 0.25)' : '#5A679B',
+                bg: selectedPotionAsset === asset ? 'rgba(213, 151, 178, 0.25)' : '#5A679B',
                 transform: 'scale(1.02)',
             }}>
             <Stack direction={'column'} spacing={3}>
                 <Box position="relative">
                     <Image
-                        src={image}
+                        src={imgUrl}
                         fallbackSrc="/images/items/WaterCristaline copia.png"
                         boxSize="70px"
                         borderRadius="md"
                         border="2px solid #D597B2"
                     />
-                    <Badge
-                        position="absolute"
-                        top="-8px"
-                        right="-8px"
-                        colorScheme={
-                            medium ? getMediumColor(medium) : continent ? getContinentColor(continent) : 'gray'
-                        }
-                        fontSize="xs">
-                        {medium || continent || 'Universal'}
+                    <Badge position="absolute" top="-8px" right="-8px" colorScheme={getColor(bonus)} fontSize="xs">
+                        {bonus.type} ({getTypeValue(bonus)})
                     </Badge>
                 </Box>
                 <Stack flex={1} spacing={1}>
-                    <Text color={'#ffffffff'} fontWeight={'bold'} fontSize={'md'} fontFamily={'Chelsea Market, system-ui'}>
-                        {name}
-                    </Text>
-                    {/* 
-                    <Stack direction={'column'} spacing={2}>
-                        {medium && (
-                            <Badge colorScheme={getMediumColor(medium)} size="sm">
-                                {medium}
-                            </Badge>
-                        )}
-                        {continent && (
-                            <Badge colorScheme={getContinentColor(continent)} size="sm">
-                                {continent}
-                            </Badge>
-                        )}
-                        <Badge colorScheme="gray" size="sm">
-                            {type}
-                        </Badge>
-                    </Stack> 
-                    */}
-                    <Text color={'#D597B2'} fontSize={'sm'} fontFamily={'Inter, system-ui'}>
+                    <Text
+                        color={'#ffffffff'}
+                        fontWeight={'bold'}
+                        fontSize={'md'}
+                        fontFamily={'Chelsea Market, system-ui'}>
                         {description}
                     </Text>
+                    <Text color={'#D597B2'} fontSize={'sm'} fontFamily={'Inter, system-ui'}>
+                        +{bonus.power} power
+                    </Text>
                     <Text color={'#FFF'} fontSize={'xs'} fontFamily={'Inter, system-ui'}>
-                        Available: {quantity}
+                        Available: {omnoQuantity}
                     </Text>
                 </Stack>
-                {selectedPotionId === id && (
+                {selectedPotionAsset === asset && (
                     <Box color={'#D597B2'} fontSize={'xl'} position={'absolute'} bottom={1} right={2}>
                         ✓
                     </Box>
