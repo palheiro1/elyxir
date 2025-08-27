@@ -24,6 +24,7 @@ const Rewards = ({ ...props }) => {
 
         fetchAccumulatedBounty();
     }, []);
+
     return (
         <Stack boxSize={'200px'} borderRadius={'12px'} p={'12px'} color={'#000'} bgColor={'#FFF'} {...props}>
             <Text textDecoration={'underline'} fontSize={'2xl'} fontFamily={'Chelsea Market, system-ui'} mx={'auto'}>
@@ -35,14 +36,14 @@ const Rewards = ({ ...props }) => {
                 </Center>
             ) : (
                 <Stack direction={'row'} w={'100%'} mx={'auto'} pl={2}>
-                    <Stack direction="column" w={'60%'}>
+                    <Stack direction="column" w={'65%'}>
                         {Object.entries(rewards)
                             .reverse()
                             .slice(0, -1)
                             .map(([key, value], index) => {
                                 const formattedValue =
                                     key === 'weth'
-                                        ? (value / NQTDIVIDER).toFixed(3)
+                                        ? (value / NQTDIVIDER).toFixed(4)
                                         : key === 'gem' || key === 'mana'
                                         ? (value / NQTDIVIDER).toFixed(0)
                                         : value;
@@ -84,8 +85,8 @@ const Rewards = ({ ...props }) => {
                                             my="auto"
                                             src={getCurrencyImage(key)}
                                             alt={`${key} Icon`}
-                                            w="60px"
-                                            h="60px"
+                                            w="65px"
+                                            h="65px"
                                             mt={-2}
                                         />
 
