@@ -9,6 +9,7 @@ import BattleFooter from './Components/BattleFooter';
 import BattleLoading from './Components/BattleLoading';
 import { useSelector } from 'react-redux';
 import BattleCardsSummary from '../../../BattleRecord/BattleDetails/Components/BattleCardsSummary';
+import UsedPotion from '../../../BattleRecord/BattleDetails/Components/UsedPotion';
 
 /**
  * @name BattleResults
@@ -34,7 +35,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     const [defenderPoints, setDefenderPoints] = useState(null);
     const [attackerBonus, setAttackerBonus] = useState([]);
     const [defenderBonus, setDefenderBonus] = useState([]);
-    const [battleResults, setBattleResults] = useState(null);
     const [isUserDefending, setIsUserDefending] = useState(false);
     const [attackerInfo, setAttackerInfo] = useState(null);
     const [defenderInfo, setDefenderInfo] = useState(null);
@@ -74,7 +74,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             setDefenderHero(cards.find(card => card.asset === battle.defenderArmy.heroAsset));
 
             setIsUserDefending(res.defenderAccount === accountId);
-            setBattleResults(battle);
 
             const info = await getArenaInfo(arenaInfo.id, res.defenderAccount, res.attackerAccount);
             setAttackerInfo(info.attacker);
@@ -129,7 +128,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
 
     useEffect(() => {
         const calculateAllBonusesAndPoints = async () => {
-            if (!battleResults || !cards?.length || !soldiers || !calculateBonus) return;
+            if (!battleInfo || !cards?.length || !soldiers || !calculateBonus) return;
 
             let pointsA = 0;
             let pointsD = 0;
@@ -137,7 +136,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
             const defenderResults = [];
 
             await Promise.all(
-                battleResults.battleResult.map(async (item, index) => {
+                battleInfo.battleResult.map(async (item, index) => {
                     const attackerCard = cards.find(card => String(card.asset) === String(item.attackerAsset));
                     const defenderCard = cards.find(card => String(card.asset) === String(item.defenderAsset));
 
@@ -157,7 +156,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
         };
 
         calculateAllBonusesAndPoints();
-    }, [battleResults, cards, soldiers, calculateBonus]);
+    }, [battleInfo, cards, soldiers, calculateBonus]);
 
     if (!battleInfo) {
         return <BattleLoading />;
@@ -175,18 +174,19 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                 arenaInfo={arenaInfo}
             />
 
+            <UsedPotion potionAsset={battleInfo.attackerItemForBonusAssetId} />
+
             <BattleCardsSummary
                 infoAccount={infoAccount}
                 playerInfo={attackerInfo}
                 cards={cards}
                 army={battleInfo.attackerArmy}
                 battleInfo={battleInfo}
-                battleResults={battleResults}
                 role="attacker"
             />
 
             <BattleRounds
-                battleResults={battleResults.battleResult}
+                battleResults={battleInfo.battleResult}
                 cards={cards}
                 battleInfo={battleInfo}
                 soldiers={soldiers}
@@ -194,6 +194,7 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                 defenderBonus={defenderBonus}
                 attackerHero={attackerHero}
                 defenderHero={defenderHero}
+                potionAsset={battleInfo.attackerItemForBonusAssetId}
             />
 
             <BattleCardsSummary
@@ -202,7 +203,6 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
                 cards={cards}
                 army={battleInfo.defenderArmy}
                 battleInfo={battleInfo}
-                battleResults={battleResults}
                 role="defender"
             />
 

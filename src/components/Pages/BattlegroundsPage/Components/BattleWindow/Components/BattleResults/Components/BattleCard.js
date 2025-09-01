@@ -9,6 +9,7 @@ import {
 import CardImage from './CardImage';
 import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import ScoreBox from '../../../../BattleRecord/BattleDetails/Components/ScoreBox';
+import { useSelector } from 'react-redux';
 
 /**
  * @name BattleCard
@@ -40,9 +41,19 @@ const BattleCard = ({
     color,
     isDefender = false,
     defenderBonus = 0,
+    potionAsset,
 }) => {
     const { isMobile } = useBattlegroundBreakpoints();
     const isRowReversed = isMobile && isDefender;
+
+    const { items } = useSelector(state => state.items);
+    const usedPotion = items.find(item => item.asset === potionAsset);
+
+    const matchCard =
+        (usedPotion?.bonus?.type === 'medium' && usedPotion?.bonus?.value === soldier.mediumId) ||
+        (usedPotion?.bonus?.type === 'domain' && usedPotion?.bonus?.value === soldier.domainId);
+
+    const showPotionIcon = usedPotion && !isDefender && matchCard;
 
     return (
         <Stack
@@ -71,6 +82,7 @@ const BattleCard = ({
                         {isDefender && isHero && (
                             <StatRow icon="/images/battlegrounds/defense_icon.svg" value={defenderBonus || 2} />
                         )}
+                        {showPotionIcon && <StatRow icon={usedPotion.imgUrl} value={usedPotion?.bonus?.power ?? 0} />}
                     </Stack>
                     <CardImage card={card} isHero={isHero} isDefeated={value <= opponentValue} />
                 </Stack>

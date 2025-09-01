@@ -1,10 +1,10 @@
-const mediumMapping = {
-    1: 'Earth',
-    2: 'Air',
-    3: 'Water',
+export const mediumMapping = {
+    1: 'Terrestrial',
+    2: 'Aerial',
+    3: 'Aquatic',
 };
 
-const domainMapping = {
+export const domainMapping = {
     1: 'Asia',
     2: 'Oceania',
     3: 'America',
@@ -20,7 +20,7 @@ export const getTypeValue = ({ type, value }) => {
 export const getMediumColor = medium => {
     const colors = {
         1: 'red',
-        2: '#09d2e0ff',
+        2: '#0da1acff',
         3: 'blue',
     };
     return colors[medium] || 'gray';

@@ -20,6 +20,7 @@ import BridgeItem from '../../../../../Items/BridgeItem';
 // Utils
 import { checkPin, sendCardsToOmno } from '../../../../../../utils/walletUtils';
 import { infoToast, okToast } from '../../../../../../utils/alerts';
+import { withdrawCardsFromOmno } from '../../../../../../services/Ardor/omnoInterface';
 
 /**
  * @name OmnoItems
@@ -41,8 +42,11 @@ const OmnoItems = ({
     setSelectedItems,
     handleEdit,
     handleDeleteSelectedItem,
+    withdraw,
 }) => {
     const toast = useToast();
+
+    const transferFn = withdraw ? withdrawCardsFromOmno : sendCardsToOmno;
 
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
 
@@ -71,9 +75,14 @@ const OmnoItems = ({
             quantity: item.selectQuantity || 1,
         }));
 
-        const success = await sendCardsToOmno({ cards: itemsToSwap, passPhrase: passphrase, toast });
+        const success = await transferFn({ cards: itemsToSwap, passPhrase: passphrase, toast });
         if (success) {
-            okToast('Potions sent successfully to battlegrounds. Wait for the next block and refresh the page.', toast);
+            okToast(
+                `Potions  ${
+                    withdraw ? 'withdraw' : 'sent'
+                } successfully to battlegrounds. Wait for the next block and refresh the page.`,
+                toast
+            );
             setSelectedItems([]);
             setIsSwapping(false);
         }
@@ -105,6 +114,7 @@ const OmnoItems = ({
                                     isMobile={isMobile}
                                     handleEdit={handleEdit}
                                     handleDeleteSelectedItem={handleDeleteSelectedItem}
+                                    withdraw={withdraw}
                                 />
                             ))}
                         </Stack>
@@ -143,7 +153,7 @@ const OmnoItems = ({
 
                 <Stack direction="column" spacing={4} align="center">
                     <Heading fontSize="lg" fontWeight="light">
-                        3. Send potions to battlegrounds
+                        3. Send potions to {withdraw ? 'inventory' : 'battlegrounds'}
                     </Heading>
                     <Button
                         colorScheme="blue"

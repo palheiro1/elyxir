@@ -6,6 +6,7 @@ import PairSelector from './PairSelector/PairSelector';
 import CardMarket from './CardMarket';
 import CurrencyMarket from './CurrencyMarket';
 import ItemMarket from './ItemMarket';
+import { useSelector } from 'react-redux';
 
 /**
  * @name Market
@@ -18,8 +19,10 @@ import ItemMarket from './ItemMarket';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const Market = ({ infoAccount, cards, items = [], gemCards, giftzCards, wethCards, manaCards }) => {
-    // Market type
+const Market = ({ infoAccount, gemCards, giftzCards, wethCards, manaCards }) => {
+    const { items } = useSelector(state => state.items);
+    const { cards } = useSelector(state => state.cards);
+
     const [marketCurrency, setMarketCurrency] = useState('CARDS');
 
     const textColor = '#3b6497';
@@ -51,7 +54,7 @@ const Market = ({ infoAccount, cards, items = [], gemCards, giftzCards, wethCard
                 />
             )}
 
-            {marketCurrency === 'ITEMS' && <ItemMarket items={items} />}
+            {marketCurrency === 'ITEMS' && <ItemMarket items={items} infoAccount={infoAccount} />}
         </Box>
     );
 };

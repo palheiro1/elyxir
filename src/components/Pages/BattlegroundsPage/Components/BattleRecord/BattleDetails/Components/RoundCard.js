@@ -1,6 +1,7 @@
 import { Box, Image, Stack, Text } from '@chakra-ui/react';
 import { getContinentIcon, getLevelIconInt, getMediumIconInt } from '../../../../Utils/BattlegroundsUtils';
 import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
+import { useSelector } from 'react-redux';
 
 /**
  * @name RoundCard
@@ -32,9 +33,19 @@ const RoundCard = ({
     rollIcon,
     defenseBonus,
     isDefender,
+    potionAsset,
 }) => {
     const { isMobile } = useBattlegroundBreakpoints();
     const isRowReversed = isMobile && isDefender;
+
+    const { items } = useSelector(state => state.items);
+    const usedPotion = items.find(item => item.asset === potionAsset);
+
+    const matchCard =
+        (usedPotion?.bonus?.type === 'medium' && usedPotion?.bonus?.value === soldier.mediumId) ||
+        (usedPotion?.bonus?.type === 'domain' && usedPotion?.bonus?.value === soldier.domainId);
+
+    const showPotionIcon = usedPotion && !isDefender && matchCard;
 
     return (
         <Stack direction={isRowReversed ? 'row-reverse' : 'row'} w={isMobile ? '70%' : '95%'}>
@@ -82,6 +93,12 @@ const RoundCard = ({
                     <Stack direction="row">
                         <Image boxSize="20px" borderRadius="5px" src="/images/battlegrounds/defense_icon.svg" />
                         <Text>{defenseBonus}</Text>
+                    </Stack>
+                )}
+                {showPotionIcon && (
+                    <Stack direction="row">
+                        <Image boxSize="20px" borderRadius="5px" p={0.5} bgColor="#FFF" src={usedPotion.imgUrl} />
+                        <Text>{usedPotion?.bonus?.power ?? 0}</Text>
                     </Stack>
                 )}
             </Stack>

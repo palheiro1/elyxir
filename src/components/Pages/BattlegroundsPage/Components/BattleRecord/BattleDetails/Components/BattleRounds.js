@@ -8,7 +8,6 @@ import BattleRound from './BattleRound';
  * @description Renders a horizontally scrollable list of all battle rounds for a given battle.
  * Includes navigation arrows to scroll left or right and dynamically enables/disables them based on scroll position.
  * @param {Object} props - Component props.
- * @param {Object} props.battleResults - Object containing all battle round data, including `battleResult` array.
  * @param {Object} props.battleInfo - General metadata about the battle (e.g., winner, round count).
  * @param {Object} props.attackerHero - Hero data for the attacker.
  * @param {Object} props.attackerBonus - Bonus effects applied to the attacker.
@@ -21,7 +20,6 @@ import BattleRound from './BattleRound';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const BattleRounds = ({
-    battleResults,
     battleInfo,
     attackerHero,
     attackerBonus,
@@ -30,6 +28,7 @@ const BattleRounds = ({
     battleId,
     isMobile,
     isMediumScreen,
+    potionAsset,
 }) => {
     const [arrowDisable, setArrowDisable] = useState(true);
     const [arrowRigthDisable, setArrowRigthDisable] = useState(false);
@@ -87,8 +86,8 @@ const BattleRounds = ({
                 display={isMobile ? 'none' : 'block'}
             />
 
-            {battleResults &&
-                battleResults.battleResult.map((item, index) => (
+            {battleInfo &&
+                battleInfo.battleResult.map((item, index) => (
                     <BattleRound
                         key={index}
                         index={index}
@@ -100,6 +99,7 @@ const BattleRounds = ({
                         defenderBonus={defenderBonus}
                         battleId={battleId}
                         isMobile={isMobile}
+                        potionAsset={potionAsset}
                     />
                 ))}
             <IconButton

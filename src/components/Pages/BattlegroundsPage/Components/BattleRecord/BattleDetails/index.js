@@ -11,6 +11,7 @@ import BattleDetailsFooter from './Components/BattleDetailsFooter';
 import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import BattleCardsSummary from './Components/BattleCardsSummary';
 import { useSelector } from 'react-redux';
+import UsedPotion from './Components/UsedPotion';
 
 /**
  * @name BattleDetails
@@ -37,7 +38,6 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
     const [defenderPoints, setDefenderPoints] = useState(<Spinner />);
     const [attackerBonus, setAttackerBonus] = useState([]);
     const [defenderBonus, setDefenderBonus] = useState([]);
-    const [battleResults, setBattleResults] = useState(null);
     const [domainName, setDomainName] = useState(null);
     const [attackerHero, setAttackerHero] = useState(null);
     const [defenderHero, setDefenderHero] = useState(null);
@@ -76,8 +76,6 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
         const defenderHero = cards.find(card => card.asset === res.defenderArmy.heroAsset);
         setDefenderHero(defenderHero);
         setCapturedCard(capturedCard);
-
-        setBattleResults(res);
 
         setBattleInfo(res);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -128,7 +126,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
             const defenderResults = [];
 
             await Promise.all(
-                battleResults.battleResult.map(async (item, index) => {
+                battleInfo.battleResult.map(async (item, index) => {
                     let { defenderValue, attackerValue } = item;
 
                     const attackerCard = cards.find(card => String(card.asset) === String(item.attackerAsset));
@@ -161,10 +159,10 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
             setDefenderBonus(defenderResults);
         };
 
-        if (battleResults && cards && cards.length > 0 && soldiers && calculateBonus) {
+        if (battleInfo && cards && cards.length > 0 && soldiers && calculateBonus) {
             calculateAllBonusesAndPoints();
         }
-    }, [battleDetails.attacker, battleDetails.defender, battleResults, calculateBonus, cards, soldiers]);
+    }, [battleDetails.attacker, battleDetails.defender, battleInfo, calculateBonus, cards, soldiers]);
 
     const toast = useToast();
     if (!cards || cards.length <= 0) {
@@ -186,6 +184,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                 zIndex={999}
                 onClick={handleGoBack}
             />
+
             <BattleDetailsHeader
                 isDefenderWin={battleInfo.isDefenderWin}
                 attackerInfo={attackerInfo}
@@ -195,6 +194,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                 medium={medium}
                 domainName={domainName}
             />
+            <UsedPotion potionAsset={battleInfo.attackerItemForBonusAssetId} />
 
             <BattleCardsSummary
                 infoAccount={infoAccount}
@@ -202,12 +202,10 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                 cards={cards}
                 army={battleInfo.attackerArmy}
                 battleInfo={battleInfo}
-                battleResults={battleResults}
                 role="attacker"
             />
 
             <BattleRounds
-                battleResults={battleResults}
                 battleInfo={battleInfo}
                 attackerHero={attackerHero}
                 attackerBonus={attackerBonus}
@@ -216,6 +214,7 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                 battleId={battleId}
                 isMobile={isMobile}
                 isMediumScreen={isMediumScreen}
+                potionAsset={battleInfo.attackerItemForBonusAssetId}
             />
 
             <BattleCardsSummary
@@ -224,7 +223,6 @@ const BattleDetails = ({ cards, arenaInfo, handleGoBack, battleDetails, battleId
                 cards={cards}
                 army={battleInfo.defenderArmy}
                 battleInfo={battleInfo}
-                battleResults={battleResults}
                 role="defender"
             />
 

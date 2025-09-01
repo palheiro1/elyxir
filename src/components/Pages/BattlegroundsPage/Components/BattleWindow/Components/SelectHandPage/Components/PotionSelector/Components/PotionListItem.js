@@ -1,4 +1,4 @@
-import { Badge, Box, Image, Stack, Text } from '@chakra-ui/react';
+import { Box, Image, Stack, Text } from '@chakra-ui/react';
 import { getColor, getTypeValue } from '../../../../../../../../../Items/data';
 
 /**
@@ -39,9 +39,18 @@ const PotionListItem = ({ potion, selectedPotionAsset, handleSelectPotion }) => 
                         borderRadius="md"
                         border="2px solid #D597B2"
                     />
-                    <Badge position="absolute" top="-8px" right="-8px" colorScheme={getColor(bonus)} fontSize="xs">
+                    <Text
+                        position="absolute"
+                        top="-8px"
+                        right="-8px"
+                        px={2}
+                        fontSize="sm"
+                        bgColor={getColor(bonus)}
+                        rounded="lg"
+                        color={'white'}
+                        textTransform={'capitalize'}>
                         {bonus.type} ({getTypeValue(bonus)})
-                    </Badge>
+                    </Text>
                 </Box>
                 <Stack flex={1} spacing={1}>
                     <Text

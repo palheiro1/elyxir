@@ -12,7 +12,7 @@ import {
     useNumberInput,
 } from '@chakra-ui/react';
 import { AiFillDelete } from 'react-icons/ai';
-import { getTypeValue } from './data';
+import { getColor, getTypeValue } from './data';
 
 /**
  * @name BridgeItem
@@ -23,19 +23,24 @@ import { getTypeValue } from './data';
  * @param {Function} handleEdit - Function to handle edit
  * @returns {JSX.Element} - JSX element
  */
-const BridgeItem = ({ item, canEdit = true, handleDeleteSelectedItem, handleEdit }) => {
-    const { name, description, imgUrl, bonus, quantityQNT } = item;
+const BridgeItem = ({ item, canEdit = true, handleDeleteSelectedItem, handleEdit, withdraw }) => {
+    const { name, description, imgUrl, bonus } = item;
+
+    const quantityKey = withdraw ? 'omnoQuantity' : 'quantityQNT';
+    const maxQNT = item[quantityKey];
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
         step: 1,
         defaultValue: item.selectQuantity || 1,
         min: 1,
-        max: quantityQNT,
+        max: maxQNT,
+        onChange: (valueAsString, valueAsNumber) => handleEdit(item, valueAsNumber),
     });
 
     const inc = getIncrementButtonProps();
     const dec = getDecrementButtonProps();
     const input = getInputProps();
+
     const textColor = useColorModeValue(!canEdit ? 'black' : 'white', canEdit ? 'white' : 'white');
 
     return (
@@ -58,14 +63,14 @@ const BridgeItem = ({ item, canEdit = true, handleDeleteSelectedItem, handleEdit
                         <Text
                             px={2}
                             fontSize="sm"
-                            bgColor="gray.600"
+                            bgColor={getColor(bonus)}
                             rounded="lg"
                             color="white"
                             textTransform={'capitalize'}>
                             {bonus.type} ({getTypeValue(bonus)})
                         </Text>
                     </Stack>
-                    <Text color="grey">Available: {quantityQNT}</Text>
+                    <Text color="grey">Available: {item[quantityKey]}</Text>
                 </Box>
             </Stack>
 
@@ -73,18 +78,11 @@ const BridgeItem = ({ item, canEdit = true, handleDeleteSelectedItem, handleEdit
                 <>
                     <HStack ml={2}>
                         <HStack maxW="200px" spacing={0}>
-                            <Button rounded="none" {...dec} onClick={() => handleEdit(item, input.value)}>
+                            <Button rounded="none" {...dec}>
                                 -
                             </Button>
-                            <Input
-                                rounded="none"
-                                border="none"
-                                textAlign="center"
-                                disabled={true}
-                                {...input}
-                                onChange={() => handleEdit(item, input.value)}
-                            />
-                            <Button rounded="none" {...inc} onClick={() => handleEdit(item, input.value)}>
+                            <Input rounded="none" border="none" textAlign="center" {...input} />
+                            <Button rounded="none" {...inc}>
                                 +
                             </Button>
                         </HStack>

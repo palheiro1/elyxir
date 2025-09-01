@@ -83,9 +83,6 @@ export const getActivePlayers = async () => {
         .catch(error => error);
 };
 
-
-
-
 export const getLandLords = async () => {
     return axios
         .get(`${OMNO_API}/index.php?action=getOmnoGameState`)

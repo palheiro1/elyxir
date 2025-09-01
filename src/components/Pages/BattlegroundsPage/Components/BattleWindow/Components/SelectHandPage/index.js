@@ -63,7 +63,7 @@ export const SelectHandPage = ({
     defenderCards,
     selectedPotion,
     setSelectedPotion,
-    handleResetHandBattleCards
+    handleResetHandBattleCards,
 }) => {
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -175,6 +175,7 @@ export const SelectHandPage = ({
             cards: handBattleCards,
             passPhrase: passphrase,
             arenaId: arenaInfo.id,
+            potion: selectedPotion,
         });
 
         onClose();

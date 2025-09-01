@@ -150,7 +150,7 @@ export const getUsersState = async () => {
         .catch(error => error);
 };
 
-export const sendCardsToBattle = async ({ cards, passPhrase, arenaId }) => {
+export const sendCardsToBattle = async ({ cards, passPhrase, arenaId, potion = null }) => {
     const assets = [];
 
     for (let index = 0; index < cards.length; index++) {
@@ -158,9 +158,10 @@ export const sendCardsToBattle = async ({ cards, passPhrase, arenaId }) => {
         if (cards[index] !== '') assets.push(card.asset);
     }
 
+    if (potion) assets.push(potion.asset);
+
     const message = JSON.stringify({
         contract: 'MBOmno',
-
         operation: [
             {
                 service: 'rgame',

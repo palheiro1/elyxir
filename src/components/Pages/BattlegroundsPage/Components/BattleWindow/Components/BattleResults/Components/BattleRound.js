@@ -32,6 +32,7 @@ const BattleRound = ({
     defenderBonus,
     attackerHero,
     defenderHero,
+    potionAsset,
 }) => {
     const { defenderValue, attackerValue, attackerRoll, defenderRoll, defenderAsset, attackerAsset } = round;
 
@@ -61,6 +62,7 @@ const BattleRound = ({
                     opponentValue={defenderValue}
                     isHero={attackerHero?.asset === attackerCard.asset}
                     color="#D597B2"
+                    potionAsset={potionAsset}
                 />
 
                 {/* Defender Card */}

@@ -42,7 +42,7 @@ const ResponsiveTooltip = ({ children, label, placement = 'bottom', ...rest }) =
                     {...rest}>
                     <PopoverArrow />
                     <PopoverCloseButton />
-                    <PopoverBody whiteSpace="normal">{label}</PopoverBody>
+                    <PopoverBody whiteSpace="pre-line">{label}</PopoverBody>
                 </PopoverContent>
             </Popover>
         );
@@ -50,7 +50,7 @@ const ResponsiveTooltip = ({ children, label, placement = 'bottom', ...rest }) =
 
     return (
         <Tooltip
-            label={label}
+            label={<Box whiteSpace="pre-line">{label}</Box>}
             placement={placement}
             hasArrow
             bgColor="#1F2323"

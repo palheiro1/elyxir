@@ -162,7 +162,7 @@ export const DEFAULT_CONTACTS = [
 // ---------------------------------------------
 // ----------------- APIS URL ------------------
 // ---------------------------------------------
-export const OMNO_API = 'https://api.mythicalbeings.io/';
+export const OMNO_API = 'https://api.mythicalbeings.io';
 export const BRIDGEAPIURL = 'https://api.mythicalbeings.io/';
 export const NODEURL = 'https://main.mythicalbeings.io/nxt';
 export const APILIMIT = 125;

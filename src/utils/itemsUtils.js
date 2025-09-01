@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { IMGURL, ITEMSACCOUNT } from '../data/CONSTANTS';
 import { addressToAccountId, getAccountAssets, getAsset, getAssetsByIssuer } from '../services/Ardor/ardorInterface';
+import { getItemsForBonus, getOmnoItemsBalance } from '../services/Items/Items';
 
 export const fetchAllItems = async accountRs => {
     const [{ accountAssets }, itemsAssets, accountId] = await Promise.all([
@@ -9,27 +9,6 @@ export const fetchAllItems = async accountRs => {
         addressToAccountId(accountRs),
     ]);
     return itemsGenerator(accountAssets, itemsAssets, accountId);
-};
-
-export const getOmnoItemsBalance = async (accountId, itemsAssets) => {
-    const response = await axios.get('https://api.mythicalbeings.io/index.php?action=getOmnoUserState');
-
-    const accountData = response.data.find(item => item.id === accountId);
-    if (!accountData || !accountData.balance?.asset) return [];
-
-    const userBalance = accountData.balance.asset;
-
-    const itemsBalance = itemsAssets
-        .map(asset => {
-            const quantityQNT = Number(userBalance[asset.asset] || 0);
-            return {
-                asset: asset.asset,
-                quantityQNT,
-            };
-        })
-        .filter(item => item.quantityQNT > 0);
-
-    return itemsBalance;
 };
 
 /**
@@ -41,21 +20,19 @@ export const getOmnoItemsBalance = async (accountId, itemsAssets) => {
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
-    const itemsBonus = fetchItemsBonus();
+    const itemsBonus = await getItemsForBonus();
 
     const itemsOmnoBalance = await getOmnoItemsBalance(accountId, itemsAssets);
     const formattedAssets = await Promise.all(
         itemsAssets.map(async asset => {
             const accountAsset = accountAssets.find(a => a.asset === asset.asset);
 
-            if (!accountAsset) return null;
-
-            const assetDetails = await getAsset(accountAsset.asset);
+            const assetDetails = await getAsset(asset.asset);
             const totalQuantityQNT = assetDetails?.quantityQNT || 0;
             const quantityQNT = Number(accountAsset?.quantityQNT) || 0;
             const bonus = itemsBonus.find(item => item.asset === assetDetails.asset)?.bonus;
 
-            const omnoBalance = itemsOmnoBalance.find(item => item.asset === accountAsset.asset);
+            const omnoBalance = itemsOmnoBalance.find(item => item.asset === asset.asset);
             const omnoQuantity = omnoBalance ? omnoBalance.quantityQNT : 0;
 
             delete assetDetails.requestProcessingTime;
@@ -78,76 +55,4 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
 export const getItemImage = itemName => {
     if (!itemName || itemName === '') return;
     return `${IMGURL}potions/${itemName}.png`;
-};
-
-export const fetchItemsBonus = () => {
-    //Mock by the moment. Will be configured on omno
-    const itemsBonus = [
-        {
-            asset: '6485210212239811',
-            bonus: {
-                type: 'medium',
-                value: 2,
-                power: 1,
-            },
-        },
-        {
-            asset: '7582224115266007515',
-            bonus: {
-                type: 'medium',
-                power: 1,
-                value: 3,
-            },
-        },
-        {
-            asset: '10474636406729395731',
-            bonus: {
-                type: 'medium',
-                power: 1,
-                value: 1,
-            },
-        },
-        {
-            asset: '5089659721388119266',
-            bonus: {
-                type: 'domain',
-                power: 1,
-                value: 1,
-            },
-        },
-        {
-            asset: '8693351662911145147',
-            bonus: {
-                type: 'domain',
-                power: 1,
-                value: 2,
-            },
-        },
-        {
-            asset: '11206437400477435454',
-            bonus: {
-                power: 1,
-                type: 'domain',
-                value: 3,
-            },
-        },
-        {
-            asset: '12861522637067934750',
-            bonus: {
-                power: 1,
-                type: 'domain',
-                value: 4,
-            },
-        },
-        {
-            asset: '3858707486313568681',
-            bonus: {
-                type: 'domain',
-                power: 1,
-                value: 5,
-            },
-        },
-    ];
-
-    return itemsBonus;
 };

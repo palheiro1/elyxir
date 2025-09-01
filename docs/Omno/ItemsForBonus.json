@@ -1,0 +1,77 @@
+{
+  "contract": "MBOmno",
+  "operation": [
+    {
+      "service": "rgame",
+      "request": "configureAsMerge",
+      "parameter": {
+        "itemForBonus": [
+          {
+            "asset": "6485210212239811",
+            "bonus": {
+              "type": "medium",
+              "value": 2,
+              "power": 1
+            }
+          },
+          {
+            "asset": "7582224115266007515",
+            "bonus": {
+              "type": "medium",
+              "power": 1,
+              "value": 3
+            }
+          },
+          {
+            "asset": "10474636406729395731",
+            "bonus": {
+              "type": "medium",
+              "power": 1,
+              "value": 1
+            }
+          },
+          {
+            "asset": "5089659721388119266",
+            "bonus": {
+              "type": "domain",
+              "power": 1,
+              "value": 1
+            }
+          },
+          {
+            "asset": "8693351662911145147",
+            "bonus": {
+              "type": "domain",
+              "power": 1,
+              "value": 2
+            }
+          },
+          {
+            "asset": "11206437400477435454",
+            "bonus": {
+              "power": 1,
+              "type": "domain",
+              "value": 3
+            }
+          },
+          {
+            "asset": "12861522637067934750",
+            "bonus": {
+              "power": 1,
+              "type": "domain",
+              "value": 4
+            }
+          },
+          {
+            "asset": "3858707486313568681",
+            "bonus": {
+              "type": "domain",
+              "power": 1,
+              "value": 5
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

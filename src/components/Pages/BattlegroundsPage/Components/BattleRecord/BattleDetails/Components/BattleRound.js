@@ -34,6 +34,7 @@ const BattleRound = ({
     defenderBonus,
     battleId,
     isMobile,
+    potionAsset,
 }) => {
     const { cards } = useSelector(state => state.cards);
     const { soldiers: rawSoldiers } = useSelector(state => state.soldiers);
@@ -82,6 +83,7 @@ const BattleRound = ({
                             cardImgUrl={attackerCard.cardImgUrl}
                             roll={attackerRoll}
                             rollIcon={getDiceIcon(attackerRoll)}
+                            potionAsset={potionAsset}
                         />
                     </Stack>
                     <ScoreBox value={attackerValue} isWinner={isAttackerWinner} />

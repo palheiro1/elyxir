@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Image, Stack, Text } from '@chakra-ui/react';
+import {  Box, Button, Image, Stack, Text } from '@chakra-ui/react';
 import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
 import { getColor, getTypeValue } from '../../../../../../../../../Items/data';
 
@@ -47,9 +47,15 @@ const SelectedPotion = ({ onPotionModalOpen, selectedPotion, setSelectedPotion }
                     <Text color={'#D597B2'} fontSize={isMobile ? 'xs' : 'sm'} fontFamily={'Inter, system-ui'}>
                         +{bonus.power} power
                     </Text>
-                    <Badge colorScheme={getColor(bonus)} fontSize="xs" rounded={'md'}>
+                    <Text
+                        px={2}
+                        fontSize="sm"
+                        bgColor={getColor(bonus)}
+                        rounded="lg"
+                        color={'white'}
+                        textTransform={'capitalize'}>
                         {bonus.type} ({getTypeValue(bonus)})
-                    </Badge>
+                    </Text>
                 </Stack>
             </Stack>
             <Stack spacing={2}>

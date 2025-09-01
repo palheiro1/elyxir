@@ -14,14 +14,16 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import OmnoItems from './OmnoItems';
-import { getTypeValue } from '../../../../../Items/data';
+import { getColor, getTypeValue } from '../../../../../Items/data';
 
-const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
+const ItemsPage = ({ infoAccount, items, isMobile, gridColumns, withdraw }) => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [filters, setFilters] = useState({
         rarity: '',
         type: '',
     });
+
+    const quantityKey = withdraw ? 'omnoQuantity' : 'quantityQNT';
 
     const handleEdit = (item, quantity) => {
         const newSelectedItems = selectedItems.map(selectedItem => {
@@ -38,7 +40,7 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
         setSelectedItems(newSelectedItems);
     };
 
-    const myItems = items.filter(item => parseInt(item.quantityQNT) > 0);
+    const myItems = items.filter(item => parseInt(item[quantityKey]) > 0);
     const notSelectedItems = myItems.filter(item => !selectedItems.some(selected => selected.asset === item.asset));
 
     const handleTypeChange = event => {
@@ -55,6 +57,10 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
     const optionStyle = { backgroundColor: '#FFF', color: '#000' };
     const textColor = useColorModeValue('black', 'white');
 
+    const subTitle = withdraw
+        ? 'Withdraw your potions from battlegrounds to your inventory'
+        : 'Send your potions to battlegrounds to use them in combat';
+
     return (
         <>
             <Stack
@@ -68,11 +74,11 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                 <Heading fontFamily={'Chelsea Market, System'} fontWeight={100} size={isMobile ? 'md' : 'xl'}>
                     POTIONS
                 </Heading>
-                <Text fontSize={isMobile ? 'sm' : 'xl'}>Send your potions to battlegrounds to use them in combat</Text>
+                <Text fontSize={isMobile ? 'sm' : 'xl'}>{subTitle}</Text>
             </Stack>
             <Stack backgroundColor={'#0F0F0F'} borderRadius={'20px'} h={isMobile ? '80%' : '85%'}>
                 <Heading fontSize={isMobile ? 'md' : 'xl'} fontWeight="light" textAlign="center" mt={3}>
-                    1. Select potions to send to Battlegrounds
+                    1. Select potions to {withdraw ? 'withdraw from' : 'send to'} Battlegrounds
                 </Heading>
                 <Stack direction="row" fontFamily={'Chelsea Market, system-ui'} ml={!isMobile && '10'}>
                     <Select w={isMobile ? '20%' : '10%'} onChange={handleTypeChange} color={'#FFF'}>
@@ -110,7 +116,7 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                             height={'100%'}>
                             {filteredNotSelectedItems.length > 0 &&
                                 filteredNotSelectedItems.map((item, itemIndex) => {
-                                    const { imgUrl, bonus, quantityQNT, description } = item;
+                                    const { imgUrl, bonus, description } = item;
                                     return (
                                         <Box
                                             key={itemIndex}
@@ -144,9 +150,9 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                                                     <Text
                                                         px={2}
                                                         fontSize="sm"
-                                                        bgColor="gray.600"
+                                                        bgColor={getColor(bonus)}
                                                         rounded="lg"
-                                                        color="white"
+                                                        color={'white'}
                                                         textTransform={'capitalize'}>
                                                         {bonus.type} ({getTypeValue(bonus)})
                                                     </Text>
@@ -160,7 +166,7 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                                                                 minH={{ base: '100%', lg: 'auto' }}
                                                                 fontSize={'small'}
                                                                 color={'#000'}>
-                                                                Available quantity: {quantityQNT}
+                                                                Available quantity: {item[quantityKey]}
                                                             </Text>
                                                         </Flex>
                                                     </Tooltip>
@@ -196,6 +202,7 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns }) => {
                             setSelectedItems={setSelectedItems}
                             handleEdit={handleEdit}
                             handleDeleteSelectedItem={handleDeleteSelectedItem}
+                            withdraw={withdraw}
                         />
                     </Box>
                 </Stack>

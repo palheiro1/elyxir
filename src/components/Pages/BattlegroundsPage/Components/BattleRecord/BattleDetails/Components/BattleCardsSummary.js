@@ -13,16 +13,15 @@ import { useBattlegroundBreakpoints } from '@hooks/useBattlegroundBreakpoints';
  * @param {Array} props.cards - Full list of cards with metadata (`asset`, `cardImgUrl`, etc.).
  * @param {Object} props.army - Army of the player (must include `asset` array).
  * @param {Object} props.battleInfo - Info about the battle (must include `isDefenderWin`).
- * @param {Object} props.battleResults - Detailed battle results with final card used.
  * @param {('attacker'|'defender')} props.role - Role of the player (used for logic and icon orientation).
  * @returns {JSX.Element} Visual summary of the cards and outcome for the attacker or defender.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const BattleCardsSummary = ({ infoAccount, playerInfo, cards, army, battleInfo, battleResults, role }) => {
+const BattleCardsSummary = ({ infoAccount, playerInfo, cards, army, battleInfo, role }) => {
     const isUser = infoAccount.accountRs === playerInfo.accountRS;
     const isVictory = role === 'defender' ? battleInfo.isDefenderWin : !battleInfo.isDefenderWin;
 
-    const lastBattleAsset = battleResults.battleResult[battleResults.battleResult.length - 1][`${role}Asset`];
+    const lastBattleAsset = battleInfo.battleResult[battleInfo.battleResult.length - 1][`${role}Asset`];
 
     const { isMobile } = useBattlegroundBreakpoints();
 
