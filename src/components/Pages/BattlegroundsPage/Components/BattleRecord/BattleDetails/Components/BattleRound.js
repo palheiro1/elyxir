@@ -96,7 +96,12 @@ const BattleRound = ({
                     h={!isMobile && '50%'}
                     spacing={4}
                     ml={isMobile && 2}>
-                    <Stack direction="column" fontSize="xs" align="flex-end" my="auto" w="90%">
+                    <Stack
+                        direction="column"
+                        fontSize="xs"
+                        align={isMobile ? 'flex-end' : 'flex-start'}
+                        my="auto"
+                        w="90%">
                         <Text fontSize="large" letterSpacing={2} fontFamily="'Aagaz', sans-serif" color="#D597B2">
                             {defenderCard.name} {defenderHero.asset === defenderCard.asset ? '(Alpha)' : null}
                         </Text>

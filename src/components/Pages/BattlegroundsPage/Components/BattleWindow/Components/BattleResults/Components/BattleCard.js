@@ -59,14 +59,9 @@ const BattleCard = ({
         <Stack
             direction={isRowReversed ? 'row-reverse' : 'row'}
             w={isMobile ? '70%' : '95%'}
-            mr={!isDefender && isMobile && 3}
-            ml={isDefender && isMobile && 3}>
-            <Stack
-                direction="column"
-                fontSize="xs"
-                align={isDefender && isMobile ? 'flex-end' : 'flex-start'}
-                my="auto"
-                w="90%">
+            mr={!isRowReversed && 3}
+            ml={isRowReversed && 3}>
+            <Stack direction="column" fontSize="xs" align={isRowReversed ? 'flex-end' : 'flex-start'} my="auto" w="90%">
                 <Text fontSize="large" letterSpacing={2} fontFamily="'Aagaz', sans-serif" color={color}>
                     {card.name} {isHero ? '(Alpha)' : null}
                 </Text>

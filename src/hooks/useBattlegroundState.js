@@ -115,7 +115,7 @@ export const useBattlegroundState = infoAccount => {
             cleanStuckedBattleCards(prev_height);
 
             Promise.all([
-                dispatch(fetchItems(accountRs)),
+                dispatch(fetchItems({ accountRs })),
                 dispatch(fetchArenasInfo()),
                 dispatch(fetchSoldiers()),
                 accountRs && dispatch(fetchUserBattles(accountRs)),

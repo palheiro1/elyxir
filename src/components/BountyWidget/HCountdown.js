@@ -103,7 +103,7 @@ const HCountdown = ({ bountyTimer, totalTickets = 0, bountyBalance = 0, bountyBa
         <Center>
             <Stack direction="column" spacing={4} align="center" w="100%">
                 <SimpleGrid
-                    columns={{ base: 1, md: 2, lg: 5 }}
+                    columns={{ base: 1, md: 2, lg: 4 }}
                     spacing={{ base: 4, lg: 8, xl: 12 }}
                     p={{ base: 2, lg: 4, xl: 8 }}
                     color={'white'}
@@ -112,7 +112,7 @@ const HCountdown = ({ bountyTimer, totalTickets = 0, bountyBalance = 0, bountyBa
                     <CurrencyBounty currencyName={'GEM'} />
                     <CurrencyBounty currencyName={'Mana'} />
                     <CurrencyBounty specialCard={'Garuda'} />
-                    <CurrencyBounty currencyName={'Potions'} />
+                    {/* <CurrencyBounty currencyName={'Potions'} /> */}
                 </SimpleGrid>
 
                 <Countdown />

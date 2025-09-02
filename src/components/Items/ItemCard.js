@@ -12,7 +12,6 @@ import {
     Text,
     Tooltip,
     useColorModeValue,
-    useMediaQuery,
 } from '@chakra-ui/react';
 import { getTypeValue, getColor } from './data';
 
@@ -41,8 +40,8 @@ const ItemCard = ({
     market = 'IGNIS',
     rgbColor = '59, 100, 151',
 }) => {
-    const newBgColor = `rgba(${rgbColor}, 0.1)`;
-    const newBorderColor = 'rgba(47, 129, 144, 1)';
+    // const newBgColor = `rgba(${rgbColor}, 0.1)`;
+    // const newBorderColor = 'rgba(47, 129, 144, 1)';
     const separatorColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     const { name, imgUrl, bonus, quantityQNT = 0, description } = item;
@@ -71,23 +70,23 @@ const ItemCard = ({
     const haveThisItem = quantityQNT > 0;
     const itemOpacity = haveThisItem ? 1 : 0.25;
 
-    const [canUseIcon] = useMediaQuery('(min-width: 1200px)');
+    // const [canUseIcon] = useMediaQuery('(min-width: 1200px)');
 
-    const ItemButton = ({ text, onClick, isDisabled = false, icon }) => (
-        <Button
-            fontWeight="medium"
-            border="2px"
-            borderColor={newBorderColor}
-            bgColor={newBgColor}
-            color="white"
-            fontSize={{ base: 'xs', md: 'sm' }}
-            leftIcon={canUseIcon ? icon : null}
-            _hover={{ fontWeight: 'bold', shadow: 'xl', bgColor: newBorderColor }}
-            onClick={onClick}
-            isDisabled={isDisabled}>
-            {text}
-        </Button>
-    );
+    // const ItemButton = ({ text, onClick, isDisabled = false, icon }) => (
+    //     <Button
+    //         fontWeight="medium"
+    //         border="2px"
+    //         borderColor={newBorderColor}
+    //         bgColor={newBgColor}
+    //         color="white"
+    //         fontSize={{ base: 'xs', md: 'sm' }}
+    //         leftIcon={canUseIcon ? icon : null}
+    //         _hover={{ fontWeight: 'bold', shadow: 'xl', bgColor: newBorderColor }}
+    //         onClick={onClick}
+    //         isDisabled={isDisabled}>
+    //         {text}
+    //     </Button>
+    // );
 
     return (
         <Box
@@ -146,7 +145,7 @@ const ItemCard = ({
                         </Center>
                     </Stack>
 
-                    {!isMarket && (
+                    {/* {!isMarket && (
                         <Box>
                             <SimpleGrid columns={1} gap={1}>
                                 <ItemButton
@@ -157,7 +156,7 @@ const ItemCard = ({
                                 />
                             </SimpleGrid>
                         </Box>
-                    )}
+                    )} */}
 
                     {isMarket && (
                         <Center>

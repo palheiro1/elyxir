@@ -48,7 +48,15 @@ const CardGrid = ({
                 const quantity = card[quantityKey] ?? 0;
 
                 return (
-                    <Box key={idx} bg="white" borderRadius="10px" mx="auto" maxH="345px" onClick={() => onSelect(card)}>
+                    <Box
+                        key={idx}
+                        bg="white"
+                        borderRadius="10px"
+                        mx="auto"
+                        maxH="345px"
+                        onClick={() => onSelect(card)}
+                        _hover={{ transform: 'scale(1.025)' }}
+                        transition="transform 0.2s">
                         <Center>
                             <Img src={cardImgUrl} w="90%" h="75%" />
                         </Center>

@@ -37,7 +37,7 @@ const BountyWidget = ({ cStyle = 0 }) => {
         wETH: 0,
         GEM: 0,
         Mana: 0,
-        Items: 0,
+        // Items: 0,
     });
 
     const [bountyBalanceUSD, setBountyBalanceUSD] = useState({
@@ -45,7 +45,7 @@ const BountyWidget = ({ cStyle = 0 }) => {
         GEM: 0,
         Mana: 0,
         Sumanga: 0,
-        Items: 0,
+        // Items: 0,
         Total: 0,
     });
 
@@ -65,7 +65,7 @@ const BountyWidget = ({ cStyle = 0 }) => {
                     wETH: bountyBalance,
                     GEM: 9000,
                     Mana: 9000,
-                    Potions: 10,
+                    // Potions: 10,
                 });
 
                 const [wethUsd, cardUsd] = await Promise.all([
@@ -76,15 +76,15 @@ const BountyWidget = ({ cStyle = 0 }) => {
                 const totalGem = gemPrice * 9000;
                 const totalMana = manaPrice * 9000;
                 const totalCard = cardUsd * 7;
-                const totalPotions = 30;
+                // const totalPotions = 30;
 
                 setBountyBalanceUSD({
                     wETH: wethUsd,
                     GEM: totalGem,
                     Mana: totalMana,
                     SpecialCard: totalCard, // 7 cartas
-                    Potions: totalPotions,
-                    Total: Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalCard) + totalPotions,
+                    // Potions: totalPotions,
+                    Total: Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalCard), // + totalPotions,
                 });
 
                 const { allTickets: tickets, participants } = await getJackpotFormattedTickets();

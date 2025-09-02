@@ -5,14 +5,29 @@ import { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Select, Stack, Text } from '@chakra-ui/react';
 
+/**
+ * @name ItemsInventory
+ * @description React component that renders a modal containing the user's item inventory.
+ * It allows switching between sending items to the "Army" (Battlegrounds) or "Inventory" (Ardor).
+ * The component adapts its layout dynamically based on screen size breakpoints and displays items
+ * in a responsive grid using the `ItemsPage` subcomponent.
+ * @param {Object} props - Component props.
+ * @param {Object} props.infoAccount - Account information used for displaying and interacting with items.
+ * @param {Function} props.onClose - Callback to close the modal.
+ * @returns {JSX.Element} A modal containing the item inventory with filtering and transfer options.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+
 const ItemsInventory = ({ infoAccount, onClose }) => {
     const { isMobile, isLittleScreen, isMediumScreen } = useBattlegroundBreakpoints();
     const { items } = useSelector(state => state.items);
 
+    const [selectedItems, setSelectedItems] = useState([]);
     const [selectedOption, setSelectedOption] = useState('battlegrounds');
 
     const handleSelectChange = useCallback(event => {
         setSelectedOption(event.target.value);
+        setSelectedItems([]);
     }, []);
 
     const gridColumns = useMemo(() => {
@@ -54,6 +69,8 @@ const ItemsInventory = ({ infoAccount, onClose }) => {
                 isMobile={isMobile}
                 items={items}
                 withdraw={selectedOption === 'ardor'}
+                selectedItems={selectedItems}
+                setSelectedItems={setSelectedItems}
             />
         </Modal>
     );

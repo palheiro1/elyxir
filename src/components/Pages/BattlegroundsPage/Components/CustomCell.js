@@ -1,4 +1,4 @@
-import { GridItem, Text } from '@chakra-ui/react';
+import { Box, GridItem } from '@chakra-ui/react';
 
 /**
  * @name CustomCell
@@ -25,7 +25,7 @@ const CustomCell = ({
     ...rest
 }) => (
     <GridItem colSpan={1} textAlign="center" maxW={maxW} mx={'auto'}>
-        <Text
+        <Box
             p={padding}
             maxH="45px"
             fontFamily="Inter, System"
@@ -38,7 +38,7 @@ const CustomCell = ({
             textTransform={isUppercase ? 'uppercase' : 'none'}
             {...rest}>
             {children || value}
-        </Text>
+        </Box>
     </GridItem>
 );
 

@@ -1,7 +1,7 @@
-import { Box, Button, Select, Stack, Text } from '@chakra-ui/react';
+import { Box, Select, Stack, Text } from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
 import { BsArrowDownUp } from 'react-icons/bs';
-
+import { FaFilter } from 'react-icons/fa';
 /**
  * @name SortAndFilterItems
  * @description Menu to sort and filter items/potions
@@ -11,7 +11,6 @@ import { BsArrowDownUp } from 'react-icons/bs';
  * @returns {JSX.Element} - JSX element
  */
 const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129, 144' }) => {
-    const bgButtons = `rgba(${rgbColor}, 0.35)`;
     const borderButtons = `rgba(${rgbColor}, 1)`;
 
     const [type, setType] = useState('All');
@@ -65,48 +64,50 @@ const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129,
     return (
         <Box>
             <Stack direction={{ base: 'column', lg: 'row' }} spacing={4} mb={4}>
-                <Box>
-                    <Text fontSize="sm" mb={2} color="gray">
-                        Filter by Type
+                <Stack
+                    direction="row"
+                    border="2px"
+                    borderColor={borderButtons}
+                    rounded="lg"
+                    bg="transparent"
+                    px={2}
+                    align="center"
+                    w={{ base: '100%', lg: 'unset' }}>
+                    <Box pl={1} py={2}>
+                        <FaFilter color={borderButtons} />
+                    </Box>
+                    <Text fontSize="sm" color={borderButtons}>
+                        Filter:{' '}
                     </Text>
-                    <Select
-                        value={type}
-                        onChange={handleTypeChange}
-                        bg={bgButtons}
-                        border={`1px solid ${borderButtons}`}>
+                    <Select value={type} onChange={handleTypeChange} border="0px" borderColor="gray.800" size="xs">
                         <option value="All">All Types</option>
                         <option value="medium">Medium Bonus</option>
-                        <option value="domain">Continent Bonus</option>
+                        <option value="domain">Domain Bonus</option>
                     </Select>
-                </Box>
+                </Stack>
 
-                <Box>
-                    <Text fontSize="sm" mb={2} color="gray">
-                        Sort by
+                <Stack
+                    direction="row"
+                    border="2px"
+                    borderColor={borderButtons}
+                    rounded="lg"
+                    bg="transparent"
+                    px={2}
+                    align="center"
+                    w={{ base: '100%', lg: 'unset' }}>
+                    <Box pl={1} py={2}>
+                        <BsArrowDownUp color={borderButtons} />
+                    </Box>
+                    <Text fontSize="sm" color={borderButtons}>
+                        Sort:{' '}
                     </Text>
-                    <Select
-                        value={sort}
-                        onChange={handleSortChange}
-                        bg={bgButtons}
-                        border={`1px solid ${borderButtons}`}>
+                    <Select value={sort} onChange={handleSortChange} border="0px" borderColor="gray.800" size="xs">
                         <option value="moreQuantity">More Quantity</option>
                         <option value="lessQuantity">Less Quantity</option>
                         <option value="name">Name</option>
                         <option value="bonus">Bonus</option>
                     </Select>
-                </Box>
-            </Stack>
-
-            <Stack direction="row" spacing={2} mb={4}>
-                <Button
-                    size="sm"
-                    bg={bgButtons}
-                    border={`1px solid ${borderButtons}`}
-                    _hover={{ bg: borderButtons }}
-                    leftIcon={<BsArrowDownUp />}
-                    onClick={() => setSort(prev => (prev === 'moreQuantity' ? 'lessQuantity' : 'moreQuantity'))}>
-                    Toggle Quantity
-                </Button>
+                </Stack>
             </Stack>
         </Box>
     );

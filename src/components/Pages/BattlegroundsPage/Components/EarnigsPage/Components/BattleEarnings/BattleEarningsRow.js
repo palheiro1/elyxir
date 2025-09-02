@@ -26,7 +26,7 @@ const BattleEarningsRow = ({ isMobile, date, arenaName, capturedAsset, rewards, 
 
     return (
         <Grid templateColumns="repeat(5, 1fr)" gap={4} w="100%" mx="auto" mt={2} borderRadius="10px" color="#FFF">
-            <CustomCell value={date} isMobile={isMobile} />
+            <CustomCell value={date} isMobile={isMobile} maxW="" />
             <CustomCell value={arenaName} isMobile={isMobile} />
             <CustomCell value={GemRewardsPrice} isMobile={isMobile} isUppercase />
             <CustomCell value={WethRewardsPrice} isMobile={isMobile} />

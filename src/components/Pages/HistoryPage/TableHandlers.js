@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from '@chakra-ui/react';
+import { Box, Image, Stack, Text } from '@chakra-ui/react';
 import { Tr } from '../../ResponsiveTable/tr';
 import { Td } from '../../ResponsiveTable/td';
 import { FaFilter, FaInbox } from 'react-icons/fa';
@@ -17,6 +17,7 @@ import GIFTZCard from '../../Cards/GIFTZCard';
 import { roundNumberWithMaxDecimals } from '../../../utils/walletUtils';
 import WETHCard from '../../Cards/WETHCard';
 import ManaCard from '../../Cards/ManaCard';
+import { getColor, getTypeValue } from '../../Items/data';
 
 // -------------------------------------------- //
 // ------------------ HANDLERS ---------------- //
@@ -152,6 +153,17 @@ export const handleType5AndSubtype3 = (tx, timestamp, infoAccount) => {
         handler = handleCurrencyTransfer('in', tx.attachment.unitsQNT, timestamp, sender);
     }
     return handler;
+};
+
+export const handleItemsTransaction = (tx, timestamp, infoAccount, itemsColection) => {
+    const itemAsset = itemsColection.find(item => item.asset === tx.attachment.asset);
+    const inOut = getInOut(tx, infoAccount);
+    if (!inOut) return;
+
+    const sender = inOut === 'in' ? parseSender(tx) : parseRecipient(tx);
+    if (!sender) return;
+
+    return handleItemsTransfer(inOut, tx.attachment.quantityQNT, timestamp, sender, itemAsset);
 };
 
 // -------------------------------------------- //
@@ -528,9 +540,57 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
     };
 };
 
+export const handleItemsTransfer = (type, amount, date, account, item) => {
+    type = type.toLowerCase();
+    const { imgUrl, description, bonus } = item;
+    const Component = () => {
+        return (
+            <Tr
+                _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
+                border={{ base: '2px', md: '0px' }}
+                borderColor="whiteAlpha.300"
+                rounded={{ base: 'md', md: 'unset' }}
+                m={{ base: 2, md: 0 }}>
+                <Td>
+                    <InOutTransaction type={type} />
+                </Td>
+                <Td>
+                    <Stack direction={'row'} align={'center'}>
+                        <Image maxW="85px" src={imgUrl} />
+                        <Stack direction={'column'}>
+                            <Text fontWeight="bold" fontSize="2xl">{description}</Text>
+                            <Stack direction="row" spacing={1}>
+                                <Text
+                                    px={2}
+                                    fontSize="sm"
+                                    bgColor={getColor(bonus)}
+                                    rounded="lg"
+                                    color="white"
+                                    textTransform={'capitalize'}>
+                                    {bonus.type} ({getTypeValue(bonus)})
+                                </Text>
+                                <Text fontSize="sm" color="green.400">
+                                    +{bonus.power} Power
+                                </Text>
+                            </Stack>
+                        </Stack>
+                    </Stack>
+                </Td>
+                <Td>{amount}</Td>
+                <Td>{date}</Td>
+                <Td>{account}</Td>
+            </Tr>
+        );
+    };
+    return {
+        Component,
+        type,
+        isItem: true,
+    };
+};
+
 export const handleMoneyTransfer = (type, amount, date, account, isBounty, reason = '') => {
     if (reason !== null && reason !== undefined && reason !== '') {
-        console.log('🚀 ~ file: TableHandlers.js:396 ~ handleMoneyTransfer ~ reason', reason);
     }
 
     type = type.toLowerCase();

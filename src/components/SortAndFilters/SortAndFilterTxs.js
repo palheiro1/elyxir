@@ -26,6 +26,8 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                     return transactions.filter(({ isCard }) => isCard);
                 case 'currency':
                     return transactions.filter(({ isCurrency }) => isCurrency);
+                case 'items':
+                    return transactions.filter(({ isItem }) => isItem);
                 default:
                     return transactions.filter(({ type }) => type === filter);
             }
@@ -94,6 +96,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                         <option value="in">Received</option>
                         <option value="out">Sent</option>
                         <option value="cards">Cards</option>
+                        <option value="items">Items</option>
                         <option value="currency">Currencies</option>
                         <option value="placed">Trades</option>
                     </Select>

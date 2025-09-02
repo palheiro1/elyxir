@@ -15,6 +15,7 @@ import { isEmptyObject } from '../../../../../../../utils/utils';
 import { fetchAssetsWithPricing, setStuckedBattleCards } from '../../../../Utils/BattlegroundsUtils';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFilteredCards } from '../../../../../../../redux/reducers/BattlegroundsReducer';
+import { fetchItems } from '../../../../../../../redux/reducers/ItemsReducer';
 
 /**
  * @name SelectHandPage
@@ -76,6 +77,7 @@ export const SelectHandPage = ({
     const [defenderBonus, setDefenderBonus] = useState({ medium: 0, domain: 0 });
     const [isLowHeight] = useMediaQuery('(max-height: 700px)');
 
+    const { name, accountRs } = infoAccount;
     const { soldier: soldiers } = useSelector(state => state.soldiers.soldiers);
     useEffect(() => {
         if (!arenaInfo) return;
@@ -181,13 +183,14 @@ export const SelectHandPage = ({
         onClose();
         setCurrentTime(new Date().toISOString());
         setShowResults(true);
-        setStuckedBattleCards(handBattleCards, prev_height);
-        updateFilteredCards(infoAccount.accountRs, cards, dispatch);
+        setStuckedBattleCards([...handBattleCards, selectedPotion], prev_height);
+        updateFilteredCards(accountRs, cards, dispatch);
+        dispatch(fetchItems({ accountRs }));
     };
 
     const handleCompletePin = pin => {
-        setIsValidPin(false); // reset
-        const account = checkPin(infoAccount.name, pin);
+        setIsValidPin(false);
+        const account = checkPin(name, pin);
         if (account) {
             setIsValidPin(true);
             setPassphrase(account.passphrase);

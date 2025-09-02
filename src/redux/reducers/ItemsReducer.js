@@ -1,16 +1,41 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchAllItems } from '../../utils/itemsUtils'; // asegúrate de que la ruta sea correcta
 
+
 /**
- * @name fetchItems
- * @description Async thunk to fetch items for a given account
+ * @name itemsSlice
+ * @description
+ * Redux slice to manage the state of in-game items. 
+ * Handles asynchronous fetching of items from the blockchain or API,
+ * allows manual state reset, and provides the ability to set items manually.
+ *
+ * @asyncThunk fetchItems
+ * @description
+ * Asynchronous thunk to fetch all items for a given account.
+ * Uses `fetchAllItems` utility and handles loading, success, and error states.
+ * 
+ * @param {Object} params - Object containing the account information.
+ * @param {string} params.accountRs - Account RS identifier for fetching items.
+ * @returns {Promise<Array>} A promise that resolves to an array of items.
+ *
+ * @action resetItemsState
+ * @description Resets the items state to its initial values (empty items, no error, not loading).
+ *
+ * @action setItemsManually
+ * @description Manually sets the items state with the provided payload.
+ * @param {Array} action.payload - Array of items to manually set in the state.
+ *
+ * @state
+ * @property {Array} items - List of items fetched or manually set.
+ * @property {boolean} loading - Indicates if items are being fetched.
+ * @property {string|null} error - Error message if fetching fails.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 export const fetchItems = createAsyncThunk('items/fetchItems', async ({ accountRs }, { rejectWithValue }) => {
     try {
         const itemsData = await fetchAllItems(accountRs);
         return itemsData;
     } catch (error) {
-        console.error('🚀 ~ fetchItems error:', error);
         return rejectWithValue('Unknown error fetching items');
     }
 });

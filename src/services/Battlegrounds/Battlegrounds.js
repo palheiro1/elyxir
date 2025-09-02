@@ -58,7 +58,7 @@ export const getLastUserBattle = async (accountId, currentTime) => {
 
             // Timestamp del último combate en formato UTC
             const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
-            const battleStamp = new Date(eb.getTime() + 30000 + latestBattle.timestamp * 1000);
+            const battleStamp = new Date(eb.getTime() + 50000 + latestBattle.timestamp * 1000);
 
             // Fecha y hora actual en formato UTC
             const currentTimestamp = new Date(currentTime);

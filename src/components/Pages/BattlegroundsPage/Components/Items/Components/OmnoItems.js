@@ -24,16 +24,18 @@ import { withdrawCardsFromOmno } from '../../../../../../services/Ardor/omnoInte
 
 /**
  * @name OmnoItems
- * @description This component is used to send items to the OMNO inventory
- * @author Assistant
- * @version 0.1
- * @param {Object} infoAccount - Account info
- * @param {Array} selectedItems - Selected items
- * @param {Function} setSelectedItems - Function to set selected items
- * @param {Function} handleEdit - Function to handle item editing
- * @param {Function} handleDeleteSelectedItem - Function to handle item deletion
- * @param {Boolean} isMobile - Boolean used for controlling the mobile view
- * @returns {JSX.Element} - JSX element
+ * @description Component that manages the process of sending or withdrawing potion items between the user's account and
+ * Battlegrounds/Inventory. It allows the user to review selected items, validate with a PIN, and execute the transfer.
+ * @param {Object} props - Component props.
+ * @param {Object} props.infoAccount - User account information used to validate PIN and get the passphrase.
+ * @param {boolean} props.isMobile - Indicates if the view is mobile for responsive layout adjustments.
+ * @param {Array} props.selectedItems - List of items selected by the user to send or withdraw.
+ * @param {Function} props.setSelectedItems - Setter function to update the list of selected items.
+ * @param {Function} props.handleEdit - Callback function to edit an item’s quantity or details.
+ * @param {Function} props.handleDeleteSelectedItem - Callback function to remove an item from the selected list.
+ * @param {boolean} props.withdraw - Defines the transfer mode: `true` for withdrawing to inventory, `false` for sending to battlegrounds.
+ * @returns {JSX.Element} Rendered `OmnoItems` component.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const OmnoItems = ({
     infoAccount,

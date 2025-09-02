@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import { getBountyBalance, swapPriceEthtoUSD } from '../../../../../services/Bounty/utils';
 import { getGemPrice, getManaPrice } from '../../../../../services/Ardor/evmInterface';
-import { Image, Stack, Text, SimpleGrid, Box } from '@chakra-ui/react';
+import { Image, Stack, Text } from '@chakra-ui/react';
 import { getRewardsData } from './data';
 
 export const RewardsDisplay = () => {
@@ -10,7 +10,7 @@ export const RewardsDisplay = () => {
         wETH: 0,
         GEM: 0,
         Mana: 0,
-        Items: 0, // Added items to bounty balance
+        // Items: 0, // Added items to bounty balance
     });
 
     const [bountyBalanceUSD, setBountyBalanceUSD] = useState({
@@ -40,7 +40,7 @@ export const RewardsDisplay = () => {
                     wETH: bountyBalance,
                     GEM: 9000,
                     Mana: 9000,
-                    Items: bountyPotions.reduce((total, potion) => total + potion.quantity, 0),
+                    // Items: bountyPotions.reduce((total, potion) => total + potion.quantity, 0),
                 });
 
                 const [wethUsd, cardUsd] = await Promise.all([
@@ -51,11 +51,10 @@ export const RewardsDisplay = () => {
                 const totalGem = gemPrice * 9000;
                 const totalMana = manaPrice * 9000;
                 const totalCard = cardUsd * 7;
-                const totalItems = bountyPotions.length * 10; // Mock item value
+                // const totalItems = bountyPotions.length * 10; // Mock item value
 
                 setBountyBalanceUSD({
-                    Total:
-                        Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalCard) + Number(totalItems),
+                    Total: Number(wethUsd) + Number(totalGem) + Number(totalMana) + Number(totalCard), // + Number(totalItems),
                 });
             } catch (error) {
                 console.error('🚀 ~ file: BountyWidget.js:47 ~ fetchBountyBalance ~ error:', error);
@@ -103,7 +102,7 @@ export const RewardsDisplay = () => {
                 ))}
             </Stack>
 
-            <Box mt={4} p={4} bg="rgba(255, 255, 255, 0.1)" borderRadius="md" w="100%">
+            {/* <Box mt={4} p={4} bg="rgba(255, 255, 255, 0.1)" borderRadius="md" w="100%">
                 <Text fontFamily={'Chelsea market, system-ui'} fontWeight={500} textAlign="center" mb={2}>
                     POTIONS IN BOUNTY POOL
                 </Text>
@@ -117,7 +116,7 @@ export const RewardsDisplay = () => {
                         </Stack>
                     ))}
                 </SimpleGrid>
-            </Box>
+            </Box> */}
         </Stack>
     );
 };

@@ -16,8 +16,23 @@ import { useState } from 'react';
 import OmnoItems from './OmnoItems';
 import { getColor, getTypeValue } from '../../../../../Items/data';
 
-const ItemsPage = ({ infoAccount, items, isMobile, gridColumns, withdraw }) => {
-    const [selectedItems, setSelectedItems] = useState([]);
+/**
+ * @name ItemsPage
+ * @description Component that displays the list of available potions and allows the user to select, filter, and manage them
+ * for sending to or withdrawing from Battlegrounds. It provides UI controls for filtering by type, selecting potions, and
+ * managing selected items with edit and delete operations.
+ * @param {Object} props - Component props.
+ * @param {Object} props.infoAccount - Information about the user's account, passed down to `OmnoItems`.
+ * @param {Array} props.items - List of available potion items from Redux store.
+ * @param {boolean} props.isMobile - Indicates if the view is mobile for responsive adjustments.
+ * @param {number} props.gridColumns - Number of grid columns for potion display.
+ * @param {boolean} props.withdraw - Defines if the mode is withdraw (inventory) or send to Battlegrounds.
+ * @param {Array} props.selectedItems - Array of currently selected items.
+ * @param {Function} props.setSelectedItems - State setter for selected items.
+ * @returns {JSX.Element} Rendered `ItemsPage` component.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+const ItemsPage = ({ infoAccount, items, isMobile, gridColumns, withdraw, selectedItems, setSelectedItems }) => {
     const [filters, setFilters] = useState({
         rarity: '',
         type: '',
@@ -89,7 +104,7 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns, withdraw }) => {
                             Medium
                         </option>
                         <option value="domain" style={optionStyle}>
-                            Continent
+                            Domain
                         </option>
                     </Select>
                 </Stack>
@@ -124,6 +139,8 @@ const ItemsPage = ({ infoAccount, items, isMobile, gridColumns, withdraw }) => {
                                             borderRadius={'10px'}
                                             mx={'auto'}
                                             maxH={'296px'}
+                                            _hover={{ transform: 'scale(1.025)' }}
+                                            transition="transform 0.2s"
                                             cursor="pointer"
                                             onClick={() => setSelectedItems([...selectedItems, item])}>
                                             <Center>

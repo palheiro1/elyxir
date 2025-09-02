@@ -3,6 +3,7 @@ import { Box, useDisclosure } from '@chakra-ui/react';
 
 import {
     handleIncomingGIFTZ,
+    handleItemsTransaction,
     handleType0AndSubtype0,
     handleType1AndSubtype0,
     handleType2AndSubtype1,
@@ -18,6 +19,8 @@ import ShowDividends from './ShowDividens';
 import { isMBAsset } from '../../../utils/cardsUtils';
 import { getTxTimestamp } from '../../../utils/txUtils';
 import DetailedCard from '../../Cards/DetailedCard';
+import { useSelector } from 'react-redux';
+import { isItemAsset } from '../../../utils/itemsUtils';
 
 /**
  * @name History
@@ -93,6 +96,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
         checkConfirmation();
     }, [haveUnconfirmed, lastConfirmation]);
 
+    const { items } = useSelector(state => state.items);
     // -------------------------------------------------
     useEffect(() => {
         const processTransactions = () => {
@@ -101,7 +105,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
             const dirtyTransactions = infoAccount.transactions;
 
             dirtyTransactions.forEach(tx => {
-                if (isMBAsset(tx.attachment.asset) || !tx.attachment.asset) {
+                if (isMBAsset(tx.attachment.asset) || !tx.attachment.asset || isItemAsset(tx.attachment.asset)) {
                     const timestamp = getTxTimestamp(tx, epoch_beginning);
                     const type = tx.type;
                     const subtype = tx.subtype;
@@ -128,6 +132,10 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                             if (subtype === 4 || subtype === 5)
                                 // Cancelled order
                                 handler = handleType2AndSubtype4And5(tx, timestamp, infoAccount);
+                            if (isItemAsset(tx.attachment.asset)) {
+                                // Items transfer
+                                handler = handleItemsTransaction(tx, timestamp, infoAccount, items);
+                            }
                             break;
                         case 5:
                             if (subtype === 3)
@@ -154,7 +162,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
             collectionCardsStatic !== undefined &&
             needReload &&
             processTransactions();
-    }, [infoAccount, transactions, epoch_beginning, needReload, collectionCardsStatic]);
+    }, [infoAccount, transactions, epoch_beginning, needReload, collectionCardsStatic, items]);
 
     return (
         <>

@@ -28,13 +28,13 @@ export const getRewardsData = (bountyBalance, bountyBalanceUSD) => [
         label: 'SPECIAL CARDS',
         customSize: { h: '40px' },
     },
-    {
-        key: 'items',
-        image: '/images/items/WaterCristaline copia.png',
-        alt: 'potions Icon',
-        value: bountyBalance.Items,
-        label: 'POTIONS',
-    },
+    // {
+    //     key: 'items',
+    //     image: '/images/items/WaterCristaline copia.png',
+    //     alt: 'potions Icon',
+    //     value: bountyBalance.Items,
+    //     label: 'POTIONS',
+    // },
     {
         key: 'total',
         image: '/images/currency/multicurrency.png',
