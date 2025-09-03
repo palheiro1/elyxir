@@ -15,7 +15,13 @@ import Crypto from 'crypto-browserify';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true, needSorting = true, rgbColor = "47, 129, 144" }) => {
+const SortAndFilterCards = ({
+    cards = [],
+    setCardsFiltered,
+    needSpecials = true,
+    needSorting = true,
+    rgbColor = '47, 129, 144',
+}) => {
     const bgButtons = `rgba(${rgbColor}, 0.35)`;
     const borderButtons = `rgba(${rgbColor}, 1)`;
 
@@ -99,7 +105,7 @@ const SortAndFilterCards = ({ cards = [], setCardsFiltered, needSpecials = true,
             align="center"
             justify="space-between"
             position="relative"
-            my={4}>
+            mb={4}>
             {needSorting && (
                 <Stack
                     direction="row"

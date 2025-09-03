@@ -1,6 +1,15 @@
 import { getStuckedBattleCards } from '../components/Pages/BattlegroundsPage/Utils/BattlegroundsUtils';
-import { IMGURL, ITEMS_ASSETS, ITEMSACCOUNT } from '../data/CONSTANTS';
-import { addressToAccountId, getAccountAssets, getAsset, getAssetsByIssuer } from '../services/Ardor/ardorInterface';
+import { IMGURL, ITEMS_ASSETS, ITEMSACCOUNT, NQTDIVIDER } from '../data/CONSTANTS';
+import {
+    addressToAccountId,
+    getAccountAssets,
+    getAskOrders,
+    getAsset,
+    getAssetsByIssuer,
+    getBidOrders,
+    getLastTrades,
+} from '../services/Ardor/ardorInterface';
+import { getOmnoMarketOrdesForAsset } from '../services/Ardor/omnoInterface';
 import { getItemsForBonus, getOmnoItemsBalance } from '../services/Items/Items';
 
 /**
@@ -40,10 +49,35 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
             const accountAsset = accountAssets.find(a => a.asset === asset.asset);
             const stuckedQnt = stuckedCards?.[asset.asset] || 0;
 
+            let askOrders = [];
+            let bidOrders = [];
+            let askOmnoOrders = [];
+            let bidOmnoOrders = [];
+            let lastPrice = 0;
+            let lastOmnoPrice = 0;
+
             const assetDetails = await getAsset(asset.asset);
+            const unconfirmedQuantityQNT = accountAsset ? accountAsset.unconfirmedQuantityQNT : 0;
             const totalQuantityQNT = assetDetails?.quantityQNT || 0;
             const quantityQNT = Number(accountAsset?.quantityQNT) || 0;
             const bonus = itemsBonus.find(item => item.asset === assetDetails.asset)?.bonus;
+
+            const [askResponse, bidResponse, lastTradesResponse, omnoOrdersResponse] = await Promise.all([
+                getAskOrders(asset.asset),
+                getBidOrders(asset.asset),
+                getLastTrades(asset.asset),
+                getOmnoMarketOrdesForAsset(asset.asset),
+            ]);
+
+            askOrders = askResponse.askOrders;
+            bidOrders = bidResponse.bidOrders;
+            askOmnoOrders = omnoOrdersResponse.askOrders;
+            bidOmnoOrders = omnoOrdersResponse.bidOrders;
+
+            if (lastTradesResponse.trades.length > 0) {
+                const auxLastPrice = lastTradesResponse.trades[0].priceNQTPerShare / NQTDIVIDER;
+                lastPrice = Number.isInteger(auxLastPrice) ? auxLastPrice : auxLastPrice.toFixed(2);
+            }
 
             const omnoBalance = itemsOmnoBalance.find(item => item.asset === asset.asset);
             const omnoQuantity = omnoBalance ? Math.max(0, omnoBalance.quantityQNT - stuckedQnt) : 0;
@@ -56,6 +90,13 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
                 imgUrl: getItemImage(assetDetails.name),
                 bonus,
                 omnoQuantity,
+                askOrders,
+                bidOrders,
+                askOmnoOrders,
+                bidOmnoOrders,
+                lastPrice,
+                lastOmnoPrice,
+                unconfirmedQuantityQNT,
             };
 
             return formattedAsset;

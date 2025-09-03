@@ -34,6 +34,7 @@ import { checkPin, roundNumberWithMaxDecimals, sendBidOrder } from '../../../../
 import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
 import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidList';
 import { getUser } from '../../../../utils/storage';
+import { domainMapping, mediumMapping } from '../../../Items/data';
 
 /**
  * @name BidDialog
@@ -59,6 +60,7 @@ const BidDialog = ({
     askOrders = [],
     bidOrders = [],
     actualAmount = 0,
+    isItem = false,
 }) => {
     const toast = useToast();
 
@@ -265,6 +267,12 @@ const BidDialog = ({
         }
     }
 
+    let bonusText;
+    if (isItem) {
+        if (card.bonus.type === 'medium') bonusText = 'Medium: ' + mediumMapping[card.bonus.value];
+        else if (card.bonus.type === 'domain') bonusText = 'Domain: ' + domainMapping[card.bonus.value];
+    }
+
     return (
         <>
             <AlertDialog
@@ -297,12 +305,13 @@ const BidDialog = ({
                                             minW="22rem"
                                             shadow={!isCurrency && 'lg'}
                                             rounded={!isCurrency && 'md'}
-                                            src={!isCurrency ? card.cardImgUrl : currencyImg}
+                                            src={isItem ? card.imgUrl : !isCurrency ? card.cardImgUrl : currencyImg}
                                             maxH="30rem"
                                         />
                                     </Center>
                                     <Text fontSize="sm" textAlign="center" my={2}>
-                                        You have {finalActualAmount} {isCurrency ? currencyName : card.name}
+                                        You have {finalActualAmount}{' '}
+                                        {isItem ? card.description : isCurrency ? currencyName : card.name}
                                     </Text>
                                 </Box>
                                 <VStack spacing={4} w="100%">
@@ -310,10 +319,11 @@ const BidDialog = ({
                                         {!isCurrency && (
                                             <>
                                                 <Text fontWeight="bold" fontSize="xl">
-                                                    {card.name}
+                                                    {isItem ? card.description : card.name}
                                                 </Text>
                                                 <Text>
-                                                    {card.channel} / {card.rarity}
+                                                    {isItem ? bonusText : card.channel} /
+                                                    {isItem ? ` Power: +${card.bonus.power}` : card.rarity}
                                                 </Text>
                                                 <Text fontSize={'sm'}>Asset: {card.asset}</Text>
                                             </>
@@ -449,7 +459,7 @@ const BidDialog = ({
                                             color="white"
                                             py={6}
                                             onClick={handleSend}>
-                                            BUY {isCurrency ? currencyName : card.name}
+                                            BUY {isItem ? card.description : isCurrency ? currencyName : card.name}
                                         </Button>
                                     </Box>
                                 </VStack>
@@ -467,7 +477,7 @@ const BidDialog = ({
                             <Box w="100%">
                                 <AskAndBidList
                                     orders={userOrders}
-                                    name={isCurrency ? currencyName : card.name}
+                                    name={isItem ? card.description : isCurrency ? currencyName : card.name}
                                     canDelete={true}
                                     username={username}
                                 />

@@ -32,6 +32,7 @@ import { errorToast, okToast } from '../../../utils/alerts';
 import { isArdorAccount } from '../../../utils/validators';
 import CardBadges from '../../Cards/CardBadges';
 import QRReader from '../../QRReader/QRReader';
+import { getColor, getTypeValue } from '../../Items/data';
 
 /**
  * @name SendDialog
@@ -45,7 +46,7 @@ import QRReader from '../../QRReader/QRReader';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
+const SendDialog = ({ reference, isOpen, onClose, card, username, isItem = false }) => {
     const toast = useToast();
 
     const [ardorAccount, setArdorAccount] = useState('ARDOR-');
@@ -106,7 +107,7 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                 await waitForRefresh();
 
                 okToast('Card sent successfully', toast);
-                
+
                 cleanOnClose();
             } else {
                 errorToast('Error sending card', toast);
@@ -153,12 +154,29 @@ const SendDialog = ({ reference, isOpen, onClose, card, username }) => {
                     <AlertDialogBody color="white">
                         <Center rounded="lg" bgColor={borderColor} p={4}>
                             <Stack direction="row" align="center" spacing={4}>
-                                <Image src={card.cardImgUrl} maxH="5rem" />
+                                <Image src={isItem ? card.imgUrl : card.cardImgUrl} maxH="5rem" />
                                 <Box>
-                                    <Text fontSize="2xl" fontWeight="bold">
-                                        {card.name}
+                                    <Text fontSize="2xl" fontWeight="bold" noOfLines={isItem && 1}>
+                                        {isItem ? card.description : card.name}
                                     </Text>
-                                    <CardBadges rarity={card.rarity} continent={card.channel} size="sm" />
+                                    {isItem ? (
+                                        <Stack direction="row" spacing={1}>
+                                            <Text
+                                                px={2}
+                                                fontSize="sm"
+                                                bgColor={getColor(card.bonus)}
+                                                rounded="lg"
+                                                color="white"
+                                                textTransform={'capitalize'}>
+                                                {card.bonus.type} ({getTypeValue(card.bonus)})
+                                            </Text>
+                                            <Text fontSize="sm" color="green.400">
+                                                +{card.bonus.power} Power
+                                            </Text>
+                                        </Stack>
+                                    ) : (
+                                        <CardBadges rarity={card.rarity} continent={card.channel} size="sm" />
+                                    )}
                                     <Text fontSize="sm">Quantity: {card.quantityQNT}</Text>
                                 </Box>
                             </Stack>

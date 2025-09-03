@@ -35,6 +35,7 @@ import { checkPin, roundNumberWithMaxDecimals, sendAskOrder } from '../../../../
 import AskAndBidGrid from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidGrid';
 import AskAndBidList from '../../../Pages/MarketPage/TradesAndOrders/AskAndBids/AskAndBidList';
 import { getUser } from '../../../../utils/storage';
+import { domainMapping, mediumMapping } from '../../../Items/data';
 
 /**
  * @name AskDialog - Ask dialog component
@@ -58,6 +59,7 @@ const AskDialog = ({
     askOrders = [],
     bidOrders = [],
     actualAmount = 0,
+    isItem = false,
 }) => {
     const toast = useToast();
     const [isValidPin, setIsValidPin] = useState(false); // invalid pin flag
@@ -258,6 +260,12 @@ const AskDialog = ({
         }
     }
 
+    let bonusText;
+    if (isItem) {
+        if (card.bonus.type === 'medium') bonusText = 'Medium: ' + mediumMapping[card.bonus.value];
+        else if (card.bonus.type === 'domain') bonusText = 'Domain: ' + domainMapping[card.bonus.value];
+    }
+
     return (
         <>
             <AlertDialog
@@ -290,12 +298,13 @@ const AskDialog = ({
                                             minW="22rem"
                                             shadow={!isCurrency && 'lg'}
                                             rounded={!isCurrency && 'md'}
-                                            src={!isCurrency ? card.cardImgUrl : currencyImg}
+                                            src={isItem ? card.imgUrl : !isCurrency ? card.cardImgUrl : currencyImg}
                                             maxH="30rem"
                                         />
                                     </Center>
                                     <Text fontSize="sm" textAlign="center" my={2}>
-                                        You have {finalActualAmount} {isCurrency ? currencyName : card.name}
+                                        You have {finalActualAmount}{' '}
+                                        {isItem ? card.description : isCurrency ? currencyName : card.name}
                                     </Text>
                                 </Box>
                                 <VStack spacing={4} w="100%">
@@ -303,11 +312,13 @@ const AskDialog = ({
                                         {!isCurrency && (
                                             <>
                                                 <Text fontWeight="bold" fontSize="xl">
-                                                    {card.name}
+                                                    {isItem ? card.description : card.name}
                                                 </Text>
                                                 <Text>
-                                                    {card.channel} / {card.rarity}
+                                                    {isItem ? bonusText : card.channel} /
+                                                    {isItem ? ` Power: +${card.bonus.power}` : card.rarity}
                                                 </Text>
+                                                <Text fontSize={'sm'}>Asset: {card.asset}</Text>
                                             </>
                                         )}
                                     </Box>
@@ -441,7 +452,7 @@ const AskDialog = ({
                                             color="white"
                                             py={6}
                                             onClick={handleSend}>
-                                            SELL {isCurrency ? currencyName : card.name}
+                                            SELL {isItem ? card.description : isCurrency ? currencyName : card.name}
                                         </Button>
                                     </Box>
                                 </VStack>
@@ -458,7 +469,7 @@ const AskDialog = ({
                             <Box w="100%">
                                 <AskAndBidList
                                     orders={userOrders}
-                                    name={isCurrency ? currencyName : card.name}
+                                    name={isItem ? card.description : isCurrency ? currencyName : card.name}
                                     canDelete={true}
                                     username={username}
                                     isCurrency={isCurrency}

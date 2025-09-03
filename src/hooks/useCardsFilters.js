@@ -48,9 +48,11 @@ export const useCardsFilters = ({ selectedCards, cards, quantityKey = 'quantityQ
     const handleChange = key => e => setFilters(prev => ({ ...prev, [key]: e.target.value }));
 
     const handleReset = () => setFilters({ rarity: '-1', element: '-1', domain: '-1' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const memoizedFilters = useMemo(() => filters, [filters.rarity, filters.element, filters.domain]);
 
     return {
-        filters,
+        filters: memoizedFilters,
         filteredNotSelectedCards,
         handleRarityChange: handleChange('rarity'),
         handleElementChange: handleChange('element'),

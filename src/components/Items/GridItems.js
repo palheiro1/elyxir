@@ -16,7 +16,14 @@ import DetailedItem from './DetailedItem';
  * @param {String} rgbColor - String with the RGB color
  * @returns {JSX.Element} - JSX element
  */
-const GridItems = ({ items, isMarket = false, onlyBuy = false, infoAccount = {}, market = 'IGNIS', rgbColor = '59, 100, 151' }) => {
+const GridItems = ({
+    items,
+    isMarket = false,
+    onlyBuy = false,
+    infoAccount = {},
+    market = 'IGNIS',
+    rgbColor = '59, 100, 151',
+}) => {
     const [actualItems, setActualItems] = useState(items);
 
     // Item clicked

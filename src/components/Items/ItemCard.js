@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import {
     Box,
@@ -7,13 +7,20 @@ import {
     Flex,
     Image,
     SimpleGrid,
-    Spacer,
+    Spinner,
     Stack,
     Text,
     Tooltip,
     useColorModeValue,
+    useDisclosure,
+    useMediaQuery,
 } from '@chakra-ui/react';
 import { getTypeValue, getColor } from './data';
+import { NQTDIVIDER, WETHASSET } from '../../data/CONSTANTS';
+import AskDialog from '../Modals/TradeDialog/AskDialog/AskDialog';
+import BidDialog from '../Modals/TradeDialog/BidDialog/BidDialog';
+import SendDialog from '../Modals/SendDialog/SendDialog';
+import { BiLockAlt } from 'react-icons/bi';
 
 /**
  * @name ItemCard
@@ -35,13 +42,12 @@ const ItemCard = ({
     onOpen,
     isMarket = false,
     onlyBuy = true,
-    username,
     infoAccount = {},
     market = 'IGNIS',
     rgbColor = '59, 100, 151',
 }) => {
-    // const newBgColor = `rgba(${rgbColor}, 0.1)`;
-    // const newBorderColor = 'rgba(47, 129, 144, 1)';
+    const newBgColor = `rgba(${rgbColor}, 0.1)`;
+    const newBorderColor = 'rgba(47, 129, 144, 1)';
     const separatorColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     const { name, imgUrl, bonus, quantityQNT = 0, description } = item;
@@ -53,6 +59,8 @@ const ItemCard = ({
 
     const bgColor = `rgba(${rgbColor}, 0.1)`;
     const [hover, setHover] = useState(false);
+    const [hoverButton, setHoverButton] = useState(false);
+
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     const initialStyle = {
@@ -70,23 +78,80 @@ const ItemCard = ({
     const haveThisItem = quantityQNT > 0;
     const itemOpacity = haveThisItem ? 1 : 0.25;
 
-    // const [canUseIcon] = useMediaQuery('(min-width: 1200px)');
+    const [canUseIcon] = useMediaQuery('(min-width: 1200px)');
 
-    // const ItemButton = ({ text, onClick, isDisabled = false, icon }) => (
-    //     <Button
-    //         fontWeight="medium"
-    //         border="2px"
-    //         borderColor={newBorderColor}
-    //         bgColor={newBgColor}
-    //         color="white"
-    //         fontSize={{ base: 'xs', md: 'sm' }}
-    //         leftIcon={canUseIcon ? icon : null}
-    //         _hover={{ fontWeight: 'bold', shadow: 'xl', bgColor: newBorderColor }}
-    //         onClick={onClick}
-    //         isDisabled={isDisabled}>
-    //         {text}
-    //     </Button>
-    // );
+    const ItemButton = ({ text, onClick, isDisabled = false, icon }) => (
+        <Button
+            fontWeight="medium"
+            border="2px"
+            borderColor={newBorderColor}
+            bgColor={newBgColor}
+            color="white"
+            fontSize={{ base: 'xs', md: 'sm' }}
+            leftIcon={canUseIcon ? icon : null}
+            _hover={{ fontWeight: 'bold', shadow: 'xl', bgColor: newBorderColor }}
+            onClick={onClick}
+            isDisabled={isDisabled}>
+            {text}
+        </Button>
+    );
+
+    const { isOpen: isOpenAsk, onOpen: onOpenAsk, onClose: onCloseAsk } = useDisclosure();
+    const refAsk = useRef();
+
+    const { isOpen: isOpenBid, onOpen: onOpenBid, onClose: onCloseBid } = useDisclosure();
+    const refBid = useRef();
+
+    const { isOpen: isOpenSend, onOpen: onOpenSend, onClose: onCloseSend } = useDisclosure();
+    const refSend = useRef();
+
+    const {
+        currentAsks: askOrdersAccount,
+        currentBids: bidOrdersAccount,
+        name: username,
+        IGNISBalance: ignis,
+    } = infoAccount;
+
+    const askOrdersForThisCard = askOrdersAccount?.filter(order => order.asset === item.asset);
+    const bidOrdersForThisCard = bidOrdersAccount?.filter(order => order.asset === item.asset);
+
+    const {
+        askOrders: askIgnisOrders,
+        askOmnoOrders,
+        bidOrders: bidIgnisOrders,
+        bidOmnoOrders,
+        lastPrice: lastIgnisPrice,
+        lastOmnoPrice,
+    } = item;
+
+    let askOrders = market === 'IGNIS' ? askIgnisOrders : askOmnoOrders;
+    let bidOrders = market === 'IGNIS' ? bidIgnisOrders : bidOmnoOrders;
+    let lastPrice = market === 'IGNIS' ? lastIgnisPrice : lastOmnoPrice;
+    // ------------------------------
+
+    let lowedAskOrders = 0;
+    let highBidOrders = 0;
+    if (askOrders.length > 0) {
+        let auxAsks;
+        if (market === 'IGNIS') auxAsks = askOrders[0].priceNQTPerShare / NQTDIVIDER;
+        if (market === 'WETH') auxAsks = askOrders[0].take.asset[WETHASSET] / NQTDIVIDER;
+        lowedAskOrders = Number.isInteger(auxAsks) ? auxAsks : auxAsks.toFixed(2);
+    }
+    if (bidOrders.length > 0) {
+        let auxBids;
+        if (market === 'IGNIS') auxBids = bidOrders[0].priceNQTPerShare / NQTDIVIDER;
+        if (market === 'WETH') auxBids = bidOrders[0].give.asset[WETHASSET] / NQTDIVIDER;
+        highBidOrders = Number.isInteger(auxBids) ? auxBids : auxBids.toFixed(2);
+    }
+
+    const unconfirmedQuantityQNT = Number(item.unconfirmedQuantityQNT);
+    const isBlocked = quantityQNT > unconfirmedQuantityQNT && unconfirmedQuantityQNT === 0;
+    const lockedCards = quantityQNT - unconfirmedQuantityQNT;
+    const haveCardsInMarket = lockedCards > 0;
+    const isSingular = Number(lockedCards) === 1;
+
+    let fixOnlyBuy = onlyBuy;
+    if (quantityQNT === 0 && !isMarket) fixOnlyBuy = true;
 
     return (
         <Box
@@ -111,59 +176,46 @@ const ItemCard = ({
                     />
 
                     <Stack direction={{ base: 'column', lg: 'row' }} spacing={0}>
-                        <Stack direction="column" spacing={0} align={{ base: 'center', lg: 'start' }}>
+                        <Stack direction="column" spacing={0} align={{ base: 'center', lg: 'start' }} w={'100%'}>
                             <Text fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }} noOfLines={1} fontWeight="bold">
                                 {description}
                             </Text>
-                            <Stack direction="row" spacing={1}>
-                                <Text
-                                    px={2}
-                                    fontSize="sm"
-                                    bgColor={getColor(bonus)}
-                                    rounded="lg"
-                                    color="white"
-                                    textTransform={'capitalize'}>
-                                    {bonus.type} ({getTypeValue(bonus)})
-                                </Text>
+                            <Text
+                                px={2}
+                                fontSize="sm"
+                                bgColor={getColor(bonus)}
+                                rounded="lg"
+                                color="white"
+                                textTransform={'capitalize'}>
+                                {bonus.type} ({getTypeValue(bonus)})
+                            </Text>
+                            <Stack direction={'row'} w={'100%'} justifyContent={'space-between'} align={'center'}>
+                                <Text fontSize="sm" color="green.400">
+                                    +{bonus.power} Power
+                                </Text>{' '}
+                                <Tooltip
+                                    label={`You have ${lockedCards} blocked ${
+                                        isSingular ? 'card' : 'cards'
+                                    } in the market`}
+                                    display={haveCardsInMarket ? 'flex' : 'none'}
+                                    placement="bottom">
+                                    <Flex>
+                                        <Text textAlign="end" minH={{ base: '100%', lg: 'auto' }} noOfLines={1}>
+                                            <small>Quantity:</small> {quantityQNT}
+                                        </Text>
+                                        <Center>{haveCardsInMarket && <BiLockAlt size="1rem" color="orange" />}</Center>
+                                    </Flex>
+                                </Tooltip>
                             </Stack>
-                            <Text fontSize="xs" color="gray.400" noOfLines={2}>
-                                {description}
-                            </Text>
-                            <Text fontSize="sm" color="green.400">
-                                +{bonus.power} Power
-                            </Text>
                         </Stack>
-                        <Spacer display={{ base: 'none', lg: 'block' }} />
-                        <Center minHeight={{ base: 'auto', lg: '100%' }}>
-                            <Tooltip placement="bottom">
-                                <Flex w={{ base: 'auto', lg: '100%' }}>
-                                    <Text textAlign="end" minH={{ base: '100%', lg: 'auto' }}>
-                                        <small>Quantity:</small> {quantityQNT}
-                                    </Text>
-                                </Flex>
-                            </Tooltip>
-                        </Center>
                     </Stack>
 
-                    {/* {!isMarket && (
-                        <Box>
-                            <SimpleGrid columns={1} gap={1}>
-                                <ItemButton
-                                    text="Use in Battle"
-                                    onClick={() => {}}
-                                    isDisabled={!haveThisItem}
-                                    icon={<Image src="/images/battlegrounds/attack_icon.svg" w="15px" />}
-                                />
-                            </SimpleGrid>
-                        </Box>
-                    )} */}
-
-                    {isMarket && (
+                    {isMarket && !fixOnlyBuy && (
                         <Center>
                             <Stack direction="column" w="100%">
                                 <Stack direction="row" w="100%">
                                     <Button
-                                        onClick={() => {}}
+                                        onClick={onOpenBid}
                                         size="lg"
                                         bgColor="#29a992"
                                         w="100%"
@@ -173,7 +225,7 @@ const ItemCard = ({
                                         BUY
                                     </Button>
                                     <Button
-                                        onClick={() => {}}
+                                        onClick={onOpenAsk}
                                         size="lg"
                                         w="100%"
                                         color="white"
@@ -191,7 +243,7 @@ const ItemCard = ({
                                                 Lowest ask
                                             </Text>
                                             <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                                N/A
+                                                {lowedAskOrders === '' ? <Spinner size="md" /> : lowedAskOrders}
                                             </Text>
                                         </Box>
                                         <Box>
@@ -199,7 +251,7 @@ const ItemCard = ({
                                                 Highest bid
                                             </Text>
                                             <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                                N/A
+                                                {highBidOrders === '' ? <Spinner size="md" /> : highBidOrders}
                                             </Text>
                                         </Box>
                                         <Box>
@@ -207,7 +259,7 @@ const ItemCard = ({
                                                 Latest price
                                             </Text>
                                             <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                                                N/A
+                                                {lastPrice === '' ? <Spinner size="md" /> : lastPrice}
                                             </Text>
                                         </Box>
                                     </SimpleGrid>
@@ -215,8 +267,76 @@ const ItemCard = ({
                             </Stack>
                         </Center>
                     )}
+                    {fixOnlyBuy && (
+                        <Box>
+                            <Button
+                                w="100%"
+                                color="white"
+                                fontWeight={'black'}
+                                variant="solid"
+                                bgColor="#9f3772"
+                                _hover={{ fontWeight: 'bold', shadow: 'xl' }}
+                                onClick={onOpenBid}>
+                                BUY
+                            </Button>
+                        </Box>
+                    )}
+                    {!isMarket && !fixOnlyBuy && (
+                        <Box
+                            onMouseEnter={() => isBlocked && setHoverButton(true)}
+                            onMouseLeave={() => isBlocked && setHoverButton(false)}>
+                            {!hoverButton && (
+                                <SimpleGrid columns={1} gap={1}>
+                                    <ItemButton
+                                        text="Send"
+                                        onClick={onOpenSend}
+                                        isDisabled={isBlocked}
+                                        icon={<Image src="/images/icons/send.png" w="15px" />}
+                                    />
+                                </SimpleGrid>
+                            )}
+                        </Box>
+                    )}
                 </SimpleGrid>
             </Center>
+            {isOpenAsk && (
+                <AskDialog
+                    reference={refAsk}
+                    isOpen={isOpenAsk}
+                    onClose={onCloseAsk}
+                    card={item}
+                    username={username}
+                    askOrders={askOrdersForThisCard}
+                    bidOrders={bidOrdersForThisCard}
+                    actualAmount={quantityQNT}
+                    isItem
+                />
+            )}
+            {isOpenBid && (
+                <BidDialog
+                    reference={refBid}
+                    isOpen={isOpenBid}
+                    onClose={onCloseBid}
+                    card={item}
+                    username={username}
+                    ignis={ignis}
+                    askOrders={askOrdersForThisCard}
+                    bidOrders={bidOrdersForThisCard}
+                    actualAmount={quantityQNT}
+                    isItem
+                />
+            )}
+
+            {isOpenSend && (
+                <SendDialog
+                    isOpen={isOpenSend}
+                    onClose={onCloseSend}
+                    reference={refSend}
+                    card={item}
+                    username={username}
+                    isItem
+                />
+            )}
         </Box>
     );
 };
