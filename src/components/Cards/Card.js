@@ -51,6 +51,9 @@ const Card = ({
     infoAccount,
     market = 'WETH',
     rgbColor = '59, 100, 151',
+    askOrders = [],
+    bidOrders = [],
+    lastPrice = '',
 }) => {
     const separatorColor = `rgba(${rgbColor}, 1)`;
     const newBgColor = 'rgba(47, 129, 144, 0.6)';
@@ -82,8 +85,8 @@ const Card = ({
         currentBids: bidOrdersAccount,
     } = infoAccount;
 
-    const askOrdersForThisCard = askOrdersAccount?.filter(order => order.asset === card.asset);
-    const bidOrdersForThisCard = bidOrdersAccount?.filter(order => order.asset === card.asset);
+    const askOrdersForThisCard = (askOrdersAccount?.filter?.(order => order.asset === card.asset)) || askOrders || [];
+    const bidOrdersForThisCard = (bidOrdersAccount?.filter?.(order => order.asset === card.asset)) || bidOrders || [];
 
     const {
         name,
@@ -104,9 +107,13 @@ const Card = ({
     let fixOnlyBuy = onlyBuy;
     if (quantity === 0 && !isMarket) fixOnlyBuy = true;
 
-    let askOrders = market === 'IGNIS' ? askIgnisOrders : askOmnoOrders;
-    let bidOrders = market === 'IGNIS' ? bidIgnisOrders : bidOmnoOrders;
-    let lastPrice = market === 'IGNIS' ? lastIgnisPrice : lastOmnoPrice;
+    let _askOrders = market === 'IGNIS' ? askIgnisOrders : askOmnoOrders;
+    let _bidOrders = market === 'IGNIS' ? bidIgnisOrders : bidOmnoOrders;
+    let _lastPrice = market === 'IGNIS' ? lastIgnisPrice : lastOmnoPrice;
+    // For recipe/non-market cards, use props if provided
+    if (askOrders && Array.isArray(askOrders)) _askOrders = askOrders;
+    if (bidOrders && Array.isArray(bidOrders)) _bidOrders = bidOrders;
+    if (typeof lastPrice !== 'undefined') _lastPrice = lastPrice;
 
     // ------------------------------
 
@@ -140,17 +147,17 @@ const Card = ({
 
     let lowedAskOrders = 0;
     let highBidOrders = 0;
-    if (askOrders.length > 0) {
+    if (_askOrders && _askOrders.length > 0) {
         let auxAsks;
-        if (market === 'IGNIS') auxAsks = askOrders[0].priceNQTPerShare / NQTDIVIDER;
-        if (market === 'WETH') auxAsks = askOrders[0].take.asset[WETHASSET] / NQTDIVIDER;
-        lowedAskOrders = Number.isInteger(auxAsks) ? auxAsks : auxAsks.toFixed(2);
+        if (market === 'IGNIS') auxAsks = _askOrders[0].priceNQTPerShare / NQTDIVIDER;
+        if (market === 'WETH') auxAsks = _askOrders[0].take?.asset?.[WETHASSET] / NQTDIVIDER;
+        lowedAskOrders = Number.isInteger(auxAsks) ? auxAsks : auxAsks?.toFixed?.(2) || 0;
     }
-    if (bidOrders.length > 0) {
+    if (_bidOrders && _bidOrders.length > 0) {
         let auxBids;
-        if (market === 'IGNIS') auxBids = bidOrders[0].priceNQTPerShare / NQTDIVIDER;
-        if (market === 'WETH') auxBids = bidOrders[0].give.asset[WETHASSET] / NQTDIVIDER;
-        highBidOrders = Number.isInteger(auxBids) ? auxBids : auxBids.toFixed(2);
+        if (market === 'IGNIS') auxBids = _bidOrders[0].priceNQTPerShare / NQTDIVIDER;
+        if (market === 'WETH') auxBids = _bidOrders[0].give?.asset?.[WETHASSET] / NQTDIVIDER;
+        highBidOrders = Number.isInteger(auxBids) ? auxBids : auxBids?.toFixed?.(2) || 0;
     }
 
     // ------------------------------
@@ -210,10 +217,12 @@ const Card = ({
                                 {name}
                             </Text>
                             <CardBadges rarity={rarity} continent={continent} size="sm" />
-                            <Text fontSize={'sm'} noOfLines={1} mt={1}>
-                                Burned: {burnedQuantity}/{totalQuantityQNT} (
-                                {((burnedQuantity / totalQuantityQNT) * 100).toFixed(2)}%)
-                            </Text>
+                            {rarity !== 'Recipe' && (
+                                <Text fontSize={'sm'} noOfLines={1} mt={1}>
+                                    Burned: {burnedQuantity}/{totalQuantityQNT} (
+                                    {((burnedQuantity / (totalQuantityQNT || 1)) * 100).toFixed(2)}%)
+                                </Text>
+                            )}
                         </Stack>
                         <Spacer display={{ base: 'none', lg: 'block' }} />
                         <Center minHeight={{ base: 'auto', lg: '100%' }}>
@@ -230,7 +239,7 @@ const Card = ({
                             </Tooltip>
                         </Center>
                     </Stack>
-                    {!isMarket && !fixOnlyBuy && (
+                    {!isMarket && !fixOnlyBuy && rarity !== 'Recipe' && (
                         <Box
                             onMouseEnter={() => isBlocked && setHoverButton(true)}
                             onMouseLeave={() => isBlocked && setHoverButton(false)}>

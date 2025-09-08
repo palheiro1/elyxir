@@ -13,8 +13,9 @@ import LateralMenu from '../../components/Navigation/LateralMenu/LateralMenu';
 // Pages
 import History from '../../components/Pages/HistoryPage/History';
 import Overview from '../../components/Pages/HomePage/Overview';
+import NewsAirdrops from '../../components/Pages/HomePage/NewsAirdrops';
 import Inventory from '../../components/Pages/InventoryPage/Inventory';
-import Bounty from '../../components/Pages/BountyPage/Bounty';
+// import Bounty from '../../components/Pages/BountyPage/Bounty';
 import Market from '../../components/Pages/MarketPage/Market';
 import Account from '../../components/Pages/AccountPage/Account';
 
@@ -80,6 +81,7 @@ import { firstTimeToast, okToast } from '../../utils/alerts';
 import OpenPackDialog from '../../components/Modals/OpenPackDialog/OpenPackDialog';
 import { getOmnoGiftzBalance } from '../../services/Ardor/omnoInterface';
 import Battlegrounds from '../../components/Pages/BattlegroundsPage/Battlegrounds';
+import Elyxir from '../../components/Pages/ElyxirPage/Elyxir';
 import { fetchUserBattles } from '../../redux/reducers/BattleReducer';
 import { fetchArenasInfo } from '../../redux/reducers/ArenasReducer';
 import { fetchBattleData, updateFilteredCards } from '../../redux/reducers/BattlegroundsReducer';
@@ -507,6 +509,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         '#413b97', // Book
         '#e094b3', // Open pack
         '#DC30EB', // Battlegrounds
+        '#B53FEA', // Elyxir
     ];
 
     const components = useMemo(
@@ -532,14 +535,15 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 manaCards={manaCards}
                 selectedBridgeType={selectedBridgeType}
             />, // OPTION 4 - Bridge
-            <Bounty infoAccount={infoAccount} />, // OPTION 5 - Bounty
+            <NewsAirdrops />, // OPTION 5 - News & Airdrops
             <Account infoAccount={infoAccount} />, // OPTION 6 - Account
             '', // OPTION 7 - Buy pack
             <Exchange infoAccount={infoAccount} />, // OPTION 8 - Exchange
             <ArdorChat infoAccount={infoAccount} />, // OPTION 9 - Chat
             <Book cards={cards} />, // OPTION 10 - Book
             '', // OPTION 11 - OPEN PACK
-            <Battlegrounds infoAccount={infoAccount} />,
+            <Battlegrounds infoAccount={infoAccount} />, // OPTION 12 - Battlegrounds
+            <Elyxir />, // OPTION 13 - Elyxir
         ],
         [
             infoAccount,

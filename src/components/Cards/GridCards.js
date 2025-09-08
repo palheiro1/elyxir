@@ -100,6 +100,8 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {},
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4, '2xl': 5 }} my={4} gap={{ base: 1, md: 4 }}>
                 {loadedCards.map((card, index) => {
                     const delay = cardsDelay[index % 10];
+                    // For recipe/non-market cards, pass empty arrays for askOrders/bidOrders
+                    const isRecipe = card && card.ingredients && card.tools && card.flasks;
                     return (
                         <Animated
                             key={index}
@@ -116,6 +118,9 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {},
                                 infoAccount={infoAccount}
                                 market={market}
                                 rgbColor={rgbColor}
+                                askOrders={isRecipe ? [] : undefined}
+                                bidOrders={isRecipe ? [] : undefined}
+                                lastPrice={isRecipe ? '' : undefined}
                             />
                         </Animated>
                     );
