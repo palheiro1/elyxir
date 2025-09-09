@@ -75,8 +75,6 @@ import {
     processWrapsFor20,
 } from '../../services/Ardor/ardorInterface';
 import Exchange from '../Exchange/Exchange';
-import ArdorChat from '../../components/Pages/ChatPage/ArdorChat';
-import Book from '../../components/Pages/BookPage/Book';
 import { firstTimeToast, okToast } from '../../utils/alerts';
 import OpenPackDialog from '../../components/Modals/OpenPackDialog/OpenPackDialog';
 import { getOmnoGiftzBalance } from '../../services/Ardor/omnoInterface';
@@ -493,8 +491,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         '#4e3b97', // Account
         '#9f3772', // Buy pack
         '#413b97', // Exchange
-        '#3b4397', // Chat
-        '#413b97', // Book
         '#e094b3', // Open pack
         '#B53FEA', // Elyxir
     ];
@@ -526,10 +522,8 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             <Account infoAccount={infoAccount} />, // OPTION 6 - Account
             '', // OPTION 7 - Buy pack
             <Exchange infoAccount={infoAccount} />, // OPTION 8 - Exchange
-            <ArdorChat infoAccount={infoAccount} />, // OPTION 9 - Chat
-            <Book cards={cards} />, // OPTION 10 - Book
-            '', // OPTION 11 - OPEN PACK
-            <Elyxir />, // OPTION 12 - Elyxir
+            '', // OPTION 9 - OPEN PACK
+            <Elyxir />, // OPTION 10 - Elyxir
         ],
         [
             infoAccount,
