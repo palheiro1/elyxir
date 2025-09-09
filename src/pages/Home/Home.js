@@ -21,7 +21,6 @@ import Account from '../../components/Pages/AccountPage/Account';
 
 // Modals
 import BuyPackDialog from '../../components/Modals/BuyPackDialog/BuyPackDialog';
-import CardReceived from '../../components/Modals/CardReceived/CardReceived';
 import Bridge from '../../components/Pages/Bridge/Bridge';
 import { isNotLogged } from '../../utils/validators';
 
@@ -61,7 +60,6 @@ import {
     checkDataChange,
     getCurrentAskAndBids,
     getIGNISBalance,
-    handleNotifications,
 } from '../../utils/walletUtils';
 
 import {
@@ -69,14 +67,12 @@ import {
     getBlockchainTransactions,
     getTrades,
     getTransaction,
-    getUnconfirmedTransactions,
     processUnwrapsFor1155,
     processUnwrapsForGemBridge,
     processWrapsFor20,
 } from '../../services/Ardor/ardorInterface';
 import Exchange from '../Exchange/Exchange';
 import { firstTimeToast, okToast } from '../../utils/alerts';
-import OpenPackDialog from '../../components/Modals/OpenPackDialog/OpenPackDialog';
 import { getOmnoGiftzBalance } from '../../services/Ardor/omnoInterface';
 import Elyxir from '../../components/Pages/ElyxirPage/Elyxir';
 import { setCardsManually } from '../../redux/reducers/CardsReducer';
@@ -102,22 +98,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const { cards } = useSelector(state => state.cards);
     const { items } = useSelector(state => state.items);
 
-    // Refs
-    const newTransactionRef = useRef();
-    const confirmedTransactionRef = useRef();
-    const cardsNotificationRef = useRef();
-
     // Buy pack dialog
     const { isOpen, onOpen, onClose } = useDisclosure();
     const buyRef = useRef();
-
-    // Card received dialog
-    const { isOpen: isOpenCardReceived, onOpen: onOpenCardReceived, onClose: onCloseCardReceived } = useDisclosure();
-    const cardReceivedRef = useRef();
-
-    // Open pack dialog
-    const { isOpen: isOpenOpenPack, onOpen: onOpenOpenPack, onClose: onCloseOpenPack } = useDisclosure();
-    const openPackRef = useRef();
 
     // Navigate
     const navigate = useNavigate();
@@ -171,9 +154,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
     // ------------------------- Functions -----------------------------
     // -----------------------------------------------------------------
-    // Stack of cards to notify
-    const [cardsNotification, setCardsNotification] = useState([]);
-
     // Show all cards - Toggle button
     const [showAllCards, setShowAllCards] = useState(true);
     const handleShowAllCards = () => setShowAllCards(!showAllCards);
@@ -245,7 +225,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     currencyAssets,
                     ignis,
                     txs,
-                    unconfirmed,
                     currentAskOrBids,
                     trades,
                     dividends,
@@ -260,7 +239,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     ),
                     getIGNISBalance(accountRs),
                     getBlockchainTransactions(2, accountRs, true),
-                    getUnconfirmedTransactions(2, accountRs),
                     getCurrentAskAndBids(accountRs),
                     getTrades(2, accountRs),
                     getAccountLedger({
@@ -289,24 +267,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 }
 
                 // -----------------------------------------------------------------
-                // Check notifications - Unconfirmed transactions
-                const unconfirmedTxs = unconfirmed.unconfirmedTransactions;
-                if (cardsNotificationRef.current !== cardsNotification) {
-                    handleNotifications({
-                        unconfirmedTransactions,
-                        newsTransactions: unconfirmedTxs,
-                        accountRs,
-                        cardsNotification,
-                        setCardsNotification,
-                        toast,
-                        cards: loadCards,
-                        setUnconfirmedTransactions,
-                        newTransactionRef,
-                        confirmedTransactionRef,
-                    });
-                }
-
-                // -----------------------------------------------------------------
 
                 const auxDividends = dividends.entries;
                 updateDividendsWithCards(auxDividends, loadCards).then(() => {
@@ -326,7 +286,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                         MANARealBalance: mana.unconfirmedQuantityQNT / NQTDIVIDER,
                         transactions: txs.transactions,
                         dividends: auxDividends,
-                        unconfirmedTxs: unconfirmedTxs,
+                        unconfirmedTxs: unconfirmedTransactions,
                         currentAsks: currentAskOrBids.askOrders,
                         currentBids: currentAskOrBids.bidOrders,
                         trades: trades.trades,
@@ -388,49 +348,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     }, []);
 
     // -----------------------------------------------------------------
-    // Check for new cards notifications
-    // -----------------------------------------------------------------
-
-    const handleOnCloseCardReceived = () => {
-        cardsNotificationRef.current = cardsNotification;
-        onCloseCardReceived();
-        setCardsNotification([]);
-    };
-
-    useEffect(() => {
-        const handleOpenCardReceived = () => {
-            // Wait 45 seconds to show the notification
-            setTimeout(() => {
-                if (!isOpenCardReceived && cardsNotification.length > 0) {
-                    onOpenCardReceived();
-                }
-            }, 45000);
-        };
-        if (cardsNotification.length > 0 && !isOpenCardReceived) {
-            handleOpenCardReceived();
-        }
-
-        if (cardsNotification.length === 0 && isOpenCardReceived) {
-            onCloseCardReceived();
-        }
-
-        if (cardsNotification.length > 0 && cardsNotificationRef.current === cardsNotification) {
-            setCardsNotification([]);
-            onCloseCardReceived();
-        }
-    }, [cardsNotification, onOpenCardReceived, onCloseCardReceived, isOpenCardReceived]);
-
-    useEffect(() => {
-        const resetTransactionRefs = () => {
-            newTransactionRef.current = null;
-            confirmedTransactionRef.current = null;
-        };
-
-        const intervalId = setInterval(resetTransactionRefs, REFRESH_DATA_TIME * 4);
-        return () => clearInterval(intervalId);
-    }, []);
-
-    // -----------------------------------------------------------------
     // Check for new unwraps
     // -----------------------------------------------------------------
 
@@ -470,7 +387,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // -----------------------------------------------------------------
 
     const haveUnconfirmed = useMemo(() => {
-        if (!infoAccount.unconfirmedTxs) {
+        if (!infoAccount || !infoAccount.unconfirmedTxs) {
             return false;
         }
 
@@ -543,9 +460,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             if (option === 7) {
                 onOpen();
                 setOption(lastOption);
-            } else if (option === 11) {
-                onOpenOpenPack();
-                setOption(lastOption);
             } else {
                 setRenderComponent(components[option]);
             }
@@ -568,7 +482,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     useEffect(() => {
         if (directSection) {
             if (directSection === 7) onOpen();
-            else if (directSection === 11) onOpenOpenPack();
             else {
                 setDirectSectionToRender(directSection);
             }
@@ -612,24 +525,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
             {/* DIALOGS */}
             {isOpen && <BuyPackDialog isOpen={isOpen} onClose={onClose} reference={buyRef} infoAccount={infoAccount} />}
-
-            {isOpenOpenPack && (
-                <OpenPackDialog
-                    isOpen={isOpenOpenPack}
-                    onClose={onCloseOpenPack}
-                    reference={openPackRef}
-                    infoAccount={infoAccount}
-                />
-            )}
-
-            {isOpenCardReceived && cardsNotification.length > 0 && (
-                <CardReceived
-                    isOpen={isOpenCardReceived}
-                    onClose={handleOnCloseCardReceived}
-                    reference={cardReceivedRef}
-                    cards={cardsNotification}
-                />
-            )}
         </Box>
     );
 });

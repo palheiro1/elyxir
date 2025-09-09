@@ -20,8 +20,6 @@ import {
 import { NQTDIVIDER, WETHASSET } from '../../data/CONSTANTS';
 import CardBadges from './CardBadges';
 // Modals
-import CraftDialog from '../Modals/CraftDialog/CraftDialog';
-import MorphDialog from '../Modals/MorphDialog/MorphDialog';
 import SendDialog from '../Modals/SendDialog/SendDialog';
 
 import { BiLockAlt } from 'react-icons/bi';
@@ -60,12 +58,6 @@ const Card = ({
     const newBorderColor = 'rgba(47, 129, 144, 1)';
     // ------------------------------
 
-    const { isOpen: isOpenCraft, onOpen: onOpenCraft, onClose: onCloseCraft } = useDisclosure();
-    const refCraft = useRef();
-
-    const { isOpen: isOpenMorph, onOpen: onOpenMorph, onClose: onCloseMorph } = useDisclosure();
-    const refMorph = useRef();
-
     const { isOpen: isOpenSend, onOpen: onOpenSend, onClose: onCloseSend } = useDisclosure();
     const refSend = useRef();
 
@@ -80,7 +72,6 @@ const Card = ({
     const {
         name: username,
         IGNISBalance: ignis,
-        GEMRealBalance: gem,
         currentAsks: askOrdersAccount,
         currentBids: bidOrdersAccount,
     } = infoAccount;
@@ -109,11 +100,9 @@ const Card = ({
 
     let _askOrders = market === 'IGNIS' ? askIgnisOrders : askOmnoOrders;
     let _bidOrders = market === 'IGNIS' ? bidIgnisOrders : bidOmnoOrders;
-    let _lastPrice = market === 'IGNIS' ? lastIgnisPrice : lastOmnoPrice;
     // For recipe/non-market cards, use props if provided
     if (askOrders && Array.isArray(askOrders)) _askOrders = askOrders;
     if (bidOrders && Array.isArray(bidOrders)) _bidOrders = bidOrders;
-    if (typeof lastPrice !== 'undefined') _lastPrice = lastPrice;
 
     // ------------------------------
 
@@ -163,7 +152,6 @@ const Card = ({
     // ------------------------------
     const unconfirmedQuantityQNT = Number(card.unconfirmedQuantityQNT);
     const isBlocked = quantity > unconfirmedQuantityQNT && unconfirmedQuantityQNT === 0;
-    const isBlockedCraft = unconfirmedQuantityQNT < 5;
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
     const lockedCards = quantity - unconfirmedQuantityQNT;
@@ -251,22 +239,6 @@ const Card = ({
                                         isDisabled={isBlocked}
                                         icon={<Image src="/images/icons/send.png" w="15px" />}
                                     />
-                                    {rarity !== 'Special' && (
-                                        <>
-                                            <CardButton
-                                                text="Craft"
-                                                onClick={onOpenCraft}
-                                                isDisabled={isBlockedCraft}
-                                                icon={<Image src="/images/icons/craft.png" w="15px" />}
-                                            />
-                                            <CardButton
-                                                text="Morph"
-                                                onClick={onOpenMorph}
-                                                isDisabled={isBlocked}
-                                                icon={<Image src="/images/icons/morph.png" w="15px" />}
-                                            />
-                                        </>
-                                    )}
                                 </SimpleGrid>
                             )}
                             {hoverButton && (
@@ -362,28 +334,6 @@ const Card = ({
                             onClose={onCloseSend}
                             reference={refSend}
                             card={card}
-                            username={username}
-                        />
-                    )}
-
-                    {isOpenCraft && (
-                        <CraftDialog
-                            isOpen={isOpenCraft}
-                            onClose={onCloseCraft}
-                            reference={refCraft}
-                            card={card}
-                            gem={gem}
-                            username={username}
-                        />
-                    )}
-
-                    {isOpenMorph && (
-                        <MorphDialog
-                            isOpen={isOpenMorph}
-                            onClose={onCloseMorph}
-                            reference={refMorph}
-                            card={card}
-                            gem={gem}
                             username={username}
                         />
                     )}

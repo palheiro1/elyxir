@@ -1,6 +1,4 @@
 import { Box, Button, Image, Spinner, Stack, Text, VStack } from '@chakra-ui/react';
-import { IS_BOUNTY_ENABLED } from '../../../data/CONSTANTS';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, setSelectedBridgeType }) => {
@@ -9,15 +7,10 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
     // ---------------------------------------------
     const isActive = index => index === option;
     const sTextActiveColor = 'white';
-    const sTextColor = 'white';
-
-    const textColor = index => (isActive(index) ? sTextActiveColor : sTextColor);
-    // ---------------------------------------------
 
     // ---------------------------------------------
     // ------------------ BUTTONS ------------------
     // ---------------------------------------------
-    const navigate = useNavigate();
     const { t } = useTranslation('navigation');
     const buttons = [
         {
@@ -77,17 +70,17 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
             icon: '/images/icons/menu/blanco/alchemy.png',
             text: t('alchemy'),
             onClick: () => {
-                setOption(13); // Elyxir section
+                setOption(10); // Elyxir section
                 window.setTimeout(() => {
                     const elyxirTab = document.querySelector('[data-elyxir-tab="workshop"]');
                     if (elyxirTab) elyxirTab.click();
                 }, 100);
             },
-            bgColor: isActive(13) ? 'white' : '#7E9246',
+            bgColor: isActive(10) ? 'white' : '#7E9246',
             hoverBg: 'rgba(126, 146, 70, 0.75)',
-            textColor: isActive(13) ? '#7E9246' : 'white',
-            fontWeight: isActive(13) ? 'bolder' : 'normal',
-            isActive: isActive(13),
+            textColor: isActive(10) ? '#7E9246' : 'white',
+            fontWeight: isActive(10) ? 'bolder' : 'normal',
+            isActive: isActive(10),
         },
     ];
 

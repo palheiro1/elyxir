@@ -1,5 +1,4 @@
 import { Box, Center, Heading, Stack, Text, useColorModeValue } from '@chakra-ui/react';
-import HowToPlay from './HowToPlay/HowToPlay';
 import { ACTUAL_SEASON, IS_BOUNTY_ENABLED } from '../../../data/CONSTANTS';
 
 const Overview = () => {
@@ -41,8 +40,6 @@ const Overview = () => {
                         enchanting beings hailing from each continent.
                     </Text>
                 </Box>
-
-                <HowToPlay />
 
                 {!IS_BOUNTY_ENABLED && (
                     <Stack

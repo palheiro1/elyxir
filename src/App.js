@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { theme } from './themes/theme';
 
@@ -13,7 +13,7 @@ import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Restore from './pages/Restore/Restore';
 import Home from './pages/Home/Home';
-import Welcome from './components/Pages/WelcomePage/Welcome';
+import Account from './components/Pages/AccountPage/Account';
 
 // Data
 import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
@@ -26,6 +26,7 @@ import { clearCacheData, getVersion, setVersion } from './utils/storage';
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
     const isLogged = infoAccount.token !== null && infoAccount.accountRs !== null;
+    const showHeaderAndFooter = true;
 
     useEffect(() => {
         const cachedVersion = getVersion();
@@ -38,9 +39,6 @@ function App() {
             window.location.reload();
         }
     }, []);
-
-    const location = useLocation();
-    const showHeaderAndFooter = true;
 
     return (
         <ChakraProvider theme={theme}>
@@ -58,8 +56,9 @@ function App() {
                 <Route path="/redeem" element={<Redeem />} />
 
                 {/* HOME PAGE */}
+                <Route path="/" element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />} />
                 <Route path="/home" element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />} />
-                <Route path="/welcome" element={<Welcome />} />
+                <Route path="/account" element={<Account />} />                
 
                 {/* 404 - NOT FOUND */}
                 <Route path="*" element={<Navigate replace to="/login" />} />

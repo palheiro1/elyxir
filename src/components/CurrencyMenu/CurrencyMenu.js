@@ -18,7 +18,6 @@ import { useRef, useState } from 'react';
 import SendCurrencyDialog from '../Modals/SendCurrencyDialog/SendCurrencyDialog';
 import { getIgnisFromFaucet } from '../../services/Faucet/faucet';
 import { errorToast, okToast } from '../../utils/alerts';
-import UnStuckGiftz from '../Modals/UnStuckGiftz/UnStuckGiftz';
 import { BsInfoCircle } from 'react-icons/bs';
 import ResponsiveTooltip from '../ui/ReponsiveTooltip';
 
@@ -50,10 +49,6 @@ const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) 
     }
 
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
-
-    // --------------------- UNSTUCK GIFTZ ---------------------
-    const { isOpen: isOpenUnstuckGiftz, onClose: onCloseUnstuckGiftz, onOpen: onOpenUnstuckGiftz } = useDisclosure();
-    const unstuckReference = useRef();
 
     // ----------------------- SEND CURRENCY -----------------------
     const { isOpen: isOpenSendCurrency, onClose: onCloseSendCurrency, onOpen: onOpenSendCurrency } = useDisclosure();
@@ -293,9 +288,6 @@ const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) 
                                 <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
                                 <MenuItem onClick={() => handleOpenGetMoreCurrency('GIFTZ')}>Get GIFTZ</MenuItem>
                                 <MenuItem onClick={() => handleSwapCurrencyToArdor('GIFTZ')}>Swap to ARDOR</MenuItem>
-                                {infoAccount.stuckedGiftz > 0 && (
-                                    <MenuItem onClick={() => onOpenUnstuckGiftz()}>Unstuck GIFTZ</MenuItem>
-                                )}
                             </MenuList>
                         </Portal>
                     </Menu>
@@ -451,14 +443,6 @@ const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) 
                     reference={reference}
                     currency={currency}
                     IGNISBalance={IGNISBalance}
-                    username={username}
-                />
-            )}
-            {isOpenUnstuckGiftz && (
-                <UnStuckGiftz
-                    isOpen={isOpenUnstuckGiftz}
-                    onClose={onCloseUnstuckGiftz}
-                    reference={unstuckReference}
                     username={username}
                 />
             )}
