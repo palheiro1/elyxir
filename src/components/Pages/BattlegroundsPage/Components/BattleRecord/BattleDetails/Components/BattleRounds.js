@@ -36,12 +36,17 @@ const BattleRounds = ({
     const handleHorizantalScroll = (element, speed, distance, step) => {
         const maxScrollLeft = element.scrollWidth - element.clientWidth;
         let scrollAmount = 0;
-        const slideTimer = setInterval(() => {
+        let slideTimer = null;
+        const clear = () => {
+            if (slideTimer) clearInterval(slideTimer);
+            slideTimer = null;
+        };
+        slideTimer = setInterval(() => {
             element.scrollLeft += step;
             scrollAmount += Math.abs(step);
 
             if (scrollAmount >= distance) {
-                clearInterval(slideTimer);
+                clear();
             }
 
             if (element.scrollLeft === 0) {
@@ -56,6 +61,8 @@ const BattleRounds = ({
                 setArrowRigthDisable(false);
             }
         }, speed);
+        // Defensive: clear on unmount if needed (if you ever use this as effect)
+        return clear;
     };
     return (
         <Stack

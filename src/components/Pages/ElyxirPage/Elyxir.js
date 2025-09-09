@@ -1,18 +1,17 @@
 import { useMemo, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { Tabs, TabList, TabPanels, Tab, TabPanel, Heading, Text, Box, Stack, Button, Image, Tooltip, Divider, SimpleGrid, HStack, Tag, Badge, Progress, Wrap, WrapItem, useColorModeValue } from '@chakra-ui/react';
-import ElyxirMarket from './ElyxirMarket';
+import { Heading, Text, Box, Stack, Button, Image, Tooltip, HStack, Tag, Badge, Progress, Wrap, WrapItem, useColorModeValue } from '@chakra-ui/react';
 import GridCards from '../../Cards/GridCards';
 
-// Map item names to image paths
+// Map item names to image paths (fix for lowercase/underscores)
 const imageFor = (name, type) => {
     if (!name) return '';
-    const n = name.toLowerCase();
-    if (type === 'ingredients') return `/images/elyxir/ingredients/${name}.png`;
-    if (type === 'tools') return `/images/elyxir/tools/${n.replace(/ /g, '').replace(/bellows/, 'bellow')}.png`;
+    const n = name.toLowerCase().replace(/ /g, '_');
+    if (type === 'ingredients') return `/images/elyxir/ingredients/${n}.png`;
+    if (type === 'tools') return `/images/elyxir/tools/${n.replace(/bellows/, 'bellow')}.png`;
     if (type === 'flasks') return `/images/elyxir/flasks/flask${n.match(/(conical|pear|kjeldahl|florence|round)/) ? ['conical','pear','kjeldahl','florence','round'].findIndex(f=>n.includes(f))+1 : 1}.png`;
-    if (type === 'recipes') return `/images/elyxir/recipes/recipe1.png`;
-    if (type === 'outputs') return `/images/elyxir/outputs/${name}.png`;
+    if (type === 'recipes') return `/images/elyxir/${n}.png`;
+    if (type === 'outputs') return `/images/elyxir/outputs/${n}.png`;
     return '';
 };
 
@@ -35,43 +34,110 @@ const groupItemsByType = items =>
     }, {});
 
 
-// Two example recipes, each with multiple tools and ingredients from the ingredients folder
+// Full set of example potion recipes, each with a matching output name and image
 const RECIPES = [
     {
-        id: 'elixir_of_clouds',
-        name: 'Elixir of Clouds',
+        id: 'whispering_gale',
+        name: 'Whispering Gale',
         ingredients: [
-            { name: 'Cloud', quantity: 1, file: 'cloud.png' },
-            { name: 'Water Cristaline', quantity: 2, file: 'watercristaline.png' },
-            { name: 'Hymalayansnow', quantity: 1, file: 'hymalayansnow.png' },
+            { name: 'Cloud', quantity: 1 },
+            { name: 'Wind', quantity: 2 },
+            { name: 'Hymalayansnow', quantity: 1 },
         ],
         tools: ['Mortar', 'Cauldron'],
-        // Flasks are not required by the recipe
         successRate: 0.8,
-        result: 'Elixir of Clouds',
-        parchment: '/images/elyxir/parchment1.png', // will use provided parchment image
+        result: 'Whispering Gale',
     },
     {
-        id: 'draught_of_the_wild',
-        name: 'Draught of the Wild',
+        id: 'tideheart',
+        name: 'Tideheart',
         ingredients: [
-            { name: 'Bonepowder', quantity: 1, file: 'bonepowder.png' },
-            { name: 'Colmillo De Lobo', quantity: 1, file: 'colmillo_de_lobo.png' },
-            { name: 'Herba De Etiopia', quantity: 2, file: 'herba_de_etiopia.png' },
+            { name: 'Water Cristaline', quantity: 2 },
+            { name: 'Water Sea', quantity: 1 },
+            { name: 'Gardenflower', quantity: 1 },
         ],
-        tools: ['Ladle', 'Bellows'],
-        successRate: 0.65,
-        result: 'Draught of the Wild',
-        parchment: '/images/elyxir/parchment2.png', // will use provided scroll image
+        tools: ['Ladle', 'Cauldron'],
+        successRate: 0.75,
+        result: 'Tideheart',
+    },
+    {
+        id: 'stoneblood',
+        name: 'Stoneblood',
+        ingredients: [
+            { name: 'Bonepowder', quantity: 1 },
+            { name: 'Gardensoil', quantity: 2 },
+            { name: 'Diamantebruto', quantity: 1 },
+        ],
+        tools: ['Mortar', 'Bellows'],
+        successRate: 0.7,
+        result: 'Stoneblood',
+    },
+    {
+        id: 'shifting_dunes',
+        name: 'Shifting Dunes',
+        ingredients: [
+            { name: 'Arena Del Desierto', quantity: 2 },
+            { name: 'Ash', quantity: 1 },
+            { name: 'Sunlight', quantity: 1 },
+        ],
+        tools: ['Cauldron', 'Bellows'],
+        successRate: 0.68,
+        result: 'Shifting Dunes',
+    },
+    {
+        id: 'forgotten_grove',
+        name: 'Forgotten Grove',
+        ingredients: [
+            { name: 'Herba De Etiopia', quantity: 2 },
+            { name: 'Flor De Algodon', quantity: 1 },
+            { name: 'Corteza', quantity: 1 },
+        ],
+        tools: ['Mortar', 'Ladle'],
+        successRate: 0.72,
+        result: 'Forgotten Grove',
+    },
+    {
+        id: 'feathered_flame',
+        name: 'Feathered Flame',
+        ingredients: [
+            { name: 'Pluma', quantity: 2 },
+            { name: 'Lava', quantity: 1 },
+            { name: 'Lightninggg', quantity: 1 },
+        ],
+        tools: ['Bellows', 'Ladle'],
+        successRate: 0.7,
+        result: 'Feathered Flame',
+    },
+    {
+        id: 'eternal_silk',
+        name: 'Eternal Silk',
+        ingredients: [
+            { name: 'Peyote', quantity: 1 },
+            { name: 'Flor De Algodon', quantity: 2 },
+            { name: 'Sunlight', quantity: 1 },
+        ],
+        tools: ['Mortar', 'Cauldron'],
+        successRate: 0.77,
+        result: 'Eternal Silk',
+    },
+    {
+        id: 'coral',
+        name: 'Coral',
+        ingredients: [
+            { name: 'Water Sea', quantity: 2 },
+            { name: 'Rainboudust', quantity: 1 },
+            { name: 'Gardenflower', quantity: 1 },
+        ],
+        tools: ['Cauldron', 'Ladle'],
+        successRate: 0.74,
+        result: 'Coral',
     },
 ];
 
 
 const Elyxir = () => {
     const { items } = useSelector(state => state.items);
-    const [tabIndex, setTabIndex] = useState(0);
     const [message, setMessage] = useState('');
-    const [viewMode, setViewMode] = useState('ingredients');
     // Alchemy UI state
     const [selectedRecipeIdx, setSelectedRecipeIdx] = useState(0);
     const [craftDuration, setCraftDuration] = useState(300); // default 5 min
@@ -132,7 +198,7 @@ const Elyxir = () => {
             .replace(/\b\w/g, l => l.toUpperCase());
     }
 
-    const ALL_ITEMS = {
+    const ALL_ITEMS = useMemo(() => ({
         ingredients: INGREDIENT_IMAGE_FILES.map(f => ({ name: filenameToName(f), image: `/images/elyxir/ingredients/${f}` })),
         tools: [
             { name: 'Mortar' },
@@ -155,29 +221,16 @@ const Elyxir = () => {
             { name: 'Magic Shield' },
             { name: 'Enchanted Sword' },
         ],
-        };
+    }), [INGREDIENT_IMAGE_FILES]);
 
     // Group owned items by type
     const grouped = useMemo(() => groupItemsByType(items), [items]);
 
     // For each type, merge ALL_ITEMS with owned items, marking quantityQNT = 0 if not owned
-    const mergedItems = useMemo(() => {
-        const result = {};
-        Object.keys(ALL_ITEMS).forEach(type => {
-            result[type] = ALL_ITEMS[type].map(base => {
-                const owned = grouped[type]?.find(i => i.name.toLowerCase() === base.name.toLowerCase());
-                // For ingredients, preserve the image path from ALL_ITEMS
-                if (type === 'ingredients') {
-                    return owned ? { ...owned, image: base.image } : { ...base, quantityQNT: 0, asset: base.name };
-                }
-                return owned ? { ...owned } : { ...base, quantityQNT: 0, asset: base.name };
-            });
-        });
-        return result;
-    }, [grouped, ALL_ITEMS]);
+    // ...existing code... (remove unused mergedItems)
 
     // Show all recipes in the workshop, even if user doesn't own any
-    const availableRecipes = RECIPES;
+    // ...existing code... (remove unused availableRecipes)
     const getMissingItems = useCallback(
         recipe => {
             const missing = [];
@@ -222,26 +275,43 @@ const Elyxir = () => {
         }
     };
     // Prepare recipe cards for GridCards, removing burning info and asset fields
-    const recipeCards = RECIPES.map((r, idx) => ({
-        ...r,
-        cardImgUrl: idx === 0 ? '/images/elyxir/parchment1.png' : '/images/elyxir/parchment2.png',
-        name: r.name,
-        description: `${Math.round(r.successRate * 100)}% success`,
-        onClick: () => setSelectedRecipeIdx(idx),
-        isSelected: selectedRecipeIdx === idx,
-        burnedQuantity: 0,
-        totalQuantityQNT: 1,
-        quantityQNT: 1,
-        asset: undefined,
-        rarity: 'Recipe',
-        // For GridCards, add tools and ingredients for display
-        tools: r.tools,
-        ingredients: r.ingredients.map(i => ({
-            ...i,
-            image: `/images/elyxir/ingredients/${i.file || i.name.toLowerCase().replace(/ /g,'_')}.png`,
-        })),
-        flasks: [],
-    }));
+    // Map recipe result to real output image filenames
+    const outputImageMap = {
+        'Whispering Gale': 'PotionWhisperingGale.png',
+        'Tideheart': 'PotionTideheart.png',
+        'Stoneblood': 'PotionStoneblood .png',
+        'Shifting Dunes': 'Potion of the Shifting Dunes.png',
+        'Forgotten Grove': 'PotionoftheForgottenGrove.png',
+        'Feathered Flame': 'PotionoftheFeatheredFlame.png',
+        'Eternal Silk': 'PotionofheEternalSilk.png',
+        'Coral': 'PotionCoral.png',
+    };
+    const recipeCards = RECIPES.map((r, idx) => {
+        const outputImg = r.result && outputImageMap[r.result]
+            ? `/images/elyxir/outputs/${outputImageMap[r.result]}`
+            : '';
+        return {
+            ...r,
+            cardImgUrl: outputImg,
+            name: r.name,
+            description: `${Math.round(r.successRate * 100)}% success`,
+            setSelectedRecipeIdx,
+            idx,
+            isSelected: selectedRecipeIdx === idx,
+            burnedQuantity: 0,
+            totalQuantityQNT: 1,
+            quantityQNT: 1,
+            asset: undefined,
+            rarity: 'Recipe',
+            tools: r.tools,
+            ingredients: r.ingredients.map(i => ({
+                ...i,
+                image: imageFor(i.name, 'ingredients'),
+            })),
+            flasks: [],
+            outputImg,
+        };
+    });
 
     return (
         <Box p={4}>
@@ -347,7 +417,7 @@ const Elyxir = () => {
                             {/* Left summary */}
                             <Box flex={1} minW={{ base: '100%', lg: '260px' }}>
                                 <HStack spacing={4} align="flex-start" mb={4}>
-                                    <Image src={selectedRecipeIdx === 0 ? '/images/elyxir/parchment1.png' : '/images/elyxir/parchment2.png'} alt={r.name} boxSize="90px" rounded="lg" shadow="md" />
+                                    <Image src={recipeCards[selectedRecipeIdx]?.outputImg || ''} alt={r.name} boxSize="90px" rounded="lg" shadow="md" />
                                     <Stack spacing={2} flex={1}>
                                         <Heading size="md" color="purple.300">{r.name}</Heading>
                                         <HStack spacing={2} wrap="wrap">

@@ -122,7 +122,9 @@ const BattleResults = ({ infoAccount, currentTime, cards, arenaInfo, domainName 
     useEffect(() => {
         if (currentTime) {
             intervalRef.current = setInterval(getLastBattle, 5000);
-            return () => clearInterval(intervalRef.current);
+            return () => {
+                if (intervalRef.current) clearInterval(intervalRef.current);
+            };
         }
     }, [currentTime, getLastBattle]);
 

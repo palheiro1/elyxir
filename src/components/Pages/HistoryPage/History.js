@@ -1,22 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Box, useDisclosure } from '@chakra-ui/react';
 
-import {
-    handleIncomingGIFTZ,
-    handleItemsTransaction,
-    handleType0AndSubtype0,
-    handleType1AndSubtype0,
-    handleType2AndSubtype1,
-    handleType2AndSubtype2And3,
-    handleType2AndSubtype4And5,
-    handleType5AndSubtype3,
-} from './TableHandlers';
+import { handleItemsTransaction } from './TableHandlers';
 
 import ShowTransactions from './ShowTransactions';
 import Loader from './Loader';
 import TopBar from './TopBar';
 import ShowDividends from './ShowDividens';
-import { isMBAsset } from '../../../utils/cardsUtils';
+// import { isMBAsset } from '../../../utils/cardsUtils';
 import { getTxTimestamp } from '../../../utils/txUtils';
 import DetailedCard from '../../Cards/DetailedCard';
 import { useSelector } from 'react-redux';
@@ -109,7 +100,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                 if (isItemAsset(tx.attachment.asset)) {
                     const timestamp = getTxTimestamp(tx, epoch_beginning);
                     const type = tx.type;
-                    const subtype = tx.subtype;
+                    // const subtype = tx.subtype;
                     let handler = null;
 
                     switch (type) {

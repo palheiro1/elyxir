@@ -20,11 +20,8 @@ import DetailedCard from './DetailedCard';
 const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {}, market = 'IGNIS', rgbColor="59, 100, 151" }) => {
     const [actualCards, setActualCards] = useState(cards);
 
-    // Card clicked
-    const [cardClicked, setCardClicked] = useState();
 
-    // Open DetailedCardView
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    // Remove modal logic for recipe selection
 
     // State to keep track of the cards that have been loaded
     const [loadedCards, setLoadedCards] = useState([]);
@@ -100,8 +97,15 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {},
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4, '2xl': 5 }} my={4} gap={{ base: 1, md: 4 }}>
                 {loadedCards.map((card, index) => {
                     const delay = cardsDelay[index % 10];
-                    // For recipe/non-market cards, pass empty arrays for askOrders/bidOrders
                     const isRecipe = card && card.ingredients && card.tools && card.flasks;
+                    // For recipe cards, clicking selects the recipe, not a modal
+                    const handleClick = isRecipe && card.setSelectedRecipeIdx
+                        ? (e) => {
+                            e?.stopPropagation?.();
+                            e?.preventDefault?.();
+                            card.setSelectedRecipeIdx(card.idx);
+                        }
+                        : undefined;
                     return (
                         <Animated
                             key={index}
@@ -109,25 +113,34 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {},
                             animationOut="fadeOut"
                             isVisible={true}
                             animationInDelay={delay}>
-                            <Card
-                                card={card}
-                                setCardClicked={setCardClicked}
-                                onOpen={onOpen}
-                                isMarket={isMarket}
-                                onlyBuy={onlyBuy}
-                                infoAccount={infoAccount}
-                                market={market}
-                                rgbColor={rgbColor}
-                                askOrders={isRecipe ? [] : undefined}
-                                bidOrders={isRecipe ? [] : undefined}
-                                lastPrice={isRecipe ? '' : undefined}
-                            />
+                            <div
+                                onClick={handleClick}
+                                style={{ cursor: isRecipe ? 'pointer' : undefined }}
+                                tabIndex={isRecipe ? 0 : undefined}
+                                role={isRecipe ? 'button' : undefined}
+                                onKeyDown={isRecipe ? (e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') handleClick(e);
+                                } : undefined}
+                            >
+                                <Card
+                                    card={card}
+                                    setCardClicked={() => {}}
+                                    onOpen={() => {}}
+                                    isMarket={isMarket}
+                                    onlyBuy={onlyBuy}
+                                    infoAccount={infoAccount}
+                                    market={market}
+                                    rgbColor={rgbColor}
+                                    askOrders={isRecipe ? [] : undefined}
+                                    bidOrders={isRecipe ? [] : undefined}
+                                    lastPrice={isRecipe ? '' : undefined}
+                                />
+                            </div>
                         </Animated>
                     );
                 })}
             </SimpleGrid>
             {isLoading && <p>Loading...</p>}
-            {isOpen && <DetailedCard isOpen={isOpen} onClose={onClose} data={cardClicked} />}
         </>
     );
 };

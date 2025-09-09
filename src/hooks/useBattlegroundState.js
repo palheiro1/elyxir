@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDisclosure } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
@@ -130,12 +130,17 @@ export const useBattlegroundState = infoAccount => {
         if (prev_height) updateBattlegroundStatus();
     }, [prev_height, updateBattlegroundStatus]);
 
+    // Only set up this interval once
+    const dispatchRef = useRef(dispatch);
+    useEffect(() => {
+        dispatchRef.current = dispatch;
+    }, [dispatch]);
     useEffect(() => {
         const intervalId = setInterval(() => {
-            dispatch(getBlockchainBlocks());
+            dispatchRef.current(getBlockchainBlocks());
         }, REFRESH_BLOCK_TIME);
         return () => clearInterval(intervalId);
-    }, [dispatch]);
+    }, []);
 
     const handleOpenModal = key => {
         setModals(prev => ({ ...prev, [key]: true }));

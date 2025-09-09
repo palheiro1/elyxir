@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { BLOCKTIME } from '../data/CONSTANTS';
 
@@ -13,14 +13,20 @@ export const useBlockCountdown = getTargetBlockFn => {
     const { prev_height } = useSelector(state => state.blockchain);
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
+    // Use a ref to keep getTargetBlockFn stable
+    const getTargetBlockFnRef = useRef(getTargetBlockFn);
+    useEffect(() => { getTargetBlockFnRef.current = getTargetBlockFn; }, [getTargetBlockFn]);
+
     useEffect(() => {
         let interval;
+        let cancelled = false;
 
         const calculate = async () => {
-            const targetBlock = await getTargetBlockFn();
+            const targetBlock = await getTargetBlockFnRef.current();
             const getDelta = () => (targetBlock - prev_height) * BLOCKTIME;
 
             const update = () => {
+                if (cancelled) return;
                 const delta = Math.max(0, getDelta());
                 const days = Math.floor(delta / (24 * 3600));
                 const hours = Math.floor((delta % (24 * 3600)) / 3600);
@@ -35,8 +41,11 @@ export const useBlockCountdown = getTargetBlockFn => {
 
         if (prev_height) calculate();
 
-        return () => clearInterval(interval);
-    }, [prev_height, getTargetBlockFn]);
+        return () => {
+            cancelled = true;
+            clearInterval(interval);
+        };
+    }, [prev_height]);
 
     return timeLeft;
 };
