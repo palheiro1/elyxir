@@ -1,4 +1,3 @@
-import { getStuckedBattleCards } from '../components/Pages/BattlegroundsPage/Utils/BattlegroundsUtils';
 import { IMGURL, ITEMS_ASSETS, ITEMSACCOUNT, NQTDIVIDER } from '../data/CONSTANTS';
 import {
     addressToAccountId,
@@ -42,7 +41,7 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
     const itemsBonus = await getItemsForBonus();
 
     const itemsOmnoBalance = await getOmnoItemsBalance(accountId, itemsAssets);
-    const { stuckedCards } = getStuckedBattleCards();
+    const stuckedCards = {}; // Removed battlegrounds dependency
 
     const formattedAssets = await Promise.all(
         itemsAssets.map(async asset => {

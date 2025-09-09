@@ -6,7 +6,21 @@ import Rewards from './Components/Rewards/Rewards';
 import { useSelector } from 'react-redux';
 import { BLOCKTIME, FREQUENCY } from '../../../data/CONSTANTS';
 import { useEffect } from 'react';
-import { ScrollLock } from '../BattlegroundsPage/assets/ScrollLock';
+
+// Simple ScrollLock component replacement
+const ScrollLock = ({ isLocked }) => {
+    useEffect(() => {
+        if (isLocked) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isLocked]);
+    return null;
+};
 
 /**
  * @name Bounty

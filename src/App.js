@@ -22,7 +22,6 @@ import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
 import './App.css';
 import Redeem from './pages/Redeem/Redeem';
 import { clearCacheData, getVersion, setVersion } from './utils/storage';
-import Battlegrounds from './components/Pages/BattlegroundsPage/Battlegrounds';
 
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
@@ -41,7 +40,7 @@ function App() {
     }, []);
 
     const location = useLocation();
-    const showHeaderAndFooter = location.pathname !== '/battlegrounds';
+    const showHeaderAndFooter = true;
 
     return (
         <ChakraProvider theme={theme}>
@@ -60,7 +59,6 @@ function App() {
 
                 {/* HOME PAGE */}
                 <Route path="/home" element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />} />
-                <Route path="/battlegrounds" element={<Battlegrounds infoAccount={infoAccount} />} />
                 <Route path="/welcome" element={<Welcome />} />
 
                 {/* 404 - NOT FOUND */}

@@ -80,13 +80,7 @@ import Book from '../../components/Pages/BookPage/Book';
 import { firstTimeToast, okToast } from '../../utils/alerts';
 import OpenPackDialog from '../../components/Modals/OpenPackDialog/OpenPackDialog';
 import { getOmnoGiftzBalance } from '../../services/Ardor/omnoInterface';
-import Battlegrounds from '../../components/Pages/BattlegroundsPage/Battlegrounds';
 import Elyxir from '../../components/Pages/ElyxirPage/Elyxir';
-import { fetchUserBattles } from '../../redux/reducers/BattleReducer';
-import { fetchArenasInfo } from '../../redux/reducers/ArenasReducer';
-import { fetchBattleData, updateFilteredCards } from '../../redux/reducers/BattlegroundsReducer';
-import { fetchSoldiers } from '../../redux/reducers/SoldiersReducer';
-import { fetchLeaderboards } from '../../redux/reducers/LeaderboardsReducer';
 import { setCardsManually } from '../../redux/reducers/CardsReducer';
 import ProfileDropdown from '../../components/Navigation/ProfileDropdown';
 import { fetchAllItems } from '../../utils/itemsUtils';
@@ -439,23 +433,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     }, []);
 
     // -----------------------------------------------------------------
-    // Load battlegrounds data
-    // -----------------------------------------------------------------
-
-    useEffect(() => {
-        let { accountRs } = infoAccount;
-        if (cards && accountRs) {
-            dispatch(fetchBattleData({ accountRs }));
-            updateFilteredCards(accountRs, cards, dispatch);
-        }
-
-        dispatch(fetchArenasInfo());
-        infoAccount && dispatch(fetchUserBattles(infoAccount.accountRs));
-        dispatch(fetchSoldiers());
-        dispatch(fetchLeaderboards());
-    }, [cards, dispatch, infoAccount]);
-
-    // -----------------------------------------------------------------
     // Check for new unwraps
     // -----------------------------------------------------------------
 
@@ -519,7 +496,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         '#3b4397', // Chat
         '#413b97', // Book
         '#e094b3', // Open pack
-        '#DC30EB', // Battlegrounds
         '#B53FEA', // Elyxir
     ];
 
@@ -553,8 +529,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             <ArdorChat infoAccount={infoAccount} />, // OPTION 9 - Chat
             <Book cards={cards} />, // OPTION 10 - Book
             '', // OPTION 11 - OPEN PACK
-            <Battlegrounds infoAccount={infoAccount} />, // OPTION 12 - Battlegrounds
-            <Elyxir />, // OPTION 13 - Elyxir
+            <Elyxir />, // OPTION 12 - Elyxir
         ],
         [
             infoAccount,

@@ -1,6 +1,11 @@
 import { Box, Grid, GridItem, Image, Text, useBreakpointValue } from '@chakra-ui/react';
 import { NQTDIVIDER, SEASONSPECIALCARDASSET } from '../../../../../data/CONSTANTS';
-import { formatAddress } from '../../../BattlegroundsPage/Utils/BattlegroundsUtils';
+
+// Simple address formatter function
+const formatAddress = (address) => {
+    if (!address || address.length <= 8) return address;
+    return `${address.slice(0, 4)}...${address.slice(-4)}`;
+};
 
 const RewardsTableRow = ({ index, data, accountRs, filter, getCurrencyImage }) => {
     const { address, accountName, quantity, ticketNumber, assetId, assetName } = data;
