@@ -12,9 +12,21 @@ export const domainMapping = {
     5: 'Europe',
 };
 
+export const typeMapping = {
+    ingredient: 'Crafting Material',
+    tool: 'Crafting Tool',
+    flask: 'Storage Container',
+    recipe: 'Crafting Knowledge',
+};
+
 export const getTypeValue = ({ type, value }) => {
     if (type === 'medium') return mediumMapping[value];
     if (type === 'domain') return domainMapping[value];
+    if (type === 'ingredient') return 'Ingredient';
+    if (type === 'tool') return 'Tool';
+    if (type === 'flask') return `${value} Portion${value > 1 ? 's' : ''}`;
+    if (type === 'recipe') return 'Recipe';
+    return type;
 };
 
 export const getMediumColor = medium => {
@@ -40,4 +52,9 @@ export const getContinentColor = continent => {
 export const getColor = ({ type, value }) => {
     if (type === 'medium') return getMediumColor(value);
     if (type === 'domain') return getContinentColor(value);
+    if (type === 'ingredient') return '#8B4513'; // Brown for ingredients
+    if (type === 'tool') return '#696969'; // Dark gray for tools  
+    if (type === 'flask') return '#4682B4'; // Steel blue for flasks
+    if (type === 'recipe') return '#DAA520'; // Goldenrod for recipes
+    return 'gray';
 };

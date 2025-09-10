@@ -178,6 +178,9 @@ const ItemCard = ({
                     <Stack direction={{ base: 'column', lg: 'row' }} spacing={0}>
                         <Stack direction="column" spacing={0} align={{ base: 'center', lg: 'start' }} w={'100%'}>
                             <Text fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }} noOfLines={1} fontWeight="bold">
+                                {name}
+                            </Text>
+                            <Text fontSize="xs" color="gray.500" noOfLines={2}>
                                 {description}
                             </Text>
                             <Text

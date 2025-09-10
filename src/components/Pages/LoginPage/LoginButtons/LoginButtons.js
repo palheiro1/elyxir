@@ -1,4 +1,4 @@
-import { Button, Image, Stack } from '@chakra-ui/react';
+import { Button, Stack } from '@chakra-ui/react';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
  * @version 0.1
  * @returns {JSX.Element} Register and Restore buttons component
  */
-const LoginButtons = ({ showNewUser, showLogIn, showRestore, loginType, setLoginType }) => {
+const LoginButtons = ({ showNewUser, showLogIn, showRestore }) => {
     const navigate = useNavigate();
     const handleNewUser = () => navigate('/register');
     const handleRestoreUser = () => navigate('/restore');
@@ -41,21 +41,7 @@ const LoginButtons = ({ showNewUser, showLogIn, showRestore, loginType, setLogin
                 </Button>
             )}
 
-            {loginType === 'normal' && (
-                <Button
-                    w="100%"
-                    px={6}
-                    onClick={() => setLoginType('sigbro')}
-                    leftIcon={<Image src="/images/logos/sigbro.png" w="20px" />}>
-                    Sigbro
-                </Button>
-            )}
 
-            {loginType === 'sigbro' && (
-                <Button rounded="none" w="100%" onClick={() => setLoginType('normal')}>
-                    Legacy login
-                </Button>
-            )}
         </Stack>
     );
 };

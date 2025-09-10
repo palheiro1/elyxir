@@ -15,7 +15,7 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
     const buttons = [
         {
             icon: '/images/icons/menu/blanco/news.png',
-            text: t('news_airdrops', { defaultValue: 'News & Airdrops' }),
+            text: t('airdrops', { defaultValue: 'Airdrops' }),
             onClick: () => setOption(5),
             bgColor: isActive(5) ? 'white' : '#2F8190',
             hoverBg: 'rgba(47, 129, 144, 0.75)',
@@ -25,7 +25,7 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
         },
         {
             icon: !isActive(1) ? '/images/icons/menu/blanco/inventory.png' : '/images/icons/menu/color/inventory.jpg',
-            text: t('inventory'),
+            text: t('Inventory'),
             onClick: () => setOption(1),
             bgColor: isActive(1) ? 'white' : '#2F8190',
             hoverBg: 'rgba(47, 129, 144, 0.75)',
@@ -35,7 +35,7 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
         },
         {
             icon: !isActive(2) ? '/images/icons/menu/blanco/history.png' : '/images/icons/menu/color/history.jpg',
-            text: t('history'),
+            text: t('History'),
             onClick: () => setOption(2),
             bgColor: isActive(2) ? 'white' : '#3B7197',
             hoverBg: 'rgba(59, 113, 151, 0.75)',
@@ -45,7 +45,7 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
         },
         {
             icon: !isActive(3) ? '/images/icons/menu/blanco/market.png' : '/images/icons/menu/color/market.jpg',
-            text: t('market'),
+            text: t('Market'),
             onClick: () => setOption(3),
             bgColor: isActive(3) ? 'white' : '#3B6497',
             hoverBg: 'rgba(59, 100, 151, 0.75   )',
@@ -55,7 +55,7 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
         },
         {
             icon: !isActive(4) ? '/images/icons/menu/blanco/bridge.png' : '/images/icons/menu/color/bridge.jpg',
-            text: t('bridge'),
+            text: t('Bridge'),
             onClick: () => {
                 setSelectedBridgeType(null);
                 setOption(4);
@@ -68,7 +68,7 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
         },
         {
             icon: '/images/icons/menu/blanco/alchemy.png',
-            text: t('alchemy'),
+            text: t('Alchemy'),
             onClick: () => {
                 setOption(10); // Elyxir section
                 window.setTimeout(() => {

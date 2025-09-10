@@ -56,7 +56,7 @@ const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129,
 
     useEffect(() => {
         setItemsFiltered(computed);
-    }, [computed, setItemsFiltered]);
+    }, [computed]);
 
     const handleTypeChange = e => setType(e.target.value);
     const handleSortChange = e => setSort(e.target.value);

@@ -1,9 +1,7 @@
-import { useState } from 'react';
-import { Box, Heading, Image, Stack, Center, Button, Text } from '@chakra-ui/react';
+import { Box, Heading, Image, Stack, Center } from '@chakra-ui/react';
 
 import LoginButtons from '../../components/Pages/LoginPage/LoginButtons/LoginButtons';
 import UserLogin from '../../components/Pages/LoginPage/UserLogin/UserLogin';
-import SigBroLogin from '../../components/Pages/LoginPage/UserLogin/SigBroLogin';
 import { useNavigate } from 'react-router-dom';
 
 /**
@@ -15,7 +13,6 @@ import { useNavigate } from 'react-router-dom';
  * @returns {JSX.Element} Login component
  */
 const Login = ({ setInfoAccount }) => {
-    const [loginType, setLoginType] = useState('normal');
     const navigate = useNavigate();
 
     return (
@@ -31,31 +28,19 @@ const Login = ({ setInfoAccount }) => {
                     <Box w={{ base: '90%', md: '60%', lg: '40%', xl: '30%' }}>
                         <Heading textAlign={'center'}>
                             Welcome to <br />
-                            <strong>Mythical Beings</strong>
+                            <strong>Elyxir</strong>
                         </Heading>
-                        <Text textAlign={'center'} fontSize={'sm'}>
-                            SEASON 08
-                        </Text>
+
 
                         <LoginButtons
                             showNewUser={true}
                             showRestore={true}
-                            loginType={loginType}
-                            setLoginType={setLoginType}
                         />
 
-                        {loginType === 'normal' && <UserLogin setInfoAccount={setInfoAccount} />}
-                        {loginType === 'sigbro' && <SigBroLogin setInfoAccount={setInfoAccount} />}
+                        <UserLogin setInfoAccount={setInfoAccount} />
+  
 
-                        <Button
-                            w="100%"
-                            mt={4}
-                            onClick={() => navigate('/redeem')}
-                            bgColor={'#EBB2B9'}
-                            _hover={{ bgColor: '#E8A5B3' }}
-                            color="black">
-                            Claim voucher
-                        </Button>
+
                     </Box>
                 </Stack>
             </Center>

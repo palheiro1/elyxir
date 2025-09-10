@@ -40,11 +40,11 @@ const RECIPES = [
         id: 'whispering_gale',
         name: 'Whispering Gale',
         ingredients: [
-            { name: 'Cloud', quantity: 1 },
-            { name: 'Wind', quantity: 2 },
-            { name: 'Hymalayansnow', quantity: 1 },
+            { name: 'Cloud Essence', quantity: 1 },
+            { name: 'Wind Essence', quantity: 2 },
+            { name: 'Himalayan Snow', quantity: 1 },
         ],
-        tools: ['Mortar', 'Cauldron'],
+        tools: ['Stone Mortar', 'Ancient Cauldron'],
         successRate: 0.8,
         result: 'Whispering Gale',
     },
@@ -52,11 +52,11 @@ const RECIPES = [
         id: 'tideheart',
         name: 'Tideheart',
         ingredients: [
-            { name: 'Water Cristaline', quantity: 2 },
-            { name: 'Water Sea', quantity: 1 },
-            { name: 'Gardenflower', quantity: 1 },
+            { name: 'Crystal Water', quantity: 2 },
+            { name: 'Sea Water', quantity: 1 },
+            { name: 'Garden Flower', quantity: 1 },
         ],
-        tools: ['Ladle', 'Cauldron'],
+        tools: ['Silver Ladle', 'Ancient Cauldron'],
         successRate: 0.75,
         result: 'Tideheart',
     },
@@ -64,11 +64,11 @@ const RECIPES = [
         id: 'stoneblood',
         name: 'Stoneblood',
         ingredients: [
-            { name: 'Bonepowder', quantity: 1 },
-            { name: 'Gardensoil', quantity: 2 },
-            { name: 'Diamantebruto', quantity: 1 },
+            { name: 'Bone Powder', quantity: 1 },
+            { name: 'Garden Soil', quantity: 2 },
+            { name: 'Raw Diamond', quantity: 1 },
         ],
-        tools: ['Mortar', 'Bellows'],
+        tools: ['Stone Mortar', 'Mystical Bellows'],
         successRate: 0.7,
         result: 'Stoneblood',
     },
@@ -76,11 +76,11 @@ const RECIPES = [
         id: 'shifting_dunes',
         name: 'Shifting Dunes',
         ingredients: [
-            { name: 'Arena Del Desierto', quantity: 2 },
-            { name: 'Ash', quantity: 1 },
-            { name: 'Sunlight', quantity: 1 },
+            { name: 'Desert Sand', quantity: 2 },
+            { name: 'Volcanic Ash', quantity: 1 },
+            { name: 'Bottled Sunlight', quantity: 1 },
         ],
-        tools: ['Cauldron', 'Bellows'],
+        tools: ['Ancient Cauldron', 'Mystical Bellows'],
         successRate: 0.68,
         result: 'Shifting Dunes',
     },
@@ -88,11 +88,11 @@ const RECIPES = [
         id: 'forgotten_grove',
         name: 'Forgotten Grove',
         ingredients: [
-            { name: 'Herba De Etiopia', quantity: 2 },
-            { name: 'Flor De Algodon', quantity: 1 },
-            { name: 'Corteza', quantity: 1 },
+            { name: 'Healing Herb', quantity: 2 },
+            { name: 'Garden Flower', quantity: 1 },
+            { name: 'Tree Bark', quantity: 1 },
         ],
-        tools: ['Mortar', 'Ladle'],
+        tools: ['Stone Mortar', 'Silver Ladle'],
         successRate: 0.72,
         result: 'Forgotten Grove',
     },
@@ -100,11 +100,11 @@ const RECIPES = [
         id: 'feathered_flame',
         name: 'Feathered Flame',
         ingredients: [
-            { name: 'Pluma', quantity: 2 },
-            { name: 'Lava', quantity: 1 },
-            { name: 'Lightninggg', quantity: 1 },
+            { name: 'Magic Pollen', quantity: 2 },
+            { name: 'Volcano Lava', quantity: 1 },
+            { name: 'Thunder Essence', quantity: 1 },
         ],
-        tools: ['Bellows', 'Ladle'],
+        tools: ['Mystical Bellows', 'Silver Ladle'],
         successRate: 0.7,
         result: 'Feathered Flame',
     },
@@ -112,11 +112,11 @@ const RECIPES = [
         id: 'eternal_silk',
         name: 'Eternal Silk',
         ingredients: [
-            { name: 'Peyote', quantity: 1 },
-            { name: 'Flor De Algodon', quantity: 2 },
-            { name: 'Sunlight', quantity: 1 },
+            { name: 'Magic Dust', quantity: 1 },
+            { name: 'Garden Flower', quantity: 2 },
+            { name: 'Bottled Sunlight', quantity: 1 },
         ],
-        tools: ['Mortar', 'Cauldron'],
+        tools: ['Stone Mortar', 'Ancient Cauldron'],
         successRate: 0.77,
         result: 'Eternal Silk',
     },
@@ -124,11 +124,11 @@ const RECIPES = [
         id: 'coral',
         name: 'Coral',
         ingredients: [
-            { name: 'Water Sea', quantity: 2 },
-            { name: 'Rainboudust', quantity: 1 },
-            { name: 'Gardenflower', quantity: 1 },
+            { name: 'Sea Water', quantity: 2 },
+            { name: 'Stardust', quantity: 1 },
+            { name: 'Garden Flower', quantity: 1 },
         ],
-        tools: ['Cauldron', 'Ladle'],
+        tools: ['Ancient Cauldron', 'Silver Ladle'],
         successRate: 0.74,
         result: 'Coral',
     },
@@ -148,80 +148,129 @@ const Elyxir = () => {
 
     // Define all possible items for each type (should be expanded as needed)
     // Ingredient names from normalized image filenames
-    const INGREDIENT_IMAGE_FILES = [
-        'aguas_fetidas.png',
-        'alamorcego.png',
-        'alcoholbeer.png',
-        'araucarianresine.png',
-        'arena_del_desierto.png',
-        'ash.png',
-        'blood.png',
-        'bonepowder.png',
-        'cedrepinenute.png',
-        'cloud.png',
-        'colmillo_de_lobo.png',
-        'colmillo_de_vampiro.png',
-        'corteza.png',
-        'cucumberleftover.png',
-        'diamantebruto.png',
-        'escama_de_trasca.png',
-        'flor_de_algodon.png',
-        'gardenflower.png',
-        'gardensoil.png',
-        'guijarros.png',
-        'herba_de_etiopia.png',
-        'holi_water2.png',
-        'horndust.png',
-        'hymalayansnow.png',
-        'kangurhair.png',
-        'lava.png',
-        'lightninggg.png',
-        'medicinalstone.png',
-        'mustard_seeds.png',
-        'pelosasquatch.png',
-        'peyote.png',
-        'pluma.png',
-        'rainboudust.png',
-        'salivaderahu.png',
-        'skin.png',
-        'sunlight.png',
-        'watercristaline.png',
-        'water_sea.png',
-        'wind.png',
-    ];
+    const { ALL_ITEMS, filteredIngredients } = useMemo(() => {
+        const INGREDIENT_IMAGE_FILES = [
+            'aguas_fetidas.png',
+            'alamorcego.png',
+            'alcoholbeer.png',
+            'araucarianresine.png',
+            'arena_del_desierto.png',
+            'ash.png',
+            'blood.png',
+            'bonepowder.png',
+            'cedrepinenute.png',
+            'cloud.png',
+            'colmillo_de_lobo.png',
+            'colmillo_de_vampiro.png',
+            'corteza.png',
+            'cucumberleftover.png',
+            'diamantebruto.png',
+            'escama_de_trasca.png',
+            'flor_de_algodon.png',
+            'gardenflower.png',
+            'gardensoil.png',
+            'guijarros.png',
+            'herba_de_etiopia.png',
+            'holi_water2.png',
+            'horndust.png',
+            'hymalayansnow.png',
+            'kangurhair.png',
+            'lava.png',
+            'lightninggg.png',
+            'medicinalstone.png',
+            'mustard_seeds.png',
+            'pelosasquatch.png',
+            'peyote.png',
+            'pluma.png',
+            'rainboudust.png',
+            'salivaderahu.png',
+            'skin.png',
+            'sunlight.png',
+            'watercristaline.png',
+            'water_sea.png',
+            'wind.png',
+        ];
 
-    // Convert filenames to display names (e.g., 'aguas_fetidas.png' => 'Aguas fetidas')
-    function filenameToName(filename) {
-        return filename
-            .replace('.png', '')
-            .replace(/_/g, ' ')
-            .replace(/\b\w/g, l => l.toUpperCase());
-    }
+        // Map image filenames to display names to match the Airdrop page names
+        function filenameToName(filename) {
+            const nameMap = {
+                'aguas_fetidas.png': 'Fetid Waters',
+                'arena_del_desierto.png': 'Desert Sand',
+                'araucarianresine.png': 'Araucarian Resine',
+                'ash.png': 'Volcanic Ash',
+                'bonepowder.png': 'Bone Powder',
+                'cloud.png': 'Cloud Essence',
+                'diamantebruto.png': 'Raw Diamond',
+                'dientes_de_dragon.png': 'Dragon Teeth',
+                'elixir_rarity.png': 'Elixir Rarity',
+                'ether.png': 'Ethereal Mist',
+                'gardenflower.png': 'Garden Flower',
+                'gardensoil.png': 'Garden Soil',
+                'hierba_curandera.png': 'Healing Herb',
+                'hierro.png': 'Iron Ore',
+                'hueso_de_ballena.png': 'Whale Bone',
+                'hymalayansnow.png': 'Himalayan Snow',
+                'ice.png': 'Pristine Ice',
+                'magic_dust.png': 'Magic Dust',
+                'medusahair.png': 'Medusa Hair',
+                'moonstone.png': 'Moonstone',
+                'mushroom_luminous.png': 'Luminous Mushroom',
+                'piel_de_serpiente.png': 'Snake Skin',
+                'pollen_magico.png': 'Magic Pollen',
+                'rare_crystal.png': 'Rare Crystal',
+                'raiz_de_ent.png': 'Ent Root',
+                'ruby.png': 'Ruby Gem',
+                'salmon_teeth.png': 'Salmon Teeth',
+                'semilla_de_arbol_magico.png': 'Magic Tree Seed',
+                'stardust.png': 'Stardust',
+                'sunlight.png': 'Bottled Sunlight',
+                'thunder.png': 'Thunder Essence',
+                'tree_bark.png': 'Tree Bark',
+                'unicorn_horn.png': 'Unicorn Horn',
+                'vampire_blood.png': 'Vampire Blood',
+                'volcano_lava.png': 'Volcano Lava',
+                'water_cristalina.png': 'Crystal Water',
+                'water_sea.png': 'Sea Water',
+                'wind.png': 'Wind Essence'
+            };
+            
+            return nameMap[filename] || filename
+                .replace('.png', '')
+                .replace(/_/g, ' ')
+                .replace(/\b\w/g, l => l.toUpperCase());
+        }
 
-    const ALL_ITEMS = useMemo(() => ({
-        ingredients: INGREDIENT_IMAGE_FILES.map(f => ({ name: filenameToName(f), image: `/images/elyxir/ingredients/${f}` })),
-        tools: [
-            { name: 'Mortar' },
-            { name: 'Cauldron' },
-            { name: 'Bellows' },
-            { name: 'Ladle' },
-        ],
-        flasks: [
-            { name: 'Conical flask' },
-            { name: 'Pear flask' },
-            { name: 'Kjeldahl flask' },
-            { name: 'Florence flask' },
-            { name: 'Round flask' },
-        ],
-        recipes: [
-            { name: 'Strength Potion' },
-        ],
-        creations: [
-            { name: 'Potion of Power' },
-            { name: 'Magic Shield' },
-            { name: 'Enchanted Sword' },
-        ],
-    }), [INGREDIENT_IMAGE_FILES]);
+        const ALL_ITEMS = {
+            ingredients: INGREDIENT_IMAGE_FILES.map(f => ({ name: filenameToName(f), image: `/images/elyxir/ingredients/${f}` })),
+            tools: [
+                { name: 'Stone Mortar' },
+                { name: 'Ancient Cauldron' },
+                { name: 'Mystical Bellows' },
+                { name: 'Silver Ladle' },
+            ],
+            flasks: [
+                { name: 'Crystal Flask' },
+                { name: 'Emerald Flask' },
+                { name: 'Sapphire Flask' },
+                { name: 'Ruby Flask' },
+                { name: 'Diamond Flask' },
+            ],
+            recipes: [
+                { name: 'Recipe of the Coral Potion' },
+                { name: 'Recipe of the Stoneblood Potion' },
+            ],
+            creations: [
+                { name: 'Whispering Gale Potion' },
+                { name: 'Tideheart Potion' },
+                { name: 'Stoneblood Potion' },
+            ],
+        };
+
+        // Return all ingredients as filtered ingredients (no search functionality)
+        const filteredIngredients = ALL_ITEMS.ingredients;
+
+        return { ALL_ITEMS, filteredIngredients };
+    }, []);
 
     // Group owned items by type
     const grouped = useMemo(() => groupItemsByType(items), [items]);

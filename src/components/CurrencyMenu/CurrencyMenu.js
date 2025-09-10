@@ -199,7 +199,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) 
             <Stack direction={{ base: 'column', md: 'row' }} gap={4} align="flex-end" w="80%">
                 <Spacer />
                 <SimpleGrid
-                    columns={{ base: 2, md: 3, lg: 5 }}
+                    columns={{ base: 2, md: 2, lg: 2 }}
                     spacing={{ base: 4, lg: 6 }}
                     pb={{ base: 4, lg: 0 }}
                     w="100%">
@@ -257,50 +257,6 @@ const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) 
                             maxH={'2.2rem'}
                             _hover={{ bg: hoverColor }}>
                             <Stack direction="row" align="center" pr={2}>
-                                <Image ml={-5} src="images/currency/giftz.png" alt="GIFTZ Icon" minW="50px" h="50px" />
-                                <Text align="center" textAlign={'center'} w="100%">
-                                    {Number(GIFTZBalance).toFixed(0)}
-                                </Text>
-                                <Box
-                                    onClick={e => e.stopPropagation()}
-                                    onMouseDown={e => e.stopPropagation()}
-                                    pointerEvents="auto">
-                                    <ResponsiveTooltip
-                                        label="The very essence of generosity. GIFTZ are tokens of appreciation. They enable you to buy card packs."
-                                        placement="bottom"
-                                        hasArrow
-                                        bgColor="#1F2323"
-                                        color="#FFF"
-                                        p={2}
-                                        borderRadius={'10px'}
-                                        border={'1px solid #585858'}
-                                        zIndex="tooltip">
-                                        <Box as="span" cursor="pointer">
-                                            <BsInfoCircle color="#C3C3C3" size="20px" />
-                                        </Box>
-                                    </ResponsiveTooltip>
-                                </Box>
-                            </Stack>
-                        </MenuButton>
-
-                        <Portal>
-                            <MenuList>
-                                <MenuItem onClick={() => handleOpenSendCurrency('GIFTZ')}>Send GIFTZ</MenuItem>
-                                <MenuItem onClick={() => handleOpenGetMoreCurrency('GIFTZ')}>Get GIFTZ</MenuItem>
-                                <MenuItem onClick={() => handleSwapCurrencyToArdor('GIFTZ')}>Swap to ARDOR</MenuItem>
-                            </MenuList>
-                        </Portal>
-                    </Menu>
-                    <Menu>
-                        <MenuButton
-                            bgColor={bgColor}
-                            color={'black'}
-                            borderColor={borderColor}
-                            rounded="lg"
-                            minW="5rem"
-                            maxH={'2.2rem'}
-                            _hover={{ bg: hoverColor }}>
-                            <Stack direction="row" align="center" pr={2}>
                                 <Image ml={-5} src="images/currency/gem.png" alt="GEM Icon" w="55px" h="50px" />
                                 <Text w="100%" textAlign="center">
                                     {GEMBalance.toFixed(0)}
@@ -333,104 +289,6 @@ const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) 
                                 <MenuItem onClick={() => handleOpenGetMoreCurrency('GEM')}>Get GEM</MenuItem>
                                 <MenuItem onClick={() => handleSwapCurrencyToArdor('GEM')}>Swap to ARDOR</MenuItem>
                                 <MenuItem onClick={() => addToMetamask('GEM')}>Add to Metamask</MenuItem>
-                            </MenuList>
-                        </Portal>
-                    </Menu>
-                    <Menu>
-                        <MenuButton
-                            bgColor={bgColor}
-                            color={'black'}
-                            borderColor={borderColor}
-                            rounded="lg"
-                            minW="5rem"
-                            maxH={'2.2rem'}
-                            _hover={{ bg: hoverColor }}>
-                            <Stack direction="row" align="center" pr={2}>
-                                <Image ml={-5} src="images/currency/weth.png" alt="wETH Icon" w="50px" h="50px" />
-                                <Text w="100%" textAlign="center">
-                                    {parseWETH.toFixed(Math.max(0, wEthDecimals <= 6 ? wEthDecimals : 6))}
-                                </Text>
-                                <Box
-                                    onClick={e => e.stopPropagation()}
-                                    onMouseDown={e => e.stopPropagation()}
-                                    pointerEvents="auto">
-                                    <ResponsiveTooltip
-                                        label="WETH are the ethereal threads connecting our world with the mythical blockchain. They act as a bridge, allowing you to exchange them for GIFTZ, other currencies or cards, expanding your collection and influence."
-                                        placement="bottom"
-                                        hasArrow
-                                        bgColor="#1F2323"
-                                        color="#FFF"
-                                        p={2}
-                                        borderRadius={'10px'}
-                                        border={'1px solid #585858'}
-                                        zIndex="tooltip">
-                                        <Box as="span" cursor="pointer">
-                                            <BsInfoCircle color="#C3C3C3" size="20px" />
-                                        </Box>
-                                    </ResponsiveTooltip>
-                                </Box>
-                            </Stack>
-                        </MenuButton>
-
-                        <Portal>
-                            <MenuList>
-                                <MenuItem onClick={() => handleOpenSendCurrency('WETH')}>Send wETH</MenuItem>
-                                <MenuItem onClick={() => handleOpenGetMoreCurrency('WETH')}>Get wETH</MenuItem>
-                                <MenuItem onClick={() => handleSwapCurrencyToArdor('WETH')}>Swap to ARDOR</MenuItem>
-                                <MenuItem onClick={() => addToMetamask('WETH')}>Add to Metamask</MenuItem>
-                            </MenuList>
-                        </Portal>
-                    </Menu>
-
-                    <Menu>
-                        <MenuButton
-                            bgColor={bgColor}
-                            color={'black'}
-                            borderColor={borderColor}
-                            rounded="lg"
-                            minW="5rem"
-                            maxH={'2.2rem'}
-                            _hover={{ bg: hoverColor }}>
-                            <Stack direction="row" align="center" pr={2}>
-                                <Image
-                                    ml={-5}
-                                    src="images/currency/mana.png"
-                                    alt="MANA Icon"
-                                    w="55px"
-                                    h="55px"
-                                    mb={2}
-                                />
-                                <Text w="100%" textAlign="center">
-                                    {parseMANA.toFixed(0)}
-                                </Text>
-                                <Box
-                                    onClick={e => e.stopPropagation()}
-                                    onMouseDown={e => e.stopPropagation()}
-                                    pointerEvents="auto">
-                                    <ResponsiveTooltip
-                                        label="Crystalline sources of mana, MANA crystals are the essence of magic itself. They serve as governance tokens, allowing you to have a say in the destiny of this enchanted realm."
-                                        placement="bottom"
-                                        hasArrow
-                                        bgColor="#1F2323"
-                                        color="#FFF"
-                                        p={2}
-                                        borderRadius={'10px'}
-                                        border={'1px solid #585858'}
-                                        zIndex="tooltip">
-                                        <Box as="span" cursor="pointer">
-                                            <BsInfoCircle color="#C3C3C3" size="20px" />
-                                        </Box>
-                                    </ResponsiveTooltip>
-                                </Box>
-                            </Stack>
-                        </MenuButton>
-
-                        <Portal>
-                            <MenuList>
-                                <MenuItem onClick={() => handleOpenSendCurrency('MANA')}>Send MANA</MenuItem>
-                                <MenuItem onClick={() => handleOpenGetMoreCurrency('MANA')}>Get MANA</MenuItem>
-                                <MenuItem onClick={() => handleSwapCurrencyToArdor('MANA')}>Swap to ARDOR</MenuItem>
-                                <MenuItem onClick={() => addToMetamask('MANA')}>Add to Metamask</MenuItem>
                             </MenuList>
                         </Portal>
                     </Menu>

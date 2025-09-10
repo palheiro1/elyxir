@@ -85,79 +85,13 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
 export default Navigation;
 
 const FooterCentrado = () => {
-    return (
-        <Stack direction={'column'} w={'100%'} position={'absolute'} bottom={0} background={'#0A1631'}>
-            <Stack direction={'column'} w="100%">
-                <Center>
-                    <Stack direction={'column'} align="center">
-                        <Logo key="logo" isLogoGame={false} w="4rem" mt={1} />
-
-                        <Text textAlign="center" fontSize="2xs" textColor="white" pb={2} w="100%">
-                            © 2022 Tarasca GmbH. All Rights Reserved.
-                            <br />
-                            Build: {process.env.REACT_APP_GIT_SHA}
-                        </Text>
-                    </Stack>
-                </Center>
-            </Stack>
-        </Stack>
-    );
+    // Bottom bar removed as requested
+    return null;
 };
 
 const Header = () => {
-    const linkColor = 'white'; //useColorModeValue('gray.200', 'gray.200');
-    const linkHoverColor = useColorModeValue('white', 'white');
-    // const [isMobile] = useMediaQuery('(max-width: 980px)');
-
-    return (
-        <Stack direction={'column'} w={'100%'} bottom={0} background={'#0A1631'}>
-            <Stack direction={'row'} spacing={12} align="center" my={'auto'} w={'100%'}>
-                <Logo key="logo" p={3} isLogoGame={true} ml={7} />
-                {NAV_ITEMS.map((navItem, index) => (
-                    <Fragment key={index}>
-                        <Box key={navItem.label}>
-                            <Link
-                                p={2}
-                                href={navItem.href ?? '#'}
-                                fontSize={'sm'}
-                                color={linkColor}
-                                isExternal
-                                fontFamily={'ABeeZee'}
-                                _hover={{
-                                    textDecoration: 'none',
-                                    color: linkHoverColor,
-                                }}>
-                                {navItem.label}
-                            </Link>
-                        </Box>
-                    </Fragment>
-                ))}
-                <Spacer />
-                {/* <Box flexGrow={isMobile ? 0.5 : 0.7} /> */}
-                {/* <Stack py={1} direction={'row'}>
-                    <Box w={'450px'} textAlign={'center'} h={'fit-content'} my={'auto'} ml={isMobile && -20}>
-                        <Text
-                            fontFamily="'Aagaz', sans-serif"
-                            fontSize="2xl"
-                            color="#F4931A"
-                            w="100%"
-                            letterSpacing="widest"
-                            textAlign={'center'}>
-                            The Awakening of the Firts Light
-                        </Text>
-                        <Text
-                            fontFamily="'Alatsi', sans-serif"
-                            fontSize="sm"
-                            color="#F4931A"
-                            textAlign={'center'}
-                            w="100%">
-                            SEASON 8
-                        </Text>
-                    </Box>
-                </Stack> */}
-            </Stack>
-        </Stack>
-    );
+    // Toolbar removed as requested
+    return null;
 };
 
 /**
