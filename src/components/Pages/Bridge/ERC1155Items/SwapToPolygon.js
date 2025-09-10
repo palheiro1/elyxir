@@ -30,12 +30,12 @@ import { errorToast, infoToast, okToast } from '../../../../utils/alerts';
 
 /**
  * @name SwapToPolygon
- * @description This component is used to swap potions to Polygon
+ * @description This component is used to swap Elyxir items to Polygon
  * @author Assistant
  * @version 0.1
  * @param {Object} infoAccount - Account info
  * @param {String} ardorAddress - Ardor address
- * @param {Array} items - Items/Potions
+ * @param {Array} items - Elyxir Items
  * @returns {JSX.Element} - JSX element
  */
 const SwapToPolygon = ({ infoAccount, ardorAddress, items }) => {
@@ -88,7 +88,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, items }) => {
 
     const handleSwap = async () => {
         if (!isValidPin || !isValidAccount || selectedItems.length === 0) return;
-        infoToast('Swapping potions to Polygon...', toast);
+        infoToast('Swapping Elyxir items to Polygon...', toast);
         setIsSwapping(true);
 
         // Mock implementation - in real app this would call the blockchain
@@ -99,7 +99,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, items }) => {
 
         // Simulate API call
         setTimeout(() => {
-            okToast('Potions swapped successfully to Polygon!', toast);
+            okToast('Elyxir items swapped successfully to Polygon!', toast);
             setSelectedItems([]);
             setIsSwapping(false);
         }, 2000);
@@ -112,16 +112,16 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, items }) => {
             <Stack direction="column" spacing={8} w={'30rem'}>
                 <Box>
                     <Heading fontSize="xl" fontWeight="light" mb={4}>
-                        Swap potions to Polygon
+                        Swap Elyxir items to Polygon
                     </Heading>
                     <Stack direction="column" spacing={4}>
                         <Box>
                             <Heading fontSize="lg" fontWeight="light" mb={2}>
-                                1. Select potions to swap
+                                1. Select items to swap
                             </Heading>
                             <Menu>
                                 <MenuButton as={Button} rightIcon={<ChevronDownIcon />} w="100%">
-                                    Select potions ({notSelectedItems.length} available)
+                                    Select items ({notSelectedItems.length} available)
                                 </MenuButton>
                                 <MenuList maxH="200px" overflowY="auto">
                                     {notSelectedItems.map((item, index) => (
@@ -138,7 +138,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, items }) => {
                         {selectedItems.length > 0 && (
                             <Box>
                                 <Heading fontSize="lg" fontWeight="light" mb={2}>
-                                    Selected potions
+                                    Selected items
                                 </Heading>
                                 <Stack
                                     direction="column"

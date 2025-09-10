@@ -196,25 +196,25 @@ const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) 
 
     return (
         <>
-            <Stack direction={{ base: 'column', md: 'row' }} gap={4} align="flex-end" w="80%">
-                <Spacer />
+            <Stack direction={{ base: 'column', md: 'row' }} gap={2} align="flex-end" w="100%" justify="flex-end">
                 <SimpleGrid
                     columns={{ base: 2, md: 2, lg: 2 }}
-                    spacing={{ base: 4, lg: 6 }}
-                    pb={{ base: 4, lg: 0 }}
-                    w="100%">
+                    spacing={{ base: 2, lg: 3 }}
+                    pb={{ base: 2, lg: 0 }}
+                    w="auto">
                     <Menu>
                         <MenuButton
                             color="black"
                             bgColor={bgColor}
                             borderColor={borderColor}
                             rounded="lg"
-                            minW={{ base: '100%', md: '5rem' }}
-                            maxH="2.2rem"
+                            minW={{ base: '100%', md: '8rem' }}
+                            minH="3.5rem"
+                            maxH="3.5rem"
                             _hover={{ bg: hoverColor }}>
-                            <Stack direction="row" align="center" pr={2}>
-                                <Image ml={-5} src="images/currency/ignis.png" alt="IGNIS Icon" w="50px" h="50px" />
-                                <Text align="center" w="100%" textAlign="center">
+                            <Stack direction="row" align="center" spacing={2} px={2}>
+                                <Image src="images/currency/ignis.png" alt="IGNIS Icon" w="40px" h="40px" />
+                                <Text align="center" w="100%" textAlign="center" fontSize="md" fontWeight="semibold">
                                     {Number(IGNISBalance).toFixed(0)}
                                 </Text>
                                 <Box
@@ -253,12 +253,13 @@ const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) 
                             color={'black'}
                             borderColor={borderColor}
                             rounded="lg"
-                            minW="5rem"
-                            maxH={'2.2rem'}
+                            minW={{ base: '100%', md: '8rem' }}
+                            minH="3.5rem"
+                            maxH="3.5rem"
                             _hover={{ bg: hoverColor }}>
-                            <Stack direction="row" align="center" pr={2}>
-                                <Image ml={-5} src="images/currency/gem.png" alt="GEM Icon" w="55px" h="50px" />
-                                <Text w="100%" textAlign="center">
+                            <Stack direction="row" align="center" spacing={2} px={2}>
+                                <Image src="images/currency/gem.png" alt="GEM Icon" w="40px" h="40px" />
+                                <Text w="100%" textAlign="center" fontSize="md" fontWeight="semibold">
                                     {GEMBalance.toFixed(0)}
                                 </Text>
                                 <Box

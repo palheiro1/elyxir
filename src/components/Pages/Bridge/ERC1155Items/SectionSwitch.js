@@ -2,7 +2,7 @@ import { Button, ButtonGroup } from '@chakra-ui/react';
 
 /**
  * @name SectionSwitch
- * @description Component to switch between the sections of the Bridge page for items
+ * @description Component to switch between the sections of the Bridge page for Elyxir items
  * @param {Number} option - Option selected
  * @param {Function} setOption - Function to set the option
  * @returns {JSX.Element} - JSX element

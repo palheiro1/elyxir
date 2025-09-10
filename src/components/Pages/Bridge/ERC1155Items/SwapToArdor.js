@@ -17,7 +17,7 @@ import { copyToast, errorToast, okToast } from '../../../../utils/alerts';
 
 /**
  * @name SwapToArdor
- * @description This component is used to swap potions to Ardor
+ * @description This component is used to swap Elyxir items to Ardor
  * @author Assistant
  * @version 0.1
  * @param {Object} infoAccount - Account info
@@ -38,18 +38,18 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
         
         // Simulate API call
         setTimeout(() => {
-            okToast('Potion transfers started successfully!', toast);
+            okToast('Elyxir item transfers started successfully!', toast);
         }, 1000);
     };
 
     return (
         <Stack direction="column" spacing={8} align="center">
             <Heading fontSize="3xl" fontWeight="light" mb={-8}>
-                1. Send the potions
+                1. Send the items
             </Heading>
             <Text fontWeight="light">to your deposit address</Text>
 
-            <FormControl variant="floatingTransparent" id="potions">
+            <FormControl variant="floatingTransparent" id="items">
                 <Tooltip label="Click to copy">
                     <Input
                         value={ethAddress}
@@ -79,7 +79,7 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
                 3. Initiate the swap to this wallet
             </Heading>
 
-            <FormControl variant="floatingTransparent" id="potions">
+            <FormControl variant="floatingTransparent" id="items">
                 <Input value={infoAccount.accountRs} isReadOnly />
                 <FormLabel>ARDOR address</FormLabel>
             </FormControl>
