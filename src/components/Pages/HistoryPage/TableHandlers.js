@@ -9,7 +9,7 @@ import TableCard from '../../Cards/TableCard';
 
 // Utils
 import { calculateFixedAmount, getReason, parseJson, parseRecipient, parseSender } from '../../../utils/txUtils';
-import { BOUNTYACCOUNT, NQTDIVIDER, OMNO_ACCOUNT } from '../../../data/CONSTANTS';
+import { BOUNTYACCOUNT, NQTDIVIDER, OMNO_ACCOUNT, isElyxirAsset } from '../../../data/CONSTANTS';
 import { getAsset } from '../../../utils/cardsUtils';
 import GemCard from '../../Cards/GemCard';
 import IgnisCard from '../../Cards/IgnisCard';
@@ -47,7 +47,7 @@ export const handleType0AndSubtype0 = (tx, timestamp, infoAccount) => {
 /**
  * @description Handles message transactions
  * @param {string} tx - transaction object
- * @param {number} timestamp - timestamp of transaction
+ * @param {number} timestamp - timestamp of timestamp
  * @param {object} infoAccount - account info
  */
 export const handleType1AndSubtype0 = (tx, timestamp, infoAccount) => {
@@ -156,7 +156,26 @@ export const handleType5AndSubtype3 = (tx, timestamp, infoAccount) => {
 };
 
 export const handleItemsTransaction = (tx, timestamp, infoAccount, itemsColection) => {
-    const itemAsset = itemsColection.find(item => item.asset === tx.attachment.asset);
+    if (!itemsColection || itemsColection.length === 0) {
+        // Items not loaded yet, skip for now
+        return;
+    }
+    let itemAsset = itemsColection.find(item => item.asset === tx.attachment.asset);
+    if (!itemAsset) {
+        if (isElyxirAsset(tx.attachment.asset)) {
+            // Fallback: create a minimal item object for Elyxir assets so transaction is not discarded
+            itemAsset = {
+                asset: tx.attachment.asset,
+                imgUrl: `/images/elyxir/unknown.png`, // fallback image, could be improved
+                description: `Elyxir Item (${tx.attachment.asset})`,
+                bonus: { type: 'unknown', power: 0 },
+            };
+            console.warn('handleItemsTransaction: Using fallback for Elyxir asset', tx.attachment.asset);
+        } else {
+            console.warn('handleItemsTransaction: Item asset not found for tx asset', tx.attachment.asset);
+            return; // Avoid crashing until items are available / synced
+        }
+    }
     const inOut = getInOut(tx, infoAccount);
     if (!inOut) return;
 
@@ -541,6 +560,9 @@ export const handleCurrencyTransfer = (type, amount, date, account) => {
 };
 
 export const handleItemsTransfer = (type, amount, date, account, item) => {
+    if (!item) {
+        return null; // Defensive: upstream should have validated, but avoid runtime crash
+    }
     type = type.toLowerCase();
     const { imgUrl, description, bonus } = item;
     const Component = () => {

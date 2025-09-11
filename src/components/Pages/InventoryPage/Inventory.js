@@ -17,6 +17,7 @@ import { ELYXIR_POTIONS } from '../../../data/elyxirPotions';
  * @returns {JSX.Element} - Inventory component
  */
 
+/* eslint-disable no-undef */
 const Inventory = ({ infoAccount }) => {
     // Only Elyxir items
     const { items } = useSelector(state => state.items);

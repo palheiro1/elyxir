@@ -1,4 +1,4 @@
-import { IMGURL, ITEMS_ASSETS, ITEMSACCOUNT, NQTDIVIDER } from '../data/CONSTANTS';
+import { IMGURL, NQTDIVIDER, isElyxirAsset } from '../data/CONSTANTS';
 import {
     addressToAccountId,
     getAccountAssets,
@@ -36,7 +36,7 @@ export const fetchAllItems = async accountRs => {
         { asset: '488367278629756964' }, // lava
         { asset: '1853993309806999896' }, // alamorcego
         { asset: '10089652431946070133' }, // flordealgodao
-        { asset: '8066924493903893072' }, // gardenflower
+        { asset: '8966516609271135665' }, // gardenflower
         { asset: '11436325470737709655' }, // gardensoil
         { asset: '10982823421829006444' }, // herbadeetiopia
         { asset: '1571336020100556625' }, // holi
@@ -44,6 +44,7 @@ export const fetchAllItems = async accountRs => {
         { asset: '10089652431946070133' }, // hymalayansnow
         { asset: '1734749669966442838' }, // kangarootail
         { asset: '15102806604556354632' }, // ash (lava mapped to different ID)
+        { asset: '3607141736374727634' }, // lightning
         { asset: '11508698419506139756' }, // mustardseeds
         { asset: '6043065774866721090' }, // peyote
         { asset: '11508698419506139756' }, // pluma
@@ -52,13 +53,12 @@ export const fetchAllItems = async accountRs => {
         { asset: '6043065774866721090' }, // rahusaliva
         { asset: '11436325470737709655' }, // sand
         { asset: '1734749669966442838' }, // skin
+        { asset: '8717959006135737805' }, // sunlight
         { asset: '15230533556325993984' }, // vampirefang
+        { asset: '10089652431946070133' }, // watercristaline
+        { asset: '2795734210888256790' }, // water_sea  
+        { asset: '65767141008711421' }, // wind
         { asset: '1734749669966442838' }, // wolfsfang
-        { asset: '5570219882495290440' }, // diamantebruto
-        { asset: '11508698419506139756' }, // feather
-        { asset: '15102806604556354632' }, // bonepowder
-        { asset: '1571336020100556625' }, // cloud (duplicate with different mapping)
-        { asset: '8066924493903893072' }, // sunlight (duplicate)
         
         // Tools
         { asset: '7394449015011337044' }, // bellow
@@ -138,7 +138,7 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
         '488367278629756964': { name: 'lava', displayName: 'Lava' },
         '1853993309806999896': { name: 'alamorcego', displayName: 'Bat Wing' },
         '10089652431946070133': { name: 'flordealgodao', displayName: 'Cotton Flower' },
-        '8066924493903893072': { name: 'gardenflower', displayName: 'Garden Flower' },
+        '8966516609271135665': { name: 'gardenflower', displayName: 'Garden Flower' },
         '11436325470737709655': { name: 'gardensoil', displayName: 'Garden Soil' },
         '10982823421829006444': { name: 'herbadeetiopia', displayName: 'Ethiopian Herb' },
         '1571336020100556625': { name: 'holi', displayName: 'Holi Powder' },
@@ -258,5 +258,5 @@ export const getItemImage = itemName => {
 };
 
 export const isItemAsset = asset => {
-    return ITEMS_ASSETS.includes(asset);
+    return isElyxirAsset(asset);
 };

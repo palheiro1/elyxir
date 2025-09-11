@@ -2,7 +2,7 @@ import { Box, Select, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaFilter } from 'react-icons/fa';
 import { BsArrowDownUp } from 'react-icons/bs';
-import { ELYXIR_ASSETS, GEMASSET, isElyxirAsset } from '../../data/CONSTANTS';
+import { isElyxirAsset } from '../../data/CONSTANTS';
 
 const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTransactions }) => {
     const [/*filter*/, setFilter] = useState('all');

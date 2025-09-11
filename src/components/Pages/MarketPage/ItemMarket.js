@@ -7,6 +7,7 @@ import SortAndFilterItems from '../../SortAndFilters/SortAndFilterItems';
 import SectionSwitch from './SectionSwitch';
 import { useSelector } from 'react-redux';
 import { ELYXIR_POTIONS } from '../../../data/elyxirPotions';
+import { isElyxirAsset } from '../../../data/CONSTANTS';
 
 const ItemMarket = ({ items, infoAccount, textColor }) => {
     // Only Elyxir items
@@ -35,7 +36,7 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
         'diamantebruto': '5570219882495290440',
         'feather': '11508698419506139756',
         'flordealgodao': '10089652431946070133',
-        'gardenflower': '8066924493903893072',
+        'gardenflower': '8966516609271135665',
         'gardensoil': '11436325470737709655',
         'herbadeetiopia': '10982823421829006444',
         'holi': '1571336020100556625',
@@ -43,7 +44,7 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
         'hymalayansnow': '10089652431946070133',
         'kangarootail': '1734749669966442838',
         'lava': '15102806604556354632',
-        'lightninggg': '8066924493903893072',
+        'lightninggg': '3607141736374727634',
         'mustardseeds': '11508698419506139756',
         'peyote': '6043065774866721090',
         'pluma': '11508698419506139756',
@@ -52,11 +53,11 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
         'rahusaliva': '6043065774866721090',
         'sand': '11436325470737709655',
         'skin': '1734749669966442838',
-        'sunlight': '8066924493903893072',
+        'sunlight': '8717959006135737805',
         'vampirefang': '15230533556325993984',
         'watercristaline': '10089652431946070133',
         'water_sea': '2795734210888256790',
-        'wind': '8066924493903893072',
+        'wind': '65767141008711421',
         'wolfsfang': '1734749669966442838',
         'arena_del_desierto': '11436325470737709655',
         'colmillo_de_vampiro': '15230533556325993984',

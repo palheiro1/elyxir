@@ -101,7 +101,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
         const processTransactions = () => {
             let newTransactions = [];
 
-            const dirtyTransactions = infoAccount.transactions;
+            const dirtyTransactions = infoAccount.transactions || [];
             console.log('Processing transactions:', dirtyTransactions?.length, 'total transactions');
 
             dirtyTransactions.forEach((tx, index) => {
@@ -180,7 +180,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
 
             console.log('Processed transactions result:', newTransactions.length, 'transactions processed');
             console.log('First few processed transactions:', newTransactions.slice(0, 3));
-            setDividends(infoAccount.dividends);
+            setDividends(infoAccount.dividends || []);
             setTransactions(newTransactions);
             setNeedReload(false);
         };
@@ -194,12 +194,13 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
             collectionCardsType: typeof collectionCardsStatic
         });
 
-        infoAccount.transactions !== undefined &&
-            collectionCardsStatic !== undefined &&
-            collectionCardsStatic.length > 0 &&
-            needReload &&
-            processTransactions();
-    }, [infoAccount, transactions, epoch_beginning, needReload, collectionCardsStatic, items]);
+    infoAccount.transactions !== undefined &&
+        Array.isArray(infoAccount.transactions) &&
+        collectionCardsStatic !== undefined &&
+        collectionCardsStatic.length > 0 &&
+        needReload &&
+        processTransactions();
+    }, [infoAccount, epoch_beginning, needReload, collectionCardsStatic, items]);
 
     return (
         <>
