@@ -1,17 +1,7 @@
-import React, { useMemo, useState, useCallback } from 'react';
-import { 
-    Heading, 
-    Text, 
-    Box, 
-    Stack, 
-    Button, 
-    HStack, 
-    Badge, 
-    Progress, 
-    Wrap, 
-    WrapItem, 
-    useColorModeValue 
-} from '@chakra-ui/react';
+import { useMemo, useState, useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { Heading, Text, Box, Stack, Button, Image, Tooltip, HStack, Tag, Badge, Progress, Wrap, WrapItem, useColorModeValue } from '@chakra-ui/react';
+import GridCards from '../../Cards/GridCards';
 
 // Full set of example potion recipes
 const RECIPES = [
@@ -90,26 +80,14 @@ const RECIPES = [
 ];
 
 const Elyxir = ({ infoAccount }) => {
+    const { items } = useSelector(state => state.items);
+    const [message, setMessage] = useState('');
     // Alchemy UI state
     const [selectedRecipeIdx, setSelectedRecipeIdx] = useState(0);
-    const [selectedFlaskIdx, setSelectedFlaskIdx] = useState(0);
-    const [craftDuration, setCraftDuration] = useState(1); // default 1 day
+    const [craftDuration, setCraftDuration] = useState(300); // default 5 min
     const [craftingProgress, setCraftingProgress] = useState(0); // percent
     // UI colors (hooks must be at top level)
     const sectionBg = useColorModeValue('gray.50', 'gray.800');
-
-    // Calculate success rate based on craft duration (parabolic curve)
-    const calculateSuccessRate = (days) => {
-        // Parabolic formula: y = 20 + 75 * (1 - (1/(1 + 0.5*x))^2)
-        // At day 1: ~20%, at day 7: ~95%, asymptotic to 100%
-        const baseRate = 20;
-        const maxIncrease = 75;
-        const factor = 0.5;
-        return Math.min(95, baseRate + maxIncrease * (1 - Math.pow(1 / (1 + factor * days), 2)));
-    };
-
-    // Flask multipliers for ingredient quantities
-    const flaskMultipliers = [1, 2, 3, 4, 5]; // x1 to x5
 
     // Create assets using real Ardor asset IDs from the blockchain (same as Inventory and Market)
     const fakeAssets = useMemo(() => {
@@ -338,16 +316,15 @@ const Elyxir = ({ infoAccount }) => {
         return result;
     }, [allElyxirItems]);
 
-    // Get missing items for recipe crafting (updated to use flask multiplier)
+    // Get missing items for recipe crafting (updated to use new data structure)
     const getMissingItems = useCallback(
-        (recipe, flaskMultiplier) => {
+        recipe => {
             const missing = [];
             if (recipe.ingredients) {
                 recipe.ingredients.forEach(req => {
                     const item = grouped.ingredients?.find(i => i.name.toLowerCase() === req.name.toLowerCase());
                     const have = item ? Number(item.quantityQNT) : 0;
-                    const needed = req.quantity * flaskMultiplier;
-                    if (have < needed) missing.push(`${needed - have}x ${req.name}`);
+                    if (have < req.quantity) missing.push(`${req.quantity - have}x ${req.name}`);
                 });
             }
             if (recipe.tools) {
@@ -364,238 +341,217 @@ const Elyxir = ({ infoAccount }) => {
     return (
         <Box maxW={'100%'} px={4} py={6}>
             {/* Header */}
+            <Heading size="lg" mb={6} textAlign="center">
+                🧪 Elyxir Alchemy Workshop
+            </Heading>
 
+            {/* Workshop Tabs */}
+            <Stack direction={{ base: 'column', md: 'row' }} spacing={4} mb={6} justify="center">
+                <Button
+                    size="sm"
+                    variant={message === 'workshop' ? 'solid' : 'outline'}
+                    colorScheme="purple"
+                    onClick={() => setMessage('workshop')}
+                    data-elyxir-tab="workshop">
+                    Workshop
+                </Button>
+                <Button
+                    size="sm"
+                    variant={message === 'inventory' ? 'solid' : 'outline'}
+                    colorScheme="purple"
+                    onClick={() => setMessage('inventory')}>
+                    Inventory
+                </Button>
+                <Button
+                    size="sm"
+                    variant={message === 'recipes' ? 'solid' : 'outline'}
+                    colorScheme="purple"
+                    onClick={() => setMessage('recipes')}>
+                    Recipes
+                </Button>
+            </Stack>
 
-            <Box bg={sectionBg} p={6} borderRadius="md">
-                {/* Recipe Selection */}
-                <Stack spacing={6} mb={8}>
-                    <Text fontWeight="bold" fontSize="lg">Select Recipe:</Text>
-                    <Wrap spacing={4}>
-                        {RECIPES.map((recipe, idx) => {
-                            const currentMultiplier = flaskMultipliers[selectedFlaskIdx];
-                            const missing = getMissingItems(recipe, currentMultiplier);
-                            const canCraft = missing.length === 0;
-                            
-                            return (
-                                <WrapItem key={idx}>
-                                    <Button
-                                        size="md"
-                                        variant={selectedRecipeIdx === idx ? 'solid' : 'outline'}
-                                        colorScheme={canCraft ? 'green' : 'gray'}
-                                        onClick={() => setSelectedRecipeIdx(idx)}
-                                        isDisabled={!canCraft}
-                                        h="60px"
-                                        px={6}>
-                                        {recipe.name}
-                                    </Button>
-                                </WrapItem>
-                            );
-                        })}
-                    </Wrap>
-                </Stack>
+            {/* Content based on selected tab */}
+            {(() => {
+                if (message === 'inventory') {
+                    return (
+                        <Box bg={sectionBg} p={4} borderRadius="md">
+                            <Heading size="md" mb={4}>Your Elyxir Inventory</Heading>
+                            <GridCards 
+                                cards={allElyxirItems} 
+                                infoAccount={infoAccount}
+                                isMarket={false}
+                            />
+                        </Box>
+                    );
+                }
 
-                {/* Flask Selection */}
-                <Stack spacing={6} mb={8}>
-                    <Text fontWeight="bold" fontSize="lg">Select Flask (Potion Quantity):</Text>
-                    <Wrap spacing={4}>
-                        {fakeAssets.flasks.map((flask, idx) => (
-                            <WrapItem key={idx}>
-                                <Button
-                                    variant={selectedFlaskIdx === idx ? 'solid' : 'outline'}
-                                    colorScheme="blue"
-                                    onClick={() => setSelectedFlaskIdx(idx)}
-                                    h="120px"
-                                    w="120px"
-                                    flexDirection="column"
-                                    p={2}>
-                                    <Box
-                                        w="60px"
-                                        h="60px"
-                                        backgroundImage={`url(${flask.imgUrl})`}
-                                        backgroundSize="contain"
-                                        backgroundRepeat="no-repeat"
-                                        backgroundPosition="center"
-                                        mb={2}
-                                    />
-                                    <Text fontSize="xs" textAlign="center">
-                                        {flask.name}
-                                    </Text>
-                                    <Badge colorScheme="blue" fontSize="xs">
-                                        x{flaskMultipliers[idx]} potions
-                                    </Badge>
-                                </Button>
-                            </WrapItem>
-                        ))}
-                    </Wrap>
-                </Stack>
+                if (message === 'recipes') {
+                    return (
+                        <Box bg={sectionBg} p={4} borderRadius="md">
+                            <Heading size="md" mb={4}>Potion Recipes</Heading>
+                            <Stack spacing={4}>
+                                {RECIPES.map((recipe, idx) => {
+                                    const missing = getMissingItems(recipe);
+                                    const canCraft = missing.length === 0;
+                                    
+                                    return (
+                                        <Box key={idx} p={4} border="1px" borderColor="gray.300" borderRadius="md">
+                                            <HStack justify="space-between" mb={2}>
+                                                <Heading size="sm">{recipe.name}</Heading>
+                                                <Badge colorScheme={canCraft ? 'green' : 'red'}>
+                                                    {canCraft ? 'Can Craft' : 'Missing Items'}
+                                                </Badge>
+                                            </HStack>
+                                            
+                                            <Text fontSize="sm" color="gray.600" mb={2}>
+                                                Success Rate: {Math.round(recipe.successRate * 100)}%
+                                            </Text>
+                                            
+                                            <Stack spacing={2}>
+                                                <Text fontWeight="bold">Ingredients:</Text>
+                                                <Wrap>
+                                                    {recipe.ingredients.map((ing, i) => (
+                                                        <WrapItem key={i}>
+                                                            <Tag size="sm" colorScheme="blue">
+                                                                {ing.quantity}x {ing.name}
+                                                            </Tag>
+                                                        </WrapItem>
+                                                    ))}
+                                                </Wrap>
+                                                
+                                                <Text fontWeight="bold">Tools:</Text>
+                                                <Wrap>
+                                                    {recipe.tools.map((tool, i) => (
+                                                        <WrapItem key={i}>
+                                                            <Tag size="sm" colorScheme="orange">
+                                                                {tool}
+                                                            </Tag>
+                                                        </WrapItem>
+                                                    ))}
+                                                </Wrap>
+                                                
+                                                {missing.length > 0 && (
+                                                    <>
+                                                        <Text fontWeight="bold" color="red.500">Missing:</Text>
+                                                        <Wrap>
+                                                            {missing.map((item, i) => (
+                                                                <WrapItem key={i}>
+                                                                    <Tag size="sm" colorScheme="red">
+                                                                        {item}
+                                                                    </Tag>
+                                                                </WrapItem>
+                                                            ))}
+                                                        </Wrap>
+                                                    </>
+                                                )}
+                                            </Stack>
+                                        </Box>
+                                    );
+                                })}
+                            </Stack>
+                        </Box>
+                    );
+                }
 
-                {/* Selected Recipe Details with Visual Ingredients */}
-                {RECIPES[selectedRecipeIdx] && (
-                    <Box p={6} border="2px" borderColor="purple.300" borderRadius="md" mb={8}>
-                        <Heading size="md" mb={4}>{RECIPES[selectedRecipeIdx].name}</Heading>
-                        <Text fontSize="md" mb={4} color="purple.600" fontWeight="bold">
-                            Success Rate: {Math.round(calculateSuccessRate(craftDuration))}%
-                        </Text>
+                // Workshop (default)
+                return (
+                    <Box bg={sectionBg} p={4} borderRadius="md">
+                        <Heading size="md" mb={4}>Potion Crafting Workshop</Heading>
                         
-                        <Stack spacing={6}>
-                            {/* Ingredients with Images */}
-                            <Box>
-                                <Text fontWeight="bold" fontSize="lg" mb={4}>Required Ingredients:</Text>
-                                <Wrap spacing={6}>
-                                    {RECIPES[selectedRecipeIdx].ingredients.map((ing, i) => {
-                                        const ingredient = grouped.ingredients?.find(item => 
-                                            item.name.toLowerCase() === ing.name.toLowerCase()
-                                        );
-                                        const requiredQty = ing.quantity * flaskMultipliers[selectedFlaskIdx];
-                                        const have = ingredient ? Number(ingredient.quantityQNT) : 0;
-                                        const hasEnough = have >= requiredQty;
-                                        
-                                        return (
-                                            <WrapItem key={i}>
-                                                <Box 
-                                                    p={4}
-                                                    border="2px"
-                                                    borderColor={hasEnough ? "green.300" : "red.300"}
-                                                    borderRadius="md"
-                                                    textAlign="center"
-                                                    w="140px">
-                                                    {ingredient && (
-                                                        <Box
-                                                            w="60px"
-                                                            h="60px"
-                                                            backgroundImage={`url(${ingredient.imgUrl})`}
-                                                            backgroundSize="contain"
-                                                            backgroundRepeat="no-repeat"
-                                                            backgroundPosition="center"
-                                                            mx="auto"
-                                                            mb={2}
-                                                        />
-                                                    )}
-                                                    <Text fontSize="sm" fontWeight="bold" mb={1}>
-                                                        {ing.name}
-                                                    </Text>
-                                                    <Badge 
-                                                        colorScheme={hasEnough ? "green" : "red"}
-                                                        fontSize="xs">
-                                                        {requiredQty} needed
-                                                    </Badge>
-                                                    <Text fontSize="xs" color="gray.600">
-                                                        ({have} available)
-                                                    </Text>
-                                                </Box>
-                                            </WrapItem>
-                                        );
-                                    })}
-                                </Wrap>
-                            </Box>
+                        {/* Recipe Selection */}
+                        <Stack spacing={4} mb={6}>
+                            <Text fontWeight="bold">Select Recipe:</Text>
+                            <Wrap>
+                                {RECIPES.map((recipe, idx) => {
+                                    const missing = getMissingItems(recipe);
+                                    const canCraft = missing.length === 0;
+                                    
+                                    return (
+                                        <WrapItem key={idx}>
+                                            <Button
+                                                size="sm"
+                                                variant={selectedRecipeIdx === idx ? 'solid' : 'outline'}
+                                                colorScheme={canCraft ? 'green' : 'gray'}
+                                                onClick={() => setSelectedRecipeIdx(idx)}
+                                                isDisabled={!canCraft}>
+                                                {recipe.name}
+                                            </Button>
+                                        </WrapItem>
+                                    );
+                                })}
+                            </Wrap>
+                        </Stack>
 
-                            {/* Tools with Images */}
-                            <Box>
-                                <Text fontWeight="bold" fontSize="lg" mb={4}>Required Tools:</Text>
-                                <Wrap spacing={6}>
-                                    {RECIPES[selectedRecipeIdx].tools.map((toolName, i) => {
-                                        const tool = grouped.tools?.find(item => 
-                                            item.name.toLowerCase() === toolName.toLowerCase()
-                                        );
-                                        const hasTool = !!tool;
-                                        
-                                        return (
+                        {/* Selected Recipe Details */}
+                        {RECIPES[selectedRecipeIdx] && (
+                            <Box p={4} border="1px" borderColor="purple.300" borderRadius="md" mb={4}>
+                                <Heading size="sm" mb={2}>{RECIPES[selectedRecipeIdx].name}</Heading>
+                                <Text fontSize="sm" mb={2}>
+                                    Success Rate: {Math.round(RECIPES[selectedRecipeIdx].successRate * 100)}%
+                                </Text>
+                                
+                                <Stack spacing={2}>
+                                    <Text fontWeight="bold">Required:</Text>
+                                    <Wrap>
+                                        {RECIPES[selectedRecipeIdx].ingredients.map((ing, i) => (
                                             <WrapItem key={i}>
-                                                <Box 
-                                                    p={4}
-                                                    border="2px"
-                                                    borderColor={hasTool ? "green.300" : "red.300"}
-                                                    borderRadius="md"
-                                                    textAlign="center"
-                                                    w="140px">
-                                                    {tool && (
-                                                        <Box
-                                                            w="60px"
-                                                            h="60px"
-                                                            backgroundImage={`url(${tool.imgUrl})`}
-                                                            backgroundSize="contain"
-                                                            backgroundRepeat="no-repeat"
-                                                            backgroundPosition="center"
-                                                            mx="auto"
-                                                            mb={2}
-                                                        />
-                                                    )}
-                                                    <Text fontSize="sm" fontWeight="bold" mb={1}>
-                                                        {toolName}
-                                                    </Text>
-                                                    <Badge 
-                                                        colorScheme={hasTool ? "green" : "red"}
-                                                        fontSize="xs">
-                                                        {hasTool ? "Available" : "Missing"}
-                                                    </Badge>
-                                                </Box>
+                                                <Tag size="sm" colorScheme="blue">
+                                                    {ing.quantity}x {ing.name}
+                                                </Tag>
                                             </WrapItem>
-                                        );
-                                    })}
-                                </Wrap>
+                                        ))}
+                                        {RECIPES[selectedRecipeIdx].tools.map((tool, i) => (
+                                            <WrapItem key={i}>
+                                                <Tag size="sm" colorScheme="orange">
+                                                    {tool}
+                                                </Tag>
+                                            </WrapItem>
+                                        ))}
+                                    </Wrap>
+                                </Stack>
                             </Box>
+                        )}
+
+                        {/* Crafting Controls */}
+                        <Stack spacing={4}>
+                            <HStack>
+                                <Text>Craft Duration (minutes):</Text>
+                                <Button size="sm" onClick={() => setCraftDuration(Math.max(60, craftDuration - 60))}>-</Button>
+                                <Text minW="60px" textAlign="center">{Math.round(craftDuration / 60)}</Text>
+                                <Button size="sm" onClick={() => setCraftDuration(craftDuration + 60)}>+</Button>
+                            </HStack>
+                            
+                            {craftingProgress > 0 && (
+                                <Box>
+                                    <Text mb={2}>Crafting Progress:</Text>
+                                    <Progress value={craftingProgress} colorScheme="purple" />
+                                </Box>
+                            )}
+                            
+                            <Button
+                                colorScheme="purple"
+                                size="lg"
+                                isDisabled={getMissingItems(RECIPES[selectedRecipeIdx]).length > 0 || craftingProgress > 0}
+                                onClick={() => {
+                                    // Start crafting simulation
+                                    setCraftingProgress(0);
+                                    const interval = setInterval(() => {
+                                        setCraftingProgress(prev => {
+                                            if (prev >= 100) {
+                                                clearInterval(interval);
+                                                return 0;
+                                            }
+                                            return prev + (100 / (craftDuration / 1000));
+                                        });
+                                    }, 1000);
+                                }}>
+                                {craftingProgress > 0 ? 'Crafting...' : 'Start Crafting'}
+                            </Button>
                         </Stack>
                     </Box>
-                )}
-
-                {/* Crafting Controls */}
-                <Stack spacing={6}>
-                    <HStack spacing={8}>
-                        <Text fontWeight="bold" fontSize="lg">Craft Duration:</Text>
-                        <HStack>
-                            <Button 
-                                size="md" 
-                                onClick={() => setCraftDuration(Math.max(1, craftDuration - 1))}
-                                colorScheme="purple"
-                                variant="outline">
-                                -
-                            </Button>
-                            <Text minW="80px" textAlign="center" fontSize="lg" fontWeight="bold">
-                                {craftDuration} {craftDuration === 1 ? 'day' : 'days'}
-                            </Text>
-                            <Button 
-                                size="md" 
-                                onClick={() => setCraftDuration(craftDuration + 1)}
-                                colorScheme="purple"
-                                variant="outline">
-                                +
-                            </Button>
-                        </HStack>
-                        <Text fontSize="md" color="purple.600" fontWeight="bold">
-                            Success Rate: {Math.round(calculateSuccessRate(craftDuration))}%
-                        </Text>
-                    </HStack>
-                    
-                    {craftingProgress > 0 && (
-                        <Box>
-                            <Text mb={2} fontWeight="bold">Crafting Progress:</Text>
-                            <Progress value={craftingProgress} colorScheme="purple" size="lg" />
-                        </Box>
-                    )}
-                    
-                    <Button
-                        colorScheme="purple"
-                        size="lg"
-                        h="60px"
-                        fontSize="lg"
-                        isDisabled={getMissingItems(RECIPES[selectedRecipeIdx], flaskMultipliers[selectedFlaskIdx]).length > 0 || craftingProgress > 0}
-                        onClick={() => {
-                            // Start crafting simulation
-                            setCraftingProgress(0);
-                            const interval = setInterval(() => {
-                                setCraftingProgress(prev => {
-                                    if (prev >= 100) {
-                                        clearInterval(interval);
-                                        return 0;
-                                    }
-                                    return prev + (100 / (craftDuration * 10)); // Simulate days
-                                });
-                            }, 100);
-                        }}>
-                        {craftingProgress > 0 ? 'Crafting...' : `Start Crafting (${flaskMultipliers[selectedFlaskIdx]} potions)`}
-                    </Button>
-                </Stack>
-            </Box>
+                );
+            })()}
         </Box>
     );
 };
