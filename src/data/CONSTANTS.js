@@ -8,9 +8,9 @@
 // ---------------------------------------------------------
 // ------------------ APP CONFIGURATION --------------------
 // ---------------------------------------------------------
-export const REFRESH_DATA_TIME = 6 * 1000; // 5 seconds
-export const REFRESH_BLOCK_TIME = 2.5 * 1000; // 10 seconds
-export const REFRESH_UNWRAP_TIME = 30 * 1000; // 30 seconds
+export const REFRESH_DATA_TIME = 60 * 1000; // 60 seconds - Reduced from 6s to prevent infinite API calls
+export const REFRESH_BLOCK_TIME = 15 * 1000; // 15 seconds - Reduced from 2.5s to prevent spam
+export const REFRESH_UNWRAP_TIME = 120 * 1000; // 120 seconds - Increased for less frequent checks
 export const REFRESH_BOUNTY_PARTICIPANTS = 22 * 1000; // 30 seconds
 
 export const RARITY_COLORS = {
@@ -309,3 +309,76 @@ export const ITEMS_ASSETS = [
     '7582224115266007515',
     '6485210212239811',
 ];
+
+// Complete list of Elyxir game assets (ingredients, tools, creations, flasks, recipes)
+export const ELYXIR_ASSETS = [
+    // Ingredients
+    '7536385584787697086',  // Fetid Waters
+    '2795734210888256790',  // Alcohol Beer
+    '16326649816730553703', // Blood
+    '10917692030112170713', // Crystal Water
+    '10444425886085847503', // Sea Water
+    '18101012326255288772', // Cloud Essence
+    '3607141736374727634',  // Lightning Essence
+    '65767141008711421',    // Wind Essence
+    '8717959006135737805',  // Bottled Sunlight
+    '488367278629756964',   // Volcano Lava
+    '6086151229884242778',  // Cotton Flower
+    '8966516609271135665',  // Garden Flower
+    '1941380340903453000',  // Tree Bark
+    '5528548442683058721',  // Ethiopian Herb
+    '524790161704873898',   // Poison Herb
+    '583958094572828441',   // Mustard Seeds
+    '12313032092046113556', // Peyote
+    '8825927167203958938',  // Bat Wing
+    '4735490741705855799',  // Bigfoot Hair
+    '15284691712437925618', // Feather
+    '16412049206728355506', // Kangaroo Tail
+    '609721796834652174',   // Snake Skin
+    '9057629654312953814',  // Vampire Blood
+    '3865726407233803673',  // Wolf Fang
+    '13430257599807483745', // Araucarian Resine
+    '374078224198142471',   // Volcanic Ash
+    '17472981396773816914', // Bone Powder
+    '1479526493428793943',  // Horn Dust
+    '10229749181769297696', // Desert Sand
+    '465570788961452184',   // Garden Soil
+    '13446501052073878899', // Holi Powder
+    '7891814295348826088',  // Rainbow Dust
+    '2603114092541070832',  // Himalayan Snow
+    '8821500247715349893',  // Rahu Saliva
+    // Tools
+    '7394449015011337044',  // Bellow
+    '1310229991284473521',  // Cauldron
+    '9451976923053037726',  // Ladle
+    '188493294393002400',   // Mortar
+    // Creations
+    '6485210212239811',     // Whispering Gale Potion
+    '7582224115266007515',  // Tideheart Potion
+    '10474636406729395731', // Stoneblood Potion
+    '5089659721388119266',  // Potion of the Eternal Silk
+    '8693351662911145147',  // Potion of the Coral Spirits
+    '11206437400477435454', // Potion of the Feathered Flame
+    '12861522637067934750', // Potion of the Shifting Dunes
+    '3858707486313568681',  // Potion of the Forgotten Grove
+    // Flasks
+    '4367881087678870632',  // Conical Flask
+    '3758988694981372970',  // Pear-Shaped Flask
+    '1328293559375692481',  // Kjeldahl Flask
+    '8026549983053279231',  // Florence Flask
+    '9118586585609900793',  // Round-Bottom Flask
+    // Recipes
+    '12936439663349626618', // Whispering Gale Potion Recipe
+    '7024690161218732154',  // Tideheart Potion Recipe
+    '11654119158397769364', // Stoneblood Potion Recipe
+    '1462047204733593633',  // Potion of the Eternal Silk Recipe
+    '6864800023593094679',  // Potion of the Coral Spirits Recipe
+    '1770779863759720918',  // Potion of the Feathered Flame Recipe
+    '10956456574154580310', // Potion of the Shifting Dunes Recipe
+    '7535070915409870441',  // Potion of the Forgotten Grove Recipe
+];
+
+// Helper function to check if an asset is an Elyxir game asset
+export const isElyxirAsset = (assetId) => {
+    return ELYXIR_ASSETS.includes(assetId) || assetId === GEMASSET;
+};

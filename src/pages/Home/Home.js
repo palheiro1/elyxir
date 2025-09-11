@@ -63,6 +63,7 @@ import {
 } from '../../utils/walletUtils';
 
 import {
+    getAccountAssets,
     getAccountLedger,
     getBlockchainTransactions,
     getTrades,
@@ -79,6 +80,7 @@ import { setCardsManually } from '../../redux/reducers/CardsReducer';
 import ProfileDropdown from '../../components/Navigation/ProfileDropdown';
 import { fetchAllItems } from '../../utils/itemsUtils';
 import { setItemsManually } from '../../redux/reducers/ItemsReducer';
+import apiMonitor from '../../utils/apiMonitor';
 
 /**
  * @name Home
@@ -97,6 +99,12 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Get cards from Redux store
     const { cards } = useSelector(state => state.cards);
     const { items } = useSelector(state => state.items);
+    
+    // Debug Redux state changes
+    useEffect(() => {
+        console.log('Home - Redux cards state changed, length:', cards.length);
+        console.log('Home - Redux items state changed, length:', items.length);
+    }, [cards, items]);
 
     // Buy pack dialog
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -123,18 +131,25 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const [giftzCardsHash, setGiftzCardsHash] = useState('');
     const [wethCardsHash, setWethCardsHash] = useState('');
     const [manaCardsHash, setManaCardsHash] = useState('');
-    const [cardsHash, setCardsHash] = useState('');
+    const [cardsHash] = useState('');
     const [itemsHash, setItemsHash] = useState('');
 
     // Filtered cards
     const [cardsFiltered, setCardsFiltered] = useState(cards);
 
     // Uncorfirmed transactions
-    const [unconfirmedTransactions, setUnconfirmedTransactions] = useState([]);
+    const [unconfirmedTransactions] = useState([]);
 
     // Need reload data
     const [needReload, setNeedReload] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    
+    // Add request deduplication to prevent multiple simultaneous requests
+    const [lastRequestTime, setLastRequestTime] = useState(0);
+    const REQUEST_DEBOUNCE_MS = 5000; // Minimum 5 seconds between requests
+    
+    // Add abort controller for request cancellation
+    const abortControllerRef = useRef(null);
 
     // Menu
     const [option, setOption] = useState(0);
@@ -207,17 +222,37 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         });
     };
 
-    const [firstTime, setFirstTime] = useState(true);
-
     useEffect(() => {
         if (!infoAccount.accountRs || !needReload || isLoading) return;
 
         const loadAll = async () => {
             try {
-                setFirstTime(false);
+                // Check API rate limiting before proceeding
+                if (!apiMonitor.shouldAllowCall('loadAll')) {
+                    console.warn('Home - LoadAll blocked by API monitor');
+                    setIsLoading(false);
+                    return;
+                }
+                
+                // Cancel previous request if still running
+                if (abortControllerRef.current) {
+                    abortControllerRef.current.abort();
+                }
+                abortControllerRef.current = new AbortController();
+                
+                // Prevent overlapping requests with debouncing
+                const now = Date.now();
+                if (now - lastRequestTime < REQUEST_DEBOUNCE_MS) {
+                    console.log('Home - Request debounced, skipping loadAll');
+                    return;
+                }
+                setLastRequestTime(now);
+                
                 setIsLoading(true);
                 setNeedReload(false);
                 const { accountRs } = infoAccount;
+
+                console.log('Home - Starting loadAll with debouncing at:', new Date().toISOString());
 
                 // Fetch all info
                 const [
@@ -230,6 +265,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     dividends,
                     giftzOmnoBalance,
                     loadItems,
+                    accountAssets,
                 ] = await Promise.all([
                     fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
                     fetchCurrencyAssets(
@@ -249,6 +285,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     }),
                     getOmnoGiftzBalance(accountRs),
                     fetchAllItems(accountRs),
+                    getAccountAssets(accountRs),
                 ]);
 
                 const gems = currencyAssets[0].find(asset => asset.asset === GEMASSET);
@@ -256,12 +293,13 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 const giftzAsset = currencyAssets[2].find(asset => asset.asset === GIFTZASSET);
                 const mana = currencyAssets[3].find(asset => asset.asset === MANAASSET);
 
-                if (firstTime || cards.length === 0) {
-                    dispatch(setCardsManually(loadCards));
-                }
-                if (firstTime || items.length === 0) {
-                    dispatch(setItemsManually(loadItems));
-                }
+                // Always dispatch cards and items when they're loaded to ensure Redux state is updated
+                console.log('Home - Dispatching cards to Redux. LoadCards length:', loadCards.length);
+                console.log('Home - Current Redux cards length:', cards.length);
+                dispatch(setCardsManually(loadCards));
+                
+                console.log('Home - Dispatching items to Redux. LoadItems length:', loadItems.length);
+                dispatch(setItemsManually(loadItems));
                 if (txs.transactions.length === 0) {
                     firstTimeToast(toast);
                 }
@@ -270,6 +308,12 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
                 const auxDividends = dividends.entries;
                 updateDividendsWithCards(auxDividends, loadCards).then(() => {
+                    // -----------------------------------------------------------------
+                    // Debug account assets
+                    // -----------------------------------------------------------------
+                    console.log('Home - accountAssets from API:', accountAssets);
+                    console.log('Home - accountAssets.accountAssets:', accountAssets?.accountAssets);
+                    
                     // -----------------------------------------------------------------
                     // Rebuild infoAccount
                     // -----------------------------------------------------------------
@@ -291,7 +335,11 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                         currentBids: currentAskOrBids.bidOrders,
                         trades: trades.trades,
                         stuckedGiftz: giftzOmnoBalance,
+                        assets: accountAssets.accountAssets,
                     };
+
+                    console.log('Home - _auxInfo.assets:', _auxInfo.assets);
+                    console.log('Home - _auxInfo object:', _auxInfo);
 
                     // -----------------------------------------------------------------
                     // Get all hashes and compare
@@ -303,18 +351,52 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset);
                 checkDataChange('wETH', wethCardsHash, setWethCards, setWethCardsHash, weth);
                 checkDataChange('MANA', manaCardsHash, setManaCards, setManaCardsHash, mana);
-                checkCardsChange('Cards', cardsHash, setCardsHash, dispatch, loadCards, setCardsManually);
+                // Remove the duplicate card dispatch since we're already dispatching above
+                // checkCardsChange('Cards', cardsHash, setCardsHash, dispatch, loadCards, setCardsManually);
+                console.log('Home - After loadAll, final Redux cards length should be:', loadCards.length);
                 checkCardsChange('Items', itemsHash, setItemsHash, dispatch, loadItems, setItemsManually);
+                
+                // Log API monitor stats after successful load
+                console.log('Home - LoadAll completed successfully');
+                apiMonitor.logStats();
             } catch (error) {
                 console.error('Mythical Beings: Error loading data', error);
+                // On error, add additional delay before allowing next request
+                setLastRequestTime(Date.now() + REQUEST_DEBOUNCE_MS);
             } finally {
                 setIsLoading(false);
+                abortControllerRef.current = null;
             }
         };
 
         loadAll();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [infoAccount, needReload, isLoading]);
+    }, [infoAccount, needReload]);
+
+    // Add page visibility monitoring to reduce API calls when tab is not active
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                console.log('Home - Tab became visible, triggering reload');
+                setNeedReload(true);
+            } else {
+                console.log('Home - Tab became hidden, pausing refreshes');
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+    }, []);
+
+    // Cleanup effect to cancel ongoing requests when component unmounts
+    useEffect(() => {
+        return () => {
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+                console.log('Home - Component unmounting, aborting requests');
+            }
+        };
+    }, []);
 
     // Only set up this interval once, and use a ref to always get the latest isLoading
     const isLoadingRef = useRef(isLoading);
@@ -325,7 +407,13 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (!isLoadingRef.current) {
-                setNeedReload(true);
+                // Only trigger reload if user is active and tab is visible
+                if (document.visibilityState === 'visible') {
+                    console.log('Home - Interval triggering reload at:', new Date().toISOString());
+                    setNeedReload(true);
+                } else {
+                    console.log('Home - Skipping reload, tab not visible');
+                }
             }
         }, REFRESH_DATA_TIME);
         return () => clearInterval(intervalId);
@@ -342,7 +430,10 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     }, [dispatch]);
     useEffect(() => {
         const intervalId = setInterval(() => {
-            dispatchRef.current(getBlockchainBlocks());
+            // Only check blocks if tab is visible and API monitor allows it
+            if (document.visibilityState === 'visible' && apiMonitor.shouldAllowCall('getBlockchainBlocks')) {
+                dispatchRef.current(getBlockchainBlocks());
+            }
         }, REFRESH_BLOCK_TIME);
         return () => clearInterval(intervalId);
     }, []);

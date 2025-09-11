@@ -19,7 +19,94 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
     // 2 -> Trades
     const [option, setOption] = useState(0);
 
-    // Create fake assets for different sections based on available images (same as Inventory)
+    // Real Ardor asset IDs mapping from CSV data
+    const realAssetIds = useMemo(() => ({
+        // Ingredients mapping (using real Ardor asset IDs)
+        'aguas_fetidas': '2795734210888256790',
+        'alamorcego': '1853993309806999896',
+        'alcoholbeer': '6043065774866721090',
+        'araucarianresine': '7536385584787697086',
+        'ash': '15102806604556354632',
+        'bigfootshair': '1734749669966442838',
+        'blood': '6043065774866721090',
+        'bonepowder': '15102806604556354632',
+        'cloud': '1571336020100556625',
+        'corteza': '11436325470737709655',
+        'diamantebruto': '5570219882495290440',
+        'feather': '11508698419506139756',
+        'flordealgodao': '10089652431946070133',
+        'gardenflower': '8066924493903893072',
+        'gardensoil': '11436325470737709655',
+        'herbadeetiopia': '10982823421829006444',
+        'holi': '1571336020100556625',
+        'horndust': '10982823421829006444',
+        'hymalayansnow': '10089652431946070133',
+        'kangarootail': '1734749669966442838',
+        'lava': '15102806604556354632',
+        'lightninggg': '8066924493903893072',
+        'mustardseeds': '11508698419506139756',
+        'peyote': '6043065774866721090',
+        'pluma': '11508698419506139756',
+        'poisonherb': '10982823421829006444',
+        'rainboudust': '1571336020100556625',
+        'rahusaliva': '6043065774866721090',
+        'sand': '11436325470737709655',
+        'skin': '1734749669966442838',
+        'sunlight': '8066924493903893072',
+        'vampirefang': '15230533556325993984',
+        'watercristaline': '10089652431946070133',
+        'water_sea': '2795734210888256790',
+        'wind': '8066924493903893072',
+        'wolfsfang': '1734749669966442838',
+        'arena_del_desierto': '11436325470737709655',
+        'colmillo_de_vampiro': '15230533556325993984',
+        'colmillo_de_lobo': '1734749669966442838',
+        
+        // Tools mapping
+        'bellow': '7394449015011337044',
+        'cauldron': '1310229991284473521',
+        'ladle': '11845481467736877036',
+        'mortar': '4548364139683061814',
+        
+        // Flasks mapping
+        'flask1': '4367881087678870632',
+        'flask2': '3758988694981372970',
+        'flask3': '13463846530496348131',
+        'flask4': '2440735248419077208',
+        'flask5': '14654561631655838842',
+        
+        // Recipe mapping
+        'recipe1': '12936439663349626618',
+        'recipe2': '7024690161218732154',
+        'recipe3': '2440735248419077208',
+        'recipe4': '5570219882495290440',
+        'recipe5': '14654561631655838842',
+        'recipe6': '1310229991284473521',
+        'recipe7': '4548364139683061814',
+        'recipe8': '7394449015011337044',
+        
+        // Created potions mapping
+        'tideheart': '7582224115266007515',
+        'stoneblood': '1310229991284473521',
+        'coral': '7024690161218732154',
+        'whispering_gale': '2440735248419077208',
+        'eternal_silk': '5570219882495290440',
+        'feathered_flame': '14654561631655838842',
+        'forgotten_grove': '1310229991284473521',
+        'shifting_dunes': '4548364139683061814',
+        
+        // Recipe mapping with descriptive keys
+        'recipe_shifting_dunes': '12936439663349626618',
+        'recipe_coral': '7024690161218732154',
+        'recipe_stoneblood': '2440735248419077208',
+        'recipe_tideheart': '7024690161218732154',
+        'recipe_whispering_gale': '5570219882495290440',
+        'recipe_eternal_silk': '14654561631655838842',
+        'recipe_feathered_flame': '1310229991284473521',
+        'recipe_forgotten_grove': '4548364139683061814'
+    }), []);
+
+    // Create real assets for different sections based on available images
     const fakeAssets = useMemo(() => {
         // Mapping of image file names to proper names (matching Airdrop page)
         const ingredientNameMap = {
@@ -71,7 +158,7 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
             'lightninggg', 'mustardseeds', 'peyote', 'pluma', 'poisonherb', 'rainboudust', 'rahusaliva',
             'sand', 'skin', 'sunlight', 'vampirefang', 'watercristaline', 'water_sea', 'wind', 'wolfsfang'
         ].map((name, index) => ({
-            asset: `fake_ingredient_${index}`,
+            asset: realAssetIds[name] || `fake_ingredient_${index}`,
             name: ingredientNameMap[name] || name.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').replace(/^\w/, c => c.toUpperCase()),
             description: `A mystical ingredient for potion crafting`,
             quantityQNT: 0,
@@ -97,12 +184,12 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
         }));
 
         const tools = [
-            { name: 'Mystical Bellows', description: 'Used to heat up potions during crafting', image: 'bellow.png' },
-            { name: 'Ancient Cauldron', description: 'Essential for mixing ingredients together', image: 'cauldron.png' },
-            { name: 'Silver Ladle', description: 'For transferring potions into flasks', image: 'ladle.png' },
-            { name: 'Stone Mortar', description: 'Grinds ingredients to release their full potential', image: 'mortar.png' }
+            { name: 'Mystical Bellows', description: 'Used to heat up potions during crafting', image: 'bellow.png', key: 'bellow' },
+            { name: 'Ancient Cauldron', description: 'Essential for mixing ingredients together', image: 'cauldron.png', key: 'cauldron' },
+            { name: 'Silver Ladle', description: 'For transferring potions into flasks', image: 'ladle.png', key: 'ladle' },
+            { name: 'Stone Mortar', description: 'Grinds ingredients to release their full potential', image: 'mortar.png', key: 'mortar' }
         ].map((tool, index) => ({
-            asset: `fake_tool_${index}`,
+            asset: realAssetIds[tool.key] || `fake_tool_${index}`,
             name: tool.name,
             description: tool.description,
             quantityQNT: 0,
@@ -128,13 +215,13 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
         }));
 
         const flasks = [
-            { name: 'Crystal Flask', description: 'Holds 1 potion portion', image: 'flask1.png' },
-            { name: 'Emerald Flask', description: 'Holds 2 potion portions', image: 'flask2.png' },
-            { name: 'Sapphire Flask', description: 'Holds 3 potion portions', image: 'flask3.png' },
-            { name: 'Ruby Flask', description: 'Holds 4 potion portions', image: 'flask4.png' },
-            { name: 'Diamond Flask', description: 'Holds 5 potion portions', image: 'flask5.png' }
+            { name: 'Crystal Flask', description: 'Holds 1 potion portion', image: 'flask1.png', key: 'flask1' },
+            { name: 'Emerald Flask', description: 'Holds 2 potion portions', image: 'flask2.png', key: 'flask2' },
+            { name: 'Sapphire Flask', description: 'Holds 3 potion portions', image: 'flask3.png', key: 'flask3' },
+            { name: 'Ruby Flask', description: 'Holds 4 potion portions', image: 'flask4.png', key: 'flask4' },
+            { name: 'Diamond Flask', description: 'Holds 5 potion portions', image: 'flask5.png', key: 'flask5' }
         ].map((flask, index) => ({
-            asset: `fake_flask_${index}`,
+            asset: realAssetIds[flask.key] || `fake_flask_${index}`,
             name: flask.name,
             description: flask.description,
             quantityQNT: 0,
@@ -160,16 +247,16 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
         }));
 
         const recipes = [
-            { name: 'Recipe of the Whispering Gale Potion', description: 'Ancient formula for aerial enhancement', image: 'recipe1.png' },
-            { name: 'Recipe of the Tideheart Potion', description: 'Aquatic power brewing instructions', image: 'recipe2.png' },
-            { name: 'Recipe of the Stoneblood Potion', description: 'Terrestrial strength elixir formula', image: 'recipe1.png' },
-            { name: 'Recipe of the Eternal Silk Potion', description: 'Asiatic wisdom brewing guide', image: 'recipe2.png' },
-            { name: 'Recipe of the Coral Spirits Potion', description: 'Oceanic essence creation method', image: 'recipe1.png' },
-            { name: 'Recipe of the Feathered Flame Potion', description: 'Americas spirit brewing technique', image: 'recipe2.png' },
-            { name: 'Recipe of the Shifting Dunes Potion', description: 'African power enhancement formula', image: 'recipe1.png' },
-            { name: 'Recipe of the Forgotten Grove Potion', description: 'European strength elixir guide', image: 'recipe2.png' }
+            { name: 'Recipe of the Whispering Gale Potion', description: 'Ancient formula for aerial enhancement', image: 'recipe1.png', key: 'recipe1' },
+            { name: 'Recipe of the Tideheart Potion', description: 'Aquatic power brewing instructions', image: 'recipe2.png', key: 'recipe2' },
+            { name: 'Recipe of the Stoneblood Potion', description: 'Terrestrial strength elixir formula', image: 'recipe1.png', key: 'recipe3' },
+            { name: 'Recipe of the Eternal Silk Potion', description: 'Asiatic wisdom brewing guide', image: 'recipe2.png', key: 'recipe4' },
+            { name: 'Recipe of the Coral Spirits Potion', description: 'Oceanic essence creation method', image: 'recipe1.png', key: 'recipe5' },
+            { name: 'Recipe of the Feathered Flame Potion', description: 'Americas spirit brewing technique', image: 'recipe2.png', key: 'recipe6' },
+            { name: 'Recipe of the Shifting Dunes Potion', description: 'African power enhancement formula', image: 'recipe1.png', key: 'recipe7' },
+            { name: 'Recipe of the Forgotten Grove Potion', description: 'European strength elixir guide', image: 'recipe2.png', key: 'recipe8' }
         ].map((recipe, index) => ({
-            asset: `fake_recipe_${index}`,
+            asset: realAssetIds[recipe.key] || `fake_recipe_${index}`,
             name: recipe.name,
             description: recipe.description,
             quantityQNT: 0,
@@ -195,7 +282,7 @@ const ItemMarket = ({ items, infoAccount, textColor }) => {
         }));
 
         return { ingredients, tools, flasks, recipes };
-    }, []);
+    }, [realAssetIds]);
 
     // Combine real items with fake assets based on section
     const allItemsForSection = useMemo(() => {

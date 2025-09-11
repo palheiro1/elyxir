@@ -2,6 +2,7 @@ import { Box, Select, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaFilter } from 'react-icons/fa';
 import { BsArrowDownUp } from 'react-icons/bs';
+import { ELYXIR_ASSETS, GEMASSET, isElyxirAsset } from '../../data/CONSTANTS';
 
 const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTransactions }) => {
     const [/*filter*/, setFilter] = useState('all');
@@ -16,9 +17,31 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
     };
 
     useEffect(() => {
-        // Only show Elyxir item transactions
+        // Show only Elyxir-related transactions: items, GEM, and IGNIS
         const filterTransactions = transactions => {
-            return transactions.filter(({ isItem }) => isItem);
+            return transactions.filter(transaction => {
+                console.log('Filtering transaction:', {
+                    type: transaction.type,
+                    attachment: transaction.attachment,
+                    asset: transaction.attachment?.asset,
+                    isElyxirAsset: transaction.attachment?.asset ? isElyxirAsset(transaction.attachment.asset) : false
+                });
+                
+                // Include IGNIS currency transactions (native currency, no asset ID)
+                if (transaction.type === 'payment' && !transaction.attachment?.asset) {
+                    console.log('Including IGNIS transaction');
+                    return true;
+                }
+                
+                // Include transactions for specific Elyxir assets (including GEM)
+                if (transaction.attachment?.asset && isElyxirAsset(transaction.attachment.asset)) {
+                    console.log('Including Elyxir asset transaction:', transaction.attachment.asset);
+                    return true;
+                }
+                
+                console.log('Excluding transaction');
+                return false;
+            });
         };
 
         const sortTransactions = transactions => {
@@ -30,6 +53,10 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
 
         if (transactions.length > 0) {
             const filteredTransactions = filterTransactions([...transactions]);
+            console.log('SortAndFilterTxs: Total transactions:', transactions.length);
+            console.log('SortAndFilterTxs: Filtered transactions:', filteredTransactions.length);
+            console.log('SortAndFilterTxs: First few filtered:', filteredTransactions.slice(0, 3));
+            
             const sortedTransactions = sortTransactions(filteredTransactions);
             setFilteredTransactions(sortedTransactions);
             setVisibleTransactions(10);

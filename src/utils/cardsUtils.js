@@ -82,14 +82,16 @@ export const fetchAllCards = async (accountRs, collectionRs, specialRs, fetchOrd
 };
 
 export const fetchCurrencyAssets = async (accountRs, currencyAssets = [], fetchOrders = false) => {
+    // Get burned amounts once for all currency assets
+    const burnedAmounts = await getBurnedAmounts();
+    
     const response = await Promise.all(
         currencyAssets.map(async asset => {
             const [account, currencyAsset] = await Promise.all([getAccountAssets(accountRs), getAssetsByIssuer(asset)]);
-            return await cardsGenerator(account.accountAssets, currencyAsset, fetchOrders);
+            return await cardsGenerator(account.accountAssets, currencyAsset, fetchOrders, burnedAmounts);
         })
     );
-
-    return response;
+    return response; // Don't flatten - each element should be an array for one currency asset
 };
 
 // -------------------------------------------------
@@ -217,13 +219,16 @@ export const openPackWithGiftz = async (passphrase, noPacks, giftzBalance, ignis
 //            CARDS UTILS FOR INVENTORY
 // -------------------------------------------------
 export const cardsGenerator = async (accountAssets, collectionAssets, fetchOrders = false) => {
+    // Get burned amounts once for all cards to avoid repeated API calls
+    const burnedAmounts = await getBurnedAmounts();
+    
     var ret = await Promise.all(
         collectionAssets.map(async asset => {
             const accountAsset = accountAssets.find(a => a.asset === asset.asset);
             const quantityQNT = accountAsset ? accountAsset.quantityQNT : 0;
             const unconfirmedQuantityQNT = accountAsset ? accountAsset.unconfirmedQuantityQNT : 0;
             if (asset.description) {
-                let newAsset = await cardInfoGenerator(asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders);
+                let newAsset = await cardInfoGenerator(asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders, burnedAmounts);
                 if (newAsset !== undefined) {
                     return newAsset;
                 }
@@ -253,7 +258,7 @@ function cleanJSON(jsonString) {
         .replace(/\\r/g, ''); // Elimina las secuencias de escape de retornos de carro
 }
 
-export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders = false) => {
+export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders = false, burnedAmounts = null) => {
     let cardDetails = cleanJSON(asset.description);
 
     if (cardDetails) {
@@ -298,8 +303,9 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
         const cardname = getTruncatedName(cardDetails.name);
         const fixContinent = cardDetails.channel === 'Europa' ? 'Europe' : cardDetails.channel;
 
-        const burnedAmounts = await getBurnedAmounts();
-        const burnedQuantity = burnedAmounts[asset.asset] || 0;
+        // Use passed burnedAmounts or fetch if not provided (fallback for other uses)
+        const burnedAmountsToUse = burnedAmounts || await getBurnedAmounts();
+        const burnedQuantity = burnedAmountsToUse[asset.asset] || 0;
 
         return {
             asset: asset.asset,

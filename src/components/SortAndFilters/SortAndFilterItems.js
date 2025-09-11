@@ -5,19 +5,19 @@ import { FaFilter } from 'react-icons/fa';
 /**
  * @name SortAndFilterItems
  * @description Menu to sort and filter items/potions
- * @param {Array} items - Array with the items
+ * @param {Array} originalItems - Array with the original items to sort/filter
  * @param {Function} setItemsFiltered - Function to set the filtered items
  * @param {String} rgbColor - String with the RGB color
  * @returns {JSX.Element} - JSX element
  */
-const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129, 144' }) => {
+const SortAndFilterItems = ({ originalItems = [], setItemsFiltered, rgbColor = '47, 129, 144' }) => {
     const borderButtons = `rgba(${rgbColor}, 1)`;
 
     const [type, setType] = useState('All');
     const [sort, setSort] = useState('moreQuantity');
 
     const computed = useMemo(() => {
-        let out = [...items];
+        let out = [...originalItems];
 
         if (type !== 'All') {
             out = out.filter(it => (it?.bonus?.type || '').toLowerCase() === type);
@@ -52,11 +52,11 @@ const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129,
         }
 
         return out;
-    }, [items, type, sort]);
+    }, [originalItems, type, sort]);
 
     useEffect(() => {
         setItemsFiltered(computed);
-    }, [computed]);
+    }, [computed, setItemsFiltered]);
 
     const handleTypeChange = e => setType(e.target.value);
     const handleSortChange = e => setSort(e.target.value);
