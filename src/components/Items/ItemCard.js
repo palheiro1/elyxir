@@ -50,7 +50,7 @@ const ItemCard = ({
     const newBorderColor = 'rgba(47, 129, 144, 1)';
     const separatorColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
-    const { name, imgUrl, bonus, quantityQNT = 0, description } = item;
+    const { name, imgUrl, bonus = null, quantityQNT = 0, description } = item;
 
     const handleClick = ({ item }) => {
         setItemClicked(item);
@@ -186,15 +186,15 @@ const ItemCard = ({
                             <Text
                                 px={2}
                                 fontSize="sm"
-                                bgColor={getColor(bonus)}
+                                bgColor={bonus ? getColor(bonus) : 'gray.500'}
                                 rounded="lg"
                                 color="white"
                                 textTransform={'capitalize'}>
-                                {bonus.type} ({getTypeValue(bonus)})
+                                {bonus ? `${bonus.type} (${getTypeValue(bonus)})` : 'No bonus'}
                             </Text>
                             <Stack direction={'row'} w={'100%'} justifyContent={'space-between'} align={'center'}>
                                 <Text fontSize="sm" color="green.400">
-                                    +{bonus.power} Power
+                                    +{bonus ? bonus.power : 0} Power
                                 </Text>{' '}
                                 <Tooltip
                                     label={`You have ${lockedCards} blocked ${

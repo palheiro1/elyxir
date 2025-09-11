@@ -531,7 +531,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             '', // OPTION 7 - Buy pack
             <Exchange infoAccount={infoAccount} />, // OPTION 8 - Exchange
             '', // OPTION 9 - OPEN PACK
-            <Elyxir />, // OPTION 10 - Elyxir
+            <Elyxir infoAccount={infoAccount} />, // OPTION 10 - Elyxir
         ],
         [
             infoAccount,
