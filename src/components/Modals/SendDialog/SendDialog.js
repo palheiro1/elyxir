@@ -106,15 +106,14 @@ const SendDialog = ({ reference, isOpen, onClose, card, username, isItem = false
                 // Wait REFRESH_TIME to close the modal
                 await waitForRefresh();
 
-                okToast('Card sent successfully', toast);
-
+                okToast(isItem ? 'Item sent successfully' : 'Card sent successfully', toast);
                 cleanOnClose();
             } else {
-                errorToast('Error sending card', toast);
+                errorToast(isItem ? 'Error sending item' : 'Error sending card', toast);
             }
         } catch (error) {
             console.error('🚀 ~ file: SendDialog.js:104 ~ handleSend ~ error:', error);
-            errorToast('Error sending card', toast);
+            errorToast(isItem ? 'Error sending item' : 'Error sending card', toast);
         } finally {
             setSendingTx(false);
         }
@@ -164,14 +163,14 @@ const SendDialog = ({ reference, isOpen, onClose, card, username, isItem = false
                                             <Text
                                                 px={2}
                                                 fontSize="sm"
-                                                bgColor={getColor(card.bonus)}
+                                                bgColor={getColor(card.bonus || { type: 'ingredient', value: 0 })}
                                                 rounded="lg"
                                                 color="white"
                                                 textTransform={'capitalize'}>
-                                                {card.bonus.type} ({getTypeValue(card.bonus)})
+                                                {(card.bonus?.type || 'ingredient')} ({getTypeValue(card.bonus || { type: 'ingredient', value: 0 })})
                                             </Text>
                                             <Text fontSize="sm" color="green.400">
-                                                +{card.bonus.power} Power
+                                                +{card.bonus?.power || 0} Power
                                             </Text>
                                         </Stack>
                                     ) : (

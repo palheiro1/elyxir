@@ -10,6 +10,7 @@ import TableCard from '../../Cards/TableCard';
 // Utils
 import { calculateFixedAmount, getReason, parseJson, parseRecipient, parseSender } from '../../../utils/txUtils';
 import { BOUNTYACCOUNT, NQTDIVIDER, OMNO_ACCOUNT, isElyxirAsset } from '../../../data/CONSTANTS';
+import { getItemImage } from '../../../utils/itemsUtils';
 import { getAsset } from '../../../utils/cardsUtils';
 import GemCard from '../../Cards/GemCard';
 import IgnisCard from '../../Cards/IgnisCard';
@@ -166,15 +167,20 @@ export const handleItemsTransaction = (tx, timestamp, infoAccount, itemsColectio
             // Fallback: create a minimal item object for Elyxir assets so transaction is not discarded
             itemAsset = {
                 asset: tx.attachment.asset,
-                imgUrl: `/images/elyxir/unknown.png`, // fallback image, could be improved
-                description: `Elyxir Item (${tx.attachment.asset})`,
+                imgUrl: `/images/elyxir/unknown.png`,
+                description: `Unknown Elyxir Item`,
                 bonus: { type: 'unknown', power: 0 },
             };
-            console.warn('handleItemsTransaction: Using fallback for Elyxir asset', tx.attachment.asset);
+            // Only log fallback for true unknowns
+            console.warn('handleItemsTransaction: Using fallback for unknown Elyxir asset', tx.attachment.asset);
         } else {
-            console.warn('handleItemsTransaction: Item asset not found for tx asset', tx.attachment.asset);
-            return; // Avoid crashing until items are available / synced
+            // Not an Elyxir asset, skip rendering
+            return;
         }
+    }
+    // Use displayName if available for cleaner UI
+    if (itemAsset.displayName) {
+        itemAsset.description = itemAsset.displayName;
     }
     const inOut = getInOut(tx, infoAccount);
     if (!inOut) return;
@@ -564,50 +570,54 @@ export const handleItemsTransfer = (type, amount, date, account, item) => {
         return null; // Defensive: upstream should have validated, but avoid runtime crash
     }
     type = type.toLowerCase();
-    const { imgUrl, description, bonus } = item;
-    const Component = () => {
-        return (
-            <Tr
-                _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
-                border={{ base: '2px', md: '0px' }}
-                borderColor="whiteAlpha.300"
-                rounded={{ base: 'md', md: 'unset' }}
-                m={{ base: 2, md: 0 }}>
-                <Td>
-                    <InOutTransaction type={type} />
-                </Td>
-                <Td>
-                    <Stack direction={'row'} align={'center'}>
-                        <Image maxW="85px" src={imgUrl} />
-                        <Stack direction={'column'}>
-                            <Text fontWeight="bold" fontSize="2xl">{description}</Text>
-                            <Stack direction="row" spacing={1}>
-                                <Text
-                                    px={2}
-                                    fontSize="sm"
-                                    bgColor={getColor(bonus)}
-                                    rounded="lg"
-                                    color="white"
-                                    textTransform={'capitalize'}>
-                                    {bonus.type} ({getTypeValue(bonus)})
-                                </Text>
-                                <Text fontSize="sm" color="green.400">
-                                    +{bonus.power} Power
-                                </Text>
-                            </Stack>
-                        </Stack>
+    // Always resolve displayName and image from assetId using the realAssetMapping
+    let displayName = item.displayName;
+    let imgUrl = item.imgUrl;
+    // If missing, try to resolve from mapping
+    if ((!displayName || !imgUrl) && item.asset) {
+        try {
+            // Dynamically import the mapping from itemsUtils
+            const { realAssetMapping } = require('../../../utils/itemsUtils');
+            const mapping = realAssetMapping[item.asset];
+            if (mapping) {
+                displayName = mapping.displayName || mapping.name || item.asset;
+                imgUrl = getItemImage(mapping.name);
+            }
+        } catch (e) {
+            // fallback below
+        }
+    }
+    // Fallbacks
+    if (!displayName) displayName = item.name || 'Unknown Item';
+    if (!imgUrl) imgUrl = '/images/elyxir/unknown.png';
+
+    const Component = () => (
+        <Tr
+            _hover={{ bgColor: 'rgba(59, 113, 151, 0.15)' }}
+            border={{ base: '2px', md: '0px' }}
+            borderColor="whiteAlpha.300"
+            rounded={{ base: 'md', md: 'unset' }}
+            m={{ base: 2, md: 0 }}>
+            <Td>
+                <InOutTransaction type={type} />
+            </Td>
+            <Td>
+                <Stack direction={'row'} align={'center'}>
+                    <Image maxW="85px" src={imgUrl} />
+                    <Stack direction={'column'}>
+                        <Text fontWeight="bold" fontSize="2xl">{displayName}</Text>
                     </Stack>
-                </Td>
-                <Td>{amount}</Td>
-                <Td>{date}</Td>
-                <Td>{account}</Td>
-            </Tr>
-        );
-    };
+                </Stack>
+            </Td>
+            <Td>{amount}</Td>
+            <Td>{date}</Td>
+            <Td>{account}</Td>
+        </Tr>
+    );
     return {
         Component,
         type,
-        isItem: true,
+        isCurrency: false,
     };
 };
 

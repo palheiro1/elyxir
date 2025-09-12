@@ -58,8 +58,17 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
      */
     const [transactions, setTransactions] = useState([]);
     const [dividends, setDividends] = useState([]);
-    const [filteredTransactions, setFilteredTransactions] = useState(transactions);
-    const [filteredDividends, setFilteredDividends] = useState(dividends);
+    const [filteredTransactions, setFilteredTransactions] = useState([]);
+    const [filteredDividends, setFilteredDividends] = useState([]);
+    // Keep filteredTransactions in sync with transactions
+    useEffect(() => {
+        // After refactor, currency filtering happens during processing; just mirror transactions
+        setFilteredTransactions(transactions);
+    }, [transactions]);
+
+    useEffect(() => {
+        setFilteredDividends(dividends);
+    }, [dividends]);
 
     const [needReload, setNeedReload] = useState(true);
     const [lastConfirmation, setLastConfirmation] = useState(false);
@@ -98,7 +107,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
     const { items } = useSelector(state => state.items);
     // -------------------------------------------------
     useEffect(() => {
-        const processTransactions = () => {
+    const processTransactions = () => {
             let newTransactions = [];
 
             const dirtyTransactions = infoAccount.transactions || [];
@@ -106,7 +115,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
 
             dirtyTransactions.forEach((tx, index) => {
                 // Process transactions for both Elyxir items and MB cards
-                const isItem = tx.attachment?.asset && isItemAsset(tx.attachment.asset);
+                const isItem = tx.attachment?.asset && isItemAsset(tx.attachment.asset) && tx.attachment.asset !== require('../../../data/CONSTANTS').GEMASSET;
                 const isCard = tx.attachment?.asset && isMBAsset(tx.attachment.asset);
                 
                 // Debug logging for first few transactions
@@ -122,6 +131,18 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                 }
                 
                 if (isItem || isCard || tx.type === 0 || tx.type === 1 || tx.type === 5) {
+                    // Early currency exclusion (MANA, WETH, GIFTZ) before handler creation
+                    try {
+                        const { CURRENCY_ASSETS } = require('../../../data/CONSTANTS');
+                        const assetIdForFilter = tx.attachment?.asset;
+                        const symbol = assetIdForFilter ? CURRENCY_ASSETS[assetIdForFilter] : null;
+                        if (symbol && ['MANA', 'WETH', 'GIFTZ'].includes(symbol)) {
+                            if (index < 5) console.log(`Skipping currency ${symbol} tx at index ${index}`);
+                            return; // skip adding this transaction
+                        }
+                    } catch (e) {
+                        console.warn('Currency pre-filter failed', e);
+                    }
                     const timestamp = getTxTimestamp(tx, epoch_beginning);
                     const type = tx.type;
                     const subtype = tx.subtype;
@@ -201,6 +222,15 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
         needReload &&
         processTransactions();
     }, [infoAccount, epoch_beginning, needReload, collectionCardsStatic, items]);
+
+    // Trigger a reprocess once when items finish loading (to replace fallbacks)
+    const [prevItemsCount, setPrevItemsCount] = useState(0);
+    useEffect(() => {
+        if (prevItemsCount === 0 && items && items.length > 0) {
+            setNeedReload(true);
+        }
+        setPrevItemsCount(items?.length || 0);
+    }, [items, prevItemsCount]);
 
     return (
         <>

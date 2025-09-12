@@ -49,7 +49,9 @@ export const getContinentColor = continent => {
     return colors[continent] || 'gray';
 };
 
-export const getColor = ({ type, value }) => {
+export const getColor = (bonus) => {
+    if (!bonus || typeof bonus !== 'object') return 'gray';
+    const { type, value } = bonus;
     if (type === 'medium') return getMediumColor(value);
     if (type === 'domain') return getContinentColor(value);
     if (type === 'ingredient') return '#8B4513'; // Brown for ingredients

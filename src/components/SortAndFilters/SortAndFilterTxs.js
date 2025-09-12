@@ -2,7 +2,7 @@ import { Box, Select, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaFilter } from 'react-icons/fa';
 import { BsArrowDownUp } from 'react-icons/bs';
-import { isElyxirAsset } from '../../data/CONSTANTS';
+import { isElyxirAsset, GEMASSET } from '../../data/CONSTANTS';
 
 const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTransactions }) => {
     const [/*filter*/, setFilter] = useState('all');
@@ -17,48 +17,34 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
     };
 
     useEffect(() => {
-        // Show only Elyxir-related transactions: items, GEM, and IGNIS
-        const filterTransactions = transactions => {
-            return transactions.filter(transaction => {
-                console.log('Filtering transaction:', {
-                    type: transaction.type,
-                    attachment: transaction.attachment,
-                    asset: transaction.attachment?.asset,
-                    isElyxirAsset: transaction.attachment?.asset ? isElyxirAsset(transaction.attachment.asset) : false
-                });
-                
-                // Include IGNIS currency transactions (native currency, no asset ID)
-                if (transaction.type === 'payment' && !transaction.attachment?.asset) {
-                    console.log('Including IGNIS transaction');
-                    return true;
-                }
-                
-                // Include transactions for specific Elyxir assets (including GEM)
-                if (transaction.attachment?.asset && isElyxirAsset(transaction.attachment.asset)) {
-                    console.log('Including Elyxir asset transaction:', transaction.attachment.asset);
-                    return true;
-                }
-                
-                console.log('Excluding transaction');
-                return false;
-            });
-        };
+        // transactions array now contains processed handler objects: { Component, type, ... }
+        const { CURRENCY_ASSETS } = require('../../data/CONSTANTS');
 
-        const sortTransactions = transactions => {
-            if (sort === 'older') {
-                transactions.reverse();
-            }
-            return transactions;
+        const normalizeType = t => (t || '').toLowerCase();
+
+        const sortTransactions = list => {
+            if (sort === 'older') return [...list].reverse();
+            return list;
         };
 
         if (transactions.length > 0) {
-            const filteredTransactions = filterTransactions([...transactions]);
-            console.log('SortAndFilterTxs: Total transactions:', transactions.length);
-            console.log('SortAndFilterTxs: Filtered transactions:', filteredTransactions.length);
-            console.log('SortAndFilterTxs: First few filtered:', filteredTransactions.slice(0, 3));
-            
-            const sortedTransactions = sortTransactions(filteredTransactions);
-            setFilteredTransactions(sortedTransactions);
+            // We already excluded MANA/WETH/GIFTZ earlier. Just ensure nothing sneaks in.
+            const filtered = transactions.filter(t => {
+                // Keep everything the processor decided was relevant
+                // Defensive: if a future change passes raw tx with attachment we still exclude unwanted currencies
+                const rawAsset = t.attachment?.asset || t.assetId;
+                if (rawAsset && CURRENCY_ASSETS[rawAsset] && ['MANA','WETH','GIFTZ'].includes(CURRENCY_ASSETS[rawAsset])) {
+                    return false;
+                }
+                return true;
+            });
+
+            console.log('SortAndFilterTxs: Total transactions (processed):', transactions.length);
+            console.log('SortAndFilterTxs: After light filter:', filtered.length);
+            console.log('SortAndFilterTxs: Sample:', filtered.slice(0,3));
+
+            const sorted = sortTransactions(filtered);
+            setFilteredTransactions(sorted);
             setVisibleTransactions(10);
         }
     }, [transactions, sort, setFilteredTransactions, setVisibleTransactions]);
