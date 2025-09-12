@@ -25,17 +25,18 @@ export const realAssetMapping = {
     '8717959006135737805': { name: 'sunlight', displayName: 'Sunlight' },
     '488367278629756964': { name: 'lava', displayName: 'Lava' },
     '1853993309806999896': { name: 'alamorcego', displayName: 'Bat Wing' },
-    '10089652431946070133': { name: 'flordealgodao', displayName: 'Cotton Flower' },
+    '10089652431946070133': { name: 'flor_de_algodon', displayName: 'Cotton Flower' },
     '8966516609271135665': { name: 'gardenflower', displayName: 'Garden Flower' },
     '11436325470737709655': { name: 'gardensoil', displayName: 'Garden Soil' },
-    '10982823421829006444': { name: 'herbadeetiopia', displayName: 'Ethiopian Herb' },
+    '10982823421829006444': { name: 'herba_de_etiopia', displayName: 'Ethiopian Herb' },
     '1571336020100556625': { name: 'holi', displayName: 'Holi Powder' },
-    '1734749669966442838': { name: 'kangarootail', displayName: 'Kangaroo Tail' },
+    '1734749669966442838': { name: 'kangurhair', displayName: 'Kangaroo Tail' },
     '15102806604556354632': { name: 'ash', displayName: 'Ash' },
-    '11508698419506139756': { name: 'mustardseeds', displayName: 'Mustard Seeds' },
+    '11508698419506139756': { name: 'mustard_seeds', displayName: 'Mustard Seeds' },
     '6043065774866721090': { name: 'peyote', displayName: 'Peyote' },
-    '15230533556325993984': { name: 'vampirefang', displayName: 'Vampire Fang' },
+    '15230533556325993984': { name: 'colmillo_de_vampiro', displayName: 'Vampire Fang' },
     '5570219882495290440': { name: 'diamantebruto', displayName: 'Raw Diamond' },
+    '374078224198142471': { name: 'ash', displayName: 'Volcanic Ash' }, // The specific asset from the user's issue
     // Tools
     '7394449015011337044': { name: 'bellow', displayName: 'Bellow' },
     '1310229991284473521': { name: 'cauldron', displayName: 'Cauldron' },
@@ -76,6 +77,7 @@ const realItemAssets = [
     { asset: '6043065774866721090' }, // peyote
     { asset: '15230533556325993984' }, // vampirefang
     { asset: '5570219882495290440' }, // diamantebruto
+    { asset: '374078224198142471' }, // Volcanic Ash
     // Tools
     { asset: '7394449015011337044' }, // bellow
     { asset: '1310229991284473521' }, // cauldron
@@ -208,7 +210,15 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
  */
 export const getItemImage = itemName => {
     if (!itemName || itemName === '') return;
-    return `${IMGURL}potions/${itemName}.png`;
+    
+    // Define which items are in which categories
+    const toolItems = ['mortar', 'bellow', 'cauldron', 'ladle'];
+    
+    // Determine the correct subdirectory based on item type
+    const category = toolItems.includes(itemName) ? 'tools' : 'ingredients';
+    
+    // Use local images instead of external media.mythicalbeings.io to avoid CORS issues
+    return `/images/elyxir/${category}/${itemName}.png`;
 };
 
 export const isItemAsset = asset => {

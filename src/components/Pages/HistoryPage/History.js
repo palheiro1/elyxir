@@ -60,6 +60,10 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
     const [dividends, setDividends] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [filteredDividends, setFilteredDividends] = useState([]);
+    
+    // Get items from Redux store early in component
+    const { items } = useSelector(state => state.items);
+    
     // Keep filteredTransactions in sync with transactions
     useEffect(() => {
         // After refactor, currency filtering happens during processing; just mirror transactions
@@ -70,7 +74,13 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
         setFilteredDividends(dividends);
     }, [dividends]);
 
-    const [needReload, setNeedReload] = useState(true);
+    // Loading state - show loader only when we're expecting data but don't have it yet
+    const isLoading = useMemo(() => {
+        // Show loading if we don't have basic required data
+        const hasBasicData = infoAccount && infoAccount.transactions !== undefined && 
+                            collectionCardsStatic !== undefined && items !== undefined;
+        return !hasBasicData;
+    }, [infoAccount, collectionCardsStatic, items]);
     const [lastConfirmation, setLastConfirmation] = useState(false);
     const [section, setSection] = useState('transactions'); // transactions/dividends
 
@@ -91,146 +101,125 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
 
     useEffect(() => {
         const checkConfirmation = () => {
-            if (haveUnconfirmed) {
+            if (haveUnconfirmed && !lastConfirmation) {
                 setLastConfirmation(true);
-            }
-
-            if (lastConfirmation && !haveUnconfirmed) {
-                setNeedReload(true);
+            } else if (!haveUnconfirmed && lastConfirmation) {
+                // Transactions will auto-update through memoized dependencies
                 setLastConfirmation(false);
             }
-        };
-
-        checkConfirmation();
+        };        checkConfirmation();
     }, [haveUnconfirmed, lastConfirmation]);
 
-    const { items } = useSelector(state => state.items);
-    // -------------------------------------------------
-    useEffect(() => {
-    const processTransactions = () => {
-            let newTransactions = [];
+    // Memoize stable dependencies to prevent unnecessary re-renders
+    const transactionData = useMemo(() => ({
+        transactions: infoAccount.transactions || [],
+        transactionsLength: infoAccount.transactions?.length || 0,
+        dividends: infoAccount.dividends || []
+    }), [infoAccount.transactions?.length, infoAccount.dividends?.length]);
+    
+    const cardsDataLength = useMemo(() => 
+        collectionCardsStatic?.length || 0, 
+        [collectionCardsStatic?.length]
+    );
+    
+    const itemsDataLength = useMemo(() => 
+        items?.length || 0, 
+        [items?.length]
+    );
+    
+    // Memoized transaction processing function
+    const processedTransactions = useMemo(() => {
+        if (!transactionData.transactions.length || !cardsDataLength || !itemsDataLength) {
+            return [];
+        }
+        
+        console.log('Processing transactions:', transactionData.transactions.length, 'total transactions');
+        let newTransactions = [];
 
-            const dirtyTransactions = infoAccount.transactions || [];
-            console.log('Processing transactions:', dirtyTransactions?.length, 'total transactions');
-
-            dirtyTransactions.forEach((tx, index) => {
-                // Process transactions for both Elyxir items and MB cards
-                const isItem = tx.attachment?.asset && isItemAsset(tx.attachment.asset) && tx.attachment.asset !== require('../../../data/CONSTANTS').GEMASSET;
-                const isCard = tx.attachment?.asset && isMBAsset(tx.attachment.asset);
-                
-                // Debug logging for first few transactions
-                if (index < 5) {
-                    console.log(`Transaction ${index}:`, {
-                        type: tx.type,
-                        subtype: tx.subtype,
-                        asset: tx.attachment?.asset,
-                        isItem,
-                        isCard,
-                        fullTx: tx
-                    });
+        transactionData.transactions.forEach((tx, index) => {
+            // Process transactions for both Elyxir items and MB cards
+            const isItem = tx.attachment?.asset && isItemAsset(tx.attachment.asset) && tx.attachment.asset !== require('../../../data/CONSTANTS').GEMASSET;
+            const isCard = tx.attachment?.asset && isMBAsset(tx.attachment.asset);
+            
+            // Debug logging for first few transactions (only in dev mode)
+            if (index < 3 && process.env.NODE_ENV === 'development') {
+                console.log(`Transaction ${index}:`, {
+                    type: tx.type,
+                    subtype: tx.subtype,
+                    asset: tx.attachment?.asset,
+                    isItem,
+                    isCard
+                });
+            }
+            
+            if (isItem || isCard || tx.type === 0 || tx.type === 1 || tx.type === 5) {
+                // Early currency exclusion (MANA, WETH, GIFTZ) before handler creation
+                try {
+                    const { CURRENCY_ASSETS } = require('../../../data/CONSTANTS');
+                    const assetIdForFilter = tx.attachment?.asset;
+                    const symbol = assetIdForFilter ? CURRENCY_ASSETS[assetIdForFilter] : null;
+                    if (symbol && ['MANA', 'WETH', 'GIFTZ'].includes(symbol)) {
+                        return; // skip adding this transaction
+                    }
+                } catch (e) {
+                    console.warn('Currency pre-filter failed', e);
                 }
                 
-                if (isItem || isCard || tx.type === 0 || tx.type === 1 || tx.type === 5) {
-                    // Early currency exclusion (MANA, WETH, GIFTZ) before handler creation
-                    try {
-                        const { CURRENCY_ASSETS } = require('../../../data/CONSTANTS');
-                        const assetIdForFilter = tx.attachment?.asset;
-                        const symbol = assetIdForFilter ? CURRENCY_ASSETS[assetIdForFilter] : null;
-                        if (symbol && ['MANA', 'WETH', 'GIFTZ'].includes(symbol)) {
-                            if (index < 5) console.log(`Skipping currency ${symbol} tx at index ${index}`);
-                            return; // skip adding this transaction
-                        }
-                    } catch (e) {
-                        console.warn('Currency pre-filter failed', e);
-                    }
-                    const timestamp = getTxTimestamp(tx, epoch_beginning);
-                    const type = tx.type;
-                    const subtype = tx.subtype;
-                    let handler = null;
+                const timestamp = getTxTimestamp(tx, epoch_beginning);
+                const type = tx.type;
+                const subtype = tx.subtype;
+                let handler = null;
 
-                    switch (type) {
-                        case 0:
-                            if (subtype === 0) {
-                                // Money transfer
-                                handler = handleType0AndSubtype0(tx, timestamp, infoAccount);
-                            }
-                            break;
-                        case 1:
-                            if (subtype === 0) {
-                                // Message
-                                handler = handleType1AndSubtype0(tx, timestamp, infoAccount);
-                            }
-                            break;
-                        case 2:
-                            if (subtype === 1) {
-                                if (isItem) {
-                                    // Items transfer
-                                    handler = handleItemsTransaction(tx, timestamp, infoAccount, items);
-                                } else if (isCard) {
-                                    // Card transfer
-                                    handler = handleType2AndSubtype1(tx, timestamp, infoAccount, collectionCardsStatic);
-                                }
-                            } else if (subtype === 2 || subtype === 3) {
-                                // Asset exchange (ask/bid orders)
-                                handler = handleType2AndSubtype2And3(tx, timestamp, infoAccount, collectionCardsStatic);
-                            } else if (subtype === 4 || subtype === 5) {
-                                // Order cancellation
-                                handler = handleType2AndSubtype4And5(tx, timestamp, infoAccount);
-                            }
-                            break;
-                        case 5:
-                            if (subtype === 3) {
-                                // Account control
-                                handler = handleType5AndSubtype3(tx, timestamp, infoAccount);
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-
-                    if (handler) {
-                        newTransactions.push(handler);
-                        if (index < 5) {
-                            console.log(`Handler result for transaction ${index}:`, handler);
+                switch (type) {
+                    case 0:
+                        if (subtype === 0) {
+                            handler = handleType0AndSubtype0(tx, timestamp, infoAccount);
                         }
-                    } else if (index < 5) {
-                        console.log(`No handler found for transaction ${index}, type: ${type}, subtype: ${subtype}`);
-                    }
+                        break;
+                    case 1:
+                        if (subtype === 0) {
+                            handler = handleType1AndSubtype0(tx, timestamp, infoAccount);
+                        }
+                        break;
+                    case 2:
+                        if (subtype === 1) {
+                            if (isItem) {
+                                handler = handleItemsTransaction(tx, timestamp, infoAccount, items);
+                            } else if (isCard) {
+                                handler = handleType2AndSubtype1(tx, timestamp, infoAccount, collectionCardsStatic);
+                            }
+                        } else if (subtype === 2 || subtype === 3) {
+                            handler = handleType2AndSubtype2And3(tx, timestamp, infoAccount, collectionCardsStatic);
+                        } else if (subtype === 4 || subtype === 5) {
+                            handler = handleType2AndSubtype4And5(tx, timestamp, infoAccount);
+                        }
+                        break;
+                    case 5:
+                        if (subtype === 3) {
+                            handler = handleType5AndSubtype3(tx, timestamp, infoAccount);
+                        }
+                        break;
+                    default:
+                        break;
                 }
-            });
 
-            console.log('Processed transactions result:', newTransactions.length, 'transactions processed');
-            console.log('First few processed transactions:', newTransactions.slice(0, 3));
-            setDividends(infoAccount.dividends || []);
-            setTransactions(newTransactions);
-            setNeedReload(false);
-        };
-
-        console.log('History useEffect dependencies check:', {
-            hasTransactions: infoAccount.transactions !== undefined,
-            hasCollectionCards: collectionCardsStatic !== undefined,
-            collectionCardsLength: collectionCardsStatic?.length,
-            needReload,
-            transactionsLength: infoAccount.transactions?.length,
-            collectionCardsType: typeof collectionCardsStatic
+                if (handler) {
+                    newTransactions.push(handler);
+                }
+            }
         });
 
-    infoAccount.transactions !== undefined &&
-        Array.isArray(infoAccount.transactions) &&
-        collectionCardsStatic !== undefined &&
-        collectionCardsStatic.length > 0 &&
-        needReload &&
-        processTransactions();
-    }, [infoAccount, epoch_beginning, needReload, collectionCardsStatic, items]);
-
-    // Trigger a reprocess once when items finish loading (to replace fallbacks)
-    const [prevItemsCount, setPrevItemsCount] = useState(0);
+        console.log('Processed transactions result:', newTransactions.length, 'transactions processed');
+        return newTransactions;
+    }, [transactionData.transactions, cardsDataLength, itemsDataLength, infoAccount, epoch_beginning, collectionCardsStatic, items]);
+    
+    // Update state only when processed transactions change
     useEffect(() => {
-        if (prevItemsCount === 0 && items && items.length > 0) {
-            setNeedReload(true);
-        }
-        setPrevItemsCount(items?.length || 0);
-    }, [items, prevItemsCount]);
+        setTransactions(processedTransactions);
+        setDividends(transactionData.dividends);
+    }, [processedTransactions, transactionData.dividends]);
+
+    // Items are now handled by the memoized processedTransactions, no need for separate effect
 
     return (
         <>
@@ -246,9 +235,9 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                     setSection={setSection}
                 />
 
-                {needReload && <Loader />}
+                {isLoading && <Loader />}
 
-                {!needReload && section === 'transactions' && (
+                {!isLoading && section === 'transactions' && (
                     <ShowTransactions
                         haveUnconfirmed={haveUnconfirmed}
                         filteredTransactions={filteredTransactions}
@@ -257,7 +246,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                         handleClick={handleClick}
                     />
                 )}
-                {!needReload && section === 'dividends' && (
+                {!isLoading && section === 'dividends' && (
                     <ShowDividends
                         filteredDividends={filteredDividends}
                         setVisibleDividends={setVisibleDividends}
