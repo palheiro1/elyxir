@@ -12,82 +12,19 @@ import {
     WrapItem, 
     useColorModeValue 
 } from '@chakra-ui/react';
+import { ELYXIR_PROCESSES } from '../../../data/elyxirProcesses';
 
-// Full set of example potion recipes
-const RECIPES = [
-    {
-        id: 'whispering_gale',
-        name: 'Whispering Gale',
-        ingredients: [
-            { name: 'Cloud Essence', quantity: 1 },
-            { name: 'Wind Essence', quantity: 2 },
-            { name: 'Himalayan Snow', quantity: 1 },
-        ],
-        tools: ['Stone Mortar', 'Ancient Cauldron'],
-        successRate: 0.8,
-        result: 'Whispering Gale',
-    },
-    {
-        id: 'tideheart',
-        name: 'Tideheart',
-        ingredients: [
-            { name: 'Sea Water', quantity: 2 },
-            { name: 'Crystal Water', quantity: 1 },
-            { name: 'Rainbow Dust', quantity: 1 },
-        ],
-        tools: ['Silver Ladle', 'Ancient Cauldron'],
-        successRate: 0.75,
-        result: 'Tideheart',
-    },
-    {
-        id: 'stoneblood',
-        name: 'Stoneblood',
-        ingredients: [
-            { name: 'Volcano Lava', quantity: 1 },
-            { name: 'Raw Diamond', quantity: 1 },
-            { name: 'Desert Sand', quantity: 2 },
-        ],
-        tools: ['Stone Mortar', 'Mystical Bellows'],
-        successRate: 0.82,
-        result: 'Stoneblood',
-    },
-    {
-        id: 'feathered_flame',
-        name: 'Feathered Flame',
-        ingredients: [
-            { name: 'Feather', quantity: 2 },
-            { name: 'Volcano Lava', quantity: 1 },
-            { name: 'Lightning Essence', quantity: 1 },
-        ],
-        tools: ['Mystical Bellows', 'Silver Ladle'],
-        successRate: 0.7,
-        result: 'Feathered Flame',
-    },
-    {
-        id: 'eternal_silk',
-        name: 'Eternal Silk',
-        ingredients: [
-            { name: 'Cotton Flower', quantity: 1 },
-            { name: 'Garden Flower', quantity: 2 },
-            { name: 'Bottled Sunlight', quantity: 1 },
-        ],
-        tools: ['Stone Mortar', 'Ancient Cauldron'],
-        successRate: 0.77,
-        result: 'Eternal Silk',
-    },
-    {
-        id: 'coral',
-        name: 'Coral',
-        ingredients: [
-            { name: 'Sea Water', quantity: 2 },
-            { name: 'Rainbow Dust', quantity: 1 },
-            { name: 'Garden Flower', quantity: 1 },
-        ],
-        tools: ['Ancient Cauldron', 'Silver Ladle'],
-        successRate: 0.74,
-        result: 'Coral',
-    },
-];
+// Map creation asset IDs to human-friendly creation names
+const PROCESS_NAME_MAP = {
+    '6485210212239811': 'Whispering Gale',
+    '7582224115266007515': 'Tideheart',
+    '10474636406729395731': 'Stoneblood',
+    '5089659721388119266': 'Eternal Silk',
+    '8693351662911145147': 'Coral Spirits',
+    '11206437400477435454': 'Feathered Flame',
+    '12861522637067934750': 'Shifting Dunes',
+    '3858707486313568681': 'Forgotten Grove'
+};
 
 const Elyxir = ({ infoAccount }) => {
     // Alchemy UI state
@@ -338,27 +275,52 @@ const Elyxir = ({ infoAccount }) => {
         return result;
     }, [allElyxirItems]);
 
-    // Get missing items for recipe crafting (updated to use flask multiplier)
+    // After fakeAssets declaration and before grouped usage, create a fast lookup for assetId->display name
+    const assetIdNameMap = useMemo(() => {
+        const map = {};
+        allElyxirItems.forEach(item => {
+            map[item.asset] = item.name;
+        });
+        return map;
+    }, [allElyxirItems]);
+
+    // Build UI recipes from processes once we know item names
+    const RECIPES = useMemo(() => {
+        return ELYXIR_PROCESSES.recipes.map(p => ({
+            id: p.recipeAssetId,
+            name: PROCESS_NAME_MAP[p.creationAssetId] || p.creationAssetId,
+            ingredients: p.ingredients.map(ing => ({
+                assetId: ing.assetId,
+                quantity: ing.qtyQNT,
+                name: assetIdNameMap[ing.assetId] || ing.assetId
+            })),
+            tools: p.tools // asset IDs
+        }));
+    }, [assetIdNameMap]);
+
+    // Get missing items for recipe crafting (assetId-based)
     const getMissingItems = useCallback(
         (recipe, flaskMultiplier) => {
             const missing = [];
-            if (recipe.ingredients) {
+            if (recipe?.ingredients) {
                 recipe.ingredients.forEach(req => {
-                    const item = grouped.ingredients?.find(i => i.name.toLowerCase() === req.name.toLowerCase());
+                    const item = grouped.ingredients?.find(i => i.asset === req.assetId);
                     const have = item ? Number(item.quantityQNT) : 0;
                     const needed = req.quantity * flaskMultiplier;
                     if (have < needed) missing.push(`${needed - have}x ${req.name}`);
                 });
             }
-            if (recipe.tools) {
-                recipe.tools.forEach(name => {
-                    if (!grouped.tools?.some(i => i.name.toLowerCase() === name.toLowerCase()))
-                        missing.push(name);
+            if (recipe?.tools) {
+                recipe.tools.forEach(toolAssetId => {
+                    if (!grouped.tools?.some(t => t.asset === toolAssetId)) {
+                        const toolName = assetIdNameMap[toolAssetId] || toolAssetId;
+                        missing.push(toolName);
+                    }
                 });
             }
             return missing;
         },
-        [grouped]
+        [grouped, assetIdNameMap]
     );
 
     return (
@@ -443,9 +405,7 @@ const Elyxir = ({ infoAccount }) => {
                                 <Text fontWeight="bold" fontSize="lg" mb={4}>Required Ingredients:</Text>
                                 <Wrap spacing={6}>
                                     {RECIPES[selectedRecipeIdx].ingredients.map((ing, i) => {
-                                        const ingredient = grouped.ingredients?.find(item => 
-                                            item.name.toLowerCase() === ing.name.toLowerCase()
-                                        );
+                                        const ingredient = grouped.ingredients?.find(item => item.asset === ing.assetId);
                                         const requiredQty = ing.quantity * flaskMultipliers[selectedFlaskIdx];
                                         const have = ingredient ? Number(ingredient.quantityQNT) : 0;
                                         const hasEnough = have >= requiredQty;
@@ -493,10 +453,8 @@ const Elyxir = ({ infoAccount }) => {
                             <Box>
                                 <Text fontWeight="bold" fontSize="lg" mb={4}>Required Tools:</Text>
                                 <Wrap spacing={6}>
-                                    {RECIPES[selectedRecipeIdx].tools.map((toolName, i) => {
-                                        const tool = grouped.tools?.find(item => 
-                                            item.name.toLowerCase() === toolName.toLowerCase()
-                                        );
+                                    {RECIPES[selectedRecipeIdx].tools.map((toolAssetId, i) => {
+                                        const tool = grouped.tools?.find(item => item.asset === toolAssetId);
                                         const hasTool = !!tool;
                                         
                                         return (
@@ -521,7 +479,7 @@ const Elyxir = ({ infoAccount }) => {
                                                         />
                                                     )}
                                                     <Text fontSize="sm" fontWeight="bold" mb={1}>
-                                                        {toolName}
+                                                        {tool ? tool.name : (assetIdNameMap[toolAssetId] || toolAssetId)}
                                                     </Text>
                                                     <Badge 
                                                         colorScheme={hasTool ? "green" : "red"}
