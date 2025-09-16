@@ -505,7 +505,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     const components = useMemo(
         () => [
-            <Overview />, // OPTION 0 - Overview
+            <Overview infoAccount={infoAccount} trades={infoAccount?.trades || []} />, // OPTION 0 - Overview
             <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // OPTION 1 - Inventory
             <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />, // OPTION 2 - History
             <Market

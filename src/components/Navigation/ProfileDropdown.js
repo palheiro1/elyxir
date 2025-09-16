@@ -43,12 +43,6 @@ const ProfileDropdown = ({ setOption, handleLogout }) => {
                 )}
 
                 <MenuList bgColor="#1F2323" borderRadius="10px" p={2} w="140px" minW="unset">
-                    <MenuItem onClick={() => setOption(9)} bgColor={'#3B4397'} {...menuItemProps}>
-                        <Image src="/images/icons/menu/blanco/messages.png" boxSize={'15px'} />
-                        <Text left={0} fontWeight={'semibold'}>
-                            Messages
-                        </Text>
-                    </MenuItem>
                     <MenuItem onClick={() => setOption(6)} bgColor={'#4E3B97'} {...menuItemProps} mt={2}>
                         <Image src="/images/icons/menu/blanco/account.png" boxSize={'15px'} />
                         <Text fontWeight={'semibold'}>Account</Text>

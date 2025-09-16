@@ -14,6 +14,17 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
     const { t } = useTranslation('navigation');
     const buttons = [
         {
+            icon: '/images/icons/menu/blanco/overview.png',
+            text: t('Overview', { defaultValue: 'Overview' }),
+            onClick: () => setOption(0),
+            bgColor: isActive(0) ? 'white' : '#2F8190',
+            hoverBg: 'rgba(47, 129, 144, 0.75)',
+            textColor: isActive(0) ? '#2F8190' : 'white',
+            fontWeight: isActive(0) ? 'bolder' : 'normal',
+            isActive: isActive(0),
+        },
+        // Messages button removed as requested
+        {
             icon: '/images/icons/menu/blanco/news.png',
             text: t('airdrops', { defaultValue: 'Airdrops' }),
             onClick: () => setOption(5),
