@@ -32,11 +32,19 @@ const UserDataItem = ({
         calculateUSD();
     }, [IGNISBalance]);
 
+    const [claimDebug, setClaimDebug] = useState(null);
     useEffect(() => {
         const checkClaimable = async () => {
-            const res = await checkCanClaim(accountRs);
-            if (!res.error) {
-                setIsClaimable(true);
+            try {
+                const res = await checkCanClaim(accountRs);
+                // Prominent debug log
+                console.log('🟢 [DAILY REWARDS DEBUG] checkCanClaim for', accountRs, '=>', JSON.stringify(res));
+                setClaimDebug(res);
+                setIsClaimable(!res.error);
+            } catch (err) {
+                console.error('🔴 [DAILY REWARDS ERROR] checkCanClaim failed:', err);
+                setClaimDebug({ error: true, message: err?.message || String(err) });
+                setIsClaimable(false);
             }
         };
         checkClaimable();
@@ -156,7 +164,15 @@ const UserDataItem = ({
                                 </Text>
                             </>
                         ) : (
-                            <Text>No more rewards today, come back tomorrow! </Text>
+                            <>
+                                <Text>No more rewards today, come back tomorrow!</Text>
+                                {claimDebug && (
+                                    <Box mt={2} p={2} bg="#222" color="#fff" fontSize="xs" borderRadius="md">
+                                        <b>Debug info:</b>
+                                        <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{JSON.stringify(claimDebug, null, 2)}</pre>
+                                    </Box>
+                                )}
+                            </>
                         )}
                     </Box>
                 </ContainerText>
