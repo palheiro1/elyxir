@@ -147,6 +147,52 @@ const Elyxir = ({ infoAccount }) => {
         const loadJobs = () => {
             const active = elyxirJobManager.getActiveJobs();
             const completed = elyxirJobManager.getCompletedJobs();
+            
+            // If no jobs exist and we're in development, create sample jobs for testing
+            if (active.length === 0 && completed.length === 0 && process.env.NODE_ENV === 'development') {
+                const sampleActiveJob = {
+                    jobId: 'WHISPERING_GALE_' + Date.now(),
+                    userAccount: infoAccount?.accountRS,
+                    potionName: 'Whispering Gale',
+                    recipeAsset: '12936439663349626618',
+                    potionAsset: '6485210212239811',
+                    durationBlocks: 30,
+                    startBlock: 12345,
+                    endBlock: 12375,
+                    successChance: 0.85,
+                    flaskMultiplier: 2,
+                    flaskAssetId: '4367881087678870632',
+                    status: 'ACTIVE',
+                    createdAt: new Date(Date.now() - 15 * 60 * 1000).toISOString(), // 15 minutes ago
+                    transactionHashes: ['sample_tx_hash_123']
+                };
+                
+                const sampleCompletedJob = {
+                    jobId: 'TIDEHEART_' + (Date.now() - 1000),
+                    userAccount: infoAccount?.accountRS,
+                    potionName: 'Tideheart',
+                    recipeAsset: '7024690161218732154',
+                    potionAsset: '7582224115266007515',
+                    durationBlocks: 20,
+                    startBlock: 12300,
+                    endBlock: 12320,
+                    successChance: 0.74,
+                    flaskMultiplier: 1,
+                    flaskAssetId: '4367881087678870632',
+                    status: 'COMPLETED',
+                    success: true,
+                    createdAt: new Date(Date.now() - 45 * 60 * 1000).toISOString(), // 45 minutes ago
+                    completedAt: new Date(Date.now() - 25 * 60 * 1000).toISOString(), // 25 minutes ago
+                    transactionHashes: ['sample_tx_hash_456', 'completion_tx_789']
+                };
+
+                if (infoAccount?.accountRS) {
+                    setActiveJobs([sampleActiveJob]);
+                    setCompletedJobs([sampleCompletedJob]);
+                    return;
+                }
+            }
+            
             setActiveJobs(active);
             setCompletedJobs(completed);
         };
@@ -156,7 +202,7 @@ const Elyxir = ({ infoAccount }) => {
         // Check for completed jobs every 10 seconds
         const interval = setInterval(loadJobs, 10000);
         return () => clearInterval(interval);
-    }, []);
+    }, [infoAccount?.accountRS]);
 
     // Crafting functions
     const handleStartCrafting = useCallback(async (recipe) => {
@@ -861,33 +907,66 @@ const Elyxir = ({ infoAccount }) => {
                         <Heading size="md" mb={4} color="orange.500">Active Crafting Jobs</Heading>
                         <VStack spacing={4}>
                             {activeJobs.map((job) => {
-                                const timeLeft = Math.max(0, job.completionTime - Date.now());
-                                const totalTime = job.completionTime - job.startTime;
-                                const progress = Math.min(100, ((totalTime - timeLeft) / totalTime) * 100);
+                                // Calculate time-based values using block system
+                                const currentTime = Date.now();
+                                const startTime = new Date(job.createdAt).getTime();
+                                const estimatedDuration = job.durationBlocks * 60 * 1000; // Assuming 1 minute per block
+                                const completionTime = startTime + estimatedDuration;
+                                const timeLeft = Math.max(0, completionTime - currentTime);
+                                const totalTime = estimatedDuration;
+                                const progress = totalTime > 0 ? Math.min(100, ((totalTime - timeLeft) / totalTime) * 100) : 0;
                                 const isComplete = timeLeft <= 0;
 
                                 return (
-                                    <Box key={job.id} p={4} border="1px solid" borderColor="orange.200" borderRadius="md" w="full">
+                                    <Box key={job.jobId} p={4} border="1px solid" borderColor={isComplete ? "green.200" : "orange.200"} borderRadius="md" w="full" bg={isComplete ? "green.50" : "orange.50"}>
                                         <HStack justify="space-between" mb={2}>
-                                            <Text fontWeight="bold">{job.recipeName}</Text>
-                                            <Badge colorScheme={isComplete ? "green" : "orange"}>
-                                                {isComplete ? "Ready!" : `${Math.ceil(timeLeft / 60000)} min left`}
+                                            <HStack>
+                                                <Text fontWeight="bold" color={isComplete ? "green.700" : "orange.700"}>
+                                                    🧪 {job.potionName}
+                                                </Text>
+                                                <Badge colorScheme="purple" variant="subtle">
+                                                    x{job.flaskMultiplier}
+                                                </Badge>
+                                            </HStack>
+                                            <Badge colorScheme={isComplete ? "green" : "orange"} fontSize="xs" px={2}>
+                                                {isComplete ? "✅ Ready!" : `⏱️ ${Math.ceil(timeLeft / 60000)} min left`}
                                             </Badge>
                                         </HStack>
-                                        <Text fontSize="sm" color="gray.600" mb={2}>
-                                            Amount: {job.amount} | Success Rate: {Math.round(job.successRate * 100)}%
-                                        </Text>
-                                        <Progress value={progress} colorScheme="orange" size="sm" mb={3} />
-                                        <HStack justify="space-between">
-                                            <Text fontSize="xs" color="gray.500">
-                                                Started: {new Date(job.startTime).toLocaleTimeString()}
+                                        
+                                        <HStack spacing={4} mb={2}>
+                                            <Text fontSize="sm" color="gray.600">
+                                                📊 Success Rate: <strong>{Math.round((job.successChance || 0.8) * 100)}%</strong>
                                             </Text>
+                                            <Text fontSize="sm" color="gray.600">
+                                                ⛏️ Duration: <strong>{job.durationBlocks} blocks</strong>
+                                            </Text>
+                                        </HStack>
+                                        
+                                        <Progress 
+                                            value={progress} 
+                                            colorScheme={isComplete ? "green" : "orange"} 
+                                            size="sm" 
+                                            mb={3} 
+                                            borderRadius="md"
+                                            bg="gray.100"
+                                        />
+                                        
+                                        <HStack justify="space-between" align="center">
+                                            <VStack align="start" spacing={0}>
+                                                <Text fontSize="xs" color="gray.500">
+                                                    🕐 Started: {new Date(job.createdAt).toLocaleTimeString()}
+                                                </Text>
+                                                <Text fontSize="xs" color="gray.500">
+                                                    🔗 Blocks: {job.startBlock} → {job.endBlock}
+                                                </Text>
+                                            </VStack>
                                             {isComplete && (
                                                 <Button
                                                     size="sm"
                                                     colorScheme="green"
-                                                    onClick={() => handleCompleteJob(job.id)}
-                                                    isLoading={isLoading}>
+                                                    onClick={() => handleCompleteJob(job.jobId)}
+                                                    isLoading={isLoading}
+                                                    leftIcon={<span>🎯</span>}>
                                                     Complete Crafting
                                                 </Button>
                                             )}
@@ -905,20 +984,72 @@ const Elyxir = ({ infoAccount }) => {
                         <Heading size="md" mb={4} color="green.500">Recent Completed Jobs</Heading>
                         <VStack spacing={3}>
                             {completedJobs.slice(-5).map((job) => (
-                                <Box key={job.id} p={3} border="1px solid" borderColor="green.200" borderRadius="md" w="full">
+                                <Box 
+                                    key={job.jobId} 
+                                    p={3} 
+                                    border="1px solid" 
+                                    borderColor={job.success ? "green.200" : "red.200"} 
+                                    borderRadius="md" 
+                                    w="full" 
+                                    bg={job.success ? "green.50" : "red.50"}
+                                >
                                     <HStack justify="space-between">
-                                        <VStack align="start" spacing={0}>
-                                            <Text fontWeight="bold" fontSize="sm">{job.recipeName}</Text>
+                                        <VStack align="start" spacing={1}>
+                                            <HStack>
+                                                <Text fontWeight="bold" fontSize="sm" color={job.success ? "green.700" : "red.700"}>
+                                                    🧪 {job.potionName}
+                                                </Text>
+                                                <Badge colorScheme="purple" variant="subtle" fontSize="xs">
+                                                    x{job.flaskMultiplier}
+                                                </Badge>
+                                            </HStack>
                                             <Text fontSize="xs" color="gray.600">
-                                                {job.success ? `✅ Success: +${job.amount} potions` : `❌ Failed (${Math.round(job.successRate * 100)}% chance)`}
+                                                {job.success 
+                                                    ? `✅ Success: Crafted ${job.flaskMultiplier} potion${job.flaskMultiplier > 1 ? 's' : ''}` 
+                                                    : `❌ Failed (${Math.round((job.successChance || 0.8) * 100)}% success rate)`
+                                                }
+                                            </Text>
+                                            <Text fontSize="xs" color="gray.500">
+                                                ⛏️ {job.durationBlocks} blocks • 📊 {Math.round((job.successChance || 0.8) * 100)}% rate
                                             </Text>
                                         </VStack>
-                                        <Text fontSize="xs" color="gray.500">
-                                            {new Date(job.completedTime).toLocaleString()}
-                                        </Text>
+                                        <VStack align="end" spacing={0}>
+                                            <Badge colorScheme={job.success ? "green" : "red"} fontSize="xs">
+                                                {job.success ? "COMPLETED" : "FAILED"}
+                                            </Badge>
+                                            <Text fontSize="xs" color="gray.500">
+                                                {new Date(job.completedAt || job.createdAt).toLocaleDateString()}
+                                            </Text>
+                                            <Text fontSize="xs" color="gray.500">
+                                                {new Date(job.completedAt || job.createdAt).toLocaleTimeString()}
+                                            </Text>
+                                        </VStack>
                                     </HStack>
                                 </Box>
                             ))}
+                        </VStack>
+                    </Box>
+                )}
+
+                {/* Empty State Messages */}
+                {activeJobs.length === 0 && (
+                    <Box bg={sectionBg} p={6} borderRadius="lg" mb={8}>
+                        <Heading size="md" mb={4} color="orange.500">Active Crafting Jobs</Heading>
+                        <VStack spacing={3} py={8}>
+                            <Text fontSize="4xl">⚗️</Text>
+                            <Text color="gray.500" textAlign="center" fontWeight="medium">No active crafting jobs</Text>
+                            <Text color="gray.400" textAlign="center" fontSize="sm">Start crafting potions to see progress here</Text>
+                        </VStack>
+                    </Box>
+                )}
+
+                {completedJobs.length === 0 && (
+                    <Box bg={sectionBg} p={6} borderRadius="lg" mb={8}>
+                        <Heading size="md" mb={4} color="green.500">Recent Completed Jobs</Heading>
+                        <VStack spacing={3} py={8}>
+                            <Text fontSize="4xl">📜</Text>
+                            <Text color="gray.500" textAlign="center" fontWeight="medium">No completed jobs yet</Text>
+                            <Text color="gray.400" textAlign="center" fontSize="sm">Your crafting history will appear here</Text>
                         </VStack>
                     </Box>
                 )}
