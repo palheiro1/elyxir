@@ -27,7 +27,9 @@ import {
     AlertIcon,
     AlertTitle,
     AlertDescription,
-    Spinner
+    Spinner,
+    PinInput,
+    PinInputField
 } from '@chakra-ui/react';
 import { elyxirJobManager, ELYXIR_CONFIG } from '../../../services/Elyxir/elyxirCrafting';
 import { checkPin } from '../../../utils/walletUtils';
@@ -121,6 +123,9 @@ const Elyxir = ({ infoAccount }) => {
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [craftingAmount, setCraftingAmount] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [userPassphrase, setUserPassphrase] = useState(null);
+    const [showPinInput, setShowPinInput] = useState(false);
+    const [pendingAction, setPendingAction] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toast = useToast();
     
@@ -176,6 +181,46 @@ const Elyxir = ({ infoAccount }) => {
         }
     }, [onOpen, toast]);
 
+    const handlePinInput = useCallback((pin) => {
+        try {
+            const userAccount = checkPin(infoAccount.name, pin);
+            if (!userAccount || !userAccount.passphrase) {
+                toast({
+                    title: "Invalid PIN",
+                    description: "Please enter your correct PIN",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+                return;
+            }
+
+            setUserPassphrase(userAccount.passphrase);
+            setShowPinInput(false);
+
+            // Execute the pending action
+            if (pendingAction === 'craft') {
+                executeCrafting(userAccount.passphrase);
+            } else if (pendingAction && pendingAction.type === 'complete') {
+                executeCompletion(pendingAction.jobId, userAccount.passphrase);
+            }
+        } catch (error) {
+            console.error('PIN verification error:', error);
+            toast({
+                title: "PIN Error",
+                description: "Failed to verify PIN. Please try again.",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    }, [infoAccount.name, pendingAction, toast]);
+
+    const requestPinForAction = useCallback((action) => {
+        setPendingAction(action);
+        setShowPinInput(true);
+    }, []);
+
     const confirmCrafting = useCallback(async () => {
         if (!selectedRecipe || !infoAccount) {
             toast({
@@ -188,20 +233,25 @@ const Elyxir = ({ infoAccount }) => {
             return;
         }
 
-        setIsLoading(true);
         onClose();
 
-        try {
-            // Check PIN if required
-            const pinResult = await checkPin(infoAccount.accountRS);
-            if (!pinResult.success) {
-                throw new Error(pinResult.message || 'PIN verification failed');
-            }
+        // Request PIN for crafting
+        if (!userPassphrase) {
+            requestPinForAction('craft');
+            return;
+        }
 
+        await executeCrafting(userPassphrase);
+    }, [selectedRecipe, infoAccount, onClose, toast, userPassphrase, requestPinForAction]);
+
+    const executeCrafting = useCallback(async (passphrase) => {
+        setIsLoading(true);
+
+        try {
             // Start crafting job
             const jobResult = await elyxirJobManager.startCraftingJob(
                 infoAccount.accountRS,
-                infoAccount.passPhrase || pinResult.passPhrase,
+                passphrase,
                 selectedRecipe.name,
                 30, // 30 blocks duration (about 30 minutes)
                 "4367881087678870632", // default conical flask
@@ -215,7 +265,7 @@ const Elyxir = ({ infoAccount }) => {
 
                 toast({
                     title: "Crafting Started!",
-                    description: `Started crafting ${craftingAmount}x ${selectedRecipe.name}. It will complete in ${selectedRecipe.duration} minutes.`,
+                    description: `Started crafting ${craftingAmount}x ${selectedRecipe.name}. It will complete in ${selectedRecipe.duration || 30} minutes.`,
                     status: "success",
                     duration: 5000,
                     isClosable: true,
@@ -236,22 +286,27 @@ const Elyxir = ({ infoAccount }) => {
             setIsLoading(false);
             setSelectedRecipe(null);
             setCraftingAmount(1);
+            setPendingAction(null);
         }
-    }, [selectedRecipe, craftingAmount, infoAccount, onClose, toast]);
+    }, [selectedRecipe, craftingAmount, infoAccount, toast]);
 
     const handleCompleteJob = useCallback(async (jobId) => {
+        // Request PIN for job completion
+        if (!userPassphrase) {
+            requestPinForAction({ type: 'complete', jobId });
+            return;
+        }
+
+        await executeCompletion(jobId, userPassphrase);
+    }, [userPassphrase, requestPinForAction]);
+
+    const executeCompletion = useCallback(async (jobId, passphrase) => {
         setIsLoading(true);
 
         try {
-            // Check PIN if required
-            const pinResult = await checkPin(infoAccount.accountRS);
-            if (!pinResult.success) {
-                throw new Error(pinResult.message || 'PIN verification failed');
-            }
-
             const result = await elyxirJobManager.completeCraftingJob(
                 jobId, 
-                infoAccount.passPhrase || pinResult.passPhrase, 
+                passphrase, 
                 toast
             );
             
@@ -275,7 +330,7 @@ const Elyxir = ({ infoAccount }) => {
         } catch (error) {
             console.error('Complete job error:', error);
             toast({
-                title: "Completion Failed",
+                title: "Completion Failed",  
                 description: error.message || 'Failed to complete crafting job',
                 status: "error",
                 duration: 5000,
@@ -283,8 +338,9 @@ const Elyxir = ({ infoAccount }) => {
             });
         } finally {
             setIsLoading(false);
+            setPendingAction(null);
         }
-    }, [infoAccount, toast]);
+    }, [toast]);
 
     const getMaxCraftable = useCallback((recipe) => {
         if (!recipe || !recipe.ingredients || !infoAccount?.assets) return 0;
@@ -947,6 +1003,30 @@ const Elyxir = ({ infoAccount }) => {
                             Start Crafting
                         </Button>
                     </ModalFooter>
+                </ModalContent>
+            </Modal>
+
+            {/* PIN Input Modal */}
+            <Modal isOpen={showPinInput} onClose={() => setShowPinInput(false)} size="sm">
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Enter Your PIN</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody pb={6}>
+                        <VStack spacing={4}>
+                            <Text textAlign="center" color="gray.600">
+                                Please enter your 4-digit PIN to authorize the transaction
+                            </Text>
+                            <HStack>
+                                <PinInput size="lg" onComplete={handlePinInput}>
+                                    <PinInputField />
+                                    <PinInputField />
+                                    <PinInputField />
+                                    <PinInputField />
+                                </PinInput>
+                            </HStack>
+                        </VStack>
+                    </ModalBody>
                 </ModalContent>
             </Modal>
         </Box>
