@@ -787,6 +787,22 @@ const getBlockchainStatus = async () => {
     }
 };
 
+const getBlock = async height => {
+    try {
+        const response = await axios.get(NODEURL, {
+            params: {
+                requestType: 'getBlock',
+                chain: 2,
+                height: height,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('🚀 ~ file: ardorInterface.js ~ getBlock ~ error', error);
+        return null;
+    }
+};
+
 // ----------------------------------------------
 // |                B R I D G E S               |
 // ----------------------------------------------
@@ -1101,4 +1117,5 @@ export {
     getUnconfirmedTransactions,
     changeAccountName,
     getAccountInventory,
+    getBlock,
 };

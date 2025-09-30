@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { 
     Heading, 
     Text, 
@@ -10,8 +10,27 @@ import {
     Progress, 
     Wrap, 
     WrapItem, 
-    useColorModeValue 
+    useColorModeValue,
+    useToast,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    ModalCloseButton,
+    useDisclosure,
+    VStack,
+    Divider,
+    Select,
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
+    Spinner
 } from '@chakra-ui/react';
+import { elyxirJobManager, ELYXIR_CONFIG } from '../../../services/Elyxir/elyxirCrafting';
+import { checkPin } from '../../../utils/walletUtils';
 
 // Full set of example potion recipes
 const RECIPES = [
@@ -94,7 +113,17 @@ const Elyxir = ({ infoAccount }) => {
     const [selectedRecipeIdx, setSelectedRecipeIdx] = useState(0);
     const [selectedFlaskIdx, setSelectedFlaskIdx] = useState(0);
     const [craftDuration, setCraftDuration] = useState(1); // default 1 day
-    const [craftingProgress, setCraftingProgress] = useState(0); // percent
+    const [craftingProgress, setCraftingProgress] = useState(0); // percent (for demo UI)
+    
+    // Real on-chain crafting state
+    const [activeJobs, setActiveJobs] = useState([]);
+    const [completedJobs, setCompletedJobs] = useState([]);
+    const [selectedRecipe, setSelectedRecipe] = useState(null);
+    const [craftingAmount, setCraftingAmount] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const toast = useToast();
+    
     // UI colors (hooks must be at top level)
     const sectionBg = useColorModeValue('gray.50', 'gray.800');
 
@@ -107,6 +136,170 @@ const Elyxir = ({ infoAccount }) => {
         const factor = 0.5;
         return Math.min(95, baseRate + maxIncrease * (1 - Math.pow(1 / (1 + factor * days), 2)));
     };
+
+    // Load jobs from localStorage on component mount
+    useEffect(() => {
+        const loadJobs = () => {
+            const active = elyxirJobManager.getActiveJobs();
+            const completed = elyxirJobManager.getCompletedJobs();
+            setActiveJobs(active);
+            setCompletedJobs(completed);
+        };
+
+        loadJobs();
+        
+        // Check for completed jobs every 10 seconds
+        const interval = setInterval(loadJobs, 10000);
+        return () => clearInterval(interval);
+    }, []);
+
+    // Crafting functions
+    const handleStartCrafting = useCallback(async (recipe) => {
+        // Find the official recipe by name
+        if (ELYXIR_CONFIG && ELYXIR_CONFIG.POTION_RECIPES && ELYXIR_CONFIG.POTION_RECIPES[recipe.name]) {
+            const officialRecipe = {
+                id: recipe.name.toLowerCase().replace(/\s+/g, '_'),
+                name: recipe.name,
+                ...ELYXIR_CONFIG.POTION_RECIPES[recipe.name]
+            };
+            setSelectedRecipe(officialRecipe);
+            setCraftingAmount(1);
+            onOpen();
+        } else {
+            toast({
+                title: "Recipe Not Available",
+                description: "This recipe is not available for real crafting yet",
+                status: "warning",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    }, [onOpen, toast]);
+
+    const confirmCrafting = useCallback(async () => {
+        if (!selectedRecipe || !infoAccount) {
+            toast({
+                title: "Error",
+                description: "Please select a recipe and ensure you're logged in",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
+
+        setIsLoading(true);
+        onClose();
+
+        try {
+            // Check PIN if required
+            const pinResult = await checkPin(infoAccount.accountRS);
+            if (!pinResult.success) {
+                throw new Error(pinResult.message || 'PIN verification failed');
+            }
+
+            // Start crafting job
+            const jobResult = await elyxirJobManager.startCraftingJob(
+                infoAccount.accountRS,
+                infoAccount.passPhrase || pinResult.passPhrase,
+                selectedRecipe.name,
+                30, // 30 blocks duration (about 30 minutes)
+                "4367881087678870632", // default conical flask
+                toast
+            );
+
+            if (jobResult.success) {
+                // Update active jobs
+                const updatedJobs = elyxirJobManager.getActiveJobs();
+                setActiveJobs(updatedJobs);
+
+                toast({
+                    title: "Crafting Started!",
+                    description: `Started crafting ${craftingAmount}x ${selectedRecipe.name}. It will complete in ${selectedRecipe.duration} minutes.`,
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                });
+            } else {
+                throw new Error(jobResult.message || 'Failed to start crafting');
+            }
+        } catch (error) {
+            console.error('Crafting error:', error);
+            toast({
+                title: "Crafting Failed",
+                description: error.message || 'An unexpected error occurred',
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        } finally {
+            setIsLoading(false);
+            setSelectedRecipe(null);
+            setCraftingAmount(1);
+        }
+    }, [selectedRecipe, craftingAmount, infoAccount, onClose, toast]);
+
+    const handleCompleteJob = useCallback(async (jobId) => {
+        setIsLoading(true);
+
+        try {
+            // Check PIN if required
+            const pinResult = await checkPin(infoAccount.accountRS);
+            if (!pinResult.success) {
+                throw new Error(pinResult.message || 'PIN verification failed');
+            }
+
+            const result = await elyxirJobManager.completeCraftingJob(
+                jobId, 
+                infoAccount.passPhrase || pinResult.passPhrase, 
+                toast
+            );
+            
+            if (result && result.success) {
+                // Update jobs
+                const active = elyxirJobManager.getActiveJobs();
+                const completed = elyxirJobManager.getCompletedJobs();
+                setActiveJobs(active);
+                setCompletedJobs(completed);
+
+                toast({
+                    title: "Crafting Completed!",
+                    description: result.message || 'Your crafting has been completed successfully',
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                });
+            } else {
+                throw new Error(result.message || 'Failed to complete crafting');
+            }
+        } catch (error) {
+            console.error('Complete job error:', error);
+            toast({
+                title: "Completion Failed",
+                description: error.message || 'Failed to complete crafting job',
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    }, [infoAccount, toast]);
+
+    const getMaxCraftable = useCallback((recipe) => {
+        if (!recipe || !recipe.ingredients || !infoAccount?.assets) return 0;
+        
+        let maxAmount = Infinity;
+        
+        recipe.ingredients.forEach(ingredient => {
+            const userAsset = infoAccount.assets.find(asset => asset.asset === ingredient.assetId);
+            const available = userAsset ? parseInt(userAsset.quantityQNT) : 0;
+            const possibleAmount = Math.floor(available / ingredient.baseQNT);
+            maxAmount = Math.min(maxAmount, possibleAmount);
+        });
+        
+        return maxAmount === Infinity ? 0 : maxAmount;
+    }, [infoAccount?.assets]);
 
     // Flask multipliers for ingredient quantities
     const flaskMultipliers = [1, 2, 3, 4, 5]; // x1 to x5
@@ -369,25 +562,46 @@ const Elyxir = ({ infoAccount }) => {
             <Box bg={sectionBg} p={6} borderRadius="md">
                 {/* Recipe Selection */}
                 <Stack spacing={6} mb={8}>
-                    <Text fontWeight="bold" fontSize="lg">Select Recipe:</Text>
+                    <HStack justify="space-between" align="center">
+                        <Text fontWeight="bold" fontSize="lg">Select Recipe:</Text>
+                        <Badge colorScheme="purple" fontSize="sm" p={2}>
+                            🔗 Real Blockchain Crafting Available
+                        </Badge>
+                    </HStack>
                     <Wrap spacing={4}>
                         {RECIPES.map((recipe, idx) => {
                             const currentMultiplier = flaskMultipliers[selectedFlaskIdx];
                             const missing = getMissingItems(recipe, currentMultiplier);
                             const canCraft = missing.length === 0;
                             
+                            // Check if this recipe has a real implementation
+                            const hasRealImplementation = ELYXIR_CONFIG && ELYXIR_CONFIG.POTION_RECIPES && Object.keys(ELYXIR_CONFIG.POTION_RECIPES).some(name => name === recipe.name);
+                            
                             return (
                                 <WrapItem key={idx}>
-                                    <Button
-                                        size="md"
-                                        variant={selectedRecipeIdx === idx ? 'solid' : 'outline'}
-                                        colorScheme={canCraft ? 'green' : 'gray'}
-                                        onClick={() => setSelectedRecipeIdx(idx)}
-                                        isDisabled={!canCraft}
-                                        h="60px"
-                                        px={6}>
-                                        {recipe.name}
-                                    </Button>
+                                    <Box position="relative">
+                                        <Button
+                                            size="md"
+                                            variant={selectedRecipeIdx === idx ? 'solid' : 'outline'}
+                                            colorScheme={canCraft ? 'green' : 'gray'}
+                                            onClick={() => setSelectedRecipeIdx(idx)}
+                                            isDisabled={!canCraft}
+                                            h="60px"
+                                            px={6}>
+                                            {recipe.name}
+                                        </Button>
+                                        {hasRealImplementation && (
+                                            <Badge
+                                                position="absolute"
+                                                top="-8px"
+                                                right="-8px"
+                                                colorScheme="purple"
+                                                fontSize="xs"
+                                                borderRadius="full">
+                                                🔗
+                                            </Badge>
+                                        )}
+                                    </Box>
                                 </WrapItem>
                             );
                         })}
@@ -578,24 +792,163 @@ const Elyxir = ({ infoAccount }) => {
                         size="lg"
                         h="60px"
                         fontSize="lg"
-                        isDisabled={getMissingItems(RECIPES[selectedRecipeIdx], flaskMultipliers[selectedFlaskIdx]).length > 0 || craftingProgress > 0}
-                        onClick={() => {
-                            // Start crafting simulation
-                            setCraftingProgress(0);
-                            const interval = setInterval(() => {
-                                setCraftingProgress(prev => {
-                                    if (prev >= 100) {
-                                        clearInterval(interval);
-                                        return 0;
-                                    }
-                                    return prev + (100 / (craftDuration * 10)); // Simulate days
-                                });
-                            }, 100);
-                        }}>
-                        {craftingProgress > 0 ? 'Crafting...' : `Start Crafting (${flaskMultipliers[selectedFlaskIdx]} potions)`}
+                        isDisabled={getMissingItems(RECIPES[selectedRecipeIdx], flaskMultipliers[selectedFlaskIdx]).length > 0 || craftingProgress > 0 || isLoading}
+                        onClick={() => handleStartCrafting(RECIPES[selectedRecipeIdx])}>
+                        {isLoading ? <Spinner size="sm" mr={2} /> : null}
+                        {craftingProgress > 0 ? 'Crafting...' : isLoading ? 'Starting...' : `Start Real Crafting (${flaskMultipliers[selectedFlaskIdx]} potions)`}
                     </Button>
                 </Stack>
+
+                {/* Active Jobs Section */}
+                {activeJobs.length > 0 && (
+                    <Box bg={sectionBg} p={6} borderRadius="lg" mb={8}>
+                        <Heading size="md" mb={4} color="orange.500">Active Crafting Jobs</Heading>
+                        <VStack spacing={4}>
+                            {activeJobs.map((job) => {
+                                const timeLeft = Math.max(0, job.completionTime - Date.now());
+                                const totalTime = job.completionTime - job.startTime;
+                                const progress = Math.min(100, ((totalTime - timeLeft) / totalTime) * 100);
+                                const isComplete = timeLeft <= 0;
+
+                                return (
+                                    <Box key={job.id} p={4} border="1px solid" borderColor="orange.200" borderRadius="md" w="full">
+                                        <HStack justify="space-between" mb={2}>
+                                            <Text fontWeight="bold">{job.recipeName}</Text>
+                                            <Badge colorScheme={isComplete ? "green" : "orange"}>
+                                                {isComplete ? "Ready!" : `${Math.ceil(timeLeft / 60000)} min left`}
+                                            </Badge>
+                                        </HStack>
+                                        <Text fontSize="sm" color="gray.600" mb={2}>
+                                            Amount: {job.amount} | Success Rate: {Math.round(job.successRate * 100)}%
+                                        </Text>
+                                        <Progress value={progress} colorScheme="orange" size="sm" mb={3} />
+                                        <HStack justify="space-between">
+                                            <Text fontSize="xs" color="gray.500">
+                                                Started: {new Date(job.startTime).toLocaleTimeString()}
+                                            </Text>
+                                            {isComplete && (
+                                                <Button
+                                                    size="sm"
+                                                    colorScheme="green"
+                                                    onClick={() => handleCompleteJob(job.id)}
+                                                    isLoading={isLoading}>
+                                                    Complete Crafting
+                                                </Button>
+                                            )}
+                                        </HStack>
+                                    </Box>
+                                );
+                            })}
+                        </VStack>
+                    </Box>
+                )}
+
+                {/* Completed Jobs Section */}
+                {completedJobs.length > 0 && (
+                    <Box bg={sectionBg} p={6} borderRadius="lg" mb={8}>
+                        <Heading size="md" mb={4} color="green.500">Recent Completed Jobs</Heading>
+                        <VStack spacing={3}>
+                            {completedJobs.slice(-5).map((job) => (
+                                <Box key={job.id} p={3} border="1px solid" borderColor="green.200" borderRadius="md" w="full">
+                                    <HStack justify="space-between">
+                                        <VStack align="start" spacing={0}>
+                                            <Text fontWeight="bold" fontSize="sm">{job.recipeName}</Text>
+                                            <Text fontSize="xs" color="gray.600">
+                                                {job.success ? `✅ Success: +${job.amount} potions` : `❌ Failed (${Math.round(job.successRate * 100)}% chance)`}
+                                            </Text>
+                                        </VStack>
+                                        <Text fontSize="xs" color="gray.500">
+                                            {new Date(job.completedTime).toLocaleString()}
+                                        </Text>
+                                    </HStack>
+                                </Box>
+                            ))}
+                        </VStack>
+                    </Box>
+                )}
             </Box>
+
+            {/* Crafting Confirmation Modal */}
+            <Modal isOpen={isOpen} onClose={onClose} size="lg">
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Confirm Real Crafting</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        {selectedRecipe && (
+                            <VStack spacing={4} align="stretch">
+                                <Alert status="info" borderRadius="md">
+                                    <AlertIcon />
+                                    <Box>
+                                        <AlertTitle>Real Blockchain Transaction!</AlertTitle>
+                                        <AlertDescription>
+                                            This will use real assets from your account and create actual blockchain transactions.
+                                        </AlertDescription>
+                                    </Box>
+                                </Alert>
+
+                                <Box>
+                                    <Text fontWeight="bold" mb={2}>Recipe: {selectedRecipe.name}</Text>
+                                    <Text fontSize="sm" color="gray.600" mb={4}>{selectedRecipe.description}</Text>
+                                </Box>
+
+                                <Box>
+                                    <Text fontWeight="bold" mb={2}>Amount to Craft:</Text>
+                                    <Select
+                                        value={craftingAmount}
+                                        onChange={(e) => setCraftingAmount(parseInt(e.target.value))}
+                                        maxW="150px">
+                                        {Array.from({ length: Math.min(10, getMaxCraftable(selectedRecipe)) }, (_, i) => (
+                                            <option key={i + 1} value={i + 1}>{i + 1}</option>
+                                        ))}
+                                    </Select>
+                                </Box>
+
+                                <Divider />
+
+                                <Box>
+                                    <Text fontWeight="bold" mb={2}>Required Ingredients:</Text>
+                                    <VStack spacing={2} align="stretch">
+                                        {selectedRecipe.ingredients && selectedRecipe.ingredients.map((ingredient, index) => {
+                                            const userAsset = infoAccount?.assets?.find(asset => asset.asset === ingredient.assetId);
+                                            const available = userAsset ? parseInt(userAsset.quantityQNT) : 0;
+                                            const needed = ingredient.baseQNT * craftingAmount;
+                                            const hasEnough = available >= needed;
+
+                                            return (
+                                                <HStack key={index} justify="space-between">
+                                                    <Text fontSize="sm">{ingredient.name}</Text>
+                                                    <Text fontSize="sm" color={hasEnough ? "green.500" : "red.500"}>
+                                                        {needed} needed ({available} available)
+                                                    </Text>
+                                                </HStack>
+                                            );
+                                        })}
+                                    </VStack>
+                                </Box>
+
+                                <Box>
+                                    <Text fontWeight="bold" mb={2}>Crafting Details:</Text>
+                                    <Text fontSize="sm">Duration: {selectedRecipe.duration || 30} minutes</Text>
+                                    <Text fontSize="sm">Success Rate: {Math.round((selectedRecipe.successRate || 0.8) * 100)}%</Text>
+                                    <Text fontSize="sm">Fee: {selectedRecipe.fee || 0.1} ARDOR</Text>
+                                </Box>
+                            </VStack>
+                        )}
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button variant="ghost" mr={3} onClick={onClose}>
+                            Cancel
+                        </Button>
+                        <Button 
+                            colorScheme="purple" 
+                            onClick={confirmCrafting}
+                            isLoading={isLoading}>
+                            Start Crafting
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </Box>
     );
 };
