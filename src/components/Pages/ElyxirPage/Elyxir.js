@@ -40,35 +40,35 @@ const RECIPES = [
         id: 'whispering_gale',
         name: 'Whispering Gale',
         ingredients: [
+            { name: 'Wind Essence', quantity: 1 },
+            { name: 'Feather', quantity: 1 },
             { name: 'Cloud Essence', quantity: 1 },
-            { name: 'Wind Essence', quantity: 2 },
-            { name: 'Himalayan Snow', quantity: 1 },
         ],
-        tools: ['Stone Mortar', 'Ancient Cauldron'],
-        successRate: 0.8,
+        tools: ['Bellow', 'Cauldron', 'Mortar', 'Ladle'],
+        successRate: 0.65,
         result: 'Whispering Gale',
     },
     {
         id: 'tideheart',
         name: 'Tideheart',
         ingredients: [
-            { name: 'Sea Water', quantity: 2 },
+            { name: 'Sea Water', quantity: 1 },
             { name: 'Crystal Water', quantity: 1 },
             { name: 'Rainbow Dust', quantity: 1 },
         ],
-        tools: ['Silver Ladle', 'Ancient Cauldron'],
-        successRate: 0.75,
+        tools: ['Bellow', 'Cauldron', 'Mortar', 'Ladle'],
+        successRate: 0.8,
         result: 'Tideheart',
     },
     {
         id: 'stoneblood',
         name: 'Stoneblood',
         ingredients: [
-            { name: 'Volcano Lava', quantity: 1 },
-            { name: 'Raw Diamond', quantity: 1 },
-            { name: 'Desert Sand', quantity: 2 },
+            { name: 'Tree Bark', quantity: 1 },
+            { name: 'Bone Powder', quantity: 1 },
+            { name: 'Volcanic Ash', quantity: 1 },
         ],
-        tools: ['Stone Mortar', 'Mystical Bellows'],
+        tools: ['Bellow', 'Cauldron', 'Mortar', 'Ladle'],
         successRate: 0.82,
         result: 'Stoneblood',
     },
@@ -76,11 +76,11 @@ const RECIPES = [
         id: 'feathered_flame',
         name: 'Feathered Flame',
         ingredients: [
-            { name: 'Feather', quantity: 2 },
-            { name: 'Volcano Lava', quantity: 1 },
-            { name: 'Lightning Essence', quantity: 1 },
+            { name: 'Bottled Sunlight', quantity: 1 },
+            { name: 'Feather', quantity: 1 },
+            { name: 'Peyote', quantity: 1 },
         ],
-        tools: ['Mystical Bellows', 'Silver Ladle'],
+        tools: ['Bellow', 'Cauldron', 'Mortar', 'Ladle'],
         successRate: 0.7,
         result: 'Feathered Flame',
     },
@@ -88,11 +88,11 @@ const RECIPES = [
         id: 'eternal_silk',
         name: 'Eternal Silk',
         ingredients: [
-            { name: 'Cotton Flower', quantity: 1 },
-            { name: 'Garden Flower', quantity: 2 },
-            { name: 'Bottled Sunlight', quantity: 1 },
+            { name: 'Holi Powder', quantity: 1 },
+            { name: 'Himalayan Snow', quantity: 1 },
+            { name: 'Rahu Saliva', quantity: 1 },
         ],
-        tools: ['Stone Mortar', 'Ancient Cauldron'],
+        tools: ['Bellow', 'Cauldron', 'Mortar', 'Ladle'],
         successRate: 0.77,
         result: 'Eternal Silk',
     },
@@ -100,13 +100,37 @@ const RECIPES = [
         id: 'coral',
         name: 'Coral',
         ingredients: [
-            { name: 'Sea Water', quantity: 2 },
-            { name: 'Rainbow Dust', quantity: 1 },
-            { name: 'Garden Flower', quantity: 1 },
+            { name: 'Sea Water', quantity: 1 },
+            { name: 'Kangaroo Tail', quantity: 1 },
+            { name: 'Araucarian Resine', quantity: 1 },
         ],
-        tools: ['Ancient Cauldron', 'Silver Ladle'],
-        successRate: 0.74,
+        tools: ['Bellow', 'Cauldron', 'Mortar', 'Ladle'],
+        successRate: 0.85,
         result: 'Coral',
+    },
+    {
+        id: 'shifting_dunes',
+        name: 'Shifting Dunes',
+        ingredients: [
+            { name: 'Desert Sand', quantity: 1 },
+            { name: 'Snake Skin', quantity: 1 },
+            { name: 'Mustard Seeds', quantity: 1 },
+        ],
+        tools: ['Bellow', 'Cauldron', 'Mortar', 'Ladle'],
+        successRate: 0.75,
+        result: 'Shifting Dunes',
+    },
+    {
+        id: 'forgotten_grove',
+        name: 'Forgotten Grove',
+        ingredients: [
+            { name: 'Garden Flower', quantity: 1 },
+            { name: 'Tree Bark', quantity: 1 },
+            { name: 'Wolf Fang', quantity: 1 },
+        ],
+        tools: ['Bellow', 'Cauldron', 'Mortar', 'Ladle'],
+        successRate: 0.73,
+        result: 'Forgotten Grove',
     },
 ];
 
@@ -564,10 +588,10 @@ const Elyxir = ({ infoAccount }) => {
         });
 
         const tools = [
-            { name: 'Mystical Bellows', description: 'Used to heat up potions during crafting', image: 'bellow.png', key: 'bellow' },
-            { name: 'Ancient Cauldron', description: 'Essential for mixing ingredients together', image: 'cauldron.png', key: 'cauldron' },
-            { name: 'Silver Ladle', description: 'For transferring potions into flasks', image: 'ladle.png', key: 'ladle' },
-            { name: 'Stone Mortar', description: 'Grinds ingredients to release their full potential', image: 'mortar.png', key: 'mortar' }
+            { name: 'Bellow', description: 'Used to heat up potions during crafting', image: 'bellow.png', key: 'bellow' },
+            { name: 'Cauldron', description: 'Essential for mixing ingredients together', image: 'cauldron.png', key: 'cauldron' },
+            { name: 'Ladle', description: 'For transferring potions into flasks', image: 'ladle.png', key: 'ladle' },
+            { name: 'Mortar', description: 'Grinds ingredients to release their full potential', image: 'mortar.png', key: 'mortar' }
         ].map((tool, index) => {
             const assetId = realAssetIds[tool.key] || `fake_tool_${index}`;
             const realAsset = infoAccount?.assets?.find(asset => asset.asset === assetId);
