@@ -789,6 +789,7 @@ const getBlockchainStatus = async () => {
 
 const getBlock = async height => {
     try {
+        console.log('🔍 [ARDOR] Getting block at height:', height);
         const response = await axios.get(NODEURL, {
             params: {
                 requestType: 'getBlock',
@@ -796,6 +797,7 @@ const getBlock = async height => {
                 height: height,
             },
         });
+        console.log('✅ [ARDOR] Block response:', response.data);
         return response.data;
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js ~ getBlock ~ error', error);

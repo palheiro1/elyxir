@@ -422,8 +422,25 @@ export class ElyxirJobManager {
                 throw new Error('Could not retrieve completion block');
             }
 
+            console.log('🔍 [ELYXIR DEBUG] Completion block data:', completionBlock);
+
+            // Check for different possible hash property names
+            let blockHash = completionBlock.blockHash || 
+                           completionBlock.block || 
+                           completionBlock.payloadHash || 
+                           completionBlock.generationSignature ||
+                           completionBlock.previousBlockHash;
+
+            if (!blockHash) {
+                console.error('🔴 [ELYXIR] No block hash found in block data:', completionBlock);
+                // Fallback: use a combination of available block data for randomness
+                const fallbackSeed = `${job.endBlock}${job.jobId}${Date.now()}`;
+                blockHash = fallbackSeed.substring(0, 16).padEnd(16, '0');
+                console.log('🔄 [ELYXIR] Using fallback hash:', blockHash);
+            }
+
             // Calculate success based on block hash RNG
-            const isSuccess = this.calculateRNGFromBlock(completionBlock.blockHash, job.successChance);
+            const isSuccess = this.calculateRNGFromBlock(blockHash, job.successChance);
 
             // Send completion message to contract
             const completionMessage = JSON.stringify({
@@ -545,10 +562,33 @@ export class ElyxirJobManager {
      * Calculate RNG result from block hash
      */
     calculateRNGFromBlock(blockHash, successThreshold) {
-        const seed = blockHash.substring(0, 16);
-        const seedInt = parseInt(seed, 16);
+        if (!blockHash || typeof blockHash !== 'string') {
+            console.error('🔴 [ELYXIR RNG] Invalid blockHash:', blockHash);
+            return false;
+        }
+
+        // Ensure we have enough characters for the seed
+        const seed = blockHash.length >= 16 ? blockHash.substring(0, 16) : blockHash.padEnd(16, '0');
+        
+        // Convert hex to integer, handle non-hex characters
+        let seedInt;
+        try {
+            seedInt = parseInt(seed, 16);
+            if (isNaN(seedInt)) {
+                // If not valid hex, use character codes as fallback
+                seedInt = seed.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            }
+        } catch (error) {
+            console.error('🔴 [ELYXIR RNG] Error parsing seed:', error);
+            seedInt = Date.now() % 1000000; // Fallback to timestamp
+        }
+
         const probability = (seedInt % 100) + 1;
-        return probability <= successThreshold;
+        const success = probability <= successThreshold;
+        
+        console.log(`🎲 [ELYXIR RNG] Seed: ${seed}, SeedInt: ${seedInt}, Probability: ${probability}, Threshold: ${successThreshold}, Success: ${success}`);
+        
+        return success;
     }
 
     /**

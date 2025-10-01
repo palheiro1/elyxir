@@ -132,14 +132,43 @@ const Elyxir = ({ infoAccount }) => {
     // UI colors (hooks must be at top level)
     const sectionBg = useColorModeValue('gray.50', 'gray.800');
 
-    // Calculate success rate based on craft duration (parabolic curve)
+    // Calculate success rate based on craft duration using actual DURATION_OPTIONS
     const calculateSuccessRate = (days) => {
-        // Parabolic formula: y = 20 + 75 * (1 - (1/(1 + 0.5*x))^2)
-        // At day 1: ~20%, at day 7: ~95%, asymptotic to 100%
-        const baseRate = 20;
-        const maxIncrease = 75;
-        const factor = 0.5;
-        return Math.min(95, baseRate + maxIncrease * (1 - Math.pow(1 / (1 + factor * days), 2)));
+        // Find the closest duration option or interpolate
+        const options = ELYXIR_CONFIG.DURATION_OPTIONS;
+        
+        // Find exact match first
+        const exactMatch = options.find(opt => opt.days === days);
+        if (exactMatch) {
+            return exactMatch.successChance;
+        }
+        
+        // If no exact match, find the closest lower and upper bounds
+        const sortedOptions = [...options].sort((a, b) => a.days - b.days);
+        
+        // If days is less than minimum, return minimum
+        if (days <= sortedOptions[0].days) {
+            return sortedOptions[0].successChance;
+        }
+        
+        // If days is greater than maximum, return maximum  
+        if (days >= sortedOptions[sortedOptions.length - 1].days) {
+            return sortedOptions[sortedOptions.length - 1].successChance;
+        }
+        
+        // Linear interpolation between two closest values
+        for (let i = 0; i < sortedOptions.length - 1; i++) {
+            const lower = sortedOptions[i];
+            const upper = sortedOptions[i + 1];
+            
+            if (days >= lower.days && days <= upper.days) {
+                const ratio = (days - lower.days) / (upper.days - lower.days);
+                return Math.round(lower.successChance + ratio * (upper.successChance - lower.successChance));
+            }
+        }
+        
+        // Fallback
+        return 31;
     };
 
     // Load jobs from localStorage on component mount
@@ -336,16 +365,6 @@ const Elyxir = ({ infoAccount }) => {
         }
     }, [selectedRecipe, craftingAmount, infoAccount, toast]);
 
-    const handleCompleteJob = useCallback(async (jobId) => {
-        // Request PIN for job completion
-        if (!userPassphrase) {
-            requestPinForAction({ type: 'complete', jobId });
-            return;
-        }
-
-        await executeCompletion(jobId, userPassphrase);
-    }, [userPassphrase, requestPinForAction]);
-
     const executeCompletion = useCallback(async (jobId, passphrase) => {
         setIsLoading(true);
 
@@ -387,6 +406,16 @@ const Elyxir = ({ infoAccount }) => {
             setPendingAction(null);
         }
     }, [toast]);
+
+    const handleCompleteJob = useCallback(async (jobId) => {
+        // Request PIN for job completion
+        if (!userPassphrase) {
+            requestPinForAction({ type: 'complete', jobId });
+            return;
+        }
+
+        await executeCompletion(jobId, userPassphrase);
+    }, [userPassphrase, requestPinForAction, executeCompletion]);
 
     const getMaxCraftable = useCallback((recipe) => {
         if (!recipe || !recipe.ingredients || !infoAccount?.assets) return 0;
@@ -861,9 +890,15 @@ const Elyxir = ({ infoAccount }) => {
                         <HStack>
                             <Button 
                                 size="md" 
-                                onClick={() => setCraftDuration(Math.max(1, craftDuration - 1))}
+                                onClick={() => {
+                                    const options = ELYXIR_CONFIG.DURATION_OPTIONS.map(opt => opt.days).sort((a, b) => a - b);
+                                    const currentIndex = options.indexOf(craftDuration);
+                                    const prevIndex = Math.max(0, currentIndex - 1);
+                                    setCraftDuration(options[prevIndex]);
+                                }}
                                 colorScheme="purple"
-                                variant="outline">
+                                variant="outline"
+                                isDisabled={craftDuration <= Math.min(...ELYXIR_CONFIG.DURATION_OPTIONS.map(opt => opt.days))}>
                                 -
                             </Button>
                             <Text minW="80px" textAlign="center" fontSize="lg" fontWeight="bold">
@@ -871,9 +906,15 @@ const Elyxir = ({ infoAccount }) => {
                             </Text>
                             <Button 
                                 size="md" 
-                                onClick={() => setCraftDuration(craftDuration + 1)}
+                                onClick={() => {
+                                    const options = ELYXIR_CONFIG.DURATION_OPTIONS.map(opt => opt.days).sort((a, b) => a - b);
+                                    const currentIndex = options.indexOf(craftDuration);
+                                    const nextIndex = Math.min(options.length - 1, currentIndex + 1);
+                                    setCraftDuration(options[nextIndex]);
+                                }}
                                 colorScheme="purple"
-                                variant="outline">
+                                variant="outline"
+                                isDisabled={craftDuration >= Math.max(...ELYXIR_CONFIG.DURATION_OPTIONS.map(opt => opt.days))}>
                                 +
                             </Button>
                         </HStack>
@@ -935,7 +976,7 @@ const Elyxir = ({ infoAccount }) => {
                                         
                                         <HStack spacing={4} mb={2}>
                                             <Text fontSize="sm" color="gray.600">
-                                                📊 Success Rate: <strong>{Math.round((job.successChance || 0.8) * 100)}%</strong>
+                                                📊 Success Rate: <strong>{Math.round(job.successChance || 80)}%</strong>
                                             </Text>
                                             <Text fontSize="sm" color="gray.600">
                                                 ⛏️ Duration: <strong>{job.durationBlocks} blocks</strong>
@@ -1006,11 +1047,11 @@ const Elyxir = ({ infoAccount }) => {
                                             <Text fontSize="xs" color="gray.600">
                                                 {job.success 
                                                     ? `✅ Success: Crafted ${job.flaskMultiplier} potion${job.flaskMultiplier > 1 ? 's' : ''}` 
-                                                    : `❌ Failed (${Math.round((job.successChance || 0.8) * 100)}% success rate)`
+                                                    : `❌ Failed (${Math.round(job.successChance || 80)}% success rate)`
                                                 }
                                             </Text>
                                             <Text fontSize="xs" color="gray.500">
-                                                ⛏️ {job.durationBlocks} blocks • 📊 {Math.round((job.successChance || 0.8) * 100)}% rate
+                                                ⛏️ {job.durationBlocks} blocks • 📊 {Math.round(job.successChance || 80)}% rate
                                             </Text>
                                         </VStack>
                                         <VStack align="end" spacing={0}>
@@ -1117,7 +1158,7 @@ const Elyxir = ({ infoAccount }) => {
                                 <Box>
                                     <Text fontWeight="bold" mb={2}>Crafting Details:</Text>
                                     <Text fontSize="sm">Duration: {selectedRecipe.duration || 30} minutes</Text>
-                                    <Text fontSize="sm">Success Rate: {Math.round((selectedRecipe.successRate || 0.8) * 100)}%</Text>
+                                    <Text fontSize="sm">Success Rate: {Math.round(selectedRecipe.successRate || 80)}%</Text>
                                     <Text fontSize="sm">Fee: {selectedRecipe.fee || 0.1} ARDOR</Text>
                                 </Box>
                             </VStack>
