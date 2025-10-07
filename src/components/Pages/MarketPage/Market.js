@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
-import ElyxirMarket from '../ElyxirPage/ElyxirMarket';
+import ElyxirMarket from './ElyxirMarket';
 
 /**
  * @name Market

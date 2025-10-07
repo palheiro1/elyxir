@@ -15,7 +15,7 @@ import History from '../../components/Pages/HistoryPage/History';
 import Overview from '../../components/Pages/HomePage/Overview';
 import NewsAirdrops from '../../components/Pages/HomePage/NewsAirdrops';
 import Inventory from '../../components/Pages/InventoryPage/Inventory';
-// import Bounty from '../../components/Pages/BountyPage/Bounty';
+import Elyxir from '../../components/Pages/ElyxirPage';
 import Market from '../../components/Pages/MarketPage/Market';
 import Account from '../../components/Pages/AccountPage/Account';
 
@@ -75,7 +75,6 @@ import {
 import Exchange from '../Exchange/Exchange';
 import { firstTimeToast, okToast } from '../../utils/alerts';
 import { getOmnoGiftzBalance } from '../../services/Ardor/omnoInterface';
-import Elyxir from '../../components/Pages/ElyxirPage/Elyxir';
 import { setCardsManually } from '../../redux/reducers/CardsReducer';
 import ProfileDropdown from '../../components/Navigation/ProfileDropdown';
 import { fetchAllItems } from '../../utils/itemsUtils';
@@ -131,7 +130,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const [giftzCardsHash, setGiftzCardsHash] = useState('');
     const [wethCardsHash, setWethCardsHash] = useState('');
     const [manaCardsHash, setManaCardsHash] = useState('');
-    const [cardsHash] = useState('');
     const [itemsHash, setItemsHash] = useState('');
 
     // Filtered cards

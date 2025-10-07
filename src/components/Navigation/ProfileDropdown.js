@@ -34,8 +34,7 @@ const ProfileDropdown = ({ setOption, handleLogout }) => {
                         rightIcon={<GoTriangleDown />}
                         leftIcon={<FaUser />}
                         bgColor={'#E15083'}
-                        fontFamily={'Inter'}
-                        fontWeight={'regular'}
+                        fontWeight={'semibold'}
                         _hover={{ opacity: '0.75' }}
                         _active={{ opacity: '0.85' }}>
                         Profile

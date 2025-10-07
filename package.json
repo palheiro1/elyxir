@@ -43,7 +43,7 @@
     "web-vitals": "^2.1.4"
   },
   "overrides": {
-        "typescript": "5.1"
+    "typescript": "5.1"
   },
   "scripts": {
     "postinstall": "patch-package",

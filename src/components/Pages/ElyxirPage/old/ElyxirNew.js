@@ -1,7 +1,7 @@
 import { useMemo, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Heading, Text, Box, Stack, Button, Image, Tooltip, HStack, Tag, Badge, Progress, Wrap, WrapItem, useColorModeValue } from '@chakra-ui/react';
-import GridCards from '../../Cards/GridCards';
+import GridCards from '../../../Cards/GridCards';
 
 // Full set of example potion recipes
 const RECIPES = [
