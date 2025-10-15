@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import BlockchainReducer from '../reducers/BlockchainReducer';
 import CardsReducer from '../reducers/CardsReducer';
 import ItemsReducer from '../reducers/ItemsReducer';
+import ElyxirReducer from '../reducers/ElyxirReducer';
 
 /**
  *
@@ -15,5 +16,6 @@ export const store = configureStore({
         blockchain: BlockchainReducer,
         cards: CardsReducer,
         items: ItemsReducer,
+        elyxir: ElyxirReducer,
     },
 });

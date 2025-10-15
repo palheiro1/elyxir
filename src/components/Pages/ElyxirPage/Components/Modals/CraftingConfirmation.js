@@ -16,6 +16,7 @@ import {
     Stack,
     Text,
 } from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
 
 const CraftingConfirmation = ({
     infoAccount,
@@ -26,6 +27,11 @@ const CraftingConfirmation = ({
     isLoading,
     selectedFlask,
 }) => {
+    const { fakeAssets } = useSelector(state => state.elyxir);
+    const { potions } = fakeAssets;
+    const recipePotion = potions?.find(potion => potion?.asset === selectedRecipe?.creationAssetId);
+    const multiplier = selectedFlask?.multiplier || 1;
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
             <ModalOverlay />
@@ -48,10 +54,10 @@ const CraftingConfirmation = ({
 
                             <Box>
                                 <Text fontWeight="bold" mb={2}>
-                                    Recipe: {selectedRecipe.name}
+                                    Recipe: {recipePotion.name}
                                 </Text>
                                 <Text fontSize="sm" color="gray.600" mb={4}>
-                                    {selectedRecipe.description}
+                                    {recipePotion.description}
                                 </Text>
                             </Box>
 
@@ -68,12 +74,16 @@ const CraftingConfirmation = ({
                                                 asset => asset.asset === ingredient.assetId
                                             );
                                             const available = userAsset ? parseInt(userAsset.quantityQNT) : 0;
-                                            const needed = ingredient.baseQNT * selectedFlask.multiplier;
+                                            const needed = ingredient.qtyQNT * multiplier;
                                             const hasEnough = available >= needed;
 
+                                            const ing = fakeAssets?.ingredients?.find(item => {
+                                                return item.asset === ingredient?.assetId;
+                                            });
+ 
                                             return (
                                                 <Stack direction={'row'} key={index} justify="space-between">
-                                                    <Text fontSize="sm">{ingredient.name}</Text>
+                                                    <Text fontSize="sm">{ing?.name}</Text>
                                                     <Text fontSize="sm" color={hasEnough ? 'green.500' : 'red.500'}>
                                                         {needed} needed ({available} available)
                                                     </Text>
@@ -81,15 +91,6 @@ const CraftingConfirmation = ({
                                             );
                                         })}
                                 </Stack>
-                            </Box>
-
-                            <Box>
-                                <Text fontWeight="bold" mb={2}>
-                                    Crafting Details:
-                                </Text>
-                                <Text fontSize="sm">Duration: {selectedRecipe.duration || 30} minutes</Text>
-                                <Text fontSize="sm">Success Rate: {Math.round(selectedRecipe.successRate || 80)}%</Text>
-                                <Text fontSize="sm">Fee: {selectedRecipe.fee || 0.1} ARDOR</Text>
                             </Box>
                         </Stack>
                     )}

@@ -1,44 +1,42 @@
 import { Badge, Box, Stack, Text } from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
 
 const CompletedJobItem = ({ job }) => {
+    const { fakeAssets } = useSelector(state => state.elyxir);
+    const craftedPotion = fakeAssets.potions?.find(potion => potion?.asset === job?.creationAssetId);
+
     return (
         <Box
-            key={job.jobId}
+            key={job?.jobId}
             p={3}
             border="1px solid"
-            borderColor={job.success ? 'green.200' : 'red.200'}
+            borderColor={job?.isSuccess ? 'green.200' : 'red.200'}
             borderRadius="md"
             w="full"
-            bg={job.success ? 'green.50' : 'red.50'}>
+            bg={job?.success ? 'green.50' : 'red.50'}>
             <Stack direction={'row'} justify="space-between">
                 <Stack direction={'column'} align="start" spacing={1}>
                     <Stack direction={'row'}>
-                        <Text fontWeight="bold" fontSize="sm" color={job.success ? 'green.700' : 'red.700'}>
-                            🧪 {job.potionName}
+                        <Text fontWeight="bold" fontSize="sm" color={job?.isSuccess ? 'green.700' : 'red.700'}>
+                            🧪 {craftedPotion.name}
                         </Text>
                         <Badge colorScheme="purple" variant="subtle" fontSize="xs">
-                            x{job.flaskMultiplier}
+                            x{job?.flaskMultiplier}
                         </Badge>
                     </Stack>
                     <Text fontSize="xs" color="gray.600">
-                        {job.success
-                            ? `✅ Success: Crafted ${job.flaskMultiplier} potion${job.flaskMultiplier > 1 ? 's' : ''}`
-                            : `❌ Failed (${Math.round(job.successChance || 80)}% success rate)`}
+                        {job?.isSuccess
+                            ? `✅ Success: Crafted ${job?.flaskMultiplier} potion${job?.flaskMultiplier > 1 ? 's' : ''}`
+                            : `❌ Failed`}
                     </Text>
                     <Text fontSize="xs" color="gray.500">
-                        ⛏️ {job.durationBlocks} blocks • 📊 {Math.round(job.successChance || 80)}% rate
+                        📊 ({Math.round(job?.successProbability)}% success rate)
                     </Text>
                 </Stack>
                 <Stack direction={'column'} align="end" spacing={0}>
-                    <Badge colorScheme={job.success ? 'green' : 'red'} fontSize="xs">
-                        {job.success ? 'COMPLETED' : 'FAILED'}
+                    <Badge colorScheme={job?.isSuccess ? 'green' : 'red'} fontSize="xs">
+                        {job?.isSuccess ? 'COMPLETED' : 'FAILED'}
                     </Badge>
-                    <Text fontSize="xs" color="gray.500">
-                        {new Date(job.completedAt || job.createdAt).toLocaleDateString()}
-                    </Text>
-                    <Text fontSize="xs" color="gray.500">
-                        {new Date(job.completedAt || job.createdAt).toLocaleTimeString()}
-                    </Text>
                 </Stack>
             </Stack>
         </Box>

@@ -1,43 +1,16 @@
 import { OMNO_CONTRACT } from '../data/CONSTANTS';
-import { ELYXIR_CONFIG } from '../services/Elyxir/elyxirCrafting';
 
-// Calculate success rate based on craft duration using actual DURATION_OPTIONS
+const K = Math.log(4.0) / 6.0; // ≈ 0.231049060186648
+const A = 0.503968421;
+const BLOCKS_PER_DAY = 1440.0;
+
+export const calculateSuccessRateWithBlocks = durationBlocks => {
+    const tDays = durationBlocks / BLOCKS_PER_DAY;
+    return 1.0 - A * Math.exp(-K * tDays);
+};
+
 export const calculateSuccessRate = days => {
-    // Find the closest duration option or interpolate
-    const options = ELYXIR_CONFIG.DURATION_OPTIONS;
-
-    // Find exact match first
-    const exactMatch = options.find(opt => opt.days === days);
-    if (exactMatch) {
-        return exactMatch.successChance;
-    }
-
-    // If no exact match, find the closest lower and upper bounds
-    const sortedOptions = [...options].sort((a, b) => a.days - b.days);
-
-    // If days is less than minimum, return minimum
-    if (days <= sortedOptions[0].days) {
-        return sortedOptions[0].successChance;
-    }
-
-    // If days is greater than maximum, return maximum
-    if (days >= sortedOptions[sortedOptions.length - 1].days) {
-        return sortedOptions[sortedOptions.length - 1].successChance;
-    }
-
-    // Linear interpolation between two closest values
-    for (let i = 0; i < sortedOptions.length - 1; i++) {
-        const lower = sortedOptions[i];
-        const upper = sortedOptions[i + 1];
-
-        if (days >= lower.days && days <= upper.days) {
-            const ratio = (days - lower.days) / (upper.days - lower.days);
-            return Math.round(lower.successChance + ratio * (upper.successChance - lower.successChance));
-        }
-    }
-
-    // Fallback
-    return 31;
+    return 1.0 - A * Math.exp(-K * days);
 };
 
 export const getCraftPotionMessage = ({
@@ -48,22 +21,26 @@ export const getCraftPotionMessage = ({
     flaskAssetId,
     durationBlocks,
     testMode = false,
+    blockId,
 }) => {
     const message = {
         contract: OMNO_CONTRACT,
-        operation: {
-            service: 'elyxir',
-            request: 'create',
-            parameter: {
-                jobId,
-                owner: accountId,
-                recipeAssetId,
-                creationAssetId,
-                flaskAssetId,
-                durationBlocks,
-                testMode,
+        operation: [
+            {
+                service: 'elyxir',
+                request: 'create',
+                parameter: {
+                    jobId,
+                    owner: accountId,
+                    recipeAssetId,
+                    creationAssetId,
+                    flaskAssetId,
+                    durationBlocks,
+                    testMode,
+                    blockId,
+                },
             },
-        },
+        ],
     };
 
     return JSON.stringify(message);

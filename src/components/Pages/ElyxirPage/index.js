@@ -1,6 +1,7 @@
-import { useMemo, useState, useCallback, useEffect } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useCallback, useEffect } from 'react';
 import { Box, useColorModeValue, useToast, useDisclosure } from '@chakra-ui/react';
-import { elyxirJobManager, ELYXIR_CONFIG } from '../../../services/Elyxir/elyxirCrafting';
+import { ELYXIR_CONFIG, elyxirJobManager } from '../../../services/Elyxir/elyxirCrafting';
 import { checkPin } from '../../../utils/walletUtils';
 import RecipeSelector from './Components/RecipeSelector';
 import FlaskSelector from './Components/FlaskSelector';
@@ -10,20 +11,19 @@ import ActiveJobs from './Components/ActiveJobs';
 import CompletedJobs from './Components/CompletedJobs';
 import CraftingConfirmation from './Components/Modals/CraftingConfirmation';
 import PinModal from './Components/Modals/PinModal';
-import { ingredientNameMap, rawFlasks, rawIngredients, rawPotions, rawTools, realAssetIds } from './data';
-import { getFlaskAssets, sendCraftPotionMessage } from '../../../services/Elyxir/elyxir';
+import { getUserJobs, sendCraftPotionAssets, sendCraftPotionMessage } from '../../../services/Elyxir/elyxir';
 import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
-
-// Full set of example potion recipes
+import { useSelector } from 'react-redux';
+import { waitForBlockChange } from '../../../utils/blockchain';
 
 const Elyxir = ({ infoAccount }) => {
-    // Alchemy UI state
-    const [selectedRecipeIdx, setSelectedRecipeIdx] = useState(0);
-    const [selectedFlask, setSelectedFlask] = useState(0);
-    const [craftDuration, setCraftDuration] = useState(1); // default 1 day
-    const [craftingProgress, setCraftingProgress] = useState(0); // percent (for demo UI)
+    const { elyxir, fakeAssets } = useSelector(state => state.elyxir);
+    const { prev_height } = useSelector(state => state.blockchain);
 
-    // Real on-chain crafting state
+    const [selectedFlask, setSelectedFlask] = useState(null);
+    const [craftDuration, setCraftDuration] = useState(1);
+    const [craftingProgress, setCraftingProgress] = useState(0);
+
     const [activeJobs, setActiveJobs] = useState([]);
     const [completedJobs, setCompletedJobs] = useState([]);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
@@ -38,53 +38,10 @@ const Elyxir = ({ infoAccount }) => {
     const sectionBg = useColorModeValue('gray.50', 'gray.800');
 
     useEffect(() => {
-        const loadJobs = () => {
-            const active = elyxirJobManager.getActiveJobs();
-            const completed = elyxirJobManager.getCompletedJobs();
-
-            if (active.length === 0 && completed.length === 0) {
-                const sampleActiveJob = {
-                    jobId: 'WHISPERING_GALE_' + Date.now(),
-                    userAccount: infoAccount?.accountRS,
-                    potionName: 'Whispering Gale',
-                    recipeAsset: '12936439663349626618',
-                    potionAsset: '6485210212239811',
-                    durationBlocks: 30,
-                    startBlock: 12345,
-                    endBlock: 12375,
-                    successChance: 0.85,
-                    flaskMultiplier: 2,
-                    flaskAssetId: '4367881087678870632',
-                    status: 'ACTIVE',
-                    createdAt: new Date(Date.now() - 15 * 60 * 1000).toISOString(), // 15 minutes ago
-                    transactionHashes: ['sample_tx_hash_123'],
-                };
-
-                const sampleCompletedJob = {
-                    jobId: 'TIDEHEART_' + (Date.now() - 1000),
-                    userAccount: infoAccount?.accountRS,
-                    potionName: 'Tideheart',
-                    recipeAsset: '7024690161218732154',
-                    potionAsset: '7582224115266007515',
-                    durationBlocks: 20,
-                    startBlock: 12300,
-                    endBlock: 12320,
-                    successChance: 0.74,
-                    flaskMultiplier: 1,
-                    flaskAssetId: '4367881087678870632',
-                    status: 'COMPLETED',
-                    success: true,
-                    createdAt: new Date(Date.now() - 45 * 60 * 1000).toISOString(), // 45 minutes ago
-                    completedAt: new Date(Date.now() - 25 * 60 * 1000).toISOString(), // 25 minutes ago
-                    transactionHashes: ['sample_tx_hash_456', 'completion_tx_789'],
-                };
-
-                if (infoAccount?.accountRS) {
-                    setActiveJobs([sampleActiveJob]);
-                    setCompletedJobs([sampleCompletedJob]);
-                    return;
-                }
-            }
+        const loadJobs = async () => {
+            const accountId = addressToAccountId(infoAccount.accountRs);
+            const active = await getUserJobs({ accountId, activeJobs: true });
+            const completed = await getUserJobs({ accountId, activeJobs: false });
 
             setActiveJobs(active);
             setCompletedJobs(completed);
@@ -92,22 +49,15 @@ const Elyxir = ({ infoAccount }) => {
 
         loadJobs();
 
-        // Check for completed jobs every 10 seconds
         const interval = setInterval(loadJobs, 10000);
         return () => clearInterval(interval);
-    }, [infoAccount?.accountRS]);
+    }, [infoAccount?.accountRs]);
 
-    // Crafting functions
     const handleStartCrafting = useCallback(
         async recipe => {
-            // Find the official recipe by name
-            if (ELYXIR_CONFIG && ELYXIR_CONFIG.POTION_RECIPES && ELYXIR_CONFIG.POTION_RECIPES[recipe.name]) {
-                const officialRecipe = {
-                    id: recipe.name.toLowerCase().replace(/\s+/g, '_'),
-                    name: recipe.name,
-                    ...ELYXIR_CONFIG.POTION_RECIPES[recipe.name],
-                };
-                setSelectedRecipe(officialRecipe);
+            const recipeConfig = elyxir.definition.recipes.find(r => r.recipeAssetId === recipe.recipeAssetId);
+            if (recipeConfig) {
+                setSelectedRecipe(recipeConfig);
                 setCraftingAmount(1);
                 onOpen();
             } else {
@@ -120,7 +70,7 @@ const Elyxir = ({ infoAccount }) => {
                 });
             }
         },
-        [onOpen, toast]
+        [elyxir?.definition?.recipes, onOpen, toast]
     );
 
     const handlePinInput = useCallback(
@@ -141,14 +91,12 @@ const Elyxir = ({ infoAccount }) => {
                 setUserPassphrase(userAccount.passphrase);
                 setShowPinInput(false);
 
-                // Execute the pending action
                 if (pendingAction === 'craft') {
                     executeCrafting(userAccount.passphrase);
                 } else if (pendingAction && pendingAction.type === 'complete') {
                     executeCompletion(pendingAction.jobId, userAccount.passphrase);
                 }
             } catch (error) {
-                console.error('PIN verification error:', error);
                 toast({
                     title: 'PIN Error',
                     description: 'Failed to verify PIN. Please try again.',
@@ -180,7 +128,6 @@ const Elyxir = ({ infoAccount }) => {
 
         onClose();
 
-        // Request PIN for crafting
         if (!userPassphrase) {
             requestPinForAction('craft');
             return;
@@ -194,40 +141,50 @@ const Elyxir = ({ infoAccount }) => {
             setIsLoading(true);
 
             try {
-                // Start crafting job
-                const accountId = addressToAccountId(infoAccount.accountRS);
-                const response = await sendCraftPotionMessage({
-                    accountId,
-                    recipeAssetId: selectedRecipe.realAsset,
-                    flaskAssetId: (await fakeAssets).flasks,
+                const accountId = addressToAccountId(infoAccount.accountRs);
+                const recipePotion = fakeAssets.potions?.find(
+                    potion => potion?.asset === selectedRecipe?.creationAssetId
+                );
+                const multiplier = selectedFlask?.multiplier || 1;
+
+                const mergedAssets = [];
+
+                mergedAssets.push({ asset: selectedFlask?.asset, qnt: 1 });
+
+                selectedRecipe.tools.forEach(asset => {
+                    return mergedAssets.push({ asset, qnt: 1 });
                 });
 
-                const jobResult = await elyxirJobManager.startCraftingJob(
-                    infoAccount.accountRS,
+                selectedRecipe.ingredients.forEach(ing => {
+                    const qnt = ing.qtyQNT * multiplier;
+                    const asset = ing.assetId;
+                    mergedAssets.push({ asset, qnt });
+                });
+
+                const durationBlocks = ELYXIR_CONFIG.DURATION_OPTIONS.find(item => item.days === craftDuration).blocks;
+
+                const transfered = await sendCraftPotionAssets({ mergedAssets, passphrase });
+                if (!transfered) throw new Error('Failed transfering crafting asset');
+
+                const response = await sendCraftPotionMessage({
+                    accountId,
+                    recipeAssetId: selectedRecipe?.recipeAssetId,
+                    creationAssetId: recipePotion?.asset,
+                    flaskAssetId: selectedFlask?.asset,
+                    durationBlocks,
                     passphrase,
-                    selectedRecipe.name,
-                    30, // 30 blocks duration (about 30 minutes)
-                    '4367881087678870632', // default conical flask
-                    toast
-                );
+                    blockId: prev_height,
+                });
 
-                if (response) {
-                    // Update active jobs
-                    const updatedJobs = elyxirJobManager.getActiveJobs();
-                    setActiveJobs(updatedJobs);
+                if (!response) throw new Error('Failed to start crafting');
 
-                    toast({
-                        title: 'Crafting Started!',
-                        description: `Started crafting ${craftingAmount}x ${selectedRecipe.name}. It will complete in ${
-                            selectedRecipe.duration || 30
-                        } minutes.`,
-                        status: 'success',
-                        duration: 5000,
-                        isClosable: true,
-                    });
-                } else {
-                    throw new Error(jobResult.message || 'Failed to start crafting');
-                }
+                toast({
+                    title: 'Crafting Started!',
+                    description: `Started crafting ${craftingAmount}x ${recipePotion.name}. It will complete in ${craftDuration} days.`,
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                });
             } catch (error) {
                 console.error('Crafting error:', error);
                 toast({
@@ -255,7 +212,6 @@ const Elyxir = ({ infoAccount }) => {
                 const result = await elyxirJobManager.completeCraftingJob(jobId, passphrase, toast);
 
                 if (result && result.success) {
-                    // Update jobs
                     const active = elyxirJobManager.getActiveJobs();
                     const completed = elyxirJobManager.getCompletedJobs();
                     setActiveJobs(active);
@@ -288,202 +244,61 @@ const Elyxir = ({ infoAccount }) => {
         [toast]
     );
 
-    const handleCompleteJob = useCallback(
-        async jobId => {
-            // Request PIN for job completion
-            if (!userPassphrase) {
-                requestPinForAction({ type: 'complete', jobId });
-                return;
-            }
-
-            await executeCompletion(jobId, userPassphrase);
-        },
-        [userPassphrase, requestPinForAction, executeCompletion]
-    );
-
-    // Create assets using real Ardor asset IDs from the blockchain (same as Inventory and Market)
-    const fakeAssets = useMemo(async () => {
-        const ingredients = rawIngredients.map((name, index) => {
-            const assetId = realAssetIds[name] || `fake_ingredient_${index}`;
-            const realAsset = infoAccount?.assets?.find(asset => asset.asset === assetId);
-            const realQuantity = realAsset ? parseInt(realAsset.quantityQNT) : 0;
-            const realUnconfirmedQuantity = realAsset ? parseInt(realAsset.unconfirmedQuantityQNT) : 0;
-
-            return {
-                asset: assetId,
-                name:
-                    ingredientNameMap[name] ||
-                    name
-                        .replace(/_/g, ' ')
-                        .replace(/([A-Z])/g, ' $1')
-                        .replace(/^\w/, c => c.toUpperCase()),
-                description: `A mystical ingredient for potion crafting`,
-                quantityQNT: realQuantity,
-                totalQuantityQNT: 1,
-                unconfirmedQuantityQNT: realUnconfirmedQuantity,
-                imgUrl: `/images/elyxir/ingredients/${name}.png`,
-                elyxirType: 'INGREDIENT',
-                isFake: true,
-            };
-        });
-
-        const tools = rawTools.map((tool, index) => {
-            const assetId = realAssetIds[tool.key] || `fake_tool_${index}`;
-            const realAsset = infoAccount?.assets?.find(asset => asset.asset === assetId);
-            const realQuantity = realAsset ? parseInt(realAsset.quantityQNT) : 0;
-            const realUnconfirmedQuantity = realAsset ? parseInt(realAsset.unconfirmedQuantityQNT) : 0;
-
-            return {
-                asset: assetId,
-                name: tool.name,
-                description: tool.description,
-                quantityQNT: realQuantity,
-                totalQuantityQNT: 1,
-                unconfirmedQuantityQNT: realUnconfirmedQuantity,
-                imgUrl: `/images/elyxir/tools/${tool.image}`,
-                elyxirType: 'TOOL',
-                isFake: true,
-            };
-        });
-
-        const flasksResponse = await getFlaskAssets();
-        const flasks = rawFlasks.map((flask, index) => {
-            const assetId = realAssetIds[flask.key] || `fake_flask_${index}`;
-            const realAsset = infoAccount?.assets?.find(asset => asset.asset === assetId);
-            const realQuantity = realAsset ? parseInt(realAsset.quantityQNT) : 0;
-            const realUnconfirmedQuantity = realAsset ? parseInt(realAsset.unconfirmedQuantityQNT) : 0;
-
-            let multiplier = 0;
-            if (flasksResponse) {
-                multiplier = flasksResponse[assetId];
-            }
-            return {
-                asset: assetId,
-                name: flask.name,
-                description: flask.description,
-                quantityQNT: realQuantity,
-                totalQuantityQNT: 1,
-                unconfirmedQuantityQNT: realUnconfirmedQuantity,
-                imgUrl: `/images/elyxir/flasks/${flask.image}`,
-                elyxirType: 'FLASK',
-                isFake: true,
-                multiplier,
-            };
-        });
-
-        const potions = rawPotions.map((potion, index) => {
-            const assetId = realAssetIds[potion.key] || `fake_potion_${index}`;
-            const realAsset = infoAccount?.assets?.find(asset => asset.asset === assetId);
-            const realQuantity = realAsset ? parseInt(realAsset.quantityQNT) : 0;
-            const realUnconfirmedQuantity = realAsset ? parseInt(realAsset.unconfirmedQuantityQNT) : 0;
-
-            return {
-                asset: assetId,
-                name: potion.name,
-                description: potion.description,
-                quantityQNT: realQuantity,
-                totalQuantityQNT: 1,
-                unconfirmedQuantityQNT: realUnconfirmedQuantity,
-                imgUrl: `/images/elyxir/potions/${potion.image}`,
-                elyxirType: 'CREATION',
-                isFake: true,
-            };
-        });
-
-        return { ingredients, tools, flasks, potions };
-    }, [infoAccount?.assets]);
-
-    console.log('🚀 ~ Elyxir ~ fakeAssets:', fakeAssets);
-
-    // Use the properly formatted assets instead of raw Redux items
-    const allElyxirItems = useMemo(() => {
-        return [...fakeAssets.ingredients, ...fakeAssets.tools, ...fakeAssets.flasks, ...fakeAssets.potions];
-    }, [fakeAssets]);
-
-    // Group items by type for recipe checking
-    const groupedItems = useMemo(() => {
-        const result = {};
-        allElyxirItems.forEach(item => {
-            const type = item.elyxirType.toLowerCase() + 's';
-            if (!result[type]) result[type] = [];
-            result[type].push(item);
-        });
-        return result;
-    }, [allElyxirItems]);
-
-    // Get missing items for recipe crafting (updated to use flask multiplier)
     const getMissingItems = useCallback(
         (recipe, flaskMultiplier) => {
             const missing = [];
-            if (recipe.ingredients) {
-                recipe.ingredients.forEach(req => {
-                    const item = groupedItems.ingredients?.find(i => i.name.toLowerCase() === req.name.toLowerCase());
+            if (recipe?.ingredients) {
+                recipe?.ingredients?.forEach(req => {
+                    const item = fakeAssets.ingredients?.find(i => i.asset === req.assetId);
                     const have = item ? Number(item.quantityQNT) : 0;
-                    const needed = req.quantity * flaskMultiplier;
+                    const needed = req.qtyQNT * flaskMultiplier;
                     if (have < needed) missing.push(`${needed - have}x ${req.name}`);
                 });
             }
-            if (recipe.tools) {
-                recipe.tools.forEach(name => {
-                    if (!groupedItems.tools?.some(i => i.name.toLowerCase() === name.toLowerCase())) missing.push(name);
+            if (recipe?.tools) {
+                recipe.tools.forEach(asset => {
+                    if (!fakeAssets.tools?.some(i => i.asset === asset)) missing.push(asset);
                 });
             }
             return missing;
         },
-        [groupedItems]
+        [fakeAssets.ingredients, fakeAssets.tools]
     );
 
     return (
         <Box maxW={'100%'} px={4} py={6}>
             <Box bg={sectionBg} p={6} borderRadius="md">
-                {/* Recipe Selection */}
                 <RecipeSelector
                     selectedFlask={selectedFlask}
-                    selectedRecipeIdx={selectedRecipeIdx}
-                    setSelectedRecipeIdx={setSelectedRecipeIdx}
+                    selectedRecipe={selectedRecipe}
+                    setSelectedRecipe={setSelectedRecipe}
                     getMissingItems={getMissingItems}
+                    potions={fakeAssets.potions}
                 />
-
-                {/* Flask Selection */}
                 <FlaskSelector
                     selectedFlask={selectedFlask}
                     setSelectedFlask={setSelectedFlask}
-                    fakeAssets={fakeAssets}
+                    flasks={fakeAssets.flasks}
+                    isPotionSelected={selectedRecipe !== null}
                 />
-
-                {/* Selected Recipe Details with Visual Ingredients */}
                 <RecipeDisplay
                     selectedFlask={selectedFlask}
-                    selectedRecipeIdx={selectedRecipeIdx}
+                    selectedRecipe={selectedRecipe}
                     craftDuration={craftDuration}
-                    groupedItems={groupedItems}
                 />
-
-                {/* Crafting Controls */}
                 <CraftingControls
                     craftDuration={craftDuration}
                     setCraftDuration={setCraftDuration}
                     craftingProgress={craftingProgress}
                     getMissingItems={getMissingItems}
                     selectedFlask={selectedFlask}
-                    selectedRecipeIdx={selectedRecipeIdx}
+                    selectedRecipe={selectedRecipe}
                     isLoading={isLoading}
                     handleStartCrafting={handleStartCrafting}
                 />
-
-                {/* Active Jobs Section */}
-                <ActiveJobs
-                    activeJobs={activeJobs}
-                    sectionBg={sectionBg}
-                    handleCompleteJob={handleCompleteJob}
-                    isLoading={isLoading}
-                />
-
-                {/* Completed Jobs Section */}
+                <ActiveJobs activeJobs={activeJobs} sectionBg={sectionBg} isLoading={isLoading} />
                 <CompletedJobs completedJobs={completedJobs} sectionBg={sectionBg} />
             </Box>
-
-            {/* Crafting Confirmation Modal */}
             <CraftingConfirmation
                 infoAccount={infoAccount}
                 isOpen={isOpen}
@@ -494,8 +309,6 @@ const Elyxir = ({ infoAccount }) => {
                 isLoading={isLoading}
                 selectedFlask={selectedFlask}
             />
-
-            {/* PIN Input Modal */}
             <PinModal showPinInput={showPinInput} setShowPinInput={setShowPinInput} handlePinInput={handlePinInput} />
         </Box>
     );

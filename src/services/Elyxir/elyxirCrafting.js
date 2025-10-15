@@ -9,142 +9,142 @@ import { okToast, errorToast } from '../../utils/alerts';
 // Configuration constants from the wallet integration guide
 export const ELYXIR_CONFIG = {
     // Contract accounts
-    CONTRACT_ACCOUNT: "ARDOR-CLUN-N4AJ-ZQWK-GD74N",
-    BURN_ACCOUNT: "ARDOR-RQYR-NMDJ-3Q8U-9UAXH",
-    
+    CONTRACT_ACCOUNT: 'ARDOR-CLUN-N4AJ-ZQWK-GD74N',
+    BURN_ACCOUNT: 'ARDOR-RQYR-NMDJ-3Q8U-9UAXH',
+
     // Official potion recipes with real asset IDs
     POTION_RECIPES: {
-        "Whispering Gale": {
-            recipeAsset: "12936439663349626618",
-            potionAsset: "6485210212239811",
+        'Whispering Gale': {
+            recipeAsset: '12936439663349626618',
+            potionAsset: '6485210212239811',
             ingredients: [
-                {assetId: "65767141008711421", name: "Wind Essence", baseQNT: 1},
-                {assetId: "15284691712437925618", name: "Feather", baseQNT: 1},
-                {assetId: "18101012326255288772", name: "Cloud Essence", baseQNT: 1}
+                { assetId: '65767141008711421', name: 'Wind Essence', baseQNT: 1 },
+                { assetId: '15284691712437925618', name: 'Feather', baseQNT: 1 },
+                { assetId: '18101012326255288772', name: 'Cloud Essence', baseQNT: 1 },
             ],
             tools: [
-                {assetId: "7394449015011337044", name: "Bellow"},
-                {assetId: "1310229991284473521", name: "Cauldron"},
-                {assetId: "188493294393002400", name: "Mortar"},
-                {assetId: "9451976923053037726", name: "Ladle"}
-            ]
+                { assetId: '7394449015011337044', name: 'Bellow' },
+                { assetId: '1310229991284473521', name: 'Cauldron' },
+                { assetId: '188493294393002400', name: 'Mortar' },
+                { assetId: '9451976923053037726', name: 'Ladle' },
+            ],
         },
-        "Tideheart": {
-            recipeAsset: "7024690161218732154",
-            potionAsset: "7582224115266007515",
+        Tideheart: {
+            recipeAsset: '7024690161218732154',
+            potionAsset: '7582224115266007515',
             ingredients: [
-                {assetId: "10444425886085847503", name: "Sea Water", baseQNT: 1},
-                {assetId: "10917692030112170713", name: "Crystal Water", baseQNT: 1},
-                {assetId: "7891814295348826088", name: "Rainbow Dust", baseQNT: 1}
+                { assetId: '10444425886085847503', name: 'Sea Water', baseQNT: 1 },
+                { assetId: '10917692030112170713', name: 'Crystal Water', baseQNT: 1 },
+                { assetId: '7891814295348826088', name: 'Rainbow Dust', baseQNT: 1 },
             ],
             tools: [
-                {assetId: "7394449015011337044", name: "Bellow"},
-                {assetId: "1310229991284473521", name: "Cauldron"},
-                {assetId: "188493294393002400", name: "Mortar"},
-                {assetId: "9451976923053037726", name: "Ladle"}
-            ]
+                { assetId: '7394449015011337044', name: 'Bellow' },
+                { assetId: '1310229991284473521', name: 'Cauldron' },
+                { assetId: '188493294393002400', name: 'Mortar' },
+                { assetId: '9451976923053037726', name: 'Ladle' },
+            ],
         },
-        "Stoneblood": {
-            recipeAsset: "11654119158397769364",
-            potionAsset: "10474636406729395731",
+        Stoneblood: {
+            recipeAsset: '11654119158397769364',
+            potionAsset: '10474636406729395731',
             ingredients: [
-                {assetId: "1941380340903453000", name: "Tree Bark", baseQNT: 1},
-                {assetId: "17472981396773816914", name: "Bone Powder", baseQNT: 1},
-                {assetId: "374078224198142471", name: "Volcanic Ash", baseQNT: 1}
+                { assetId: '1941380340903453000', name: 'Tree Bark', baseQNT: 1 },
+                { assetId: '17472981396773816914', name: 'Bone Powder', baseQNT: 1 },
+                { assetId: '374078224198142471', name: 'Volcanic Ash', baseQNT: 1 },
             ],
             tools: [
-                {assetId: "7394449015011337044", name: "Bellow"},
-                {assetId: "1310229991284473521", name: "Cauldron"},
-                {assetId: "188493294393002400", name: "Mortar"},
-                {assetId: "9451976923053037726", name: "Ladle"}
-            ]
+                { assetId: '7394449015011337044', name: 'Bellow' },
+                { assetId: '1310229991284473521', name: 'Cauldron' },
+                { assetId: '188493294393002400', name: 'Mortar' },
+                { assetId: '9451976923053037726', name: 'Ladle' },
+            ],
         },
-        "Eternal Silk": {
-            recipeAsset: "1462047204733593633",
-            potionAsset: "5089659721388119266",
+        'Eternal Silk': {
+            recipeAsset: '1462047204733593633',
+            potionAsset: '5089659721388119266',
             ingredients: [
-                {assetId: "13446501052073878899", name: "Holi Powder", baseQNT: 1},
-                {assetId: "2603114092541070832", name: "Himalayan Snow", baseQNT: 1},
-                {assetId: "8821500247715349893", name: "Rahu Saliva", baseQNT: 1}
+                { assetId: '13446501052073878899', name: 'Holi Powder', baseQNT: 1 },
+                { assetId: '2603114092541070832', name: 'Himalayan Snow', baseQNT: 1 },
+                { assetId: '8821500247715349893', name: 'Rahu Saliva', baseQNT: 1 },
             ],
             tools: [
-                {assetId: "7394449015011337044", name: "Bellow"},
-                {assetId: "1310229991284473521", name: "Cauldron"},
-                {assetId: "188493294393002400", name: "Mortar"},
-                {assetId: "9451976923053037726", name: "Ladle"}
-            ]
+                { assetId: '7394449015011337044', name: 'Bellow' },
+                { assetId: '1310229991284473521', name: 'Cauldron' },
+                { assetId: '188493294393002400', name: 'Mortar' },
+                { assetId: '9451976923053037726', name: 'Ladle' },
+            ],
         },
-        "Coral": {
-            recipeAsset: "6864800023593094679",
-            potionAsset: "8693351662911145147",
+        Coral: {
+            recipeAsset: '6864800023593094679',
+            potionAsset: '8693351662911145147',
             ingredients: [
-                {assetId: "10444425886085847503", name: "Sea Water", baseQNT: 1},
-                {assetId: "16412049206728355506", name: "Kangaroo Tail", baseQNT: 1},
-                {assetId: "13430257599807483745", name: "Araucarian Resine", baseQNT: 1}
+                { assetId: '10444425886085847503', name: 'Sea Water', baseQNT: 1 },
+                { assetId: '16412049206728355506', name: 'Kangaroo Tail', baseQNT: 1 },
+                { assetId: '13430257599807483745', name: 'Araucarian Resine', baseQNT: 1 },
             ],
             tools: [
-                {assetId: "7394449015011337044", name: "Bellow"},
-                {assetId: "1310229991284473521", name: "Cauldron"},
-                {assetId: "188493294393002400", name: "Mortar"},
-                {assetId: "9451976923053037726", name: "Ladle"}
-            ]
+                { assetId: '7394449015011337044', name: 'Bellow' },
+                { assetId: '1310229991284473521', name: 'Cauldron' },
+                { assetId: '188493294393002400', name: 'Mortar' },
+                { assetId: '9451976923053037726', name: 'Ladle' },
+            ],
         },
-        "Feathered Flame": {
-            recipeAsset: "1770779863759720918",
-            potionAsset: "11206437400477435454",
+        'Feathered Flame': {
+            recipeAsset: '1770779863759720918',
+            potionAsset: '11206437400477435454',
             ingredients: [
-                {assetId: "8717959006135737805", name: "Bottled Sunlight", baseQNT: 1},
-                {assetId: "15284691712437925618", name: "Feather", baseQNT: 1},
-                {assetId: "12313032092046113556", name: "Peyote", baseQNT: 1}
+                { assetId: '8717959006135737805', name: 'Bottled Sunlight', baseQNT: 1 },
+                { assetId: '15284691712437925618', name: 'Feather', baseQNT: 1 },
+                { assetId: '12313032092046113556', name: 'Peyote', baseQNT: 1 },
             ],
             tools: [
-                {assetId: "7394449015011337044", name: "Bellow"},
-                {assetId: "1310229991284473521", name: "Cauldron"},
-                {assetId: "188493294393002400", name: "Mortar"},
-                {assetId: "9451976923053037726", name: "Ladle"}
-            ]
+                { assetId: '7394449015011337044', name: 'Bellow' },
+                { assetId: '1310229991284473521', name: 'Cauldron' },
+                { assetId: '188493294393002400', name: 'Mortar' },
+                { assetId: '9451976923053037726', name: 'Ladle' },
+            ],
         },
-        "Shifting Dunes": {
-            recipeAsset: "10956456574154580310",
-            potionAsset: "12861522637067934750",
+        'Shifting Dunes': {
+            recipeAsset: '10956456574154580310',
+            potionAsset: '12861522637067934750',
             ingredients: [
-                {assetId: "10229749181769297696", name: "Desert Sand", baseQNT: 1},
-                {assetId: "609721796834652174", name: "Snake Skin", baseQNT: 1},
-                {assetId: "583958094572828441", name: "Mustard Seeds", baseQNT: 1}
+                { assetId: '10229749181769297696', name: 'Desert Sand', baseQNT: 1 },
+                { assetId: '609721796834652174', name: 'Snake Skin', baseQNT: 1 },
+                { assetId: '583958094572828441', name: 'Mustard Seeds', baseQNT: 1 },
             ],
             tools: [
-                {assetId: "7394449015011337044", name: "Bellow"},
-                {assetId: "1310229991284473521", name: "Cauldron"},
-                {assetId: "188493294393002400", name: "Mortar"},
-                {assetId: "9451976923053037726", name: "Ladle"}
-            ]
+                { assetId: '7394449015011337044', name: 'Bellow' },
+                { assetId: '1310229991284473521', name: 'Cauldron' },
+                { assetId: '188493294393002400', name: 'Mortar' },
+                { assetId: '9451976923053037726', name: 'Ladle' },
+            ],
         },
-        "Forgotten Grove": {
-            recipeAsset: "7535070915409870441",
-            potionAsset: "3858707486313568681",
+        'Forgotten Grove': {
+            recipeAsset: '7535070915409870441',
+            potionAsset: '3858707486313568681',
             ingredients: [
-                {assetId: "8966516609271135665", name: "Garden Flower", baseQNT: 1},
-                {assetId: "1941380340903453000", name: "Tree Bark", baseQNT: 1},
-                {assetId: "3865726407233803673", name: "Wolf Fang", baseQNT: 1}
+                { assetId: '8966516609271135665', name: 'Garden Flower', baseQNT: 1 },
+                { assetId: '1941380340903453000', name: 'Tree Bark', baseQNT: 1 },
+                { assetId: '3865726407233803673', name: 'Wolf Fang', baseQNT: 1 },
             ],
             tools: [
-                {assetId: "7394449015011337044", name: "Bellow"},
-                {assetId: "1310229991284473521", name: "Cauldron"},
-                {assetId: "188493294393002400", name: "Mortar"},
-                {assetId: "9451976923053037726", name: "Ladle"}
-            ]
-        }
+                { assetId: '7394449015011337044', name: 'Bellow' },
+                { assetId: '1310229991284473521', name: 'Cauldron' },
+                { assetId: '188493294393002400', name: 'Mortar' },
+                { assetId: '9451976923053037726', name: 'Ladle' },
+            ],
+        },
     },
-    
+
     // Flask configurations
     FLASKS: {
-        "4367881087678870632": {name: "Conical Flask", multiplier: 1},
-        "3758988694981372970": {name: "Pear Flask", multiplier: 2},
-        "1328293559375692481": {name: "Kjeldahl Flask", multiplier: 3},
-        "8026549983053279231": {name: "Florence Flask", multiplier: 4},
-        "9118586585609900793": {name: "Round-Bottom Flask", multiplier: 5}
+        '4367881087678870632': { name: 'Conical Flask', multiplier: 1 },
+        '3758988694981372970': { name: 'Pear Flask', multiplier: 2 },
+        '1328293559375692481': { name: 'Kjeldahl Flask', multiplier: 3 },
+        '8026549983053279231': { name: 'Florence Flask', multiplier: 4 },
+        '9118586585609900793': { name: 'Round-Bottom Flask', multiplier: 5 },
     },
-    
+
     // Duration options with success rates
     DURATION_OPTIONS: [
         { blocks: 1440, days: 1, successChance: 31 },
@@ -152,8 +152,8 @@ export const ELYXIR_CONFIG = {
         { blocks: 14400, days: 10, successChance: 46 },
         { blocks: 21600, days: 15, successChance: 55 },
         { blocks: 28800, days: 20, successChance: 63 },
-        { blocks: 43200, days: 30, successChance: 80 }
-    ]
+        { blocks: 43200, days: 30, successChance: 80 },
+    ],
 };
 
 /**
@@ -182,7 +182,14 @@ export class ElyxirJobManager {
     /**
      * Start a new crafting job - Main entry point for wallet integration
      */
-    async startCraftingJob(userAccount, userPassphrase, potionName, durationBlocks, flaskAssetId = "4367881087678870632", toast) {
+    async startCraftingJob(
+        userAccount,
+        userPassphrase,
+        potionName,
+        durationBlocks,
+        flaskAssetId = '4367881087678870632',
+        toast
+    ) {
         try {
             const recipe = ELYXIR_CONFIG.POTION_RECIPES[potionName];
             if (!recipe) {
@@ -219,7 +226,7 @@ export class ElyxirJobManager {
                 flaskMultiplier: flask.multiplier,
                 flaskAssetId,
                 jobId,
-                durationBlocks
+                durationBlocks,
             });
 
             if (!transactionResults.success) {
@@ -241,7 +248,7 @@ export class ElyxirJobManager {
                 flaskAssetId,
                 status: 'ACTIVE',
                 createdAt: new Date().toISOString(),
-                transactionHashes: transactionResults.transactionHashes
+                transactionHashes: transactionResults.transactionHashes,
             };
 
             this.activeJobs.push(jobData);
@@ -255,9 +262,8 @@ export class ElyxirJobManager {
                 success: true,
                 jobId,
                 message: `Crafting job for ${potionName} started successfully!`,
-                estimatedCompletion: new Date(Date.now() + (durationBlocks * 60 * 1000)) // Assuming 1 minute per block
+                estimatedCompletion: new Date(Date.now() + durationBlocks * 60 * 1000), // Assuming 1 minute per block
             };
-
         } catch (error) {
             console.error('🔴 [ELYXIR CRAFTING] Job creation failed:', error);
             if (toast) {
@@ -265,7 +271,7 @@ export class ElyxirJobManager {
             }
             return {
                 success: false,
-                error: error.message
+                error: error.message,
             };
         }
     }
@@ -273,9 +279,17 @@ export class ElyxirJobManager {
     /**
      * Execute the blockchain transactions for crafting
      */
-    async executeTransactions({ userAccount, userPassphrase, recipe, flaskMultiplier, flaskAssetId, jobId, durationBlocks }) {
+    async executeTransactions({
+        userAccount,
+        userPassphrase,
+        recipe,
+        flaskMultiplier,
+        flaskAssetId,
+        jobId,
+        durationBlocks,
+    }) {
         const transactionHashes = [];
-        
+
         try {
             // Step 1: Transfer ingredients to contract (scaled by flask multiplier)
             for (const ingredient of recipe.ingredients) {
@@ -290,13 +304,13 @@ export class ElyxirJobManager {
                         operation: 'transferIngredient',
                         jobId,
                         ingredient: ingredient.name,
-                        quantity
+                        quantity,
                     }),
                     messagePrunable: true,
                     deadline: 1440,
-                    priority: 'HIGH'
+                    priority: 'HIGH',
                 });
-                
+
                 if (!txHash) {
                     throw new Error(`Failed to transfer ingredient: ${ingredient.name}`);
                 }
@@ -314,13 +328,13 @@ export class ElyxirJobManager {
                         contract: 'ElyxirCrafting',
                         operation: 'transferTool',
                         jobId,
-                        tool: tool.name
+                        tool: tool.name,
                     }),
                     messagePrunable: true,
                     deadline: 1440,
-                    priority: 'HIGH'
+                    priority: 'HIGH',
                 });
-                
+
                 if (!txHash) {
                     throw new Error(`Failed to transfer tool: ${tool.name}`);
                 }
@@ -337,13 +351,13 @@ export class ElyxirJobManager {
                     contract: 'ElyxirCrafting',
                     operation: 'transferFlask',
                     jobId,
-                    flask: ELYXIR_CONFIG.FLASKS[flaskAssetId].name
+                    flask: ELYXIR_CONFIG.FLASKS[flaskAssetId].name,
                 }),
                 messagePrunable: true,
                 deadline: 1440,
-                priority: 'HIGH'
+                priority: 'HIGH',
             });
-            
+
             if (!flaskTxHash) {
                 throw new Error('Failed to transfer flask');
             }
@@ -362,20 +376,20 @@ export class ElyxirJobManager {
                 ingredients: recipe.ingredients.map(ing => ({
                     assetId: ing.assetId,
                     name: ing.name,
-                    quantity: ing.baseQNT * flaskMultiplier
+                    quantity: ing.baseQNT * flaskMultiplier,
                 })),
                 tools: recipe.tools,
                 flask: {
                     assetId: flaskAssetId,
                     name: ELYXIR_CONFIG.FLASKS[flaskAssetId].name,
-                    multiplier: flaskMultiplier
-                }
+                    multiplier: flaskMultiplier,
+                },
             });
 
             const jobTxHash = await sendMessage({
                 recipient: ELYXIR_CONFIG.CONTRACT_ACCOUNT,
                 passPhrase: userPassphrase,
-                message: jobMessage
+                message: jobMessage,
             });
 
             if (!jobTxHash) {
@@ -385,14 +399,13 @@ export class ElyxirJobManager {
 
             return {
                 success: true,
-                transactionHashes
+                transactionHashes,
             };
-
         } catch (error) {
             return {
                 success: false,
                 error: error.message,
-                transactionHashes
+                transactionHashes,
             };
         }
     }
@@ -410,7 +423,7 @@ export class ElyxirJobManager {
             // Check if job is ready
             const blockchainStatus = await getBlockchainStatus();
             const currentBlock = blockchainStatus.numberOfBlocks;
-            
+
             if (currentBlock < job.endBlock) {
                 const blocksRemaining = job.endBlock - currentBlock;
                 throw new Error(`Job not ready yet. ${blocksRemaining} blocks remaining.`);
@@ -425,11 +438,12 @@ export class ElyxirJobManager {
             console.log('🔍 [ELYXIR DEBUG] Completion block data:', completionBlock);
 
             // Check for different possible hash property names
-            let blockHash = completionBlock.blockHash || 
-                           completionBlock.block || 
-                           completionBlock.payloadHash || 
-                           completionBlock.generationSignature ||
-                           completionBlock.previousBlockHash;
+            let blockHash =
+                completionBlock.blockHash ||
+                completionBlock.block ||
+                completionBlock.payloadHash ||
+                completionBlock.generationSignature ||
+                completionBlock.previousBlockHash;
 
             if (!blockHash) {
                 console.error('🔴 [ELYXIR] No block hash found in block data:', completionBlock);
@@ -452,13 +466,13 @@ export class ElyxirJobManager {
                 blockHash: completionBlock.blockHash,
                 isSuccess,
                 potionAsset: job.potionAsset,
-                toolsToReturn: ELYXIR_CONFIG.POTION_RECIPES[job.potionName].tools
+                toolsToReturn: ELYXIR_CONFIG.POTION_RECIPES[job.potionName].tools,
             });
 
             const completionTxHash = await sendMessage({
                 recipient: ELYXIR_CONFIG.CONTRACT_ACCOUNT,
                 passPhrase: userPassphrase,
-                message: completionMessage
+                message: completionMessage,
             });
 
             if (!completionTxHash) {
@@ -471,7 +485,7 @@ export class ElyxirJobManager {
                 status: isSuccess ? 'SUCCESS' : 'FAILED',
                 completedAt: new Date().toISOString(),
                 completionTxHash,
-                result: isSuccess ? 'Potion crafted successfully!' : 'Crafting failed, tools returned.'
+                result: isSuccess ? 'Potion crafted successfully!' : 'Crafting failed, tools returned.',
             };
 
             this.activeJobs = this.activeJobs.filter(j => j.jobId !== jobId);
@@ -491,9 +505,8 @@ export class ElyxirJobManager {
                 success: true,
                 result: isSuccess ? 'SUCCESS' : 'FAILED',
                 message: completedJob.result,
-                potionName: job.potionName
+                potionName: job.potionName,
             };
-
         } catch (error) {
             console.error('🔴 [ELYXIR COMPLETION] Job completion failed:', error);
             if (toast) {
@@ -501,7 +514,7 @@ export class ElyxirJobManager {
             }
             return {
                 success: false,
-                error: error.message
+                error: error.message,
             };
         }
     }
@@ -513,9 +526,9 @@ export class ElyxirJobManager {
         const userJobs = this.activeJobs.filter(job => job.userAccount === userAccount);
         const blockchainStatus = await getBlockchainStatus();
         const currentBlock = blockchainStatus.numberOfBlocks;
-        
+
         const readyJobs = userJobs.filter(job => currentBlock >= job.endBlock);
-        
+
         if (readyJobs.length === 0) {
             if (toast) {
                 okToast('No jobs ready for completion', toast);
@@ -545,16 +558,16 @@ export class ElyxirJobManager {
         // This would typically check the user's actual asset balances
         // For now, return a simplified validation
         const missing = [];
-        
+
         // Note: In a real implementation, you would:
         // 1. Get user's asset balances from getAccountAssets
         // 2. Check each ingredient quantity * flaskMultiplier
         // 3. Check each tool (always 1 QNT required)
         // 4. Check flask (1 QNT required)
-        
+
         return {
             isValid: missing.length === 0,
-            missing
+            missing,
         };
     }
 
@@ -569,7 +582,7 @@ export class ElyxirJobManager {
 
         // Ensure we have enough characters for the seed
         const seed = blockHash.length >= 16 ? blockHash.substring(0, 16) : blockHash.padEnd(16, '0');
-        
+
         // Convert hex to integer, handle non-hex characters
         let seedInt;
         try {
@@ -585,9 +598,11 @@ export class ElyxirJobManager {
 
         const probability = (seedInt % 100) + 1;
         const success = probability <= successThreshold;
-        
-        console.log(`🎲 [ELYXIR RNG] Seed: ${seed}, SeedInt: ${seedInt}, Probability: ${probability}, Threshold: ${successThreshold}, Success: ${success}`);
-        
+
+        console.log(
+            `🎲 [ELYXIR RNG] Seed: ${seed}, SeedInt: ${seedInt}, Probability: ${probability}, Threshold: ${successThreshold}, Success: ${success}`
+        );
+
         return success;
     }
 

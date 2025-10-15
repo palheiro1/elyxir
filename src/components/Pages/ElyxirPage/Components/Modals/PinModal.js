@@ -23,8 +23,8 @@ const PinModal = ({ showPinInput, setShowPinInput, handlePinInput }) => {
                         <Text textAlign="center" color="gray.600">
                             Please enter your 4-digit PIN to authorize the transaction
                         </Text>
-                        <Stack direction={'row'}>
-                            <PinInput size="lg" onComplete={handlePinInput}>
+                        <Stack direction={'row'} w={'100%'} justifyContent={'center'}>
+                            <PinInput size="lg" onComplete={handlePinInput} mask>
                                 <PinInputField />
                                 <PinInputField />
                                 <PinInputField />

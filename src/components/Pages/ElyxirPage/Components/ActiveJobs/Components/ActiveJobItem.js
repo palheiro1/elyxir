@@ -1,6 +1,11 @@
-import { Badge, Box, Button, Progress, Stack, Text } from '@chakra-ui/react';
+import { Badge, Box, Progress, Stack, Text } from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
 
-const ActiveJobItem = ({ job, isComplete, timeLeft, handleCompleteJob, progress, isLoading }) => {
+const ActiveJobItem = ({ job, isComplete, progress }) => {
+    const { fakeAssets } = useSelector(state => state.elyxir);
+    const { prev_height } = useSelector(state => state.blockchain);
+    const craftedPotion = fakeAssets.potions?.find(potion => potion?.asset === job?.creationAssetId);
+
     return (
         <Box
             p={4}
@@ -12,26 +17,21 @@ const ActiveJobItem = ({ job, isComplete, timeLeft, handleCompleteJob, progress,
             <Stack direction={'column'} justify="space-between" mb={2}>
                 <Stack direction={'row'}>
                     <Text fontWeight="bold" color={isComplete ? 'green.700' : 'orange.700'}>
-                        🧪 {job.potionName}
+                        🧪 {craftedPotion.name}
                     </Text>
                     <Badge colorScheme="purple" variant="subtle">
                         x{job.flaskMultiplier}
                     </Badge>
                 </Stack>
                 <Badge colorScheme={isComplete ? 'green' : 'orange'} fontSize="xs" px={2}>
-                    {isComplete ? '✅ Ready!' : `⏱️ ${Math.ceil(timeLeft / 60000)} min left`}
+                    {isComplete ? '✅ Ready!' : `⏱️ Blocks left: ${job.endHeight - prev_height}`}
                 </Badge>
             </Stack>
-
             <Stack direction={'row'} spacing={4} mb={2}>
                 <Text fontSize="sm" color="gray.600">
-                    📊 Success Rate: <strong>{Math.round(job.successChance || 80)}%</strong>
-                </Text>
-                <Text fontSize="sm" color="gray.600">
-                    ⛏️ Duration: <strong>{job.durationBlocks} blocks</strong>
+                    📊 Success Rate: <strong>{Math.round(job?.successProbability)}%</strong>
                 </Text>
             </Stack>
-
             <Progress
                 value={progress}
                 colorScheme={isComplete ? 'green' : 'orange'}
@@ -40,27 +40,6 @@ const ActiveJobItem = ({ job, isComplete, timeLeft, handleCompleteJob, progress,
                 borderRadius="md"
                 bg="gray.100"
             />
-
-            <Stack direction={'row'} justify="space-between" align="center">
-                <Stack direction={'column'} align="start" spacing={0}>
-                    <Text fontSize="xs" color="gray.500">
-                        🕐 Started: {new Date(job.createdAt).toLocaleTimeString()}
-                    </Text>
-                    <Text fontSize="xs" color="gray.500">
-                        🔗 Blocks: {job.startBlock} → {job.endBlock}
-                    </Text>
-                </Stack>
-                {isComplete && (
-                    <Button
-                        size="sm"
-                        colorScheme="green"
-                        onClick={() => handleCompleteJob(job.jobId)}
-                        isLoading={isLoading}
-                        leftIcon={<span>🎯</span>}>
-                        Complete Crafting
-                    </Button>
-                )}
-            </Stack>
         </Box>
     );
 };

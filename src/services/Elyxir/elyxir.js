@@ -1,6 +1,6 @@
 import { uuid } from 'uuidv4';
 import { sendMessage, transferAsset } from '../Ardor/ardorInterface';
-import { OMNO_ACCOUNT, OMNO_API } from '../../data/CONSTANTS';
+import { OMNO_ACCOUNT, OMNO_API, OMNO_CONTRACT } from '../../data/CONSTANTS';
 import { getCraftPotionMessage } from '../../utils/elyxirUtils';
 import axios from 'axios';
 
@@ -15,6 +15,88 @@ export const getFlaskAssets = async () => {
     }
 };
 
+export const getRecipesDefinition = async () => {
+    try {
+        const response = await axios.get(`${OMNO_API}/index.php?action=getElyxirState`);
+        if (!response) return false;
+        return response.data.elyxir.definition.recipes;
+    } catch (error) {
+        console.error('🚀 ~ getRecipesDefinition ~ error:', error);
+        return false;
+    }
+};
+
+export const getElyxirConfiguration = async () => {
+    try {
+        const response = await axios.get(`${OMNO_API}/index.php?action=getElyxirState`);
+        if (!response) return false;
+        return response.data.elyxir;
+    } catch (error) {
+        console.error('🚀 ~ getElyxirConfiguration ~ error:', error);
+        return false;
+    }
+};
+
+export const getUserJobs = async ({ accountId, activeJobs = true }) => {
+    try {
+        const response = await axios.get(`${OMNO_API}/index.php?action=getElyxirState`);
+        if (!response?.data?.elyxir?.jobs) return [];
+
+        const rawJobs = response.data.elyxir.jobs;
+
+        let jobs = Object.entries(rawJobs).map(([jobId, jobData]) => ({
+            jobId,
+            ...jobData,
+        }));
+
+        jobs = jobs.filter(job => job.owner === accountId);
+        if (activeJobs) {
+            jobs = jobs.filter(job => job.status === 'STARTED');
+        } else {
+            jobs = jobs.filter(job => job.status !== 'STARTED');
+        }
+
+        return jobs;
+    } catch (error) {
+        console.error('🚀 ~ getUserJobs ~ error:', error);
+        return [];
+    }
+};
+
+/**
+ * @name sendCraftPotionAssets
+ * @description Sends all required assets for potion crafting to the crafting contract.
+ * @param {Object[]} mergedAssets - Array of assets to transfer with quantities.
+ * @param {string} passphrase - The user's passphrase for transaction signing.
+ * @returns {Promise<boolean>} Returns true if all transfers succeed, false otherwise.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company.
+ */
+export const sendCraftPotionAssets = async ({ mergedAssets = [], passphrase }) => {
+    try {
+        if (!mergedAssets.length) return false;
+
+        await Promise.all(
+            mergedAssets.map(({ asset, qnt }) =>
+                transferAsset({
+                    asset,
+                    quantityQNT: qnt,
+                    message: JSON.stringify({ contract: OMNO_CONTRACT }),
+                    recipient: OMNO_ACCOUNT,
+                    passPhrase: passphrase,
+                    messagePrunable: true,
+                    deadline: 361,
+                    priority: 'HIGH',
+                })
+            )
+        );
+
+        return true;
+    } catch (error) {
+        console.error('🚀 ~ sendCraftPotionAssets ~ error:', error);
+        return false;
+    }
+};
+
 /**
  * @name sendCraftPotionMessage
  * @description Sends multiple asset transfer transactions to craft a potion, each including a shared message payload.
@@ -25,7 +107,6 @@ export const getFlaskAssets = async () => {
  * @param {string} params.flaskAssetId - The flask asset ID required for the craft.
  * @param {number} params.durationBlocks - Duration of the crafting process in blocks.
  * @param {string} params.passphrase - The sender's account passphrase.
- * @param {Array<{asset: string, qnt: number}>} [params.mergedAssets=[]] - List of assets and quantities to merge for the potion.
  * @returns {Promise<void>} Resolves when all transfers are completed.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company.
  */
@@ -36,32 +117,25 @@ export const sendCraftPotionMessage = async ({
     flaskAssetId,
     durationBlocks,
     passphrase,
-    mergedAssets = [],
+    blockId,
 }) => {
-    if (!mergedAssets.length) return;
+    try {
+        const jobId = uuid();
 
-    const jobId = uuid();
+        const message = getCraftPotionMessage({
+            accountId,
+            recipeAssetId,
+            creationAssetId,
+            flaskAssetId,
+            durationBlocks,
+            jobId,
+            testMode: true,
+            blockId,
+        });
 
-    const message = getCraftPotionMessage({
-        accountId,
-        recipeAssetId,
-        creationAssetId,
-        flaskAssetId,
-        durationBlocks,
-        jobId,
-    });
-
-    // await Promise.all(
-    //     mergedAssets.map(({ asset, qnt }) =>
-    //         transferAsset({
-    //             asset,
-    //             quantityQNT: qnt,
-    //             message,
-    //             recipient: OMNO_ACCOUNT,
-    //             passPhrase: passphrase,
-    //         })
-    //     )
-    // );
-
-    return await sendMessage({ recipient: OMNO_ACCOUNT, message, passPhrase: passphrase });
+        return await sendMessage({ recipient: OMNO_ACCOUNT, message, passPhrase: passphrase });
+    } catch (error) {
+        console.error('🚀 ~ sendCraftPotionMessage ~ error:', error);
+        return false;
+    }
 };

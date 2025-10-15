@@ -55,12 +55,7 @@ import { cleanInfoAccount } from '../../data/DefaultInfo/cleanInfoAccount';
 // Services
 import { fetchAllCards, fetchCurrencyAssets, isMBAsset } from '../../utils/cardsUtils';
 
-import {
-    checkCardsChange,
-    checkDataChange,
-    getCurrentAskAndBids,
-    getIGNISBalance,
-} from '../../utils/walletUtils';
+import { checkCardsChange, checkDataChange, getCurrentAskAndBids, getIGNISBalance } from '../../utils/walletUtils';
 
 import {
     getAccountAssets,
@@ -80,6 +75,7 @@ import ProfileDropdown from '../../components/Navigation/ProfileDropdown';
 import { fetchAllItems } from '../../utils/itemsUtils';
 import { setItemsManually } from '../../redux/reducers/ItemsReducer';
 import apiMonitor from '../../utils/apiMonitor';
+import { fetchAllElyxirData } from '../../redux/reducers/ElyxirReducer';
 
 /**
  * @name Home
@@ -98,12 +94,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Get cards from Redux store
     const { cards } = useSelector(state => state.cards);
     const { items } = useSelector(state => state.items);
-    
-    // Debug Redux state changes
-    useEffect(() => {
-        console.log('Home - Redux cards state changed, length:', cards.length);
-        console.log('Home - Redux items state changed, length:', items.length);
-    }, [cards, items]);
 
     // Buy pack dialog
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -141,11 +131,11 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Need reload data
     const [needReload, setNeedReload] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    
+
     // Add request deduplication to prevent multiple simultaneous requests
     const [lastRequestTime, setLastRequestTime] = useState(0);
     const REQUEST_DEBOUNCE_MS = 5000; // Minimum 5 seconds between requests
-    
+
     // Add abort controller for request cancellation
     const abortControllerRef = useRef(null);
 
@@ -231,26 +221,23 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     setIsLoading(false);
                     return;
                 }
-                
+
                 // Cancel previous request if still running
                 if (abortControllerRef.current) {
                     abortControllerRef.current.abort();
                 }
                 abortControllerRef.current = new AbortController();
-                
+
                 // Prevent overlapping requests with debouncing
                 const now = Date.now();
                 if (now - lastRequestTime < REQUEST_DEBOUNCE_MS) {
-                    console.log('Home - Request debounced, skipping loadAll');
                     return;
                 }
                 setLastRequestTime(now);
-                
+
                 setIsLoading(true);
                 setNeedReload(false);
                 const { accountRs } = infoAccount;
-
-                console.log('Home - Starting loadAll with debouncing at:', new Date().toISOString());
 
                 // Fetch all info
                 const [
@@ -292,11 +279,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 const mana = currencyAssets[3].find(asset => asset.asset === MANAASSET);
 
                 // Always dispatch cards and items when they're loaded to ensure Redux state is updated
-                console.log('Home - Dispatching cards to Redux. LoadCards length:', loadCards.length);
-                console.log('Home - Current Redux cards length:', cards.length);
                 dispatch(setCardsManually(loadCards));
-                
-                console.log('Home - Dispatching items to Redux. LoadItems length:', loadItems.length);
                 dispatch(setItemsManually(loadItems));
                 if (txs.transactions.length === 0) {
                     firstTimeToast(toast);
@@ -306,12 +289,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
                 const auxDividends = dividends.entries;
                 updateDividendsWithCards(auxDividends, loadCards).then(() => {
-                    // -----------------------------------------------------------------
-                    // Debug account assets
-                    // -----------------------------------------------------------------
-                    console.log('Home - accountAssets from API:', accountAssets);
-                    console.log('Home - accountAssets.accountAssets:', accountAssets?.accountAssets);
-                    
                     // -----------------------------------------------------------------
                     // Rebuild infoAccount
                     // -----------------------------------------------------------------
@@ -336,9 +313,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                         assets: accountAssets.accountAssets,
                     };
 
-                    console.log('Home - _auxInfo.assets:', _auxInfo.assets);
-                    console.log('Home - _auxInfo object:', _auxInfo);
-
+                    dispatch(fetchAllElyxirData({ infoAccount: _auxInfo }));
                     // -----------------------------------------------------------------
                     // Get all hashes and compare
                     // -----------------------------------------------------------------
@@ -351,11 +326,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 checkDataChange('MANA', manaCardsHash, setManaCards, setManaCardsHash, mana);
                 // Remove the duplicate card dispatch since we're already dispatching above
                 // checkCardsChange('Cards', cardsHash, setCardsHash, dispatch, loadCards, setCardsManually);
-                console.log('Home - After loadAll, final Redux cards length should be:', loadCards.length);
                 checkCardsChange('Items', itemsHash, setItemsHash, dispatch, loadItems, setItemsManually);
-                
+
                 // Log API monitor stats after successful load
-                console.log('Home - LoadAll completed successfully');
                 apiMonitor.logStats();
             } catch (error) {
                 console.error('Mythical Beings: Error loading data', error);
@@ -375,10 +348,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     useEffect(() => {
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible') {
-                console.log('Home - Tab became visible, triggering reload');
                 setNeedReload(true);
-            } else {
-                console.log('Home - Tab became hidden, pausing refreshes');
             }
         };
 
@@ -391,7 +361,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         return () => {
             if (abortControllerRef.current) {
                 abortControllerRef.current.abort();
-                console.log('Home - Component unmounting, aborting requests');
             }
         };
     }, []);
@@ -407,10 +376,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             if (!isLoadingRef.current) {
                 // Only trigger reload if user is active and tab is visible
                 if (document.visibilityState === 'visible') {
-                    console.log('Home - Interval triggering reload at:', new Date().toISOString());
                     setNeedReload(true);
-                } else {
-                    console.log('Home - Skipping reload, tab not visible');
                 }
             }
         }, REFRESH_DATA_TIME);
@@ -443,8 +409,12 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Use refs to keep checkUnwraps stable
     const infoAccountRef = useRef(infoAccount);
     const toastRef = useRef(toast);
-    useEffect(() => { infoAccountRef.current = infoAccount; }, [infoAccount]);
-    useEffect(() => { toastRef.current = toast; }, [toast]);
+    useEffect(() => {
+        infoAccountRef.current = infoAccount;
+    }, [infoAccount]);
+    useEffect(() => {
+        toastRef.current = toast;
+    }, [toast]);
 
     const checkUnwraps = useCallback(async () => {
         try {
@@ -455,9 +425,15 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 processWrapsFor20(accountRs),
             ]).then(([gemBridge, bridge1155, bridge20]) => {
                 if (gemBridge && gemBridge.starts)
-                    okToast('[GEM BRIDGE] DETECTED UNWRAP: ' + gemBridge.starts + ' transfers started.', toastRef.current);
+                    okToast(
+                        '[GEM BRIDGE] DETECTED UNWRAP: ' + gemBridge.starts + ' transfers started.',
+                        toastRef.current
+                    );
                 if (bridge1155 && bridge1155.starts)
-                    okToast('[ERC-1155] DETECTED UNWRAP: ' + bridge1155.starts + ' transfers started.', toastRef.current);
+                    okToast(
+                        '[ERC-1155] DETECTED UNWRAP: ' + bridge1155.starts + ' transfers started.',
+                        toastRef.current
+                    );
                 if (bridge20 && bridge20.starts)
                     okToast('[ERC-20] DETECTED WRAP: ' + bridge20.starts + ' transfers started.', toastRef.current);
             });

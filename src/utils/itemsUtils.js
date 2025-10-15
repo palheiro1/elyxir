@@ -25,7 +25,7 @@ export const fetchAllItems = async accountRs => {
     const realItemAssets = [
         // Ingredients
         { asset: '7536385584787697086' }, // aguas_fetidas -> Araucarian Resine
-        { asset: '2795734210888256790' }, // alcoholbeer -> Fetid Waters  
+        { asset: '2795734210888256790' }, // alcoholbeer -> Fetid Waters
         { asset: '16326649816730553703' }, // blood
         { asset: '10917692030112170713' }, // watercristaline
         { asset: '10444425886085847503' }, // water_sea
@@ -56,23 +56,23 @@ export const fetchAllItems = async accountRs => {
         { asset: '8717959006135737805' }, // sunlight
         { asset: '15230533556325993984' }, // vampirefang
         { asset: '10089652431946070133' }, // watercristaline
-        { asset: '2795734210888256790' }, // water_sea  
+        { asset: '2795734210888256790' }, // water_sea
         { asset: '65767141008711421' }, // wind
         { asset: '1734749669966442838' }, // wolfsfang
-        
+
         // Tools
         { asset: '7394449015011337044' }, // bellow
         { asset: '1310229991284473521' }, // cauldron
         { asset: '11845481467736877036' }, // ladle
         { asset: '4548364139683061814' }, // mortar
-        
+
         // Flasks
         { asset: '4367881087678870632' }, // flask1
         { asset: '3758988694981372970' }, // flask2
         { asset: '13463846530496348131' }, // flask3
         { asset: '2440735248419077208' }, // flask4
         { asset: '14654561631655838842' }, // flask5
-        
+
         // Recipes
         { asset: '12936439663349626618' }, // recipe1
         { asset: '7024690161218732154' }, // recipe2
@@ -82,7 +82,7 @@ export const fetchAllItems = async accountRs => {
         { asset: '1310229991284473521' }, // recipe6
         { asset: '4548364139683061814' }, // recipe7
         { asset: '7394449015011337044' }, // recipe8
-        
+
         // Created potions
         { asset: '7582224115266007515' }, // tideheart
         { asset: '1310229991284473521' }, // stoneblood
@@ -91,7 +91,7 @@ export const fetchAllItems = async accountRs => {
         { asset: '5570219882495290440' }, // eternal_silk
         { asset: '14654561631655838842' }, // feathered_flame
         { asset: '1310229991284473521' }, // forgotten_grove
-        { asset: '4548364139683061814' } // shifting_dunes
+        { asset: '4548364139683061814' }, // shifting_dunes
     ];
 
     const [{ accountAssets }, itemsAssets, accountId] = await Promise.all([
@@ -115,7 +115,7 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
         accountAssetsCount: accountAssets?.length || 0,
         itemsAssetsCount: itemsAssets?.length || 0,
         accountId,
-        firstFewAccountAssets: accountAssets?.slice(0, 5)
+        firstFewAccountAssets: accountAssets?.slice(0, 5),
     });
 
     const itemsBonus = await getItemsForBonus();
@@ -148,20 +148,20 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
         '6043065774866721090': { name: 'peyote', displayName: 'Peyote' },
         '15230533556325993984': { name: 'vampirefang', displayName: 'Vampire Fang' },
         '5570219882495290440': { name: 'diamantebruto', displayName: 'Raw Diamond' },
-        
+
         // Tools
         '7394449015011337044': { name: 'bellow', displayName: 'Bellow' },
         '1310229991284473521': { name: 'cauldron', displayName: 'Cauldron' },
         '11845481467736877036': { name: 'ladle', displayName: 'Ladle' },
         '4548364139683061814': { name: 'mortar', displayName: 'Mortar' },
-        
+
         // Flasks
         '4367881087678870632': { name: 'flask1', displayName: 'Flask Level 1' },
         '3758988694981372970': { name: 'flask2', displayName: 'Flask Level 2' },
         '13463846530496348131': { name: 'flask3', displayName: 'Flask Level 3' },
         '2440735248419077208': { name: 'flask4', displayName: 'Flask Level 4' },
         '14654561631655838842': { name: 'flask5', displayName: 'Flask Level 5' },
-        
+
         // Recipes
         '12936439663349626618': { name: 'recipe1', displayName: 'Recipe Level 1' },
         '7024690161218732154': { name: 'recipe2', displayName: 'Recipe Level 2' },
@@ -185,13 +185,6 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
             const totalQuantityQNT = assetDetails?.quantityQNT || 0;
             const quantityQNT = Number(accountAsset?.quantityQNT) || 0;
             const bonus = itemsBonus.find(item => item.asset === assetDetails.asset)?.bonus;
-
-            console.log(`Processing asset ${asset.asset}:`, {
-                accountAsset,
-                quantityQNT,
-                assetDetails: assetDetails?.name,
-                hasAccountAsset: !!accountAsset
-            });
 
             // Get the mapped Elyxir name and display name for this real asset
             const assetMapping = realAssetMapping[asset.asset];
@@ -241,7 +234,7 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
     );
 
     const filteredAssets = formattedAssets.filter(Boolean);
-    
+
     return filteredAssets;
 };
 

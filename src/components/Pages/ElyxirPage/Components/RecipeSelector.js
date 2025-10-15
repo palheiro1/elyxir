@@ -1,8 +1,13 @@
 import { Badge, Box, Button, Stack, Text, Wrap, WrapItem } from '@chakra-ui/react';
-import { RECIPES } from '../data';
-import { ELYXIR_CONFIG } from '../../../../services/Elyxir/elyxirCrafting';
+import { useSelector } from 'react-redux';
 
-const RecipeSelector = ({ selectedFlask, selectedRecipeIdx, setSelectedRecipeIdx, getMissingItems }) => {
+const RecipeSelector = ({ selectedFlask, selectedRecipe, setSelectedRecipe, getMissingItems }) => {
+    const { elyxir, fakeAssets } = useSelector(state => state.elyxir);
+    const recipes = elyxir?.definition?.recipes;
+    const potions = fakeAssets?.potions;
+
+    if (!recipes) return;
+
     return (
         <Stack spacing={6} mb={8}>
             <Stack direction={'row'} justify="space-between" align="center">
@@ -14,40 +19,37 @@ const RecipeSelector = ({ selectedFlask, selectedRecipeIdx, setSelectedRecipeIdx
                 </Badge>
             </Stack>
             <Wrap spacing={4}>
-                {RECIPES.map((recipe, idx) => {
-                    const currentMultiplier = selectedFlask.multiplier;
+                {recipes.map((recipe, idx) => {
+                    const currentMultiplier = selectedFlask?.multiplier || 1;
                     const missing = getMissingItems(recipe, currentMultiplier);
                     const canCraft = missing.length === 0;
-
-                    // Check if this recipe has a real implementation
-                    const hasRealImplementation =
-                        ELYXIR_CONFIG &&
-                        ELYXIR_CONFIG.POTION_RECIPES &&
-                        Object.keys(ELYXIR_CONFIG.POTION_RECIPES).some(name => name === recipe.name);
+                    const recipePotion = potions?.find(potion => potion?.asset === recipe?.creationAssetId);
+                    if (!recipePotion) return null;
 
                     return (
                         <WrapItem key={idx}>
                             <Box position="relative">
                                 <Button
                                     size="md"
-                                    variant={selectedRecipeIdx === idx ? 'solid' : 'outline'}
+                                    variant={
+                                        selectedRecipe?.recipeAssetId === recipe?.recipeAssetId ? 'solid' : 'outline'
+                                    }
                                     colorScheme={canCraft ? 'green' : 'gray'}
-                                    onClick={() => setSelectedRecipeIdx(idx)}
+                                    onClick={() => setSelectedRecipe(recipe)}
                                     h="60px"
                                     px={6}>
-                                    {recipe.name}
+                                    {recipePotion?.name}
                                 </Button>
-                                {hasRealImplementation && (
-                                    <Badge
-                                        position="absolute"
-                                        top="-8px"
-                                        right="-8px"
-                                        colorScheme="purple"
-                                        fontSize="xs"
-                                        borderRadius="full">
-                                        🔗
-                                    </Badge>
-                                )}
+
+                                <Badge
+                                    position="absolute"
+                                    top="-8px"
+                                    right="-8px"
+                                    colorScheme="purple"
+                                    fontSize="xs"
+                                    borderRadius="full">
+                                    🔗
+                                </Badge>
                             </Box>
                         </WrapItem>
                     );

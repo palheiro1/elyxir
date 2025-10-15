@@ -1,18 +1,19 @@
 import { Badge, Box, Text, Wrap, WrapItem } from '@chakra-ui/react';
-import { RECIPES } from '../../../data';
+import { useSelector } from 'react-redux';
 
-const RequiredIngredients = ({ groupedItems, selectedRecipeIdx, selectedFlask }) => {
+const RequiredIngredients = ({ selectedRecipe, selectedFlask }) => {
+    const { fakeAssets } = useSelector(state => state.elyxir);
+    const { ingredients } = fakeAssets;
     return (
         <Box>
             <Text fontWeight="bold" fontSize="lg" mb={4}>
                 Required Ingredients:
             </Text>
             <Wrap spacing={6}>
-                {RECIPES[selectedRecipeIdx].ingredients.map((ing, i) => {
-                    const ingredient = groupedItems.ingredients?.find(
-                        item => item.name.toLowerCase() === ing.name.toLowerCase()
-                    );
-                    const requiredQty = ing.quantity * selectedFlask.multiplier;
+                {selectedRecipe.ingredients.map((ing, i) => {
+                    const ingredient = ingredients?.find(item => item.asset === ing.assetId);
+                    const multiplier = selectedFlask?.multiplier || 1;
+                    const requiredQty = ing.qtyQNT * multiplier;
                     const have = ingredient ? Number(ingredient.quantityQNT) : 0;
                     const hasEnough = have >= requiredQty;
 
@@ -29,7 +30,7 @@ const RequiredIngredients = ({ groupedItems, selectedRecipeIdx, selectedFlask })
                                     <Box
                                         w="60px"
                                         h="60px"
-                                        backgroundImage={`url(${ingredient.imgUrl})`}
+                                        backgroundImage={`url(${ingredient?.imgUrl})`}
                                         backgroundSize="contain"
                                         backgroundRepeat="no-repeat"
                                         backgroundPosition="center"
@@ -38,7 +39,7 @@ const RequiredIngredients = ({ groupedItems, selectedRecipeIdx, selectedFlask })
                                     />
                                 )}
                                 <Text fontSize="sm" fontWeight="bold" mb={1}>
-                                    {ing.name}
+                                    {ingredient?.name}
                                 </Text>
                                 <Badge colorScheme={hasEnough ? 'green' : 'red'} fontSize="xs">
                                     {requiredQty} needed

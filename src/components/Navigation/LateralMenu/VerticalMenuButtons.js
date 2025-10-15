@@ -1,5 +1,6 @@
 import { Box, Button, Image, Spinner, Stack, Text, VStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, setSelectedBridgeType }) => {
     // ---------------------------------------------
@@ -8,6 +9,8 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
     const isActive = index => index === option;
     const sTextActiveColor = 'white';
 
+    const { elyxir } = useSelector(state => state.elyxir);
+    const loaded = Array.isArray(elyxir) && elyxir.length === 0;
     // ---------------------------------------------
     // ------------------ BUTTONS ------------------
     // ---------------------------------------------
@@ -81,6 +84,7 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
             textColor: isActive(10) ? '#7E9246' : 'white',
             fontWeight: isActive(10) ? 'bolder' : 'normal',
             isActive: isActive(10),
+            isLoading: loaded,
         },
     ];
 
@@ -105,10 +109,16 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
                             <Stack direction="row" align="center" w="100px" spacing={3}>
                                 {icon && text ? (
                                     <>
-                                        <Image src={icon} w="28px" />
-                                        <Text fontSize="sm" fontWeight={fontWeight} whiteSpace="nowrap">
-                                            {text}
-                                        </Text>
+                                        {isLoading ? (
+                                            <Spinner mx="auto" />
+                                        ) : (
+                                            <>
+                                                <Image src={icon} w="28px" />
+                                                <Text fontSize="sm" fontWeight={fontWeight} whiteSpace="nowrap">
+                                                    {text}
+                                                </Text>
+                                            </>
+                                        )}
                                     </>
                                 ) : (
                                     !text && (

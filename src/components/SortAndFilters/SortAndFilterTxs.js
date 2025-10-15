@@ -53,10 +53,6 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
 
         if (transactions.length > 0) {
             const filteredTransactions = filterTransactions([...transactions]);
-            console.log('SortAndFilterTxs: Total transactions:', transactions.length);
-            console.log('SortAndFilterTxs: Filtered transactions:', filteredTransactions.length);
-            console.log('SortAndFilterTxs: First few filtered:', filteredTransactions.slice(0, 3));
-            
             const sortedTransactions = sortTransactions(filteredTransactions);
             setFilteredTransactions(sortedTransactions);
             setVisibleTransactions(10);
