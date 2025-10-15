@@ -1,6 +1,6 @@
 import { Box, Button, Progress, Spinner, Stack, Text } from '@chakra-ui/react';
-import { ELYXIR_CONFIG } from '../../../../services/Elyxir/elyxirCrafting';
 import { calculateSuccessRate } from '../../../../utils/elyxirUtils';
+import { DURATION_OPTIONS } from '../data';
 
 const CraftingControls = ({
     craftDuration,
@@ -21,7 +21,7 @@ const CraftingControls = ({
         isLoading;
 
     const changeCraftDuration = direction => {
-        const options = ELYXIR_CONFIG.DURATION_OPTIONS.map(opt => opt.days).sort((a, b) => a - b);
+        const options = DURATION_OPTIONS.map(opt => opt.days).sort((a, b) => a - b);
         const currentIndex = options.indexOf(craftDuration);
 
         let newIndex = currentIndex;
@@ -36,8 +36,8 @@ const CraftingControls = ({
 
     const disabledControl = direction => {
         return direction === 'increase'
-            ? craftDuration >= Math.max(...ELYXIR_CONFIG.DURATION_OPTIONS.map(opt => opt.days))
-            : craftDuration <= Math.min(...ELYXIR_CONFIG.DURATION_OPTIONS.map(opt => opt.days));
+            ? craftDuration >= Math.max(...DURATION_OPTIONS.map(opt => opt.days))
+            : craftDuration <= Math.min(...DURATION_OPTIONS.map(opt => opt.days));
     };
 
     const buttonText =

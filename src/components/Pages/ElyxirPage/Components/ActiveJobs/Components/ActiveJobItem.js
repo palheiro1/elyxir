@@ -6,6 +6,8 @@ const ActiveJobItem = ({ job, isComplete, progress }) => {
     const { prev_height } = useSelector(state => state.blockchain);
     const craftedPotion = fakeAssets.potions?.find(potion => potion?.asset === job?.creationAssetId);
 
+    const successRate = Math.trunc(job?.successProbability * 10000) / 100;
+
     return (
         <Box
             p={4}
@@ -29,7 +31,7 @@ const ActiveJobItem = ({ job, isComplete, progress }) => {
             </Stack>
             <Stack direction={'row'} spacing={4} mb={2}>
                 <Text fontSize="sm" color="gray.600">
-                    📊 Success Rate: <strong>{Math.round(job?.successProbability)}%</strong>
+                    📊 Success Rate: <strong>{successRate}%</strong>
                 </Text>
             </Stack>
             <Progress

@@ -5,6 +5,8 @@ const CompletedJobItem = ({ job }) => {
     const { fakeAssets } = useSelector(state => state.elyxir);
     const craftedPotion = fakeAssets.potions?.find(potion => potion?.asset === job?.creationAssetId);
 
+    const successRate = Math.trunc(job?.successProbability * 10000) / 100;
+
     return (
         <Box
             key={job?.jobId}
@@ -30,7 +32,7 @@ const CompletedJobItem = ({ job }) => {
                             : `❌ Failed`}
                     </Text>
                     <Text fontSize="xs" color="gray.500">
-                        📊 ({Math.round(job?.successProbability)}% success rate)
+                        📊 ({successRate}% success rate)
                     </Text>
                 </Stack>
                 <Stack direction={'column'} align="end" spacing={0}>

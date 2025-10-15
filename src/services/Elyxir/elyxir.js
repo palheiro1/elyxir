@@ -37,7 +37,7 @@ export const getElyxirConfiguration = async () => {
     }
 };
 
-export const getUserJobs = async ({ accountId, activeJobs = true }) => {
+export const getUserJobs = async ({ accountId }) => {
     try {
         const response = await axios.get(`${OMNO_API}/index.php?action=getElyxirState`);
         if (!response?.data?.elyxir?.jobs) return [];
@@ -50,11 +50,6 @@ export const getUserJobs = async ({ accountId, activeJobs = true }) => {
         }));
 
         jobs = jobs.filter(job => job.owner === accountId);
-        if (activeJobs) {
-            jobs = jobs.filter(job => job.status === 'STARTED');
-        } else {
-            jobs = jobs.filter(job => job.status !== 'STARTED');
-        }
 
         return jobs;
     } catch (error) {

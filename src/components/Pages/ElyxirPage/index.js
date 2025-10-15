@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useEffect } from 'react';
 import { Box, useColorModeValue, useToast, useDisclosure } from '@chakra-ui/react';
-import { ELYXIR_CONFIG, elyxirJobManager } from '../../../services/Elyxir/elyxirCrafting';
 import { checkPin } from '../../../utils/walletUtils';
 import RecipeSelector from './Components/RecipeSelector';
 import FlaskSelector from './Components/FlaskSelector';
@@ -14,7 +13,7 @@ import PinModal from './Components/Modals/PinModal';
 import { getUserJobs, sendCraftPotionAssets, sendCraftPotionMessage } from '../../../services/Elyxir/elyxir';
 import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
 import { useSelector } from 'react-redux';
-import { waitForBlockChange } from '../../../utils/blockchain';
+import { DURATION_OPTIONS } from './data';
 
 const Elyxir = ({ infoAccount }) => {
     const { elyxir, fakeAssets } = useSelector(state => state.elyxir);
@@ -22,7 +21,6 @@ const Elyxir = ({ infoAccount }) => {
 
     const [selectedFlask, setSelectedFlask] = useState(null);
     const [craftDuration, setCraftDuration] = useState(1);
-    const [craftingProgress, setCraftingProgress] = useState(0);
 
     const [activeJobs, setActiveJobs] = useState([]);
     const [completedJobs, setCompletedJobs] = useState([]);
@@ -40,8 +38,10 @@ const Elyxir = ({ infoAccount }) => {
     useEffect(() => {
         const loadJobs = async () => {
             const accountId = addressToAccountId(infoAccount.accountRs);
-            const active = await getUserJobs({ accountId, activeJobs: true });
-            const completed = await getUserJobs({ accountId, activeJobs: false });
+            const jobs = await getUserJobs({ accountId });
+
+            const active = jobs.filter(job => job.status === 'STARTED');
+            const completed = jobs.filter(job => job.status !== 'STARTED');
 
             setActiveJobs(active);
             setCompletedJobs(completed);
@@ -93,8 +93,6 @@ const Elyxir = ({ infoAccount }) => {
 
                 if (pendingAction === 'craft') {
                     executeCrafting(userAccount.passphrase);
-                } else if (pendingAction && pendingAction.type === 'complete') {
-                    executeCompletion(pendingAction.jobId, userAccount.passphrase);
                 }
             } catch (error) {
                 toast({
@@ -161,7 +159,7 @@ const Elyxir = ({ infoAccount }) => {
                     mergedAssets.push({ asset, qnt });
                 });
 
-                const durationBlocks = ELYXIR_CONFIG.DURATION_OPTIONS.find(item => item.days === craftDuration).blocks;
+                const durationBlocks = DURATION_OPTIONS.find(item => item.days === craftDuration).blocks;
 
                 const transfered = await sendCraftPotionAssets({ mergedAssets, passphrase });
                 if (!transfered) throw new Error('Failed transfering crafting asset');
@@ -202,46 +200,6 @@ const Elyxir = ({ infoAccount }) => {
             }
         },
         [selectedRecipe, craftingAmount, infoAccount, toast]
-    );
-
-    const executeCompletion = useCallback(
-        async (jobId, passphrase) => {
-            setIsLoading(true);
-
-            try {
-                const result = await elyxirJobManager.completeCraftingJob(jobId, passphrase, toast);
-
-                if (result && result.success) {
-                    const active = elyxirJobManager.getActiveJobs();
-                    const completed = elyxirJobManager.getCompletedJobs();
-                    setActiveJobs(active);
-                    setCompletedJobs(completed);
-
-                    toast({
-                        title: 'Crafting Completed!',
-                        description: result.message || 'Your crafting has been completed successfully',
-                        status: 'success',
-                        duration: 5000,
-                        isClosable: true,
-                    });
-                } else {
-                    throw new Error(result.message || 'Failed to complete crafting');
-                }
-            } catch (error) {
-                console.error('Complete job error:', error);
-                toast({
-                    title: 'Completion Failed',
-                    description: error.message || 'Failed to complete crafting job',
-                    status: 'error',
-                    duration: 5000,
-                    isClosable: true,
-                });
-            } finally {
-                setIsLoading(false);
-                setPendingAction(null);
-            }
-        },
-        [toast]
     );
 
     const getMissingItems = useCallback(
@@ -289,7 +247,6 @@ const Elyxir = ({ infoAccount }) => {
                 <CraftingControls
                     craftDuration={craftDuration}
                     setCraftDuration={setCraftDuration}
-                    craftingProgress={craftingProgress}
                     getMissingItems={getMissingItems}
                     selectedFlask={selectedFlask}
                     selectedRecipe={selectedRecipe}
