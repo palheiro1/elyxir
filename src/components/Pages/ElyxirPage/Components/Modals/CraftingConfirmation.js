@@ -18,6 +18,20 @@ import {
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 
+/**
+ * @name CraftingConfirmation
+ * @description Modal component that prompts the user to confirm a real blockchain crafting transaction.
+ * Displays the selected recipe, its description, required ingredients with availability checks, and alerts the user that real assets will be used.
+ * @param {Object} infoAccount - User account information, including owned assets.
+ * @param {boolean} isOpen - Controls whether the modal is visible.
+ * @param {Function} onClose - Callback to close the modal.
+ * @param {Object} selectedRecipe - The recipe chosen for crafting.
+ * @param {Function} confirmCrafting - Function executed when the user confirms the crafting action.
+ * @param {boolean} isLoading - Indicates whether the crafting confirmation is currently processing.
+ * @param {Object} selectedFlask - The selected flask, used to calculate ingredient multipliers.
+ * @returns {JSX.Element} A modal displaying crafting confirmation details, required ingredients, and action buttons to cancel or start crafting.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const CraftingConfirmation = ({
     infoAccount,
     isOpen,
@@ -80,7 +94,7 @@ const CraftingConfirmation = ({
                                             const ing = fakeAssets?.ingredients?.find(item => {
                                                 return item.asset === ingredient?.assetId;
                                             });
- 
+
                                             return (
                                                 <Stack direction={'row'} key={index} justify="space-between">
                                                     <Text fontSize="sm">{ing?.name}</Text>

@@ -111,13 +111,6 @@ export const fetchAllItems = async accountRs => {
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
-    console.log('itemsGenerator called with:', {
-        accountAssetsCount: accountAssets?.length || 0,
-        itemsAssetsCount: itemsAssets?.length || 0,
-        accountId,
-        firstFewAccountAssets: accountAssets?.slice(0, 5),
-    });
-
     const itemsBonus = await getItemsForBonus();
 
     const itemsOmnoBalance = await getOmnoItemsBalance(accountId, itemsAssets);

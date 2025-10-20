@@ -2,6 +2,21 @@ import { Box, Button, Progress, Spinner, Stack, Text } from '@chakra-ui/react';
 import { calculateSuccessRate } from '../../../../utils/elyxirUtils';
 import { DURATION_OPTIONS } from '../data';
 
+/**
+ * @name CraftingControls
+ * @description Provides user controls for managing the potion crafting process, including selecting crafting duration, viewing success rate,
+ * monitoring progress, and starting the real blockchain crafting action. It dynamically handles state changes such as loading, progress, and disabled states.
+ * @param {number} craftDuration - The currently selected crafting duration in days.
+ * @param {Function} setCraftDuration - Function to update the selected crafting duration.
+ * @param {number} craftingProgress - The current crafting progress percentage (0–100).
+ * @param {Function} getMissingItems - Function that returns an array of missing ingredients for the selected recipe and flask multiplier.
+ * @param {Object} selectedFlask - The currently selected flask, containing its multiplier and asset data.
+ * @param {Object} selectedRecipe - The currently selected recipe to craft.
+ * @param {boolean} isLoading - Indicates whether the crafting process is currently initializing.
+ * @param {Function} handleStartCrafting - Function that starts the real crafting process when the user confirms.
+ * @returns {JSX.Element} A full interactive crafting control section with duration adjustment, success rate display, progress bar, and a crafting action button.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const CraftingControls = ({
     craftDuration,
     setCraftDuration,

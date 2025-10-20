@@ -1,6 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useEffect } from 'react';
-import { Box, useColorModeValue, useToast, useDisclosure } from '@chakra-ui/react';
+import {
+    Box,
+    useColorModeValue,
+    useToast,
+    useDisclosure,
+    Tabs,
+    TabList,
+    Tab,
+    TabPanels,
+    TabPanel,
+    Heading,
+} from '@chakra-ui/react';
 import { checkPin } from '../../../utils/walletUtils';
 import RecipeSelector from './Components/RecipeSelector';
 import FlaskSelector from './Components/FlaskSelector';
@@ -223,39 +234,73 @@ const Elyxir = ({ infoAccount }) => {
         [fakeAssets.ingredients, fakeAssets.tools]
     );
 
+    const [tabIndex, setTabIndex] = useState(0);
+
+    const handleTabsChange = index => {
+        setTabIndex(index);
+    };
     return (
         <Box maxW={'100%'} px={4} py={6}>
-            <Box bg={sectionBg} p={6} borderRadius="md">
-                <RecipeSelector
-                    selectedFlask={selectedFlask}
-                    selectedRecipe={selectedRecipe}
-                    setSelectedRecipe={setSelectedRecipe}
-                    getMissingItems={getMissingItems}
-                    potions={fakeAssets.potions}
-                />
-                <FlaskSelector
-                    selectedFlask={selectedFlask}
-                    setSelectedFlask={setSelectedFlask}
-                    flasks={fakeAssets.flasks}
-                    isPotionSelected={selectedRecipe !== null}
-                />
-                <RecipeDisplay
-                    selectedFlask={selectedFlask}
-                    selectedRecipe={selectedRecipe}
-                    craftDuration={craftDuration}
-                />
-                <CraftingControls
-                    craftDuration={craftDuration}
-                    setCraftDuration={setCraftDuration}
-                    getMissingItems={getMissingItems}
-                    selectedFlask={selectedFlask}
-                    selectedRecipe={selectedRecipe}
-                    isLoading={isLoading}
-                    handleStartCrafting={handleStartCrafting}
-                />
-                <ActiveJobs activeJobs={activeJobs} sectionBg={sectionBg} isLoading={isLoading} />
-                <CompletedJobs completedJobs={completedJobs} sectionBg={sectionBg} />
-            </Box>
+            <Tabs
+                index={tabIndex}
+                onChange={handleTabsChange}
+                variant={'enclosed'}
+                bg={sectionBg}
+                borderRadius="md"
+                isFitted>
+                <TabList>
+                    <Tab>
+                        <Heading size="sm" m={1}>
+                            Craft potions
+                        </Heading>
+                    </Tab>
+                    <Tab>
+                        <Heading size="sm" m={1}>
+                            Crafting history
+                        </Heading>
+                    </Tab>
+                </TabList>
+                <TabPanels>
+                    <TabPanel>
+                        <Box p={6}>
+                            <RecipeSelector
+                                selectedFlask={selectedFlask}
+                                selectedRecipe={selectedRecipe}
+                                setSelectedRecipe={setSelectedRecipe}
+                                getMissingItems={getMissingItems}
+                                potions={fakeAssets.potions}
+                            />
+                            <FlaskSelector
+                                selectedFlask={selectedFlask}
+                                setSelectedFlask={setSelectedFlask}
+                                flasks={fakeAssets.flasks}
+                                isPotionSelected={selectedRecipe !== null}
+                            />
+                            <RecipeDisplay
+                                selectedFlask={selectedFlask}
+                                selectedRecipe={selectedRecipe}
+                                craftDuration={craftDuration}
+                            />
+                            <CraftingControls
+                                craftDuration={craftDuration}
+                                setCraftDuration={setCraftDuration}
+                                getMissingItems={getMissingItems}
+                                selectedFlask={selectedFlask}
+                                selectedRecipe={selectedRecipe}
+                                isLoading={isLoading}
+                                handleStartCrafting={handleStartCrafting}
+                            />
+                        </Box>
+                    </TabPanel>
+                    <TabPanel>
+                        <Box p={6}>
+                            <ActiveJobs activeJobs={activeJobs} sectionBg={sectionBg} isLoading={isLoading} />
+                            <CompletedJobs completedJobs={completedJobs} sectionBg={sectionBg} />
+                        </Box>
+                    </TabPanel>
+                </TabPanels>
+            </Tabs>
+
             <CraftingConfirmation
                 infoAccount={infoAccount}
                 isOpen={isOpen}

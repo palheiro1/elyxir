@@ -1,6 +1,14 @@
 import { Badge, Box, Text, Wrap, WrapItem } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 
+/**
+ * @name RequiredTools
+ * @description Displays the list of tools required to craft the selected recipe, showing availability status and corresponding visuals.
+ * Each tool card indicates whether the user possesses the required tool, including its name, image, and available quantity.
+ * @param {Object} selectedRecipe - The currently selected recipe containing an array of required tool asset IDs.
+ * @returns {JSX.Element} A grid of tool cards showing tool details and availability indicators for each required tool in the recipe.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const RequiredTools = ({ selectedRecipe }) => {
     const { fakeAssets } = useSelector(state => state.elyxir);
     const { tools } = fakeAssets;

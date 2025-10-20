@@ -17,3 +17,10 @@ export const waitForBlockChange = async initialBlock => {
         }, 3000); // Verifica cada 3 segundos
     });
 };
+
+export const formatTimeStamp = timestamp => {
+    const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
+    let battleStamp = new Date(eb.getTime() + timestamp * 1000);
+    battleStamp = new Date(battleStamp.getTime()).toLocaleString();
+    return battleStamp;
+};

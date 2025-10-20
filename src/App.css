@@ -78,3 +78,8 @@ td {
         font-weight: 600;
     }
 }
+
+.custom-scrollbar {
+    scrollbar-width: none;
+    scrollbar-color: #ffffff00 #00000000;
+}

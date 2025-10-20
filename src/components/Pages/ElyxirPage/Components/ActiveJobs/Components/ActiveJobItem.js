@@ -1,12 +1,36 @@
 import { Badge, Box, Progress, Stack, Text } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { getBlock } from '../../../../../../services/Ardor/ardorInterface';
+import { formatTimeStamp } from '../../../../../../utils/blockchain';
 
+/**
+ * @name ActiveJobItem
+ * @description Renders a visual representation of an active crafting job, showing progress, success rate, and remaining blocks until completion.
+ * It dynamically updates based on blockchain height and marks the job as complete when the end height is reached.
+ * @param {Object} job - The crafting job data, including `creationAssetId`, `flaskMultiplier`, `successProbability`, `startHeight`, and `endHeight`.
+ * @param {boolean} isComplete - Indicates whether the crafting job has been completed.
+ * @param {number} progress - The completion percentage of the job, between 0 and 100.
+ * @returns {JSX.Element} A styled box displaying the job’s potion name, success rate, progress bar, and remaining blocks indicator.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
 const ActiveJobItem = ({ job, isComplete, progress }) => {
+    const [jobBlock, setJobBlock] = useState(null);
+
     const { fakeAssets } = useSelector(state => state.elyxir);
     const { prev_height } = useSelector(state => state.blockchain);
     const craftedPotion = fakeAssets.potions?.find(potion => potion?.asset === job?.creationAssetId);
 
     const successRate = Math.trunc(job?.successProbability * 10000) / 100;
+
+    useEffect(() => {
+        const getJobBlock = async () => {
+            const block = await getBlock(job.startHeight);
+            if (!block) return;
+            setJobBlock(block);
+        };
+        getJobBlock();
+    });
 
     return (
         <Box
@@ -42,6 +66,9 @@ const ActiveJobItem = ({ job, isComplete, progress }) => {
                 borderRadius="md"
                 bg="gray.100"
             />
+            <Text fontSize="xs" color="gray.500">
+                Started at: {formatTimeStamp(jobBlock?.timestamp)}
+            </Text>
         </Box>
     );
 };
