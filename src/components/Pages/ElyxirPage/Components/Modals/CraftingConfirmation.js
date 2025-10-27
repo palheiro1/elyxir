@@ -41,8 +41,11 @@ const CraftingConfirmation = ({
     isLoading,
     selectedFlask,
 }) => {
-    const { fakeAssets } = useSelector(state => state.elyxir);
-    const { potions } = fakeAssets;
+    const { items } = useSelector(state => state.items);
+
+    const potions = items.filter(item => item.type === 'potion');
+    const ingredients = items.filter(item => item.type === 'ingredient');
+
     const recipePotion = potions?.find(potion => potion?.asset === selectedRecipe?.creationAssetId);
     const multiplier = selectedFlask?.multiplier || 1;
 
@@ -68,10 +71,7 @@ const CraftingConfirmation = ({
 
                             <Box>
                                 <Text fontWeight="bold" mb={2}>
-                                    Recipe: {recipePotion.name}
-                                </Text>
-                                <Text fontSize="sm" color="gray.600" mb={4}>
-                                    {recipePotion.description}
+                                    Recipe: {recipePotion?.description}
                                 </Text>
                             </Box>
 
@@ -91,7 +91,7 @@ const CraftingConfirmation = ({
                                             const needed = ingredient.qtyQNT * multiplier;
                                             const hasEnough = available >= needed;
 
-                                            const ing = fakeAssets?.ingredients?.find(item => {
+                                            const ing = ingredients?.find(item => {
                                                 return item.asset === ingredient?.assetId;
                                             });
 

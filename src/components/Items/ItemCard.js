@@ -50,7 +50,7 @@ const ItemCard = ({
     const newBorderColor = 'rgba(47, 129, 144, 1)';
     const separatorColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 
-    const { name, imgUrl, bonus = null, quantityQNT = 0, description } = item;
+    const { name, description, imgUrl, bonus = null, quantityQNT = 0, type } = item;
 
     const handleClick = ({ item }) => {
         setItemClicked(item);
@@ -153,13 +153,20 @@ const ItemCard = ({
     let fixOnlyBuy = onlyBuy;
     if (quantityQNT === 0 && !isMarket) fixOnlyBuy = true;
 
+    const formattedName = description
+        .replace('Potion of the ', '')
+        .replace('Potion of', '')
+        .replace('Ingredient of', '')
+        .replace('Ingredient of the', '')
+        .replace('Tool of', '');
+
     return (
         <Box
             p={3}
             rounded="lg"
             bgColor={bgColor}
             borderColor={borderColor}
-            minH={{ base: '25rem', md: '29rem' }}
+            minH={{ base: '25rem', md: '32rem' }}
             minW={{ base: '15rem', md: '12rem' }}>
             <Center>
                 <SimpleGrid columns={1} spacing={{ base: 2, lg: 4 }}>
@@ -178,24 +185,28 @@ const ItemCard = ({
                     <Stack direction={{ base: 'column', lg: 'row' }} spacing={0}>
                         <Stack direction="column" spacing={0} align={{ base: 'center', lg: 'start' }} w={'100%'}>
                             <Text fontSize={{ base: 'sm', md: 'md', '2xl': 'xl' }} noOfLines={1} fontWeight="bold">
-                                {name}
+                                {formattedName}
                             </Text>
                             <Text fontSize="xs" color="gray.500" noOfLines={2}>
                                 {description}
                             </Text>
-                            <Text
-                                px={2}
-                                fontSize="sm"
-                                bgColor={bonus ? getColor(bonus) : 'gray.500'}
-                                rounded="lg"
-                                color="white"
-                                textTransform={'capitalize'}>
-                                {bonus ? `${bonus.type} (${getTypeValue(bonus)})` : 'No bonus'}
-                            </Text>
+                            {type === 'potion' && (
+                                <Text
+                                    px={2}
+                                    fontSize="sm"
+                                    bgColor={bonus ? getColor(bonus) : 'gray.500'}
+                                    rounded="lg"
+                                    color="white"
+                                    textTransform={'capitalize'}>
+                                    {bonus ? `${bonus.type} (${getTypeValue(bonus)})` : 'No bonus'}
+                                </Text>
+                            )}
                             <Stack direction={'row'} w={'100%'} justifyContent={'space-between'} align={'center'}>
-                                <Text fontSize="sm" color="green.400">
-                                    +{bonus ? bonus.power : 0} Power
-                                </Text>{' '}
+                                {type === 'potion' && (
+                                    <Text fontSize="sm" color="green.400">
+                                        +{bonus ? bonus.power : 0} Power
+                                    </Text>
+                                )}
                                 <Tooltip
                                     label={`You have ${lockedCards} blocked ${
                                         isSingular ? 'card' : 'cards'

@@ -10,8 +10,9 @@ import { useSelector } from 'react-redux';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const RequiredTools = ({ selectedRecipe }) => {
-    const { fakeAssets } = useSelector(state => state.elyxir);
-    const { tools } = fakeAssets;
+    const { items } = useSelector(state => state.items);
+    const tools = items.filter(item => item.type === 'tool');
+
     return (
         <Box>
             <Text fontWeight="bold" fontSize="lg" mb={4}>

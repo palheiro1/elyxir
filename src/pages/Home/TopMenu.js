@@ -13,11 +13,11 @@ const TopMenu = ({ infoAccount, goToSection, setSelectedBridgeType }) => {
     return (
         <>
             <Flex w="100%">
-                <Stack direction="column" mb={1}>
+                <Stack direction="column" mb={1} w={'100%'} maxW={'270px'}>
                     <Text fontSize="sm" fontWeight="bold" mb={-3}>
                         {infoAccount.name}
                     </Text>
-                    <Tooltip label="Click to copy" hasArrow placement="top-end">
+                    <Tooltip label="Click to copy" hasArrow placement="right">
                         <Text fontSize="md" fontWeight="bold" onClick={copyToClipboard} _hover={{ cursor: 'pointer' }}>
                             {infoAccount.accountRs}
                         </Text>

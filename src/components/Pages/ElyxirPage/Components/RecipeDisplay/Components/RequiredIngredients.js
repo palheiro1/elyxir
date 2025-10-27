@@ -11,8 +11,9 @@ import { useSelector } from 'react-redux';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const RequiredIngredients = ({ selectedRecipe, selectedFlask }) => {
-    const { fakeAssets } = useSelector(state => state.elyxir);
-    const { ingredients } = fakeAssets;
+    const { items } = useSelector(state => state.items);
+    const ingredients = items.filter(item => item.type === 'ingredient');
+
     return (
         <Box>
             <Text fontWeight="bold" fontSize="lg" mb={4}>
@@ -26,10 +27,12 @@ const RequiredIngredients = ({ selectedRecipe, selectedFlask }) => {
                     const have = ingredient ? Number(ingredient.quantityQNT) : 0;
                     const hasEnough = have >= requiredQty;
 
+                    const formatedName = ingredient?.description?.replace('Ingredient of', '');
+
                     return (
                         <WrapItem key={i}>
                             <Box
-                                p={4}
+                                p={3}
                                 border="2px"
                                 borderColor={hasEnough ? 'green.300' : 'red.300'}
                                 borderRadius="md"
@@ -48,7 +51,7 @@ const RequiredIngredients = ({ selectedRecipe, selectedFlask }) => {
                                     />
                                 )}
                                 <Text fontSize="sm" fontWeight="bold" mb={1}>
-                                    {ingredient?.name}
+                                    {formatedName}
                                 </Text>
                                 <Badge colorScheme={hasEnough ? 'green' : 'red'} fontSize="xs">
                                     {requiredQty} needed

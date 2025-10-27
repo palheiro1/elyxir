@@ -44,7 +44,7 @@ const AskBidTable = ({
                     borderBottom="2px"
                     fontWeight={'black'}
                     borderColor={!newStyle ? '#3b6497' : '#f79c27'}
-                    color={newStyle ? (isAsk ? 'white' : '#29a992') : "white"}>
+                    color={newStyle ? (isAsk ? 'white' : '#29a992') : 'white'}>
                     {type}
                 </Text>
             )}
@@ -83,6 +83,7 @@ const AskBidTable = ({
                                 setSelectedOrder={setSelectedOrder}
                                 onlyOneAsset={onlyOneAsset}
                                 canDelete={canDelete}
+                                isItems
                             />
                         );
                     })}

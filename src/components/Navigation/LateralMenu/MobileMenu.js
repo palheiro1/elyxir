@@ -1,4 +1,4 @@
-import { Box, Center, Stack, Switch, Text } from '@chakra-ui/react';
+import { Box, Center, Stack, Text } from '@chakra-ui/react';
 import CurrencyMenu from '../../CurrencyMenu/CurrencyMenu';
 import VerticalMenuButtons from './VerticalMenuButtons';
 
@@ -7,8 +7,6 @@ const MobileMenu = ({
     setOption,
     handleLogout,
     infoAccount,
-    showAllCards,
-    handleShowAllCards,
     goToSection,
     cardsLoaded,
     setSelectedBridgeType,
@@ -46,13 +44,6 @@ const MobileMenu = ({
                         setSelectedBridgeType={setSelectedBridgeType}
                     />
                 </Center>
-
-                <Stack p={2} align="center" pt={{ base: 4, md: 8 }}>
-                    <Text fontWeight="bold" textAlign="center" fontSize="sm">
-                        Show all cards
-                    </Text>
-                    <Switch isChecked={showAllCards} onChange={handleShowAllCards} colorScheme="blue" />
-                </Stack>
             </Box>
         </Stack>
     );

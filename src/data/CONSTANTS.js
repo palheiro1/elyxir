@@ -299,7 +299,7 @@ export const CURRENCY_ASSETS = {
     [MANAASSET]: 'MANA',
 };
 
-export const ITEMS_ASSETS = [
+export const POTIONS_ASSETS = [
     '8693351662911145147',
     '12861522637067934750',
     '5089659721388119266',
@@ -310,75 +310,69 @@ export const ITEMS_ASSETS = [
     '6485210212239811',
 ];
 
-// Complete list of Elyxir game assets (ingredients, tools, creations, flasks, recipes)
-export const ELYXIR_ASSETS = [
-    // Ingredients
-    '7536385584787697086',  // Fetid Waters
-    '2795734210888256790',  // Alcohol Beer
-    '16326649816730553703', // Blood
-    '10917692030112170713', // Crystal Water
-    '10444425886085847503', // Sea Water
-    '18101012326255288772', // Cloud Essence
-    '3607141736374727634',  // Lightning Essence
-    '65767141008711421',    // Wind Essence
-    '8717959006135737805',  // Bottled Sunlight
-    '488367278629756964',   // Volcano Lava
-    '6086151229884242778',  // Cotton Flower
-    '8966516609271135665',  // Garden Flower
-    '1941380340903453000',  // Tree Bark
-    '5528548442683058721',  // Ethiopian Herb
-    '524790161704873898',   // Poison Herb
-    '583958094572828441',   // Mustard Seeds
-    '12313032092046113556', // Peyote
-    '8825927167203958938',  // Bat Wing
-    '4735490741705855799',  // Bigfoot Hair
-    '15284691712437925618', // Feather
-    '16412049206728355506', // Kangaroo Tail
-    '609721796834652174',   // Snake Skin
-    '9057629654312953814',  // Vampire Blood
-    '3865726407233803673',  // Wolf Fang
-    '13430257599807483745', // Araucarian Resine
-    '374078224198142471',   // Volcanic Ash
-    '17472981396773816914', // Bone Powder
-    '1479526493428793943',  // Horn Dust
-    '10229749181769297696', // Desert Sand
-    '465570788961452184',   // Garden Soil
-    '13446501052073878899', // Holi Powder
-    '7891814295348826088',  // Rainbow Dust
-    '2603114092541070832',  // Himalayan Snow
-    '8821500247715349893',  // Rahu Saliva
-    // Tools
-    '7394449015011337044',  // Bellow
-    '1310229991284473521',  // Cauldron
-    '9451976923053037726',  // Ladle
-    '188493294393002400',   // Mortar
-    // Creations
-    '6485210212239811',     // Whispering Gale Potion
-    '7582224115266007515',  // Tideheart Potion
-    '10474636406729395731', // Stoneblood Potion
-    '5089659721388119266',  // Potion of the Eternal Silk
-    '8693351662911145147',  // Potion of the Coral Spirits
-    '11206437400477435454', // Potion of the Feathered Flame
-    '12861522637067934750', // Potion of the Shifting Dunes
-    '3858707486313568681',  // Potion of the Forgotten Grove
-    // Flasks
-    '4367881087678870632',  // Conical Flask
-    '3758988694981372970',  // Pear-Shaped Flask
-    '1328293559375692481',  // Kjeldahl Flask
-    '8026549983053279231',  // Florence Flask
-    '9118586585609900793',  // Round-Bottom Flask
-    // Recipes
-    '12936439663349626618', // Whispering Gale Potion Recipe
-    '7024690161218732154',  // Tideheart Potion Recipe
-    '11654119158397769364', // Stoneblood Potion Recipe
-    '1462047204733593633',  // Potion of the Eternal Silk Recipe
-    '6864800023593094679',  // Potion of the Coral Spirits Recipe
-    '1770779863759720918',  // Potion of the Feathered Flame Recipe
-    '10956456574154580310', // Potion of the Shifting Dunes Recipe
-    '7535070915409870441',  // Potion of the Forgotten Grove Recipe
+export const INGREDIENTS_ASSETS = [
+    '3889177039140864382',
+    '7464041035414516620',
+    '1984030976252900595',
+    '4500703559888112616',
+    '6449913327322486032',
+    '11386383170019744285',
+    '9760149757254295727',
+    '15521713672709080827',
+    '6465232678112387630',
+    '2820535047226119418',
+    '3141101292112031086',
+    '12210617625866540653',
+    '9030969335636586236',
+    '11600172755121130046',
+    '2450000736429359136',
+    '16985415109716408753',
+    '9859593227468066316',
+    '18140737140039335538',
+    '4961997300267659319',
+    '955451625820789680',
+    '7081966488954575750',
+    '3042874600616626102',
+    '3283766635496740738',
+    '10290172289119183466',
+    '1748542894784204097',
+    '5277313819896974342',
 ];
 
-// Helper function to check if an asset is an Elyxir game asset
-export const isElyxirAsset = (assetId) => {
+export const TOOLS_ASSETS = [
+    '16510405738781556809',
+    '134965209883026568',
+    '16675035144675396134',
+    '891244524698574104',
+];
+
+export const FLASKS_ASSETS = [
+    '15449537292115398209',
+    '7733730178178340688',
+    '10988806909985982048',
+    '8654762646210741353',
+    '18264820454208225977',
+];
+
+export const RECIPES_ASSETS = [
+    '13707014208004245427',
+    '5014026648203178396',
+    '1960378025858544673',
+    '12569558571118274638',
+    '12033558477889085358',
+    '12177531144011278176',
+    '13408138407764096853',
+    '14852902787489380032',
+];
+
+export const ELYXIR_ASSETS = [
+    ...POTIONS_ASSETS,
+    ...INGREDIENTS_ASSETS,
+    ...TOOLS_ASSETS,
+    ...FLASKS_ASSETS,
+    ...RECIPES_ASSETS,
+];
+
+export const isElyxirAsset = assetId => {
     return ELYXIR_ASSETS.includes(assetId) || assetId === GEMASSET;
 };

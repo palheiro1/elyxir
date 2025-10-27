@@ -100,7 +100,7 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                         setMaticPrice(maticPrice);
                     })
                     .catch(error => {
-                        console.log('🚀 ~ recoverMarketOffers ~ getMaticPriceWithEth ~ error:', error);
+                        console.error('🚀 ~ recoverMarketOffers ~ getMaticPriceWithEth ~ error:', error);
                     });
 
                 getEthPrice()
@@ -108,10 +108,10 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                         setEthPrice(ethPrice);
                     })
                     .catch(error => {
-                        console.log('🚀 ~ recoverMarketOffers ~ getEthPrice ~ error:', error);
+                        console.error('🚀 ~ recoverMarketOffers ~ getEthPrice ~ error:', error);
                     });
             } catch (error) {
-                console.log('🚀 ~ recoverMarketOffers ~ error:', error);
+                console.error('🚀 ~ recoverMarketOffers ~ error:', error);
             } finally {
                 setIsLoading(false);
             }

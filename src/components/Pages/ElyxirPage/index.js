@@ -27,7 +27,8 @@ import { useSelector } from 'react-redux';
 import { DURATION_OPTIONS } from './data';
 
 const Elyxir = ({ infoAccount }) => {
-    const { elyxir, fakeAssets } = useSelector(state => state.elyxir);
+    const { elyxir } = useSelector(state => state.elyxir);
+    const { items } = useSelector(state => state.items);
     const { prev_height } = useSelector(state => state.blockchain);
 
     const [selectedFlask, setSelectedFlask] = useState(null);
@@ -45,6 +46,11 @@ const Elyxir = ({ infoAccount }) => {
     const toast = useToast();
 
     const sectionBg = useColorModeValue('gray.50', 'gray.800');
+
+    const potions = items?.filter(item => item.type === 'potion');
+    const ingredients = items?.filter(item => item.type === 'ingredient');
+    const flasks = items?.filter(item => item.type === 'flask');
+    const tools = items?.filter(item => item?.type === 'tool');
 
     useEffect(() => {
         const loadJobs = async () => {
@@ -151,9 +157,7 @@ const Elyxir = ({ infoAccount }) => {
 
             try {
                 const accountId = addressToAccountId(infoAccount.accountRs);
-                const recipePotion = fakeAssets.potions?.find(
-                    potion => potion?.asset === selectedRecipe?.creationAssetId
-                );
+                const recipePotion = potions?.find(potion => potion?.asset === selectedRecipe?.creationAssetId);
                 const multiplier = selectedFlask?.multiplier || 1;
 
                 const mergedAssets = [];
@@ -218,7 +222,7 @@ const Elyxir = ({ infoAccount }) => {
             const missing = [];
             if (recipe?.ingredients) {
                 recipe?.ingredients?.forEach(req => {
-                    const item = fakeAssets.ingredients?.find(i => i.asset === req.assetId);
+                    const item = ingredients?.find(i => i.asset === req.assetId);
                     const have = item ? Number(item.quantityQNT) : 0;
                     const needed = req.qtyQNT * flaskMultiplier;
                     if (have < needed) missing.push(`${needed - have}x ${req.name}`);
@@ -226,12 +230,12 @@ const Elyxir = ({ infoAccount }) => {
             }
             if (recipe?.tools) {
                 recipe.tools.forEach(asset => {
-                    if (!fakeAssets.tools?.some(i => i.asset === asset)) missing.push(asset);
+                    if (!tools?.some(i => i.asset === asset)) missing.push(asset);
                 });
             }
             return missing;
         },
-        [fakeAssets.ingredients, fakeAssets.tools]
+        [tools, ingredients]
     );
 
     const [tabIndex, setTabIndex] = useState(0);
@@ -264,16 +268,17 @@ const Elyxir = ({ infoAccount }) => {
                     <TabPanel>
                         <Box p={6}>
                             <RecipeSelector
+                                infoAccount={infoAccount}
                                 selectedFlask={selectedFlask}
                                 selectedRecipe={selectedRecipe}
                                 setSelectedRecipe={setSelectedRecipe}
                                 getMissingItems={getMissingItems}
-                                potions={fakeAssets.potions}
+                                potions={potions}
                             />
                             <FlaskSelector
                                 selectedFlask={selectedFlask}
                                 setSelectedFlask={setSelectedFlask}
-                                flasks={fakeAssets.flasks}
+                                flasks={flasks}
                                 isPotionSelected={selectedRecipe !== null}
                             />
                             <RecipeDisplay

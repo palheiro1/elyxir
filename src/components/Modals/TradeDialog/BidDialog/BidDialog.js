@@ -269,8 +269,8 @@ const BidDialog = ({
 
     let bonusText;
     if (isItem) {
-        if (card.bonus.type === 'medium') bonusText = 'Medium: ' + mediumMapping[card.bonus.value];
-        else if (card.bonus.type === 'domain') bonusText = 'Domain: ' + domainMapping[card.bonus.value];
+        if (card?.bonus?.type === 'medium') bonusText = 'Medium: ' + mediumMapping[card.bonus.value];
+        else if (card?.bonus?.type === 'domain') bonusText = 'Domain: ' + domainMapping[card.bonus.value];
     }
 
     return (
@@ -311,7 +311,7 @@ const BidDialog = ({
                                     </Center>
                                     <Text fontSize="sm" textAlign="center" my={2}>
                                         You have {finalActualAmount}{' '}
-                                        {isItem ? card.description : isCurrency ? currencyName : card.name}
+                                        {isItem ? card?.description : isCurrency ? currencyName : card?.name}
                                     </Text>
                                 </Box>
                                 <VStack spacing={4} w="100%">
@@ -319,11 +319,13 @@ const BidDialog = ({
                                         {!isCurrency && (
                                             <>
                                                 <Text fontWeight="bold" fontSize="xl">
-                                                    {isItem ? card.description : card.name}
+                                                    {isItem ? card?.description : card?.name}
                                                 </Text>
                                                 <Text>
-                                                    {isItem ? bonusText : card.channel} /
-                                                    {isItem ? ` Power: +${card.bonus.power}` : card.rarity}
+                                                    {isItem && card.type === 'potion' ? bonusText : card.channel} /
+                                                    {isItem && card.type === 'potion'
+                                                        ? ` Power: +${card.bonus.power}`
+                                                        : card.rarity}
                                                 </Text>
                                                 <Text fontSize={'sm'}>Asset: {card.asset}</Text>
                                             </>

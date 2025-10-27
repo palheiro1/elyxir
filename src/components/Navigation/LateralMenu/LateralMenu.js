@@ -14,8 +14,6 @@ import TopMenu from '../../../pages/Home/TopMenu';
  * @param {Number} option - Option selected
  * @param {Function} setOption - Function to set the option
  * @param {JSX.Element} children - Components to show in the main section
- * @param {Boolean} showAllCards - Boolean to show all cards
- * @param {Function} handleShowAllCards - Function to handle the show all cards
  * @returns {JSX.Element} - JSX element
  * @author Jesús Sánchez Fernández
  * @version 1.0
@@ -25,8 +23,6 @@ const LateralMenu = memo(
         option = 0,
         setOption,
         children,
-        showAllCards,
-        handleShowAllCards,
         infoAccount,
         handleLogout,
         goToSection,
@@ -64,8 +60,6 @@ const LateralMenu = memo(
                         option={option}
                         setOption={setOption}
                         handleLogout={handleLogout}
-                        showAllCards={showAllCards}
-                        handleShowAllCards={handleShowAllCards}
                         children={children}
                         cardsLoaded={cardsLoaded}
                         setSelectedBridgeType={setSelectedBridgeType}
@@ -78,8 +72,6 @@ const LateralMenu = memo(
                             setOption={handleSetOption}
                             handleLogout={handleLogout}
                             infoAccount={infoAccount}
-                            showAllCards={showAllCards}
-                            handleShowAllCards={handleShowAllCards}
                             goToSection={goToSection}
                             cardsLoaded={cardsLoaded}
                             setSelectedBridgeType={setSelectedBridgeType}

@@ -1,7 +1,10 @@
 import { Box, Heading, Stack, Button } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import GridItems from '../../Items/GridItems';
-import SortAndFilterItems from '../../SortAndFilters/SortAndFilterItems';
+import SectionSwitch from './SectionSwitch';
+import TradesAndOrderTable from './TradesAndOrders/TradesAndOrderTable';
+import AskAndBidGrid from './TradesAndOrders/AskAndBids/AskAndBidGrid';
+import { ELYXIR_ASSETS } from '../../../data/CONSTANTS';
 
 /**
  * @name ElyxirMarket
@@ -11,30 +14,31 @@ import SortAndFilterItems from '../../SortAndFilters/SortAndFilterItems';
  * @returns {JSX.Element}
  */
 const ElyxirMarket = ({ items, infoAccount }) => {
-    // Option: 0 -> Market, 1 -> Orders, 2 -> Trades
     const [option, setOption] = useState(0);
     const [itemsFiltered, setItemsFiltered] = useState(items);
-    // Section switcher logic (same as Elyxir inventory)
-    const [section, setSection] = useState('INGREDIENT'); // INGREDIENT | TOOL | FLASK | RECIPE | CREATION
+    const [section, setSection] = useState('all');
+    useEffect(() => {
+        let newItems = items;
+        if (section !== 'all') {
+            newItems = items.filter(item => item.type === section);
+        }
+        setItemsFiltered(newItems);
+    }, [items, section]);
 
-    // Map section to elyxirType
-    const filterBySection = (base = items, sec = section) => {
-        return base.filter(it => (it.elyxirType || 'INGREDIENT').toUpperCase() === sec);
-    };
-
-    // Sync itemsFiltered with section
-    if (itemsFiltered.length !== filterBySection(items, section).length) {
-        setItemsFiltered(filterBySection(items, section));
-    }
+    const accountAsk = infoAccount.currentAsks || [];
+    const accountBid = infoAccount.currentBids || [];
+    const trades = infoAccount.trades || [];
+    const askWithoutCurrencies = accountAsk.filter(ask => ELYXIR_ASSETS.includes(ask.asset));
+    const bidWithoutCurrencies = accountBid.filter(bid => ELYXIR_ASSETS.includes(bid.asset));
+    const tradesWithoutCurrencies = trades.filter(trade => ELYXIR_ASSETS.includes(trade.asset));
 
     return (
         <>
-
-
+            <SectionSwitch option={option} setOption={setOption} color={'47,129,144'} />
             {option === 0 && (
                 <Box>
                     <Stack direction="row" spacing={2} mb={4}>
-                        {['INGREDIENT', 'TOOL', 'FLASK', 'RECIPE', 'CREATION'].map(type => (
+                        {['all', 'ingredient', 'tool', 'flask', 'recipe', 'potion'].map(type => (
                             <Button
                                 key={type}
                                 isActive={section === type}
@@ -45,20 +49,16 @@ const ElyxirMarket = ({ items, infoAccount }) => {
                                 size="sm"
                                 fontWeight="medium"
                                 fontSize="sm"
-                                onClick={() => {
-                                    setSection(type);
-                                    setItemsFiltered(filterBySection(items, type));
-                                }}
-                            >
-                                {type.charAt(0) + type.slice(1).toLowerCase() + (type === 'INGREDIENT' ? 's' : 's')}
+                                onClick={() => setSection(type)}>
+                                {type.charAt(0).toUpperCase() + type.slice(1) + (type === 'all' ? '' : 's')}
                             </Button>
                         ))}
                     </Stack>
-                    <SortAndFilterItems
+                    {/* <SortAndFilterItems
                         items={itemsFiltered}
                         setItemsFiltered={setItemsFiltered}
                         rgbColor={'47,129,144'}
-                    />
+                    /> */}
                     <GridItems
                         items={itemsFiltered}
                         isMarket={true}
@@ -71,26 +71,30 @@ const ElyxirMarket = ({ items, infoAccount }) => {
             {option === 1 && (
                 <Box>
                     <Heading textAlign="center" mt={4} color="rgb(47,129,144)">
-                        Ingredient Orders
+                        Item Orders
                     </Heading>
-                    <Box p={8} textAlign="center">
-                        <Heading size="md" color="gray.400">
-                            Ingredient orders feature coming soon!
-                        </Heading>
-                    </Box>
+                    <AskAndBidGrid
+                        username={infoAccount.name}
+                        cards={items}
+                        askOrders={askWithoutCurrencies}
+                        bidOrders={bidWithoutCurrencies}
+                        canDelete={true}
+                        isItems
+                    />
                 </Box>
             )}
 
             {option === 2 && (
                 <Box>
                     <Heading textAlign="center" mt={4} color="rgb(47,129,144)">
-                        Ingredient Trades
+                        Item Trades
                     </Heading>
-                    <Box p={8} textAlign="center">
-                        <Heading size="md" color="gray.400">
-                            Ingredient trades feature coming soon!
-                        </Heading>
-                    </Box>
+                    <TradesAndOrderTable
+                        account={infoAccount.accountRs}
+                        cards={items}
+                        trades={tradesWithoutCurrencies}
+                        isItems
+                    />
                 </Box>
             )}
         </>

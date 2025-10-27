@@ -9,15 +9,15 @@ import { Button, ButtonGroup } from '@chakra-ui/react';
  * @author Jesús Sánchez Fernández
  * @version 1.0
  */
-const SectionSwitch = ({ option, setOption }) => {
+const SectionSwitch = ({ option, setOption, color = '59,100,151' }) => {
     const ButtonSwitch = ({ isActive, onClick, text }) => {
         return (
             <Button
                 isActive={isActive}
                 color="white"
-                _active={{ bgColor: '#3b6497', color: 'white' }}
-                bgColor={'rgba(59,100,151,0.5)'}
-                _hover={{ bgColor: 'rgba(59,100,151,0.7)' }}
+                _active={{ bgColor: `rgba(${color}, 1)`, color: 'white' }}
+                bgColor={`rgba(${color},0.5)`}
+                _hover={{ bgColor: `rgba(${color},0.7)` }}
                 w="33.333%"
                 size="lg"
                 fontWeight="medium"

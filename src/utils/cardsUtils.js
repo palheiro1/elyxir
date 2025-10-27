@@ -84,7 +84,7 @@ export const fetchAllCards = async (accountRs, collectionRs, specialRs, fetchOrd
 export const fetchCurrencyAssets = async (accountRs, currencyAssets = [], fetchOrders = false) => {
     // Get burned amounts once for all currency assets
     const burnedAmounts = await getBurnedAmounts();
-    
+
     const response = await Promise.all(
         currencyAssets.map(async asset => {
             const [account, currencyAsset] = await Promise.all([getAccountAssets(accountRs), getAssetsByIssuer(asset)]);
@@ -221,14 +221,20 @@ export const openPackWithGiftz = async (passphrase, noPacks, giftzBalance, ignis
 export const cardsGenerator = async (accountAssets, collectionAssets, fetchOrders = false) => {
     // Get burned amounts once for all cards to avoid repeated API calls
     const burnedAmounts = await getBurnedAmounts();
-    
+
     var ret = await Promise.all(
         collectionAssets.map(async asset => {
             const accountAsset = accountAssets.find(a => a.asset === asset.asset);
             const quantityQNT = accountAsset ? accountAsset.quantityQNT : 0;
             const unconfirmedQuantityQNT = accountAsset ? accountAsset.unconfirmedQuantityQNT : 0;
             if (asset.description) {
-                let newAsset = await cardInfoGenerator(asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders, burnedAmounts);
+                let newAsset = await cardInfoGenerator(
+                    asset,
+                    quantityQNT,
+                    unconfirmedQuantityQNT,
+                    fetchOrders,
+                    burnedAmounts
+                );
                 if (newAsset !== undefined) {
                     return newAsset;
                 }
@@ -258,7 +264,13 @@ function cleanJSON(jsonString) {
         .replace(/\\r/g, ''); // Elimina las secuencias de escape de retornos de carro
 }
 
-export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQNT, fetchOrders = false, burnedAmounts = null) => {
+export const cardInfoGenerator = async (
+    asset,
+    quantityQNT,
+    unconfirmedQuantityQNT,
+    fetchOrders = false,
+    burnedAmounts = null
+) => {
     let cardDetails = cleanJSON(asset.description);
 
     if (cardDetails) {
@@ -304,7 +316,7 @@ export const cardInfoGenerator = async (asset, quantityQNT, unconfirmedQuantityQ
         const fixContinent = cardDetails.channel === 'Europa' ? 'Europe' : cardDetails.channel;
 
         // Use passed burnedAmounts or fetch if not provided (fallback for other uses)
-        const burnedAmountsToUse = burnedAmounts || await getBurnedAmounts();
+        const burnedAmountsToUse = burnedAmounts || (await getBurnedAmounts());
         const burnedQuantity = burnedAmountsToUse[asset.asset] || 0;
 
         return {
@@ -367,4 +379,89 @@ export const getBurnTransactions = async (account = null, startTimestamp = START
 
 export const isMBAsset = asset => {
     return ASSETS_IDS.includes(asset);
+};
+
+export const STUCKED_CARDS_KEY = 'stuckedBattleCards';
+
+/**
+ * @name setStuckedBattleCards
+ * @description Stores a snapshot of the currently selected battle cards in localStorage under the `stuckedCards` key.
+ * Each card is counted by its `asset` ID to support duplicate cards. Also stores the current block height
+ * to later verify if the data is outdated.
+ * @param {Array<Object>} cards - An array of card objects, each containing at least an `asset` property.
+ * @param {number} height - The current block height, used to detect outdated stored data.
+ * @returns {Object} The stored payload object containing `stuckedCards` and `height`.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const setStuckedBattleCards = (cards, height) => {
+    try {
+        if (!Array.isArray(cards)) {
+            console.warn('Expected an array of cards.');
+            return {};
+        }
+
+        const newStucked = {};
+        for (const card of cards) {
+            if (card?.asset) {
+                newStucked[card.asset] = (newStucked[card.asset] || 0) + 1;
+            }
+        }
+
+        const existingData = JSON.parse(localStorage.getItem(STUCKED_CARDS_KEY)) || {};
+        const existingStucked = existingData.stuckedCards || {};
+        const existingHeight = existingData.height || 0;
+
+        const mergedStucked = { ...existingStucked };
+        for (const asset in newStucked) {
+            mergedStucked[asset] = (mergedStucked[asset] || 0) + newStucked[asset];
+        }
+
+        const finalHeight = Math.max(existingHeight || 0, height || 0);
+
+        const payload = { stuckedCards: mergedStucked, height: finalHeight };
+        localStorage.setItem(STUCKED_CARDS_KEY, JSON.stringify(payload));
+
+        return payload;
+    } catch (error) {
+        console.error('Failed to save stucked cards to localStorage:', error);
+        return {};
+    }
+};
+
+/**
+ * @name getStuckedBattleCards
+ * @description Retrieves the `stuckedCards` object from localStorage. If the data is missing
+ * or fails to parse, returns an empty object as fallback. This function is used
+ * to restore potentially stuck battle card selections from previous sessions.
+ * @returns {Object} The parsed `stuckedCards` object from localStorage, or an empty object on failure.
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const getStuckedBattleCards = () => {
+    try {
+        const stored = localStorage.getItem(STUCKED_CARDS_KEY);
+        return stored ? JSON.parse(stored) : {};
+    } catch (error) {
+        console.error('Failed to parse stucked cards from localStorage:', error);
+        return {};
+    }
+};
+
+/**
+ * @name cleanStuckedBattleCards
+ * @description Removes the `stuckedCards` entry from localStorage if its stored `height`
+ * does not match the current provided block height. Used to prevent outdated or
+ * stuck battle card data from persisting across sessions.
+ * @param {number} height - The current block height to compare against the stored one.
+ * @returns {void}
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ */
+export const cleanStuckedBattleCards = height => {
+    try {
+        const stored = JSON.parse(localStorage.getItem(STUCKED_CARDS_KEY));
+        if (stored && stored.height !== height) {
+            localStorage.removeItem(STUCKED_CARDS_KEY);
+        }
+    } catch (error) {
+        console.error('Failed to clean stucked cards from localStorage:', error);
+    }
 };

@@ -1,5 +1,6 @@
 import { Badge, Box, Button, Stack, Text, Wrap, WrapItem } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
+import ResponsiveTooltip from '../../../ui/ReponsiveTooltip';
 
 /**
  * @name RecipeSelector
@@ -13,10 +14,12 @@ import { useSelector } from 'react-redux';
  * @returns {JSX.Element} A responsive list of recipe buttons with indicators for craftability and blockchain integration badges.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const RecipeSelector = ({ selectedFlask, selectedRecipe, setSelectedRecipe, getMissingItems }) => {
-    const { elyxir, fakeAssets } = useSelector(state => state.elyxir);
+const RecipeSelector = ({ infoAccount, selectedFlask, selectedRecipe, setSelectedRecipe, getMissingItems }) => {
+    const { elyxir } = useSelector(state => state.elyxir);
+    const { items } = useSelector(state => state.items);
+
     const recipes = elyxir?.definition?.recipes;
-    const potions = fakeAssets?.potions;
+    const potions = items.filter(item => item.type === 'potion');
 
     if (!recipes) return;
 
@@ -30,28 +33,43 @@ const RecipeSelector = ({ selectedFlask, selectedRecipe, setSelectedRecipe, getM
                     🔗 Real Blockchain Crafting Available
                 </Badge>
             </Stack>
-            <Wrap spacing={4}>
+            <Wrap spacing={2}>
                 {recipes.map((recipe, idx) => {
                     const currentMultiplier = selectedFlask?.multiplier || 1;
                     const missing = getMissingItems(recipe, currentMultiplier);
                     const canCraft = missing.length === 0;
                     const recipePotion = potions?.find(potion => potion?.asset === recipe?.creationAssetId);
+
+                    const recipeAsset = infoAccount?.assets?.find(asset => asset?.asset === recipe?.recipeAssetId);
+                    const isDisabled = !recipeAsset || Number(recipeAsset?.quantityQNT) <= 0;
+
                     if (!recipePotion) return null;
 
                     return (
                         <WrapItem key={idx}>
                             <Box position="relative">
-                                <Button
-                                    size="md"
-                                    variant={
-                                        selectedRecipe?.recipeAssetId === recipe?.recipeAssetId ? 'solid' : 'outline'
+                                <ResponsiveTooltip
+                                    label={
+                                        isDisabled
+                                            ? 'The secrets of this recipe remain hidden until you uncover its scroll.'
+                                            : undefined
                                     }
-                                    colorScheme={canCraft ? 'green' : 'gray'}
-                                    onClick={() => setSelectedRecipe(recipe)}
-                                    h="60px"
-                                    px={6}>
-                                    {recipePotion?.name}
-                                </Button>
+                                    isDisabled={!isDisabled}>
+                                    <Button
+                                        size="md"
+                                        variant={
+                                            selectedRecipe?.recipeAssetId === recipe?.recipeAssetId
+                                                ? 'solid'
+                                                : 'outline'
+                                        }
+                                        colorScheme={canCraft ? 'green' : 'gray'}
+                                        onClick={() => setSelectedRecipe(recipe)}
+                                        h="60px"
+                                        isDisabled={isDisabled}
+                                        px={4}>
+                                        {recipePotion?.description}
+                                    </Button>
+                                </ResponsiveTooltip>
 
                                 <Badge
                                     position="absolute"

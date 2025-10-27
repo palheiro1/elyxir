@@ -31,6 +31,7 @@ const AskOrBidItem = ({
     setSelectedOrder,
     onlyOneAsset,
     canDelete = false,
+    isItems = false,
 }) => {
     // ------------------------------------------------------------
     const [hover, setHover] = useState(false);
@@ -59,7 +60,7 @@ const AskOrBidItem = ({
         name = (
             <TableCard
                 key={asset.asset}
-                image={asset.cardImgUrl}
+                image={isItems ? asset.imgUrl : asset.cardImgUrl}
                 title={asset.name}
                 rarity={asset.rarity}
                 continent={asset.channel}
@@ -118,8 +119,12 @@ const AskOrBidItem = ({
             onMouseLeave={() => setHover(false)}
             onClick={canDelete ? handleDeleteOrder : handleSelectOrder}>
             {!onlyOneAsset && <Td textAlign="center">{name}</Td>}
-            <Td textAlign="center" w="50%">{fixedIgnis}</Td>
-            <Td textAlign="center" w="50%">{showAmount}</Td>
+            <Td textAlign="center" w="50%">
+                {fixedIgnis}
+            </Td>
+            <Td textAlign="center" w="50%">
+                {showAmount}
+            </Td>
         </Tr>
     );
 };

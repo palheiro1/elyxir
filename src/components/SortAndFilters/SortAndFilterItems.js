@@ -1,23 +1,26 @@
 import { Box, Select, Stack, Text } from '@chakra-ui/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { BsArrowDownUp } from 'react-icons/bs';
 import { FaFilter } from 'react-icons/fa';
+
 /**
  * @name SortAndFilterItems
  * @description Menu to sort and filter items/potions
- * @param {Array} originalItems - Array with the original items to sort/filter
+ * @param {Array} items - Array with the items
  * @param {Function} setItemsFiltered - Function to set the filtered items
  * @param {String} rgbColor - String with the RGB color
  * @returns {JSX.Element} - JSX element
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const SortAndFilterItems = ({ originalItems = [], setItemsFiltered, rgbColor = '47, 129, 144' }) => {
+const SortAndFilterItems = ({ items = [], setItemsFiltered, rgbColor = '47, 129, 144' }) => {
     const borderButtons = `rgba(${rgbColor}, 1)`;
 
     const [type, setType] = useState('All');
     const [sort, setSort] = useState('moreQuantity');
+    const lastFilteredRef = useRef([]);
 
     const computed = useMemo(() => {
-        let out = [...originalItems];
+        let out = [...items];
 
         if (type !== 'All') {
             out = out.filter(it => (it?.bonus?.type || '').toLowerCase() === type);
@@ -52,10 +55,18 @@ const SortAndFilterItems = ({ originalItems = [], setItemsFiltered, rgbColor = '
         }
 
         return out;
-    }, [originalItems, type, sort]);
+    }, [items, type, sort]);
 
     useEffect(() => {
-        setItemsFiltered(computed);
+        const prev = lastFilteredRef.current;
+
+        // Comparación superficial simple: evita re-renders innecesarios
+        const isSame = prev.length === computed.length && prev.every((item, i) => item === computed[i]);
+
+        if (!isSame) {
+            lastFilteredRef.current = computed;
+            setItemsFiltered(computed);
+        }
     }, [computed, setItemsFiltered]);
 
     const handleTypeChange = e => setType(e.target.value);
@@ -64,7 +75,7 @@ const SortAndFilterItems = ({ originalItems = [], setItemsFiltered, rgbColor = '
     return (
         <Box>
             <Stack direction={{ base: 'column', lg: 'row' }} spacing={4} mb={4}>
-                <Stack
+                <Stack 
                     direction="row"
                     border="2px"
                     borderColor={borderButtons}
@@ -79,7 +90,7 @@ const SortAndFilterItems = ({ originalItems = [], setItemsFiltered, rgbColor = '
                     <Text fontSize="sm" color={borderButtons}>
                         Filter:{' '}
                     </Text>
-                    <Select value={type} onChange={handleTypeChange} border="0px" borderColor="gray.800" size="xs">
+                    <Select value={type} onChange={handleTypeChange} border="0px" size="xs">
                         <option value="All">All Types</option>
                         <option value="medium">Medium Bonus</option>
                         <option value="domain">Domain Bonus</option>
@@ -101,7 +112,7 @@ const SortAndFilterItems = ({ originalItems = [], setItemsFiltered, rgbColor = '
                     <Text fontSize="sm" color={borderButtons}>
                         Sort:{' '}
                     </Text>
-                    <Select value={sort} onChange={handleSortChange} border="0px" borderColor="gray.800" size="xs">
+                    <Select value={sort} onChange={handleSortChange} border="0px" size="xs">
                         <option value="moreQuantity">More Quantity</option>
                         <option value="lessQuantity">Less Quantity</option>
                         <option value="name">Name</option>

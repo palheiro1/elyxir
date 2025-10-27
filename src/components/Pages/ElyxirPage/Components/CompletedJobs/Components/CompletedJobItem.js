@@ -14,8 +14,10 @@ import { formatTimeStamp } from '../../../../../../utils/blockchain';
  */
 const CompletedJobItem = ({ job }) => {
     const [jobBlock, setJobBlock] = useState(null);
-    const { fakeAssets } = useSelector(state => state.elyxir);
-    const craftedPotion = fakeAssets.potions?.find(potion => potion?.asset === job?.creationAssetId);
+    const { items } = useSelector(state => state.items);
+
+    const potions = items.filter(item => item.type === 'potion');
+    const craftedPotion = potions?.find(potion => potion?.asset === job?.creationAssetId);
 
     const successRate = Math.trunc(job?.successProbability * 10000) / 100;
 
@@ -41,7 +43,7 @@ const CompletedJobItem = ({ job }) => {
                 <Stack direction={'column'} align="start" spacing={1}>
                     <Stack direction={'row'}>
                         <Text fontWeight="bold" fontSize="sm" color={job?.isSuccess ? 'green.700' : 'red.700'}>
-                            🧪 {craftedPotion.name}
+                            🧪 {craftedPotion?.name}
                         </Text>
                         <Badge colorScheme="purple" variant="subtle" fontSize="xs">
                             x{job?.flaskMultiplier}

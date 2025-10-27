@@ -155,18 +155,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const [directSectionToRender, setDirectSectionToRender] = useState(directSection);
 
     // -----------------------------------------------------------------
-    // ------------------------- Functions -----------------------------
-    // -----------------------------------------------------------------
-    // Show all cards - Toggle button
-    const [showAllCards, setShowAllCards] = useState(true);
-    const handleShowAllCards = () => setShowAllCards(!showAllCards);
-
-    useEffect(() => {
-        if (showAllCards) setCardsFiltered(cards);
-        else setCardsFiltered(cards.filter(card => Number(card.quantityQNT) > 0));
-    }, [showAllCards, cards]);
-
-    // -----------------------------------------------------------------
     // Check if user is logged
     // -----------------------------------------------------------------
     useEffect(() => {
@@ -313,7 +301,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                         assets: accountAssets.accountAssets,
                     };
 
-                    dispatch(fetchAllElyxirData({ infoAccount: _auxInfo }));
+                    dispatch(fetchAllElyxirData());
                     // -----------------------------------------------------------------
                     // Get all hashes and compare
                     // -----------------------------------------------------------------
@@ -580,8 +568,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     option={option}
                     setOption={handleChangeOption}
                     children={renderComponent}
-                    showAllCards={showAllCards}
-                    handleShowAllCards={handleShowAllCards}
                     goToSection={handleChangeOption}
                     cardsLoaded={cards.length > 0 ? true : false}
                     setSelectedBridgeType={setSelectedBridgeType}

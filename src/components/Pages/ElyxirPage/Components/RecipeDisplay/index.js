@@ -16,8 +16,9 @@ import { useSelector } from 'react-redux';
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const RecipeDisplay = ({ selectedRecipe, craftDuration, selectedFlask }) => {
-    const { fakeAssets } = useSelector(state => state.elyxir);
-    const recipePotion = fakeAssets.potions?.find(potion => potion?.asset === selectedRecipe?.creationAssetId);
+    const { items } = useSelector(state => state.items);
+    const potions = items.filter(item => item.type === 'potion');
+    const recipePotion = potions?.find(potion => potion?.asset === selectedRecipe?.creationAssetId);
 
     const successRate = Math.trunc(calculateSuccessRate(craftDuration) * 10000) / 100;
 
