@@ -28,7 +28,8 @@ const DetailedItem = ({ isOpen, onClose, data }) => {
 
     if (!data) return null;
 
-    const { name, imgUrl, bonus, description } = data;
+    const { name, imgUrl, bonus, description, type } = data;
+    if (type !== 'potion') return null;
 
     return (
         <>

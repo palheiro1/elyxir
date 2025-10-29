@@ -1,7 +1,7 @@
 import { Box, Heading, Stack, Text } from '@chakra-ui/react';
 import RequiredIngredients from './Components/RequiredIngredients';
 import RequiredTools from './Components/RequiredTools';
-import { calculateSuccessRate } from '../../../../../utils/elyxirUtils';
+import { calculateSuccessRate, formatSuccessRate } from '../../../../../utils/elyxirUtils';
 import { useSelector } from 'react-redux';
 
 /**
@@ -20,7 +20,7 @@ const RecipeDisplay = ({ selectedRecipe, craftDuration, selectedFlask }) => {
     const potions = items.filter(item => item.type === 'potion');
     const recipePotion = potions?.find(potion => potion?.asset === selectedRecipe?.creationAssetId);
 
-    const successRate = Math.trunc(calculateSuccessRate(craftDuration) * 10000) / 100;
+    const successRate = formatSuccessRate(calculateSuccessRate(craftDuration));
 
     return (
         recipePotion && (

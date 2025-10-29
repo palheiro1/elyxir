@@ -45,3 +45,5 @@ export const getCraftPotionMessage = ({
 
     return JSON.stringify(message);
 };
+
+export const formatSuccessRate = value => Math.trunc(value * 10000) / 100;

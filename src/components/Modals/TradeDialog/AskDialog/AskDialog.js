@@ -261,7 +261,7 @@ const AskDialog = ({
     }
 
     let bonusText;
-    if (isItem) {
+    if (isItem && card.type === 'potion') {
         if (card.bonus.type === 'medium') bonusText = 'Medium: ' + mediumMapping[card.bonus.value];
         else if (card.bonus.type === 'domain') bonusText = 'Domain: ' + domainMapping[card.bonus.value];
     }
@@ -315,8 +315,10 @@ const AskDialog = ({
                                                     {isItem ? card.description : card.name}
                                                 </Text>
                                                 <Text>
-                                                    {isItem ? bonusText : card.channel} /
-                                                    {isItem ? ` Power: +${card.bonus.power}` : card.rarity}
+                                                    {isItem && card.type === 'potion' ? bonusText : card.channel} /
+                                                    {isItem && card.type === 'potion'
+                                                        ? ` Power: +${card.bonus.power}`
+                                                        : card.rarity}
                                                 </Text>
                                                 <Text fontSize={'sm'}>Asset: {card.asset}</Text>
                                             </>

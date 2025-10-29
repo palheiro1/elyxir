@@ -154,28 +154,28 @@ const SendDialog = ({ reference, isOpen, onClose, card, username, isItem = false
                     <AlertDialogBody color="white">
                         <Center rounded="lg" bgColor={borderColor} p={4}>
                             <Stack direction="row" align="center" spacing={4}>
-                                <Image src={isItem ? card.imgUrl : card.cardImgUrl} maxH="5rem" />
+                                <Image src={isItem ? card?.imgUrl : card?.cardImgUrl} maxH="5rem" />
                                 <Box>
                                     <Text fontSize="2xl" fontWeight="bold" noOfLines={isItem && 1}>
-                                        {isItem ? card.description : card.name}
+                                        {isItem ? card?.description : card?.name}
                                     </Text>
-                                    {isItem ? (
+                                    {isItem && card.type === 'potion' ? (
                                         <Stack direction="row" spacing={1}>
                                             <Text
                                                 px={2}
                                                 fontSize="sm"
-                                                bgColor={getColor(card.bonus)}
+                                                bgColor={getColor(card?.bonus)}
                                                 rounded="lg"
                                                 color="white"
                                                 textTransform={'capitalize'}>
-                                                {card.bonus.type} ({getTypeValue(card.bonus)})
+                                                {card.bonus.type} ({getTypeValue(card?.bonus)})
                                             </Text>
                                             <Text fontSize="sm" color="green.400">
                                                 +{card.bonus.power} Power
                                             </Text>
                                         </Stack>
                                     ) : (
-                                        <CardBadges rarity={card.rarity} continent={card.channel} size="sm" />
+                                        <CardBadges rarity={card?.rarity} continent={card?.channel} size="sm" />
                                     )}
                                     <Text fontSize="sm">Quantity: {card.quantityQNT}</Text>
                                 </Box>

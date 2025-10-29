@@ -10,7 +10,7 @@ import { formatTimeStamp } from '../../../../../../utils/blockchain';
  * Provides visual feedback with color-coded indicators for success or failure.
  * @param {Object} job - The completed job object containing `creationAssetId`, `flaskMultiplier`, `isSuccess`, and `successProbability`.
  * @returns {JSX.Element} A styled box summarizing the completed job’s outcome, including potion name, quantity, success/failure status, and success rate.
- * author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
+ * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 const CompletedJobItem = ({ job }) => {
     const [jobBlock, setJobBlock] = useState(null);
@@ -23,7 +23,7 @@ const CompletedJobItem = ({ job }) => {
 
     useEffect(() => {
         const getJobBlock = async () => {
-            const block = await getBlock(job.startHeight);
+            const block = await getBlock(job?.startHeight);
             if (!block) return;
             setJobBlock(block);
         };
@@ -43,7 +43,7 @@ const CompletedJobItem = ({ job }) => {
                 <Stack direction={'column'} align="start" spacing={1}>
                     <Stack direction={'row'}>
                         <Text fontWeight="bold" fontSize="sm" color={job?.isSuccess ? 'green.700' : 'red.700'}>
-                            🧪 {craftedPotion?.name}
+                            🧪 {craftedPotion?.description}
                         </Text>
                         <Badge colorScheme="purple" variant="subtle" fontSize="xs">
                             x{job?.flaskMultiplier}

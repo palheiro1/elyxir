@@ -14,13 +14,14 @@ export const waitForBlockChange = async initialBlock => {
                 clearInterval(checkInterval);
                 resolve();
             }
-        }, 3000); // Verifica cada 3 segundos
+        }, 3000);
     });
 };
 
 export const formatTimeStamp = timestamp => {
-    const eb = new Date(Date.UTC(2018, 0, 1, 0, 0, 0));
-    let battleStamp = new Date(eb.getTime() + timestamp * 1000);
-    battleStamp = new Date(battleStamp.getTime()).toLocaleString();
-    return battleStamp;
+    const ebTimeStamp = store.getState().blockchain.epoch_beginning;
+    const eb = new Date(ebTimeStamp);
+    let formattedTimeStamp = new Date(eb.getTime() + timestamp * 1000);
+    formattedTimeStamp = new Date(formattedTimeStamp.getTime()).toLocaleString();
+    return formattedTimeStamp;
 };

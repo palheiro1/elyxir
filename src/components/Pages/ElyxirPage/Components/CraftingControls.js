@@ -1,5 +1,5 @@
 import { Box, Button, Progress, Spinner, Stack, Text } from '@chakra-ui/react';
-import { calculateSuccessRate } from '../../../../utils/elyxirUtils';
+import { calculateSuccessRate, formatSuccessRate } from '../../../../utils/elyxirUtils';
 import { DURATION_OPTIONS } from '../data';
 
 /**
@@ -62,7 +62,7 @@ const CraftingControls = ({
             ? 'Starting...'
             : `Start Real Crafting (${multiplier} potions)`;
 
-    const successRate = Math.trunc(calculateSuccessRate(craftDuration) * 10000) / 100;
+    const successRate = formatSuccessRate(calculateSuccessRate(craftDuration));
 
     return (
         selectedRecipe !== null && (

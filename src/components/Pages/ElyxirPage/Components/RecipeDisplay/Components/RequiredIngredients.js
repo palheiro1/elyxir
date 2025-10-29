@@ -28,7 +28,6 @@ const RequiredIngredients = ({ selectedRecipe, selectedFlask }) => {
                     const hasEnough = have >= requiredQty;
 
                     const formatedName = ingredient?.description?.replace('Ingredient of', '');
-
                     return (
                         <WrapItem key={i}>
                             <Box

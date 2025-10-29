@@ -33,7 +33,6 @@ const Elyxir = ({ infoAccount }) => {
 
     const [selectedFlask, setSelectedFlask] = useState(null);
     const [craftDuration, setCraftDuration] = useState(1);
-
     const [activeJobs, setActiveJobs] = useState([]);
     const [completedJobs, setCompletedJobs] = useState([]);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
@@ -42,15 +41,16 @@ const Elyxir = ({ infoAccount }) => {
     const [userPassphrase, setUserPassphrase] = useState(null);
     const [showPinInput, setShowPinInput] = useState(false);
     const [pendingAction, setPendingAction] = useState(null);
+    const [tabIndex, setTabIndex] = useState(0);
+
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toast = useToast();
-
     const sectionBg = useColorModeValue('gray.50', 'gray.800');
 
-    const potions = items?.filter(item => item.type === 'potion');
-    const ingredients = items?.filter(item => item.type === 'ingredient');
-    const flasks = items?.filter(item => item.type === 'flask');
-    const tools = items?.filter(item => item?.type === 'tool');
+    const potions = items?.filter(item => item.type === 'potion') || [];
+    const ingredients = items?.filter(item => item.type === 'ingredient') || [];
+    const flasks = items?.filter(item => item.type === 'flask') || [];
+    const tools = items?.filter(item => item?.type === 'tool') || [];
 
     useEffect(() => {
         const loadJobs = async () => {
@@ -129,8 +129,70 @@ const Elyxir = ({ infoAccount }) => {
         setShowPinInput(true);
     }, []);
 
+    const executeCrafting = async passphrase => {
+        setIsLoading(true);
+
+        try {
+            if (!selectedFlask) return;
+            const accountId = addressToAccountId(infoAccount.accountRs);
+            const recipePotion = potions.find(potion => potion?.asset === selectedRecipe?.creationAssetId);
+            const multiplier = selectedFlask?.multiplier || 1;
+
+            const mergedAssets = [];
+
+            mergedAssets.push({ asset: selectedFlask?.asset, qnt: 1 });
+
+            selectedRecipe.tools.forEach(asset => {
+                return mergedAssets.push({ asset, qnt: 1 });
+            });
+
+            selectedRecipe.ingredients.forEach(ing => {
+                const qnt = ing.qtyQNT * multiplier;
+                const asset = ing.assetId;
+                mergedAssets.push({ asset, qnt });
+            });
+
+            const durationBlocks = DURATION_OPTIONS.find(item => item.days === craftDuration).blocks;
+
+            const transfered = await sendCraftPotionAssets({ mergedAssets, passphrase });
+            if (!transfered) throw new Error('Failed transfering crafting asset');
+
+            const response = await sendCraftPotionMessage({
+                accountId,
+                recipeAssetId: selectedRecipe?.recipeAssetId,
+                creationAssetId: recipePotion?.asset,
+                flaskAssetId: selectedFlask?.asset,
+                durationBlocks,
+                passphrase,
+                blockId: prev_height,
+            });
+
+            if (!response) throw new Error('Failed to start crafting');
+
+            toast({
+                title: 'Crafting Started!',
+                description: `Started crafting ${craftingAmount}x ${recipePotion.name}. It will complete in ${craftDuration} days.`,
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+            });
+        } catch (error) {
+            console.error('Crafting error:', error);
+            toast({
+                title: 'Crafting Failed',
+                description: error.message || 'An unexpected error occurred',
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            });
+        } finally {
+            setIsLoading(false);
+            setPendingAction(null);
+        }
+    };
+
     const confirmCrafting = useCallback(async () => {
-        if (!selectedRecipe || !infoAccount) {
+        if (!selectedRecipe || !selectedFlask || !infoAccount) {
             toast({
                 title: 'Error',
                 description: "Please select a recipe and ensure you're logged in",
@@ -149,80 +211,14 @@ const Elyxir = ({ infoAccount }) => {
         }
 
         await executeCrafting(userPassphrase);
-    }, [selectedRecipe, infoAccount, onClose, toast, userPassphrase, requestPinForAction]);
-
-    const executeCrafting = useCallback(
-        async passphrase => {
-            setIsLoading(true);
-
-            try {
-                const accountId = addressToAccountId(infoAccount.accountRs);
-                const recipePotion = potions?.find(potion => potion?.asset === selectedRecipe?.creationAssetId);
-                const multiplier = selectedFlask?.multiplier || 1;
-
-                const mergedAssets = [];
-
-                mergedAssets.push({ asset: selectedFlask?.asset, qnt: 1 });
-
-                selectedRecipe.tools.forEach(asset => {
-                    return mergedAssets.push({ asset, qnt: 1 });
-                });
-
-                selectedRecipe.ingredients.forEach(ing => {
-                    const qnt = ing.qtyQNT * multiplier;
-                    const asset = ing.assetId;
-                    mergedAssets.push({ asset, qnt });
-                });
-
-                const durationBlocks = DURATION_OPTIONS.find(item => item.days === craftDuration).blocks;
-
-                const transfered = await sendCraftPotionAssets({ mergedAssets, passphrase });
-                if (!transfered) throw new Error('Failed transfering crafting asset');
-
-                const response = await sendCraftPotionMessage({
-                    accountId,
-                    recipeAssetId: selectedRecipe?.recipeAssetId,
-                    creationAssetId: recipePotion?.asset,
-                    flaskAssetId: selectedFlask?.asset,
-                    durationBlocks,
-                    passphrase,
-                    blockId: prev_height,
-                });
-
-                if (!response) throw new Error('Failed to start crafting');
-
-                toast({
-                    title: 'Crafting Started!',
-                    description: `Started crafting ${craftingAmount}x ${recipePotion.name}. It will complete in ${craftDuration} days.`,
-                    status: 'success',
-                    duration: 5000,
-                    isClosable: true,
-                });
-            } catch (error) {
-                console.error('Crafting error:', error);
-                toast({
-                    title: 'Crafting Failed',
-                    description: error.message || 'An unexpected error occurred',
-                    status: 'error',
-                    duration: 5000,
-                    isClosable: true,
-                });
-            } finally {
-                setIsLoading(false);
-                setSelectedRecipe(null);
-                setCraftingAmount(1);
-                setPendingAction(null);
-            }
-        },
-        [selectedRecipe, craftingAmount, infoAccount, toast]
-    );
+    }, [selectedRecipe, infoAccount, onClose, userPassphrase, requestPinForAction]);
 
     const getMissingItems = useCallback(
         (recipe, flaskMultiplier) => {
             const missing = [];
             if (recipe?.ingredients) {
                 recipe?.ingredients?.forEach(req => {
-                    const item = ingredients?.find(i => i.asset === req.assetId);
+                    const item = ingredients.find(i => i.asset === req.assetId);
                     const have = item ? Number(item.quantityQNT) : 0;
                     const needed = req.qtyQNT * flaskMultiplier;
                     if (have < needed) missing.push(`${needed - have}x ${req.name}`);
@@ -230,7 +226,7 @@ const Elyxir = ({ infoAccount }) => {
             }
             if (recipe?.tools) {
                 recipe.tools.forEach(asset => {
-                    if (!tools?.some(i => i.asset === asset)) missing.push(asset);
+                    if (!tools.some(i => i.asset === asset)) missing.push(asset);
                 });
             }
             return missing;
@@ -238,11 +234,10 @@ const Elyxir = ({ infoAccount }) => {
         [tools, ingredients]
     );
 
-    const [tabIndex, setTabIndex] = useState(0);
-
     const handleTabsChange = index => {
         setTabIndex(index);
     };
+
     return (
         <Box maxW={'100%'} px={4} py={6}>
             <Tabs

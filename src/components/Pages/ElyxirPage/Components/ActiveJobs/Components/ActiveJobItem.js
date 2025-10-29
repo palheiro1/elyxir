@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getBlock } from '../../../../../../services/Ardor/ardorInterface';
 import { formatTimeStamp } from '../../../../../../utils/blockchain';
+import { formatSuccessRate } from '../../../../../../utils/elyxirUtils';
 
 /**
  * @name ActiveJobItem
@@ -22,8 +23,6 @@ const ActiveJobItem = ({ job, isComplete, progress }) => {
 
     const potions = items.filter(item => item.type === 'potion');
     const craftedPotion = potions?.find(potion => potion?.asset === job?.creationAssetId);
-
-    const successRate = Math.trunc(job?.successProbability * 10000) / 100;
 
     useEffect(() => {
         const getJobBlock = async () => {
@@ -45,7 +44,7 @@ const ActiveJobItem = ({ job, isComplete, progress }) => {
             <Stack direction={'column'} justify="space-between" mb={2}>
                 <Stack direction={'row'}>
                     <Text fontWeight="bold" color={isComplete ? 'green.700' : 'orange.700'}>
-                        🧪 {craftedPotion?.name}
+                        🧪 {craftedPotion?.description}
                     </Text>
                     <Badge colorScheme="purple" variant="subtle">
                         x{job.flaskMultiplier}
@@ -57,7 +56,7 @@ const ActiveJobItem = ({ job, isComplete, progress }) => {
             </Stack>
             <Stack direction={'row'} spacing={4} mb={2}>
                 <Text fontSize="sm" color="gray.600">
-                    📊 Success Rate: <strong>{successRate}%</strong>
+                    📊 Success Rate: <strong>{formatSuccessRate(job?.successProbability)}%</strong>
                 </Text>
             </Stack>
             <Progress

@@ -20,29 +20,33 @@ class APIMonitor {
     shouldAllowCall(endpoint) {
         const now = Date.now();
         const windowStart = now - this.WINDOW_SIZE;
-        
+
         // Get or create call history for this endpoint
         if (!this.calls.has(endpoint)) {
             this.calls.set(endpoint, []);
         }
-        
+
         const callHistory = this.calls.get(endpoint);
-        
+
         // Remove calls outside the current window
         const recentCalls = callHistory.filter(time => time > windowStart);
         this.calls.set(endpoint, recentCalls);
-        
+
         // Check if we're under the limit
         if (recentCalls.length >= this.MAX_CALLS_PER_MINUTE) {
-            console.warn(`⚠️ API Monitor: Rate limit exceeded for ${endpoint}. Calls in last minute: ${recentCalls.length}`);
+            console.warn(
+                `⚠️ API Monitor: Rate limit exceeded for ${endpoint}. Calls in last minute: ${recentCalls.length}`
+            );
             return false;
         }
-        
+
         // Record this call
         recentCalls.push(now);
         this.calls.set(endpoint, recentCalls);
-        
-        console.log(`✅ API Monitor: Allowing call to ${endpoint}. Recent calls: ${recentCalls.length}/${this.MAX_CALLS_PER_MINUTE}`);
+
+        console.log(
+            `✅ API Monitor: Allowing call to ${endpoint}. Recent calls: ${recentCalls.length}/${this.MAX_CALLS_PER_MINUTE}`
+        );
         return true;
     }
 
@@ -54,16 +58,16 @@ class APIMonitor {
         const stats = {};
         const now = Date.now();
         const windowStart = now - this.WINDOW_SIZE;
-        
+
         for (const [endpoint, callHistory] of this.calls.entries()) {
             const recentCalls = callHistory.filter(time => time > windowStart);
             stats[endpoint] = {
                 recentCalls: recentCalls.length,
                 limit: this.MAX_CALLS_PER_MINUTE,
-                lastCall: recentCalls.length > 0 ? new Date(Math.max(...recentCalls)).toISOString() : 'Never'
+                lastCall: recentCalls.length > 0 ? new Date(Math.max(...recentCalls)).toISOString() : 'Never',
             };
         }
-        
+
         return stats;
     }
 
