@@ -1583,5 +1583,139 @@
         ],
         "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d37129.08398555025!2d81.30673244651027!3d6.414470086058173!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae4260426c19ea1%3A0x722d6bf359bc2aca!2sKataragama%2C%20Sri%20Lanka!5e1!3m2!1sen!2ses!4v1745915088397!5m2!1sen!2ses' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>",
         "assetname": "mythical68"
+    },
+    {
+        "name": "Bonnaco",
+        "country": "Roman Empire",
+        "continent": "Europe",
+        "picture": "bonnaco.jpg",
+        "rarity": "Epic",
+        "creature": [
+            "Roman writers tell of a strange beast from Paeonia, north of Macedonia, as large as a bull yet wearing a horse’s mane and a pair of horns so tightly curled inward that they are useless in a fight. Hunted for sport, it relied on no charge or gore to save itself. Instead, when riders drew too near, the Bonnaco spun about and fled at great speed, blasting behind it a stream of burning dung that seared the ground, singed men and dogs, and forced pursuit to a halt. Hunters learned to keep their distance, for the creature’s trail could scorch a field and choke the air with a caustic reek.",
+            "Some said it grazed in open woodland and steppe, shy unless harried, its strength found in swiftness rather than battle. Others swore that its hide was thick and dark, the mane coarse, and the tail lashing as it ran, leaving a stinging wake that made the earth smoke. Reports placed it firmly in the Roman world: a provincial quadruped of the Balkans, known by rumor, travelers’ tales, and the notebooks of natural historians. Centuries later, storytellers kept the details— the inward horns, the fiery defense, the gleeful escape— and copied them into bestiaries, sometimes moralizing the episode but always keeping the same lesson: the Bonnaco is less a killer than a comic danger, a beast whose only weapon is the indignity of its blazing retreat."
+        ],
+        "landscape": "roman.jpg",
+        "culture": [
+            "Rome begins as a union of villages in the Lazio, under a monarchy. As it stacks up victories and absorbs neighbors, the crown gives way to a Republic with checks and balances and a legal notion of citizenship able to absorb different peoples. With a military ethos, the Republic secures the peninsula and projects power across the Mediterranean, accumulating wealth and enemies. Near‑constant war enlarges the army and the authority of its commanders opens the door to the personal concentration of power in Octavian Augustus. The Empire begins.",
+            "At its height, a long relative peace takes hold. The state stitches the territory together with roads, ports, and aqueducts; citizenship spreads and draws in the elites of conquered peoples, and the new ethnic diversity is accommodated by an official cult that legitimizes power and by tolerance of local cults. The economy runs on large estates, workshops and maritime trade, with heavy reliance on slavery. The army guards the frontiers, but new conquests become rarer and harder.",
+            "When expansion slows, cracks appear: bloody successions, civil wars, and fiscal strain. The Empire splits into western and eastern branches, and Germanic groups from northern Europe exploit the opening. The western capital is sacked more than once, and the European territories pass into the hands of so‑called “barbarian” kingdoms, while in the East the Empire endures for many centuries. The legacy is clear: a body of law that inspires modern codes, a network of roads that shaped regions, and the idea of citizenship as the basis for political integration.",
+            "TOTAL POPULATION AT ITS PEAK: 65.000.000 (25% of global population at 117 AD)."
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7249.804900539512!2d21.195394472907576!3d41.27418845331241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1354159f70bc4809%3A0xe0f25ad6c81fc5b1!2sMaced%C3%B4nia%20do%20Norte!5e1!3m2!1spt-PT!2ses!4v1761899806729!5m2!1spt-PT!2ses' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>",
+        "assetname": "mythical69"
+    },
+    {
+        "name": "Olgoi-Khorkhoi",
+        "country": "Mongol Empire",
+        "continent": "Asia",
+        "picture": "olgoi.jpg",
+        "rarity": "Epic",
+        "creature": [
+            "A creature from the Gobi Desert, linked to the imagination of Mongolian nomads. It has the thick body of a huge worm, approximately 60 cm to 1.5 m long. Its color ranges from bright red to ochre, with a moist sheen. It has no distinct head, eyes, or visible limbs, appearing to have 'two equal ends'; it moves by undulations and can submerge itself in the sand as if it were water.",
+            "Although not particularly ferocious, it is a dangerous being: when disturbed, it expels a highly caustic yellow liquid that burns skin, leather, and metal. In some versions, it emits an electric shock that paralyzes from a distance. It is said to avoid prolonged confrontation: it emerges, attacks, and then returns to hide beneath the surface, leaving few clues beyond fright and fleeting marks on the ground.",
+            "Its relationship with humans is one of caution. Shepherds and caravanners avoid certain dune belts during the heat of summer and after storms, when the worm is most active. It is recommended not to touch suspicious carcasses, not to dig your hands into wet sand, and to probe the ground with sticks before advancing with people or livestock. The name is treated with respect and rarely uttered unnecessarily, also serving as a warning to children and newcomers to the Gobi.",
+            "The first written record in a Western language dates from the early 20th century, with reports collected in Mongolia; expeditions in the 20th and 21st centuries have produced no material evidence. The story, however, remains alive in books and documentaries, preserving the idea of a hidden danger beneath the sand."
+        ],
+        "landscape": "mongol.jpg",
+        "culture": [
+            "The Mongol Empire emerged as a confederation of steppe herder tribes, forged by alliances sworn to its founder, Genghis Khan, in 1206 AD. As it integrated clans and subjugated neighbors, a single authority imposed common law and meritocratic rule. Its lightning-fast mobility and the psychological terror that provoked its famous cruelty broke the resistance of millennia-old kingdoms in weeks and opened corridors from one end of Eurasia to the other. Within a few decades, Mongol herders dominated the largest empire in history, over the ruins of millennia-old entities like China and Persia, and reaching Eastern Europe.",
+            "At its peak, a corridor peace was established along the great routes. The state bound space with post stations and safe-conducts; it protected merchants, encouraged fairs and cities, and governed with pragmatism: co-opted local elites, censuses and direct taxation, and declared religious tolerance. The economy stimulated caravans, tributes in kind and currency when convenient; techniques, maps, and ideas circulated at an unprecedented pace.",
+            "But the expansion of the territory also weakened loyalty oaths, and local powers soon became independent of the Khan. The empire would not survive the century after its birth, divided into small khanates and finally expelled from China, back to the steppes. It remains in history as a locust that swept across Asia and Europe, lessons learned from unconventional warfare, a more integrated Eurasian corridor, and habits of administrative tolerance.",
+            "Today, their descendants, the Mongols, are a peaceful people between Russia and China, still inhabiting the steppes where Genghis Khan rode.",
+            "TOTAL POPULATION AT ITS PEAK: 110.000.000 (25% of global population at 1300 AD)."
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d172248.60839495566!2d104.45033544947415!3d44.89156279241635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5d85ee905286f453%3A0xa14d10f1f1086199!2sGobi%20Desert!5e1!3m2!1spt-PT!2ses!4v1761899977553!5m2!1spt-PT!2ses' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>",
+        "assetname": "mythical70"
+    },
+    {
+        "name": "Fu",
+        "country": "Kanem-Bornu Empire",
+        "continent": "Africa",
+        "picture": "fu.jpg",
+        "rarity": "Special",
+        "creature": [
+            "It is a spirit of the banks and marshes of ancient Kanem-Bornu. It belongs to the freshwater domain and primarily manifests itself on reed islands, in shallow canals and inlets. It has no material form. It reveals it presence through subtle signs: a gentle breeze raising mist from the water, an inexplicable ripple, or a brief ripple touching the bank and disappearing. Shepherds have described seeing a moist sheen on the surface of the water, and sometimes a rounded shadow breaking the surface and disappearing without a sound.",
+            "It has the power to call and command, especially over domestic animals. At dusk, a brief breath—'fu, fu, fu'—brings cattle closer and gathers them together. On unstable nights, it calms calves and guides cows to solid ground. However, if it is offended, it scatters the herd, raising mist that obscures trails and lures the unwary into the mudflats.",
+            "Its relationship with humans is ritualised. At dusk, bonfires are lit by the water's edge, the first sip of milk is poured onto the ground as a gesture of respect, and people avoid entering the reeds after sunset. They also refrain from boasting loudly about the abundance of their livestock. During floods, elders recommend probing the bottom with a stick and advancing slowly so as not to 'cut' the spirit's path.",
+            "Among the Kanembu/Kanuri, the name 'Fu' is common; among the neighbouring Fulbe (Shuwa), however, variants appear without a proper name, referring only to the 'djinn of the water'. Stories concentrate on the mat islands and bays of Lake Chad — from the Chadian side to the shores of Nigeria, Niger and Cameroon."
+        ],
+        "landscape": "kanem.jpg",
+        "culture": [
+            "The Kanem-Bornu Empire formed around Lake Chad in the 8th century, founded by Kanembu herders and caravanners who made the oasis a hub for trans-Saharan trade. A nomadic people, without any cities, living in reed huts, their military advantage made the Duguwa dynasty a strong regional power. ",
+            "The adoption of Islam in the 9th century by the long-lived Sefuwa dynasty (850-1846) reenergized the empire, which established the first cities and centered its economy on the slave trade. Camel caravans crisscrossed the territory, connecting Bornu with the routes to Tripoli, Kawar, and Hausaland. In the late Middle Ages, internal pressures and the advance of the Bulala forced the court to move from Kanem to Bornu, west of the lake. At its height, under King Idris Aluma (16th century), the state gained military discipline and a more stable administration: permanent fortresses and camps, caravan posts, diplomacy with Tripoli and the Ottomans, justice inspired by Islamic law, and censuses.",
+            "In the early 19th century, new, more energetic imperial foci undermined the authority of this ancient empire, especially the jihad of the Fulani herders. The empire reorganized its defenses and maintained its political core, but at the end of the 19th century, the invader Rabih az-Zubayr defeated the old dynasty; subsequently, European powers divided the Chad Basin.",
+            "The legacy persists in the Kanuri identity, in the lasting Islamization, in the caravan routes, and in regional centers that inherited the functions of capital. The current descendants retain the language and pride in their past and number some ten million people distributed throughout Nigeria, Niger, Chad, Sudan, and Cameroon.",
+            "TOTAL POPULATION AT ITS PEAK: 4,000,000 (0.5% of the global population in 1600 AD)."
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d50205.81388402909!2d13.957909810491563!3d13.43003354414904!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1spt-PT!2ses!4v1761900084709!5m2!1spt-PT!2ses' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>",
+        "assetname": "mythical71"
+    },
+    {
+        "name": "Seketo'a",
+        "country": "Tu'i Tonga Empire",
+        "continent": "Oceania",
+        "picture": "seketoa.jpg",
+        "rarity": "Rare",
+        "creature": [
+            "This coastal creature of Tonga is linked to the Tuʻi Tonga tradition. It lives in the reefs and channels between the islands and the open ocean. Resembling a large oceanic shark, it has a robust body, a dark back and a light belly, as well as well-defined fins. It has a distinctive white scar near the base of its dorsal fin, which is how elders recognise it. It moves slowly near the edge of the reef before disappearing in a vertical dive.",
+            "Its role is to guard and guide. It protects reef passages, wards off aggressive sharks and accompanies canoes in strong tides. If it is offended, it signals its discomfort by raising short eddies or making the water 'heavy', indicating that it is time to turn back. If this is not enough, it can confuse the route or break a paddle. It has a respectful relationship with humans. Fishermen say a short prayer before setting off and leave the first fish they catch in the water as an offering. Shouting or banging on the hull is avoided when a large shark appears near the reef. In families that consider him their protector, discreet tattoos of fins or teeth resemble a lasso.",
+            "It is related to the shark spirits of the Tongan and Samoan islands. References to him can be found in sailors' songs, family stories and the notebooks of missionaries and ethnographers. Today, he is still present in canoe-launching ceremonies, local emblems and the conversations of those who are still learning to read reefs."
+        ],
+        "landscape": "tonga.jpg",
+        "culture": [
+            "The Tuʻi Tonga Empire emerged in Tongatapu around the 10th century, when a sacred lineage transformed scattered chiefdoms into a hereditary monarchy. Neighbors were integrated through marriage alliances, tributes, and protection on the open sea. The court organized ceremonies that placed the sovereign at the center of the social order and made the sea a stable waterway, where each reef passage had rules and guardians.",
+            "At its height, between the 12th and 13th centuries, thalassocracy created continuity between archipelagos now called Tonga, Samoa, Wallis and Futuna, and parts of Fiji and Niue. Across the half-million square kilometers controlled by the Empire, circulation became predictable: double canoes linked islands, ritual hospitality welcomed emissaries, and exchanges passed through the palace. Production combined intensive gardening, fishing, and prestigious arts, united by a system of donation and redistribution that affirmed hierarchies without breaking cohesion.",
+            "Over time, distance weakens obedience, and the network itself requires adjustments. The government separates functions: a Tuʻi Haʻatakalaua handles administration, while Tuʻi Tonga maintains ritual primacy. Later, the Tuʻi Kanokupolu branch rebalances power. European contact and Christianization in the 19th century shift alliances, warfare techniques, and beliefs, and the ancient maritime confederacy gives way to a centralized kingdom.",
+            "Today, Tonga is a constitutional monarchy with a strong diaspora in the Pacific and beyond. Language, kava, and traditional navigation continue to shape the social landscape, while schools, migration, and modern jobs coexist with horticulture and fishing on the islands that once recognized the primacy of the Tu'i Tonga.",
+            "TOTAL POPULATION AT ITS PEAK: 250,000 (≈0.06% of the world population in 1300 AD)."
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d119608.36785350893!2d-175.02547816148103!3d-21.21304658753172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1spt-PT!2ses!4v1761900169267!5m2!1spt-PT!2ses' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>",
+        "assetname": "mythical72"
+    },
+    {
+        "name": "Titiqaqa Amaru",
+        "country": "Tawantinsuyu Empire",
+        "continent": "America",
+        "picture": "titiqaqa.jpg",
+        "rarity": "Rare",
+        "creature": [
+            "This aquatic creature is found in Lake Titicaca in the Andean highlands and is linked to the Quechua and Aymara communities in the region. It has a robust body that is three to four metres long and is covered in short brown fur. Its broad, bear-like head has a blunt snout and a small tuft on its forehead, which is noticeable when it emerges from the water. Its back is barely visible as the animal swims close to the surface, leaving only a subtle V-shaped wake that suddenly disappears in a vertical dive. On calm days, it may sun itself on warm rocks, but it moves away at the slightest noise.",
+            "This elusive creature can be sighted after storms, when the lake rises and the foam becomes heavy. Anyone who disturbs it or tries to surround it will receive a short blast, almost like a snort, before the water closes again. It does not attack people; its only defence is fright.",
+            "Its relationship with humans is one of cautious respect. Before casting their nets, some fishermen make a simple gesture to the water, asking for safe passage. When an encounter occurs, the custom is to remain silent, gather their oars and move aside, as if yielding passage to an ancient resident.",
+            "Sightings are concentrated in the deep coves and backwaters of Copacabana, the Tiquina Strait and the Sun and Moon Islands, which are protected from the wind. Although written records are recent, they echo an older narrative. Science has not corrected this narrative, but it endures in the stories told by boatmen and in the signs that shape the lake's use."
+        ],
+        "landscape": "tawantinsuyu.jpg",
+        "culture": [
+            "The Inca Empire, Tawantinsuyu, was born in Cusco, Peru, in 1438 AD, in an Andean valley over 3,000 meters above sea level, populated by shepherds. A local dynasty transformed kinship alliances into territorial power and embarked on the conquest of neighboring tribes. With skillful diplomacy and the constant use of war, the famous Pachacuti organized his domains as a proto-socialist state, where the economy was completely planned by state and priestly bureaucracies. As a religion, a cult of the Sun legitimized the Sapa Inca, while the mummies of past kings continued to participate in ceremonies.",
+            "At its height, Tawantinsuyu stretched from present-day Ecuador to central Chile and northwestern Argentina. Internal peace kept the routes active; tambos, bridges, and depots made travel and supplies predictable, and quipus allowed for the counting of people, herds, and tribute. The land is divided between the state, temples, and communities; terraces and canals sustain high-altitude agriculture; llama caravans and mitmaqkuna movements spread techniques and loyalties among the provinces.",
+            "The decline began before the Spanish arrival. Diseases from the north disrupted the fields and the court, and the civil war between Huáscar and Atahualpa fragmented the elite. The Spaniard Pizarro took advantage of the vacuum and crushed the resistance, which ended in 1572. Thus ended the history of this atypical empire that ruled millions of people without needing to master metals, wheels, writing, or currency.",
+            "The legacy remains in place names and the Quechua language, in still-cultivated terraces, in forms of collective labor, and in a road layout that shaped the Andes for centuries. Today's Andean communities live within modern republics, but they remain heirs to this order.",
+            "POPULATION AT ITS PEAK: 12,000,000 (≈2.5% of the world population in 1500 AD)."
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d453247.4654584366!2d-69.35448400594207!3d-15.79762897228078!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1spt-PT!2ses!4v1761900276471!5m2!1spt-PT!2ses' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>",
+        "assetname": "mythical73"
+    },
+    {
+        "name": "Gumiho",
+        "country": "Goguryeo Empire",
+        "continent": "Asia",
+        "picture": "gumiho.jpg",
+        "rarity": "Common",
+        "creature": [
+            "The gumiho (구미호), or 'nine-tailed fox', is a spirit from the Korean peninsula. Linked to hills, forests and misty valleys, it inhabits the threshold between the wild world and villages and prefers to emerge at dusk, when the boundaries become blurred. In its usual form, it is a large fox with thick fur and nine tails that fan out like a fan. Its eyes glow in the cold light and, when it runs, its tails undulate like will-o'-the-wisps. It leaves no footprints or scent and can move across dry leaves without breaking them.",
+            "Its most feared trait is its ability to transform. The gumiho takes on the appearance of a young woman with a sweet voice and impeccable manners. It approaches isolated houses, invites lost travellers and asks for hospitality or love. In some versions, she is described as a predator seeking human livers or hearts, believing that eating them will allow her to transform into a human. In others, she only tastes humans who lie, break oaths or abuse hospitality. In rare narratives, after a hundred or a thousand years of good behaviour, she can become fully human.",
+            "Her relationship with humans is ambiguous. Villagers avoid mountain trails at dusk and are suspicious of strangers without shadows or reflections. Common protections include amulets, written talismans, and dogs; cold iron and the sound of temple bells also bother her. There are tales in which a sincere pact — food offered without greed or a promise kept — disarms the creature and saves people."
+        ],
+        "landscape": "goguryeo.jpg",
+        "culture": [
+            "Goguryeo emerged from agricultural and pastoral Yemaek communities amid mountains, cold valleys and plateaus in the far northeast of Asia. According to tradition, it was founded in 37 BC in the Yalu/Amnok Valley by a warrior royalty who integrated tribes under local chieftains (bu) and imposed discipline through laws, tributes and military service on the borders of the long-standing Chinese Empire. The court adopted Chinese characters for administration purposes and, from 372 AD onwards, patronised Buddhism, which provided temples, iconography and a shared language of legitimacy. This marked the beginning of a period of territorial expansion based on swift wars and diplomacy.",
+            "At its peak under Gwanggaeto (391–413) and Jangsu, the kingdom expanded to encompass southern Manchuria and the northern part of the Korean Peninsula, extending west to the middle Liao and south to Pyongyang. Defence relied on mountain citadels, stone walls and heavy cavalry, while roads, warehouses and garrisons were used to control rivers and gorges. The economy combined high-altitude agriculture, hunting and the trade of furs, iron and salt, and the capital in Pyongyang became a political and ritual centre. Missions and treaties with neighbouring states secured trade routes and prisoners of war, while painted tombs displaying courts, warriors, and deities were a sign of a confident aristocracy.",
+            "The kingdom began to decline when its neighbours were reorganised and tested its borders. Wars with the Sui and then the Tang dynasties depleted its resources and caused alliances to shift, leaving the kingdom isolated. In 668, Pyongyang fell and part of the elite and population migrated north and east.",
+            "The legacy endures in the form of the successor kingdoms: Balhae adopts Goguryeo's political landscapes and military techniques, while Goryeo (from which the name 'Korea' originates) regains its peninsular ambition. The memory of Goguryeo lives on in its mountain fortresses, Buddhist repertoire, tomb paintings and the concept of a state capable of uniting Manchuria and Korea under a single crown.",
+            "TOTAL POPULATION AT ITS PEAK: 2,000,000 (≈1% of the world population in 500 AD)."
+        ],
+        "maplink": "<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1781.5955071455717!2d125.59806328458532!3d39.97371722727583!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356e1f4f94b90bd5%3A0x5c0042c41bbc6615!2sAmnok-gil%2C%20Ogok-myeon%2C%20Gorseong%2C%20Jeollanam-do%2C%20Coreia%20do%20Sul!5e1!3m2!1spt-PT!2ses!4v1761900424821!5m2!1spt-PT!2ses' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>
+",
+        "assetname": "mythical74"
     }
 ]
