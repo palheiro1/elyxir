@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Box, useDisclosure } from '@chakra-ui/react';
 
-import { handleItemsTransaction } from './TableHandlers';
-import { 
-    handleType2AndSubtype1, 
-    handleType2AndSubtype2And3, 
-    handleType2AndSubtype4And5,
+import {
+    handleIncomingGIFTZ,
+    handleItemsTransaction,
     handleType0AndSubtype0,
     handleType1AndSubtype0,
-    handleType5AndSubtype3
+    handleType2AndSubtype1,
+    handleType2AndSubtype2And3,
+    handleType2AndSubtype4And5,
+    handleType5AndSubtype3,
 } from './TableHandlers';
 
 import ShowTransactions from './ShowTransactions';
@@ -101,27 +102,10 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
         const processTransactions = () => {
             let newTransactions = [];
 
-            const dirtyTransactions = infoAccount.transactions || [];
-            console.log('Processing transactions:', dirtyTransactions?.length, 'total transactions');
+            const dirtyTransactions = infoAccount.transactions;
 
-            dirtyTransactions.forEach((tx, index) => {
-                // Process transactions for both Elyxir items and MB cards
-                const isItem = tx.attachment?.asset && isItemAsset(tx.attachment.asset);
-                const isCard = tx.attachment?.asset && isMBAsset(tx.attachment.asset);
-                
-                // Debug logging for first few transactions
-                if (index < 5) {
-                    console.log(`Transaction ${index}:`, {
-                        type: tx.type,
-                        subtype: tx.subtype,
-                        asset: tx.attachment?.asset,
-                        isItem,
-                        isCard,
-                        fullTx: tx
-                    });
-                }
-                
-                if (isItem || isCard || tx.type === 0 || tx.type === 1 || tx.type === 5) {
+            dirtyTransactions.forEach(tx => {
+                if (isMBAsset(tx.attachment.asset) || !tx.attachment.asset || isItemAsset(tx.attachment.asset)) {
                     const timestamp = getTxTimestamp(tx, epoch_beginning);
                     const type = tx.type;
                     const subtype = tx.subtype;
@@ -129,78 +113,56 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
 
                     switch (type) {
                         case 0:
-                            if (subtype === 0) {
+                            if (subtype === 0)
                                 // Money transfer
                                 handler = handleType0AndSubtype0(tx, timestamp, infoAccount);
-                            }
                             break;
                         case 1:
-                            if (subtype === 0) {
+                            if (subtype === 0)
                                 // Message
                                 handler = handleType1AndSubtype0(tx, timestamp, infoAccount);
-                            }
                             break;
                         case 2:
-                            if (subtype === 1) {
-                                if (isItem) {
-                                    // Items transfer
-                                    handler = handleItemsTransaction(tx, timestamp, infoAccount, items);
-                                } else if (isCard) {
-                                    // Card transfer
-                                    handler = handleType2AndSubtype1(tx, timestamp, infoAccount, collectionCardsStatic);
-                                }
-                            } else if (subtype === 2 || subtype === 3) {
-                                // Asset exchange (ask/bid orders)
+                            if (subtype === 1)
+                                // GEM & Card transfer
+                                handler = handleType2AndSubtype1(tx, timestamp, infoAccount, collectionCardsStatic);
+                            if (subtype === 2 || subtype === 3)
+                                // GEM & Card exchange
                                 handler = handleType2AndSubtype2And3(tx, timestamp, infoAccount, collectionCardsStatic);
-                            } else if (subtype === 4 || subtype === 5) {
-                                // Order cancellation
+                            if (subtype === 4 || subtype === 5)
+                                // Cancelled order
                                 handler = handleType2AndSubtype4And5(tx, timestamp, infoAccount);
+                            if (isItemAsset(tx.attachment.asset)) {
+                                // Items transfer
+                                handler = handleItemsTransaction(tx, timestamp, infoAccount, items);
                             }
                             break;
                         case 5:
-                            if (subtype === 3) {
-                                // Account control
+                            if (subtype === 3)
+                                // Currency transfer
                                 handler = handleType5AndSubtype3(tx, timestamp, infoAccount);
-                            }
+                            if (subtype === 5 && tx.senderRS === infoAccount.accountRs)
+                                // Incoming GIFTZ (NOT WORKING)
+                                handler = handleIncomingGIFTZ(tx, timestamp, infoAccount);
                             break;
                         default:
                             break;
                     }
 
-                    if (handler) {
-                        newTransactions.push(handler);
-                        if (index < 5) {
-                            console.log(`Handler result for transaction ${index}:`, handler);
-                        }
-                    } else if (index < 5) {
-                        console.log(`No handler found for transaction ${index}, type: ${type}, subtype: ${subtype}`);
-                    }
+                    if (handler) newTransactions.push(handler);
                 }
             });
 
-            console.log('Processed transactions result:', newTransactions.length, 'transactions processed');
-            console.log('First few processed transactions:', newTransactions.slice(0, 3));
-            setDividends(infoAccount.dividends || []);
+            setDividends(infoAccount.dividends);
             setTransactions(newTransactions);
             setNeedReload(false);
         };
 
-        console.log('History useEffect dependencies check:', {
-            hasTransactions: infoAccount.transactions !== undefined,
-            hasCollectionCards: collectionCardsStatic !== undefined,
-            collectionCardsLength: collectionCardsStatic?.length,
-            needReload,
-            transactionsLength: infoAccount.transactions?.length,
-            collectionCardsType: typeof collectionCardsStatic
-        });
-
-    infoAccount.transactions !== undefined &&
-        Array.isArray(infoAccount.transactions) &&
-        collectionCardsStatic !== undefined &&
-        collectionCardsStatic.length > 0 &&
-        needReload &&
-        processTransactions();
-    }, [infoAccount, epoch_beginning, needReload, collectionCardsStatic, items]);
+        infoAccount.transactions !== undefined &&
+            collectionCardsStatic !== undefined &&
+            needReload &&
+            processTransactions();
+    }, [infoAccount, transactions, epoch_beginning, needReload, collectionCardsStatic, items]);
 
     return (
         <>

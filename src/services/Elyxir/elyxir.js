@@ -114,7 +114,6 @@ export const sendCraftPotionMessage = async ({
     passphrase,
     blockId,
 }) => {
-    console.log('🚀 ~ sendCraftPotionMessage ~ flaskAssetId:', flaskAssetId);
     try {
         const jobId = uuid();
 
@@ -128,9 +127,7 @@ export const sendCraftPotionMessage = async ({
             testMode: true,
             blockId,
         });
-        console.log('🚀 ~ sendCraftPotionMessage ~ message:', message);
 
-        // return false;
         return await sendMessage({ recipient: OMNO_ACCOUNT, message, passPhrase: passphrase });
     } catch (error) {
         console.error('🚀 ~ sendCraftPotionMessage ~ error:', error);

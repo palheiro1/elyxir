@@ -2,10 +2,9 @@ import { Box, Select, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaFilter } from 'react-icons/fa';
 import { BsArrowDownUp } from 'react-icons/bs';
-import { isElyxirAsset } from '../../data/CONSTANTS';
 
 const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTransactions }) => {
-    const [/*filter*/, setFilter] = useState('all');
+    const [filter, setFilter] = useState('all');
     const [sort, setSort] = useState('newest');
 
     const handleSort = e => {
@@ -17,31 +16,19 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
     };
 
     useEffect(() => {
-        // Show only Elyxir-related transactions: items, GEM, and IGNIS
         const filterTransactions = transactions => {
-            return transactions.filter(transaction => {
-                console.log('Filtering transaction:', {
-                    type: transaction.type,
-                    attachment: transaction.attachment,
-                    asset: transaction.attachment?.asset,
-                    isElyxirAsset: transaction.attachment?.asset ? isElyxirAsset(transaction.attachment.asset) : false
-                });
-                
-                // Include IGNIS currency transactions (native currency, no asset ID)
-                if (transaction.type === 'payment' && !transaction.attachment?.asset) {
-                    console.log('Including IGNIS transaction');
-                    return true;
-                }
-                
-                // Include transactions for specific Elyxir assets (including GEM)
-                if (transaction.attachment?.asset && isElyxirAsset(transaction.attachment.asset)) {
-                    console.log('Including Elyxir asset transaction:', transaction.attachment.asset);
-                    return true;
-                }
-                
-                console.log('Excluding transaction');
-                return false;
-            });
+            switch (filter) {
+                case 'all':
+                    return transactions;
+                case 'placed':
+                    return transactions.filter(({ type }) => type === 'ask' || type === 'bid');
+                case 'currency':
+                    return transactions.filter(({ isCurrency }) => isCurrency);
+                case 'items':
+                    return transactions.filter(({ isItem }) => isItem);
+                default:
+                    return transactions.filter(({ type }) => type === filter);
+            }
         };
 
         const sortTransactions = transactions => {
@@ -57,7 +44,7 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
             setFilteredTransactions(sortedTransactions);
             setVisibleTransactions(10);
         }
-    }, [transactions, sort, setFilteredTransactions, setVisibleTransactions]);
+    }, [transactions, filter, sort, setFilteredTransactions, setVisibleTransactions]);
 
     const borderColor = '#3b7197';
     const textColor = useColorModeValue('#3b7197', 'white');
@@ -106,7 +93,6 @@ const SortAndFilterTxs = ({ transactions, setFilteredTransactions, setVisibleTra
                         <option value="all">All transactions</option>
                         <option value="in">Received</option>
                         <option value="out">Sent</option>
-                        <option value="cards">Cards</option>
                         <option value="items">Items</option>
                         <option value="currency">Currencies</option>
                         <option value="placed">Trades</option>

@@ -9,7 +9,7 @@ import TableCard from '../../Cards/TableCard';
 
 // Utils
 import { calculateFixedAmount, getReason, parseJson, parseRecipient, parseSender } from '../../../utils/txUtils';
-import { BOUNTYACCOUNT, NQTDIVIDER, OMNO_ACCOUNT, isElyxirAsset } from '../../../data/CONSTANTS';
+import { BOUNTYACCOUNT, NQTDIVIDER, OMNO_ACCOUNT } from '../../../data/CONSTANTS';
 import { getAsset } from '../../../utils/cardsUtils';
 import GemCard from '../../Cards/GemCard';
 import IgnisCard from '../../Cards/IgnisCard';
@@ -87,14 +87,8 @@ export const handleType2AndSubtype1 = (tx, timestamp, infoAccount, collectionCar
     let handler = null;
     if (asset === 'GEM') {
         handler = handleGEM(inOut, fixedAmount, timestamp, sender);
-    } else if (asset === 'GIFTZ') {
-        handler = handleGIFTZ(inOut, fixedAmount, timestamp, sender);
     } else if (asset === 'WETH') {
         handler = handleWETH(inOut, fixedAmount, timestamp, sender);
-    } else if (asset === 'MANA') {
-        handler = handleMANA(inOut, tx.attachment.quantityQNT, timestamp, sender);
-    } else {
-        handler = handleCardTransfer(inOut, fixedAmount, timestamp, sender, asset);
     }
     return handler;
 };
@@ -156,26 +150,7 @@ export const handleType5AndSubtype3 = (tx, timestamp, infoAccount) => {
 };
 
 export const handleItemsTransaction = (tx, timestamp, infoAccount, itemsColection) => {
-    if (!itemsColection || itemsColection.length === 0) {
-        // Items not loaded yet, skip for now
-        return;
-    }
-    let itemAsset = itemsColection.find(item => item.asset === tx.attachment.asset);
-    if (!itemAsset) {
-        if (isElyxirAsset(tx.attachment.asset)) {
-            // Fallback: create a minimal item object for Elyxir assets so transaction is not discarded
-            itemAsset = {
-                asset: tx.attachment.asset,
-                imgUrl: `/images/elyxir/unknown.png`, // fallback image, could be improved
-                description: `Elyxir Item (${tx.attachment.asset})`,
-                bonus: { type: 'unknown', power: 0 },
-            };
-            console.warn('handleItemsTransaction: Using fallback for Elyxir asset', tx.attachment.asset);
-        } else {
-            console.warn('handleItemsTransaction: Item asset not found for tx asset', tx.attachment.asset);
-            return; // Avoid crashing until items are available / synced
-        }
-    }
+    const itemAsset = itemsColection.find(item => item.asset === tx.attachment.asset);
     const inOut = getInOut(tx, infoAccount);
     if (!inOut) return;
 
@@ -564,7 +539,7 @@ export const handleItemsTransfer = (type, amount, date, account, item) => {
         return null; // Defensive: upstream should have validated, but avoid runtime crash
     }
     type = type.toLowerCase();
-    const { imgUrl, description, bonus } = item;
+    const { imgUrl, description, bonus, type: itemType } = item;
     const Component = () => {
         return (
             <Tr
@@ -580,21 +555,25 @@ export const handleItemsTransfer = (type, amount, date, account, item) => {
                     <Stack direction={'row'} align={'center'}>
                         <Image maxW="85px" src={imgUrl} />
                         <Stack direction={'column'}>
-                            <Text fontWeight="bold" fontSize="2xl">{description}</Text>
-                            <Stack direction="row" spacing={1}>
-                                <Text
-                                    px={2}
-                                    fontSize="sm"
-                                    bgColor={getColor(bonus)}
-                                    rounded="lg"
-                                    color="white"
-                                    textTransform={'capitalize'}>
-                                    {bonus.type} ({getTypeValue(bonus)})
-                                </Text>
-                                <Text fontSize="sm" color="green.400">
-                                    +{bonus.power} Power
-                                </Text>
-                            </Stack>
+                            <Text fontWeight="bold" fontSize="2xl">
+                                {description}
+                            </Text>
+                            {itemType === 'potion ' && (
+                                <Stack direction="row" spacing={1}>
+                                    <Text
+                                        px={2}
+                                        fontSize="sm"
+                                        bgColor={getColor(bonus)}
+                                        rounded="lg"
+                                        color="white"
+                                        textTransform={'capitalize'}>
+                                        {bonus.type} ({getTypeValue(bonus)})
+                                    </Text>
+                                    <Text fontSize="sm" color="green.400">
+                                        +{bonus.power} Power
+                                    </Text>
+                                </Stack>
+                            )}
                         </Stack>
                     </Stack>
                 </Td>
