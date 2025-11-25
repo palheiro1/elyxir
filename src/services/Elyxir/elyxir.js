@@ -124,7 +124,6 @@ export const sendCraftPotionMessage = async ({
             flaskAssetId,
             durationBlocks,
             jobId,
-            testMode: true,
             blockId,
         });
 
