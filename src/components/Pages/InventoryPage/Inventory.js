@@ -53,5 +53,4 @@ const Inventory = ({ infoAccount }) => {
         </Box>
     );
 };
-
 export default Inventory;

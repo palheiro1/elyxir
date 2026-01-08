@@ -2,7 +2,6 @@ import { Box, Heading, Image, Stack, Center } from '@chakra-ui/react';
 
 import LoginButtons from '../../components/Pages/LoginPage/LoginButtons/LoginButtons';
 import UserLogin from '../../components/Pages/LoginPage/UserLogin/UserLogin';
-import { useNavigate } from 'react-router-dom';
 
 /**
  * This component is used to render the login page
@@ -13,16 +12,14 @@ import { useNavigate } from 'react-router-dom';
  * @returns {JSX.Element} Login component
  */
 const Login = ({ setInfoAccount }) => {
-    const navigate = useNavigate();
-
     return (
         <Box px={8} mb={4}>
             <Center>
                 <Stack direction={{ base: 'column' }} spacing={8} pt={8} align="center" w={'100%'}>
                     <Image
-                        src="images/logos/s8.png"
+                        src="images/logos/ElyxirColor.png"
                         h={{ base: '100%', lg: '20%' }}
-                        w={{ base: '100%', md: '40%', lg: '30%', xl: '17%' }}
+                        w={{ base: '100%', md: '40%', lg: '40%', xl: '30%' }}
                     />
 
                     <Box w={{ base: '90%', md: '60%', lg: '40%', xl: '30%' }}>
@@ -31,16 +28,9 @@ const Login = ({ setInfoAccount }) => {
                             <strong>Elyxir</strong>
                         </Heading>
 
-
-                        <LoginButtons
-                            showNewUser={true}
-                            showRestore={true}
-                        />
+                        <LoginButtons showNewUser={true} showRestore={true} />
 
                         <UserLogin setInfoAccount={setInfoAccount} />
-  
-
-
                     </Box>
                 </Stack>
             </Center>

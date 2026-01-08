@@ -17,7 +17,9 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
     const { t } = useTranslation('navigation');
     const buttons = [
         {
-            icon: '/images/icons/menu/blanco/news.png',
+            icon: !isActive(5)
+                ? '/images/icons/menu/blanco/airdropsBlanco.png'
+                : '/images/icons/menu/color/airdropsColor.png',
             text: t('airdrops', { defaultValue: 'Airdrops' }),
             onClick: () => setOption(5),
             bgColor: isActive(5) ? 'white' : '#2F8190',
@@ -70,7 +72,9 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, set
             isActive: isActive(4),
         },
         {
-            icon: '/images/icons/menu/blanco/alchemy.png',
+            icon: isActive(10)
+                ? '/images/icons/menu/color/AlchemyColor.png'
+                : '/images/icons/menu/blanco/AlchemyBlanco.png',
             text: t('Alchemy'),
             onClick: () => {
                 setOption(10); // Elyxir section

@@ -93,7 +93,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
 
     // Get cards from Redux store
     const { cards } = useSelector(state => state.cards);
-    const { items } = useSelector(state => state.items);
 
     // Buy pack dialog
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -468,11 +467,10 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const components = useMemo(
         () => [
             <Overview />, // OPTION 0 - Overview
-            <Inventory infoAccount={infoAccount} cards={cardsFiltered} />, // OPTION 1 - Inventory
+            <Inventory infoAccount={infoAccount} />, // OPTION 1 - Inventory
             <History infoAccount={infoAccount} collectionCardsStatic={cards} haveUnconfirmed={haveUnconfirmed} />, // OPTION 2 - History
             <Market
                 infoAccount={infoAccount}
-                cards={cardsFiltered}
                 gemCards={gemCards}
                 giftzCards={giftzCards}
                 wethCards={wethCards}
