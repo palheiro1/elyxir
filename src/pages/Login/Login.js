@@ -1,4 +1,4 @@
-import { Box, Heading, Image, Stack, Center } from '@chakra-ui/react';
+import { Box, Heading, Image, Stack, Center, useColorModeValue } from '@chakra-ui/react';
 
 import LoginButtons from '../../components/Pages/LoginPage/LoginButtons/LoginButtons';
 import UserLogin from '../../components/Pages/LoginPage/UserLogin/UserLogin';
@@ -12,22 +12,20 @@ import UserLogin from '../../components/Pages/LoginPage/UserLogin/UserLogin';
  * @returns {JSX.Element} Login component
  */
 const Login = ({ setInfoAccount }) => {
+    const image = useColorModeValue('ElyxirColor.png', 'ElyxirColorBlack.png');
     return (
         <Box px={8} mb={4}>
             <Center>
                 <Stack direction={{ base: 'column' }} spacing={8} pt={8} align="center" w={'100%'}>
+                    <Heading textAlign="center">Welcome to</Heading>
+
                     <Image
-                        src="images/logos/ElyxirColor.png"
+                        src={`images/logos/${image}`}
                         h={{ base: '100%', lg: '20%' }}
                         w={{ base: '100%', md: '40%', lg: '40%', xl: '30%' }}
                     />
 
                     <Box w={{ base: '90%', md: '60%', lg: '40%', xl: '30%' }}>
-                        <Heading textAlign={'center'}>
-                            Welcome to <br />
-                            <strong>Elyxir</strong>
-                        </Heading>
-
                         <LoginButtons showNewUser={true} showRestore={true} />
 
                         <UserLogin setInfoAccount={setInfoAccount} />

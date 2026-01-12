@@ -9,16 +9,12 @@ import {
     Link,
     useColorModeValue,
     useDisclosure,
-    Center,
-    Spacer,
 } from '@chakra-ui/react';
 
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
 
 import { ColorModeSwitcher } from '../ColorModeSwitch/ColorModeSwitcher';
 import { NAV_ITEMS } from '../../data/NAV_ITEMS';
-import Logo from '../Logo/Logo';
-import { Fragment } from 'react';
 import '@fontsource/abeezee';
 /**
  * This component is used to render the navigation bar
@@ -34,6 +30,8 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
     // -------------------------------------------------------------
     const needTarascaLogo = isHeader ? false : true;
     const needChangeColor = !isHeader ? false : true;
+
+    const buttonColor = useColorModeValue('black', 'white');
 
     return (
         <Box mt={needTarascaLogo ? 14 : 0} w={'100%'}>
@@ -52,7 +50,7 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
                             variant={'ghost'}
                             aria-label={'Toggle Navigation'}
                         />
-                        {needChangeColor && <ColorModeSwitcher position="absolute" right="2.5%" />}
+                        {needChangeColor && <ColorModeSwitcher color={buttonColor} position="absolute" right="2.5%" />}
                     </Flex>
                 )}
 
@@ -67,7 +65,7 @@ const Navigation = ({ isHeader = true, isLogged = false }) => {
                         position="absolute"
                         my={'7'}
                         right="2%"
-                        color={'#FFF'}
+                        color={buttonColor}
                         display={{ base: 'none', md: 'flex' }}
                     />
                 )}
