@@ -26,7 +26,7 @@ import BridgeItem from '../../../Items/BridgeItem';
 
 // Utils
 import { checkPin } from '../../../../utils/walletUtils';
-import { errorToast, infoToast, okToast } from '../../../../utils/alerts';
+import { infoToast, okToast } from '../../../../utils/alerts';
 
 /**
  * @name SwapToPolygon

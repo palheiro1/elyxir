@@ -9,7 +9,6 @@ import {
     Image,
     Stack,
     Text,
-    Spacer,
     SimpleGrid,
     useToast,
     Box,
@@ -32,21 +31,6 @@ const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) 
         accountRs,
         publicKey,
     } = infoAccount;
-    const parseWETH = parseFloat(WETHBalance);
-    const parseMANA = parseFloat(MANABalance);
-
-    const cleanDecimals = number => {
-        const aux = number.toString().split('.');
-        if (aux.length > 1) return aux[1].length || 0;
-        return 0;
-    };
-
-    let wEthDecimals = 0;
-    if (parseWETH) {
-        // const aux = parseWETH.toString().split('.');
-        // if (aux.length > 1) wEthDecimals = aux[1].length || 0;
-        wEthDecimals = cleanDecimals(parseWETH);
-    }
 
     const borderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
 

@@ -121,9 +121,6 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const [manaCardsHash, setManaCardsHash] = useState('');
     const [itemsHash, setItemsHash] = useState('');
 
-    // Filtered cards
-    const [cardsFiltered, setCardsFiltered] = useState(cards);
-
     // Uncorfirmed transactions
     const [unconfirmedTransactions] = useState([]);
 
@@ -479,7 +476,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             <Bridge
                 key={`bridge-${selectedBridgeType}`}
                 infoAccount={infoAccount}
-                cards={cardsFiltered}
+                cards={cards}
                 gemCards={gemCards}
                 giftzCards={giftzCards}
                 wethCards={wethCards}
@@ -493,17 +490,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             '', // OPTION 9 - OPEN PACK
             <Elyxir infoAccount={infoAccount} />, // OPTION 10 - Elyxir
         ],
-        [
-            infoAccount,
-            cards,
-            cardsFiltered,
-            gemCards,
-            haveUnconfirmed,
-            giftzCards,
-            wethCards,
-            manaCards,
-            selectedBridgeType,
-        ]
+        [infoAccount, cards, gemCards, haveUnconfirmed, giftzCards, wethCards, manaCards, selectedBridgeType]
     );
 
     useEffect(() => {

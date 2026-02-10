@@ -2,12 +2,11 @@ import { Box, Button, Image, Spinner, Stack, Text, VStack } from '@chakra-ui/rea
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-const VerticalMenuButtons = ({ setOption, option, buttonsWidth, cardsLoaded, setSelectedBridgeType }) => {
+const VerticalMenuButtons = ({ setOption, option, buttonsWidth, setSelectedBridgeType }) => {
     // ---------------------------------------------
     // ------------------ COLORS ------------------
     // ---------------------------------------------
     const isActive = index => index === option;
-    const sTextActiveColor = 'white';
 
     const { elyxir } = useSelector(state => state.elyxir);
     const loaded = Array.isArray(elyxir) && elyxir.length === 0;

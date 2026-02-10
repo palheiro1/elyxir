@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 
 // Utils
-import { copyToast, errorToast, okToast } from '../../../../utils/alerts';
+import { copyToast, okToast } from '../../../../utils/alerts';
 
 /**
  * @name SwapToArdor
@@ -35,7 +35,7 @@ const SwapToArdor = ({ infoAccount, ethAddress }) => {
     const swap = async () => {
         // Mock implementation for potions - in real app this would call the blockchain
         // const response = await processUnwrapsForItems(infoAccount.accountRs);
-        
+
         // Simulate API call
         setTimeout(() => {
             okToast('Elyxir item transfers started successfully!', toast);
