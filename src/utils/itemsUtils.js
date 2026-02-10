@@ -1,4 +1,5 @@
 import {
+    BLACKLIST_ASSETS,
     FLASKS_ASSETS,
     IMGURL,
     INGREDIENTS_ASSETS,
@@ -65,6 +66,8 @@ export const fetchAllItems = async accountRs => {
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
+    const validAssets = itemsAssets.filter(asset => !BLACKLIST_ASSETS.includes(asset.asset));
+
     const itemsBonus = await getItemsForBonus();
 
     const itemsOmnoBalance = await getOmnoItemsBalance(accountId, itemsAssets);
@@ -72,7 +75,7 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
     const flaskMultipliers = await getFlaskAssets();
 
     const formattedAssets = await Promise.all(
-        itemsAssets.map(async asset => {
+        validAssets.map(async asset => {
             const accountAsset = accountAssets.find(a => a.asset === asset.asset);
             const stuckedQnt = stuckedCards?.[asset.asset] || 0;
 
