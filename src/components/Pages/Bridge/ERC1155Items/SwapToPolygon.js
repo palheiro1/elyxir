@@ -47,7 +47,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, items }) => {
 
     const [isSwapping, setIsSwapping] = useState(false);
 
-    const [passphrase, setPassphrase] = useState('');
+    // const [passphrase, setPassphrase] = useState('');
     const [selectedItems, setSelectedItems] = useState([]);
 
     const myItems = items.filter(item => parseInt(item.quantity) > 0);
@@ -67,7 +67,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, items }) => {
         const account = checkPin(name, pin);
         if (account) {
             setIsValidPin(true);
-            setPassphrase(account.passphrase);
+            // setPassphrase(account.passphrase);
         }
     };
 
