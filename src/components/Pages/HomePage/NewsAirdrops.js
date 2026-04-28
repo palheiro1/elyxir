@@ -34,6 +34,7 @@ import {
 } from '@chakra-ui/react';
 import { useMemo, useState } from 'react';
 import { FiArchive, FiBox, FiClock, FiSearch, FiShoppingBag, FiTool } from 'react-icons/fi';
+import { useSelector } from 'react-redux';
 
 import { IMGURL, IMG_THUMB_PATH } from '../../../data/CONSTANTS';
 import monsters from '../../../data/monsters.json';
@@ -463,6 +464,7 @@ const NewsAirdrops = ({ goToSection }) => {
     const [search, setSearch] = useState('');
     const [rarityFilter, setRarityFilter] = useState('all');
     const [recipeFilter, setRecipeFilter] = useState('all');
+    const { items = [] } = useSelector(state => state.items);
 
     const surface = useColorModeValue('white', '#151A1E');
     const subtleSurface = useColorModeValue('gray.50', 'whiteAlpha.100');
@@ -471,6 +473,15 @@ const NewsAirdrops = ({ goToSection }) => {
     const mutedTextColor = useColorModeValue('gray.600', 'gray.300');
 
     const canNavigate = typeof goToSection === 'function';
+
+    const ingredientCopiesByAsset = useMemo(
+        () =>
+            items.reduce((copiesByAsset, item) => {
+                copiesByAsset[item.asset] = Number(item.quantityQNT) || 0;
+                return copiesByAsset;
+            }, {}),
+        [items]
+    );
 
     const navigateToSection = (section, targetTab) => {
         if (!canNavigate) return;
@@ -686,14 +697,27 @@ const NewsAirdrops = ({ goToSection }) => {
                                     <Table size="sm">
                                         <Thead>
                                             <Tr>
-                                                <Th>Card</Th>
-                                                <Th>Rarity</Th>
                                                 <Th>Ingredient</Th>
+                                                <Th>Card to incubate</Th>
+                                                <Th>Card rarity</Th>
+                                                <Th isNumeric>Owned</Th>
                                             </Tr>
                                         </Thead>
                                         <Tbody>
                                             {filteredIncubation.map(item => (
                                                 <Tr key={`${item.cardId}:${item.ingredientId}`}>
+                                                    <Td>
+                                                        <HStack spacing={3}>
+                                                            <Image
+                                                                src={item.ingredientImage}
+                                                                alt={item.ingredientName}
+                                                                boxSize="36px"
+                                                                objectFit="contain"
+                                                                fallbackSrc="/images/icons/placeholder.png"
+                                                            />
+                                                            <Text>{item.ingredientName}</Text>
+                                                        </HStack>
+                                                    </Td>
                                                     <Td>
                                                         <HStack spacing={3}>
                                                             <Image
@@ -714,18 +738,13 @@ const NewsAirdrops = ({ goToSection }) => {
                                                             {item.rarity}
                                                         </Badge>
                                                     </Td>
-                                                    <Td isNumeric>{item.minCards}</Td>
-                                                    <Td>
-                                                        <HStack spacing={3}>
-                                                            <Image
-                                                                src={item.ingredientImage}
-                                                                alt={item.ingredientName}
-                                                                boxSize="36px"
-                                                                objectFit="contain"
-                                                                fallbackSrc="/images/icons/placeholder.png"
-                                                            />
-                                                            <Text>{item.ingredientName}</Text>
-                                                        </HStack>
+                                                    <Td isNumeric>
+                                                        <Badge
+                                                            colorScheme={
+                                                                ingredientCopiesByAsset[item.ingredientId] ? 'green' : 'gray'
+                                                            }>
+                                                            {ingredientCopiesByAsset[item.ingredientId] || 0}
+                                                        </Badge>
                                                     </Td>
                                                 </Tr>
                                             ))}
