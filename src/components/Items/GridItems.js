@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { SimpleGrid, useDisclosure } from '@chakra-ui/react';
-import { Animated } from 'react-animated-css';
 
 import ItemCard from './ItemCard';
 import DetailedItem from './DetailedItem';
@@ -107,12 +106,11 @@ const GridItems = ({
                 {loadedItems.map((item, index) => {
                     const delay = itemsDelay[index % 10];
                     return (
-                        <Animated
+                        <div
                             key={index}
-                            animationIn="fadeIn"
-                            animationOut="fadeOut"
-                            isVisible={true}
-                            animationInDelay={delay}>
+                            className="grid-fade-in"
+                            style={{ animationDelay: `${delay}ms` }}
+                        >
                             <ItemCard
                                 item={item}
                                 setItemClicked={setItemClicked}
@@ -123,7 +121,7 @@ const GridItems = ({
                                 market={market}
                                 rgbColor={rgbColor}
                             />
-                        </Animated>
+                        </div>
                     );
                 })}
             </SimpleGrid>

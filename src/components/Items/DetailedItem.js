@@ -11,8 +11,6 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 
-import HoverCard from '@darenft/react-3d-hover-card';
-import '@darenft/react-3d-hover-card/dist/style.css';
 import { getTypeValue, getColor } from './data';
 
 /**
@@ -45,7 +43,7 @@ const DetailedItem = ({ isOpen, onClose, data }) => {
                     <ModalCloseButton color="white" />
                     <Stack direction={{ base: 'column', lg: 'row' }}>
                         <Box mt="6%">
-                            <HoverCard scaleFactor={1.4}>
+                            <Box className="hover-card-lite">
                                 <Image
                                     src={imgUrl}
                                     alt={name}
@@ -53,7 +51,7 @@ const DetailedItem = ({ isOpen, onClose, data }) => {
                                     rounded="lg"
                                     mx={'auto'}
                                 />
-                            </HoverCard>
+                            </Box>
                         </Box>
 
                         <Stack direction="column" align="center" w="100%">

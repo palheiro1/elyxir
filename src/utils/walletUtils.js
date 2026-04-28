@@ -546,7 +546,7 @@ export const sendToBounty = async ({ cards, passPhrase }) => {
     );
     const responses = await Promise.allSettled(promises);
     // Check all promises
-    const success = responses.every(response => response.status === 'fulfilled');
+    const success = responses.every(response => response.status === 'fulfilled' && response.value === true);
     return {
         response: success,
         message: success ? 'Success' : 'Error sending cards to the bounty',
@@ -579,7 +579,7 @@ export const sendToPolygonBridge = async ({ cards, ardorAccount, ethAccount, pas
 
     try {
         const results = await Promise.all(promises);
-        const success = results.every(result => result.status === 200 || true);
+        const success = results.every(Boolean);
         if (success) {
             return true;
         } else {
@@ -649,7 +649,7 @@ export const sendCardsToBurn = async ({ cards, passPhrase }) => {
 
     try {
         const results = await Promise.all(promises);
-        const success = results.every(result => result.status === 200 || true);
+        const success = results.every(Boolean);
         if (success) {
             return true;
         } else {
@@ -676,7 +676,7 @@ export const sendGEMSToOmno = async ({ quantity, passPhrase }) => {
             priority: 'HIGH',
         });
 
-        const success = res.status === 200 || true;
+        const success = Boolean(res);
         if (success) {
             return true;
         } else {
@@ -737,7 +737,7 @@ export const sendWETHToOmno = async ({ quantity, passPhrase }) => {
             priority: 'HIGH',
         });
 
-        const success = res.status === 200 || true;
+        const success = Boolean(res);
         if (success) {
             return true;
         } else {

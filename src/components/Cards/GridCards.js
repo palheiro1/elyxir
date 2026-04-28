@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
-import { SimpleGrid, useDisclosure } from '@chakra-ui/react';
-import { Animated } from 'react-animated-css';
+import { SimpleGrid } from '@chakra-ui/react';
 
 import Card from './Card';
-import DetailedCard from './DetailedCard';
 
 /**
  * @name GridCards
@@ -107,12 +105,11 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {},
                         }
                         : undefined;
                     return (
-                        <Animated
+                        <div
                             key={index}
-                            animationIn="fadeIn"
-                            animationOut="fadeOut"
-                            isVisible={true}
-                            animationInDelay={delay}>
+                            className="grid-fade-in"
+                            style={{ animationDelay: `${delay}ms` }}
+                        >
                             <div
                                 onClick={handleClick}
                                 style={{ cursor: isRecipe ? 'pointer' : undefined }}
@@ -136,7 +133,7 @@ const GridCards = ({ cards, isMarket = false, onlyBuy = false, infoAccount = {},
                                     lastPrice={isRecipe ? '' : undefined}
                                 />
                             </div>
-                        </Animated>
+                        </div>
                     );
                 })}
             </SimpleGrid>

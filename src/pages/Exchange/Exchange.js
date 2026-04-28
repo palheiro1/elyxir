@@ -4,10 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { copyToast } from '../../utils/alerts';
 import { EXCHANGES } from '../../data/CONSTANTS';
 
-function Iframe(props) {
-    return <div dangerouslySetInnerHTML={{ __html: props.iframe ? props.iframe : '' }} />;
-}
-
 /**
  * @name Exchange
  * @description This component is the exchange page
@@ -31,10 +27,11 @@ const Exchange = ({ infoAccount }) => {
         copyToast('ARDOR Account', toast);
     };
 
-    const changellyIframe =
-        '<iframe src="https://widget.changelly.com?from=*&to=ignis&amount=0.005&address=&fromDefault=BTC&toDefault=ignis&theme=default&merchant_id=5zk2vil3u4s8witr&payment_id=&v=2" height="385px" class="changelly" style="min-width: 100%;">Cant load widget</iframe>';
-    const simplexIframe =
-        '<iframe src="/simplex.html" height="325px" style="min-width: 100%;">Cant load widget</iframe>';
+    const iframeSrc =
+        option === 'crypto'
+            ? 'https://widget.changelly.com?from=*&to=ignis&amount=0.005&address=&fromDefault=BTC&toDefault=ignis&theme=default&merchant_id=5zk2vil3u4s8witr&payment_id=&v=2'
+            : '/simplex.html';
+    const iframeHeight = option === 'crypto' ? '385px' : '325px';
 
     return (
         <>
@@ -72,7 +69,17 @@ const Exchange = ({ infoAccount }) => {
             </Center>
             <Center my={10} rounded="lg">
                 <Box w={{ base: '90%', md: '50%' }} border="2px" borderColor="gray" overflow="hidden">
-                    <Iframe iframe={option === 'crypto' ? changellyIframe : simplexIframe} />
+                    <iframe
+                        src={iframeSrc}
+                        title={option === 'crypto' ? 'Changelly widget' : 'Simplex widget'}
+                        height={iframeHeight}
+                        width="100%"
+                        sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+                        allow="payment"
+                        style={{ minWidth: '100%', border: 0 }}
+                    >
+                        Cant load widget
+                    </iframe>
                 </Box>
             </Center>
         </>

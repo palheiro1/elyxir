@@ -17,6 +17,8 @@ import {
 } from '@chakra-ui/react';
 import { useState, useMemo, useEffect, useCallback } from 'react';
 
+const getAirdropKey = airdrop => `${airdrop.type}:${airdrop.id}:${airdrop.name}`;
+
 const NewsAirdrops = () => {
     const [typeFilter, setTypeFilter] = useState('all');
     const [chainFilter, setChainFilter] = useState('all');
@@ -45,14 +47,21 @@ const NewsAirdrops = () => {
         localStorage.setItem('claimedAirdrops', JSON.stringify([...claimedAirdrops]));
     }, [claimedAirdrops]);
 
+    const isAirdropClaimed = useCallback(
+        airdrop => claimedAirdrops.has(getAirdropKey(airdrop)) || claimedAirdrops.has(airdrop.id),
+        [claimedAirdrops]
+    );
+
     // Toggle claimed status for an airdrop
-    const toggleClaimed = useCallback((airdropId) => {
+    const toggleClaimed = useCallback(airdrop => {
         setClaimedAirdrops(prev => {
             const newSet = new Set(prev);
-            if (newSet.has(airdropId)) {
-                newSet.delete(airdropId);
+            const key = getAirdropKey(airdrop);
+            if (newSet.has(key) || newSet.has(airdrop.id)) {
+                newSet.delete(key);
+                newSet.delete(airdrop.id);
             } else {
-                newSet.add(airdropId);
+                newSet.add(key);
             }
             return newSet;
         });
@@ -109,12 +118,12 @@ const NewsAirdrops = () => {
                 (statusFilter === 'active' && airdrop.active) || 
                 (statusFilter === 'inactive' && !airdrop.active);
             const claimMatch = claimFilter === 'all' ||
-                (claimFilter === 'claimed' && claimedAirdrops.has(airdrop.id)) ||
-                (claimFilter === 'unclaimed' && !claimedAirdrops.has(airdrop.id));
+                (claimFilter === 'claimed' && isAirdropClaimed(airdrop)) ||
+                (claimFilter === 'unclaimed' && !isAirdropClaimed(airdrop));
             
             return typeMatch && chainMatch && statusMatch && claimMatch;
         });
-    }, [airdrops, typeFilter, chainFilter, statusFilter, claimFilter, claimedAirdrops]);
+    }, [airdrops, typeFilter, chainFilter, statusFilter, claimFilter, isAirdropClaimed]);
 
     const getChainColor = (chain) => {
         return chain === 'Ardor' ? 'purple' : 'blue';
@@ -211,94 +220,97 @@ const NewsAirdrops = () => {
 
                 {/* Airdrops Grid */}
                 <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={6}>
-                    {filteredAirdrops.map((airdrop) => (
-                        <GridItem key={airdrop.id}>
-                            <Box 
-                                bg={bgColor} 
-                                p={5} 
-                                borderRadius="lg" 
-                                border="1px" 
-                                borderColor={borderColor}
-                                transition="all 0.2s"
-                                _hover={{ transform: 'translateY(-2px)', shadow: 'lg' }}
-                            >
-                                <VStack spacing={3} align="stretch">
-                                    <HStack justify="space-between" align="start">
-                                        <Image 
-                                            src={airdrop.image} 
-                                            alt={airdrop.name}
-                                            boxSize="50px"
-                                            objectFit="contain"
-                                            fallbackSrc="/images/icons/placeholder.png"
-                                        />
-                                        <VStack spacing={1} align="end">
-                                            <Badge colorScheme={getChainColor(airdrop.chain)} size="sm">
-                                                {airdrop.chain}
-                                            </Badge>
-                                            <Badge 
-                                                colorScheme={airdrop.active ? 'green' : 'red'} 
-                                                size="sm"
+                    {filteredAirdrops.map(airdrop => {
+                        const isClaimed = isAirdropClaimed(airdrop);
+                        return (
+                            <GridItem key={getAirdropKey(airdrop)}>
+                                <Box 
+                                    bg={bgColor} 
+                                    p={5} 
+                                    borderRadius="lg" 
+                                    border="1px" 
+                                    borderColor={borderColor}
+                                    transition="all 0.2s"
+                                    _hover={{ transform: 'translateY(-2px)', shadow: 'lg' }}
+                                >
+                                    <VStack spacing={3} align="stretch">
+                                        <HStack justify="space-between" align="start">
+                                            <Image 
+                                                src={airdrop.image} 
+                                                alt={airdrop.name}
+                                                boxSize="50px"
+                                                objectFit="contain"
+                                                fallbackSrc="/images/icons/placeholder.png"
+                                            />
+                                            <VStack spacing={1} align="end">
+                                                <Badge colorScheme={getChainColor(airdrop.chain)} size="sm">
+                                                    {airdrop.chain}
+                                                </Badge>
+                                                <Badge 
+                                                    colorScheme={airdrop.active ? 'green' : 'red'} 
+                                                    size="sm"
+                                                >
+                                                    {airdrop.active ? 'Active' : 'Inactive'}
+                                                </Badge>
+                                            </VStack>
+                                        </HStack>
+
+                                        <HStack justify="space-between" align="center">
+                                            <VStack spacing={1} align="start" flex="1">
+                                                <Badge colorScheme={getTypeColor(airdrop.type)} size="sm">
+                                                    {airdrop.type.charAt(0).toUpperCase() + airdrop.type.slice(1)}
+                                                </Badge>
+                                            </VStack>
+                                            <Checkbox
+                                                isChecked={isClaimed}
+                                                onChange={() => toggleClaimed(airdrop)}
+                                                colorScheme="teal"
+                                                size="md"
                                             >
-                                                {airdrop.active ? 'Active' : 'Inactive'}
-                                            </Badge>
-                                        </VStack>
-                                    </HStack>
-
-                                    <HStack justify="space-between" align="center">
-                                        <VStack spacing={1} align="start" flex="1">
-                                            <Badge colorScheme={getTypeColor(airdrop.type)} size="sm">
-                                                {airdrop.type.charAt(0).toUpperCase() + airdrop.type.slice(1)}
-                                            </Badge>
-                                        </VStack>
-                                        <Checkbox
-                                            isChecked={claimedAirdrops.has(airdrop.id)}
-                                            onChange={() => toggleClaimed(airdrop.id)}
-                                            colorScheme="teal"
-                                            size="md"
-                                        >
-                                            <Text fontSize="xs" color="gray.400" ml={1}>
-                                                Claimed
+                                                <Text fontSize="xs" color="gray.400" ml={1}>
+                                                    Claimed
+                                                </Text>
+                                            </Checkbox>
+                                        </HStack>
+                                            
+                                        <VStack spacing={2} align="stretch">
+                                            <Heading size="sm" color="white" noOfLines={2}>
+                                                {airdrop.name}
+                                            </Heading>
+                                            
+                                            <Text fontSize="sm" color="gray.300" noOfLines={3}>
+                                                {airdrop.description}
                                             </Text>
-                                        </Checkbox>
-                                    </HStack>
-                                        
-                                    <VStack spacing={2} align="stretch">
-                                        <Heading size="sm" color="white" noOfLines={2}>
-                                            {airdrop.name}
-                                        </Heading>
-                                        
-                                        <Text fontSize="sm" color="gray.300" noOfLines={3}>
-                                            {airdrop.description}
-                                        </Text>
+                                        </VStack>
+
+                                        <Divider />
+
+                                        <VStack spacing={2} align="stretch" fontSize="xs">
+                                            <HStack justify="space-between">
+                                                <Text color="gray.400">Requirement:</Text>
+                                                <Text color="gray.200" textAlign="right">{airdrop.requirement}</Text>
+                                            </HStack>
+                                            <HStack justify="space-between">
+                                                <Text color="gray.400">Method:</Text>
+                                                <Text color="gray.200" textAlign="right">{airdrop.method}</Text>
+                                            </HStack>
+                                        </VStack>
+
+                                        {airdrop.active && (
+                                            <Button 
+                                                size="sm" 
+                                                colorScheme="teal" 
+                                                variant="outline"
+                                                _hover={{ bg: 'teal.500', color: 'white' }}
+                                            >
+                                                Learn More
+                                            </Button>
+                                        )}
                                     </VStack>
-
-                                    <Divider />
-
-                                    <VStack spacing={2} align="stretch" fontSize="xs">
-                                        <HStack justify="space-between">
-                                            <Text color="gray.400">Requirement:</Text>
-                                            <Text color="gray.200" textAlign="right">{airdrop.requirement}</Text>
-                                        </HStack>
-                                        <HStack justify="space-between">
-                                            <Text color="gray.400">Method:</Text>
-                                            <Text color="gray.200" textAlign="right">{airdrop.method}</Text>
-                                        </HStack>
-                                    </VStack>
-
-                                    {airdrop.active && (
-                                        <Button 
-                                            size="sm" 
-                                            colorScheme="teal" 
-                                            variant="outline"
-                                            _hover={{ bg: 'teal.500', color: 'white' }}
-                                        >
-                                            Learn More
-                                        </Button>
-                                    )}
-                                </VStack>
-                            </Box>
-                        </GridItem>
-                    ))}
+                                </Box>
+                            </GridItem>
+                        );
+                    })}
                 </Grid>
 
                 {filteredAirdrops.length === 0 && (

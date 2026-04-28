@@ -33,10 +33,41 @@ const URL_CANCEL_BID_ORDER = `${NODEURL}?requestType=cancelBidOrder`;
 
 const URL_BROADCAST = `${NODEURL}?requestType=broadcastTransaction`;
 const URL_SEND_MESSAGE = `${NODEURL}?requestType=sendMessage`;
+const URL_SET_ACCOUNT_INFO = `${NODEURL}?requestType=setAccountInfo`;
 
 // -------------------------------------------------
 //                   BASIC UTILS
 // -------------------------------------------------
+
+const isSuccessfulNodeResponse = response => {
+    const data = response?.data;
+    return response?.status === 200 && data && data.errorCode === undefined && data.errorDescription === undefined;
+};
+
+const hasUnsignedTransaction = response =>
+    isSuccessfulNodeResponse(response) && typeof response.data.unsignedTransactionBytes === 'string';
+
+const isSuccessfulBroadcastResponse = response => {
+    if (!isSuccessfulNodeResponse(response)) return false;
+    const { data } = response;
+    return Boolean(data.transaction || data.fullHash);
+};
+
+const signAndBroadcast = async (unsignedResponse, passPhrase, includePrunableAttachment = false) => {
+    if (!hasUnsignedTransaction(unsignedResponse)) return false;
+
+    const signed = ardorjs.signTransactionBytes(unsignedResponse.data.unsignedTransactionBytes, passPhrase);
+    const txData = { transactionBytes: signed };
+
+    if (includePrunableAttachment) {
+        const attachment = unsignedResponse.data.transactionJSON?.attachment;
+        if (!attachment) return false;
+        txData.prunableAttachmentJSON = JSON.stringify(attachment);
+    }
+
+    const broadcastResponse = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
+    return isSuccessfulBroadcastResponse(broadcastResponse);
+};
 
 export const getAccountFromPhrase = value => {
     if (!value || typeof value !== 'string') throw new Error('Invalid secret phrase');
@@ -321,22 +352,8 @@ const sendIgnis = async ({
         query.feeNQT = await calculateFeeByRecipient(recipient, query, URL_SEND_MONEY);
         query.broadcast = false;
 
-        const res2 = await axios.post(URL_SEND_MONEY, qs.stringify(query, config));
-        const signed = ardorjs.signTransactionBytes(res2.data.unsignedTransactionBytes, passPhrase);
-
-        let txdata;
-        if (message !== '') {
-            const txattachment = JSON.stringify(res2.data.transactionJSON.attachment);
-            txdata = {
-                transactionBytes: signed,
-                prunableAttachmentJSON: txattachment,
-            };
-        } else {
-            txdata = { transactionBytes: signed };
-        }
-
-        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
-        return respuesta.status === 200;
+        const response = await axios.post(URL_SEND_MONEY, qs.stringify(query), config);
+        return await signAndBroadcast(response, passPhrase, Boolean(message));
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js:262 ~ error', error);
         return false;
@@ -366,22 +383,8 @@ const transferCurrency = async (currency, unitsQNT, recipient, passPhrase, messa
         query.feeNQT = Math.ceil(fee);
         query.broadcast = false;
 
-        const response2 = await axios.post(URL_TRANSFER_CURRENCY, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
-        let txdata;
-
-        if (message !== '') {
-            let txattachment = JSON.stringify(response2.data.transactionJSON.attachment);
-            txdata = {
-                transactionBytes: signed,
-                prunableAttachmentJSON: txattachment,
-            };
-        } else {
-            txdata = { transactionBytes: signed };
-        }
-
-        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
-        return respuesta.status === 200;
+        const response = await axios.post(URL_TRANSFER_CURRENCY, qs.stringify(query), config);
+        return await signAndBroadcast(response, passPhrase, Boolean(message));
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js:305 ~ transferCurrency ~ error', error);
         return false;
@@ -413,19 +416,8 @@ const transferCurrencyZeroFee = async (
     };
 
     try {
-        const response2 = await axios.post(URL_TRANSFER_CURRENCY, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
-        let txdata;
-
-        if (message !== '') {
-            let txattachment = JSON.stringify(response2.data.transactionJSON.attachment);
-            txdata = { transactionBytes: signed, prunableAttachmentJSON: txattachment };
-        } else {
-            txdata = { transactionBytes: signed };
-        }
-
-        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
-        return respuesta.status === 200;
+        const response = await axios.post(URL_TRANSFER_CURRENCY, qs.stringify(query), config);
+        return await signAndBroadcast(response, passPhrase, Boolean(message));
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js:346 ~ error', error);
         return false;
@@ -445,25 +437,16 @@ export const buyGiftz = async ({ passphrase, amountNQT }) => {
         deadline: 15,
         broadcast: false,
         publicKey: publicKey,
+        message,
+        messageIsPrunable: true,
     };
     try {
         const minimumFee = await calculateFee(query, URL_CURRENCY_BUY);
         query.feeNQT = minimumFee;
         query.broadcast = false;
 
-        const sendMoneyWithFee = await axios.post(URL_CURRENCY_BUY, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(sendMoneyWithFee.data.unsignedTransactionBytes, passphrase);
-        let txdata;
-
-        if (message !== '') {
-            let txattachment = JSON.stringify(sendMoneyWithFee.data.transactionJSON.attachment);
-            txdata = { transactionBytes: signed, prunableAttachmentJSON: txattachment };
-        } else {
-            txdata = { transactionBytes: signed };
-        }
-
-        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
-        return respuesta.status === 200;
+        const response = await axios.post(URL_CURRENCY_BUY, qs.stringify(query), config);
+        return await signAndBroadcast(response, passphrase, Boolean(message));
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js:397 ~ error', error);
         return false;
@@ -498,16 +481,8 @@ export const createAskOrder = async ({ asset, price, quantity, passPhrase }) => 
         query.feeNQT = await calculateFee(query, url_postOrder);
         query.broadcast = false;
 
-        const postOrderTransactionBytesResponse = await axios.post(url_postOrder, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(
-            postOrderTransactionBytesResponse.data.unsignedTransactionBytes,
-            passPhrase
-        );
-
-        let txdata = { transactionBytes: signed };
-
-        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
-        return respuesta.status === 200;
+        const response = await axios.post(url_postOrder, qs.stringify(query), config);
+        return await signAndBroadcast(response, passPhrase);
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
         return false;
@@ -531,10 +506,8 @@ export const cancelAskOrder = async (order, passPhrase) => {
         query.feeNQT = await calculateFee(query, URL_CANCEL_ASK_ORDER);
         query.broadcast = false;
 
-        const { data: res2 } = await axios.post(URL_CANCEL_ASK_ORDER, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(res2.unsignedTransactionBytes, passPhrase);
-        const respuesta = await axios.post(URL_BROADCAST, qs.stringify({ transactionBytes: signed }), config);
-        return respuesta.status === 200;
+        const response = await axios.post(URL_CANCEL_ASK_ORDER, qs.stringify(query), config);
+        return await signAndBroadcast(response, passPhrase);
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js:341 ~ error', error);
         return false;
@@ -565,14 +538,8 @@ export const createBidOrder = async ({ asset, price, quantity, passPhrase }) => 
 
         query.feeNQT = await calculateFee(query, url_postOrder);
         query.broadcast = false;
-        const postOrderTransactionBytesResponse = await axios.post(url_postOrder, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(
-            postOrderTransactionBytesResponse.data.unsignedTransactionBytes,
-            passPhrase
-        );
-        let txdata = { transactionBytes: signed };
-        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
-        return respuesta.status === 200;
+        const response = await axios.post(url_postOrder, qs.stringify(query), config);
+        return await signAndBroadcast(response, passPhrase);
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js:595 ~ createAskOrder ~ error', error);
         return false;
@@ -596,12 +563,8 @@ export const cancelBidOrder = async (order, passPhrase) => {
         query.feeNQT = await calculateFee(query, URL_CANCEL_BID_ORDER);
         query.broadcast = false;
 
-        const response2 = await axios.post(URL_CANCEL_BID_ORDER, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(response2.data.unsignedTransactionBytes, passPhrase);
-        const txdata = { transactionBytes: signed };
-
-        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txdata), config);
-        return respuesta.status === 200;
+        const response = await axios.post(URL_CANCEL_BID_ORDER, qs.stringify(query), config);
+        return await signAndBroadcast(response, passPhrase);
     } catch (error) {
         console.error(error);
         return false;
@@ -645,18 +608,7 @@ const transferAsset = async ({
         query.broadcast = false;
 
         const response = await axios.post(URL_TRANSFER_ASSET, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
-
-        const txData = {
-            transactionBytes: signed,
-        };
-
-        if (message !== '') {
-            txData.prunableAttachmentJSON = JSON.stringify(response.data.transactionJSON.attachment);
-        }
-
-        const response_2 = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
-        return response_2.status === 200;
+        return await signAndBroadcast(response, passPhrase, Boolean(message));
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js:604 ~ error', error);
         return false;
@@ -720,15 +672,7 @@ const transferGEM = async ({
         query.broadcast = false;
 
         const response = await axios.post(URL_TRANSFER_ASSET, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
-        const txData = { transactionBytes: signed };
-
-        if (message !== '') {
-            txData.prunableAttachmentJSON = JSON.stringify(response.data.transactionJSON.attachment);
-        }
-
-        const response_2 = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
-        return response_2.status === 200;
+        return await signAndBroadcast(response, passPhrase, Boolean(message));
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js:670 ~ error', error);
         return false;
@@ -974,14 +918,7 @@ export const sendMessage = async ({ recipient, passPhrase, message }) => {
         query.broadcast = false;
 
         const response = await axios.post(URL_SEND_MESSAGE, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
-        const txData = { transactionBytes: signed };
-
-        txData.prunableAttachmentJSON = JSON.stringify(response.data.transactionJSON.attachment);
-
-        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
-        if (respuesta.errorCode) return false;
-        return respuesta.status === 200;
+        return await signAndBroadcast(response, passPhrase, true);
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js:820 ~ sendDirectMessage ~ error', error);
         return false;
@@ -1014,14 +951,7 @@ export const sendDirectMessage = async ({ recipient, passPhrase, message }) => {
         query.broadcast = false;
 
         const response = await axios.post(URL_SEND_MESSAGE, qs.stringify(query), config);
-        const signed = ardorjs.signTransactionBytes(response.data.unsignedTransactionBytes, passPhrase);
-        const txData = { transactionBytes: signed };
-
-        txData.prunableAttachmentJSON = JSON.stringify(response.data.transactionJSON.attachment);
-
-        const respuesta = await axios.post(URL_BROADCAST, qs.stringify(txData), config);
-        if (respuesta.errorCode) return false;
-        return respuesta.status === 200;
+        return await signAndBroadcast(response, passPhrase, true);
     } catch (error) {
         console.error('🚀 ~ file: ardorInterface.js:820 ~ sendDirectMessage ~ error', error);
         return false;
@@ -1083,25 +1013,24 @@ export const getAccountPublicKey = async accountRs => {
 
 const changeAccountName = async (accountRs, passPhrase, newName) => {
     try {
-        let publicKey = getAccountPublicKey(accountRs);
+        const publicKey = ardorjs.secretPhraseToPublicKey(passPhrase);
         let query = {
             requestType: 'setAccountInfo',
-            secretPhrase: passPhrase,
             name: newName,
             chain: 2,
             publicKey: publicKey,
             feeNQT: -1,
             deadline: 10,
-            broadcast: true,
+            broadcast: false,
             messageIsPrunable: true,
         };
-        const fee = await calculateFee(query, NODEURL);
+        const fee = await calculateFee(query, URL_SET_ACCOUNT_INFO);
         query.feeNQT = fee;
-        return await axios.post(NODEURL, null, {
-            params: query,
-        });
+        const response = await axios.post(URL_SET_ACCOUNT_INFO, qs.stringify(query), config);
+        return await signAndBroadcast(response, passPhrase);
     } catch (error) {
         console.error('Error al enviar la solicitud:', error.message);
+        return false;
     }
 };
 

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import ethereum_address from 'ethereum-address';
 import {
     Box,
     Button,
@@ -27,6 +26,7 @@ import BridgeItem from '../../../Items/BridgeItem';
 // Utils
 import { checkPin } from '../../../../utils/walletUtils';
 import { infoToast, okToast } from '../../../../utils/alerts';
+import { isEthereumAddress } from '../../../../utils/validators';
 
 /**
  * @name SwapToPolygon
@@ -57,7 +57,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, items }) => {
         e.preventDefault();
         const { value } = e.target;
         setPolygonAccount(value);
-        setIsValidAccount(ethereum_address.isAddress(value));
+        setIsValidAccount(isEthereumAddress(value));
     };
 
     const handleCompletePin = pin => {

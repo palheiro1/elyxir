@@ -89,8 +89,6 @@ const Card = ({
         askOmnoOrders,
         bidOrders: bidIgnisOrders,
         bidOmnoOrders,
-        lastPrice: lastIgnisPrice,
-        lastOmnoPrice,
         totalQuantityQNT,
         burnedQuantity,
     } = card;

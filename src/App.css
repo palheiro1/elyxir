@@ -83,3 +83,36 @@ td {
     scrollbar-width: none;
     scrollbar-color: #ffffff00 #00000000;
 }
+
+.grid-fade-in {
+    animation: grid-fade-in 240ms ease both;
+}
+
+.hover-card-lite {
+    display: inline-block;
+    perspective: 900px;
+}
+
+.hover-card-lite > * {
+    transform-origin: center;
+    transition:
+        transform 180ms ease,
+        filter 180ms ease;
+}
+
+.hover-card-lite:hover > *,
+.hover-card-lite:focus-within > * {
+    filter: drop-shadow(0 18px 18px rgba(0, 0, 0, 0.28));
+    transform: scale(1.04) rotateX(2deg) rotateY(-2deg);
+}
+
+@keyframes grid-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

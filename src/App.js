@@ -32,9 +32,15 @@ function App() {
         const cachedVersion = getVersion();
         const currentVersion = process.env.REACT_APP_GIT_SHA;
 
+        if (!currentVersion) return;
+
+        if (!cachedVersion) {
+            setVersion(currentVersion);
+            return;
+        }
+
         if (cachedVersion !== currentVersion) {
             clearCacheData();
-            // localStorage.clear();
             setVersion(currentVersion);
             window.location.reload();
         }

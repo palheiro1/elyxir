@@ -1,4 +1,4 @@
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 import { sendMessage, transferAsset } from '../Ardor/ardorInterface';
 import { OMNO_ACCOUNT, OMNO_API, OMNO_CONTRACT } from '../../data/CONSTANTS';
 import { getCraftPotionMessage } from '../../utils/elyxirUtils';
@@ -70,7 +70,7 @@ export const sendCraftPotionAssets = async ({ mergedAssets = [], passphrase }) =
     try {
         if (!mergedAssets.length) return false;
 
-        await Promise.all(
+        const results = await Promise.all(
             mergedAssets.map(({ asset, qnt }) =>
                 transferAsset({
                     asset,
@@ -85,7 +85,7 @@ export const sendCraftPotionAssets = async ({ mergedAssets = [], passphrase }) =
             )
         );
 
-        return true;
+        return results.every(Boolean);
     } catch (error) {
         console.error('🚀 ~ sendCraftPotionAssets ~ error:', error);
         return false;

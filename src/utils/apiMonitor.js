@@ -91,9 +91,4 @@ class APIMonitor {
 // Create singleton instance
 const apiMonitor = new APIMonitor();
 
-// Expose to window for debugging
-if (typeof window !== 'undefined') {
-    window.apiMonitor = apiMonitor;
-}
-
 export default apiMonitor;

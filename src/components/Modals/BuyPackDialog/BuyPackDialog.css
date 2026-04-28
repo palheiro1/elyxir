@@ -2,3 +2,24 @@ button.xmint-btn {
     background-color: #6b254d;
     width: 100%;
 }
+
+.buy-pack-vending-machine {
+    animation: buy-pack-shake 900ms ease-in-out 700ms both;
+}
+
+@keyframes buy-pack-shake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    15%,
+    45%,
+    75% {
+        transform: translateX(-6px);
+    }
+    30%,
+    60%,
+    90% {
+        transform: translateX(6px);
+    }
+}

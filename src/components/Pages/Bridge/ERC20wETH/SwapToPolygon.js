@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import ethereum_address from 'ethereum-address';
 import {
     Box,
     Button,
@@ -21,6 +20,7 @@ import {
 // Utils
 import { checkPin, roundNumberWithMaxDecimals, sendToPolygonBridge } from '../../../../utils/walletUtils';
 import { errorToast, infoToast, okToast } from '../../../../utils/alerts';
+import { isEthereumAddress } from '../../../../utils/validators';
 import { NQTDIVIDER, WETHASSET } from '../../../../data/CONSTANTS';
 
 /**
@@ -51,7 +51,7 @@ const SwapToPolygon = ({ infoAccount, ardorAddress, wethCards }) => {
         e.preventDefault();
         const { value } = e.target;
         setPolygonAccount(value);
-        setIsValidAccount(ethereum_address.isAddress(value));
+        setIsValidAccount(isEthereumAddress(value));
     };
 
     const handleCompletePin = pin => {

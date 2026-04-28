@@ -1,4 +1,5 @@
 import ardorjs from 'ardorjs';
+import { isAddress } from 'ethers';
 import { getAllUsers } from './storage';
 
 /**
@@ -35,6 +36,8 @@ export function checkIsValidPassphrase(passphrase, expectedAccount) {
  * @description - checks if the pass phrase belongs to the account
  */
 export const isArdorAccount = account => {
-    if(account.length !== 26) return false;
-    return /^ARDOR-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{4}-[A-Z0-9_]{5}/.test(account);
+    if (typeof account !== 'string') return false;
+    return /^ARDOR-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{5}$/.test(account);
 };
+
+export const isEthereumAddress = address => typeof address === 'string' && isAddress(address);

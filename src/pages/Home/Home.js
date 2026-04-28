@@ -184,7 +184,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         const dividendsTxs = await Promise.all(auxDividendsPromises);
 
         dividendsTxs.forEach((dividendTx, index) => {
-            const { attachment } = dividendTx;
+            const attachment = dividendTx?.attachment;
             if (attachment && attachment.asset && isMBAsset(attachment.asset)) {
                 const card = allCards.find(card => card?.asset === attachment.asset);
                 if (card) {
@@ -222,6 +222,18 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 setIsLoading(true);
                 setNeedReload(false);
                 const { accountRs } = infoAccount;
+                const safeLoad = async (label, promise, fallback) => {
+                    try {
+                        const value = await promise;
+                        return value ?? fallback;
+                    } catch (error) {
+                        console.error(`Mythical Beings: Error loading ${label}`, error);
+                        return fallback;
+                    }
+                };
+                const emptyBalance = { quantityQNT: 0, unconfirmedQuantityQNT: 0 };
+                const getAssetBalance = (assetGroup, assetId) =>
+                    Array.isArray(assetGroup) ? assetGroup.find(asset => asset.asset === assetId) || emptyBalance : emptyBalance;
 
                 // Fetch all info
                 const [
@@ -236,73 +248,77 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                     loadItems,
                     accountAssets,
                 ] = await Promise.all([
-                    fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true),
-                    fetchCurrencyAssets(
-                        accountRs,
-                        [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT],
-                        true
+                    safeLoad('cards', fetchAllCards(accountRs, COLLECTIONACCOUNT, TARASCACARDACCOUNT, true), []),
+                    safeLoad(
+                        'currency assets',
+                        fetchCurrencyAssets(
+                            accountRs,
+                            [GEMASSETACCOUNT, WETHASSETACCOUNT, GIFTZASSETACCOUNT, MANAACCOUNT],
+                            true
+                        ),
+                        [[], [], [], []]
                     ),
-                    getIGNISBalance(accountRs),
-                    getBlockchainTransactions(2, accountRs, true),
-                    getCurrentAskAndBids(accountRs),
-                    getTrades(2, accountRs),
-                    getAccountLedger({
-                        accountRs: accountRs,
-                        firstIndex: 0,
-                        lastIndex: 99,
-                        eventType: 'ASSET_DIVIDEND_PAYMENT',
-                    }),
-                    getOmnoGiftzBalance(accountRs),
-                    fetchAllItems(accountRs),
-                    getAccountAssets(accountRs),
+                    safeLoad('IGNIS balance', getIGNISBalance(accountRs), 0),
+                    safeLoad('transactions', getBlockchainTransactions(2, accountRs, true), { transactions: [] }),
+                    safeLoad('current orders', getCurrentAskAndBids(accountRs), { askOrders: [], bidOrders: [] }),
+                    safeLoad('trades', getTrades(2, accountRs), { trades: [] }),
+                    safeLoad(
+                        'dividends',
+                        getAccountLedger({
+                            accountRs: accountRs,
+                            firstIndex: 0,
+                            lastIndex: 99,
+                            eventType: 'ASSET_DIVIDEND_PAYMENT',
+                        }),
+                        { entries: [] }
+                    ),
+                    safeLoad('OMNO GIFTZ balance', getOmnoGiftzBalance(accountRs), 0),
+                    safeLoad('items', fetchAllItems(accountRs), []),
+                    safeLoad('account assets', getAccountAssets(accountRs), { accountAssets: [] }),
                 ]);
 
-                const gems = currencyAssets[0].find(asset => asset.asset === GEMASSET);
-                const weth = currencyAssets[1].find(asset => asset.asset === WETHASSET);
-                const giftzAsset = currencyAssets[2].find(asset => asset.asset === GIFTZASSET);
-                const mana = currencyAssets[3].find(asset => asset.asset === MANAASSET);
+                const currencyAssetGroups = Array.isArray(currencyAssets) ? currencyAssets : [[], [], [], []];
+                const gems = getAssetBalance(currencyAssetGroups[0], GEMASSET);
+                const weth = getAssetBalance(currencyAssetGroups[1], WETHASSET);
+                const giftzAsset = getAssetBalance(currencyAssetGroups[2], GIFTZASSET);
+                const mana = getAssetBalance(currencyAssetGroups[3], MANAASSET);
+                const transactions = Array.isArray(txs.transactions) ? txs.transactions : [];
+                const dividendEntries = Array.isArray(dividends.entries) ? dividends.entries : [];
+                const tradesList = Array.isArray(trades.trades) ? trades.trades : [];
+                const accountAssetList = Array.isArray(accountAssets.accountAssets) ? accountAssets.accountAssets : [];
 
                 // Always dispatch cards and items when they're loaded to ensure Redux state is updated
                 dispatch(setCardsManually(loadCards));
                 dispatch(setItemsManually(loadItems));
-                if (txs.transactions.length === 0) {
+                if (transactions.length === 0) {
                     firstTimeToast(toast);
                 }
 
                 // -----------------------------------------------------------------
 
-                const auxDividends = dividends.entries;
-                updateDividendsWithCards(auxDividends, loadCards).then(() => {
-                    // -----------------------------------------------------------------
-                    // Rebuild infoAccount
-                    // -----------------------------------------------------------------
+                await updateDividendsWithCards(dividendEntries, loadCards);
+                const _auxInfo = {
+                    ...infoAccount,
+                    IGNISBalance: ignis,
+                    GIFTZBalance: giftzAsset.quantityQNT,
+                    GEMBalance: gems.quantityQNT / NQTDIVIDER,
+                    GEMRealBalance: gems.unconfirmedQuantityQNT / NQTDIVIDER,
+                    WETHBalance: weth.quantityQNT / NQTDIVIDER,
+                    WETHRealBalance: weth.unconfirmedQuantityQNT / NQTDIVIDER,
+                    MANABalance: mana.quantityQNT / NQTDIVIDER,
+                    MANARealBalance: mana.unconfirmedQuantityQNT / NQTDIVIDER,
+                    transactions,
+                    dividends: dividendEntries,
+                    unconfirmedTxs: unconfirmedTransactions,
+                    currentAsks: currentAskOrBids.askOrders,
+                    currentBids: currentAskOrBids.bidOrders,
+                    trades: tradesList,
+                    stuckedGiftz: giftzOmnoBalance,
+                    assets: accountAssetList,
+                };
 
-                    const _auxInfo = {
-                        ...infoAccount,
-                        IGNISBalance: ignis,
-                        GIFTZBalance: giftzAsset.quantityQNT,
-                        GEMBalance: gems.quantityQNT / NQTDIVIDER,
-                        GEMRealBalance: gems.unconfirmedQuantityQNT / NQTDIVIDER,
-                        WETHBalance: weth.quantityQNT / NQTDIVIDER,
-                        WETHRealBalance: weth.unconfirmedQuantityQNT / NQTDIVIDER,
-                        MANABalance: mana.quantityQNT / NQTDIVIDER,
-                        MANARealBalance: mana.unconfirmedQuantityQNT / NQTDIVIDER,
-                        transactions: txs.transactions,
-                        dividends: auxDividends,
-                        unconfirmedTxs: unconfirmedTransactions,
-                        currentAsks: currentAskOrBids.askOrders,
-                        currentBids: currentAskOrBids.bidOrders,
-                        trades: trades.trades,
-                        stuckedGiftz: giftzOmnoBalance,
-                        assets: accountAssets.accountAssets,
-                    };
-
-                    dispatch(fetchAllElyxirData());
-                    // -----------------------------------------------------------------
-                    // Get all hashes and compare
-                    // -----------------------------------------------------------------
-                    checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
-                });
+                dispatch(fetchAllElyxirData());
+                checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
 
                 checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems);
                 checkDataChange('GIFTZ', giftzCardsHash, setGiftzCards, setGiftzCardsHash, giftzAsset);

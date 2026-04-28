@@ -27,10 +27,9 @@ import { errorToast, okToast } from '../../../utils/alerts';
 import { buyPackWithWETH } from '../../../utils/cardsUtils';
 import { checkPin } from '../../../utils/walletUtils';
 import { fetchGiftzMarket } from '../../../utils/omno';
-import { Animated } from 'react-animated-css';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 
-import { CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
+import { CrossmintPayButton_DEPRECATED as CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
 import { getEthPrice, getMaticPriceWithEth } from '../../../services/coingecko/utils';
 import { getEthDepositAddressFor1155 } from '../../../services/Ardor/ardorInterface';
 
@@ -260,10 +259,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
     const correctNumberInput = input.value > 0 && input.value <= totalOnSale && input.value !== '0';
     const isDisabled = !isValidPin || !correctNumberInput || !canBuy;
 
-    const randomTime = () => {
-        return Math.floor(Math.random() * (10000 - 1000 + 1)) + 1000;
-    };
-
     return (
         <>
             <AlertDialog
@@ -282,13 +277,12 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                         <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}>
                             <GridItem w="100%">
                                 <Center w="100%">
-                                    <Animated animationIn="shake" animationInDelay={randomTime()} isVisible={true}>
-                                        <Image
-                                            src="/images/cardPacks/BuyPackExpendedora.png"
-                                            alt="Vending Machine"
-                                            maxH={{ base: '15rem', md: '30rem' }}
-                                        />
-                                    </Animated>
+                                    <Image
+                                        className="buy-pack-vending-machine"
+                                        src="/images/cardPacks/BuyPackExpendedora.png"
+                                        alt="Vending Machine"
+                                        maxH={{ base: '15rem', md: '30rem' }}
+                                    />
                                 </Center>
                             </GridItem>
 

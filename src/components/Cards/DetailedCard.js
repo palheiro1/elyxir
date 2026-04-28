@@ -22,9 +22,6 @@ import CreatureTabs from './DetailedCardViewTabs/CreatureTabs';
 import CultureTabs from './DetailedCardViewTabs/CultureTabs';
 import LocationTabs from './DetailedCardViewTabs/LocationTabs';
 
-import HoverCard from '@darenft/react-3d-hover-card';
-import '@darenft/react-3d-hover-card/dist/style.css';
-
 /**
  * @name DetailedCard
  * @description Modal to show the details of a card
@@ -59,9 +56,15 @@ const DetailedCard = ({ isOpen, onClose, data }) => {
                     <ModalCloseButton color="white" />
                     <Stack direction={{ base: 'column', lg: 'row' }}>
                         <Box mt="6%">
-                            <HoverCard scaleFactor={1.4}>
-                                <Image src={image} alt={name} maxH={{ base: '21rem', lg: '42rem' }} rounded="lg" mx={"auto"} />
-                            </HoverCard>
+                            <Box className="hover-card-lite">
+                                <Image
+                                    src={image}
+                                    alt={name}
+                                    maxH={{ base: '21rem', lg: '42rem' }}
+                                    rounded="lg"
+                                    mx={'auto'}
+                                />
+                            </Box>
                         </Box>
 
                         <Stack direction="column" align="center" w="100%">

@@ -5,6 +5,7 @@ import {
     AlertDialogContent,
     AlertDialogHeader,
     AlertDialogOverlay,
+    Box,
     Button,
     Center,
     Heading,
@@ -18,9 +19,6 @@ import { useEffect, useState } from 'react';
 import equal from 'fast-deep-equal';
 import Crypto from 'crypto-browserify';
 
-import HoverCard from '@darenft/react-3d-hover-card';
-import '@darenft/react-3d-hover-card/dist/style.css';
-
 /**
  * @name ItemReceived
  * @description Modal to show received items/potions
@@ -32,7 +30,6 @@ import '@darenft/react-3d-hover-card/dist/style.css';
  */
 const ItemReceived = ({ reference, isOpen, onClose, items }) => {
     const [currentItems, setCurrentItems] = useState([]);
-    const [itemsHash, setItemsHash] = useState('');
 
     useEffect(() => {
         const check = () => {
@@ -47,7 +44,6 @@ const ItemReceived = ({ reference, isOpen, onClose, items }) => {
 
     const bgColor = useColorModeValue('#FFF', '#1D1D1D');
     const borderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
-    const arrowColor = useColorModeValue('black', 'white');
 
     if (currentItems.length === 0) return null;
 
@@ -65,9 +61,9 @@ const ItemReceived = ({ reference, isOpen, onClose, items }) => {
                     shadow="lg"
                     borderColor="whiteAlpha.400">
                     <Center w="100%">
-                        <HoverCard scaleFactor={1.4}>
+                        <Box className="hover-card-lite">
                             <Image src={asset.image} alt="Potion" maxH="25rem" />
-                        </HoverCard>
+                        </Box>
                     </Center>
                     <SimpleGrid columns={1} mt={2}>
                         <Heading textAlign="center">{asset.name}</Heading>

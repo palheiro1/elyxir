@@ -28,6 +28,13 @@ module.exports = function override(config) {
         // '@utils': path.resolve(__dirname, 'src/utils'),
     };
 
+    config.ignoreWarnings = [
+        ...(config.ignoreWarnings || []),
+        warning =>
+            warning.module?.resource?.includes(`${path.sep}node_modules${path.sep}`) &&
+            /Failed to parse source map/.test(warning.message || ''),
+    ];
+
     config.module.rules.unshift({ test: /\.m?js$/, resolve: { fullySpecified: false } });
     return config;
 };
