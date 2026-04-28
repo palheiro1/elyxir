@@ -22,6 +22,8 @@ const config = {
     },
 };
 
+const IGNIS_CHAIN = 2;
+
 const URL_SEND_MONEY = `${NODEURL}?requestType=sendMoney`;
 const URL_CURRENCY_BUY = `${NODEURL}?requestType=currencyBuy`;
 
@@ -100,7 +102,7 @@ const getRequestToIgnisByAccount = async (type, account) => {
         const response = await axios.get(NODEURL, {
             params: {
                 requestType: type,
-                chain: 'IGNIS',
+                chain: IGNIS_CHAIN,
                 account,
             },
         });
