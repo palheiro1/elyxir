@@ -170,10 +170,10 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Handle change option with flag
     // -----------------------------------------------------------------
 
-    const handleChangeOption = newOption => {
+    const handleChangeOption = useCallback(newOption => {
         setLastOption(option);
         setOption(newOption);
-    };
+    }, [option]);
 
     // -----------------------------------------------------------------
     // Load all data from blockchain - Main flow
@@ -499,14 +499,24 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
                 manaCards={manaCards}
                 selectedBridgeType={selectedBridgeType}
             />, // OPTION 4 - Bridge
-            <NewsAirdrops />, // OPTION 5 - News & Airdrops
+            <NewsAirdrops goToSection={handleChangeOption} />, // OPTION 5 - News & Airdrops
             <Account infoAccount={infoAccount} />, // OPTION 6 - Account
             '', // OPTION 7 - Buy pack
             <Exchange infoAccount={infoAccount} />, // OPTION 8 - Exchange
             '', // OPTION 9 - OPEN PACK
             <Elyxir infoAccount={infoAccount} />, // OPTION 10 - Elyxir
         ],
-        [infoAccount, cards, gemCards, haveUnconfirmed, giftzCards, wethCards, manaCards, selectedBridgeType]
+        [
+            infoAccount,
+            cards,
+            gemCards,
+            haveUnconfirmed,
+            giftzCards,
+            wethCards,
+            manaCards,
+            selectedBridgeType,
+            handleChangeOption,
+        ]
     );
 
     useEffect(() => {
