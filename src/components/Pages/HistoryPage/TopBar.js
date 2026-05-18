@@ -14,6 +14,7 @@ const TopBar = ({
 }) => {
     const isTransactions = section === 'transactions';
     const isDividends = section === 'dividends';
+    const isAlchemy = section === 'alchemy';
     return (
         <Stack
             direction={{ base: 'column', lg: 'row' }}
@@ -58,6 +59,16 @@ const TopBar = ({
                         _hover={{ color: '#3b7197' }}
                         onClick={() => setSection('dividends')}>
                         Dividends
+                    </Button>
+                    <Button
+                        w="100%"
+                        border="2px"
+                        borderColor="#367197"
+                        bgColor={isAlchemy && '#3b7197'}
+                        color={isAlchemy && 'white'}
+                        _hover={{ color: '#3b7197' }}
+                        onClick={() => setSection('alchemy')}>
+                        Alchemy
                     </Button>
                 </ButtonGroup>
             </Stack>

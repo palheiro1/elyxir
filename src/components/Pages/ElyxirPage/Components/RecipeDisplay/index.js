@@ -1,8 +1,9 @@
-import { Box, Heading, Stack, Text } from '@chakra-ui/react';
+import { Alert, AlertDescription, AlertIcon, Box, Heading, Stack, Text } from '@chakra-ui/react';
 import RequiredIngredients from './Components/RequiredIngredients';
 import RequiredTools from './Components/RequiredTools';
 import { calculateSuccessRate, formatSuccessRate } from '../../../../../utils/elyxirUtils';
 import { useSelector } from 'react-redux';
+import { ELYXIR_LIFECYCLE_FIX_HEIGHT, NEW_LIFECYCLE_ACTIVE_COPY } from '../../../../../utils/elyxirLifecycle';
 
 /**
  * @name RecipeDisplay
@@ -15,12 +16,13 @@ import { useSelector } from 'react-redux';
  * @returns {JSX.Element} A styled box showing potion details, success rate, required ingredients, and tools needed for crafting.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
-const RecipeDisplay = ({ selectedRecipe, craftDuration, selectedFlask }) => {
+const RecipeDisplay = ({ selectedRecipe, craftDuration, selectedFlask, currentHeight }) => {
     const { items } = useSelector(state => state.items);
     const potions = items.filter(item => item.type === 'potion');
     const recipePotion = potions?.find(potion => potion?.asset === selectedRecipe?.creationAssetId);
 
     const successRate = formatSuccessRate(calculateSuccessRate(craftDuration));
+    const usesNewLifecycle = Number(currentHeight) >= ELYXIR_LIFECYCLE_FIX_HEIGHT;
 
     return (
         recipePotion && (
@@ -31,6 +33,12 @@ const RecipeDisplay = ({ selectedRecipe, craftDuration, selectedFlask }) => {
                 <Text fontSize="md" mb={4} color="purple.600" fontWeight="bold">
                     Success Rate: {successRate}%
                 </Text>
+                {usesNewLifecycle && (
+                    <Alert status="warning" borderRadius="md" mb={4}>
+                        <AlertIcon />
+                        <AlertDescription>{NEW_LIFECYCLE_ACTIVE_COPY}</AlertDescription>
+                    </Alert>
+                )}
                 <Stack spacing={6}>
                     <RequiredIngredients selectedFlask={selectedFlask} selectedRecipe={selectedRecipe} />
                     <RequiredTools selectedRecipe={selectedRecipe} />

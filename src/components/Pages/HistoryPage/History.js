@@ -13,6 +13,7 @@ import {
 } from './TableHandlers';
 
 import ShowTransactions from './ShowTransactions';
+import ShowAlchemyHistory from './ShowAlchemyHistory';
 import Loader from './Loader';
 import TopBar from './TopBar';
 import ShowDividends from './ShowDividens';
@@ -21,6 +22,9 @@ import { getTxTimestamp } from '../../../utils/txUtils';
 import DetailedCard from '../../Cards/DetailedCard';
 import { useSelector } from 'react-redux';
 import { isItemAsset } from '../../../utils/itemsUtils';
+import { getUserJobs } from '../../../services/Elyxir/elyxir';
+import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
+import { buildAlchemyHistory } from '../../../utils/elyxirHistory';
 
 /**
  * @name History
@@ -59,6 +63,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
      */
     const [transactions, setTransactions] = useState([]);
     const [dividends, setDividends] = useState([]);
+    const [alchemyJobs, setAlchemyJobs] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState(transactions);
     const [filteredDividends, setFilteredDividends] = useState(dividends);
 
@@ -69,6 +74,7 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
     // -------------------------------------------------
     const [visibleTransactions, setVisibleTransactions] = useState(10);
     const [visibleDividends, setVisibleDividends] = useState(10);
+    const [visibleAlchemy, setVisibleAlchemy] = useState(10);
     // -------------------------------------------------
     const epoch_beginning = useMemo(() => new Date(Date.UTC(2018, 0, 1, 0, 0, 0)), []);
 
@@ -97,6 +103,40 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
     }, [haveUnconfirmed, lastConfirmation]);
 
     const { items } = useSelector(state => state.items);
+    const { elyxir } = useSelector(state => state.elyxir);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const loadAlchemyJobs = async () => {
+            if (!infoAccount?.accountRs) {
+                setAlchemyJobs([]);
+                return;
+            }
+
+            const accountId = addressToAccountId(infoAccount.accountRs);
+            const jobs = await getUserJobs({ accountId });
+            if (isMounted) setAlchemyJobs(jobs);
+        };
+
+        loadAlchemyJobs();
+        const interval = setInterval(loadAlchemyJobs, 30000);
+
+        return () => {
+            isMounted = false;
+            clearInterval(interval);
+        };
+    }, [infoAccount?.accountRs]);
+
+    const alchemyEvents = useMemo(() => {
+        return buildAlchemyHistory({
+            transactions: infoAccount.transactions || [],
+            jobs: alchemyJobs,
+            items,
+            accountRs: infoAccount.accountRs,
+            recipes: elyxir?.definition?.recipes || [],
+        });
+    }, [infoAccount.transactions, infoAccount.accountRs, alchemyJobs, items, elyxir?.definition?.recipes]);
     // -------------------------------------------------
     useEffect(() => {
         const processTransactions = () => {
@@ -195,6 +235,14 @@ const History = ({ infoAccount, collectionCardsStatic, haveUnconfirmed = false }
                         setVisibleDividends={setVisibleDividends}
                         visibleDividends={visibleDividends}
                         epoch_beginning={epoch_beginning}
+                    />
+                )}
+                {!needReload && section === 'alchemy' && (
+                    <ShowAlchemyHistory
+                        alchemyEvents={alchemyEvents}
+                        visibleAlchemy={visibleAlchemy}
+                        setVisibleAlchemy={setVisibleAlchemy}
+                        epochBeginning={epoch_beginning}
                     />
                 )}
             </Box>

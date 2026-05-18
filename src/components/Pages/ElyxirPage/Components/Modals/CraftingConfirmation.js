@@ -17,6 +17,12 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
+import {
+    ELYXIR_LIFECYCLE_FIX_HEIGHT,
+    LEGACY_CREATED_COPY,
+    NEW_LIFECYCLE_CREATED_COPY,
+    RECIPE_REQUIREMENT_COPY,
+} from '../../../../../utils/elyxirLifecycle';
 
 /**
  * @name CraftingConfirmation
@@ -40,6 +46,7 @@ const CraftingConfirmation = ({
     confirmCrafting,
     isLoading,
     selectedFlask,
+    currentHeight,
 }) => {
     const { items } = useSelector(state => state.items);
 
@@ -48,6 +55,7 @@ const CraftingConfirmation = ({
 
     const recipePotion = potions?.find(potion => potion?.asset === selectedRecipe?.creationAssetId);
     const multiplier = selectedFlask?.multiplier || 1;
+    const usesNewLifecycle = Number(currentHeight) >= ELYXIR_LIFECYCLE_FIX_HEIGHT;
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -67,6 +75,18 @@ const CraftingConfirmation = ({
                                         transactions.
                                     </AlertDescription>
                                 </Box>
+                            </Alert>
+
+                            <Alert status="info" borderRadius="md">
+                                <AlertIcon />
+                                <AlertDescription>{RECIPE_REQUIREMENT_COPY}</AlertDescription>
+                            </Alert>
+
+                            <Alert status={usesNewLifecycle ? 'warning' : 'info'} borderRadius="md">
+                                <AlertIcon />
+                                <AlertDescription>
+                                    {usesNewLifecycle ? NEW_LIFECYCLE_CREATED_COPY : LEGACY_CREATED_COPY}
+                                </AlertDescription>
                             </Alert>
 
                             <Box>

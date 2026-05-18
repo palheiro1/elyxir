@@ -2,6 +2,7 @@ import { Box, Heading, Stack } from '@chakra-ui/react';
 import ActiveJobItem from './Components/ActiveJobItem';
 import EmptyActiveJobs from './Components/EmptyActiveJobs';
 import { useSelector } from 'react-redux';
+import { getJobProgress } from '../../../../../utils/elyxirLifecycle';
 
 /**
  * @name ActiveJobs
@@ -33,20 +34,16 @@ const ActiveJobs = ({ activeJobs, sectionBg, isLoading }) => {
                 <Stack direction={'column'} spacing={4}>
                     {activeJobs.map(job => {
                         const currentHeight = prev_height;
-
-                        const totalBlocks = job.endHeight - job.startHeight;
-                        const completedBlocks = Math.max(0, currentHeight - job.startHeight);
-
-                        const progress = totalBlocks > 0 ? Math.min(100, (completedBlocks / totalBlocks) * 100) : 0;
-                        const isComplete = currentHeight >= job.endHeight;
+                        const jobProgress = getJobProgress(job, currentHeight);
 
                         return (
                             <ActiveJobItem
                                 key={job.jobId}
                                 job={job}
                                 isLoading={isLoading}
-                                isComplete={isComplete}
-                                progress={progress}
+                                isComplete={jobProgress.isDue}
+                                progress={jobProgress.progress}
+                                currentHeight={currentHeight}
                             />
                         );
                     })}

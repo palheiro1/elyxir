@@ -1,6 +1,7 @@
-import { Badge, Box, Button, Stack, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import { Alert, AlertDescription, AlertIcon, Badge, Box, Button, Stack, Text, Wrap, WrapItem } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import ResponsiveTooltip from '../../../ui/ReponsiveTooltip';
+import { RECIPE_REQUIREMENT_COPY } from '../../../../utils/elyxirLifecycle';
 
 /**
  * @name RecipeSelector
@@ -30,9 +31,13 @@ const RecipeSelector = ({ infoAccount, selectedFlask, selectedRecipe, setSelecte
                     Select Recipe:
                 </Text>
                 <Badge colorScheme="purple" fontSize="sm" p={2}>
-                    🔗 Real Blockchain Crafting Available
+                    Real Blockchain Crafting Available
                 </Badge>
             </Stack>
+            <Alert status="info" borderRadius="md">
+                <AlertIcon />
+                <AlertDescription>{RECIPE_REQUIREMENT_COPY}</AlertDescription>
+            </Alert>
             <Wrap spacing={2}>
                 {recipes.map((recipe, idx) => {
                     const currentMultiplier = selectedFlask?.multiplier || 1;
@@ -78,7 +83,7 @@ const RecipeSelector = ({ infoAccount, selectedFlask, selectedRecipe, setSelecte
                                     colorScheme="purple"
                                     fontSize="xs"
                                     borderRadius="full">
-                                    🔗
+                                    L1
                                 </Badge>
                             </Box>
                         </WrapItem>

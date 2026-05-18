@@ -25,6 +25,11 @@ import { getUserJobs, sendCraftPotionAssets, sendCraftPotionMessage } from '../.
 import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
 import { useSelector } from 'react-redux';
 import { DURATION_OPTIONS } from './data';
+import {
+    ELYXIR_LIFECYCLE_FIX_HEIGHT,
+    LEGACY_CREATED_COPY,
+    NEW_LIFECYCLE_CREATED_COPY,
+} from '../../../utils/elyxirLifecycle';
 
 const Elyxir = ({ infoAccount }) => {
     const { elyxir } = useSelector(state => state.elyxir);
@@ -36,7 +41,6 @@ const Elyxir = ({ infoAccount }) => {
     const [activeJobs, setActiveJobs] = useState([]);
     const [completedJobs, setCompletedJobs] = useState([]);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
-    const [craftingAmount, setCraftingAmount] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [userPassphrase, setUserPassphrase] = useState(null);
     const [showPinInput, setShowPinInput] = useState(false);
@@ -75,7 +79,6 @@ const Elyxir = ({ infoAccount }) => {
             const recipeConfig = elyxir.definition.recipes.find(r => r.recipeAssetId === recipe.recipeAssetId);
             if (recipeConfig) {
                 setSelectedRecipe(recipeConfig);
-                setCraftingAmount(1);
                 onOpen();
             } else {
                 toast({
@@ -169,11 +172,13 @@ const Elyxir = ({ infoAccount }) => {
 
             if (!response) throw new Error('Failed to start crafting');
 
+            const usesNewLifecycle = Number(prev_height) >= ELYXIR_LIFECYCLE_FIX_HEIGHT;
+
             toast({
-                title: 'Crafting Started!',
-                description: `Started crafting ${craftingAmount}x ${recipePotion.name}. It will complete in ${craftDuration} days.`,
+                title: 'Alchemy Started',
+                description: usesNewLifecycle ? NEW_LIFECYCLE_CREATED_COPY : LEGACY_CREATED_COPY,
                 status: 'success',
-                duration: 5000,
+                duration: 7000,
                 isClosable: true,
             });
         } catch (error) {
@@ -280,6 +285,7 @@ const Elyxir = ({ infoAccount }) => {
                                 selectedFlask={selectedFlask}
                                 selectedRecipe={selectedRecipe}
                                 craftDuration={craftDuration}
+                                currentHeight={prev_height}
                             />
                             <CraftingControls
                                 craftDuration={craftDuration}
@@ -306,10 +312,10 @@ const Elyxir = ({ infoAccount }) => {
                 isOpen={isOpen}
                 onClose={onClose}
                 selectedRecipe={selectedRecipe}
-                setCraftingAmount={setCraftingAmount}
                 confirmCrafting={confirmCrafting}
                 isLoading={isLoading}
                 selectedFlask={selectedFlask}
+                currentHeight={prev_height}
             />
             <PinModal showPinInput={showPinInput} setShowPinInput={setShowPinInput} handlePinInput={handlePinInput} />
         </Box>
