@@ -93,46 +93,12 @@ const Elyxir = ({ infoAccount }) => {
         [elyxir?.definition?.recipes, onOpen, toast]
     );
 
-    const handlePinInput = useCallback(
-        pin => {
-            try {
-                const userAccount = checkPin(infoAccount.name, pin);
-                if (!userAccount || !userAccount.passphrase) {
-                    toast({
-                        title: 'Invalid PIN',
-                        description: 'Please enter your correct PIN',
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                    });
-                    return;
-                }
-
-                setUserPassphrase(userAccount.passphrase);
-                setShowPinInput(false);
-
-                if (pendingAction === 'craft') {
-                    executeCrafting(userAccount.passphrase);
-                }
-            } catch (error) {
-                toast({
-                    title: 'PIN Error',
-                    description: 'Failed to verify PIN. Please try again.',
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                });
-            }
-        },
-        [infoAccount.name, pendingAction, toast]
-    );
-
     const requestPinForAction = useCallback(action => {
         setPendingAction(action);
         setShowPinInput(true);
     }, []);
 
-    const executeCrafting = async passphrase => {
+    const executeCrafting = useCallback(async passphrase => {
         setIsLoading(true);
 
         try {
@@ -194,7 +160,41 @@ const Elyxir = ({ infoAccount }) => {
             setIsLoading(false);
             setPendingAction(null);
         }
-    };
+    }, [craftDuration, infoAccount.accountRs, potions, prev_height, selectedFlask, selectedRecipe, toast]);
+
+    const handlePinInput = useCallback(
+        pin => {
+            try {
+                const userAccount = checkPin(infoAccount.name, pin);
+                if (!userAccount || !userAccount.passphrase) {
+                    toast({
+                        title: 'Invalid PIN',
+                        description: 'Please enter your correct PIN',
+                        status: 'error',
+                        duration: 3000,
+                        isClosable: true,
+                    });
+                    return;
+                }
+
+                setUserPassphrase(userAccount.passphrase);
+                setShowPinInput(false);
+
+                if (pendingAction === 'craft') {
+                    executeCrafting(userAccount.passphrase);
+                }
+            } catch (error) {
+                toast({
+                    title: 'PIN Error',
+                    description: 'Failed to verify PIN. Please try again.',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        },
+        [executeCrafting, infoAccount.name, pendingAction, toast]
+    );
 
     const confirmCrafting = useCallback(async () => {
         if (!selectedRecipe || !selectedFlask || !infoAccount) {
@@ -216,7 +216,7 @@ const Elyxir = ({ infoAccount }) => {
         }
 
         await executeCrafting(userPassphrase);
-    }, [selectedRecipe, infoAccount, onClose, userPassphrase, requestPinForAction]);
+    }, [selectedRecipe, selectedFlask, infoAccount, onClose, userPassphrase, requestPinForAction, executeCrafting, toast]);
 
     const getMissingItems = useCallback(
         (recipe, flaskMultiplier) => {

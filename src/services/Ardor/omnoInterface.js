@@ -38,8 +38,8 @@ const getOmnoBidOrders = (allOffers = [], asset) => {
     return selectedOffers;
 };
 
-export const getOmnoMarketOrdesForAsset = async asset => {
-    const allOffers = await fetchOmnoMarket();
+export const getOmnoMarketOrdesForAsset = async (asset, options) => {
+    const allOffers = await fetchOmnoMarket(options);
     const askOrders = getOmnoAskOrders(allOffers, asset);
     const bidOrders = getOmnoBidOrders(allOffers, asset);
     return { askOrders, bidOrders };

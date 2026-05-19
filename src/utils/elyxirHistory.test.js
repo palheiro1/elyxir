@@ -54,6 +54,69 @@ describe('elyxirHistory', () => {
         });
     });
 
+    it('groups canonical jobs by create fullHash and does not emit a false rejected create event', () => {
+        const baseParameter = JSON.parse(createTx.attachment.message).operation[0].parameter;
+        const canonicalCreateTx = {
+            ...createTx,
+            fullHash: 'canonical-create-fullhash',
+            attachment: {
+                message: JSON.stringify({
+                    contract: OMNO_CONTRACT,
+                    operation: [
+                        {
+                            service: 'elyxir',
+                            request: 'create',
+                            parameter: {
+                                ...baseParameter,
+                                jobId: 'client-uuid',
+                            },
+                        },
+                    ],
+                }),
+            },
+        };
+
+        const events = buildAlchemyHistory({
+            accountRs,
+            transactions: [
+                canonicalCreateTx,
+                {
+                    type: 2,
+                    subtype: 1,
+                    senderRS: accountRs,
+                    recipientRS: OMNO_ACCOUNT,
+                    timestamp: 110,
+                    fullHash: 'ingredient-transfer',
+                    attachment: { asset: '6485210212239811', quantityQNT: '2' },
+                },
+            ],
+            jobs: [
+                {
+                    jobId: 'canonical-create-fullhash',
+                    createTxFullHash: 'canonical-create-fullhash',
+                    clientJobId: 'client-uuid',
+                    status: 'STARTED',
+                    escrowed: true,
+                    startHeight: 4472500,
+                    endHeight: 4473940,
+                    creationAssetId: '6485210212239811',
+                },
+            ],
+            items: [],
+        });
+
+        expect(events).toHaveLength(1);
+        expect(events[0]).toMatchObject({
+            kind: 'job',
+            id: 'canonical-create-fullhash',
+            createTx: { fullHash: 'canonical-create-fullhash' },
+        });
+        expect(events[0].movements[0]).toMatchObject({
+            id: 'ingredient-transfer',
+            inferred: true,
+        });
+    });
+
     it('classifies create transactions without jobs from settlement evidence', () => {
         const settled = buildAlchemyHistory({
             accountRs,

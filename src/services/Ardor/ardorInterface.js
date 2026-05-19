@@ -97,7 +97,7 @@ export const addressToAccountId = address => {
 //                  ARDOR REQUESTS
 // -------------------------------------------------
 
-const getRequestToIgnisByAccount = async (type, account) => {
+const getRequestToIgnisByAccount = async (type, account, { silent = false } = {}) => {
     try {
         const response = await axios.get(NODEURL, {
             params: {
@@ -108,12 +108,12 @@ const getRequestToIgnisByAccount = async (type, account) => {
         });
         return response.data;
     } catch (error) {
-        console.error('🚀 ~ file: ardorInterface.js:68 ~ getRequestToIgnisByAccount ~ error', error);
+        if (!silent) console.error('🚀 ~ file: ardorInterface.js:68 ~ getRequestToIgnisByAccount ~ error', error);
         return false;
     }
 };
 
-const getRequestToIgnisByAsset = async (type, asset) => {
+const getRequestToIgnisByAsset = async (type, asset, { silent = false } = {}) => {
     try {
         const response = await axios.get(NODEURL, {
             params: {
@@ -124,7 +124,7 @@ const getRequestToIgnisByAsset = async (type, asset) => {
         });
         return response.data;
     } catch (error) {
-        console.error('🚀 ~ file: ardorInterface.js:95 ~ getRequestToIgnisByAsset ~ error', error);
+        if (!silent) console.error('🚀 ~ file: ardorInterface.js:95 ~ getRequestToIgnisByAsset ~ error', error);
     }
 };
 
@@ -173,12 +173,12 @@ export const getAccountCurrentBidOrders = async account => {
     return await getRequestToIgnisByAccount('getAccountCurrentBidOrders', account);
 };
 
-export const getAskOrders = async asset => {
-    return await getRequestToIgnisByAsset('getAskOrders', asset);
+export const getAskOrders = async (asset, options) => {
+    return await getRequestToIgnisByAsset('getAskOrders', asset, options);
 };
 
-export const getBidOrders = async asset => {
-    return await getRequestToIgnisByAsset('getBidOrders', asset);
+export const getBidOrders = async (asset, options) => {
+    return await getRequestToIgnisByAsset('getBidOrders', asset, options);
 };
 
 export const getAskOrder = async order => {
@@ -189,16 +189,17 @@ export const getBidOrder = async order => {
     return await getRequestToIgnisByOrder('getBidOrder', order);
 };
 
-export const getAssetsByIssuer = async account => {
-    return (await getRequestToIgnisByAccount('getAssetsByIssuer', account)).assets[0];
+export const getAssetsByIssuer = async (account, options) => {
+    const response = await getRequestToIgnisByAccount('getAssetsByIssuer', account, options);
+    return response?.assets?.[0] || [];
 };
 
 export const getAccount = async account => {
     return await getRequestToIgnisByAccount('getAccount', account);
 };
 
-export const getAsset = async asset => {
-    return await getRequestToIgnisByAsset('getAsset', asset);
+export const getAsset = async (asset, options) => {
+    return await getRequestToIgnisByAsset('getAsset', asset, options);
 };
 
 export const getAccountAssets = async (accountId, assetId = '') => {
@@ -249,7 +250,7 @@ export const getTransaction = async (chain, fullHash) => {
     }
 };
 
-export const getLastTrades = async assets => {
+export const getLastTrades = async (assets, { silent = false } = {}) => {
     try {
         const response = await axios.get(NODEURL, {
             params: {
@@ -260,7 +261,7 @@ export const getLastTrades = async assets => {
         });
         return response.data;
     } catch (error) {
-        console.error('🚀 ~ file: ardorInterface.js:182 ~ getLastTrades ~ error', error);
+        if (!silent) console.error('🚀 ~ file: ardorInterface.js:182 ~ getLastTrades ~ error', error);
     }
 };
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Button, Stack } from '@chakra-ui/react';
+import { Alert, AlertIcon, Box, Button, Stack } from '@chakra-ui/react';
 
 import GridItems from '../../Items/GridItems';
 import SortAndFilterItems from '../../SortAndFilters/SortAndFilterItems';
@@ -17,9 +17,18 @@ import { useSelector } from 'react-redux';
  */
 
 const Inventory = ({ infoAccount }) => {
-    const { items } = useSelector(state => state.items);
+    const { items, error } = useSelector(state => state.items);
     const [section, setSection] = useState('all');
     const [itemsFiltered, setItemsFiltered] = useState(items);
+    const hasPartialDataWarning = (items || []).some(item => {
+        return (
+            item.metadataLoadFailed ||
+            item.marketLoadFailed ||
+            item.bonusLoadFailed ||
+            item.omnoLoadFailed ||
+            item.flaskMultiplierLoadFailed
+        );
+    });
 
     useEffect(() => {
         let newItems = items;
@@ -31,6 +40,13 @@ const Inventory = ({ infoAccount }) => {
 
     return (
         <Box mb={2}>
+            {(error || hasPartialDataWarning) && (
+                <Alert status="warning" mb={4} borderRadius="md">
+                    <AlertIcon />
+                    Inventory quantities are loaded from Ardor on-chain balances. Some market, bonus, or metadata details
+                    could not be loaded.
+                </Alert>
+            )}
             <Stack direction="row" spacing={2} mb={4}>
                 {['all', 'ingredient', 'tool', 'flask', 'recipe', 'potion'].map(type => (
                     <Button

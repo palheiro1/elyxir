@@ -169,11 +169,16 @@ const AlchemyEvent = ({ event, epochBeginning, items, currentHeight }) => {
                                         borderRadius="md"
                                         p={2}>
                                         <Stack direction="row" align="center" flexWrap="wrap">
-                                            <Badge colorScheme={movement.direction === 'in' ? 'green' : 'blue'}>
-                                                {movement.direction === 'in' ? 'Settlement' : 'Submitted asset'}
-                                            </Badge>
-                                            <Text fontSize="sm">{movement.itemName}</Text>
-                                        </Stack>
+	                                            <Badge colorScheme={movement.direction === 'in' ? 'green' : 'blue'}>
+	                                                {movement.direction === 'in' ? 'Settlement' : 'Submitted asset'}
+	                                            </Badge>
+	                                            {movement.inferred && (
+	                                                <Badge colorScheme="gray" variant="subtle">
+	                                                    Inferred
+	                                                </Badge>
+	                                            )}
+	                                            <Text fontSize="sm">{movement.itemName}</Text>
+	                                        </Stack>
                                         <Text fontSize="sm" color="gray.600">
                                             {movement.quantityQNT} QNT - {formatTxDate(movement.timestamp, epochBeginning)}
                                         </Text>

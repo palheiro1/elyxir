@@ -84,4 +84,47 @@ describe('ShowAlchemyHistory', () => {
         expect(screen.getByText('Assets locked')).toBeTruthy();
         expect(screen.getAllByText(NEW_LIFECYCLE_ACTIVE_COPY).length).toBeGreaterThan(0);
     });
+
+    it('marks transaction-window linked movements as inferred', () => {
+        renderWithStore(
+            <ShowAlchemyHistory
+                visibleAlchemy={10}
+                setVisibleAlchemy={jest.fn()}
+                epochBeginning={new Date(Date.UTC(2018, 0, 1, 0, 0, 0))}
+                alchemyEvents={[
+                    {
+                        id: 'job-1',
+                        kind: 'job',
+                        status: 'STARTED',
+                        statusLabel: 'STARTED',
+                        lifecycle: 'new',
+                        outcome: 'active',
+                        timestamp: 100,
+                        createTx: null,
+                        parameter: null,
+                        job: {
+                            jobId: 'job-1',
+                            escrowed: true,
+                            status: 'STARTED',
+                            creationAssetId: '6485210212239811',
+                            startHeight: 4472500,
+                            endHeight: 4473940,
+                        },
+                        movements: [
+                            {
+                                id: 'movement-1',
+                                direction: 'out',
+                                itemName: 'Potion Coral',
+                                quantityQNT: '1',
+                                timestamp: 110,
+                                inferred: true,
+                            },
+                        ],
+                    },
+                ]}
+            />
+        );
+
+        expect(screen.getByText('Inferred')).toBeTruthy();
+    });
 });

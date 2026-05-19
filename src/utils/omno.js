@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { GIFTZASSET, OMNO_API, WETHASSET } from '../data/CONSTANTS';
 
-export const fetchOmnoMarket = async () => {
+export const fetchOmnoMarket = async ({ silent = false } = {}) => {
     try {
         const response = await axios.get(OMNO_API, {
             params: {
@@ -10,7 +10,7 @@ export const fetchOmnoMarket = async () => {
         });
         return response.data || [];
     } catch (error) {
-        console.error('Error:', error);
+        if (!silent) console.error('Error:', error);
         throw error; // Rethrow the error so the caller can handle it if needed
     }
 };

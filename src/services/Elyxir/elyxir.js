@@ -4,13 +4,13 @@ import { OMNO_ACCOUNT, OMNO_API, OMNO_CONTRACT } from '../../data/CONSTANTS';
 import { getCraftPotionMessage } from '../../utils/elyxirUtils';
 import axios from 'axios';
 
-export const getFlaskAssets = async () => {
+export const getFlaskAssets = async ({ silent = false } = {}) => {
     try {
         const response = await axios.get(`${OMNO_API}/index.php?action=getElyxirState`);
         if (!response) return false;
         return response.data.elyxir.definition.flaskMultipliers;
     } catch (error) {
-        console.error('🚀 ~ getFlaskAssets ~ error:', error);
+        if (!silent) console.error('🚀 ~ getFlaskAssets ~ error:', error);
         return false;
     }
 };
@@ -40,14 +40,20 @@ export const getElyxirConfiguration = async () => {
 export const getUserJobs = async ({ accountId }) => {
     try {
         const response = await axios.get(`${OMNO_API}/index.php?action=getElyxirState`);
-        if (!response?.data?.elyxir?.jobs) return [];
+        if (!response?.data?.elyxir) return [];
 
-        const rawJobs = response.data.elyxir.jobs;
+        const normalizeJobs = (rawJobs = {}, archived = false) =>
+            Object.entries(rawJobs || {}).map(([jobId, jobData]) => ({
+                ...jobData,
+                jobId,
+                canonicalJobId: jobId,
+                archived,
+            }));
 
-        let jobs = Object.entries(rawJobs).map(([jobId, jobData]) => ({
-            jobId,
-            ...jobData,
-        }));
+        let jobs = [
+            ...normalizeJobs(response.data.elyxir.jobs, false),
+            ...normalizeJobs(response.data.elyxir.completedJobs, true),
+        ];
 
         jobs = jobs.filter(job => job.owner === accountId);
 

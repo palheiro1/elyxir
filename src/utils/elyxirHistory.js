@@ -4,6 +4,17 @@ import { getJobLifecycle, getJobOutcome } from './elyxirLifecycle';
 
 const LINK_WINDOW_SECONDS = 60 * 60;
 
+const normalizeId = value => {
+    if (value === undefined || value === null) return null;
+    return String(value);
+};
+
+const idsMatch = (left, right) => {
+    const normalizedLeft = normalizeId(left);
+    const normalizedRight = normalizeId(right);
+    return Boolean(normalizedLeft && normalizedRight && normalizedLeft === normalizedRight);
+};
+
 const getMessage = tx => {
     const message = tx?.attachment?.message;
     if (!message) return null;
@@ -88,6 +99,27 @@ const isNearCreate = (movement, createTx, expectedAssets) => {
     return Number.isFinite(distance) && distance <= LINK_WINDOW_SECONDS;
 };
 
+const createEntryMatchesJob = (entry, job) => {
+    if (idsMatch(entry?.tx?.fullHash, job?.jobId)) return true;
+    if (idsMatch(entry?.tx?.fullHash, job?.createTxFullHash)) return true;
+    if (idsMatch(entry?.parameter?.jobId, job?.jobId)) return true;
+    if (idsMatch(entry?.parameter?.jobId, job?.clientJobId)) return true;
+    return false;
+};
+
+const movementMatchesJob = (movement, job) => {
+    if (idsMatch(movement?.jobId, job?.jobId)) return true;
+    if (idsMatch(movement?.jobId, job?.createTxFullHash)) return true;
+    if (idsMatch(movement?.jobId, job?.clientJobId)) return true;
+    return false;
+};
+
+const movementMatchesCreateEntry = (movement, entry) => {
+    if (idsMatch(movement?.jobId, entry?.tx?.fullHash)) return true;
+    if (idsMatch(movement?.jobId, entry?.parameter?.jobId)) return true;
+    return false;
+};
+
 const dedupeMovements = movements => {
     const seen = new Set();
     return movements.filter(movement => {
@@ -95,6 +127,17 @@ const dedupeMovements = movements => {
         seen.add(movement.id);
         return true;
     });
+};
+
+const linkMovements = ({ movements, createTx, expectedAssets, usedMovementIds, matchesDirectly }) => {
+    return movements
+        .filter(movement => !usedMovementIds?.has(movement.id))
+        .map(movement => {
+            if (matchesDirectly(movement)) return { ...movement, inferred: false };
+            if (isNearCreate(movement, createTx, expectedAssets)) return { ...movement, inferred: true };
+            return null;
+        })
+        .filter(Boolean);
 };
 
 export const buildAlchemyHistory = ({ transactions = [], jobs = [], items = [], accountRs, recipes = [] }) => {
@@ -113,13 +156,15 @@ export const buildAlchemyHistory = ({ transactions = [], jobs = [], items = [], 
     const usedMovementIds = new Set();
 
     const jobEvents = jobs.map(job => {
-        const createEntry = createEntries.find(entry => entry.parameter.jobId === job.jobId);
+        const createEntry = createEntries.find(entry => createEntryMatchesJob(entry, job));
         const expectedAssets = getExpectedAssets({ ...createEntry?.parameter, ...job }, recipes);
 
-        const linkedMovements = movements.filter(movement => {
-            if (movement.jobId === job.jobId) return true;
-            if (isNearCreate(movement, createEntry?.tx, expectedAssets)) return true;
-            return false;
+        const linkedMovements = linkMovements({
+            movements,
+            createTx: createEntry?.tx,
+            expectedAssets,
+            usedMovementIds,
+            matchesDirectly: movement => movementMatchesJob(movement, job),
         });
 
         linkedMovements.forEach(movement => usedMovementIds.add(movement.id));
@@ -140,14 +185,15 @@ export const buildAlchemyHistory = ({ transactions = [], jobs = [], items = [], 
     });
 
     const createOnlyEvents = createEntries
-        .filter(entry => !jobs.some(job => job.jobId === entry.parameter.jobId))
+        .filter(entry => !jobs.some(job => createEntryMatchesJob(entry, job)))
         .map(entry => {
             const expectedAssets = getExpectedAssets(entry.parameter, recipes);
-            const linkedMovements = movements.filter(movement => {
-                if (usedMovementIds.has(movement.id)) return false;
-                if (movement.jobId === entry.parameter.jobId) return true;
-                if (isNearCreate(movement, entry.tx, expectedAssets)) return true;
-                return false;
+            const linkedMovements = linkMovements({
+                movements,
+                createTx: entry.tx,
+                expectedAssets,
+                usedMovementIds,
+                matchesDirectly: movement => movementMatchesCreateEntry(movement, entry),
             });
 
             linkedMovements.forEach(movement => usedMovementIds.add(movement.id));
@@ -155,7 +201,7 @@ export const buildAlchemyHistory = ({ transactions = [], jobs = [], items = [], 
             const hasSettlementEvidence = linkedMovements.some(movement => movement.direction === 'in');
 
             return {
-                id: entry.parameter.jobId,
+                id: entry.tx?.fullHash || entry.parameter.jobId,
                 kind: 'create',
                 job: null,
                 createTx: entry.tx,

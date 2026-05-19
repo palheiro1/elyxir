@@ -2,10 +2,8 @@ import axios from 'axios';
 import { OMNO_API } from '../../data/CONSTANTS';
 
 export const getItemsForBonus = async () => {
-    return axios
-        .get(`${OMNO_API}/index.php?action=getOmnoGameState`)
-        .then(res => res.data.state.definition.itemForBonus)
-        .catch(error => error);
+    const response = await axios.get(`${OMNO_API}/index.php?action=getOmnoGameState`);
+    return response.data?.state?.definition?.itemForBonus || [];
 };
 
 export const getOmnoItemsBalance = async (accountId, itemsAssets) => {
@@ -16,7 +14,7 @@ export const getOmnoItemsBalance = async (accountId, itemsAssets) => {
 
     const userBalance = accountData.balance.asset;
 
-    const itemsBalance = itemsAssets
+    const itemsBalance = (itemsAssets || [])
         .map(asset => {
             const quantityQNT = Number(userBalance[asset.asset] || 0);
             return {

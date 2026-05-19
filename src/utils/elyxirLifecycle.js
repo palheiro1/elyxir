@@ -69,13 +69,14 @@ export const getJobOutcome = job => {
     if (job?.status === 'STARTED') return 'active';
     if (job?.status === 'CATASTROPHIC' || job?.isCatastrophic === true) return 'catastrophic';
     if (job?.status === 'EXPLODED') return 'failure';
-    if (job?.status === 'FINALIZED' || job?.isSuccess === true || job?.success === true) return 'success';
     if (job?.isSuccess === false || job?.success === false) return 'failure';
+    if (job?.status === 'FINALIZED' || job?.isSuccess === true || job?.success === true) return 'success';
     return 'unknown';
 };
 
 export const getJobStatusLabel = (job, currentHeight) => {
-    if (job?.status === 'STARTED' && getJobProgress(job, currentHeight).isDue) return 'Awaiting resolution';
+    if (job?.status === 'STARTED' && job?.settlementPendingReason) return 'Settlement pending';
+    if (job?.status === 'STARTED' && getJobProgress(job, currentHeight).isDue) return 'Awaiting OMNO resolution';
     return JOB_STATUS_LABELS[job?.status] || 'Unknown';
 };
 
@@ -84,6 +85,9 @@ export const shouldShowCatastropheHeight = job => {
 };
 
 export const getLifecycleCopy = job => {
+    if (job?.status === 'STARTED' && job?.settlementPendingReason) {
+        return 'Settlement is pending in OMNO. The job passed its end height, but asset movements have not completed yet.';
+    }
     if (isNewLifecycleJob(job)) return NEW_LIFECYCLE_ACTIVE_COPY;
     if (job?.status === 'STARTED' && job?.isSuccess === true) return 'Potion pending until end height. Tools already returned.';
     return 'Legacy job: ingredients and flask were settled at create time; tools returned immediately after create confirmation.';

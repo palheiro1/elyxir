@@ -24,6 +24,38 @@ import { getFlaskAssets } from '../services/Elyxir/elyxir';
 import { getItemsForBonus, getOmnoItemsBalance } from '../services/Items/Items';
 import { getStuckedBattleCards } from './cardsUtils';
 
+const SILENT_REQUEST = { silent: true };
+
+const safeOptional = async (task, fallback) => {
+    try {
+        const value = await task();
+        if (value === false || value === undefined || value === null) {
+            return { value: fallback, failed: true };
+        }
+        return { value, failed: false };
+    } catch (error) {
+        return { value: fallback, failed: true };
+    }
+};
+
+const asArray = value => (Array.isArray(value) ? value : []);
+
+const mergeAssetLists = (itemsAssets = [], accountAssets = []) => {
+    const assetsById = new Map();
+
+    asArray(itemsAssets).forEach(asset => {
+        if (asset?.asset) assetsById.set(asset.asset, asset);
+    });
+
+    asArray(accountAssets).forEach(asset => {
+        if (asset?.asset && !assetsById.has(asset.asset) && isElyxirAsset(asset.asset)) {
+            assetsById.set(asset.asset, { asset: asset.asset });
+        }
+    });
+
+    return Array.from(assetsById.values());
+};
+
 /**
  * @name getItemType
  * @description Returns the type of an asset based on predefined asset groups.
@@ -49,11 +81,23 @@ const getItemType = asset => {
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 export const fetchAllItems = async accountRs => {
-    const [{ accountAssets }, itemsAssets, accountId] = await Promise.all([
-        getAccountAssets(accountRs),
-        getAssetsByIssuer(ITEMSACCOUNT),
-        addressToAccountId(accountRs),
+    const accountAssetsResponse = await getAccountAssets(accountRs);
+    if (!Array.isArray(accountAssetsResponse?.accountAssets)) {
+        throw new Error('Failed to fetch Ardor account assets');
+    }
+
+    const accountAssets = accountAssetsResponse.accountAssets;
+    const [itemsAssetsResult, accountIdResult] = await Promise.allSettled([
+        getAssetsByIssuer(ITEMSACCOUNT, SILENT_REQUEST),
+        Promise.resolve().then(() => addressToAccountId(accountRs)),
     ]);
+
+    const itemsAssets =
+        itemsAssetsResult.status === 'fulfilled' && asArray(itemsAssetsResult.value).length > 0
+            ? itemsAssetsResult.value
+            : accountAssets.map(asset => ({ asset: asset.asset }));
+    const accountId = accountIdResult.status === 'fulfilled' ? accountIdResult.value : null;
+
     return itemsGenerator(accountAssets, itemsAssets, accountId);
 };
 
@@ -66,17 +110,24 @@ export const fetchAllItems = async accountRs => {
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company
  */
 export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
-    const validAssets = itemsAssets.filter(asset => !BLACKLIST_ASSETS.includes(asset.asset));
+    const validAssets = mergeAssetLists(itemsAssets, accountAssets).filter(asset => !BLACKLIST_ASSETS.includes(asset.asset));
 
-    const itemsBonus = await getItemsForBonus();
+    const itemsBonusResult = await safeOptional(() => getItemsForBonus(), []);
 
-    const itemsOmnoBalance = await getOmnoItemsBalance(accountId, itemsAssets);
+    const itemsOmnoBalanceResult = await safeOptional(
+        () => (accountId ? getOmnoItemsBalance(accountId, validAssets) : Promise.resolve([])),
+        []
+    );
     const { stuckedCards } = getStuckedBattleCards();
-    const flaskMultipliers = await getFlaskAssets();
+    const flaskMultipliersResult = await safeOptional(() => getFlaskAssets(SILENT_REQUEST), {});
+
+    const itemsBonus = asArray(itemsBonusResult.value);
+    const itemsOmnoBalance = asArray(itemsOmnoBalanceResult.value);
+    const flaskMultipliers = flaskMultipliersResult.value || {};
 
     const formattedAssets = await Promise.all(
         validAssets.map(async asset => {
-            const accountAsset = accountAssets.find(a => a.asset === asset.asset);
+            const accountAsset = asArray(accountAssets).find(a => a.asset === asset.asset);
             const stuckedQnt = stuckedCards?.[asset.asset] || 0;
 
             let askOrders = [];
@@ -86,7 +137,12 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
             let lastPrice = 0;
             let lastOmnoPrice = 0;
 
-            const assetDetails = await getAsset(asset.asset);
+            const assetDetailsResult = await safeOptional(() => getAsset(asset.asset, SILENT_REQUEST), {
+                asset: asset.asset,
+                name: asset.name || asset.asset,
+                quantityQNT: 0,
+            });
+            const assetDetails = assetDetailsResult.value;
             const unconfirmedQuantityQNT = accountAsset ? accountAsset.unconfirmedQuantityQNT : 0;
             const totalQuantityQNT = assetDetails?.quantityQNT || 0;
             const quantityQNT = Number(accountAsset?.quantityQNT) || 0;
@@ -95,19 +151,22 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
 
             const multiplier = flaskMultipliers[asset.asset];
             const [askResponse, bidResponse, lastTradesResponse, omnoOrdersResponse] = await Promise.all([
-                getAskOrders(asset.asset),
-                getBidOrders(asset.asset),
-                getLastTrades(asset.asset),
-                getOmnoMarketOrdesForAsset(asset.asset),
+                safeOptional(() => getAskOrders(asset.asset, SILENT_REQUEST), { askOrders: [] }),
+                safeOptional(() => getBidOrders(asset.asset, SILENT_REQUEST), { bidOrders: [] }),
+                safeOptional(() => getLastTrades(asset.asset, SILENT_REQUEST), { trades: [] }),
+                safeOptional(() => getOmnoMarketOrdesForAsset(asset.asset, SILENT_REQUEST), {
+                    askOrders: [],
+                    bidOrders: [],
+                }),
             ]);
 
-            askOrders = askResponse.askOrders;
-            bidOrders = bidResponse.bidOrders;
-            askOmnoOrders = omnoOrdersResponse.askOrders;
-            bidOmnoOrders = omnoOrdersResponse.bidOrders;
+            askOrders = asArray(askResponse.value.askOrders);
+            bidOrders = asArray(bidResponse.value.bidOrders);
+            askOmnoOrders = asArray(omnoOrdersResponse.value.askOrders);
+            bidOmnoOrders = asArray(omnoOrdersResponse.value.bidOrders);
 
-            if (lastTradesResponse.trades.length > 0) {
-                const auxLastPrice = lastTradesResponse.trades[0].priceNQTPerShare / NQTDIVIDER;
+            if (asArray(lastTradesResponse.value.trades).length > 0) {
+                const auxLastPrice = lastTradesResponse.value.trades[0].priceNQTPerShare / NQTDIVIDER;
                 lastPrice = Number.isInteger(auxLastPrice) ? auxLastPrice : auxLastPrice.toFixed(2);
             }
 
@@ -119,7 +178,7 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
                 ...assetDetails,
                 quantityQNT,
                 totalQuantityQNT,
-                imgUrl: getItemImage(assetDetails.name, type),
+                imgUrl: type ? getItemImage(assetDetails.name, type) : undefined,
                 bonus,
                 type,
                 omnoQuantity,
@@ -131,6 +190,12 @@ export const itemsGenerator = async (accountAssets, itemsAssets, accountId) => {
                 lastPrice,
                 lastOmnoPrice,
                 unconfirmedQuantityQNT,
+                metadataLoadFailed: assetDetailsResult.failed,
+                marketLoadFailed:
+                    askResponse.failed || bidResponse.failed || lastTradesResponse.failed || omnoOrdersResponse.failed,
+                bonusLoadFailed: itemsBonusResult.failed,
+                omnoLoadFailed: itemsOmnoBalanceResult.failed,
+                flaskMultiplierLoadFailed: flaskMultipliersResult.failed,
             };
 
             return formattedAsset;

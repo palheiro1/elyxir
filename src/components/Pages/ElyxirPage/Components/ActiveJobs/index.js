@@ -41,7 +41,7 @@ const ActiveJobs = ({ activeJobs, sectionBg, isLoading }) => {
                                 key={job.jobId}
                                 job={job}
                                 isLoading={isLoading}
-                                isComplete={jobProgress.isDue}
+                                isComplete={job.status !== 'STARTED'}
                                 progress={jobProgress.progress}
                                 currentHeight={currentHeight}
                             />
