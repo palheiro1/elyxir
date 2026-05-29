@@ -14,6 +14,7 @@ import Register from './pages/Register/Register';
 import Restore from './pages/Restore/Restore';
 import Home from './pages/Home/Home';
 import Account from './components/Pages/AccountPage/Account';
+import ElyxirEmbeddedPage from './components/Pages/ElyxirEmbeddedPage';
 
 // Data
 import { cleanInfoAccount } from './data/DefaultInfo/cleanInfoAccount';
@@ -26,7 +27,8 @@ import { clearCacheData, getVersion, setVersion } from './utils/storage';
 function App() {
     const [infoAccount, setInfoAccount] = useState(cleanInfoAccount);
     const isLogged = infoAccount.token !== null && infoAccount.accountRs !== null;
-    const showHeaderAndFooter = true;
+    const isPlayHubEmbed = new URLSearchParams(window.location.search).get('embed') === 'playhub';
+    const showHeaderAndFooter = !isPlayHubEmbed;
 
     useEffect(() => {
         const cachedVersion = getVersion();
@@ -48,28 +50,34 @@ function App() {
 
     return (
         <ChakraProvider theme={theme}>
-            {showHeaderAndFooter && <Header isLogged={isLogged} />}
-            <Routes>
-                {/* LOGING PAGE / CREATE WALLET / RESTORE WALLET */}
-                <Route path="/" element={<Navigate replace to="/login" />} />
+            {isPlayHubEmbed ? (
+                <ElyxirEmbeddedPage />
+            ) : (
+                <>
+                    {showHeaderAndFooter && <Header isLogged={isLogged} />}
+                    <Routes>
+                        {/* LOGING PAGE / CREATE WALLET / RESTORE WALLET */}
+                        <Route path="/" element={<Navigate replace to="/login" />} />
 
-                <Route path="/login" element={<Login setInfoAccount={setInfoAccount} />} />
+                        <Route path="/login" element={<Login setInfoAccount={setInfoAccount} />} />
 
-                <Route path="/register" element={<Register />} />
+                        <Route path="/register" element={<Register />} />
 
-                <Route path="/restore" element={<Restore />} />
+                        <Route path="/restore" element={<Restore />} />
 
-                <Route path="/redeem" element={<Redeem />} />
+                        <Route path="/redeem" element={<Redeem />} />
 
-                {/* HOME PAGE */}
-                <Route path="/" element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />} />
-                <Route path="/home" element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />} />
-                <Route path="/account" element={<Account />} />                
+                        {/* HOME PAGE */}
+                        <Route path="/" element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />} />
+                        <Route path="/home" element={<Home infoAccount={infoAccount} setInfoAccount={setInfoAccount} />} />
+                        <Route path="/account" element={<Account />} />
 
-                {/* 404 - NOT FOUND */}
-                <Route path="*" element={<Navigate replace to="/login" />} />
-            </Routes>
-            {showHeaderAndFooter && <Footer isLogged={isLogged} />}
+                        {/* 404 - NOT FOUND */}
+                        <Route path="*" element={<Navigate replace to="/login" />} />
+                    </Routes>
+                    {showHeaderAndFooter && <Footer isLogged={isLogged} />}
+                </>
+            )}
         </ChakraProvider>
     );
 }

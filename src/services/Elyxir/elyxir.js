@@ -98,6 +98,32 @@ export const sendCraftPotionAssets = async ({ mergedAssets = [], passphrase }) =
     }
 };
 
+export const sendCraftPotionAssetsViaProvider = async ({ mergedAssets = [], provider }) => {
+    try {
+        if (!mergedAssets.length || !provider) return false;
+
+        for (const { asset, qnt } of mergedAssets) {
+            const response = await provider.transferAsset({
+                recipientRS: OMNO_ACCOUNT,
+                amount: {
+                    assetId: asset,
+                    quantity: String(qnt),
+                },
+                message: JSON.stringify({ contract: OMNO_CONTRACT }),
+                prunable: true,
+                priority: 'HIGH',
+            });
+
+            if (!response) return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error('🚀 ~ sendCraftPotionAssetsViaProvider ~ error:', error);
+        return false;
+    }
+};
+
 /**
  * @name sendCraftPotionMessage
  * @description Sends multiple asset transfer transactions to craft a potion, each including a shared message payload.
@@ -136,6 +162,40 @@ export const sendCraftPotionMessage = async ({
         return await sendMessage({ recipient: OMNO_ACCOUNT, message, passPhrase: passphrase });
     } catch (error) {
         console.error('🚀 ~ sendCraftPotionMessage ~ error:', error);
+        return false;
+    }
+};
+
+export const sendCraftPotionMessageViaProvider = async ({
+    accountId,
+    recipeAssetId,
+    creationAssetId,
+    flaskAssetId,
+    durationBlocks,
+    provider,
+    blockId,
+}) => {
+    try {
+        const jobId = uuid();
+
+        const message = getCraftPotionMessage({
+            accountId,
+            recipeAssetId,
+            creationAssetId,
+            flaskAssetId,
+            durationBlocks,
+            jobId,
+            blockId,
+        });
+
+        return await provider.sendMessage({
+            recipientRS: OMNO_ACCOUNT,
+            message,
+            prunable: true,
+            priority: 'HIGH',
+        });
+    } catch (error) {
+        console.error('🚀 ~ sendCraftPotionMessageViaProvider ~ error:', error);
         return false;
     }
 };

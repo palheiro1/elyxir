@@ -21,7 +21,13 @@ import ActiveJobs from './Components/ActiveJobs';
 import CompletedJobs from './Components/CompletedJobs';
 import CraftingConfirmation from './Components/Modals/CraftingConfirmation';
 import PinModal from './Components/Modals/PinModal';
-import { getUserJobs, sendCraftPotionAssets, sendCraftPotionMessage } from '../../../services/Elyxir/elyxir';
+import {
+    getUserJobs,
+    sendCraftPotionAssets,
+    sendCraftPotionAssetsViaProvider,
+    sendCraftPotionMessage,
+    sendCraftPotionMessageViaProvider,
+} from '../../../services/Elyxir/elyxir';
 import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
 import { useSelector } from 'react-redux';
 import { DURATION_OPTIONS } from './data';
@@ -31,7 +37,7 @@ import {
     NEW_LIFECYCLE_CREATED_COPY,
 } from '../../../utils/elyxirLifecycle';
 
-const Elyxir = ({ infoAccount }) => {
+const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
     const { elyxir } = useSelector(state => state.elyxir);
     const { items } = useSelector(state => state.items);
     const { prev_height } = useSelector(state => state.blockchain);
@@ -123,18 +129,23 @@ const Elyxir = ({ infoAccount }) => {
 
             const durationBlocks = DURATION_OPTIONS.find(item => item.days === craftDuration).blocks;
 
-            const transfered = await sendCraftPotionAssets({ mergedAssets, passphrase });
+            const transfered = walletProvider
+                ? await sendCraftPotionAssetsViaProvider({ mergedAssets, provider: walletProvider })
+                : await sendCraftPotionAssets({ mergedAssets, passphrase });
             if (!transfered) throw new Error('Failed transfering crafting asset');
 
-            const response = await sendCraftPotionMessage({
+            const messageParams = {
                 accountId,
                 recipeAssetId: selectedRecipe?.recipeAssetId,
                 creationAssetId: recipePotion?.asset,
                 flaskAssetId: selectedFlask?.asset,
                 durationBlocks,
-                passphrase,
                 blockId: prev_height,
-            });
+            };
+
+            const response = walletProvider
+                ? await sendCraftPotionMessageViaProvider({ ...messageParams, provider: walletProvider })
+                : await sendCraftPotionMessage({ ...messageParams, passphrase });
 
             if (!response) throw new Error('Failed to start crafting');
 
@@ -160,7 +171,7 @@ const Elyxir = ({ infoAccount }) => {
             setIsLoading(false);
             setPendingAction(null);
         }
-    }, [craftDuration, infoAccount.accountRs, potions, prev_height, selectedFlask, selectedRecipe, toast]);
+    }, [craftDuration, infoAccount.accountRs, potions, prev_height, selectedFlask, selectedRecipe, toast, walletProvider]);
 
     const handlePinInput = useCallback(
         pin => {
@@ -210,13 +221,29 @@ const Elyxir = ({ infoAccount }) => {
 
         onClose();
 
+        if (embedded && walletProvider) {
+            await executeCrafting(null);
+            return;
+        }
+
         if (!userPassphrase) {
             requestPinForAction('craft');
             return;
         }
 
         await executeCrafting(userPassphrase);
-    }, [selectedRecipe, selectedFlask, infoAccount, onClose, userPassphrase, requestPinForAction, executeCrafting, toast]);
+    }, [
+        selectedRecipe,
+        selectedFlask,
+        infoAccount,
+        onClose,
+        embedded,
+        walletProvider,
+        userPassphrase,
+        requestPinForAction,
+        executeCrafting,
+        toast,
+    ]);
 
     const getMissingItems = useCallback(
         (recipe, flaskMultiplier) => {

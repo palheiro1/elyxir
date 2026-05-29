@@ -20,6 +20,11 @@ import { errorToast, okToast } from '../../utils/alerts';
 import { BsInfoCircle } from 'react-icons/bs';
 import ResponsiveTooltip from '../ui/ReponsiveTooltip';
 
+const safeBalance = value => {
+    const balance = Number(value);
+    return Number.isFinite(balance) ? balance : 0;
+};
+
 const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) => {
     const {
         IGNISBalance,
@@ -43,30 +48,30 @@ const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) 
     const currencies = {
         IGNIS: {
             name: 'IGNIS',
-            balance: IGNISBalance,
+            balance: safeBalance(IGNISBalance),
             handler: () => goToSection(8),
         },
         GIFTZ: {
             name: 'GIFTZ',
-            balance: GIFTZBalance,
+            balance: safeBalance(GIFTZBalance),
             handler: () => goToSection(7),
             bridge: 'ERC1155GIFTZ',
         },
         GEM: {
             name: 'GEM',
-            balance: GEMBalance,
+            balance: safeBalance(GEMBalance),
             handler: () => goToSection(3),
             bridge: 'ERC20GEM',
         },
         WETH: {
             name: 'wETH',
-            balance: WETHBalance,
+            balance: safeBalance(WETHBalance),
             handler: () => goToSection(3),
             bridge: 'ERC20wETH',
         },
         MANA: {
             name: 'MANA',
-            balance: MANABalance,
+            balance: safeBalance(MANABalance),
             handler: () => goToSection(3),
             bridge: 'ERC20Mana',
         },
@@ -199,7 +204,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) 
                             <Stack direction="row" align="center" spacing={2} px={2}>
                                 <Image src="images/currency/ignis.png" alt="IGNIS Icon" w="40px" h="40px" />
                                 <Text align="center" w="100%" textAlign="center" fontSize="md" fontWeight="semibold">
-                                    {Number(IGNISBalance).toFixed(0)}
+                                    {safeBalance(IGNISBalance).toFixed(0)}
                                 </Text>
                                 <Box
                                     onClick={e => e.stopPropagation()}
@@ -244,7 +249,7 @@ const CurrencyMenu = ({ infoAccount = '', goToSection, setSelectedBridgeType }) 
                             <Stack direction="row" align="center" spacing={2} px={2}>
                                 <Image src="images/currency/gem.png" alt="GEM Icon" w="40px" h="40px" />
                                 <Text w="100%" textAlign="center" fontSize="md" fontWeight="semibold">
-                                    {GEMBalance.toFixed(0)}
+                                    {safeBalance(GEMBalance).toFixed(0)}
                                 </Text>
                                 <Box
                                     onClick={e => e.stopPropagation()}

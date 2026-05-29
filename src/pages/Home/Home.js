@@ -87,7 +87,7 @@ import { fetchAllElyxirData } from '../../redux/reducers/ElyxirReducer';
  * @param {Function} setInfoAccount - Set info account
  * @returns {JSX.Element} Home component
  */
-const Home = memo(({ infoAccount, setInfoAccount }) => {
+const Home = memo(({ infoAccount, setInfoAccount, walletProvider = null, embedded = false, initialOption = 0 }) => {
     const toast = useToast();
     const dispatch = useDispatch();
 
@@ -136,8 +136,8 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     const abortControllerRef = useRef(null);
 
     // Menu
-    const [option, setOption] = useState(0);
-    const [lastOption, setLastOption] = useState(0);
+    const [option, setOption] = useState(initialOption);
+    const [lastOption, setLastOption] = useState(initialOption);
 
     // Selected bridge type
     const [selectedBridgeType, setSelectedBridgeType] = useState(null);
@@ -154,8 +154,9 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
     // Check if user is logged
     // -----------------------------------------------------------------
     useEffect(() => {
-        if (isNotLogged(infoAccount)) navigate('/login');
-    }, [infoAccount, navigate]);
+        const hasEmbeddedSession = embedded && Boolean(infoAccount?.accountRs);
+        if (!hasEmbeddedSession && isNotLogged(infoAccount)) navigate('/login');
+    }, [embedded, infoAccount, navigate]);
 
     // -----------------------------------------------------------------
     // Handle logout
@@ -461,7 +462,7 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
         );
     }, [infoAccount]);
 
-    document.title = 'Mythical Beings | Wallet';
+    document.title = embedded ? 'Mythical Beings | Elyxir' : 'Mythical Beings | Wallet';
 
     const MENU_OPTIONS_COLOR = [
         '#2f9088', // Overview
@@ -504,10 +505,12 @@ const Home = memo(({ infoAccount, setInfoAccount }) => {
             '', // OPTION 7 - Buy pack
             <Exchange infoAccount={infoAccount} />, // OPTION 8 - Exchange
             '', // OPTION 9 - OPEN PACK
-            <Elyxir infoAccount={infoAccount} />, // OPTION 10 - Elyxir
+            <Elyxir infoAccount={infoAccount} walletProvider={walletProvider} embedded={embedded} />, // OPTION 10 - Elyxir
         ],
         [
             infoAccount,
+            walletProvider,
+            embedded,
             cards,
             gemCards,
             haveUnconfirmed,

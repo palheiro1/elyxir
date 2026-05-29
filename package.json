@@ -12,6 +12,8 @@
     "@fontsource/abeezee": "^5.0.13",
     "@fontsource/chelsea-market": "^5.0.13",
     "@fontsource/inter": "^5.0.18",
+    "@mythicalb/ardor-core": "^0.1.0",
+    "@mythicalb/ardor-provider": "^0.1.0",
     "@reduxjs/toolkit": "^2.2.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
