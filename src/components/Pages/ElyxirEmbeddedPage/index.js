@@ -16,6 +16,36 @@ const DEFAULT_WALLET_HOST_ORIGIN =
 
 const ELYXIR_PERMISSIONS = ['READ_ACCOUNT', 'READ_BALANCES', 'TX_TRANSFER_ASSET', 'TX_MESSAGE'];
 
+const getOrigin = value => {
+    try {
+        return new URL(value).origin;
+    } catch {
+        return null;
+    }
+};
+
+const isAllowedWalletHostOrigin = origin => {
+    try {
+        const { protocol, hostname, port } = new URL(origin);
+        if (protocol === 'https:' && (hostname === 'mythicalbeings.io' || hostname.endsWith('.mythicalbeings.io'))) {
+            return true;
+        }
+        return protocol === 'http:' && ['localhost', '127.0.0.1'].includes(hostname) && port === '3000';
+    } catch {
+        return false;
+    }
+};
+
+const resolveWalletHostOrigin = () => {
+    const configuredOrigin = getOrigin(process.env.REACT_APP_WALLET_HOST_ORIGIN);
+    if (configuredOrigin) return configuredOrigin;
+
+    const requestedOrigin = getOrigin(new URLSearchParams(window.location.search).get('walletHostOrigin'));
+    if (requestedOrigin && isAllowedWalletHostOrigin(requestedOrigin)) return requestedOrigin;
+
+    return DEFAULT_WALLET_HOST_ORIGIN;
+};
+
 const mapAssets = (accountAssets, balances) => {
     if (Array.isArray(accountAssets?.accountAssets)) return accountAssets.accountAssets;
     if (Array.isArray(balances?.assets)) {
@@ -94,7 +124,7 @@ const ElyxirEmbeddedPage = () => {
     const [error, setError] = useState(null);
     const [infoAccount, setInfoAccount] = useState(null);
 
-    const walletHostOrigin = process.env.REACT_APP_WALLET_HOST_ORIGIN || DEFAULT_WALLET_HOST_ORIGIN;
+    const walletHostOrigin = resolveWalletHostOrigin();
     const isFramed = window.parent !== window;
 
     const provider = useMemo(() => {
