@@ -1,4 +1,4 @@
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 import { sendMessage, transferAsset } from '../Ardor/ardorInterface';
 import { OMNO_ACCOUNT, OMNO_API, OMNO_CONTRACT } from '../../data/CONSTANTS';
 import { getCraftPotionMessage } from '../../utils/elyxirUtils';
