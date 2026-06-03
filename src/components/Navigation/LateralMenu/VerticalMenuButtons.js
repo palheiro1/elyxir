@@ -1,5 +1,4 @@
 import { Box, Button, Image, Spinner, Stack, Text, VStack } from '@chakra-ui/react';
-import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 const VerticalMenuButtons = ({ setOption, option, buttonsWidth, setSelectedBridgeType }) => {
@@ -13,13 +12,12 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, setSelectedBridg
     // ---------------------------------------------
     // ------------------ BUTTONS ------------------
     // ---------------------------------------------
-    const { t } = useTranslation('navigation');
     const buttons = [
         {
             icon: !isActive(5)
                 ? '/images/icons/menu/blanco/airdropsBlanco.png'
                 : '/images/icons/menu/color/airdropsColor.png',
-            text: t('airdrops', { defaultValue: 'Airdrops' }),
+            text: 'Airdrops',
             onClick: () => setOption(5),
             bgColor: isActive(5) ? 'white' : '#2F8190',
             hoverBg: 'rgba(47, 129, 144, 0.75)',
@@ -29,7 +27,7 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, setSelectedBridg
         },
         {
             icon: !isActive(1) ? '/images/icons/menu/blanco/inventory.png' : '/images/icons/menu/color/inventory.jpg',
-            text: t('Inventory'),
+            text: 'Inventory',
             onClick: () => setOption(1),
             bgColor: isActive(1) ? 'white' : '#2F8190',
             hoverBg: 'rgba(47, 129, 144, 0.75)',
@@ -39,7 +37,7 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, setSelectedBridg
         },
         {
             icon: !isActive(2) ? '/images/icons/menu/blanco/history.png' : '/images/icons/menu/color/history.jpg',
-            text: t('History'),
+            text: 'History',
             onClick: () => setOption(2),
             bgColor: isActive(2) ? 'white' : '#3B7197',
             hoverBg: 'rgba(59, 113, 151, 0.75)',
@@ -49,7 +47,7 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, setSelectedBridg
         },
         {
             icon: !isActive(3) ? '/images/icons/menu/blanco/market.png' : '/images/icons/menu/color/market.jpg',
-            text: t('Market'),
+            text: 'Market',
             onClick: () => setOption(3),
             bgColor: isActive(3) ? 'white' : '#3B6497',
             hoverBg: 'rgba(59, 100, 151, 0.75   )',
@@ -59,7 +57,7 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, setSelectedBridg
         },
         {
             icon: !isActive(4) ? '/images/icons/menu/blanco/bridge.png' : '/images/icons/menu/color/bridge.jpg',
-            text: t('Bridge'),
+            text: 'Bridge',
             onClick: () => {
                 setSelectedBridgeType(null);
                 setOption(4);
@@ -74,7 +72,7 @@ const VerticalMenuButtons = ({ setOption, option, buttonsWidth, setSelectedBridg
             icon: isActive(10)
                 ? '/images/icons/menu/color/AlchemyColor.png'
                 : '/images/icons/menu/blanco/AlchemyBlanco.png',
-            text: t('Alchemy'),
+            text: 'Alchemy',
             onClick: () => {
                 setOption(10); // Elyxir section
                 window.setTimeout(() => {

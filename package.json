@@ -6,7 +6,6 @@
     "@chakra-ui/icons": "^2.0.15",
     "@chakra-ui/react": "^2.4.6",
     "@cmdnio/react-qr-reader": "^3.0.2",
-    "@crossmint/client-sdk-react-ui": "1.19.21",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fontsource/abeezee": "^5.0.13",

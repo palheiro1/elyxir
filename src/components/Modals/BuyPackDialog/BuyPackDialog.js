@@ -15,7 +15,6 @@ import {
     Input,
     PinInput,
     PinInputField,
-    Select,
     Text,
     useNumberInput,
     useToast,
@@ -29,9 +28,7 @@ import { checkPin } from '../../../utils/walletUtils';
 import { fetchGiftzMarket } from '../../../utils/omno';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 
-import { CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
-import { getEthPrice, getMaticPriceWithEth } from '../../../services/coingecko/utils';
-import { getEthDepositAddressFor1155 } from '../../../services/Ardor/ardorInterface';
+import { getEthPrice } from '../../../services/coingecko/utils';
 
 import './BuyPackDialog.css';
 
@@ -57,10 +54,6 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
     const [needReload, setNeedReload] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    const [maticPrice, setMaticPrice] = useState(0);
-    const [priceInMatic, setPriceInMatic] = useState(0);
-    const [bridgeAddress, setBridgeAddress] = useState(null);
-    const [paymentMethod, setPaymentMethod] = useState('wETH');
     const [ethPrice, setEthPrice] = useState(0);
 
     const { name, WETHRealBalance: WETHBalance, IGNISBalance, accountRs } = infoAccount;
@@ -85,22 +78,10 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
             try {
                 setIsLoading(true);
                 setNeedReload(false);
-                const [{ wethAsset, totalOnSale }, auxBridgeAddress] = await Promise.all([
-                    fetchGiftzMarket(),
-                    getEthDepositAddressFor1155(accountRs),
-                ]);
-                setBridgeAddress(!auxBridgeAddress ? null : auxBridgeAddress);
+                const { wethAsset, totalOnSale } = await fetchGiftzMarket();
 
                 setMarketOffers(wethAsset);
                 setTotalOnSale(totalOnSale);
-
-                getMaticPriceWithEth()
-                    .then(maticPrice => {
-                        setMaticPrice(maticPrice);
-                    })
-                    .catch(error => {
-                        console.error('🚀 ~ recoverMarketOffers ~ getMaticPriceWithEth ~ error:', error);
-                    });
 
                 getEthPrice()
                     .then(ethPrice => {
@@ -209,12 +190,10 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
 
             setPriceInWETH(totalPrice);
             setSelectedOffers(offersToTake);
-            const realPriceEth = totalPrice / NQTDIVIDER;
-            setPriceInMatic((realPriceEth / maticPrice + 1).toFixed(0));
         };
 
         calculatePrices();
-    }, [input.value, marketOffers, maticPrice]);
+    }, [input.value, marketOffers]);
     // ------------------------------------------------------------
 
     const handleBuyPack = async () => {
@@ -296,37 +275,20 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                 Payment method
                                             </Text>
                                             <Center w="100%">
-                                                <Select
+                                                <Box
                                                     border="1px solid #9f3772"
                                                     textAlign="center"
                                                     w="100%"
                                                     bgColor="blackAlpha.400"
                                                     fontWeight="bold"
                                                     rounded="lg"
-                                                    onChange={e => setPaymentMethod(e.target.value)}>
-                                                    <option
-                                                        value="wETH"
-                                                        style={{
-                                                            backgroundColor: '#6b254d',
-                                                            borderRadius: '1rem',
-                                                        }}>
-                                                        wETH
-                                                    </option>
-                                                    {bridgeAddress && (
-                                                        <option
-                                                            value="CreditCard"
-                                                            style={{
-                                                                backgroundColor: '#6b254d',
-                                                                borderRadius: '1rem',
-                                                            }}>
-                                                            Credit Card
-                                                        </option>
-                                                    )}
-                                                </Select>
+                                                    py={2}>
+                                                    wETH
+                                                </Box>
                                             </Center>
                                             <Center>
                                                 <Text fontSize="xs" color={'whiteAlpha.600'}>
-                                                    Select between wETH or credit card.
+                                                    Card checkout is no longer available.
                                                 </Text>
                                             </Center>
                                         </Box>
@@ -364,117 +326,79 @@ const BuyPackDialog = ({ reference, isOpen, onClose, infoAccount }) => {
                                                     </Button>
                                                 </HStack>
                                             </Center>
-                                            {paymentMethod === 'CreditCard' && (
-                                                <>
-                                                    <Text fontSize="xs" color={'whiteAlpha.600'} textAlign={'center'}>
-                                                        Fees are applied by our payment gateway.
-                                                    </Text>
-
-                                                    <Text fontSize="xs" color={'whiteAlpha.600'} textAlign={'center'}>
-                                                        A small purchase will incur higher fees.
-                                                    </Text>
-
-                                                    <Text fontSize="xs" color={'whiteAlpha.600'} textAlign={'center'}>
-                                                        Simulation: 1 GIFTZ, fee = 37% | 25 GIFTZ, fee = 5.5%
-                                                    </Text>
-                                                </>
-                                            )}
-                                            {paymentMethod === 'wETH' && (
-                                                <Center>
-                                                    <Text fontSize="xs" color={'whiteAlpha.600'}>
-                                                        {totalOnSale} GIFTZ availables
-                                                    </Text>
-                                                </Center>
-                                            )}
+                                            <Center>
+                                                <Text fontSize="xs" color={'whiteAlpha.600'}>
+                                                    {totalOnSale} GIFTZ availables
+                                                </Text>
+                                            </Center>
                                         </Box>
-                                        {paymentMethod === 'wETH' && (
-                                            <>
-                                                <Box mt={6}>
-                                                    <Text textAlign="center" my={2}>
-                                                        Total price
-                                                    </Text>
-                                                    <Center>
-                                                        <Text fontWeight="bold" fontSize="2xl">
-                                                            {priceInWETH / NQTDIVIDER} wETH
-                                                        </Text>
-                                                    </Center>
-                                                    <Center>
-                                                        <Text fontSize="xs" color={'whiteAlpha.600'}>
-                                                            ($ {(ethPrice * (priceInWETH / NQTDIVIDER)).toFixed(2)})
-                                                        </Text>
-                                                    </Center>
-                                                </Box>
+                                        <Box mt={6}>
+                                            <Text textAlign="center" my={2}>
+                                                Total price
+                                            </Text>
+                                            <Center>
+                                                <Text fontWeight="bold" fontSize="2xl">
+                                                    {priceInWETH / NQTDIVIDER} wETH
+                                                </Text>
+                                            </Center>
+                                            <Center>
+                                                <Text fontSize="xs" color={'whiteAlpha.600'}>
+                                                    ($ {(ethPrice * (priceInWETH / NQTDIVIDER)).toFixed(2)})
+                                                </Text>
+                                            </Center>
+                                        </Box>
 
-                                                {totalOnSale === 0 && (
-                                                    <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                                        There are no GIFTZ left in the machine. You can wait for it to
-                                                        refill or buy them on the secondary market.
-                                                    </Text>
-                                                )}
-
-                                                {!enoughtWETH && (
-                                                    <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                                        You don't have enough wETH
-                                                    </Text>
-                                                )}
-
-                                                {!enoughtIGNIS && (
-                                                    <Text textAlign="center" color="#9f3772" fontWeight="bold">
-                                                        You don't have enough IGNIS (0.5 IGNIS)
-                                                    </Text>
-                                                )}
-
-                                                <Center>
-                                                    <Box py={2} mt={2}>
-                                                        <HStack spacing={4}>
-                                                            <PinInput
-                                                                size="lg"
-                                                                onComplete={handleCompletePin}
-                                                                onChange={handleCompletePin}
-                                                                isInvalid={!isValidPin}
-                                                                variant="filled"
-                                                                mask>
-                                                                <PinInputField bgColor={'#6b254d'} />
-                                                                <PinInputField bgColor={'#6b254d'} />
-                                                                <PinInputField bgColor={'#6b254d'} />
-                                                                <PinInputField bgColor={'#6b254d'} />
-                                                            </PinInput>
-                                                        </HStack>
-                                                    </Box>
-                                                </Center>
-
-                                                <Box w="100%" mt={2}>
-                                                    <Button
-                                                        color="white"
-                                                        isDisabled={isDisabled || sendingTx}
-                                                        bgColor={'#6b254d'}
-                                                        fontWeight={'black'}
-                                                        _hover={{ bgColor: '#9f3772' }}
-                                                        w="100%"
-                                                        py={6}
-                                                        onClick={handleBuyPack}>
-                                                        SUBMIT
-                                                    </Button>
-                                                </Box>
-                                            </>
+                                        {totalOnSale === 0 && (
+                                            <Text textAlign="center" color="#9f3772" fontWeight="bold">
+                                                There are no GIFTZ left in the machine. You can wait for it to refill or
+                                                buy them on the secondary market.
+                                            </Text>
                                         )}
 
-                                        {paymentMethod === 'CreditCard' && (
-                                            <Box w="100%" mt={8}>
-                                                <CrossmintPayButton
-                                                    disabled={!correctNumberInput}
-                                                    collectionId="682b163e-c8c5-4704-91d2-fe9c20dbf969"
-                                                    projectId="df884160-8b39-4fc9-960d-0a35094cc158"
-                                                    mintConfig={{
-                                                        totalPrice: priceInMatic.toString(),
-                                                        amount: input.value.toString(),
-                                                    }}
-                                                    mintTo={bridgeAddress.toString()}
-                                                    paymentMethod="fiat"
-                                                    className="xmint-btn"
-                                                />
+                                        {!enoughtWETH && (
+                                            <Text textAlign="center" color="#9f3772" fontWeight="bold">
+                                                You don't have enough wETH
+                                            </Text>
+                                        )}
+
+                                        {!enoughtIGNIS && (
+                                            <Text textAlign="center" color="#9f3772" fontWeight="bold">
+                                                You don't have enough IGNIS (0.5 IGNIS)
+                                            </Text>
+                                        )}
+
+                                        <Center>
+                                            <Box py={2} mt={2}>
+                                                <HStack spacing={4}>
+                                                    <PinInput
+                                                        size="lg"
+                                                        onComplete={handleCompletePin}
+                                                        onChange={handleCompletePin}
+                                                        isInvalid={!isValidPin}
+                                                        variant="filled"
+                                                        mask>
+                                                        <PinInputField bgColor={'#6b254d'} />
+                                                        <PinInputField bgColor={'#6b254d'} />
+                                                        <PinInputField bgColor={'#6b254d'} />
+                                                        <PinInputField bgColor={'#6b254d'} />
+                                                    </PinInput>
+                                                </HStack>
                                             </Box>
-                                        )}
+                                        </Center>
+
+                                        <Box w="100%" mt={2}>
+                                            <Button
+                                                color="white"
+                                                isDisabled={isDisabled || sendingTx}
+                                                bgColor={'#6b254d'}
+                                                fontWeight={'black'}
+                                                _hover={{ bgColor: '#9f3772' }}
+                                                w="100%"
+                                                py={6}
+                                                onClick={handleBuyPack}>
+                                                SUBMIT
+                                            </Button>
+                                        </Box>
                                     </GridItem>
                                 </Center>
                             )}
