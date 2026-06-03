@@ -75,8 +75,14 @@ const TYPE_FILTERS = [
     { id: 'ingredients', label: 'Ingredients' },
     { id: 'tools', label: 'Tools' },
     { id: 'flasks', label: 'Flasks' },
+    { id: 'recipes', label: 'Recipes' },
     { id: 'potions', label: 'Potions' },
 ];
+
+const getInitialInventoryFilter = () => {
+    const requestedFilter = new URLSearchParams(window.location.search).get('inventory');
+    return TYPE_FILTERS.some(item => item.id === requestedFilter) ? requestedFilter : 'all';
+};
 
 const imageFallback = '/images/currency/potions.png';
 
@@ -183,11 +189,32 @@ const getRecipeMissingItems = (recipe, fakeAssets, flaskMultiplier = 1) => {
     return missing;
 };
 
-const getInventoryItems = fakeAssets => [
+const getRecipeInventoryItems = (recipes = [], potions = [], infoAccount) =>
+    recipes.map((recipe, index) => {
+        const potion = getPotionForAsset(recipe.creationAssetId, potions);
+        const ownedAsset = infoAccount?.assets?.find(asset => String(asset.asset) === String(recipe.recipeAssetId));
+        const quantity = Number(ownedAsset?.quantityQNT || 0);
+
+        return {
+            asset: recipe.recipeAssetId,
+            name: `${potion.name} recipe`,
+            description: 'Recipe fragment discovered from GIFTZ rewards.',
+            quantityQNT: quantity,
+            totalQuantityQNT: 1,
+            imgUrl: `/images/elyxir/recipes/recipe${(index % 2) + 1}-transparent.png`,
+            type: 'recipes',
+            typeLabel: 'Recipe',
+            tone: 'violet',
+            creationAssetId: recipe.creationAssetId,
+        };
+    });
+
+const getInventoryItems = (fakeAssets, recipes = [], infoAccount) => [
     ...(fakeAssets.ingredients || []).map(item => ({ ...item, type: 'ingredients', typeLabel: 'Ingredient', tone: 'emerald' })),
     ...(fakeAssets.tools || []).map(item => ({ ...item, type: 'tools', typeLabel: 'Tool', tone: 'brass' })),
     ...(fakeAssets.flasks || []).map(item => ({ ...item, type: 'flasks', typeLabel: 'Flask', tone: 'cyan' })),
-    ...(fakeAssets.potions || []).map(item => ({ ...item, type: 'potions', typeLabel: 'Potion', tone: 'violet' })),
+    ...getRecipeInventoryItems(recipes, fakeAssets.potions, infoAccount),
+    ...(fakeAssets.potions || []).map(item => ({ ...item, type: 'potions', typeLabel: 'Potion', tone: 'amber' })),
 ];
 
 const getRecipeReadiness = (recipes, fakeAssets, ownedFlasks) => {
@@ -900,6 +927,8 @@ const InventoryTile = ({ item, recipes }) => {
     const helperText =
         item.type === 'flasks'
             ? 'Vessel for brewing'
+            : item.type === 'recipes'
+              ? 'Recipe fragment'
             : item.type === 'potions'
               ? 'Finished brew'
               : useCount
@@ -950,13 +979,13 @@ const InventoryTile = ({ item, recipes }) => {
     );
 };
 
-const InventoryView = () => {
+const InventoryView = ({ infoAccount }) => {
     const { elyxir, fakeAssets } = useSelector(state => state.elyxir);
     const recipeDefinition = elyxir?.definition?.recipes;
     const recipes = useMemo(() => recipeDefinition || [], [recipeDefinition]);
-    const [filter, setFilter] = useState('all');
+    const [filter, setFilter] = useState(getInitialInventoryFilter);
     const [search, setSearch] = useState('');
-    const inventory = useMemo(() => getInventoryItems(fakeAssets), [fakeAssets]);
+    const inventory = useMemo(() => getInventoryItems(fakeAssets, recipes, infoAccount), [fakeAssets, infoAccount, recipes]);
     const missingItems = useMemo(() => getMissingShelfItems(recipes, fakeAssets).slice(0, 4), [recipes, fakeAssets]);
     const filterCounts = useMemo(
         () =>
@@ -1047,6 +1076,11 @@ const InventoryView = () => {
             </Grid>
 
             <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={3}>
+                {visibleItems.length === 0 && (
+                    <CockpitPanel p={5} tone="neutral">
+                        <Text color={theme.textMuted}>No shelf items match this view.</Text>
+                    </CockpitPanel>
+                )}
                 {visibleItems.map(item => (
                     <InventoryTile key={`${item.type}-${item.asset}`} item={item} recipes={recipes} />
                 ))}
@@ -1431,7 +1465,7 @@ const PlayHubElyxirShell = ({ infoAccount, walletProvider, walletHostOrigin }) =
                     />
                 );
             case 'inventory':
-                return <InventoryView />;
+                return <InventoryView infoAccount={infoAccount} />;
             case 'jobs':
                 return <JobsView infoAccount={infoAccount} />;
             case 'airdrops':
