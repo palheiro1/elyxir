@@ -85,16 +85,66 @@ const ElyxirEmbeddedPage = () => {
     const [error, setError] = useState(null);
     const [infoAccount, setInfoAccount] = useState(null);
 
+    const query = new URLSearchParams(window.location.search);
     const walletHostOrigin = resolveWalletHostOrigin();
-    const isFramed = window.parent !== window;
+    const isMockPlayHub = process.env.NODE_ENV === 'development' && query.get('mock') === '1';
+    const isFramed = window.parent !== window || isMockPlayHub;
 
     const provider = useMemo(() => {
+        if (isMockPlayHub) return null;
         if (!isFramed) return null;
         if (!providerRef.current) providerRef.current = new MythicalProvider(walletHostOrigin);
         return providerRef.current;
-    }, [isFramed, walletHostOrigin]);
+    }, [isFramed, isMockPlayHub, walletHostOrigin]);
 
     useEffect(() => {
+        if (isMockPlayHub) {
+            let cancelled = false;
+            const mockInfoAccount = {
+                isEmbedded: true,
+                token: null,
+                accountRs: 'ARDOR-CLUN-N4AJ-ZQWK-GD74N',
+                publicKey: '',
+                name: 'CLUN',
+                IGNISBalance: 21,
+                GIFTZBalance: 0,
+                GEMBalance: 274,
+                WETHBalance: 0,
+                MANABalance: 0,
+                assets: [],
+                transactions: [],
+                dividends: [],
+                unconfirmedTxs: [],
+                currentAsks: [],
+                currentBids: [],
+                trades: [],
+            };
+
+            const loadMock = async () => {
+                try {
+                    setStatus('connecting');
+                    await Promise.all([
+                        dispatch(fetchItems({ accountRs: mockInfoAccount.accountRs })).catch(() => null),
+                        dispatch(fetchAllElyxirData({ infoAccount: mockInfoAccount })),
+                        dispatch(getBlockchainBlocks()),
+                    ]);
+                    if (cancelled) return;
+                    setInfoAccount(mockInfoAccount);
+                    setStatus('ready');
+                } catch (err) {
+                    if (cancelled) return;
+                    setError(err);
+                    setStatus('error');
+                }
+            };
+
+            loadMock();
+
+            return () => {
+                cancelled = true;
+            };
+        }
+
         if (!provider) return undefined;
 
         let cancelled = false;
@@ -168,7 +218,7 @@ const ElyxirEmbeddedPage = () => {
             provider.destroy();
             providerRef.current = null;
         };
-    }, [dispatch, provider]);
+    }, [dispatch, isMockPlayHub, provider]);
 
     if (!isFramed) {
         return (

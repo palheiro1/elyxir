@@ -21,6 +21,7 @@ import {
 } from '@chakra-ui/react';
 import {
     FaCheckCircle,
+    FaBook,
     FaBoxes,
     FaClock,
     FaExclamationTriangle,
@@ -64,11 +65,12 @@ const getDurationIndex = days => {
 
 const Panel = ({ children, ...props }) => (
     <Box
-        bg="#10171b"
+        bg="rgba(16, 23, 27, 0.72)"
         border="1px solid"
         borderColor="whiteAlpha.200"
         borderRadius="8px"
-        boxShadow="0 18px 60px rgba(0, 0, 0, 0.25)"
+        boxShadow="0 18px 60px rgba(0, 0, 0, 0.28)"
+        backdropFilter="blur(14px) saturate(1.08)"
         {...props}
     >
         {children}
@@ -80,25 +82,32 @@ const AssetImage = ({ src, boxSize = '52px', ...props }) => (
 );
 
 const MiniMetric = ({ label, value, icon, tone = '#57d68d' }) => (
-    <Box bg="#0b1114" border="1px solid" borderColor="whiteAlpha.200" borderRadius="8px" p={3}>
+    <Box bg="rgba(11, 17, 20, 0.70)" border="1px solid" borderColor="whiteAlpha.200" borderRadius="8px" p={3} minH="74px">
         <HStack justify="space-between">
-            <Box minW={0}>
-                <Text color="whiteAlpha.500" fontSize="xs" textTransform="uppercase" fontWeight="bold">
+            <Box minW={0} flex="1">
+                <Text color="whiteAlpha.500" fontSize="xs" textTransform="uppercase" fontWeight="bold" noOfLines={1}>
                     {label}
                 </Text>
-                <Text fontWeight="black" fontSize="xl">
+                <Text fontWeight="black" fontSize={{ base: 'md', md: 'lg' }} whiteSpace="nowrap">
                     {value}
                 </Text>
             </Box>
-            <Circle size="32px" bg="whiteAlpha.100" color={tone}>
+            <Circle size="28px" bg="whiteAlpha.100" color={tone} flexShrink={0}>
                 <Icon as={icon} />
             </Circle>
         </HStack>
     </Box>
 );
 
-const RecipeCard = ({ recipe, potion, selected, missingCount, onSelect }) => {
-    const ready = missingCount === 0;
+const findAssetById = (fakeAssets, assetId) => {
+    const collections = [fakeAssets.ingredients, fakeAssets.tools, fakeAssets.flasks, fakeAssets.potions];
+    return collections.flatMap(collection => collection || []).find(item => String(item.asset) === String(assetId));
+};
+
+const getAssetFallbackName = (assetId, type) => `${type} ${String(assetId || '').slice(-6)}`;
+
+const RecipeCard = ({ recipe, potion, selected, missingCount, statusLabel, statusScheme, onSelect }) => {
+    const ready = statusScheme === 'green';
 
     return (
         <Box
@@ -110,7 +119,7 @@ const RecipeCard = ({ recipe, potion, selected, missingCount, onSelect }) => {
             p={3}
             border="1px solid"
             borderColor={selected ? '#57d68d' : 'whiteAlpha.200'}
-            bg={selected ? 'rgba(87, 214, 141, 0.12)' : '#0b1114'}
+            bg={selected ? 'rgba(87, 214, 141, 0.14)' : 'rgba(11, 17, 20, 0.68)'}
             borderRadius="8px"
             transition="border-color 0.16s ease, background 0.16s ease"
             _hover={{ borderColor: ready ? '#57d68d' : '#f6ad55', bg: '#121d21' }}
@@ -123,11 +132,11 @@ const RecipeCard = ({ recipe, potion, selected, missingCount, onSelect }) => {
                         {potion?.name}
                     </Text>
                     <Text color="whiteAlpha.500" fontSize="xs" noOfLines={1}>
-                        Recipe {String(recipe.recipeAssetId || '').slice(-6)}
+                        {potion?.description || `Recipe ${String(recipe.recipeAssetId || '').slice(-6)}`}
                     </Text>
                     <HStack mt={2} spacing={2}>
-                        <Badge colorScheme={ready ? 'green' : 'orange'} borderRadius="6px">
-                            {ready ? 'Ready' : `${missingCount} missing`}
+                        <Badge colorScheme={statusScheme} borderRadius="6px">
+                            {statusLabel || (ready ? 'Ready' : `${missingCount} missing`)}
                         </Badge>
                     </HStack>
                 </Box>
@@ -146,17 +155,17 @@ const FlaskOption = ({ flask, selected, onSelect }) => {
             disabled={quantity <= 0}
             opacity={quantity <= 0 ? 0.45 : 1}
             w="100%"
-            minH="96px"
-            p={3}
+            minH="86px"
+            p={2}
             border="1px solid"
             borderColor={selected ? '#d8b56d' : 'whiteAlpha.200'}
-            bg={selected ? 'rgba(216, 181, 109, 0.12)' : '#0b1114'}
+            bg={selected ? 'rgba(216, 181, 109, 0.14)' : 'rgba(11, 17, 20, 0.66)'}
             borderRadius="8px"
             _hover={{ borderColor: quantity > 0 ? '#d8b56d' : 'whiteAlpha.200' }}
             onClick={() => quantity > 0 && onSelect(flask)}
         >
-            <Stack align="center" spacing={2}>
-                <AssetImage src={flask?.imgUrl} boxSize="42px" />
+            <Stack align="center" spacing={1}>
+                <AssetImage src={flask?.imgUrl} boxSize="36px" />
                 <Text color="white" fontWeight="bold" fontSize="xs" noOfLines={1}>
                     {flask?.name}
                 </Text>
@@ -173,7 +182,7 @@ const FlaskOption = ({ flask, selected, onSelect }) => {
     );
 };
 
-const RequirementRow = ({ item }) => {
+const RequirementRow = ({ item, onFind }) => {
     const ok = item.have >= item.needed;
 
     return (
@@ -197,9 +206,16 @@ const RequirementRow = ({ item }) => {
                     </Text>
                 </Box>
             </HStack>
-            <Badge colorScheme={ok ? 'green' : 'orange'} borderRadius="6px">
-                {formatNumber(item.have)} / {formatNumber(item.needed)}
-            </Badge>
+            <Stack spacing={1} align="flex-end" flexShrink={0}>
+                <Badge colorScheme={ok ? 'green' : 'red'} borderRadius="6px">
+                    {formatNumber(item.have)} / {formatNumber(item.needed)}
+                </Badge>
+                {!ok && onFind && (
+                    <Button size="xs" variant="outline" colorScheme="orange" onClick={onFind}>
+                        Find source
+                    </Button>
+                )}
+            </Stack>
         </HStack>
     );
 };
@@ -214,7 +230,7 @@ const JobMiniRow = ({ job }) => {
     const blocksLeft = Math.max(0, Number(job.endHeight || 0) - Number(prev_height || 0));
 
     return (
-        <Box bg="#0b1114" border="1px solid" borderColor="whiteAlpha.200" borderRadius="8px" p={3}>
+        <Box bg="rgba(11, 17, 20, 0.70)" border="1px solid" borderColor="whiteAlpha.200" borderRadius="8px" p={3}>
             <HStack spacing={3} align="flex-start">
                 <AssetImage src={potion?.imgUrl} boxSize="38px" flexShrink={0} />
                 <Stack spacing={2} flex="1" minW={0}>
@@ -236,7 +252,7 @@ const JobMiniRow = ({ job }) => {
     );
 };
 
-const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
+const Elyxir = ({ infoAccount, walletProvider = null, embedded = false, onOpenPantry = null, onOpenSupplyBoard = null }) => {
     const { elyxir, fakeAssets } = useSelector(state => state.elyxir);
     const { prev_height } = useSelector(state => state.blockchain);
     const recipes = elyxir?.definition?.recipes || [];
@@ -266,13 +282,13 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
             const missing = [];
 
             recipe?.ingredients?.forEach(req => {
-                const item = fakeAssets.ingredients?.find(i => String(i.asset) === String(req.assetId));
+                const item = findAssetById(fakeAssets, req.assetId);
                 const have = item ? Number(item.quantityQNT || 0) : 0;
                 const needed = Number(req.qtyQNT || 0) * flaskMultiplier;
                 if (have < needed) {
                     missing.push({
                         type: 'ingredient',
-                        name: item?.name || req.name || req.assetId,
+                        name: item?.name || req.name || getAssetFallbackName(req.assetId, 'Ingredient'),
                         have,
                         needed,
                     });
@@ -280,12 +296,12 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
             });
 
             recipe?.tools?.forEach(asset => {
-                const item = fakeAssets.tools?.find(i => String(i.asset) === String(asset));
+                const item = findAssetById(fakeAssets, asset);
                 const have = item ? Number(item.quantityQNT || 0) : 0;
                 if (have <= 0) {
                     missing.push({
                         type: 'tool',
-                        name: item?.name || asset,
+                        name: item?.name || getAssetFallbackName(asset, 'Tool'),
                         have,
                         needed: 1,
                     });
@@ -300,10 +316,11 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
     const requirementRows = useMemo(() => {
         if (!selectedRecipe) return [];
         const ingredients = selectedRecipe.ingredients?.map(req => {
-            const item = fakeAssets.ingredients?.find(i => String(i.asset) === String(req.assetId));
+            const item = findAssetById(fakeAssets, req.assetId);
             return {
                 type: 'Ingredient',
-                name: item?.name || req.name || req.assetId,
+                name: item?.name || req.name || getAssetFallbackName(req.assetId, 'Ingredient'),
+                assetId: req.assetId,
                 imgUrl: item?.imgUrl,
                 have: item ? Number(item.quantityQNT || 0) : 0,
                 needed: Number(req.qtyQNT || 0) * selectedMultiplier,
@@ -311,10 +328,11 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
         }) || [];
 
         const tools = selectedRecipe.tools?.map(asset => {
-            const item = fakeAssets.tools?.find(i => String(i.asset) === String(asset));
+            const item = findAssetById(fakeAssets, asset);
             return {
                 type: 'Tool',
-                name: item?.name || asset,
+                name: item?.name || getAssetFallbackName(asset, 'Tool'),
+                assetId: asset,
                 imgUrl: item?.imgUrl,
                 have: item ? Number(item.quantityQNT || 0) : 0,
                 needed: 1,
@@ -328,7 +346,34 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
         () => (selectedRecipe ? getMissingItems(selectedRecipe, selectedMultiplier) : []),
         [selectedRecipe, selectedMultiplier, getMissingItems]
     );
-    const canCraft = Boolean(selectedRecipe && selectedFlask && selectedFlaskOwned && missingItems.length === 0 && !isLoading);
+    const hasOwnedFlask = flasks.some(flask => Number(flask.quantityQNT || 0) > 0);
+    const selectedPotionAlreadyBrewing = activeJobs.some(job => String(job.creationAssetId) === String(selectedRecipe?.creationAssetId));
+    const primaryAction = useMemo(() => {
+        if (!selectedRecipe) return { label: 'Open recipe first', tone: 'gray', action: 'select' };
+        if (selectedPotionAlreadyBrewing) return { label: 'Already brewing', tone: 'orange', action: 'wait' };
+        if (!selectedFlask || !selectedFlaskOwned) return { label: 'Find a flask', tone: 'orange', action: 'supply' };
+        if (missingItems.length > 0) return { label: `Gather ${missingItems.length} missing component${missingItems.length === 1 ? '' : 's'}`, tone: 'red', action: 'supply' };
+        return { label: 'Begin brewing', tone: 'green', action: 'craft' };
+    }, [selectedRecipe, selectedPotionAlreadyBrewing, selectedFlask, selectedFlaskOwned, missingItems.length]);
+
+    const groupedRequirements = useMemo(
+        () => ({
+            ingredients: requirementRows.filter(item => item.type === 'Ingredient'),
+            tools: requirementRows.filter(item => item.type === 'Tool'),
+            flask: selectedFlask
+                ? [
+                      {
+                          type: 'Flask',
+                          name: selectedFlask.name,
+                          imgUrl: selectedFlask.imgUrl,
+                          have: selectedFlaskOwned ? 1 : 0,
+                          needed: 1,
+                      },
+                  ]
+                : [],
+        }),
+        [requirementRows, selectedFlask, selectedFlaskOwned]
+    );
 
     useEffect(() => {
         if (!selectedRecipe && recipes.length) setSelectedRecipe(recipes[0]);
@@ -520,9 +565,60 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
         setCraftDuration(DURATION_OPTIONS[nextIndex].days);
     };
 
+    const handlePrimaryAction = () => {
+        if (primaryAction.action === 'craft') {
+            handleStartCrafting(selectedRecipe);
+            return;
+        }
+
+        if (primaryAction.action === 'supply') {
+            if (onOpenSupplyBoard) {
+                onOpenSupplyBoard();
+                return;
+            }
+            if (onOpenPantry) {
+                onOpenPantry();
+                return;
+            }
+        }
+
+        toast({
+            title: primaryAction.label,
+            description: 'Select a ready recipe, flask and all required components before brewing.',
+            status: 'info',
+            duration: 3500,
+            isClosable: true,
+        });
+    };
+    const primaryActionBg = primaryAction.tone === 'green' ? '#57d68d' : primaryAction.tone === 'red' ? '#742b2b' : '#6b4f25';
+    const primaryActionColor = primaryAction.tone === 'green' ? '#07100c' : 'white';
+    const primaryActionHoverBg = primaryAction.tone === 'green' ? '#46c47d' : primaryAction.tone === 'red' ? '#8f3535' : '#7a5a2b';
+    const primaryActionDisabled = !selectedRecipe || selectedPotionAlreadyBrewing;
+
     return (
         <Box color="white">
-            <Grid templateColumns={{ base: '1fr', xl: '310px minmax(0, 1fr) 330px' }} gap={4} alignItems="start">
+            <Stack spacing={5}>
+                <Box>
+                    <Text color="#d8b56d" fontSize="xs" fontWeight="bold" textTransform="uppercase">
+                        Workbench
+                    </Text>
+                    <Heading size={{ base: 'lg', md: 'xl' }} letterSpacing="0">
+                        {selectedPotion?.name || 'Choose a potion'}
+                    </Heading>
+                    <Text color="whiteAlpha.700" mt={1} maxW="820px">
+                        {selectedPotion?.description || 'Choose a recipe, gather components, select a flask and begin brewing.'}
+                    </Text>
+                </Box>
+
+                <Grid
+                    templateColumns={{
+                        base: '1fr',
+                        xl: '280px minmax(0, 1fr) 320px',
+                        '2xl': '320px minmax(0, 1fr) 360px',
+                    }}
+                    gap={4}
+                    alignItems="start"
+                >
                 <GridItem>
                     <Panel p={4}>
                         <HStack justify="space-between" mb={4}>
@@ -530,7 +626,7 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
                                 <Text color="#d8b56d" fontSize="xs" fontWeight="bold" textTransform="uppercase">
                                     Recipes
                                 </Text>
-                                <Heading size="md">Potion browser</Heading>
+                                <Heading size="md">Recipe book</Heading>
                             </Box>
                             <Badge bg="whiteAlpha.100" color="whiteAlpha.800" borderRadius="6px">
                                 {recipes.length}
@@ -540,6 +636,15 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
                             {recipes.map(recipe => {
                                 const potion = getPotionForRecipe(recipe, fakeAssets.potions);
                                 const missing = getMissingItems(recipe, selectedMultiplier);
+                                const alreadyBrewing = activeJobs.some(job => String(job.creationAssetId) === String(recipe.creationAssetId));
+                                const statusLabel = alreadyBrewing
+                                    ? 'Already brewing'
+                                    : !hasOwnedFlask
+                                      ? 'Need flask'
+                                      : missing.length === 0
+                                        ? 'Ready'
+                                        : `Missing ${missing.length}`;
+                                const statusScheme = alreadyBrewing ? 'orange' : !hasOwnedFlask ? 'yellow' : missing.length === 0 ? 'green' : 'red';
                                 return (
                                     <RecipeCard
                                         key={recipe.recipeAssetId}
@@ -547,6 +652,8 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
                                         potion={potion}
                                         selected={selectedRecipe?.recipeAssetId === recipe.recipeAssetId}
                                         missingCount={missing.length}
+                                        statusLabel={statusLabel}
+                                        statusScheme={statusScheme}
                                         onSelect={setSelectedRecipe}
                                     />
                                 );
@@ -558,25 +665,43 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
                 <GridItem minW={0}>
                     <Panel p={{ base: 4, md: 5 }} minH={{ xl: 'calc(100vh - 108px)' }}>
                         <HStack justify="space-between" align="flex-start" mb={5}>
-                            <Box minW={0}>
+                            <Box minW={0} flex="1">
                                 <Text color="#d8b56d" fontSize="xs" fontWeight="bold" textTransform="uppercase">
-                                    Crafting station
+                                    Workbench
                                 </Text>
-                                <Heading size={{ base: 'md', md: 'lg' }} noOfLines={1}>
+                                <Heading size={{ base: 'md', md: 'lg' }} noOfLines={2}>
                                     {selectedPotion?.name || 'Select a potion'}
                                 </Heading>
                             </Box>
-                            <Badge colorScheme={canCraft ? 'green' : 'orange'} borderRadius="6px" px={3} py={1}>
-                                {canCraft ? 'Ready' : 'Blocked'}
-                            </Badge>
+                            <Button
+                                size="sm"
+                                display={{ base: 'none', md: 'inline-flex' }}
+                                leftIcon={<Icon as={primaryAction.action === 'craft' ? FaFlask : FaBook} />}
+                                bg={primaryActionBg}
+                                color={primaryActionColor}
+                                fontWeight="black"
+                                _hover={{ bg: primaryActionHoverBg }}
+                                isLoading={isLoading}
+                                isDisabled={primaryActionDisabled}
+                                onClick={handlePrimaryAction}
+                                flexShrink={0}
+                            >
+                                {primaryAction.label}
+                            </Button>
                         </HStack>
 
-                        <Grid templateColumns={{ base: '1fr', lg: '220px minmax(0, 1fr)' }} gap={5} alignItems="center">
+                        <Stack spacing={5}>
+                            <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={3}>
+                                <MiniMetric label="Stability" value={`${successRate}%`} icon={FaCheckCircle} tone="#57d68d" />
+                                <MiniMetric label="Brew time" value={`${craftDuration}d`} icon={FaClock} tone="#d8b56d" />
+                                <MiniMetric label="Yield" value={`x${selectedMultiplier || 0}`} icon={FaFlask} tone="#b999ff" />
+                            </SimpleGrid>
+
                             <Box textAlign="center">
                                 <Circle
-                                    size={{ base: '170px', md: '210px' }}
+                                    size={{ base: '170px', md: '200px' }}
                                     mx="auto"
-                                    bg="#0b1114"
+                                    bg="rgba(11, 17, 20, 0.66)"
                                     border="1px solid"
                                     borderColor="whiteAlpha.200"
                                 >
@@ -588,20 +713,14 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
                             </Box>
 
                             <Stack spacing={4}>
-                                <SimpleGrid columns={{ base: 1, md: 3 }} spacing={3}>
-                                    <MiniMetric label="Success" value={`${successRate}%`} icon={FaCheckCircle} tone="#57d68d" />
-                                    <MiniMetric label="Duration" value={`${craftDuration}d`} icon={FaClock} tone="#d8b56d" />
-                                    <MiniMetric label="Output" value={`x${selectedMultiplier || 0}`} icon={FaFlask} tone="#b999ff" />
-                                </SimpleGrid>
-
                                 <Box>
                                     <HStack justify="space-between" mb={3}>
-                                        <Text fontWeight="bold">Flask</Text>
+                                        <Text fontWeight="bold">Choose your flask</Text>
                                         <Text color="whiteAlpha.500" fontSize="sm">
                                             {selectedFlask?.name || 'No flask selected'}
                                         </Text>
                                     </HStack>
-                                    <SimpleGrid columns={{ base: 2, md: 3, lg: 5 }} spacing={3}>
+                                    <SimpleGrid columns={{ base: 2, md: 3, '2xl': 5 }} spacing={3}>
                                         {flasks.map(flask => (
                                             <FlaskOption
                                                 key={flask.asset}
@@ -615,7 +734,7 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
 
                                 <Box>
                                     <HStack justify="space-between" mb={3}>
-                                        <Text fontWeight="bold">Duration</Text>
+                                        <Text fontWeight="bold">Brewing time</Text>
                                         <HStack>
                                             <Button
                                                 size="sm"
@@ -646,19 +765,19 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
 
                                 <Button
                                     h="58px"
-                                    leftIcon={<Icon as={FaFlask} />}
-                                    bg="#57d68d"
-                                    color="#07100c"
+                                    leftIcon={<Icon as={primaryAction.action === 'craft' ? FaFlask : FaBook} />}
+                                    bg={primaryActionBg}
+                                    color={primaryActionColor}
                                     fontWeight="black"
-                                    _hover={{ bg: '#46c47d' }}
+                                    _hover={{ bg: primaryActionHoverBg }}
                                     isLoading={isLoading}
-                                    isDisabled={!canCraft}
-                                    onClick={() => handleStartCrafting(selectedRecipe)}
+                                    isDisabled={primaryActionDisabled}
+                                    onClick={handlePrimaryAction}
                                 >
-                                    Craft potion
+                                    {primaryAction.label}
                                 </Button>
                             </Stack>
-                        </Grid>
+                        </Stack>
                     </Panel>
                 </GridItem>
 
@@ -668,16 +787,72 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
                             <HStack justify="space-between" mb={4}>
                                 <Box>
                                     <Text color="#d8b56d" fontSize="xs" fontWeight="bold" textTransform="uppercase">
-                                        Requirements
+                                        Required components
                                     </Text>
-                                    <Heading size="md">Asset check</Heading>
+                                    <Heading size="md">Recipe checklist</Heading>
                                 </Box>
                                 <Icon color={missingItems.length ? '#f6ad55' : '#57d68d'} as={missingItems.length ? FaExclamationTriangle : FaCheckCircle} />
                             </HStack>
-                            <Stack spacing={2}>
-                                {requirementRows.map(item => (
-                                    <RequirementRow key={`${item.type}-${item.name}`} item={item} />
-                                ))}
+                            <Stack spacing={4}>
+                                <Box>
+                                    <Text color="#d8b56d" fontSize="xs" fontWeight="bold" textTransform="uppercase" mb={2}>
+                                        Ingredients
+                                    </Text>
+                                    <Stack spacing={2}>
+                                        {groupedRequirements.ingredients.map(item => (
+                                            <RequirementRow
+                                                key={`${item.type}-${item.name}`}
+                                                item={item}
+                                                onFind={item.have < item.needed ? onOpenSupplyBoard : null}
+                                            />
+                                        ))}
+                                    </Stack>
+                                </Box>
+
+                                <Box>
+                                    <Text color="#d8b56d" fontSize="xs" fontWeight="bold" textTransform="uppercase" mb={2}>
+                                        Tools
+                                    </Text>
+                                    <Stack spacing={2}>
+                                        {groupedRequirements.tools.map(item => (
+                                            <RequirementRow
+                                                key={`${item.type}-${item.name}`}
+                                                item={item}
+                                                onFind={item.have < item.needed ? onOpenSupplyBoard : null}
+                                            />
+                                        ))}
+                                    </Stack>
+                                </Box>
+
+                                <Box>
+                                    <Text color="#d8b56d" fontSize="xs" fontWeight="bold" textTransform="uppercase" mb={2}>
+                                        Flask
+                                    </Text>
+                                    <Stack spacing={2}>
+                                        {groupedRequirements.flask.length === 0 && (
+                                            <Text color="whiteAlpha.600" fontSize="sm">
+                                                Choose a flask to calculate yield.
+                                            </Text>
+                                        )}
+                                        {groupedRequirements.flask.map(item => (
+                                            <RequirementRow
+                                                key={`${item.type}-${item.name}`}
+                                                item={item}
+                                                onFind={item.have < item.needed ? onOpenSupplyBoard : null}
+                                            />
+                                        ))}
+                                    </Stack>
+                                </Box>
+
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    colorScheme="purple"
+                                    onClick={onOpenSupplyBoard}
+                                    isDisabled={!onOpenSupplyBoard}
+                                >
+                                    View how to obtain all
+                                </Button>
                             </Stack>
                         </Panel>
 
@@ -685,9 +860,9 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
                             <HStack justify="space-between" mb={4}>
                                 <Box>
                                     <Text color="#d8b56d" fontSize="xs" fontWeight="bold" textTransform="uppercase">
-                                        Jobs
+                                        Brewing queue
                                     </Text>
-                                    <Heading size="md">Active queue</Heading>
+                                    <Heading size="md">Active brews</Heading>
                                 </Box>
                                 <Badge colorScheme="orange" borderRadius="6px">
                                     {activeJobs.length}
@@ -730,7 +905,8 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
                         </Panel>
                     </Stack>
                 </GridItem>
-            </Grid>
+                </Grid>
+            </Stack>
 
             <CraftingConfirmation
                 infoAccount={infoAccount}
