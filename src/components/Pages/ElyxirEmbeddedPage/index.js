@@ -1,10 +1,9 @@
-import { Box, Button, Center, Code, Heading, Spinner, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Code, Heading, Spinner, Stack, Text } from '@chakra-ui/react';
 import { MythicalProvider } from '@mythicalb/ardor-provider';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import NewsAirdrops from '../HomePage/NewsAirdrops';
-import Elyxir from '../ElyxirPage';
+import PlayHubElyxirShell from '../ElyxirPage/PlayHubShell';
 import { GEMASSET, GIFTZASSET, MANAASSET, NQTDIVIDER, WETHASSET } from '../../../data/CONSTANTS';
 import { fetchAllElyxirData } from '../../../redux/reducers/ElyxirReducer';
 import { getBlockchainBlocks } from '../../../redux/reducers/BlockchainReducer';
@@ -79,44 +78,6 @@ const EmbeddedStatus = ({ title, description, children }) => (
     </Center>
 );
 
-const PlayHubElyxirShell = ({ infoAccount, walletProvider, walletHostOrigin }) => {
-    const [tabIndex, setTabIndex] = useState(0);
-
-    const handleGoToSection = section => {
-        if (section === 10) {
-            setTabIndex(1);
-            return;
-        }
-
-        window.parent.postMessage(
-            {
-                type: 'MYTHICAL_WALLET_NAVIGATE',
-                section,
-            },
-            walletHostOrigin
-        );
-    };
-
-    return (
-        <Box minH="100vh" bg="gray.950" color="white" px={{ base: 3, md: 6 }} py={14}>
-            <Tabs index={tabIndex} onChange={setTabIndex} variant="enclosed" colorScheme="purple" isLazy>
-                <TabList>
-                    <Tab>Airdrops</Tab>
-                    <Tab>Alchemy</Tab>
-                </TabList>
-                <TabPanels>
-                    <TabPanel px={0}>
-                        <NewsAirdrops goToSection={handleGoToSection} />
-                    </TabPanel>
-                    <TabPanel px={0}>
-                        <Elyxir infoAccount={infoAccount} walletProvider={walletProvider} embedded />
-                    </TabPanel>
-                </TabPanels>
-            </Tabs>
-        </Box>
-    );
-};
-
 const ElyxirEmbeddedPage = () => {
     const dispatch = useDispatch();
     const providerRef = useRef(null);
@@ -152,16 +113,12 @@ const ElyxirEmbeddedPage = () => {
                 const [balances, accountAssets] = await Promise.all([
                     provider.getBalances().catch(() => null),
                     getAccountAssets(session.accountRS).catch(() => null),
-                    dispatch(fetchItems({ accountRs: session.accountRS })),
-                    dispatch(fetchAllElyxirData()),
-                    dispatch(getBlockchainBlocks()),
                 ]);
 
                 if (cancelled) return;
 
                 const assets = mapAssets(accountAssets, balances);
-
-                setInfoAccount({
+                const embeddedInfoAccount = {
                     isEmbedded: true,
                     token: null,
                     accountRs: session.accountRS,
@@ -179,7 +136,17 @@ const ElyxirEmbeddedPage = () => {
                     currentAsks: [],
                     currentBids: [],
                     trades: [],
-                });
+                };
+
+                await Promise.all([
+                    dispatch(fetchItems({ accountRs: session.accountRS })),
+                    dispatch(fetchAllElyxirData({ infoAccount: embeddedInfoAccount })),
+                    dispatch(getBlockchainBlocks()),
+                ]);
+
+                if (cancelled) return;
+
+                setInfoAccount(embeddedInfoAccount);
                 setStatus('ready');
             } catch (err) {
                 if (cancelled) return;

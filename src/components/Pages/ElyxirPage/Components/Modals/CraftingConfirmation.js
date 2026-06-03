@@ -17,12 +17,6 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
-import {
-    ELYXIR_LIFECYCLE_FIX_HEIGHT,
-    LEGACY_CREATED_COPY,
-    NEW_LIFECYCLE_CREATED_COPY,
-    RECIPE_REQUIREMENT_COPY,
-} from '../../../../../utils/elyxirLifecycle';
 
 /**
  * @name CraftingConfirmation
@@ -46,56 +40,52 @@ const CraftingConfirmation = ({
     confirmCrafting,
     isLoading,
     selectedFlask,
-    currentHeight,
 }) => {
-    const { items } = useSelector(state => state.items);
-
-    const potions = items.filter(item => item.type === 'potion');
-    const ingredients = items.filter(item => item.type === 'ingredient');
-
-    const recipePotion = potions?.find(potion => potion?.asset === selectedRecipe?.creationAssetId);
+    const { fakeAssets } = useSelector(state => state.elyxir);
+    const { potions } = fakeAssets;
+    const recipePotion = potions?.find(potion => potion?.asset === selectedRecipe?.creationAssetId) || {
+        name: 'Selected potion',
+        description: 'Elyxir potion',
+    };
     const multiplier = selectedFlask?.multiplier || 1;
-    const usesNewLifecycle = Number(currentHeight) >= ELYXIR_LIFECYCLE_FIX_HEIGHT;
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>Confirm Real Crafting</ModalHeader>
+            <ModalOverlay bg="blackAlpha.800" />
+            <ModalContent bg="#10171b" color="white" border="1px solid" borderColor="whiteAlpha.200">
+                <ModalHeader>Confirm crafting</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     {selectedRecipe && (
                         <Stack direction={'column'} spacing={4} align="stretch">
-                            <Alert status="info" borderRadius="md">
+                            <Alert
+                                status="info"
+                                borderRadius="8px"
+                                bg="rgba(87, 214, 141, 0.1)"
+                                color="white"
+                                border="1px solid"
+                                borderColor="rgba(87, 214, 141, 0.24)"
+                            >
                                 <AlertIcon />
                                 <Box>
-                                    <AlertTitle>Real Blockchain Transaction!</AlertTitle>
+                                    <AlertTitle>Wallet approval required</AlertTitle>
                                     <AlertDescription>
-                                        This will use real assets from your account and create actual blockchain
-                                        transactions.
+                                        This craft spends the listed assets and the wallet host will ask you to approve
+                                        each transaction.
                                     </AlertDescription>
                                 </Box>
                             </Alert>
 
-                            <Alert status="info" borderRadius="md">
-                                <AlertIcon />
-                                <AlertDescription>{RECIPE_REQUIREMENT_COPY}</AlertDescription>
-                            </Alert>
-
-                            <Alert status={usesNewLifecycle ? 'warning' : 'info'} borderRadius="md">
-                                <AlertIcon />
-                                <AlertDescription>
-                                    {usesNewLifecycle ? NEW_LIFECYCLE_CREATED_COPY : LEGACY_CREATED_COPY}
-                                </AlertDescription>
-                            </Alert>
-
                             <Box>
                                 <Text fontWeight="bold" mb={2}>
-                                    Recipe: {recipePotion?.description}
+                                    Recipe: {recipePotion.name}
+                                </Text>
+                                <Text fontSize="sm" color="whiteAlpha.600" mb={4}>
+                                    {recipePotion.description}
                                 </Text>
                             </Box>
 
-                            <Divider />
+                            <Divider borderColor="whiteAlpha.200" />
 
                             <Box>
                                 <Text fontWeight="bold" mb={2}>
@@ -111,14 +101,23 @@ const CraftingConfirmation = ({
                                             const needed = ingredient.qtyQNT * multiplier;
                                             const hasEnough = available >= needed;
 
-                                            const ing = ingredients?.find(item => {
+                                            const ing = fakeAssets?.ingredients?.find(item => {
                                                 return item.asset === ingredient?.assetId;
                                             });
 
                                             return (
-                                                <Stack direction={'row'} key={index} justify="space-between">
+                                                <Stack
+                                                    direction={'row'}
+                                                    key={index}
+                                                    justify="space-between"
+                                                    bg="#0b1114"
+                                                    border="1px solid"
+                                                    borderColor="whiteAlpha.200"
+                                                    borderRadius="8px"
+                                                    p={2}
+                                                >
                                                     <Text fontSize="sm">{ing?.name}</Text>
-                                                    <Text fontSize="sm" color={hasEnough ? 'green.500' : 'red.500'}>
+                                                    <Text fontSize="sm" color={hasEnough ? '#57d68d' : '#f6ad55'}>
                                                         {needed} needed ({available} available)
                                                     </Text>
                                                 </Stack>
@@ -130,10 +129,10 @@ const CraftingConfirmation = ({
                     )}
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant="ghost" mr={3} onClick={onClose}>
+                    <Button variant="ghost" color="whiteAlpha.800" mr={3} onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button colorScheme="purple" onClick={confirmCrafting} isLoading={isLoading}>
+                    <Button bg="#57d68d" color="#07100c" _hover={{ bg: '#46c47d' }} onClick={confirmCrafting} isLoading={isLoading}>
                         Start Crafting
                     </Button>
                 </ModalFooter>

@@ -29,7 +29,7 @@ import { checkPin } from '../../../utils/walletUtils';
 import { fetchGiftzMarket } from '../../../utils/omno';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 
-import { CrossmintPayButton_DEPRECATED as CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
+import { CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
 import { getEthPrice, getMaticPriceWithEth } from '../../../services/coingecko/utils';
 import { getEthDepositAddressFor1155 } from '../../../services/Ardor/ardorInterface';
 
