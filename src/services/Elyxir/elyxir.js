@@ -74,33 +74,34 @@ export const sendCraftPotionAssets = async ({ mergedAssets = [], passphrase, wal
 
         const message = JSON.stringify({ contract: OMNO_CONTRACT });
 
-        const responses = await Promise.all(
-            mergedAssets.map(({ asset, qnt }) => {
-                if (walletProvider) {
-                    return walletProvider.transferAsset({
-                        recipientRS: OMNO_ACCOUNT,
-                        amount: {
-                            assetId: asset,
-                            quantityQNT: qnt,
-                        },
-                        message,
-                        prunable: true,
-                        priority: 'HIGH',
-                    });
-                }
+        const responses = [];
 
-                return transferAsset({
-                    asset,
-                    quantityQNT: qnt,
-                    message,
-                    recipient: OMNO_ACCOUNT,
-                    passPhrase: passphrase,
-                    messagePrunable: true,
-                    deadline: 361,
-                    priority: 'HIGH',
-                });
-            })
-        );
+        for (const { asset, qnt } of mergedAssets) {
+            const response = walletProvider
+                ? await walletProvider.transferAsset({
+                      recipientRS: OMNO_ACCOUNT,
+                      amount: {
+                          assetId: asset,
+                          quantityQNT: qnt,
+                      },
+                      message,
+                      prunable: true,
+                      priority: 'HIGH',
+                  })
+                : await transferAsset({
+                      asset,
+                      quantityQNT: qnt,
+                      message,
+                      recipient: OMNO_ACCOUNT,
+                      passPhrase: passphrase,
+                      messagePrunable: true,
+                      deadline: 361,
+                      priority: 'HIGH',
+                  });
+
+            if (!response) return false;
+            responses.push(response);
+        }
 
         return responses.every(Boolean);
     } catch (error) {
