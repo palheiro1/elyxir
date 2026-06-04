@@ -25,15 +25,17 @@ index 1864862..2e98792 100644
      placeAsk(params: unknown): Promise<unknown>;
      placeBid(params: unknown): Promise<unknown>;
 diff --git a/node_modules/@mythicalb/ardor-provider/dist/provider.js b/node_modules/@mythicalb/ardor-provider/dist/provider.js
-index 21bbe40..38db490 100644
+index 21bbe40..a38ea24 100644
 --- a/node_modules/@mythicalb/ardor-provider/dist/provider.js
 +++ b/node_modules/@mythicalb/ardor-provider/dist/provider.js
-@@ -1,4 +1,4 @@
+@@ -1,5 +1,5 @@
 -import { MythicalError, } from "@mythical/ardor-core";
+-const REQUEST_TIMEOUT_MS = 30000;
 +import { MythicalError, } from "@mythicalb/ardor-core";
- const REQUEST_TIMEOUT_MS = 30000;
++const REQUEST_TIMEOUT_MS = 120000;
  export class MythicalProvider {
      constructor(hostOrigin, targetWindow = window.parent) {
+         this.pending = new Map();
 @@ -60,6 +60,9 @@ export class MythicalProvider {
      sendIgnis(params) {
          return this.request("mythical_sendIgnis", params);
