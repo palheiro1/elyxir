@@ -55,6 +55,7 @@ import {
 import { useSelector } from 'react-redux';
 
 import Elyxir from './index';
+import { BLOCKTIME } from '../../../data/CONSTANTS';
 import { addressToAccountId, getAsset } from '../../../services/Ardor/ardorInterface';
 
 const NAV_ITEMS = [
@@ -116,6 +117,40 @@ const formatNumber = value => {
     const numeric = Number(value || 0);
     if (!Number.isFinite(numeric)) return '0';
     return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(numeric);
+};
+
+const formatBlocksAsDuration = blocks => {
+    const totalSeconds = Math.max(0, Number(blocks || 0) * BLOCKTIME);
+    if (!Number.isFinite(totalSeconds) || totalSeconds <= 0) return 'Ready now';
+
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.ceil((totalSeconds % 3600) / 60);
+    const parts = [];
+
+    if (days) parts.push(`${days}d`);
+    if (hours) parts.push(`${hours}h`);
+    if (minutes && days === 0) parts.push(`${minutes}m`);
+    if (!parts.length) parts.push('1m');
+
+    return parts.join(' ');
+};
+
+const formatDateForHeight = ({ targetHeight, currentHeight }) => {
+    const target = Number(targetHeight);
+    const current = Number(currentHeight);
+    if (!Number.isFinite(target) || !Number.isFinite(current) || current <= 0) return 'Date pending';
+
+    const deltaMs = (target - current) * BLOCKTIME * 1000;
+    const date = new Date(Date.now() + deltaMs);
+    if (Number.isNaN(date.getTime())) return 'Date pending';
+
+    return date.toISOString().slice(0, 10);
+};
+
+const formatTimeLeftLabel = blocks => {
+    const duration = formatBlocksAsDuration(blocks);
+    return duration === 'Ready now' ? duration : `${duration} left`;
 };
 
 const normalizeJobs = source => {
@@ -592,6 +627,7 @@ const BrewingNowPanel = ({ job, potions }) => {
     const elapsedBlocks = Math.max(0, Number(prev_height || 0) - Number(job?.startHeight || 0));
     const progress = job ? Math.min(100, Math.max(0, (elapsedBlocks / totalBlocks) * 100)) : 0;
     const blocksLeft = Math.max(0, Number(job?.endHeight || 0) - Number(prev_height || 0));
+    const timeLeft = formatTimeLeftLabel(blocksLeft);
 
     return (
         <CockpitPanel p={5} tone={job ? 'amber' : 'neutral'} h="100%">
@@ -629,7 +665,7 @@ const BrewingNowPanel = ({ job, potions }) => {
                                 sx={{ '& > div': { background: theme.amber } }}
                             />
                             <HStack justify="space-between" color={theme.textMuted} fontSize="xs">
-                                <Text>{formatNumber(blocksLeft)} blocks left</Text>
+                                <Text>{timeLeft}</Text>
                                 <Text>{job.successProbability ? `${Math.round(job.successProbability * 100)}% stability` : 'Stability pending'}</Text>
                             </HStack>
                         </Stack>
@@ -1098,6 +1134,12 @@ const JobRow = ({ job }) => {
     const elapsedBlocks = Math.max(0, Number(prev_height || 0) - Number(job.startHeight || 0));
     const progress = active ? Math.min(100, Math.max(0, (elapsedBlocks / totalBlocks) * 100)) : 100;
     const blocksLeft = Math.max(0, Number(job.endHeight || 0) - Number(prev_height || 0));
+    const timeLeft = formatTimeLeftLabel(blocksLeft);
+    const jobDate = formatDateForHeight({
+        targetHeight: job.endHeight || job.startHeight,
+        currentHeight: prev_height,
+    });
+    const dateLabel = job.isSuccess || job.status === 'FINALIZED' ? 'Completed' : 'Failed';
 
     return (
         <CockpitPanel p={4} tone={active ? 'amber' : job.isSuccess ? 'emerald' : 'danger'}>
@@ -1125,7 +1167,7 @@ const JobRow = ({ job }) => {
                         sx={{ '& > div': { background: active ? theme.amber : job.isSuccess ? theme.emerald : theme.danger } }}
                     />
                     <HStack justify="space-between" color={theme.textMuted} fontSize="xs">
-                        <Text>{active ? `${formatNumber(blocksLeft)} blocks left` : `Started ${job.startHeight || '-'}`}</Text>
+                        <Text>{active ? timeLeft : `${dateLabel} ${jobDate}`}</Text>
                         <Text>{job.successProbability ? `${Math.round(job.successProbability * 100)}% chance` : 'Chance pending'}</Text>
                     </HStack>
                 </Stack>
@@ -1140,9 +1182,6 @@ const JobsView = ({ infoAccount }) => {
     const jobs = useMemo(() => getJobCollections(elyxir), [elyxir]);
     const activeJobs = jobs.active.filter(job => String(job.owner) === String(accountId));
     const completedJobs = jobs.completed.filter(job => String(job.owner) === String(accountId));
-    const readySoon = [...activeJobs]
-        .sort((a, b) => Number(a.endHeight || 0) - Number(b.endHeight || 0))
-        .slice(0, 3);
 
     return (
         <Stack spacing={5}>
@@ -1152,37 +1191,24 @@ const JobsView = ({ infoAccount }) => {
                 caption="Monitor ongoing experiments and review past results from your laboratory."
             />
 
-            <Grid templateColumns={{ base: '1fr', xl: 'minmax(0, 1fr) 430px' }} gap={4}>
-                <CockpitPanel p={5}>
-                    <SectionHeader label="Active brews" title="Currently simmering" />
-                    <Stack spacing={3} mt={5}>
-                        {activeJobs.length === 0 && (
-                            <Stack align="center" textAlign="center" py={10}>
-                                <ToneIcon icon={FaFlask} tone="cyan" size="64px" />
-                                <Heading size="sm">No active brews</Heading>
-                                <Text color={theme.textMuted}>Start a potion from the Workbench to fill this queue.</Text>
-                            </Stack>
-                        )}
-                        {activeJobs.map(job => (
+            <CockpitPanel p={5}>
+                <SectionHeader label="Active brews" title="Currently simmering" />
+                <Stack spacing={3} mt={5}>
+                    {activeJobs.length === 0 && (
+                        <Stack align="center" textAlign="center" py={10}>
+                            <ToneIcon icon={FaFlask} tone="cyan" size="64px" />
+                            <Heading size="sm">No active brews</Heading>
+                            <Text color={theme.textMuted}>Start a potion from the Workbench to fill this queue.</Text>
+                        </Stack>
+                    )}
+                    {activeJobs
+                        .slice()
+                        .sort((a, b) => Number(a.endHeight || 0) - Number(b.endHeight || 0))
+                        .map(job => (
                             <JobRow key={job.jobId} job={job} />
                         ))}
-                    </Stack>
-                </CockpitPanel>
-
-                <CockpitPanel p={5}>
-                    <SectionHeader label="Ready soon" title="Upcoming resolutions" />
-                    <Stack spacing={3} mt={5}>
-                        {readySoon.length === 0 && (
-                            <Text color={theme.textMuted}>
-                                When a brew nears completion, it will appear here ready to collect results.
-                            </Text>
-                        )}
-                        {readySoon.map(job => (
-                            <JobRow key={job.jobId} job={job} />
-                        ))}
-                    </Stack>
-                </CockpitPanel>
-            </Grid>
+                </Stack>
+            </CockpitPanel>
 
             <CockpitPanel p={5}>
                 <SectionHeader label="Lab journal" title="Completed and failed experiments" />
