@@ -1459,6 +1459,7 @@ const PlayHubElyxirShell = ({ infoAccount, walletProvider, walletHostOrigin }) =
                     <Elyxir
                         infoAccount={infoAccount}
                         walletProvider={walletProvider}
+                        walletHostOrigin={walletHostOrigin}
                         embedded
                         onOpenPantry={() => setActiveView('inventory')}
                         onOpenSupplyBoard={() => setActiveView('airdrops')}

@@ -36,7 +36,12 @@ import { useSelector } from 'react-redux';
 import { checkPin } from '../../../utils/walletUtils';
 import CraftingConfirmation from './Components/Modals/CraftingConfirmation';
 import PinModal from './Components/Modals/PinModal';
-import { getUserJobs, sendCraftPotionAssets, sendCraftPotionMessage } from '../../../services/Elyxir/elyxir';
+import {
+    getUserJobs,
+    requestCraftPotionBatch,
+    sendCraftPotionAssets,
+    sendCraftPotionMessage,
+} from '../../../services/Elyxir/elyxir';
 import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
 import { calculateSuccessRate } from '../../../utils/elyxirUtils';
 import { DURATION_OPTIONS } from './data';
@@ -61,6 +66,21 @@ const getPotionForRecipe = (recipe, potions = []) =>
 const getDurationIndex = days => {
     const options = DURATION_OPTIONS.map(option => option.days);
     return Math.max(0, options.indexOf(days));
+};
+
+const getCraftBatchProgressText = status => {
+    const labels = {
+        preparing: 'Preparing the wallet batch...',
+        broadcasting: 'Broadcasting required asset transfers...',
+        awaiting_confirmations: 'Waiting for one blockchain confirmation on every transfer...',
+        ready_to_finalize: 'Transfers confirmed. Finalizing the Elyxir craft...',
+        finalizing: 'Sending the final Elyxir crafting message...',
+        complete: 'Crafting job submitted.',
+        stale: 'A transfer needs wallet recovery before Elyxir can finalize this craft.',
+        error: 'Wallet batch failed.',
+    };
+
+    return labels[status] || 'Working with the Play Hub wallet...';
 };
 
 const Panel = ({ children, ...props }) => (
@@ -252,7 +272,14 @@ const JobMiniRow = ({ job }) => {
     );
 };
 
-const Elyxir = ({ infoAccount, walletProvider = null, embedded = false, onOpenPantry = null, onOpenSupplyBoard = null }) => {
+const Elyxir = ({
+    infoAccount,
+    walletProvider = null,
+    walletHostOrigin = null,
+    embedded = false,
+    onOpenPantry = null,
+    onOpenSupplyBoard = null,
+}) => {
     const { elyxir, fakeAssets } = useSelector(state => state.elyxir);
     const { prev_height } = useSelector(state => state.blockchain);
     const recipes = elyxir?.definition?.recipes || [];
@@ -267,6 +294,7 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false, onOpenPa
     const [userPassphrase, setUserPassphrase] = useState(null);
     const [showPinInput, setShowPinInput] = useState(false);
     const [pendingAction, setPendingAction] = useState(null);
+    const [craftBatchProgress, setCraftBatchProgress] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toast = useToast();
     const isEmbeddedMode = Boolean(embedded);
@@ -276,6 +304,7 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false, onOpenPa
     const selectedMultiplier = selectedFlask?.multiplier || 1;
     const selectedFlaskOwned = Number(selectedFlask?.quantityQNT || 0) > 0;
     const successRate = Math.trunc(calculateSuccessRate(craftDuration) * 10000) / 100;
+    const craftBatchProgressText = getCraftBatchProgressText(craftBatchProgress?.status);
 
     const getMissingItems = useCallback(
         (recipe, flaskMultiplier) => {
@@ -500,6 +529,7 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false, onOpenPa
     const executeCrafting = useCallback(
         async ({ passphrase, walletProvider: craftingWalletProvider } = {}) => {
             setIsLoading(true);
+            setCraftBatchProgress(null);
 
             try {
                 if (!selectedRecipe || !selectedFlask) throw new Error('Select a recipe and flask first');
@@ -519,6 +549,31 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false, onOpenPa
 
                 const durationBlocks = DURATION_OPTIONS.find(item => item.days === craftDuration).blocks;
                 const signingStrategy = craftingWalletProvider ? { walletProvider: craftingWalletProvider } : { passphrase };
+
+                if (craftingWalletProvider) {
+                    setCraftBatchProgress({ status: 'preparing' });
+
+                    const response = await requestCraftPotionBatch({
+                        walletHostOrigin,
+                        recipeAssetId: selectedRecipe.recipeAssetId,
+                        creationAssetId: recipePotion.asset || selectedRecipe.creationAssetId,
+                        flaskAssetId: selectedFlask.asset,
+                        durationBlocks,
+                        blockId: prev_height,
+                        onProgress: progress => setCraftBatchProgress(progress),
+                    });
+
+                    if (!response) throw new Error('Failed to start crafting');
+
+                    toast({
+                        title: 'Crafting started',
+                        description: `Started crafting ${multiplier}x ${recipePotion.name}.`,
+                        status: 'success',
+                        duration: 5000,
+                        isClosable: true,
+                    });
+                    return;
+                }
 
                 const transfered = await sendCraftPotionAssets({ mergedAssets, ...signingStrategy });
                 if (!transfered) throw new Error('Failed transfering crafting asset');
@@ -556,7 +611,7 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false, onOpenPa
                 setPendingAction(null);
             }
         },
-        [selectedRecipe, selectedFlask, craftDuration, fakeAssets.potions, infoAccount, prev_height, toast]
+        [selectedRecipe, selectedFlask, craftDuration, fakeAssets.potions, infoAccount, prev_height, toast, walletHostOrigin]
     );
 
     const changeCraftDuration = direction => {
@@ -682,6 +737,7 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false, onOpenPa
                                 fontWeight="black"
                                 _hover={{ bg: primaryActionHoverBg }}
                                 isLoading={isLoading}
+                                loadingText={usesEmbeddedWallet ? craftBatchProgressText : 'Crafting'}
                                 isDisabled={primaryActionDisabled}
                                 onClick={handlePrimaryAction}
                                 flexShrink={0}
@@ -763,6 +819,22 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false, onOpenPa
                                     <Progress value={(getDurationIndex(craftDuration) / (DURATION_OPTIONS.length - 1)) * 100} colorScheme="purple" bg="#1d282d" borderRadius="6px" />
                                 </Box>
 
+                                {usesEmbeddedWallet && craftBatchProgress && (
+                                    <Box bg="rgba(7, 16, 12, 0.72)" border="1px solid" borderColor="rgba(87, 214, 141, 0.26)" borderRadius="8px" p={3}>
+                                        <HStack justify="space-between" mb={1}>
+                                            <Text color="#57d68d" fontSize="xs" fontWeight="bold" textTransform="uppercase">
+                                                Play Hub batch
+                                            </Text>
+                                            <Badge bg="rgba(87, 214, 141, 0.14)" color="#9cf2bc" borderRadius="6px">
+                                                {craftBatchProgress.status}
+                                            </Badge>
+                                        </HStack>
+                                        <Text color="whiteAlpha.800" fontSize="sm">
+                                            {craftBatchProgressText}
+                                        </Text>
+                                    </Box>
+                                )}
+
                                 <Button
                                     h="58px"
                                     leftIcon={<Icon as={primaryAction.action === 'craft' ? FaFlask : FaBook} />}
@@ -771,6 +843,7 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false, onOpenPa
                                     fontWeight="black"
                                     _hover={{ bg: primaryActionHoverBg }}
                                     isLoading={isLoading}
+                                    loadingText={usesEmbeddedWallet ? craftBatchProgressText : 'Crafting'}
                                     isDisabled={primaryActionDisabled}
                                     onClick={handlePrimaryAction}
                                 >
@@ -916,6 +989,8 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false, onOpenPa
                 confirmCrafting={confirmCrafting}
                 isLoading={isLoading}
                 selectedFlask={selectedFlask}
+                embedded={usesEmbeddedWallet}
+                currentHeight={prev_height}
             />
             {!isEmbeddedMode && (
                 <PinModal showPinInput={showPinInput} setShowPinInput={setShowPinInput} handlePinInput={handlePinInput} />

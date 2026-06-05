@@ -4,6 +4,12 @@ import { OMNO_ACCOUNT, OMNO_API, OMNO_CONTRACT } from '../../data/CONSTANTS';
 import { getCraftPotionMessage } from '../../utils/elyxirUtils';
 import axios from 'axios';
 
+export const CRAFT_BATCH_REQUEST = 'MYTHICAL_ELYXIR_CRAFT_BATCH_REQUEST';
+export const CRAFT_BATCH_RESPONSE = 'MYTHICAL_ELYXIR_CRAFT_BATCH_RESPONSE';
+export const CRAFT_BATCH_PROGRESS = 'MYTHICAL_ELYXIR_CRAFT_BATCH_PROGRESS';
+
+const CRAFT_BATCH_TIMEOUT_MS = 35 * 60 * 1000;
+
 export const getFlaskAssets = async () => {
     try {
         const response = await axios.get(`${OMNO_API}/index.php?action=getElyxirState`);
@@ -164,4 +170,83 @@ export const sendCraftPotionMessage = async ({
         console.error('🚀 ~ sendCraftPotionMessage ~ error:', error);
         return false;
     }
+};
+
+export const requestCraftPotionBatch = ({
+    walletHostOrigin,
+    jobId = uuid(),
+    recipeAssetId,
+    creationAssetId,
+    flaskAssetId,
+    durationBlocks,
+    blockId,
+    onProgress,
+}) => {
+    return new Promise((resolve, reject) => {
+        let targetOrigin;
+        try {
+            targetOrigin = new URL(walletHostOrigin).origin;
+        } catch {
+            reject(new Error('Invalid Play Hub wallet origin.'));
+            return;
+        }
+
+        if (!window.parent || window.parent === window) {
+            reject(new Error('Elyxir batch crafting must run inside Play Hub.'));
+            return;
+        }
+
+        const requestId = window.crypto?.randomUUID?.() || uuid();
+        const cleanup = () => {
+            window.removeEventListener('message', handleMessage);
+            clearTimeout(timeout);
+        };
+        const fail = error => {
+            cleanup();
+            reject(error);
+        };
+        const handleMessage = event => {
+            if (event.origin !== targetOrigin) return;
+            if (event.source !== window.parent) return;
+            if (event.data?.requestId !== requestId) return;
+
+            if (event.data?.type === CRAFT_BATCH_PROGRESS) {
+                onProgress?.(event.data);
+                return;
+            }
+
+            if (event.data?.type !== CRAFT_BATCH_RESPONSE) return;
+
+            cleanup();
+            if (event.data.ok) {
+                resolve(event.data.result);
+                return;
+            }
+
+            const error = new Error(event.data.error?.message || 'Wallet rejected Elyxir crafting.');
+            error.code = event.data.error?.code;
+            error.data = event.data.error?.data || event.data.error?.manifest;
+            reject(error);
+        };
+        const timeout = setTimeout(() => {
+            fail(new Error('Wallet batch request timed out.'));
+        }, CRAFT_BATCH_TIMEOUT_MS);
+
+        window.addEventListener('message', handleMessage);
+        window.parent.postMessage(
+            {
+                type: CRAFT_BATCH_REQUEST,
+                requestId,
+                payload: {
+                    jobId,
+                    recipeAssetId,
+                    creationAssetId,
+                    flaskAssetId,
+                    durationBlocks,
+                    blockId,
+                },
+            },
+            targetOrigin
+        );
+    });
 };

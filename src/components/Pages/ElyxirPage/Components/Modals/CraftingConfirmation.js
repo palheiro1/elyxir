@@ -17,6 +17,7 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
+import { ELYXIR_LIFECYCLE_FIX_HEIGHT, NEW_LIFECYCLE_CREATED_COPY } from '../../../../../utils/elyxirLifecycle';
 
 /**
  * @name CraftingConfirmation
@@ -40,14 +41,17 @@ const CraftingConfirmation = ({
     confirmCrafting,
     isLoading,
     selectedFlask,
+    embedded = false,
+    currentHeight,
 }) => {
-    const { fakeAssets } = useSelector(state => state.elyxir);
-    const { potions } = fakeAssets;
+    const { fakeAssets = {} } = useSelector(state => state.elyxir);
+    const { potions = [] } = fakeAssets;
     const recipePotion = potions?.find(potion => potion?.asset === selectedRecipe?.creationAssetId) || {
         name: 'Selected potion',
         description: 'Elyxir potion',
     };
     const multiplier = selectedFlask?.multiplier || 1;
+    const usesNewLifecycle = Number(currentHeight) >= ELYXIR_LIFECYCLE_FIX_HEIGHT;
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -70,11 +74,18 @@ const CraftingConfirmation = ({
                                 <Box>
                                     <AlertTitle>Wallet approval required</AlertTitle>
                                     <AlertDescription>
-                                        This craft spends the listed assets and the wallet host will ask you to approve
-                                        each transaction.
+                                        {embedded
+                                            ? 'Play Hub will ask for one PIN to sign the closed crafting batch: all asset transfers plus the final Elyxir message.'
+                                            : 'This craft spends the listed assets and the wallet host will ask you to approve each transaction.'}
                                     </AlertDescription>
                                 </Box>
                             </Alert>
+
+                            {usesNewLifecycle && (
+                                <Text fontSize="sm" color="whiteAlpha.700">
+                                    {NEW_LIFECYCLE_CREATED_COPY}
+                                </Text>
+                            )}
 
                             <Box>
                                 <Text fontWeight="bold" mb={2}>
