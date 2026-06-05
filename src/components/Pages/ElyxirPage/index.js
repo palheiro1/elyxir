@@ -430,40 +430,6 @@ const Elyxir = ({
         return () => clearInterval(interval);
     }, [infoAccount?.accountRs]);
 
-    const handlePinInput = useCallback(
-        pin => {
-            try {
-                const userAccount = checkPin(infoAccount.name, pin);
-                if (!userAccount || !userAccount.passphrase) {
-                    toast({
-                        title: 'Invalid PIN',
-                        description: 'Please enter your correct PIN',
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                    });
-                    return;
-                }
-
-                setUserPassphrase(userAccount.passphrase);
-                setShowPinInput(false);
-
-                if (pendingAction === 'craft') {
-                    executeCrafting({ passphrase: userAccount.passphrase });
-                }
-            } catch (error) {
-                toast({
-                    title: 'PIN Error',
-                    description: 'Failed to verify PIN. Please try again.',
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                });
-            }
-        },
-        [infoAccount.name, pendingAction, toast]
-    );
-
     const requestPinForAction = useCallback(action => {
         setPendingAction(action);
         setShowPinInput(true);
@@ -487,44 +453,6 @@ const Elyxir = ({
         },
         [selectedFlask, selectedFlaskOwned, missingItems, onOpen, toast]
     );
-
-    const confirmCrafting = useCallback(async () => {
-        if (!selectedRecipe || !infoAccount) {
-            toast({
-                title: 'Error',
-                description: "Please select a recipe and ensure you're logged in",
-                status: 'error',
-                duration: 3000,
-                isClosable: true,
-            });
-            return;
-        }
-
-        onClose();
-
-        if (isEmbeddedMode) {
-            if (!usesEmbeddedWallet) {
-                toast({
-                    title: 'Wallet connection unavailable',
-                    description: 'Reopen Elyxir from Play Hub with an unlocked wallet.',
-                    status: 'error',
-                    duration: 5000,
-                    isClosable: true,
-                });
-                return;
-            }
-
-            await executeCrafting({ walletProvider });
-            return;
-        }
-
-        if (!userPassphrase) {
-            requestPinForAction('craft');
-            return;
-        }
-
-        await executeCrafting({ passphrase: userPassphrase });
-    }, [selectedRecipe, infoAccount, onClose, toast, isEmbeddedMode, usesEmbeddedWallet, walletProvider, userPassphrase, requestPinForAction]);
 
     const executeCrafting = useCallback(
         async ({ passphrase, walletProvider: craftingWalletProvider } = {}) => {
@@ -613,6 +541,89 @@ const Elyxir = ({
         },
         [selectedRecipe, selectedFlask, craftDuration, fakeAssets.potions, infoAccount, prev_height, toast, walletHostOrigin]
     );
+
+    const handlePinInput = useCallback(
+        pin => {
+            try {
+                const userAccount = checkPin(infoAccount.name, pin);
+                if (!userAccount || !userAccount.passphrase) {
+                    toast({
+                        title: 'Invalid PIN',
+                        description: 'Please enter your correct PIN',
+                        status: 'error',
+                        duration: 3000,
+                        isClosable: true,
+                    });
+                    return;
+                }
+
+                setUserPassphrase(userAccount.passphrase);
+                setShowPinInput(false);
+
+                if (pendingAction === 'craft') {
+                    executeCrafting({ passphrase: userAccount.passphrase });
+                }
+            } catch (error) {
+                toast({
+                    title: 'PIN Error',
+                    description: 'Failed to verify PIN. Please try again.',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        },
+        [executeCrafting, infoAccount.name, pendingAction, toast]
+    );
+
+    const confirmCrafting = useCallback(async () => {
+        if (!selectedRecipe || !infoAccount) {
+            toast({
+                title: 'Error',
+                description: "Please select a recipe and ensure you're logged in",
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
+
+        onClose();
+
+        if (isEmbeddedMode) {
+            if (!usesEmbeddedWallet) {
+                toast({
+                    title: 'Wallet connection unavailable',
+                    description: 'Reopen Elyxir from Play Hub with an unlocked wallet.',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                });
+                return;
+            }
+
+            await executeCrafting({ walletProvider });
+            return;
+        }
+
+        if (!userPassphrase) {
+            requestPinForAction('craft');
+            return;
+        }
+
+        await executeCrafting({ passphrase: userPassphrase });
+    }, [
+        executeCrafting,
+        selectedRecipe,
+        infoAccount,
+        onClose,
+        toast,
+        isEmbeddedMode,
+        usesEmbeddedWallet,
+        walletProvider,
+        userPassphrase,
+        requestPinForAction,
+    ]);
 
     const changeCraftDuration = direction => {
         const index = getDurationIndex(craftDuration);
