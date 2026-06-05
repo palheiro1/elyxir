@@ -318,7 +318,7 @@ const Home = memo(({ infoAccount, setInfoAccount, walletProvider = null, embedde
                     assets: accountAssetList,
                 };
 
-                dispatch(fetchAllElyxirData());
+                dispatch(fetchAllElyxirData({ infoAccount: _auxInfo }));
                 checkDataChange('Account info', infoAccountHash, setInfoAccount, setInfoAccountHash, _auxInfo);
 
                 checkDataChange('Gems', gemCardsHash, setGemCards, setGemCardsHash, gems);

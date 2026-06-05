@@ -123,7 +123,7 @@ export const fetchFakeAssets = createAsyncThunk(
 
 export const fetchAllElyxirData = createAsyncThunk(
     'Elyxir/fetchAllElyxirData',
-    async ({ infoAccount }, { dispatch, rejectWithValue }) => {
+    async ({ infoAccount } = {}, { dispatch, rejectWithValue }) => {
         try {
             const [config, fakeAssets] = await Promise.all([
                 dispatch(fetchElyxirConfiguration()).unwrap(),

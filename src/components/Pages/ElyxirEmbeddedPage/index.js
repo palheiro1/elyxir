@@ -1,6 +1,6 @@
 import { Box, Button, Center, Code, Heading, Spinner, Stack, Text } from '@chakra-ui/react';
 import { MythicalProvider } from '@mythicalb/ardor-provider';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import PlayHubElyxirShell from '../ElyxirPage/PlayHubShell';
@@ -14,6 +14,7 @@ const DEFAULT_WALLET_HOST_ORIGIN =
     process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://store.mythicalbeings.io';
 
 const ELYXIR_PERMISSIONS = ['READ_ACCOUNT', 'READ_BALANCES', 'TX_TRANSFER_ASSET', 'TX_MESSAGE'];
+const EMBEDDED_REFRESH_MS = 15000;
 
 const getOrigin = value => {
     try {
@@ -97,6 +98,37 @@ const ElyxirEmbeddedPage = () => {
         return providerRef.current;
     }, [isFramed, isMockPlayHub, walletHostOrigin]);
 
+    const loadEmbeddedData = useCallback(async ({ session, balances, accountAssets }) => {
+        const assets = mapAssets(accountAssets, balances);
+        const embeddedInfoAccount = {
+            isEmbedded: true,
+            token: null,
+            accountRs: session.accountRS,
+            publicKey: session.publicKey,
+            name: session.displayName || 'Wallet account',
+            IGNISBalance: Number(balances?.ignisNQT || 0) / NQTDIVIDER,
+            GIFTZBalance: getAssetQuantity(assets, GIFTZASSET),
+            GEMBalance: getAssetQuantity(assets, GEMASSET, { formatted: true }),
+            WETHBalance: getAssetQuantity(assets, WETHASSET, { formatted: true }),
+            MANABalance: getAssetQuantity(assets, MANAASSET, { formatted: true }),
+            assets,
+            transactions: [],
+            dividends: [],
+            unconfirmedTxs: [],
+            currentAsks: [],
+            currentBids: [],
+            trades: [],
+        };
+
+        await Promise.all([
+            dispatch(fetchItems({ accountRs: session.accountRS })),
+            dispatch(fetchAllElyxirData({ infoAccount: embeddedInfoAccount })),
+            dispatch(getBlockchainBlocks()),
+        ]);
+
+        return embeddedInfoAccount;
+    }, [dispatch]);
+
     useEffect(() => {
         if (isMockPlayHub) {
             let cancelled = false;
@@ -140,14 +172,53 @@ const ElyxirEmbeddedPage = () => {
 
             loadMock();
 
+            const mockRefreshInterval = setInterval(() => {
+                Promise.all([
+                    dispatch(fetchItems({ accountRs: mockInfoAccount.accountRs })).catch(() => null),
+                    dispatch(fetchAllElyxirData({ infoAccount: mockInfoAccount })).catch(() => null),
+                    dispatch(getBlockchainBlocks()).catch(() => null),
+                ]).catch(() => null);
+            }, EMBEDDED_REFRESH_MS);
+
             return () => {
                 cancelled = true;
+                clearInterval(mockRefreshInterval);
             };
         }
 
         if (!provider) return undefined;
 
         let cancelled = false;
+        let refreshInterval = null;
+        let isRefreshing = false;
+        let connectedSession = null;
+
+        const refreshData = async ({ markReady = false } = {}) => {
+            if (!connectedSession || isRefreshing) return;
+            isRefreshing = true;
+
+            try {
+                const [balances, accountAssets] = await Promise.all([
+                    provider.getBalances().catch(() => null),
+                    getAccountAssets(connectedSession.accountRS).catch(() => null),
+                ]);
+
+                if (cancelled) return;
+
+                const embeddedInfoAccount = await loadEmbeddedData({
+                    session: connectedSession,
+                    balances,
+                    accountAssets,
+                });
+
+                if (cancelled) return;
+
+                setInfoAccount(embeddedInfoAccount);
+                if (markReady) setStatus('ready');
+            } finally {
+                isRefreshing = false;
+            }
+        };
 
         const connect = async () => {
             try {
@@ -160,44 +231,12 @@ const ElyxirEmbeddedPage = () => {
                     permissions: ELYXIR_PERMISSIONS,
                 });
 
-                const [balances, accountAssets] = await Promise.all([
-                    provider.getBalances().catch(() => null),
-                    getAccountAssets(session.accountRS).catch(() => null),
-                ]);
-
                 if (cancelled) return;
-
-                const assets = mapAssets(accountAssets, balances);
-                const embeddedInfoAccount = {
-                    isEmbedded: true,
-                    token: null,
-                    accountRs: session.accountRS,
-                    publicKey: session.publicKey,
-                    name: session.displayName || 'Wallet account',
-                    IGNISBalance: Number(balances?.ignisNQT || 0) / NQTDIVIDER,
-                    GIFTZBalance: getAssetQuantity(assets, GIFTZASSET),
-                    GEMBalance: getAssetQuantity(assets, GEMASSET, { formatted: true }),
-                    WETHBalance: getAssetQuantity(assets, WETHASSET, { formatted: true }),
-                    MANABalance: getAssetQuantity(assets, MANAASSET, { formatted: true }),
-                    assets,
-                    transactions: [],
-                    dividends: [],
-                    unconfirmedTxs: [],
-                    currentAsks: [],
-                    currentBids: [],
-                    trades: [],
-                };
-
-                await Promise.all([
-                    dispatch(fetchItems({ accountRs: session.accountRS })),
-                    dispatch(fetchAllElyxirData({ infoAccount: embeddedInfoAccount })),
-                    dispatch(getBlockchainBlocks()),
-                ]);
-
-                if (cancelled) return;
-
-                setInfoAccount(embeddedInfoAccount);
-                setStatus('ready');
+                connectedSession = session;
+                await refreshData({ markReady: true });
+                refreshInterval = setInterval(() => {
+                    refreshData().catch(err => console.error('Elyxir embedded refresh error:', err));
+                }, EMBEDDED_REFRESH_MS);
             } catch (err) {
                 if (cancelled) return;
                 console.error('Elyxir embedded connect error:', err);
@@ -208,17 +247,13 @@ const ElyxirEmbeddedPage = () => {
 
         connect();
 
-        const blockInterval = setInterval(() => {
-            dispatch(getBlockchainBlocks());
-        }, 15000);
-
         return () => {
             cancelled = true;
-            clearInterval(blockInterval);
+            if (refreshInterval) clearInterval(refreshInterval);
             provider.destroy();
             providerRef.current = null;
         };
-    }, [dispatch, isMockPlayHub, provider]);
+    }, [dispatch, isMockPlayHub, loadEmbeddedData, provider]);
 
     if (!isFramed) {
         return (
