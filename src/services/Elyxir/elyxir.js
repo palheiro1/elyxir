@@ -101,7 +101,7 @@ export const sendCraftPotionAssets = async ({ mergedAssets = [], passphrase, wal
                       recipient: OMNO_ACCOUNT,
                       passPhrase: passphrase,
                       messagePrunable: true,
-                      deadline: 361,
+                      deadline: 120,
                       priority: 'HIGH',
                   });
 
