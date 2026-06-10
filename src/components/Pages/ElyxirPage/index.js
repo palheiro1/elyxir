@@ -12,8 +12,13 @@ import {
     HStack,
     Icon,
     Image,
+    Input,
     Progress,
     SimpleGrid,
+    Slider,
+    SliderFilledTrack,
+    SliderThumb,
+    SliderTrack,
     Stack,
     Text,
     useDisclosure,
@@ -43,8 +48,15 @@ import {
     sendCraftPotionMessage,
 } from '../../../services/Elyxir/elyxir';
 import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
-import { calculateSuccessRate } from '../../../utils/elyxirUtils';
-import { DURATION_OPTIONS } from './data';
+import { calculateSuccessRateWithBlocks } from '../../../utils/elyxirUtils';
+import {
+    blocksToDurationLabel,
+    clampDurationBlocks,
+    formatLocalDateTime,
+    getApproxDateForBlocks,
+    getDurationBounds,
+    getDurationPresets,
+} from '../../../utils/elyxirRace';
 
 const imageFallback = '/images/currency/potions.png';
 
@@ -62,11 +74,6 @@ const getPotionForRecipe = (recipe, potions = []) =>
         imgUrl: imageFallback,
         quantityQNT: 0,
     };
-
-const getDurationIndex = days => {
-    const options = DURATION_OPTIONS.map(option => option.days);
-    return Math.max(0, options.indexOf(days));
-};
 
 const getCraftBatchProgressText = status => {
     const labels = {
@@ -108,7 +115,7 @@ const MiniMetric = ({ label, value, icon, tone = '#57d68d' }) => (
                 <Text color="whiteAlpha.500" fontSize="xs" textTransform="uppercase" fontWeight="bold" noOfLines={1}>
                     {label}
                 </Text>
-                <Text fontWeight="black" fontSize={{ base: 'md', md: 'lg' }} whiteSpace="nowrap">
+                <Text fontWeight="black" fontSize={{ base: 'md', md: 'lg' }} lineHeight="1.1" noOfLines={2} overflowWrap="anywhere">
                     {value}
                 </Text>
             </Box>
@@ -248,6 +255,7 @@ const JobMiniRow = ({ job }) => {
     const elapsedBlocks = Math.max(0, Number(prev_height || 0) - Number(job.startHeight || 0));
     const progress = Math.min(100, Math.max(0, (elapsedBlocks / totalBlocks) * 100));
     const blocksLeft = Math.max(0, Number(job.endHeight || 0) - Number(prev_height || 0));
+    const finishDate = getApproxDateForBlocks(blocksLeft);
 
     return (
         <Box bg="rgba(11, 17, 20, 0.70)" border="1px solid" borderColor="whiteAlpha.200" borderRadius="8px" p={3}>
@@ -264,7 +272,7 @@ const JobMiniRow = ({ job }) => {
                     </HStack>
                     <Progress value={progress} colorScheme="orange" size="sm" borderRadius="6px" bg="#1d282d" />
                     <Text color="whiteAlpha.500" fontSize="xs">
-                        {formatNumber(blocksLeft)} blocks left
+                        {formatNumber(blocksLeft)} blocks left, ends {finishDate ? formatLocalDateTime(finishDate) : 'pending'}
                     </Text>
                 </Stack>
             </HStack>
@@ -283,10 +291,12 @@ const Elyxir = ({
     const { elyxir, fakeAssets } = useSelector(state => state.elyxir);
     const { prev_height } = useSelector(state => state.blockchain);
     const recipes = elyxir?.definition?.recipes || [];
+    const durationBounds = useMemo(() => getDurationBounds(elyxir?.definition), [elyxir?.definition]);
+    const durationPresets = useMemo(() => getDurationPresets(durationBounds), [durationBounds]);
     const flasks = fakeAssets.flasks || [];
 
     const [selectedFlask, setSelectedFlask] = useState(null);
-    const [craftDuration, setCraftDuration] = useState(1);
+    const [craftDurationBlocks, setCraftDurationBlocks] = useState(durationBounds.min);
     const [activeJobs, setActiveJobs] = useState([]);
     const [completedJobs, setCompletedJobs] = useState([]);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
@@ -303,7 +313,13 @@ const Elyxir = ({
     const selectedPotion = useMemo(() => getPotionForRecipe(selectedRecipe, fakeAssets.potions), [selectedRecipe, fakeAssets.potions]);
     const selectedMultiplier = selectedFlask?.multiplier || 1;
     const selectedFlaskOwned = Number(selectedFlask?.quantityQNT || 0) > 0;
-    const successRate = Math.trunc(calculateSuccessRate(craftDuration) * 10000) / 100;
+    const successRate = Math.trunc(calculateSuccessRateWithBlocks(craftDurationBlocks) * 10000) / 100;
+    const brewTimeLabel = blocksToDurationLabel(craftDurationBlocks);
+    const finishDate = getApproxDateForBlocks(craftDurationBlocks);
+    const finishDateLabel = finishDate ? formatLocalDateTime(finishDate) : 'Date pending';
+    const targetHeight = Number(prev_height) > 0 ? Number(prev_height) + craftDurationBlocks : null;
+    const durationRange = Math.max(1, durationBounds.max - durationBounds.min);
+    const durationProgress = Math.round(((craftDurationBlocks - durationBounds.min) / durationRange) * 100);
     const craftBatchProgressText = getCraftBatchProgressText(craftBatchProgress?.status);
 
     const getMissingItems = useCallback(
@@ -415,6 +431,10 @@ const Elyxir = ({
     }, [flasks, selectedFlask]);
 
     useEffect(() => {
+        setCraftDurationBlocks(current => clampDurationBlocks(current, durationBounds));
+    }, [durationBounds.min, durationBounds.max]);
+
+    useEffect(() => {
         const loadJobs = async () => {
             if (!infoAccount?.accountRs) return;
             const accountId = addressToAccountId(infoAccount.accountRs);
@@ -475,7 +495,7 @@ const Elyxir = ({
                     mergedAssets.push({ asset: ing.assetId, qnt: ing.qtyQNT * multiplier });
                 });
 
-                const durationBlocks = DURATION_OPTIONS.find(item => item.days === craftDuration).blocks;
+                const durationBlocks = craftDurationBlocks;
                 const signingStrategy = craftingWalletProvider ? { walletProvider: craftingWalletProvider } : { passphrase };
 
                 if (craftingWalletProvider) {
@@ -539,7 +559,7 @@ const Elyxir = ({
                 setPendingAction(null);
             }
         },
-        [selectedRecipe, selectedFlask, craftDuration, fakeAssets.potions, infoAccount, prev_height, toast, walletHostOrigin]
+        [selectedRecipe, selectedFlask, craftDurationBlocks, fakeAssets.potions, infoAccount, prev_height, toast, walletHostOrigin]
     );
 
     const handlePinInput = useCallback(
@@ -625,10 +645,12 @@ const Elyxir = ({
         requestPinForAction,
     ]);
 
-    const changeCraftDuration = direction => {
-        const index = getDurationIndex(craftDuration);
-        const nextIndex = direction === 'increase' ? Math.min(DURATION_OPTIONS.length - 1, index + 1) : Math.max(0, index - 1);
-        setCraftDuration(DURATION_OPTIONS[nextIndex].days);
+    const setClampedCraftDuration = value => {
+        setCraftDurationBlocks(clampDurationBlocks(value, durationBounds));
+    };
+
+    const changeCraftDuration = deltaBlocks => {
+        setCraftDurationBlocks(current => clampDurationBlocks(current + deltaBlocks, durationBounds));
     };
 
     const handlePrimaryAction = () => {
@@ -758,9 +780,10 @@ const Elyxir = ({
                         </HStack>
 
                         <Stack spacing={5}>
-                            <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={3}>
+                            <SimpleGrid columns={{ base: 1, sm: 2, xl: 4 }} spacing={3}>
                                 <MiniMetric label="Stability" value={`${successRate}%`} icon={FaCheckCircle} tone="#57d68d" />
-                                <MiniMetric label="Brew time" value={`${craftDuration}d`} icon={FaClock} tone="#d8b56d" />
+                                <MiniMetric label="Brew time" value={brewTimeLabel} icon={FaClock} tone="#d8b56d" />
+                                <MiniMetric label="Finish" value={finishDateLabel} icon={FaClock} tone="#72d9e2" />
                                 <MiniMetric label="Yield" value={`x${selectedMultiplier || 0}`} icon={FaFlask} tone="#b999ff" />
                             </SimpleGrid>
 
@@ -800,34 +823,109 @@ const Elyxir = ({
                                 </Box>
 
                                 <Box>
-                                    <HStack justify="space-between" mb={3}>
-                                        <Text fontWeight="bold">Brewing time</Text>
-                                        <HStack>
+                                    <HStack justify="space-between" align={{ base: 'flex-start', md: 'center' }} spacing={3} mb={3} flexWrap="wrap">
+                                        <Box>
+                                            <Text fontWeight="bold">Brewing time</Text>
+                                            <Text color="whiteAlpha.500" fontSize="xs">
+                                                {formatNumber(craftDurationBlocks)} blocks, about {brewTimeLabel}
+                                            </Text>
+                                        </Box>
+                                        <HStack spacing={2}>
                                             <Button
                                                 size="sm"
-                                                leftIcon={<FaMinus />}
+                                                leftIcon={<Icon as={FaMinus} />}
                                                 variant="outline"
                                                 borderColor="whiteAlpha.300"
                                                 color="white"
-                                                isDisabled={getDurationIndex(craftDuration) === 0}
-                                                onClick={() => changeCraftDuration('decrease')}
+                                                isDisabled={craftDurationBlocks <= durationBounds.min}
+                                                onClick={() => changeCraftDuration(-1)}
                                             >
-                                                Less
+                                                1m
                                             </Button>
+                                            <Input
+                                                aria-label="Brewing time in blocks"
+                                                type="number"
+                                                min={durationBounds.min}
+                                                max={durationBounds.max}
+                                                step={1}
+                                                value={craftDurationBlocks}
+                                                onChange={event => setClampedCraftDuration(event.target.value)}
+                                                w="118px"
+                                                h="34px"
+                                                bg="rgba(11, 17, 20, 0.70)"
+                                                borderColor="whiteAlpha.300"
+                                                color="white"
+                                                textAlign="center"
+                                            />
                                             <Button
                                                 size="sm"
-                                                rightIcon={<FaPlus />}
+                                                rightIcon={<Icon as={FaPlus} />}
                                                 variant="outline"
                                                 borderColor="whiteAlpha.300"
                                                 color="white"
-                                                isDisabled={getDurationIndex(craftDuration) === DURATION_OPTIONS.length - 1}
-                                                onClick={() => changeCraftDuration('increase')}
+                                                isDisabled={craftDurationBlocks >= durationBounds.max}
+                                                onClick={() => changeCraftDuration(1)}
                                             >
-                                                More
+                                                1m
                                             </Button>
                                         </HStack>
                                     </HStack>
-                                    <Progress value={(getDurationIndex(craftDuration) / (DURATION_OPTIONS.length - 1)) * 100} colorScheme="purple" bg="#1d282d" borderRadius="6px" />
+                                    <Slider
+                                        aria-label="Brewing duration"
+                                        min={durationBounds.min}
+                                        max={durationBounds.max}
+                                        step={1}
+                                        value={craftDurationBlocks}
+                                        onChange={setClampedCraftDuration}
+                                        focusThumbOnChange={false}
+                                    >
+                                        <SliderTrack bg="#1d282d">
+                                            <SliderFilledTrack bg="#b999ff" />
+                                        </SliderTrack>
+                                        <SliderThumb boxSize={4} bg="#d8b56d" />
+                                    </Slider>
+                                    <HStack spacing={2} mt={3} flexWrap="wrap">
+                                        {durationPresets.map(preset => (
+                                            <Button
+                                                key={`${preset.label}-${preset.blocks}`}
+                                                size="xs"
+                                                variant={preset.blocks === craftDurationBlocks ? 'solid' : 'outline'}
+                                                bg={preset.blocks === craftDurationBlocks ? '#d8b56d' : 'transparent'}
+                                                color={preset.blocks === craftDurationBlocks ? '#07100c' : 'whiteAlpha.800'}
+                                                borderColor="whiteAlpha.300"
+                                                _hover={{ bg: preset.blocks === craftDurationBlocks ? '#d8b56d' : 'whiteAlpha.100' }}
+                                                onClick={() => setClampedCraftDuration(preset.blocks)}
+                                            >
+                                                {preset.label}
+                                            </Button>
+                                        ))}
+                                    </HStack>
+                                    <SimpleGrid columns={{ base: 1, md: 3 }} spacing={3} mt={3}>
+                                        <Box bg="rgba(11, 17, 20, 0.62)" border="1px solid" borderColor="whiteAlpha.200" borderRadius="8px" p={3}>
+                                            <Text color="whiteAlpha.500" fontSize="xs" textTransform="uppercase" fontWeight="bold">
+                                                Finish estimate
+                                            </Text>
+                                            <Text fontWeight="black" fontSize="sm" mt={1}>
+                                                {finishDateLabel}
+                                            </Text>
+                                        </Box>
+                                        <Box bg="rgba(11, 17, 20, 0.62)" border="1px solid" borderColor="whiteAlpha.200" borderRadius="8px" p={3}>
+                                            <Text color="whiteAlpha.500" fontSize="xs" textTransform="uppercase" fontWeight="bold">
+                                                Target height
+                                            </Text>
+                                            <Text fontWeight="black" fontSize="sm" mt={1}>
+                                                {targetHeight ? formatNumber(targetHeight) : 'Pending height'}
+                                            </Text>
+                                        </Box>
+                                        <Box bg="rgba(11, 17, 20, 0.62)" border="1px solid" borderColor="whiteAlpha.200" borderRadius="8px" p={3}>
+                                            <Text color="whiteAlpha.500" fontSize="xs" textTransform="uppercase" fontWeight="bold">
+                                                Range
+                                            </Text>
+                                            <Text fontWeight="black" fontSize="sm" mt={1}>
+                                                {durationProgress}%
+                                            </Text>
+                                        </Box>
+                                    </SimpleGrid>
                                 </Box>
 
                                 {usesEmbeddedWallet && craftBatchProgress && (
@@ -1002,6 +1100,8 @@ const Elyxir = ({
                 selectedFlask={selectedFlask}
                 embedded={usesEmbeddedWallet}
                 currentHeight={prev_height}
+                durationLabel={brewTimeLabel}
+                finishLabel={finishDateLabel}
             />
             {!isEmbeddedMode && (
                 <PinModal showPinInput={showPinInput} setShowPinInput={setShowPinInput} handlePinInput={handlePinInput} />

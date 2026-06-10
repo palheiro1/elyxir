@@ -43,6 +43,8 @@ const CraftingConfirmation = ({
     selectedFlask,
     embedded = false,
     currentHeight,
+    durationLabel,
+    finishLabel,
 }) => {
     const { fakeAssets = {} } = useSelector(state => state.elyxir);
     const { potions = [] } = fakeAssets;
@@ -94,6 +96,16 @@ const CraftingConfirmation = ({
                                 <Text fontSize="sm" color="whiteAlpha.600" mb={4}>
                                     {recipePotion.description}
                                 </Text>
+                                {(durationLabel || finishLabel) && (
+                                    <Box bg="#0b1114" border="1px solid" borderColor="whiteAlpha.200" borderRadius="8px" p={3}>
+                                        <Text fontSize="sm" fontWeight="bold">
+                                            Brewing time: {durationLabel || 'Pending'}
+                                        </Text>
+                                        <Text fontSize="sm" color="whiteAlpha.600" mt={1}>
+                                            Approx. finish: {finishLabel || 'Date pending'}
+                                        </Text>
+                                    </Box>
+                                )}
                             </Box>
 
                             <Divider borderColor="whiteAlpha.200" />

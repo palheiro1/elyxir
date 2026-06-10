@@ -42,7 +42,10 @@ import {
     FaLeaf,
     FaSearch,
     FaShieldAlt,
+    FaFlagCheckered,
+    FaTrophy,
     FaTools,
+    FaUserCircle,
     FaUsers,
 } from 'react-icons/fa';
 import {
@@ -55,8 +58,17 @@ import {
 import { useSelector } from 'react-redux';
 
 import Elyxir from './index';
-import { BLOCKTIME } from '../../../data/CONSTANTS';
-import { addressToAccountId, getAsset } from '../../../services/Ardor/ardorInterface';
+import { addressToAccountId, getAccount, getAsset, getBlock } from '../../../services/Ardor/ardorInterface';
+import {
+    blocksToDurationLabel,
+    buildRaceLeaderboard,
+    formatLocalDateTime,
+    formatUtcDateTime,
+    getApproxDateForHeight,
+    getJobResolveHeight,
+    isJobSuccessful,
+    RACE_START_DATE,
+} from '../../../utils/elyxirRace';
 
 const NAV_ITEMS = [
     { id: 'overview', label: 'Laboratory', subtitle: 'Home', icon: GiBubblingFlask, tone: 'brass' },
@@ -119,37 +131,8 @@ const formatNumber = value => {
     return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(numeric);
 };
 
-const formatBlocksAsDuration = blocks => {
-    const totalSeconds = Math.max(0, Number(blocks || 0) * BLOCKTIME);
-    if (!Number.isFinite(totalSeconds) || totalSeconds <= 0) return 'Ready now';
-
-    const days = Math.floor(totalSeconds / 86400);
-    const hours = Math.floor((totalSeconds % 86400) / 3600);
-    const minutes = Math.ceil((totalSeconds % 3600) / 60);
-    const parts = [];
-
-    if (days) parts.push(`${days}d`);
-    if (hours) parts.push(`${hours}h`);
-    if (minutes && days === 0) parts.push(`${minutes}m`);
-    if (!parts.length) parts.push('1m');
-
-    return parts.join(' ');
-};
-
-const formatDateForHeight = ({ targetHeight, currentHeight }) => {
-    const target = Number(targetHeight);
-    const current = Number(currentHeight);
-    if (!Number.isFinite(target) || !Number.isFinite(current) || current <= 0) return 'Date pending';
-
-    const deltaMs = (target - current) * BLOCKTIME * 1000;
-    const date = new Date(Date.now() + deltaMs);
-    if (Number.isNaN(date.getTime())) return 'Date pending';
-
-    return date.toISOString().slice(0, 10);
-};
-
 const formatTimeLeftLabel = blocks => {
-    const duration = formatBlocksAsDuration(blocks);
+    const duration = blocksToDurationLabel(blocks);
     return duration === 'Ready now' ? duration : `${duration} left`;
 };
 
@@ -178,6 +161,147 @@ const getAccountId = infoAccount => {
     } catch {
         return null;
     }
+};
+
+const getShortAccountLabel = account => {
+    const value = String(account || '');
+    if (!value) return 'Unknown account';
+    if (value.length <= 14) return value;
+    return `${value.slice(0, 8)}...${value.slice(-5)}`;
+};
+
+const getOwnerLabel = (job, accountLabels) => {
+    const owner = String(job?.owner || '');
+    return accountLabels?.[owner]?.label || getShortAccountLabel(owner);
+};
+
+const getChanceLabel = job => {
+    const chance = Number(job?.successProbability);
+    return Number.isFinite(chance) ? `${Math.round(chance * 100)}% chance` : 'Chance pending';
+};
+
+const getJobProgress = (job, currentHeight) => {
+    const totalBlocks = Math.max(1, Number(job?.endHeight || 0) - Number(job?.startHeight || 0));
+    const elapsedBlocks = Math.max(0, Number(currentHeight || 0) - Number(job?.startHeight || 0));
+    return Math.min(100, Math.max(0, (elapsedBlocks / totalBlocks) * 100));
+};
+
+const formatHeightDateLabel = ({ targetHeight, currentHeight, blockTimestamps = {}, exactPrefix = '' }) => {
+    const height = Number(targetHeight);
+    if (!Number.isFinite(height)) return 'Date pending';
+
+    const timestamp = blockTimestamps[String(height)];
+    if (timestamp != null) {
+        const date = new Date(Date.UTC(2018, 0, 1, 0, 0, 0) + Number(timestamp) * 1000);
+        return `${exactPrefix}${formatLocalDateTime(date)}`;
+    }
+
+    const date = getApproxDateForHeight({ targetHeight: height, currentHeight });
+    return date ? `~${formatLocalDateTime(date)}` : 'Date pending';
+};
+
+const getJobStatusLabel = job => {
+    if (job?.status === 'STARTED') return 'Brewing';
+    return isJobSuccessful(job) ? 'Complete' : 'Failed';
+};
+
+const useAccountLabels = jobs => {
+    const ownersKey = useMemo(
+        () =>
+            Array.from(new Set((jobs || []).map(job => String(job?.owner || '')).filter(Boolean)))
+                .sort()
+                .join('|'),
+        [jobs]
+    );
+    const [accountLabels, setAccountLabels] = useState({});
+
+    useEffect(() => {
+        const owners = ownersKey ? ownersKey.split('|') : [];
+        const missingOwners = owners.filter(owner => !accountLabels[owner]);
+        if (!missingOwners.length) return undefined;
+
+        let cancelled = false;
+
+        const loadAccounts = async () => {
+            const entries = await Promise.all(
+                missingOwners.map(async owner => {
+                    const account = await getAccount(owner).catch(() => null);
+                    return [
+                        owner,
+                        {
+                            label: account?.name || account?.accountRS || getShortAccountLabel(owner),
+                            detail: account?.name ? account.accountRS : null,
+                        },
+                    ];
+                })
+            );
+
+            if (!cancelled) {
+                setAccountLabels(previous => ({
+                    ...previous,
+                    ...Object.fromEntries(entries),
+                }));
+            }
+        };
+
+        loadAccounts();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [ownersKey, accountLabels]);
+
+    return accountLabels;
+};
+
+const useBlockTimestamps = jobs => {
+    const heightsKey = useMemo(
+        () =>
+            Array.from(
+                new Set(
+                    (jobs || [])
+                        .map(job => getJobResolveHeight(job))
+                        .filter(height => Number.isFinite(Number(height)) && Number(height) > 0)
+                        .map(height => String(height))
+                )
+            )
+                .sort()
+                .join('|'),
+        [jobs]
+    );
+    const [blockTimestamps, setBlockTimestamps] = useState({});
+
+    useEffect(() => {
+        const heights = heightsKey ? heightsKey.split('|') : [];
+        const missingHeights = heights.filter(height => !(height in blockTimestamps));
+        if (!missingHeights.length) return undefined;
+
+        let cancelled = false;
+
+        const loadBlocks = async () => {
+            const entries = await Promise.all(
+                missingHeights.map(async height => {
+                    const block = await getBlock(height).catch(() => null);
+                    return [height, block?.timestamp ?? null];
+                })
+            );
+
+            if (!cancelled) {
+                setBlockTimestamps(previous => ({
+                    ...previous,
+                    ...Object.fromEntries(entries),
+                }));
+            }
+        };
+
+        loadBlocks();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [heightsKey, blockTimestamps]);
+
+    return blockTimestamps;
 };
 
 const countOwned = items => (items || []).filter(item => Number(item?.quantityQNT || 0) > 0).length;
@@ -620,56 +744,103 @@ const MiniStat = ({ icon, label, value, tone = 'emerald' }) => (
     </HStack>
 );
 
-const BrewingNowPanel = ({ job, potions }) => {
+const JobSummaryRow = ({ job, potions, accountLabels, blockTimestamps = {}, compact = false, bare = false }) => {
     const { prev_height } = useSelector(state => state.blockchain);
     const potion = getPotionForAsset(job?.creationAssetId, potions);
-    const totalBlocks = Math.max(1, Number(job?.endHeight || 0) - Number(job?.startHeight || 0));
-    const elapsedBlocks = Math.max(0, Number(prev_height || 0) - Number(job?.startHeight || 0));
-    const progress = job ? Math.min(100, Math.max(0, (elapsedBlocks / totalBlocks) * 100)) : 0;
+    const active = job?.status === 'STARTED';
+    const progress = active ? getJobProgress(job, prev_height) : 100;
     const blocksLeft = Math.max(0, Number(job?.endHeight || 0) - Number(prev_height || 0));
-    const timeLeft = formatTimeLeftLabel(blocksLeft);
+    const resolveHeight = active ? job?.endHeight : getJobResolveHeight(job);
+    const resolveLabel = formatHeightDateLabel({
+        targetHeight: resolveHeight,
+        currentHeight: prev_height,
+        blockTimestamps,
+    });
+    const startLabel = formatHeightDateLabel({
+        targetHeight: job?.startHeight,
+        currentHeight: prev_height,
+        blockTimestamps,
+    });
+    const statusTone = active ? 'orange' : isJobSuccessful(job) ? 'green' : 'red';
+
+    const content = (
+            <HStack align="flex-start" spacing={3}>
+                <AssetImage src={potion.imgUrl} boxSize={compact ? '42px' : '54px'} flexShrink={0} />
+                <Stack spacing={2} flex="1" minW={0}>
+                    <HStack justify="space-between" align="flex-start" spacing={3}>
+                        <Box minW={0}>
+                            <Text fontWeight="black" noOfLines={1}>
+                                {potion.name}
+                            </Text>
+                            <HStack color={theme.textFaint} fontSize="xs" spacing={2} minW={0}>
+                                <Icon as={FaUserCircle} flexShrink={0} />
+                                <Text noOfLines={1}>{getOwnerLabel(job, accountLabels)}</Text>
+                            </HStack>
+                        </Box>
+                        <Badge colorScheme={statusTone} borderRadius="6px" flexShrink={0}>
+                            {getJobStatusLabel(job)}
+                        </Badge>
+                    </HStack>
+                    <Progress
+                        value={progress}
+                        h="8px"
+                        borderRadius="8px"
+                        bg="rgba(255, 255, 255, 0.07)"
+                        sx={{ '& > div': { background: active ? theme.amber : isJobSuccessful(job) ? theme.emerald : theme.danger } }}
+                    />
+                    <SimpleGrid columns={{ base: 1, md: compact ? 2 : 4 }} spacing={2} color={theme.textMuted} fontSize="xs">
+                        <Text noOfLines={1}>Start {startLabel}</Text>
+                        <Text noOfLines={1}>{active ? `Ends ${resolveLabel}` : `${isJobSuccessful(job) ? 'Delivered' : 'Resolved'} ${resolveLabel}`}</Text>
+                        <Text noOfLines={1}>{active ? formatTimeLeftLabel(blocksLeft) : `Height ${formatNumber(resolveHeight)}`}</Text>
+                        <Text noOfLines={1}>
+                            x{job?.flaskMultiplier || 1} flask, {getChanceLabel(job)}
+                        </Text>
+                    </SimpleGrid>
+                </Stack>
+            </HStack>
+    );
+
+    if (bare) return content;
 
     return (
-        <CockpitPanel p={5} tone={job ? 'amber' : 'neutral'} h="100%">
+        <Box bg="rgba(255, 255, 255, 0.035)" border="1px solid" borderColor={theme.line} borderRadius="8px" p={compact ? 3 : 4}>
+            {content}
+        </Box>
+    );
+};
+
+const BrewingNowPanel = ({ jobs, potions, accountLabels }) => {
+    const visibleJobs = (jobs || [])
+        .slice()
+        .sort((a, b) => Number(a.endHeight || 0) - Number(b.endHeight || 0))
+        .slice(0, 4);
+
+    return (
+        <CockpitPanel p={5} tone={visibleJobs.length ? 'amber' : 'neutral'} h="100%">
             <Stack spacing={4} position="relative" zIndex={1}>
-                <HStack justify="space-between">
-                    <Eyebrow>Brewing now</Eyebrow>
-                    <StatusChip tone={job ? 'amber' : 'cyan'} icon={FaClock}>
-                        {job ? 'Brewing' : 'Idle'}
+                <HStack justify="space-between" align="flex-start">
+                    <Box>
+                        <Eyebrow>Brewing now</Eyebrow>
+                        <Text color={theme.textMuted} fontSize="sm" mt={1}>
+                            Global active jobs visible to Race participants.
+                        </Text>
+                    </Box>
+                    <StatusChip tone={visibleJobs.length ? 'amber' : 'cyan'} icon={FaClock}>
+                        {visibleJobs.length ? `${visibleJobs.length} active` : 'Idle'}
                     </StatusChip>
                 </HStack>
-                {job ? (
-                    <Grid templateColumns={{ base: '110px 1fr', md: '150px 1fr' }} gap={4} alignItems="center">
-                        <Circle
-                            size={{ base: '110px', md: '150px' }}
-                            bg="rgba(244, 180, 95, 0.08)"
-                            border="1px solid"
-                            borderColor={tones.amber.border}
-                        >
-                            <AssetImage src={potion.imgUrl} boxSize={{ base: '82px', md: '114px' }} />
-                        </Circle>
-                        <Stack spacing={3} minW={0}>
-                            <Box minW={0}>
-                                <Heading size="sm" noOfLines={1}>
-                                    {potion.name}
-                                </Heading>
-                                <Text color={theme.textMuted} fontSize="sm">
-                                    x{job.flaskMultiplier || 1} flask output
-                                </Text>
-                            </Box>
-                            <Progress
-                                value={progress}
-                                h="8px"
-                                borderRadius="8px"
-                                bg="rgba(255, 255, 255, 0.07)"
-                                sx={{ '& > div': { background: theme.amber } }}
+                {visibleJobs.length ? (
+                    <Stack spacing={3}>
+                        {visibleJobs.map(job => (
+                            <JobSummaryRow
+                                key={job.jobId}
+                                job={job}
+                                potions={potions}
+                                accountLabels={accountLabels}
+                                compact
                             />
-                            <HStack justify="space-between" color={theme.textMuted} fontSize="xs">
-                                <Text>{timeLeft}</Text>
-                                <Text>{job.successProbability ? `${Math.round(job.successProbability * 100)}% stability` : 'Stability pending'}</Text>
-                            </HStack>
-                        </Stack>
-                    </Grid>
+                        ))}
+                    </Stack>
                 ) : (
                     <Stack spacing={3} minH="150px" justify="center" align="center" textAlign="center">
                         <ToneIcon icon={FaFlask} tone="cyan" size="62px" />
@@ -789,7 +960,88 @@ const WorldLedgerPanel = ({ jobs, recipes, supply }) => {
     );
 };
 
-const LabJournalPanel = ({ recentJobs, potions, setActiveView }) => (
+const RaceInfoPanel = ({ activeJobsCount, leaderboardCount }) => {
+    const raceLive = Date.now() >= RACE_START_DATE.getTime();
+
+    return (
+        <CockpitPanel p={5} tone={raceLive ? 'emerald' : 'violet'} h="100%">
+            <Stack spacing={4} position="relative" zIndex={1}>
+                <HStack justify="space-between" align="flex-start">
+                    <Box>
+                        <Eyebrow tone={raceLive ? 'emerald' : 'violet'}>Elyxir Race</Eyebrow>
+                        <Heading size="md">First delivery wins per potion</Heading>
+                    </Box>
+                    <StatusChip tone={raceLive ? 'emerald' : 'violet'} icon={FaFlagCheckered}>
+                        {raceLive ? 'Live' : 'Scheduled'}
+                    </StatusChip>
+                </HStack>
+                <Stack spacing={2} color={theme.textMuted} fontSize="sm">
+                    <Text>
+                        Starts {formatUtcDateTime(RACE_START_DATE)} / local {formatLocalDateTime(RACE_START_DATE, { year: true, timeZoneName: true })}.
+                    </Text>
+                    <Text>Only successful deliveries resolved after the published start count. Brew duration remains part of the strategy.</Text>
+                </Stack>
+                <SimpleGrid columns={2} spacing={3}>
+                    <MiniStat icon={FaClock} label="Active jobs" value={formatNumber(activeJobsCount)} tone="amber" />
+                    <MiniStat icon={FaTrophy} label="First deliveries" value={formatNumber(leaderboardCount)} tone="emerald" />
+                </SimpleGrid>
+            </Stack>
+        </CockpitPanel>
+    );
+};
+
+const RaceResultsPanel = ({ leaderboard, accountLabels, setActiveView }) => (
+    <CockpitPanel p={5} tone="emerald" h="100%">
+        <SectionHeader
+            label="Race board"
+            title="First deliveries by potion"
+            caption="Source of truth is resolved Elyxir job state and block time."
+            action={
+                <Button
+                    size="sm"
+                    variant="ghost"
+                    color={theme.textMuted}
+                    rightIcon={<FaChevronRight />}
+                    onClick={() => setActiveView('jobs')}
+                >
+                    Queue
+                </Button>
+            }
+        />
+        <Stack spacing={3} mt={5}>
+            {leaderboard.length === 0 && (
+                <Text color={theme.textMuted} fontSize="sm">
+                    No verified post-start potion deliveries yet.
+                </Text>
+            )}
+            {leaderboard.slice(0, 8).map(entry => (
+                <HStack key={`${entry.creationAssetId}-${entry.jobId}`} justify="space-between" spacing={3}>
+                    <HStack minW={0}>
+                        <AssetImage src={entry.potion?.imgUrl} boxSize="38px" flexShrink={0} />
+                        <Box minW={0}>
+                            <Text fontSize="sm" fontWeight="black" noOfLines={1}>
+                                {entry.potion?.name || `Potion ${String(entry.creationAssetId).slice(-6)}`}
+                            </Text>
+                            <Text color={theme.textFaint} fontSize="xs" noOfLines={1}>
+                                {getOwnerLabel(entry, accountLabels)}
+                            </Text>
+                        </Box>
+                    </HStack>
+                    <Box textAlign="right" flexShrink={0}>
+                        <Badge colorScheme={entry.ardorTimestamp != null ? 'green' : 'yellow'} borderRadius="6px">
+                            {entry.verification}
+                        </Badge>
+                        <Text color={theme.textMuted} fontSize="xs" mt={1}>
+                            {entry.resolvedDate ? formatLocalDateTime(entry.resolvedDate) : `Height ${formatNumber(entry.resolveHeight)}`}
+                        </Text>
+                    </Box>
+                </HStack>
+            ))}
+        </Stack>
+    </CockpitPanel>
+);
+
+const LabJournalPanel = ({ recentJobs, potions, accountLabels, blockTimestamps, setActiveView }) => (
     <CockpitPanel p={5}>
         <SectionHeader
             label="Lab journal"
@@ -808,34 +1060,23 @@ const LabJournalPanel = ({ recentJobs, potions, setActiveView }) => (
         />
         <Stack spacing={3} mt={5}>
             {recentJobs.length === 0 && <Text color={theme.textMuted}>No experiments recorded yet.</Text>}
-            {recentJobs.map(job => {
-                const potion = getPotionForAsset(job.creationAssetId, potions);
-                const active = job.status === 'STARTED';
-                return (
-                    <HStack key={job.jobId} justify="space-between" spacing={3}>
-                        <HStack minW={0}>
-                            <AssetImage src={potion.imgUrl} boxSize="38px" flexShrink={0} />
-                            <Box minW={0}>
-                                <Text fontSize="sm" fontWeight="black" noOfLines={1}>
-                                    {potion.name}
-                                </Text>
-                                <Text color={theme.textFaint} fontSize="xs" noOfLines={1}>
-                                    {active ? 'Brewing started' : job.isSuccess ? 'Mixture stabilized' : 'Mixture collapsed'}
-                                </Text>
-                            </Box>
-                        </HStack>
-                        <Badge colorScheme={active ? 'orange' : job.isSuccess ? 'green' : 'red'}>
-                            {active ? 'Brewing' : job.isSuccess ? 'Complete' : 'Failed'}
-                        </Badge>
-                    </HStack>
-                );
-            })}
+            {recentJobs.map(job => (
+                <JobSummaryRow
+                    key={job.jobId}
+                    job={job}
+                    potions={potions}
+                    accountLabels={accountLabels}
+                    blockTimestamps={blockTimestamps}
+                    compact
+                />
+            ))}
         </Stack>
     </CockpitPanel>
 );
 
 const OverviewView = ({ infoAccount, setActiveView }) => {
     const { elyxir, fakeAssets } = useSelector(state => state.elyxir);
+    const { prev_height } = useSelector(state => state.blockchain);
     const recipeDefinition = elyxir?.definition?.recipes;
     const recipes = useMemo(() => recipeDefinition || [], [recipeDefinition]);
     const jobs = useMemo(() => getJobCollections(elyxir), [elyxir]);
@@ -846,9 +1087,26 @@ const OverviewView = ({ infoAccount, setActiveView }) => {
     const recipeReadiness = useMemo(() => getRecipeReadiness(recipes, fakeAssets, ownedFlasks), [recipes, fakeAssets, ownedFlasks]);
     const nextCraft = recipeReadiness[0];
     const craftableRecipes = recipeReadiness.filter(item => item.missing.length === 0);
-    const recentJobs = [...jobs.active, ...jobs.completed]
-        .sort((a, b) => Number(b.startHeight || 0) - Number(a.startHeight || 0))
-        .slice(0, 5);
+    const blockTimestamps = useBlockTimestamps(jobs.completed);
+    const raceLeaderboard = useMemo(
+        () =>
+            buildRaceLeaderboard({
+                jobs: jobs.completed,
+                potions: fakeAssets.potions,
+                blockTimestamps,
+                currentHeight: prev_height,
+            }),
+        [jobs.completed, fakeAssets.potions, blockTimestamps, prev_height]
+    );
+    const recentJobs = useMemo(
+        () =>
+            [...jobs.active, ...jobs.completed]
+                .sort((a, b) => Number(b.startHeight || 0) - Number(a.startHeight || 0))
+                .slice(0, 5),
+        [jobs.active, jobs.completed]
+    );
+    const labelJobs = useMemo(() => [...jobs.active, ...recentJobs, ...raceLeaderboard], [jobs.active, recentJobs, raceLeaderboard]);
+    const accountLabels = useAccountLabels(labelJobs);
     const playerName = infoAccount?.name || 'Alchemist';
     const ingredientsOwned = countOwned(fakeAssets.ingredients);
     const introText = `${userActiveJobs.length ? `${formatNumber(userActiveJobs.length)} potion${userActiveJobs.length === 1 ? '' : 's'} brewing.` : 'No potion is brewing.'} Your shelves hold ${formatNumber(ingredientsOwned)} ingredients. ${
@@ -863,10 +1121,15 @@ const OverviewView = ({ infoAccount, setActiveView }) => {
                 caption={introText}
             />
 
-            <Grid templateColumns={{ base: '1fr', xl: '1.1fr 0.8fr 0.95fr' }} gap={4}>
-                <BrewingNowPanel job={userActiveJobs[0] || jobs.active[0]} potions={fakeAssets.potions} />
+            <Grid templateColumns={{ base: '1fr', xl: '1.25fr 0.85fr 0.9fr' }} gap={4}>
+                <BrewingNowPanel jobs={jobs.active} potions={fakeAssets.potions} accountLabels={accountLabels} />
+                <RaceInfoPanel activeJobsCount={jobs.active.length} leaderboardCount={raceLeaderboard.length} />
                 <RecipeStatusPanel nextCraft={nextCraft} craftableRecipes={craftableRecipes} setActiveView={setActiveView} />
+            </Grid>
+
+            <Grid templateColumns={{ base: '1fr', xl: 'minmax(320px, 0.75fr) minmax(0, 1.25fr)' }} gap={4}>
                 <ShelvesPanel fakeAssets={fakeAssets} userActiveJobs={userActiveJobs} recipes={recipes} setActiveView={setActiveView} />
+                <RaceResultsPanel leaderboard={raceLeaderboard} accountLabels={accountLabels} setActiveView={setActiveView} />
             </Grid>
 
             <CockpitPanel p={5}>
@@ -909,7 +1172,13 @@ const OverviewView = ({ infoAccount, setActiveView }) => {
 
             <Grid templateColumns={{ base: '1fr', xl: 'minmax(0, 0.9fr) minmax(360px, 0.7fr)' }} gap={4}>
                 <WorldLedgerPanel jobs={jobs} recipes={recipes} supply={supply} />
-                <LabJournalPanel recentJobs={recentJobs} potions={fakeAssets.potions} setActiveView={setActiveView} />
+                <LabJournalPanel
+                    recentJobs={recentJobs}
+                    potions={fakeAssets.potions}
+                    accountLabels={accountLabels}
+                    blockTimestamps={blockTimestamps}
+                    setActiveView={setActiveView}
+                />
             </Grid>
 
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
@@ -1125,53 +1394,21 @@ const InventoryView = ({ infoAccount }) => {
     );
 };
 
-const JobRow = ({ job }) => {
+const JobRow = ({ job, accountLabels, blockTimestamps }) => {
     const { fakeAssets } = useSelector(state => state.elyxir);
-    const { prev_height } = useSelector(state => state.blockchain);
-    const potion = getPotionForAsset(job.creationAssetId, fakeAssets.potions);
     const active = job.status === 'STARTED';
-    const totalBlocks = Math.max(1, Number(job.endHeight || 0) - Number(job.startHeight || 0));
-    const elapsedBlocks = Math.max(0, Number(prev_height || 0) - Number(job.startHeight || 0));
-    const progress = active ? Math.min(100, Math.max(0, (elapsedBlocks / totalBlocks) * 100)) : 100;
-    const blocksLeft = Math.max(0, Number(job.endHeight || 0) - Number(prev_height || 0));
-    const timeLeft = formatTimeLeftLabel(blocksLeft);
-    const jobDate = formatDateForHeight({
-        targetHeight: job.endHeight || job.startHeight,
-        currentHeight: prev_height,
-    });
-    const dateLabel = job.isSuccess || job.status === 'FINALIZED' ? 'Completed' : 'Failed';
 
     return (
-        <CockpitPanel p={4} tone={active ? 'amber' : job.isSuccess ? 'emerald' : 'danger'}>
-            <HStack align="flex-start" spacing={4} position="relative" zIndex={1}>
-                <AssetImage src={potion.imgUrl} boxSize="58px" flexShrink={0} />
-                <Stack spacing={2} flex="1" minW={0}>
-                    <HStack justify="space-between" align="flex-start">
-                        <Box minW={0}>
-                            <Text fontWeight="black" noOfLines={1}>
-                                {potion.name}
-                            </Text>
-                            <Text color={theme.textFaint} fontSize="xs">
-                                x{job.flaskMultiplier || 1} flask output
-                            </Text>
-                        </Box>
-                        <Badge colorScheme={active ? 'orange' : job.isSuccess ? 'green' : 'red'}>
-                            {active ? 'Active' : job.isSuccess ? 'Complete' : 'Failed'}
-                        </Badge>
-                    </HStack>
-                    <Progress
-                        value={progress}
-                        h="8px"
-                        borderRadius="8px"
-                        bg="rgba(255, 255, 255, 0.07)"
-                        sx={{ '& > div': { background: active ? theme.amber : job.isSuccess ? theme.emerald : theme.danger } }}
-                    />
-                    <HStack justify="space-between" color={theme.textMuted} fontSize="xs">
-                        <Text>{active ? timeLeft : `${dateLabel} ${jobDate}`}</Text>
-                        <Text>{job.successProbability ? `${Math.round(job.successProbability * 100)}% chance` : 'Chance pending'}</Text>
-                    </HStack>
-                </Stack>
-            </HStack>
+        <CockpitPanel p={4} tone={active ? 'amber' : isJobSuccessful(job) ? 'emerald' : 'danger'}>
+            <Box position="relative" zIndex={1}>
+                <JobSummaryRow
+                    job={job}
+                    potions={fakeAssets.potions}
+                    accountLabels={accountLabels}
+                    blockTimestamps={blockTimestamps}
+                    bare
+                />
+            </Box>
         </CockpitPanel>
     );
 };
@@ -1180,19 +1417,52 @@ const JobsView = ({ infoAccount }) => {
     const { elyxir } = useSelector(state => state.elyxir);
     const accountId = useMemo(() => getAccountId(infoAccount), [infoAccount]);
     const jobs = useMemo(() => getJobCollections(elyxir), [elyxir]);
-    const activeJobs = jobs.active.filter(job => String(job.owner) === String(accountId));
-    const completedJobs = jobs.completed.filter(job => String(job.owner) === String(accountId));
+    const raceWatchJobs = useMemo(
+        () => jobs.active.slice().sort((a, b) => Number(a.endHeight || 0) - Number(b.endHeight || 0)),
+        [jobs.active]
+    );
+    const activeJobs = useMemo(() => jobs.active.filter(job => String(job.owner) === String(accountId)), [jobs.active, accountId]);
+    const completedJobs = useMemo(
+        () =>
+            jobs.completed
+                .filter(job => String(job.owner) === String(accountId))
+                .sort((a, b) => Number(getJobResolveHeight(b) || 0) - Number(getJobResolveHeight(a) || 0)),
+        [jobs.completed, accountId]
+    );
+    const blockTimestamps = useBlockTimestamps(completedJobs);
+    const labelJobs = useMemo(() => [...raceWatchJobs, ...activeJobs, ...completedJobs], [raceWatchJobs, activeJobs, completedJobs]);
+    const accountLabels = useAccountLabels(labelJobs);
 
     return (
         <Stack spacing={5}>
             <SectionHeader
                 label="Laboratory / Brewing Queue"
                 title="Potions in preparation"
-                caption="Monitor ongoing experiments and review past results from your laboratory."
+                caption="Track the global Race watch while keeping your own active and completed jobs separate."
             />
 
             <CockpitPanel p={5}>
-                <SectionHeader label="Active brews" title="Currently simmering" />
+                <SectionHeader
+                    label="Race watch"
+                    title="Global active brews"
+                    caption="Sorted by expected finalization so players can read the field at a glance."
+                />
+                <Stack spacing={3} mt={5}>
+                    {raceWatchJobs.length === 0 && (
+                        <Stack align="center" textAlign="center" py={10}>
+                            <ToneIcon icon={FaFlask} tone="cyan" size="64px" />
+                            <Heading size="sm">No active Race watch jobs</Heading>
+                            <Text color={theme.textMuted}>Active Elyxir jobs will appear here as soon as they are submitted.</Text>
+                        </Stack>
+                    )}
+                    {raceWatchJobs.map(job => (
+                        <JobRow key={job.jobId} job={job} accountLabels={accountLabels} blockTimestamps={blockTimestamps} />
+                    ))}
+                </Stack>
+            </CockpitPanel>
+
+            <CockpitPanel p={5}>
+                <SectionHeader label="My jobs" title="Currently simmering" />
                 <Stack spacing={3} mt={5}>
                     {activeJobs.length === 0 && (
                         <Stack align="center" textAlign="center" py={10}>
@@ -1205,17 +1475,17 @@ const JobsView = ({ infoAccount }) => {
                         .slice()
                         .sort((a, b) => Number(a.endHeight || 0) - Number(b.endHeight || 0))
                         .map(job => (
-                            <JobRow key={job.jobId} job={job} />
+                            <JobRow key={job.jobId} job={job} accountLabels={accountLabels} blockTimestamps={blockTimestamps} />
                         ))}
                 </Stack>
             </CockpitPanel>
 
             <CockpitPanel p={5}>
-                <SectionHeader label="Lab journal" title="Completed and failed experiments" />
+                <SectionHeader label="My lab journal" title="Completed and failed experiments" />
                 <Stack spacing={3} mt={5}>
                     {completedJobs.length === 0 && <Text color={theme.textMuted}>No completed experiments yet.</Text>}
                     {completedJobs.map(job => (
-                        <JobRow key={job.jobId} job={job} />
+                        <JobRow key={job.jobId} job={job} accountLabels={accountLabels} blockTimestamps={blockTimestamps} />
                     ))}
                 </Stack>
             </CockpitPanel>
