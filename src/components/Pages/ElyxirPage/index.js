@@ -985,7 +985,7 @@ const Elyxir = ({
                                             <RequirementRow
                                                 key={`${item.type}-${item.name}`}
                                                 item={item}
-                                                onFind={item.have < item.needed ? onOpenSupplyBoard : null}
+                                                onFind={item.have < item.needed ? () => onOpenSupplyBoard(item) : null}
                                             />
                                         ))}
                                     </Stack>
@@ -1000,7 +1000,7 @@ const Elyxir = ({
                                             <RequirementRow
                                                 key={`${item.type}-${item.name}`}
                                                 item={item}
-                                                onFind={item.have < item.needed ? onOpenSupplyBoard : null}
+                                                onFind={item.have < item.needed ? () => onOpenSupplyBoard(item) : null}
                                             />
                                         ))}
                                     </Stack>
@@ -1020,7 +1020,7 @@ const Elyxir = ({
                                             <RequirementRow
                                                 key={`${item.type}-${item.name}`}
                                                 item={item}
-                                                onFind={item.have < item.needed ? onOpenSupplyBoard : null}
+                                                onFind={item.have < item.needed ? () => onOpenSupplyBoard(item) : null}
                                             />
                                         ))}
                                     </Stack>

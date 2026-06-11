@@ -36,8 +36,7 @@ import { useMemo, useState } from 'react';
 import { FiArchive, FiBox, FiClock, FiSearch, FiShoppingBag, FiTool } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 
-import { IMGURL, IMG_THUMB_PATH } from '../../../data/CONSTANTS';
-import monsters from '../../../data/monsters.json';
+import { ELYXIR_INCUBATION_SOURCES } from '../ElyxirPage/incubationSources';
 
 const WALLET_SECTIONS = {
     inventory: 1,
@@ -59,7 +58,7 @@ const CATEGORY_GUIDES = [
         status: 'Incubation + Market',
         colorScheme: 'green',
         image: '/images/elyxir/ingredients/araucariar.png',
-        body: 'Stake eligible cards in Wallet Inventory. After one 5 040-block cycle, harvest cards plus ingredient yield.',
+        body: 'Incubate eligible cards in Wallet Inventory. After one 5 040-block cycle, harvest cards plus ingredient yield.',
         action: 'Open Inventory',
         section: WALLET_SECTIONS.inventory,
     },
@@ -219,238 +218,7 @@ const RECIPES = [
     },
 ];
 
-const INCUBATION_MAPPINGS = [
-    {
-        cardName: '/Kaggen',
-        cardId: '8825927167203958938',
-        minCards: 10,
-        ingredientName: 'Garden flower',
-        ingredientId: '7879802689430656608',
-        ingredientImage: '/images/elyxir/ingredients/gardeflow.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Adaro',
-        cardId: '18101012326255288772',
-        minCards: 10,
-        ingredientName: 'Rainbow shred',
-        ingredientId: '18140737140039335538',
-        ingredientImage: '/images/elyxir/ingredients/rainbowshd.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Caaporá',
-        cardId: '8717959006135737805',
-        minCards: 10,
-        ingredientName: 'Araucaria resin',
-        ingredientId: '7081966488954575750',
-        ingredientImage: '/images/elyxir/ingredients/araucariar.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Catoblepas',
-        cardId: '15284691712437925618',
-        minCards: 10,
-        ingredientName: 'Poison herb',
-        ingredientId: '15080124236445648438',
-        ingredientImage: '/images/elyxir/ingredients/poisonherb.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Dhampir',
-        cardId: '609721796834652174',
-        minCards: 10,
-        ingredientName: 'Vampire fang',
-        ingredientId: '14451010716011965584',
-        ingredientImage: '/images/elyxir/ingredients/vampirefng.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Droemerdene',
-        cardId: '10444425886085847503',
-        minCards: 10,
-        ingredientName: 'Kangaroo hair',
-        ingredientId: '1748542894784204097',
-        ingredientImage: '/images/elyxir/ingredients/kangaroohr.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Dudugera',
-        cardId: '12936439663349626618',
-        minCards: 5,
-        ingredientName: 'Cloud',
-        ingredientId: '15521713672709080827',
-        ingredientImage: '/images/elyxir/ingredients/cloud.png',
-        rarity: 'RARE',
-    },
-    {
-        cardName: 'Dybbuk',
-        cardId: '9118586585609900793',
-        minCards: 2,
-        ingredientName: 'Holy water',
-        ingredientId: '12308228721908498397',
-        ingredientImage: '/images/elyxir/ingredients/holiwater.png',
-        rarity: 'EPIC',
-    },
-    {
-        cardName: 'Grootslang',
-        cardId: '14906207210027210012',
-        minCards: 1,
-        ingredientName: 'Diamond',
-        ingredientId: '7384993574556043649',
-        ingredientImage: '/images/elyxir/ingredients/diamond.png',
-        rarity: 'SPECIAL',
-    },
-    {
-        cardName: 'Haechi',
-        cardId: '11654119158397769364',
-        minCards: 5,
-        ingredientName: 'Ash',
-        ingredientId: '12210617625866540653',
-        ingredientImage: '/images/elyxir/ingredients/ash.png',
-        rarity: 'RARE',
-    },
-    {
-        cardName: 'Karkadann',
-        cardId: '7536385584787697086',
-        minCards: 10,
-        ingredientName: 'Horn dust',
-        ingredientId: '9093191442487829960',
-        ingredientImage: '/images/elyxir/ingredients/horndust.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Kel Essuf',
-        cardId: '12313032092046113556',
-        minCards: 10,
-        ingredientName: 'Desert sand',
-        ingredientId: '3042874600616626102',
-        ingredientImage: '/images/elyxir/ingredients/desentsand.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Macihuatli',
-        cardId: '6086151229884242778',
-        minCards: 10,
-        ingredientName: 'Mustard seeds',
-        ingredientId: '2820535047226119418',
-        ingredientImage: '/images/elyxir/ingredients/mustardsd.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Nei Tituaabine',
-        cardId: '10917692030112170713',
-        minCards: 10,
-        ingredientName: 'Lightning',
-        ingredientId: '9289482442465517140',
-        ingredientImage: '/images/elyxir/ingredients/lightning.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Ninki Nanka',
-        cardId: '1328293559375692481',
-        minCards: 2,
-        ingredientName: 'Fetid water',
-        ingredientId: '7464041035414516620',
-        ingredientImage: '/images/elyxir/ingredients/fetidwater.png',
-        rarity: 'EPIC',
-    },
-    {
-        cardName: 'Pele',
-        cardId: '15778342868690621160',
-        minCards: 2,
-        ingredientName: 'Lava',
-        ingredientId: '955451625820789680',
-        ingredientImage: '/images/elyxir/ingredients/lava.png',
-        rarity: 'EPIC',
-    },
-    {
-        cardName: 'Pua Tu Tahi',
-        cardId: '2795734210888256790',
-        minCards: 10,
-        ingredientName: 'Sea water',
-        ingredientId: '16876168465973703622',
-        ingredientImage: '/images/elyxir/ingredients/seawater.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Rahu',
-        cardId: '9451976923053037726',
-        minCards: 10,
-        ingredientName: "Rahu's saliva",
-        ingredientId: '17969181894960429964',
-        ingredientImage: '/images/elyxir/ingredients/rahussaliv.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Rompo',
-        cardId: '374078224198142471',
-        minCards: 10,
-        ingredientName: 'Bone powder',
-        ingredientId: '10290172289119183466',
-        ingredientImage: '/images/elyxir/ingredients/bonepowder.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Sasquatch',
-        cardId: '8504616031553931056',
-        minCards: 1,
-        ingredientName: 'Bigfoot hair',
-        ingredientId: '2380273644117095987',
-        ingredientImage: '/images/elyxir/ingredients/bigfoothr.png',
-        rarity: 'SPECIAL',
-    },
-    {
-        cardName: 'Şahmaran',
-        cardId: '1770779863759720918',
-        minCards: 5,
-        ingredientName: 'Garden soil',
-        ingredientId: '9422436625653721006',
-        ingredientImage: '/images/elyxir/ingredients/gardensoil.png',
-        rarity: 'RARE',
-    },
-    {
-        cardName: 'Tsenahale',
-        cardId: '3758988694981372970',
-        minCards: 2,
-        ingredientName: 'Feather',
-        ingredientId: '11386383170019744285',
-        ingredientImage: '/images/elyxir/ingredients/feather.png',
-        rarity: 'EPIC',
-    },
-    {
-        cardName: 'Tupilaq',
-        cardId: '488367278629756964',
-        minCards: 10,
-        ingredientName: 'Skin',
-        ingredientId: '9627155908350599600',
-        ingredientImage: '/images/elyxir/ingredients/skin.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Werewolf',
-        cardId: '13430257599807483745',
-        minCards: 10,
-        ingredientName: 'Wolf fang',
-        ingredientId: '7563318252261495089',
-        ingredientImage: '/images/elyxir/ingredients/wolffang.png',
-        rarity: 'COMMON',
-    },
-    {
-        cardName: 'Yeti',
-        cardId: '7891814295348826088',
-        minCards: 10,
-        ingredientName: 'Himalayan snow',
-        ingredientId: '9859593227468066316',
-        ingredientImage: '/images/elyxir/ingredients/himalayasn.png',
-        rarity: 'COMMON',
-    },
-];
-
-const getCardImage = cardName => {
-    const monster = monsters.find(item => item.name === cardName);
-    return monster?.assetname ? `${IMGURL}${IMG_THUMB_PATH}${monster.assetname}.jpg` : '/images/cards/card.png';
-};
+const INCUBATION_MAPPINGS = ELYXIR_INCUBATION_SOURCES;
 
 const getRarityColor = rarity => RARITY_RULES.find(item => item.rarity === rarity)?.colorScheme || 'gray';
 
@@ -500,7 +268,7 @@ const NewsAirdrops = ({ goToSection }) => {
         const selectedRecipe = RECIPES.find(recipe => recipe.name === recipeFilter);
         return INCUBATION_MAPPINGS.filter(item => {
             const matchesRarity = rarityFilter === 'all' || item.rarity === rarityFilter;
-            const matchesRecipe = !selectedRecipe || selectedRecipe.ingredients.includes(item.ingredientId);
+            const matchesRecipe = !selectedRecipe || selectedRecipe.ingredients.includes(item.ingredientAssetId);
             const matchesSearch =
                 !normalizedSearch ||
                 item.cardName.toLowerCase().includes(normalizedSearch) ||
@@ -621,7 +389,7 @@ const NewsAirdrops = ({ goToSection }) => {
                                         <Heading size="md">Incubation</Heading>
                                     </HStack>
                                     <Text color={mutedTextColor}>
-                                        Stake cards from Wallet / Inventory / Incubation for one cycle of 5 040 blocks.
+                                        Incubate cards from Wallet / Inventory / Incubation for one cycle of 5 040 blocks.
                                         Harvest returns the staked cards plus ingredient yield. Yield equals staked
                                         quantity divided by the rarity ratio, and quantity must be a positive multiple
                                         of that ratio.
@@ -705,7 +473,7 @@ const NewsAirdrops = ({ goToSection }) => {
                                         </Thead>
                                         <Tbody>
                                             {filteredIncubation.map(item => (
-                                                <Tr key={`${item.cardId}:${item.ingredientId}`}>
+                                                <Tr key={`${item.cardAssetId}:${item.ingredientAssetId}`}>
                                                     <Td>
                                                         <HStack spacing={3}>
                                                             <Image
@@ -721,7 +489,7 @@ const NewsAirdrops = ({ goToSection }) => {
                                                     <Td>
                                                         <HStack spacing={3}>
                                                             <Image
-                                                                src={getCardImage(item.cardName)}
+                                                                src={item.cardImage}
                                                                 alt={item.cardName}
                                                                 boxSize="42px"
                                                                 objectFit="cover"
@@ -741,9 +509,9 @@ const NewsAirdrops = ({ goToSection }) => {
                                                     <Td isNumeric>
                                                         <Badge
                                                             colorScheme={
-                                                                ingredientCopiesByAsset[item.ingredientId] ? 'green' : 'gray'
+                                                                ingredientCopiesByAsset[item.ingredientAssetId] ? 'green' : 'gray'
                                                             }>
-                                                            {ingredientCopiesByAsset[item.ingredientId] || 0}
+                                                            {ingredientCopiesByAsset[item.ingredientAssetId] || 0}
                                                         </Badge>
                                                     </Td>
                                                 </Tr>

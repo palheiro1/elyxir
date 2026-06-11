@@ -69,6 +69,11 @@ import {
     isJobSuccessful,
     RACE_START_DATE,
 } from '../../../utils/elyxirRace';
+import {
+    getIncubationOwnership,
+    getIncubationSearchText,
+    getIncubationSourceByIngredientAsset,
+} from './incubationSources';
 
 const NAV_ITEMS = [
     { id: 'overview', label: 'Laboratory', subtitle: 'Home', icon: GiBubblingFlask, tone: 'brass' },
@@ -1511,9 +1516,9 @@ const getSupplyMeta = type => {
         return {
             kind: 'Ingredient',
             source: 'Incubation',
-            method: 'Stake eligible cards',
+            method: 'Incubate eligible cards',
             status: 'Active',
-            cta: 'Open Inventory',
+            cta: 'Open Incubation',
             section: 1,
             tone: 'emerald',
         };
@@ -1585,13 +1590,23 @@ const SupplyRoute = ({ icon, title, body, tone }) => (
     </HStack>
 );
 
-const SupplyCard = ({ item, onNavigate }) => {
+const SupplyCard = ({ item, infoAccount, onNavigate, focusedAssetId }) => {
     const meta = getSupplyMeta(item.type);
     const owned = Number(item.quantityQNT || 0) > 0;
     const actionTone = owned ? 'brass' : meta.tone;
+    const source = item.type === 'ingredients' ? getIncubationSourceByIngredientAsset(item.asset) : null;
+    const ownership = getIncubationOwnership(source, infoAccount?.assets || []);
+    const isFocused = String(focusedAssetId || '') === String(item.asset || '');
 
     return (
-        <CockpitPanel p={4} tone={meta.tone} interactive>
+        <CockpitPanel
+            p={4}
+            tone={meta.tone}
+            interactive
+            data-supply-asset={item.asset}
+            outline={isFocused ? '2px solid rgba(216, 181, 109, 0.86)' : undefined}
+            outlineOffset={isFocused ? '2px' : undefined}
+        >
             <Stack spacing={4} position="relative" zIndex={1} minH="260px">
                 <HStack justify="space-between" align="flex-start">
                     <HStack spacing={2} wrap="wrap">
@@ -1601,6 +1616,11 @@ const SupplyCard = ({ item, onNavigate }) => {
                         <Badge bg="rgba(185, 155, 255, 0.10)" color={theme.violet} borderRadius="6px">
                             Ardor
                         </Badge>
+                        {source && (
+                            <Badge bg="rgba(87, 214, 141, 0.12)" color={theme.emerald} borderRadius="6px">
+                                {source.rarity}
+                            </Badge>
+                        )}
                     </HStack>
                     <Badge colorScheme={owned ? 'green' : 'orange'}>{owned ? 'Owned' : meta.status}</Badge>
                 </HStack>
@@ -1626,41 +1646,117 @@ const SupplyCard = ({ item, onNavigate }) => {
                 </HStack>
 
                 <Stack spacing={2} mt="auto">
-                    <HStack justify="space-between" color={theme.textMuted} fontSize="sm">
-                        <Text>Requirement</Text>
-                        <Text color="white" textAlign="right">
-                            {meta.source}
-                        </Text>
-                    </HStack>
-                    <HStack justify="space-between" color={theme.textMuted} fontSize="sm">
-                        <Text>Method</Text>
-                        <Text color="white" textAlign="right">
-                            {meta.method}
-                        </Text>
-                    </HStack>
-                    <Button
-                        size="sm"
-                        mt={2}
-                        bg={tones[actionTone]?.bg}
-                        color={tones[actionTone]?.color}
-                        border="1px solid"
-                        borderColor={tones[actionTone]?.border}
-                        _hover={{ bg: tones[actionTone]?.bg }}
-                        onClick={() => onNavigate(meta.section)}
-                    >
-                        {owned ? 'View Details' : meta.cta}
-                    </Button>
+                    {source ? (
+                        <>
+                            <HStack
+                                spacing={3}
+                                p={3}
+                                border="1px solid"
+                                borderColor="rgba(87, 214, 141, 0.22)"
+                                bg="rgba(87, 214, 141, 0.07)"
+                                borderRadius="8px"
+                            >
+                                <Image src={source.cardImage} alt={source.cardName} boxSize="48px" objectFit="cover" borderRadius="6px" />
+                                <Box minW={0}>
+                                    <Text fontSize="xs" color={theme.textMuted}>
+                                        Incubate
+                                    </Text>
+                                    <Text fontWeight="black" fontSize="sm" noOfLines={1}>
+                                        {source.cardName}
+                                    </Text>
+                                    <Text fontSize="xs" color={theme.textMuted}>
+                                        {source.minCards} cards = 1 {item.name}
+                                    </Text>
+                                </Box>
+                            </HStack>
+                            <HStack justify="space-between" color={theme.textMuted} fontSize="sm">
+                                <Text>Cards owned</Text>
+                                <Text color="white" textAlign="right">
+                                    {formatNumber(ownership?.ownedCards || 0)} / {formatNumber(source.minCards)}
+                                </Text>
+                            </HStack>
+                            <HStack justify="space-between" color={theme.textMuted} fontSize="sm">
+                                <Text>Status</Text>
+                                <Text color={ownership?.ready ? theme.emerald : theme.brass} textAlign="right" fontWeight="bold">
+                                    {ownership?.ready ? 'Ready to incubate' : `Missing ${formatNumber(ownership?.missingCards || source.minCards)}`}
+                                </Text>
+                            </HStack>
+                            <Stack direction={{ base: 'column', sm: 'row' }} spacing={2} mt={2}>
+                                <Button
+                                    size="sm"
+                                    flex="1"
+                                    bg={tones.emerald.bg}
+                                    color={tones.emerald.color}
+                                    border="1px solid"
+                                    borderColor={tones.emerald.border}
+                                    _hover={{ bg: tones.emerald.bg }}
+                                    onClick={() => onNavigate(1, { incubationIngredientId: item.asset })}
+                                >
+                                    Incubate {source.cardName}
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    flex="1"
+                                    variant="outline"
+                                    borderColor={tones.brass.border}
+                                    color={tones.brass.color}
+                                    _hover={{ bg: tones.brass.bg }}
+                                    onClick={() => onNavigate(3, { marketAssetId: source.cardAssetId })}
+                                >
+                                    Find card in Market
+                                </Button>
+                            </Stack>
+                        </>
+                    ) : (
+                        <>
+                            <HStack justify="space-between" color={theme.textMuted} fontSize="sm">
+                                <Text>Requirement</Text>
+                                <Text color="white" textAlign="right">
+                                    {meta.source}
+                                </Text>
+                            </HStack>
+                            <HStack justify="space-between" color={theme.textMuted} fontSize="sm">
+                                <Text>Method</Text>
+                                <Text color="white" textAlign="right">
+                                    {meta.method}
+                                </Text>
+                            </HStack>
+                            <Button
+                                size="sm"
+                                mt={2}
+                                bg={tones[actionTone]?.bg}
+                                color={tones[actionTone]?.color}
+                                border="1px solid"
+                                borderColor={tones[actionTone]?.border}
+                                _hover={{ bg: tones[actionTone]?.bg }}
+                                onClick={() => onNavigate(meta.section)}
+                            >
+                                {owned ? 'View Details' : meta.cta}
+                            </Button>
+                        </>
+                    )}
                 </Stack>
             </Stack>
         </CockpitPanel>
     );
 };
 
-const AirdropsView = ({ goToSection }) => {
+const getSupplyFilterForFocus = focus => {
+    const type = String(focus?.type || '').toLowerCase();
+    if (type.includes('ingredient')) return 'ingredients';
+    if (type.includes('tool')) return 'tools';
+    if (type.includes('flask')) return 'flasks';
+    if (type.includes('recipe')) return 'recipes';
+    return 'all';
+};
+
+const AirdropsView = ({ goToSection, infoAccount, focus }) => {
     const { elyxir, fakeAssets } = useSelector(state => state.elyxir);
     const [filter, setFilter] = useState(getInitialSupplyFilter);
+    const [search, setSearch] = useState('');
     const recipeDefinition = elyxir?.definition?.recipes;
     const recipes = useMemo(() => recipeDefinition || [], [recipeDefinition]);
+    const focusedAssetId = focus?.assetId || focus?.asset || '';
     const recipeItems = useMemo(
         () =>
             recipes.map((recipe, index) => {
@@ -1685,7 +1781,32 @@ const AirdropsView = ({ goToSection }) => {
         ],
         [fakeAssets, recipeItems]
     );
-    const visibleSupplies = filter === 'all' ? supplies : supplies.filter(item => item.type === filter);
+    const visibleSupplies = useMemo(() => {
+        const normalizedSearch = search.trim().toLowerCase();
+        return supplies.filter(item => {
+            const matchesFilter = filter === 'all' || item.type === filter;
+            if (!matchesFilter) return false;
+            if (!normalizedSearch) return true;
+
+            const source = item.type === 'ingredients' ? getIncubationSourceByIngredientAsset(item.asset) : null;
+            const searchText = [item.name, item.asset, item.description, source ? getIncubationSearchText(source) : '']
+                .filter(Boolean)
+                .join(' ')
+                .toLowerCase();
+            return searchText.includes(normalizedSearch);
+        });
+    }, [filter, search, supplies]);
+
+    useEffect(() => {
+        if (!focusedAssetId) return;
+        setFilter(getSupplyFilterForFocus(focus));
+        setSearch(focus?.name || focusedAssetId);
+
+        window.setTimeout(() => {
+            const target = document.querySelector(`[data-supply-asset="${focusedAssetId}"]`);
+            target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 120);
+    }, [focus, focusedAssetId]);
 
     return (
         <Stack spacing={5}>
@@ -1698,7 +1819,7 @@ const AirdropsView = ({ goToSection }) => {
             <CockpitPanel p={4}>
                 <Eyebrow>Ways to acquire supplies</Eyebrow>
                 <HStack spacing={3} overflowX="auto" mt={3} pb={1}>
-                    <SupplyRoute icon={FaLeaf} title="Incubation" body="Stake eligible cards for ingredients." tone="emerald" />
+                    <SupplyRoute icon={FaLeaf} title="Incubation" body="Incubate eligible cards for ingredients." tone="emerald" />
                     <SupplyRoute icon={FaTools} title="Bounty cycles" body="Campaigns and bounty rewards." tone="brass" />
                     <SupplyRoute icon={FaBoxes} title="Collection rewards" body="Complete sets for exclusive flasks." tone="cyan" />
                     <SupplyRoute icon={FaGift} title="GIFTZ recipes" body="Open GIFTZ packs to discover recipes." tone="violet" />
@@ -1706,33 +1827,60 @@ const AirdropsView = ({ goToSection }) => {
                 </HStack>
             </CockpitPanel>
 
-            <HStack spacing={2} overflowX="auto" pb={1}>
-                {SUPPLY_FILTERS.map(item => (
-                    <FilterButton key={item.id} filter={item} active={filter === item.id} onClick={() => setFilter(item.id)} />
-                ))}
-            </HStack>
+            <Stack direction={{ base: 'column', lg: 'row' }} spacing={3} align={{ base: 'stretch', lg: 'center' }}>
+                <InputGroup maxW={{ base: '100%', lg: '420px' }}>
+                    <InputLeftElement pointerEvents="none">
+                        <Icon as={FaSearch} color={theme.textMuted} />
+                    </InputLeftElement>
+                    <Input
+                        value={search}
+                        onChange={event => setSearch(event.target.value)}
+                        placeholder="Search supply, ingredient, or card"
+                        bg="rgba(255,255,255,0.04)"
+                        borderColor={theme.line}
+                    />
+                </InputGroup>
+                <HStack spacing={2} overflowX="auto" pb={1}>
+                    {SUPPLY_FILTERS.map(item => (
+                        <FilterButton key={item.id} filter={item} active={filter === item.id} onClick={() => setFilter(item.id)} />
+                    ))}
+                </HStack>
+            </Stack>
 
             <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} spacing={4}>
                 {visibleSupplies.map(item => (
-                    <SupplyCard key={`${item.type}-${item.asset}`} item={item} onNavigate={goToSection} />
+                    <SupplyCard
+                        key={`${item.type}-${item.asset}`}
+                        item={item}
+                        infoAccount={infoAccount}
+                        focusedAssetId={focusedAssetId}
+                        onNavigate={goToSection}
+                    />
                 ))}
             </SimpleGrid>
+            {visibleSupplies.length === 0 && (
+                <CockpitPanel p={6}>
+                    <Text color={theme.textMuted}>No supplies match this search.</Text>
+                </CockpitPanel>
+            )}
         </Stack>
     );
 };
 
 const PlayHubElyxirShell = ({ infoAccount, walletProvider, walletHostOrigin }) => {
     const [activeView, setActiveView] = useState(getInitialView);
+    const [supplyFocus, setSupplyFocus] = useState(null);
     const isDesktop = useBreakpointValue({ base: false, lg: true });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const activeItem = NAV_ITEMS.find(item => item.id === activeView) || NAV_ITEMS[0];
 
     const handleSelect = view => {
+        if (view === 'airdrops') setSupplyFocus(null);
         setActiveView(view);
         onClose();
     };
 
-    const handleGoToSection = section => {
+    const handleGoToSection = (section, params = undefined) => {
         if (section === 10) {
             setActiveView('alchemy');
             onClose();
@@ -1743,9 +1891,25 @@ const PlayHubElyxirShell = ({ infoAccount, walletProvider, walletHostOrigin }) =
             {
                 type: 'MYTHICAL_WALLET_NAVIGATE',
                 section,
+                ...(params ? { params } : {}),
             },
             walletHostOrigin
         );
+    };
+
+    const handleOpenSupplyBoard = item => {
+        const assetId = item?.assetId || item?.asset || '';
+        setSupplyFocus(
+            assetId
+                ? {
+                      assetId,
+                      type: item?.type,
+                      name: item?.name,
+                  }
+                : null
+        );
+        setActiveView('airdrops');
+        onClose();
     };
 
     const renderActiveView = () => {
@@ -1758,7 +1922,7 @@ const PlayHubElyxirShell = ({ infoAccount, walletProvider, walletHostOrigin }) =
                         walletHostOrigin={walletHostOrigin}
                         embedded
                         onOpenPantry={() => setActiveView('inventory')}
-                        onOpenSupplyBoard={() => setActiveView('airdrops')}
+                        onOpenSupplyBoard={handleOpenSupplyBoard}
                     />
                 );
             case 'inventory':
@@ -1766,7 +1930,7 @@ const PlayHubElyxirShell = ({ infoAccount, walletProvider, walletHostOrigin }) =
             case 'jobs':
                 return <JobsView infoAccount={infoAccount} />;
             case 'airdrops':
-                return <AirdropsView goToSection={handleGoToSection} />;
+                return <AirdropsView goToSection={handleGoToSection} infoAccount={infoAccount} focus={supplyFocus} />;
             case 'overview':
             default:
                 return <OverviewView infoAccount={infoAccount} setActiveView={setActiveView} />;
