@@ -61,6 +61,7 @@ import Elyxir from './index';
 import { addressToAccountId, getAccount, getAsset, getBlock } from '../../../services/Ardor/ardorInterface';
 import {
     blocksToDurationLabel,
+    buildRacePotionStatuses,
     buildRaceLeaderboard,
     formatLocalDateTime,
     formatUtcDateTime,
@@ -965,7 +966,7 @@ const WorldLedgerPanel = ({ jobs, recipes, supply }) => {
     );
 };
 
-const RaceInfoPanel = ({ activeJobsCount, leaderboardCount }) => {
+const RaceInfoPanel = ({ activeJobsCount, leaderboardCount, eligibleCount }) => {
     const raceLive = Date.now() >= RACE_START_DATE.getTime();
 
     return (
@@ -989,62 +990,88 @@ const RaceInfoPanel = ({ activeJobsCount, leaderboardCount }) => {
                 <SimpleGrid columns={2} spacing={3}>
                     <MiniStat icon={FaClock} label="Active jobs" value={formatNumber(activeJobsCount)} tone="amber" />
                     <MiniStat icon={FaTrophy} label="First deliveries" value={formatNumber(leaderboardCount)} tone="emerald" />
+                    <MiniStat icon={FaGift} label="Rewards open" value={formatNumber(eligibleCount)} tone="violet" />
                 </SimpleGrid>
             </Stack>
         </CockpitPanel>
     );
 };
 
-const RaceResultsPanel = ({ leaderboard, accountLabels, setActiveView }) => (
-    <CockpitPanel p={5} tone="emerald" h="100%">
-        <SectionHeader
-            label="Race board"
-            title="First deliveries by potion"
-            caption="Source of truth is resolved Elyxir job state and block time."
-            action={
-                <Button
-                    size="sm"
-                    variant="ghost"
-                    color={theme.textMuted}
-                    rightIcon={<FaChevronRight />}
-                    onClick={() => setActiveView('jobs')}
-                >
-                    Queue
-                </Button>
-            }
-        />
-        <Stack spacing={3} mt={5}>
-            {leaderboard.length === 0 && (
-                <Text color={theme.textMuted} fontSize="sm">
-                    No verified post-start potion deliveries yet.
-                </Text>
-            )}
-            {leaderboard.slice(0, 8).map(entry => (
-                <HStack key={`${entry.creationAssetId}-${entry.jobId}`} justify="space-between" spacing={3}>
-                    <HStack minW={0}>
-                        <AssetImage src={entry.potion?.imgUrl} boxSize="38px" flexShrink={0} />
-                        <Box minW={0}>
-                            <Text fontSize="sm" fontWeight="black" noOfLines={1}>
-                                {entry.potion?.name || `Potion ${String(entry.creationAssetId).slice(-6)}`}
-                            </Text>
-                            <Text color={theme.textFaint} fontSize="xs" noOfLines={1}>
-                                {getOwnerLabel(entry, accountLabels)}
-                            </Text>
-                        </Box>
-                    </HStack>
-                    <Box textAlign="right" flexShrink={0}>
-                        <Badge colorScheme={entry.ardorTimestamp != null ? 'green' : 'yellow'} borderRadius="6px">
-                            {entry.verification}
-                        </Badge>
-                        <Text color={theme.textMuted} fontSize="xs" mt={1}>
-                            {entry.resolvedDate ? formatLocalDateTime(entry.resolvedDate) : `Height ${formatNumber(entry.resolveHeight)}`}
-                        </Text>
-                    </Box>
-                </HStack>
-            ))}
-        </Stack>
-    </CockpitPanel>
-);
+const RaceResultsPanel = ({ potionStatuses = [], leaderboard = [], accountLabels, setActiveView }) => {
+    const rows = potionStatuses.length
+        ? potionStatuses
+        : leaderboard.map(entry => ({
+              creationAssetId: entry.creationAssetId,
+              potion: entry.potion,
+              delivery: entry,
+              isDelivered: true,
+              rewardAsset: 'GIFTZ',
+              rewardQuantity: 1,
+          }));
+
+    return (
+        <CockpitPanel p={5} tone="emerald" h="100%">
+            <SectionHeader
+                label="Race board"
+                title="Race rewards by potion"
+                caption="Delivered first wins are locked; undelivered potions still have 1 GIFTZ open."
+                action={
+                    <Button
+                        size="sm"
+                        variant="ghost"
+                        color={theme.textMuted}
+                        rightIcon={<FaChevronRight />}
+                        onClick={() => setActiveView('jobs')}
+                    >
+                        Queue
+                    </Button>
+                }
+            />
+            <Stack spacing={3} mt={5}>
+                {rows.length === 0 && (
+                    <Text color={theme.textMuted} fontSize="sm">
+                        Race potion list is still loading.
+                    </Text>
+                )}
+                {rows.slice(0, 8).map(status => {
+                    const entry = status.delivery;
+                    const isDelivered = Boolean(entry);
+
+                    return (
+                        <HStack key={`${status.creationAssetId}-${entry?.jobId || 'eligible'}`} justify="space-between" spacing={3}>
+                            <HStack minW={0}>
+                                <AssetImage src={status.potion?.imgUrl || entry?.potion?.imgUrl} boxSize="38px" flexShrink={0} />
+                                <Box minW={0}>
+                                    <Text fontSize="sm" fontWeight="black" noOfLines={1}>
+                                        {status.potion?.name || entry?.potion?.name || `Potion ${String(status.creationAssetId).slice(-6)}`}
+                                    </Text>
+                                    <Text color={theme.textFaint} fontSize="xs" noOfLines={1}>
+                                        {isDelivered ? getOwnerLabel(entry, accountLabels) : 'Eligible for first-delivery reward'}
+                                    </Text>
+                                </Box>
+                            </HStack>
+                            <Box textAlign="right" flexShrink={0}>
+                                <Badge
+                                    colorScheme={isDelivered ? (entry.ardorTimestamp != null ? 'green' : 'yellow') : 'purple'}
+                                    borderRadius="6px"
+                                >
+                                    {isDelivered ? entry.verification : 'Eligible'}
+                                </Badge>
+                                <Text color={theme.textMuted} fontSize="xs" mt={1}>
+                                    {isDelivered
+                                        ? entry.resolvedDate
+                                            ? formatLocalDateTime(entry.resolvedDate)
+                                            : `Height ${formatNumber(entry.resolveHeight)}`
+                                        : `${formatNumber(status.rewardQuantity)} ${status.rewardAsset} reward open`}
+                                </Text>
+                            </Box>
+                        </HStack>
+                    );
+                })}
+            </Stack>
+        </CockpitPanel>
+    );
+};
 
 const LabJournalPanel = ({ recentJobs, potions, accountLabels, blockTimestamps, setActiveView }) => (
     <CockpitPanel p={5}>
@@ -1103,6 +1130,16 @@ const OverviewView = ({ infoAccount, setActiveView }) => {
             }),
         [jobs.completed, fakeAssets.potions, blockTimestamps, prev_height]
     );
+    const racePotionStatuses = useMemo(
+        () =>
+            buildRacePotionStatuses({
+                recipes,
+                potions: fakeAssets.potions,
+                leaderboard: raceLeaderboard,
+            }),
+        [recipes, fakeAssets.potions, raceLeaderboard]
+    );
+    const raceEligibleCount = racePotionStatuses.filter(status => !status.isDelivered).length;
     const recentJobs = useMemo(
         () =>
             [...jobs.active, ...jobs.completed]
@@ -1128,13 +1165,22 @@ const OverviewView = ({ infoAccount, setActiveView }) => {
 
             <Grid templateColumns={{ base: '1fr', xl: '1.25fr 0.85fr 0.9fr' }} gap={4}>
                 <BrewingNowPanel jobs={jobs.active} potions={fakeAssets.potions} accountLabels={accountLabels} />
-                <RaceInfoPanel activeJobsCount={jobs.active.length} leaderboardCount={raceLeaderboard.length} />
+                <RaceInfoPanel
+                    activeJobsCount={jobs.active.length}
+                    leaderboardCount={raceLeaderboard.length}
+                    eligibleCount={raceEligibleCount}
+                />
                 <RecipeStatusPanel nextCraft={nextCraft} craftableRecipes={craftableRecipes} setActiveView={setActiveView} />
             </Grid>
 
             <Grid templateColumns={{ base: '1fr', xl: 'minmax(320px, 0.75fr) minmax(0, 1.25fr)' }} gap={4}>
                 <ShelvesPanel fakeAssets={fakeAssets} userActiveJobs={userActiveJobs} recipes={recipes} setActiveView={setActiveView} />
-                <RaceResultsPanel leaderboard={raceLeaderboard} accountLabels={accountLabels} setActiveView={setActiveView} />
+                <RaceResultsPanel
+                    potionStatuses={racePotionStatuses}
+                    leaderboard={raceLeaderboard}
+                    accountLabels={accountLabels}
+                    setActiveView={setActiveView}
+                />
             </Grid>
 
             <CockpitPanel p={5}>

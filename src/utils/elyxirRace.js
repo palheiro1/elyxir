@@ -123,9 +123,26 @@ export const getJobResolveHeight = job => {
 };
 
 export const isJobSuccessful = job => {
-    if (job?.isSuccess === false || job?.resolvedStatus === 'FAILURE') return false;
-    return job?.isSuccess === true || job?.resolvedStatus === 'SUCCESS';
+    if (
+        job?.isSuccess === false ||
+        job?.success === false ||
+        job?.resolvedStatus === 'FAILURE' ||
+        job?.status === 'EXPLODED' ||
+        job?.status === 'CATASTROPHIC'
+    ) {
+        return false;
+    }
+
+    return (
+        job?.isSuccess === true ||
+        job?.success === true ||
+        job?.resolvedStatus === 'SUCCESS' ||
+        job?.resolvedStatus === 'FINALIZED' ||
+        job?.status === 'FINALIZED'
+    );
 };
+
+const isPotionDelivered = job => (job?.testMode === true ? job?.creationDelivered === true : job?.creationDelivered !== false);
 
 export const estimateHeightForDate = ({ currentHeight, date, now = new Date() }) => {
     const current = toFiniteNumber(currentHeight);
@@ -148,7 +165,7 @@ export const buildRaceLeaderboard = ({ jobs = [], potions = [], blockTimestamps 
     const winners = new Map();
 
     jobs.forEach(job => {
-        if (!job || job.testMode === true || !isJobSuccessful(job)) return;
+        if (!job || !isJobSuccessful(job) || !isPotionDelivered(job)) return;
 
         const resolveHeight = getJobResolveHeight(job);
         if (resolveHeight == null) return;
@@ -182,4 +199,46 @@ export const buildRaceLeaderboard = ({ jobs = [], potions = [], blockTimestamps 
         const rightName = right.potion?.name || right.creationAssetId;
         return leftName.localeCompare(rightName);
     });
+};
+
+export const buildRacePotionStatuses = ({ recipes = [], potions = [], leaderboard = [] } = {}) => {
+    const potionByAsset = new Map((potions || []).map(potion => [String(potion.asset), potion]));
+    const recipeByCreationAsset = new Map(
+        (recipes || [])
+            .filter(recipe => recipe?.creationAssetId)
+            .map(recipe => [String(recipe.creationAssetId), recipe])
+    );
+    const deliveryByCreationAsset = new Map(
+        (leaderboard || [])
+            .filter(entry => entry?.creationAssetId)
+            .map(entry => [String(entry.creationAssetId), entry])
+    );
+    const creationAssetIds = Array.from(
+        new Set([
+            ...Array.from(recipeByCreationAsset.keys()),
+            ...Array.from(deliveryByCreationAsset.keys()),
+        ])
+    );
+
+    return creationAssetIds
+        .map(creationAssetId => {
+            const delivery = deliveryByCreationAsset.get(creationAssetId) || null;
+            const recipe = recipeByCreationAsset.get(creationAssetId) || null;
+
+            return {
+                creationAssetId,
+                recipe,
+                potion: delivery?.potion || potionByAsset.get(creationAssetId) || null,
+                delivery,
+                isDelivered: Boolean(delivery),
+                rewardAsset: 'GIFTZ',
+                rewardQuantity: 1,
+            };
+        })
+        .sort((left, right) => {
+            if (left.isDelivered !== right.isDelivered) return left.isDelivered ? -1 : 1;
+            const leftName = left.potion?.name || left.creationAssetId;
+            const rightName = right.potion?.name || right.creationAssetId;
+            return leftName.localeCompare(rightName);
+        });
 };

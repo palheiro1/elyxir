@@ -3,6 +3,7 @@ import {
     RACE_START_ARDOR_TIMESTAMP,
     RACE_START_DATE,
     blocksToDurationLabel,
+    buildRacePotionStatuses,
     buildRaceLeaderboard,
     clampDurationBlocks,
     getDurationBounds,
@@ -48,21 +49,32 @@ describe('buildRaceLeaderboard', () => {
                 resolvedHeight: 20,
             },
             {
-                jobId: 'test-mode',
+                jobId: 'undelivered-after-start',
                 creationAssetId: 'potion-a',
-                owner: 'test',
+                owner: 'undelivered',
                 status: 'FINALIZED',
                 isSuccess: true,
                 resolvedHeight: 30,
-                testMode: true,
+                creationDelivered: false,
             },
             {
-                jobId: 'winner',
+                jobId: 'play-hub-winner',
                 creationAssetId: 'potion-a',
                 owner: 'winner',
                 status: 'FINALIZED',
-                isSuccess: true,
+                resolvedStatus: 'FINALIZED',
+                creationDelivered: true,
+                testMode: true,
                 resolvedHeight: 40,
+            },
+            {
+                jobId: 'test-mode-without-delivery-flag',
+                creationAssetId: 'potion-a',
+                owner: 'test',
+                status: 'FINALIZED',
+                resolvedStatus: 'FINALIZED',
+                testMode: true,
+                resolvedHeight: 35,
             },
             {
                 jobId: 'later',
@@ -71,6 +83,14 @@ describe('buildRaceLeaderboard', () => {
                 status: 'FINALIZED',
                 isSuccess: true,
                 resolvedHeight: 50,
+            },
+            {
+                jobId: 'latest',
+                creationAssetId: 'potion-a',
+                owner: 'latest',
+                status: 'FINALIZED',
+                isSuccess: true,
+                resolvedHeight: 60,
             },
             {
                 jobId: 'height-fallback',
@@ -85,8 +105,10 @@ describe('buildRaceLeaderboard', () => {
             10: RACE_START_ARDOR_TIMESTAMP - 1,
             20: RACE_START_ARDOR_TIMESTAMP + 10,
             30: RACE_START_ARDOR_TIMESTAMP + 20,
+            35: RACE_START_ARDOR_TIMESTAMP + 25,
             40: RACE_START_ARDOR_TIMESTAMP + 30,
             50: RACE_START_ARDOR_TIMESTAMP + 60,
+            60: RACE_START_ARDOR_TIMESTAMP + 90,
         };
 
         const leaderboard = buildRaceLeaderboard({
@@ -101,7 +123,41 @@ describe('buildRaceLeaderboard', () => {
         });
 
         expect(leaderboard).toHaveLength(2);
-        expect(leaderboard.find(entry => entry.creationAssetId === 'potion-a').jobId).toBe('winner');
+        expect(leaderboard.find(entry => entry.creationAssetId === 'potion-a').jobId).toBe('play-hub-winner');
         expect(leaderboard.find(entry => entry.creationAssetId === 'potion-b').jobId).toBe('height-fallback');
+    });
+
+    it('builds delivered and still-eligible reward rows for every race potion', () => {
+        const statuses = buildRacePotionStatuses({
+            recipes: [
+                { creationAssetId: 'potion-a', recipeAssetId: 'recipe-a' },
+                { creationAssetId: 'potion-b', recipeAssetId: 'recipe-b' },
+            ],
+            potions: [
+                { asset: 'potion-a', name: 'A Potion' },
+                { asset: 'potion-b', name: 'B Potion' },
+            ],
+            leaderboard: [
+                {
+                    creationAssetId: 'potion-a',
+                    jobId: 'winner',
+                    potion: { asset: 'potion-a', name: 'A Potion' },
+                },
+            ],
+        });
+
+        expect(statuses).toHaveLength(2);
+        expect(statuses[0]).toMatchObject({
+            creationAssetId: 'potion-a',
+            isDelivered: true,
+            rewardAsset: 'GIFTZ',
+            rewardQuantity: 1,
+        });
+        expect(statuses[1]).toMatchObject({
+            creationAssetId: 'potion-b',
+            isDelivered: false,
+            rewardAsset: 'GIFTZ',
+            rewardQuantity: 1,
+        });
     });
 });
