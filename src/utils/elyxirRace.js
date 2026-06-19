@@ -122,6 +122,11 @@ export const getJobResolveHeight = job => {
     return height == null ? null : height;
 };
 
+export const getJobStartHeight = job => {
+    const height = toFiniteNumber(job?.startHeight);
+    return height == null ? null : height;
+};
+
 export const isJobSuccessful = job => {
     if (
         job?.isSuccess === false ||
@@ -167,25 +172,33 @@ export const buildRaceLeaderboard = ({ jobs = [], potions = [], blockTimestamps 
     jobs.forEach(job => {
         if (!job || !isJobSuccessful(job) || !isPotionDelivered(job)) return;
 
+        const startHeight = getJobStartHeight(job);
         const resolveHeight = getJobResolveHeight(job);
-        if (resolveHeight == null) return;
+        if (startHeight == null || resolveHeight == null) return;
 
+        const startArdorTimestamp = toFiniteNumber(blockTimestamps[String(startHeight)]);
         const ardorTimestamp = toFiniteNumber(blockTimestamps[String(resolveHeight)]);
-        const isEligible = ardorTimestamp != null
+        const isStartedAfterRaceStart = startArdorTimestamp != null
+            ? startArdorTimestamp >= RACE_START_ARDOR_TIMESTAMP
+            : raceStartHeight != null && startHeight >= raceStartHeight;
+        const isResolvedAfterRaceStart = ardorTimestamp != null
             ? ardorTimestamp >= RACE_START_ARDOR_TIMESTAMP
             : raceStartHeight != null && resolveHeight >= raceStartHeight;
 
-        if (!isEligible) return;
+        if (!isStartedAfterRaceStart || !isResolvedAfterRaceStart) return;
 
         const creationAssetId = String(job.creationAssetId || '');
         const entry = {
             ...job,
             potion: potionByAsset.get(creationAssetId) || null,
             creationAssetId,
+            startHeight,
             resolveHeight,
+            startArdorTimestamp,
             ardorTimestamp,
+            startedDate: startArdorTimestamp != null ? ardorTimestampToDate(startArdorTimestamp) : null,
             resolvedDate: ardorTimestamp != null ? ardorTimestampToDate(ardorTimestamp) : null,
-            verification: ardorTimestamp != null ? 'Verified block time' : 'Height estimate',
+            verification: startArdorTimestamp != null && ardorTimestamp != null ? 'Verified block time' : 'Height estimate',
         };
         const previous = winners.get(creationAssetId);
 

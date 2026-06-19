@@ -67,6 +67,7 @@ import {
     formatUtcDateTime,
     getApproxDateForHeight,
     getJobResolveHeight,
+    getJobStartHeight,
     isJobSuccessful,
     RACE_START_DATE,
 } from '../../../utils/elyxirRace';
@@ -266,7 +267,7 @@ const useBlockTimestamps = jobs => {
             Array.from(
                 new Set(
                     (jobs || [])
-                        .map(job => getJobResolveHeight(job))
+                        .flatMap(job => [getJobStartHeight(job), getJobResolveHeight(job)])
                         .filter(height => Number.isFinite(Number(height)) && Number(height) > 0)
                         .map(height => String(height))
                 )
@@ -985,7 +986,7 @@ const RaceInfoPanel = ({ activeJobsCount, leaderboardCount, eligibleCount }) => 
                     <Text>
                         Starts {formatUtcDateTime(RACE_START_DATE)} / local {formatLocalDateTime(RACE_START_DATE, { year: true, timeZoneName: true })}.
                     </Text>
-                    <Text>Only successful deliveries resolved after the published start count. Brew duration remains part of the strategy.</Text>
+                    <Text>Only brews started and successfully delivered after the published start count. Brew duration remains part of the strategy.</Text>
                 </Stack>
                 <SimpleGrid columns={2} spacing={3}>
                     <MiniStat icon={FaClock} label="Active jobs" value={formatNumber(activeJobsCount)} tone="amber" />
@@ -1014,7 +1015,7 @@ const RaceResultsPanel = ({ potionStatuses = [], leaderboard = [], accountLabels
             <SectionHeader
                 label="Race board"
                 title="Race rewards by potion"
-                caption="Delivered first wins are locked; undelivered potions still have 1 GIFTZ open."
+                caption="First wins are locked only for brews started and delivered after Race launch; open potions still have 1 GIFTZ."
                 action={
                     <Button
                         size="sm"

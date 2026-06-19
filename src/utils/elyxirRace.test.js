@@ -30,7 +30,7 @@ describe('elyxir race time helpers', () => {
 });
 
 describe('buildRaceLeaderboard', () => {
-    it('selects the first successful delivery after the official start per potion', () => {
+    it('selects the first successful post-start brew and delivery per potion', () => {
         const jobs = [
             {
                 jobId: 'before-start',
@@ -38,6 +38,7 @@ describe('buildRaceLeaderboard', () => {
                 owner: 'before',
                 status: 'FINALIZED',
                 isSuccess: true,
+                startHeight: 5,
                 resolvedHeight: 10,
             },
             {
@@ -46,6 +47,7 @@ describe('buildRaceLeaderboard', () => {
                 owner: 'failed',
                 status: 'FINALIZED',
                 isSuccess: false,
+                startHeight: 15,
                 resolvedHeight: 20,
             },
             {
@@ -54,8 +56,18 @@ describe('buildRaceLeaderboard', () => {
                 owner: 'undelivered',
                 status: 'FINALIZED',
                 isSuccess: true,
+                startHeight: 25,
                 resolvedHeight: 30,
                 creationDelivered: false,
+            },
+            {
+                jobId: 'started-before-resolved-after',
+                creationAssetId: 'potion-a',
+                owner: 'early-start',
+                status: 'FINALIZED',
+                isSuccess: true,
+                startHeight: 28,
+                resolvedHeight: 32,
             },
             {
                 jobId: 'play-hub-winner',
@@ -65,6 +77,7 @@ describe('buildRaceLeaderboard', () => {
                 resolvedStatus: 'FINALIZED',
                 creationDelivered: true,
                 testMode: true,
+                startHeight: 38,
                 resolvedHeight: 40,
             },
             {
@@ -74,6 +87,7 @@ describe('buildRaceLeaderboard', () => {
                 status: 'FINALIZED',
                 resolvedStatus: 'FINALIZED',
                 testMode: true,
+                startHeight: 34,
                 resolvedHeight: 35,
             },
             {
@@ -82,6 +96,7 @@ describe('buildRaceLeaderboard', () => {
                 owner: 'later',
                 status: 'FINALIZED',
                 isSuccess: true,
+                startHeight: 45,
                 resolvedHeight: 50,
             },
             {
@@ -90,6 +105,7 @@ describe('buildRaceLeaderboard', () => {
                 owner: 'latest',
                 status: 'FINALIZED',
                 isSuccess: true,
+                startHeight: 55,
                 resolvedHeight: 60,
             },
             {
@@ -98,16 +114,26 @@ describe('buildRaceLeaderboard', () => {
                 owner: 'fallback',
                 status: 'FINALIZED',
                 isSuccess: true,
+                startHeight: 1000,
                 resolvedHeight: 1001,
             },
         ];
         const blockTimestamps = {
+            5: RACE_START_ARDOR_TIMESTAMP - 10,
             10: RACE_START_ARDOR_TIMESTAMP - 1,
+            15: RACE_START_ARDOR_TIMESTAMP + 5,
             20: RACE_START_ARDOR_TIMESTAMP + 10,
+            25: RACE_START_ARDOR_TIMESTAMP + 15,
+            28: RACE_START_ARDOR_TIMESTAMP - 5,
             30: RACE_START_ARDOR_TIMESTAMP + 20,
+            32: RACE_START_ARDOR_TIMESTAMP + 22,
+            34: RACE_START_ARDOR_TIMESTAMP + 24,
             35: RACE_START_ARDOR_TIMESTAMP + 25,
+            38: RACE_START_ARDOR_TIMESTAMP + 28,
             40: RACE_START_ARDOR_TIMESTAMP + 30,
+            45: RACE_START_ARDOR_TIMESTAMP + 45,
             50: RACE_START_ARDOR_TIMESTAMP + 60,
+            55: RACE_START_ARDOR_TIMESTAMP + 75,
             60: RACE_START_ARDOR_TIMESTAMP + 90,
         };
 
