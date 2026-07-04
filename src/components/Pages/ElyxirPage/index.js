@@ -35,6 +35,7 @@ import {
     FaPlus,
     FaScroll,
     FaTools,
+    FaUndo,
 } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 
@@ -48,6 +49,7 @@ import {
     sendCraftPotionMessage,
 } from '../../../services/Elyxir/elyxir';
 import { addressToAccountId } from '../../../services/Ardor/ardorInterface';
+import { getOmnoAssetBalances, withdrawElyxirAssetsFromOmno } from '../../../services/Ardor/omnoInterface';
 import { calculateSuccessRateWithBlocks } from '../../../utils/elyxirUtils';
 import {
     blocksToDurationLabel,
@@ -74,6 +76,16 @@ const getPotionForRecipe = (recipe, potions = []) =>
         imgUrl: imageFallback,
         quantityQNT: 0,
     };
+
+const getAccountAssetQuantity = (infoAccount, assetId) => {
+    const ownedAsset = infoAccount?.assets?.find(asset => String(asset.asset) === String(assetId));
+    return Number(ownedAsset?.quantityQNT || 0);
+};
+
+const getRecipeImage = (recipes = [], recipe) => {
+    const index = recipes.findIndex(item => String(item.recipeAssetId) === String(recipe?.recipeAssetId));
+    return `/images/elyxir/recipes/recipe${((Math.max(0, index) % 2) + 1)}-transparent.png`;
+};
 
 const getCraftBatchProgressText = status => {
     const labels = {
@@ -305,6 +317,9 @@ const Elyxir = ({
     const [showPinInput, setShowPinInput] = useState(false);
     const [pendingAction, setPendingAction] = useState(null);
     const [craftBatchProgress, setCraftBatchProgress] = useState(null);
+    const [omnoRecoverableAssets, setOmnoRecoverableAssets] = useState([]);
+    const [isRecoveringAssets, setIsRecoveringAssets] = useState(false);
+    const [isLoadingRecoverableAssets, setIsLoadingRecoverableAssets] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toast = useToast();
     const isEmbeddedMode = Boolean(embedded);
@@ -321,10 +336,42 @@ const Elyxir = ({
     const durationRange = Math.max(1, durationBounds.max - durationBounds.min);
     const durationProgress = Math.round(((craftDurationBlocks - durationBounds.min) / durationRange) * 100);
     const craftBatchProgressText = getCraftBatchProgressText(craftBatchProgress?.status);
+    const selectedRecipeOwned = selectedRecipe ? getAccountAssetQuantity(infoAccount, selectedRecipe.recipeAssetId) > 0 : false;
+    const recoverableAssetCatalog = useMemo(() => {
+        const byAsset = new Map();
+
+        [
+            ...(fakeAssets.ingredients || []).map(item => ({ ...item, type: 'Ingredient' })),
+            ...(fakeAssets.tools || []).map(item => ({ ...item, type: 'Tool' })),
+            ...(fakeAssets.flasks || []).map(item => ({ ...item, type: 'Flask' })),
+        ].forEach(item => {
+            if (item?.asset) byAsset.set(String(item.asset), item);
+        });
+
+        return Array.from(byAsset.values());
+    }, [fakeAssets.ingredients, fakeAssets.tools, fakeAssets.flasks]);
+    const recoverableAssetIds = useMemo(() => recoverableAssetCatalog.map(item => String(item.asset)), [recoverableAssetCatalog]);
+    const recoverableAssetLookup = useMemo(
+        () => new Map(recoverableAssetCatalog.map(item => [String(item.asset), item])),
+        [recoverableAssetCatalog]
+    );
+    const recoverableAssetTotal = omnoRecoverableAssets.reduce((total, item) => total + Number(item.quantityQNT || 0), 0);
 
     const getMissingItems = useCallback(
         (recipe, flaskMultiplier) => {
             const missing = [];
+            const recipeQuantity = getAccountAssetQuantity(infoAccount, recipe?.recipeAssetId);
+            const potion = getPotionForRecipe(recipe, fakeAssets.potions);
+
+            if (recipe && recipeQuantity < 1) {
+                missing.push({
+                    type: 'recipe',
+                    name: `${potion.name} recipe`,
+                    assetId: recipe.recipeAssetId,
+                    have: recipeQuantity,
+                    needed: 1,
+                });
+            }
 
             recipe?.ingredients?.forEach(req => {
                 const item = findAssetById(fakeAssets, req.assetId);
@@ -334,6 +381,7 @@ const Elyxir = ({
                     missing.push({
                         type: 'ingredient',
                         name: item?.name || req.name || getAssetFallbackName(req.assetId, 'Ingredient'),
+                        assetId: req.assetId,
                         have,
                         needed,
                     });
@@ -347,6 +395,7 @@ const Elyxir = ({
                     missing.push({
                         type: 'tool',
                         name: item?.name || getAssetFallbackName(asset, 'Tool'),
+                        assetId: asset,
                         have,
                         needed: 1,
                     });
@@ -355,11 +404,19 @@ const Elyxir = ({
 
             return missing;
         },
-        [fakeAssets.ingredients, fakeAssets.tools]
+        [fakeAssets.ingredients, fakeAssets.tools, fakeAssets.potions, infoAccount?.assets]
     );
 
     const requirementRows = useMemo(() => {
         if (!selectedRecipe) return [];
+        const recipeItem = {
+            type: 'Recipe',
+            name: `${selectedPotion?.name || 'Selected potion'} recipe`,
+            assetId: selectedRecipe.recipeAssetId,
+            imgUrl: getRecipeImage(recipes, selectedRecipe),
+            have: getAccountAssetQuantity(infoAccount, selectedRecipe.recipeAssetId),
+            needed: 1,
+        };
         const ingredients = selectedRecipe.ingredients?.map(req => {
             const item = findAssetById(fakeAssets, req.assetId);
             return {
@@ -384,8 +441,8 @@ const Elyxir = ({
             };
         }) || [];
 
-        return [...ingredients, ...tools];
-    }, [selectedRecipe, fakeAssets.ingredients, fakeAssets.tools, selectedMultiplier]);
+        return [recipeItem, ...ingredients, ...tools];
+    }, [selectedRecipe, selectedPotion, recipes, infoAccount?.assets, fakeAssets.ingredients, fakeAssets.tools, selectedMultiplier]);
 
     const missingItems = useMemo(
         () => (selectedRecipe ? getMissingItems(selectedRecipe, selectedMultiplier) : []),
@@ -396,13 +453,15 @@ const Elyxir = ({
     const primaryAction = useMemo(() => {
         if (!selectedRecipe) return { label: 'Open recipe first', tone: 'gray', action: 'select' };
         if (selectedPotionAlreadyBrewing) return { label: 'Already brewing', tone: 'orange', action: 'wait' };
+        if (!selectedRecipeOwned) return { label: 'Find recipe', tone: 'orange', action: 'supply' };
         if (!selectedFlask || !selectedFlaskOwned) return { label: 'Find a flask', tone: 'orange', action: 'supply' };
         if (missingItems.length > 0) return { label: `Gather ${missingItems.length} missing component${missingItems.length === 1 ? '' : 's'}`, tone: 'red', action: 'supply' };
         return { label: 'Begin brewing', tone: 'green', action: 'craft' };
-    }, [selectedRecipe, selectedPotionAlreadyBrewing, selectedFlask, selectedFlaskOwned, missingItems.length]);
+    }, [selectedRecipe, selectedPotionAlreadyBrewing, selectedRecipeOwned, selectedFlask, selectedFlaskOwned, missingItems.length]);
 
     const groupedRequirements = useMemo(
         () => ({
+            recipes: requirementRows.filter(item => item.type === 'Recipe'),
             ingredients: requirementRows.filter(item => item.type === 'Ingredient'),
             tools: requirementRows.filter(item => item.type === 'Tool'),
             flask: selectedFlask
@@ -450,6 +509,43 @@ const Elyxir = ({
         return () => clearInterval(interval);
     }, [infoAccount?.accountRs]);
 
+    const loadRecoverableAssets = useCallback(async () => {
+        if (!infoAccount?.accountRs || recoverableAssetIds.length === 0) {
+            setOmnoRecoverableAssets([]);
+            return;
+        }
+
+        setIsLoadingRecoverableAssets(true);
+
+        try {
+            const balances = await getOmnoAssetBalances({
+                account: infoAccount.accountRs,
+                assetIds: recoverableAssetIds,
+            });
+
+            setOmnoRecoverableAssets(
+                balances.map(balance => {
+                    const catalogItem = recoverableAssetLookup.get(String(balance.asset));
+                    return {
+                        ...catalogItem,
+                        asset: balance.asset,
+                        quantityQNT: balance.quantityQNT,
+                        name: catalogItem?.name || getAssetFallbackName(balance.asset, 'Elyxir asset'),
+                        type: catalogItem?.type || 'Elyxir asset',
+                    };
+                })
+            );
+        } catch (error) {
+            console.error('Failed to load deposited Elyxir assets:', error);
+        } finally {
+            setIsLoadingRecoverableAssets(false);
+        }
+    }, [infoAccount?.accountRs, recoverableAssetIds, recoverableAssetLookup]);
+
+    useEffect(() => {
+        loadRecoverableAssets();
+    }, [loadRecoverableAssets]);
+
     const requestPinForAction = useCallback(action => {
         setPendingAction(action);
         setShowPinInput(true);
@@ -457,10 +553,10 @@ const Elyxir = ({
 
     const handleStartCrafting = useCallback(
         recipe => {
-            if (!recipe || !selectedFlask || !selectedFlaskOwned || missingItems.length > 0) {
+            if (!recipe || !selectedFlask || !selectedFlaskOwned || !selectedRecipeOwned || missingItems.length > 0) {
                 toast({
                     title: 'Crafting blocked',
-                    description: 'Select an available flask and complete every required asset.',
+                    description: 'Hold the recipe in this wallet, select an available flask and complete every required asset.',
                     status: 'warning',
                     duration: 3500,
                     isClosable: true,
@@ -471,7 +567,7 @@ const Elyxir = ({
             setSelectedRecipe(recipe);
             onOpen();
         },
-        [selectedFlask, selectedFlaskOwned, missingItems, onOpen, toast]
+        [selectedFlask, selectedFlaskOwned, selectedRecipeOwned, missingItems, onOpen, toast]
     );
 
     const executeCrafting = useCallback(
@@ -481,6 +577,9 @@ const Elyxir = ({
 
             try {
                 if (!selectedRecipe || !selectedFlask) throw new Error('Select a recipe and flask first');
+                if (getAccountAssetQuantity(infoAccount, selectedRecipe.recipeAssetId) < 1) {
+                    throw new Error('You must hold this recipe in your Ardor account before brewing. The recipe is not transferred or consumed.');
+                }
 
                 const accountId = addressToAccountId(infoAccount.accountRs);
                 const recipePotion = getPotionForRecipe(selectedRecipe, fakeAssets.potions);
@@ -562,6 +661,107 @@ const Elyxir = ({
         [selectedRecipe, selectedFlask, craftDurationBlocks, fakeAssets.potions, infoAccount, prev_height, toast, walletHostOrigin]
     );
 
+    const executeRecoverDepositedAssets = useCallback(
+        async ({ passPhrase, walletProvider: recoveryWalletProvider } = {}) => {
+            const assets = omnoRecoverableAssets
+                .filter(item => Number(item.quantityQNT || 0) > 0)
+                .map(item => ({ asset: item.asset, quantityQNT: item.quantityQNT }));
+
+            if (!assets.length) {
+                toast({
+                    title: 'No deposited Elyxir assets',
+                    description: 'There are no ingredients, tools or flasks waiting in Omno for this wallet.',
+                    status: 'info',
+                    duration: 3500,
+                    isClosable: true,
+                });
+                return;
+            }
+
+            setIsRecoveringAssets(true);
+
+            try {
+                const response = await withdrawElyxirAssetsFromOmno({
+                    assets,
+                    passPhrase,
+                    walletProvider: recoveryWalletProvider,
+                });
+
+                if (!response) throw new Error('Failed to request the Omno withdrawal.');
+
+                toast({
+                    title: 'Withdrawal requested',
+                    description: 'Omno will return the deposited Elyxir assets to your Ardor account after the message is processed.',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                });
+
+                setTimeout(loadRecoverableAssets, 15000);
+            } catch (error) {
+                console.error('Deposited asset recovery failed:', error);
+                toast({
+                    title: 'Recovery failed',
+                    description: error.message || 'Unable to request the Omno withdrawal.',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                });
+            } finally {
+                setIsRecoveringAssets(false);
+                setPendingAction(null);
+            }
+        },
+        [loadRecoverableAssets, omnoRecoverableAssets, toast]
+    );
+
+    const handleRecoverDepositedAssets = useCallback(async () => {
+        if (!omnoRecoverableAssets.length) {
+            await loadRecoverableAssets();
+            toast({
+                title: 'No deposited Elyxir assets',
+                description: 'There are no ingredients, tools or flasks waiting in Omno for this wallet.',
+                status: 'info',
+                duration: 3500,
+                isClosable: true,
+            });
+            return;
+        }
+
+        if (isEmbeddedMode) {
+            if (!usesEmbeddedWallet) {
+                toast({
+                    title: 'Wallet connection unavailable',
+                    description: 'Reopen Elyxir from Play Hub with an unlocked wallet.',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                });
+                return;
+            }
+
+            await executeRecoverDepositedAssets({ walletProvider });
+            return;
+        }
+
+        if (!userPassphrase) {
+            requestPinForAction('recover');
+            return;
+        }
+
+        await executeRecoverDepositedAssets({ passPhrase: userPassphrase });
+    }, [
+        executeRecoverDepositedAssets,
+        isEmbeddedMode,
+        loadRecoverableAssets,
+        omnoRecoverableAssets.length,
+        requestPinForAction,
+        toast,
+        userPassphrase,
+        usesEmbeddedWallet,
+        walletProvider,
+    ]);
+
     const handlePinInput = useCallback(
         pin => {
             try {
@@ -582,6 +782,8 @@ const Elyxir = ({
 
                 if (pendingAction === 'craft') {
                     executeCrafting({ passphrase: userAccount.passphrase });
+                } else if (pendingAction === 'recover') {
+                    executeRecoverDepositedAssets({ passPhrase: userAccount.passphrase });
                 }
             } catch (error) {
                 toast({
@@ -593,7 +795,7 @@ const Elyxir = ({
                 });
             }
         },
-        [executeCrafting, infoAccount.name, pendingAction, toast]
+        [executeCrafting, executeRecoverDepositedAssets, infoAccount.name, pendingAction, toast]
     );
 
     const confirmCrafting = useCallback(async () => {
@@ -661,7 +863,7 @@ const Elyxir = ({
 
         if (primaryAction.action === 'supply') {
             if (onOpenSupplyBoard) {
-                onOpenSupplyBoard();
+                onOpenSupplyBoard(missingItems[0] || (!selectedFlaskOwned ? selectedFlask : null));
                 return;
             }
             if (onOpenPantry) {
@@ -724,14 +926,17 @@ const Elyxir = ({
                             {recipes.map(recipe => {
                                 const potion = getPotionForRecipe(recipe, fakeAssets.potions);
                                 const missing = getMissingItems(recipe, selectedMultiplier);
+                                const missingRecipe = missing.some(item => item.type === 'recipe');
                                 const alreadyBrewing = activeJobs.some(job => String(job.creationAssetId) === String(recipe.creationAssetId));
                                 const statusLabel = alreadyBrewing
                                     ? 'Already brewing'
                                     : !hasOwnedFlask
                                       ? 'Need flask'
-                                      : missing.length === 0
-                                        ? 'Ready'
-                                        : `Missing ${missing.length}`;
+                                      : missingRecipe
+                                        ? 'Need recipe'
+                                        : missing.length === 0
+                                          ? 'Ready'
+                                          : `Missing ${missing.length}`;
                                 const statusScheme = alreadyBrewing ? 'orange' : !hasOwnedFlask ? 'yellow' : missing.length === 0 ? 'green' : 'red';
                                 return (
                                     <RecipeCard
@@ -978,6 +1183,21 @@ const Elyxir = ({
                             <Stack spacing={4}>
                                 <Box>
                                     <Text color="#d8b56d" fontSize="xs" fontWeight="bold" textTransform="uppercase" mb={2}>
+                                        Recipe
+                                    </Text>
+                                    <Stack spacing={2}>
+                                        {groupedRequirements.recipes.map(item => (
+                                            <RequirementRow
+                                                key={`${item.type}-${item.name}`}
+                                                item={item}
+                                                onFind={item.have < item.needed && onOpenSupplyBoard ? () => onOpenSupplyBoard(item) : null}
+                                            />
+                                        ))}
+                                    </Stack>
+                                </Box>
+
+                                <Box>
+                                    <Text color="#d8b56d" fontSize="xs" fontWeight="bold" textTransform="uppercase" mb={2}>
                                         Ingredients
                                     </Text>
                                     <Stack spacing={2}>
@@ -985,7 +1205,7 @@ const Elyxir = ({
                                             <RequirementRow
                                                 key={`${item.type}-${item.name}`}
                                                 item={item}
-                                                onFind={item.have < item.needed ? () => onOpenSupplyBoard(item) : null}
+                                                onFind={item.have < item.needed && onOpenSupplyBoard ? () => onOpenSupplyBoard(item) : null}
                                             />
                                         ))}
                                     </Stack>
@@ -1000,7 +1220,7 @@ const Elyxir = ({
                                             <RequirementRow
                                                 key={`${item.type}-${item.name}`}
                                                 item={item}
-                                                onFind={item.have < item.needed ? () => onOpenSupplyBoard(item) : null}
+                                                onFind={item.have < item.needed && onOpenSupplyBoard ? () => onOpenSupplyBoard(item) : null}
                                             />
                                         ))}
                                     </Stack>
@@ -1020,7 +1240,7 @@ const Elyxir = ({
                                             <RequirementRow
                                                 key={`${item.type}-${item.name}`}
                                                 item={item}
-                                                onFind={item.have < item.needed ? () => onOpenSupplyBoard(item) : null}
+                                                onFind={item.have < item.needed && onOpenSupplyBoard ? () => onOpenSupplyBoard(item) : null}
                                             />
                                         ))}
                                     </Stack>
@@ -1032,15 +1252,88 @@ const Elyxir = ({
                                     colorScheme="purple"
                                     onClick={onOpenSupplyBoard}
                                     isDisabled={!onOpenSupplyBoard}
-                                >
-                                    View how to obtain all
-                                </Button>
-                            </Stack>
-                        </Panel>
+                                    >
+                                        View how to obtain all
+                                    </Button>
+                                </Stack>
+                            </Panel>
 
-                        <Panel p={4}>
-                            <HStack justify="space-between" mb={4}>
-                                <Box>
+                            <Panel p={4}>
+                                <HStack justify="space-between" mb={3}>
+                                    <Box>
+                                        <Text color="#d8b56d" fontSize="xs" fontWeight="bold" textTransform="uppercase">
+                                            Omno deposit
+                                        </Text>
+                                        <Heading size="md">Recover assets</Heading>
+                                    </Box>
+                                    <Icon as={FaUndo} color="#d8b56d" />
+                                </HStack>
+                                <Stack spacing={3}>
+                                    <Text color="whiteAlpha.700" fontSize="sm">
+                                        Withdraw ingredients, tools and flasks currently deposited in Omno back to this Ardor account.
+                                    </Text>
+                                    <Stack spacing={2} maxH="160px" overflowY="auto">
+                                        {isLoadingRecoverableAssets && (
+                                            <Text color="whiteAlpha.500" fontSize="sm">
+                                                Checking deposited assets...
+                                            </Text>
+                                        )}
+                                        {!isLoadingRecoverableAssets && omnoRecoverableAssets.length === 0 && (
+                                            <Text color="whiteAlpha.500" fontSize="sm">
+                                                No deposited Elyxir ingredients, tools or flasks found.
+                                            </Text>
+                                        )}
+                                        {omnoRecoverableAssets.map(item => (
+                                            <HStack
+                                                key={item.asset}
+                                                justify="space-between"
+                                                spacing={3}
+                                                p={2}
+                                                bg="rgba(11, 17, 20, 0.62)"
+                                                border="1px solid"
+                                                borderColor="whiteAlpha.200"
+                                                borderRadius="8px"
+                                            >
+                                                <HStack minW={0} spacing={2}>
+                                                    <AssetImage src={item.imgUrl} boxSize="30px" flexShrink={0} />
+                                                    <Box minW={0}>
+                                                        <Text fontWeight="bold" fontSize="sm" noOfLines={1}>
+                                                            {item.name}
+                                                        </Text>
+                                                        <Text color="whiteAlpha.500" fontSize="xs">
+                                                            {item.type}
+                                                        </Text>
+                                                    </Box>
+                                                </HStack>
+                                                <Badge colorScheme="cyan" borderRadius="6px" flexShrink={0}>
+                                                    {formatNumber(item.quantityQNT)}
+                                                </Badge>
+                                            </HStack>
+                                        ))}
+                                    </Stack>
+                                    <Button
+                                        size="sm"
+                                        leftIcon={<Icon as={FaUndo} />}
+                                        colorScheme="cyan"
+                                        variant="outline"
+                                        onClick={handleRecoverDepositedAssets}
+                                        isLoading={isRecoveringAssets}
+                                        loadingText="Requesting"
+                                        isDisabled={isLoadingRecoverableAssets || isRecoveringAssets || omnoRecoverableAssets.length === 0}
+                                    >
+                                        Withdraw deposited assets
+                                    </Button>
+                                    {recoverableAssetTotal > 0 && (
+                                        <Text color="whiteAlpha.500" fontSize="xs">
+                                            {formatNumber(recoverableAssetTotal)} total units found in Omno.
+                                        </Text>
+                                    )}
+                                </Stack>
+                            </Panel>
+
+                            <Panel p={4}>
+                                <HStack justify="space-between" mb={4}>
+                                    <Box>
                                     <Text color="#d8b56d" fontSize="xs" fontWeight="bold" textTransform="uppercase">
                                         Brewing queue
                                     </Text>

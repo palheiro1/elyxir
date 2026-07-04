@@ -313,6 +313,11 @@ const useBlockTimestamps = jobs => {
 
 const countOwned = items => (items || []).filter(item => Number(item?.quantityQNT || 0) > 0).length;
 
+const getAccountAssetQuantity = (infoAccount, assetId) => {
+    const ownedAsset = infoAccount?.assets?.find(asset => String(asset.asset) === String(assetId));
+    return Number(ownedAsset?.quantityQNT || 0);
+};
+
 const getPotionForAsset = (assetId, potions = []) =>
     potions.find(potion => String(potion?.asset) === String(assetId)) || {
         asset: assetId,
@@ -322,8 +327,20 @@ const getPotionForAsset = (assetId, potions = []) =>
         quantityQNT: 0,
     };
 
-const getRecipeMissingItems = (recipe, fakeAssets, flaskMultiplier = 1) => {
+const getRecipeMissingItems = (recipe, fakeAssets, flaskMultiplier = 1, infoAccount = null) => {
     const missing = [];
+    const recipeQuantity = getAccountAssetQuantity(infoAccount, recipe?.recipeAssetId);
+    const potion = getPotionForAsset(recipe?.creationAssetId, fakeAssets.potions);
+
+    if (recipe && recipeQuantity < 1) {
+        missing.push({
+            type: 'recipe',
+            name: `${potion.name} recipe`,
+            assetId: recipe.recipeAssetId,
+            have: recipeQuantity,
+            needed: 1,
+        });
+    }
 
     recipe?.ingredients?.forEach(ingredient => {
         const owned = fakeAssets.ingredients?.find(item => String(item.asset) === String(ingredient.assetId));
@@ -333,6 +350,7 @@ const getRecipeMissingItems = (recipe, fakeAssets, flaskMultiplier = 1) => {
             missing.push({
                 type: 'ingredient',
                 name: owned?.name || ingredient.name || ingredient.assetId,
+                assetId: ingredient.assetId,
                 have,
                 needed,
             });
@@ -346,6 +364,7 @@ const getRecipeMissingItems = (recipe, fakeAssets, flaskMultiplier = 1) => {
             missing.push({
                 type: 'tool',
                 name: owned?.name || assetId,
+                assetId,
                 have,
                 needed: 1,
             });
@@ -383,14 +402,16 @@ const getInventoryItems = (fakeAssets, recipes = [], infoAccount) => [
     ...(fakeAssets.potions || []).map(item => ({ ...item, type: 'potions', typeLabel: 'Potion', tone: 'amber' })),
 ];
 
-const getRecipeReadiness = (recipes, fakeAssets, ownedFlasks) => {
+const getRecipeReadiness = (recipes, fakeAssets, ownedFlasks, infoAccount) => {
     const defaultMultiplier = ownedFlasks[0]?.multiplier || 1;
     return (recipes || [])
         .map(recipe => {
-            const flask = ownedFlasks.find(item => getRecipeMissingItems(recipe, fakeAssets, item.multiplier || 1).length === 0) || ownedFlasks[0];
-            const missing = getRecipeMissingItems(recipe, fakeAssets, flask?.multiplier || defaultMultiplier);
+            const flask =
+                ownedFlasks.find(item => getRecipeMissingItems(recipe, fakeAssets, item.multiplier || 1, infoAccount).length === 0) ||
+                ownedFlasks[0];
+            const missing = getRecipeMissingItems(recipe, fakeAssets, flask?.multiplier || defaultMultiplier, infoAccount);
             const potion = getPotionForAsset(recipe.creationAssetId, fakeAssets.potions);
-            const requirementCount = Number(recipe.ingredients?.length || 0) + Number(recipe.tools?.length || 0);
+            const requirementCount = 1 + Number(recipe.ingredients?.length || 0) + Number(recipe.tools?.length || 0);
             const readyCount = Math.max(0, requirementCount - missing.length);
 
             return {
@@ -1117,7 +1138,10 @@ const OverviewView = ({ infoAccount, setActiveView }) => {
     const accountId = useMemo(() => getAccountId(infoAccount), [infoAccount]);
     const userActiveJobs = jobs.active.filter(job => String(job.owner) === String(accountId));
     const ownedFlasks = (fakeAssets.flasks || []).filter(item => Number(item.quantityQNT || 0) > 0);
-    const recipeReadiness = useMemo(() => getRecipeReadiness(recipes, fakeAssets, ownedFlasks), [recipes, fakeAssets, ownedFlasks]);
+    const recipeReadiness = useMemo(
+        () => getRecipeReadiness(recipes, fakeAssets, ownedFlasks, infoAccount),
+        [recipes, fakeAssets, ownedFlasks, infoAccount]
+    );
     const nextCraft = recipeReadiness[0];
     const craftableRecipes = recipeReadiness.filter(item => item.missing.length === 0);
     const blockTimestamps = useBlockTimestamps(jobs.completed);
@@ -1813,11 +1837,11 @@ const AirdropsView = ({ goToSection, infoAccount, focus }) => {
                     name: `${potion.name} recipe`,
                     description: 'Recipe fragment discovered from GIFTZ rewards.',
                     imgUrl: `/images/elyxir/recipes/recipe${(index % 2) + 1}-transparent.png`,
-                    quantityQNT: 0,
+                    quantityQNT: getAccountAssetQuantity(infoAccount, recipe.recipeAssetId),
                     type: 'recipes',
                 };
             }),
-        [recipes, fakeAssets.potions]
+        [recipes, fakeAssets.potions, infoAccount]
     );
     const supplies = useMemo(
         () => [
