@@ -87,10 +87,18 @@ const getRecipeImage = (recipes = [], recipe) => {
     return `/images/elyxir/recipes/recipe${((Math.max(0, index) % 2) + 1)}-transparent.png`;
 };
 
-const getCraftBatchProgressText = status => {
+const getCraftBatchProgressText = progress => {
+    const status = progress?.status;
+    const remaining = Number(progress?.remaining);
+    const total = Number(progress?.total);
+    const remainingText =
+        Number.isFinite(remaining) && Number.isFinite(total)
+            ? ` ${remaining} of ${total} transaction${total === 1 ? '' : 's'} remaining.`
+            : '';
     const labels = {
-        preparing: 'Preparing the wallet batch...',
+        preparing: 'Preparing crafting transactions...',
         broadcasting: 'Broadcasting required asset transfers...',
+        transferring: 'Broadcasting required asset transfers...',
         awaiting_confirmations: 'Waiting for one blockchain confirmation on every transfer...',
         ready_to_finalize: 'Transfers confirmed. Finalizing the Elyxir craft...',
         finalizing: 'Sending the final Elyxir crafting message...',
@@ -99,7 +107,7 @@ const getCraftBatchProgressText = status => {
         error: 'Wallet batch failed.',
     };
 
-    return labels[status] || 'Working with the Play Hub wallet...';
+    return `${labels[status] || 'Processing crafting transactions...'}${remainingText}`;
 };
 
 const Panel = ({ children, ...props }) => (
@@ -335,7 +343,7 @@ const Elyxir = ({
     const targetHeight = Number(prev_height) > 0 ? Number(prev_height) + craftDurationBlocks : null;
     const durationRange = Math.max(1, durationBounds.max - durationBounds.min);
     const durationProgress = Math.round(((craftDurationBlocks - durationBounds.min) / durationRange) * 100);
-    const craftBatchProgressText = getCraftBatchProgressText(craftBatchProgress?.status);
+    const craftBatchProgressText = getCraftBatchProgressText(craftBatchProgress);
     const selectedRecipeOwned = selectedRecipe ? getAccountAssetQuantity(infoAccount, selectedRecipe.recipeAssetId) > 0 : false;
     const recoverableAssetCatalog = useMemo(() => {
         const byAsset = new Map();
@@ -622,8 +630,35 @@ const Elyxir = ({
                     return;
                 }
 
-                const transfered = await sendCraftPotionAssets({ mergedAssets, ...signingStrategy });
+                const totalTransactions = mergedAssets.length + 1;
+                setCraftBatchProgress({
+                    status: 'preparing',
+                    completed: 0,
+                    total: totalTransactions,
+                    remaining: totalTransactions,
+                });
+
+                const transfered = await sendCraftPotionAssets({
+                    mergedAssets,
+                    ...signingStrategy,
+                    onProgress: progress => {
+                        const completed = Number(progress?.completed || 0);
+                        setCraftBatchProgress({
+                            status: 'transferring',
+                            completed,
+                            total: totalTransactions,
+                            remaining: totalTransactions - completed,
+                        });
+                    },
+                });
                 if (!transfered) throw new Error('Failed transfering crafting asset');
+
+                setCraftBatchProgress({
+                    status: 'finalizing',
+                    completed: mergedAssets.length,
+                    total: totalTransactions,
+                    remaining: 1,
+                });
 
                 const response = await sendCraftPotionMessage({
                     accountId,
@@ -637,6 +672,13 @@ const Elyxir = ({
 
                 if (!response) throw new Error('Failed to start crafting');
 
+                setCraftBatchProgress({
+                    status: 'complete',
+                    completed: totalTransactions,
+                    total: totalTransactions,
+                    remaining: 0,
+                });
+
                 toast({
                     title: 'Crafting started',
                     description: `Started crafting ${multiplier}x ${recipePotion.name}.`,
@@ -646,6 +688,7 @@ const Elyxir = ({
                 });
             } catch (error) {
                 console.error('Crafting error:', error);
+                setCraftBatchProgress(progress => ({ ...(progress || {}), status: 'error' }));
                 toast({
                     title: 'Crafting failed',
                     description: error.message || 'An unexpected error occurred',
@@ -975,7 +1018,7 @@ const Elyxir = ({
                                 fontWeight="black"
                                 _hover={{ bg: primaryActionHoverBg }}
                                 isLoading={isLoading}
-                                loadingText={usesEmbeddedWallet ? craftBatchProgressText : 'Crafting'}
+                                loadingText={craftBatchProgressText}
                                 isDisabled={primaryActionDisabled}
                                 onClick={handlePrimaryAction}
                                 flexShrink={0}
@@ -1133,11 +1176,11 @@ const Elyxir = ({
                                     </SimpleGrid>
                                 </Box>
 
-                                {usesEmbeddedWallet && craftBatchProgress && (
+                                {craftBatchProgress && (
                                     <Box bg="rgba(7, 16, 12, 0.72)" border="1px solid" borderColor="rgba(87, 214, 141, 0.26)" borderRadius="8px" p={3}>
                                         <HStack justify="space-between" mb={1}>
                                             <Text color="#57d68d" fontSize="xs" fontWeight="bold" textTransform="uppercase">
-                                                Play Hub batch
+                                                {usesEmbeddedWallet ? 'Play Hub batch' : 'Crafting transactions'}
                                             </Text>
                                             <Badge bg="rgba(87, 214, 141, 0.14)" color="#9cf2bc" borderRadius="6px">
                                                 {craftBatchProgress.status}
@@ -1157,7 +1200,7 @@ const Elyxir = ({
                                     fontWeight="black"
                                     _hover={{ bg: primaryActionHoverBg }}
                                     isLoading={isLoading}
-                                    loadingText={usesEmbeddedWallet ? craftBatchProgressText : 'Crafting'}
+                                    loadingText={craftBatchProgressText}
                                     isDisabled={primaryActionDisabled}
                                     onClick={handlePrimaryAction}
                                 >

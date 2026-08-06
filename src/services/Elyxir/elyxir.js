@@ -9,10 +9,16 @@ export const CRAFT_BATCH_RESPONSE = 'MYTHICAL_ELYXIR_CRAFT_BATCH_RESPONSE';
 export const CRAFT_BATCH_PROGRESS = 'MYTHICAL_ELYXIR_CRAFT_BATCH_PROGRESS';
 
 const CRAFT_BATCH_TIMEOUT_MS = 35 * 60 * 1000;
+const ELYXIR_STATE_URL = `${OMNO_API}/index.php?action=getElyxirState`;
+
+const fetchElyxirState = () =>
+    axios.get(ELYXIR_STATE_URL, {
+        params: { _: Date.now() },
+    });
 
 export const getFlaskAssets = async () => {
     try {
-        const response = await axios.get(`${OMNO_API}/index.php?action=getElyxirState`);
+        const response = await fetchElyxirState();
         if (!response) return false;
         return response.data.elyxir.definition.flaskMultipliers;
     } catch (error) {
@@ -23,7 +29,7 @@ export const getFlaskAssets = async () => {
 
 export const getRecipesDefinition = async () => {
     try {
-        const response = await axios.get(`${OMNO_API}/index.php?action=getElyxirState`);
+        const response = await fetchElyxirState();
         if (!response) return false;
         return response.data.elyxir.definition.recipes;
     } catch (error) {
@@ -34,7 +40,7 @@ export const getRecipesDefinition = async () => {
 
 export const getElyxirConfiguration = async () => {
     try {
-        const response = await axios.get(`${OMNO_API}/index.php?action=getElyxirState`);
+        const response = await fetchElyxirState();
         if (!response) return false;
         return response.data.elyxir;
     } catch (error) {
@@ -45,7 +51,7 @@ export const getElyxirConfiguration = async () => {
 
 export const getUserJobs = async ({ accountId }) => {
     try {
-        const response = await axios.get(`${OMNO_API}/index.php?action=getElyxirState`);
+        const response = await fetchElyxirState();
         if (!response?.data?.elyxir?.jobs) return [];
 
         const rawJobs = response.data.elyxir.jobs;
@@ -70,10 +76,11 @@ export const getUserJobs = async ({ accountId }) => {
  * @param {Object[]} mergedAssets - Array of assets to transfer with quantities.
  * @param {string} passphrase - The user's passphrase for transaction signing.
  * @param {Object} walletProvider - Optional Play Hub wallet provider for embedded signing.
+ * @param {Function} onProgress - Optional callback invoked after every asset transfer.
  * @returns {Promise<boolean>} Returns true if all transfers succeed, false otherwise.
  * @author Dario Maza - Unknown Gravity | All-in-one Blockchain Company.
  */
-export const sendCraftPotionAssets = async ({ mergedAssets = [], passphrase, walletProvider }) => {
+export const sendCraftPotionAssets = async ({ mergedAssets = [], passphrase, walletProvider, onProgress }) => {
     try {
         if (!mergedAssets.length) return false;
         if (!walletProvider && !passphrase) return false;
@@ -81,6 +88,9 @@ export const sendCraftPotionAssets = async ({ mergedAssets = [], passphrase, wal
         const message = JSON.stringify({ contract: OMNO_CONTRACT });
 
         const responses = [];
+        const total = mergedAssets.length;
+
+        onProgress?.({ status: 'transferring', completed: 0, total, remaining: total });
 
         for (const { asset, qnt } of mergedAssets) {
             const response = walletProvider
@@ -107,6 +117,12 @@ export const sendCraftPotionAssets = async ({ mergedAssets = [], passphrase, wal
 
             if (!response) return false;
             responses.push(response);
+            onProgress?.({
+                status: 'transferring',
+                completed: responses.length,
+                total,
+                remaining: total - responses.length,
+            });
         }
 
         return responses.every(Boolean);
@@ -152,7 +168,6 @@ export const sendCraftPotionMessage = async ({
             flaskAssetId,
             durationBlocks,
             jobId,
-            testMode: true,
             blockId,
         });
 

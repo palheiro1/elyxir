@@ -4,6 +4,7 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { Provider } from 'react-redux';
 import Elyxir from './index';
 import { getUserJobs, requestCraftPotionBatch } from '../../../services/Elyxir/elyxir';
+import { getOmnoAssetBalances } from '../../../services/Ardor/omnoInterface';
 
 jest.mock('@chakra-ui/react', () => {
     const React = require('react');
@@ -61,6 +62,11 @@ jest.mock('@chakra-ui/react', () => {
 
 jest.mock('../../../services/Ardor/ardorInterface', () => ({
     addressToAccountId: jest.fn(() => '123456789'),
+}));
+
+jest.mock('../../../services/Ardor/omnoInterface', () => ({
+    getOmnoAssetBalances: jest.fn(() => Promise.resolve([])),
+    withdrawElyxirAssetsFromOmno: jest.fn(),
 }));
 
 jest.mock('../../../services/Elyxir/elyxir', () => ({
@@ -133,6 +139,7 @@ const renderWorkbench = () => {
 describe('Elyxir Workbench Race duration', () => {
     beforeEach(() => {
         getUserJobs.mockResolvedValue([]);
+        getOmnoAssetBalances.mockResolvedValue([]);
         requestCraftPotionBatch.mockResolvedValue({ ok: true });
     });
 
