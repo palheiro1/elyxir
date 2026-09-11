@@ -488,6 +488,10 @@ const Elyxir = ({
     );
 
     useEffect(() => {
+        window.dispatchEvent(new CustomEvent('mythical-product-event', {detail: {name: 'product_opened', properties: {}}}));
+    }, []);
+
+    useEffect(() => {
         if (!selectedRecipe && recipes.length) setSelectedRecipe(recipes[0]);
     }, [recipes, selectedRecipe]);
 
@@ -582,6 +586,7 @@ const Elyxir = ({
         async ({ passphrase, walletProvider: craftingWalletProvider } = {}) => {
             setIsLoading(true);
             setCraftBatchProgress(null);
+            window.dispatchEvent(new CustomEvent('mythical-product-event', {detail: {name: 'operation_started', properties: {operation: 'alchemy'}}}));
 
             try {
                 if (!selectedRecipe || !selectedFlask) throw new Error('Select a recipe and flask first');
@@ -687,6 +692,7 @@ const Elyxir = ({
                     isClosable: true,
                 });
             } catch (error) {
+                window.dispatchEvent(new CustomEvent('mythical-product-event', {detail: {name: 'operation_failed', properties: {operation: 'alchemy', error_code: 'unknown'}}}));
                 console.error('Crafting error:', error);
                 setCraftBatchProgress(progress => ({ ...(progress || {}), status: 'error' }));
                 toast({

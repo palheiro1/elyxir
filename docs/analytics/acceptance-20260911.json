@@ -1,0 +1,17 @@
+{
+  "build": "BUILD_PATH=build-analytics-20260911 GENERATE_SOURCEMAP=false npm run build: passed",
+  "tests": "4 workbench/service tests passed",
+  "browser": {
+    "preconsent_optional_requests": 0,
+    "preconsent_optional_identifiers": 0
+  },
+  "limitations": [
+    "No live wallet transaction was executed for analytics QA.",
+    "Browser records attempts and failures; confirmed outcomes come from Mythical Monitor."
+  ],
+  "version": 1,
+  "verified_at": "2026-09-11",
+  "replay_enabled": false,
+  "public_cloudflare_beacons_before_rollout": 1,
+  "sdk_source": "Tarasca-DAO/mythicalSDK@21f0dbe950755664ecdcca89b8a735d402a4fbda"
+}
