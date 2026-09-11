@@ -1,6 +1,6 @@
 {
-  "build": "pending canonical build",
-  "tests": "Static SDK acceptance; canonical build pending",
+  "build": "GENERATE_SOURCEMAP=false npm run build: passed on canonical source",
+  "tests": "Shared static SDK consent/closed-property validation; canonical production build passed",
   "browser": {
     "preconsent_optional_requests": 0,
     "preconsent_optional_identifiers": 0
