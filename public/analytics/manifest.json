@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "version": "0.1.0",
+  "posthog": "1.430.2",
+  "files": [
+    {
+      "name": "analytics.js",
+      "bytes": 19421,
+      "sha256": "35e223d8176d07a0ecb74e130c42e98b1986f83a849e1831ed96598bce4a2ab4"
+    },
+    {
+      "name": "analytics-7NNNSD53.js",
+      "bytes": 146250,
+      "sha256": "617805c528adf997c35bbb2d193c3160daeb06b0576dc9fbf0a57ca673b29fb8"
+    },
+    {
+      "name": "analytics-LSKNGMFR.js",
+      "bytes": 159654,
+      "sha256": "3602eaa3657b009a2ef5967076677988100a04ed481c9868d886e7df8b22ba37"
+    }
+  ]
+}

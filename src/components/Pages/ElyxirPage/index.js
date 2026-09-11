@@ -331,6 +331,10 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
     const canCraft = Boolean(selectedRecipe && selectedFlask && selectedFlaskOwned && missingItems.length === 0 && !isLoading);
 
     useEffect(() => {
+        window.dispatchEvent(new CustomEvent('mythical-product-event', {detail: {name: 'product_opened', properties: {}}}));
+    }, []);
+
+    useEffect(() => {
         if (!selectedRecipe && recipes.length) setSelectedRecipe(recipes[0]);
     }, [recipes, selectedRecipe]);
 
@@ -454,6 +458,7 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
 
     const executeCrafting = useCallback(
         async ({ passphrase, walletProvider: craftingWalletProvider } = {}) => {
+            window.dispatchEvent(new CustomEvent('mythical-product-event', {detail: {name: 'operation_started', properties: {operation: 'alchemy'}}}));
             setIsLoading(true);
 
             try {
@@ -498,6 +503,7 @@ const Elyxir = ({ infoAccount, walletProvider = null, embedded = false }) => {
                     isClosable: true,
                 });
             } catch (error) {
+                window.dispatchEvent(new CustomEvent('mythical-product-event', {detail: {name: 'operation_failed', properties: {operation: 'alchemy', error_code: 'unknown'}}}));
                 console.error('Crafting error:', error);
                 toast({
                     title: 'Crafting failed',
